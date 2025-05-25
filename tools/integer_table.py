@@ -55,6 +55,22 @@ parser.add_argument(
     dest='full_sequence',
 )
 parser.add_argument(
+    '--oe-split',
+    type=int,
+    help="How many odds/evens to group together before spacing.  Default is %(default)s.",
+    default=4,
+    action='store',
+    dest='oe_split',
+)
+parser.add_argument(
+    '--oe-width',
+    type=int,
+    help="Print this many odd/even markers.  0 disables the column.  Default is %(default)s.",
+    default=16,
+    action='store',
+    dest='oe_width',
+)
+parser.add_argument(
     '--sequence-width',
     type=int,
     help="Show up to X characters of the sequence.  Default is %(default)s.  See --full-sequence.",
@@ -80,17 +96,20 @@ sequence_width = args.sequence_width
 binary_group_spacing = 2
 full_sequence = args.full_sequence
 every = args.every
+oe_split = args.oe_split
+oe_width = args.oe_width
+oe_group_spacing = 1
 
 
-# Helper to calculate collatz as a string.
+# Helper to calculate collatz.
 def generate_collatz(num: int) -> list:
-    stops = [str(num)]
+    stops = [num]
     while num > 1:
         if num % 2 == 0:
             num = int(num / 2)
         else:
             num = num * 3 + 1
-        stops.append(str(num))
+        stops.append(num)
     return stops
 
 
@@ -108,9 +127,12 @@ binary_width = (group_count * binary_split) + ((group_count - 1) * binary_group_
 
 # Build the headers and separators.
 separator = f"+-{'-' * decimal_width}-+-{'-' * hex_width}-+-{'-' * binary_width}-+-{'-' * sequence_width}-+"
+if oe_width > 0:
+    separator += f"-{'-' * oe_width}-+"
 decimal_header = f"{'Decimal'[:decimal_width]:<{decimal_width}}"
 hex_header = f"{'Hex'[:hex_width]:<{hex_width}}"
 collatz_header = f"{'Collatz'[:sequence_width]:<{sequence_width}}"
+oe_header = f"{'Odd/Even'[:oe_width]:<{oe_width}}"
 binary_header = f"{'Binary'[:binary_width]:<{binary_width}}"
 binary_key_header = f"| {' ' * decimal_width} | {' ' * hex_width} | {' ' * binary_width} | {' ' * sequence_width} |\n"
 binary_key_header += f"| {' ' * decimal_width} | {' ' * hex_width} | "
@@ -136,12 +158,15 @@ for i in range(0, group_count, 1):
     segments.append("=" * binary_split)
 binary_key_header += (' ' * binary_group_spacing).join(segments)
 binary_key_header += f" | {' ' * sequence_width} |"
+all_headers = f"| {decimal_header} | {hex_header} | {binary_header} | {collatz_header} |"
+if oe_width > 0:
+    all_headers += f" {oe_header} |"
 
 # Spit out the table.
 print("Table Details")
 print(f"Start: {start}, End: {end}, Every: {every}, Max Bits: {max_bits}, Decimal Width: {decimal_width}, Hex Width: {hex_width}")
 print(separator)
-print(f"| {decimal_header} | {hex_header} | {binary_header} | {collatz_header} |")
+print(all_headers)
 print(separator)
 completed = 0
 for i in range(start, end + 1, 1):
@@ -158,10 +183,12 @@ for i in range(start, end + 1, 1):
     line += f"{(' ' * binary_group_spacing).join(binary_groups)} | "
     # Calculate the stops.
     stops = generate_collatz(i)
-    # Generate the chunk (or chunks, if full_sequence).
+    # Generate the chunk (or chunks, if full_sequence).  Build the Odd/Even chain too.
+    oe_chain = ''
     chunk = ''
     chunks = []
     for stop in stops:
+        oe_chain += 'E' if stop % 2 == 0 else 'O'
         if len(chunk) + 2 + len(str(stop)) > sequence_width:
             chunks.append(chunk)
             chunk = f"{stop}, "
@@ -170,11 +197,18 @@ for i in range(start, end + 1, 1):
     # Trim the last comma and store the final (possibly only) chunk.
     chunk = chunk[:-2]
     chunks.append(chunk)
-    # Print out the first chunk no matter what.
+    # Print out the first chunk no matter what.  Along with the Odd/Even string.
     chunk = chunks[0]
     if len(chunks) > 1 and not full_sequence:
         chunk = chunk[:sequence_width-4] + ' ...'
     line += f"{chunk:<{sequence_width}} |"
+    if oe_width > 0:
+        oe_groups = [oe_chain[i:i+oe_split] for i in range(0, len(oe_chain), oe_split)]
+        oe_formatted = f"{(' ' * oe_group_spacing).join(oe_groups)}"
+        if len(oe_formatted) > oe_width:
+            oe_formatted = oe_formatted[:oe_width-4] + ' ...'
+        line += f" {oe_formatted[:oe_width]:<{oe_width}} |"
+
     print(line)
     # Print the additional lines if --full-sequence is enabled.
     if full_sequence:
