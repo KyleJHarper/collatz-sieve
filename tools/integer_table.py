@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+from lib.collatz import Collatz
 
 """
 Builds a pretty table of integers from --start to --end and shows binary and hex formats.
@@ -101,18 +102,6 @@ oe_width = args.oe_width
 oe_group_spacing = 1
 
 
-# Helper to calculate collatz.
-def generate_collatz(num: int) -> list:
-    stops = [num]
-    while num > 1:
-        if num % 2 == 0:
-            num = int(num / 2)
-        else:
-            num = num * 3 + 1
-        stops.append(num)
-    return stops
-
-
 # Calculate maximum bit size and column widths.
 max_bits = 1
 while (pow(2, max_bits) < end):
@@ -131,7 +120,7 @@ if oe_width > 0:
     separator += f"-{'-' * oe_width}-+"
 decimal_header = f"{'Decimal'[:decimal_width]:<{decimal_width}}"
 hex_header = f"{'Hex'[:hex_width]:<{hex_width}}"
-collatz_header = f"{'Collatz'[:sequence_width]:<{sequence_width}}"
+collatz_header = f"{'Sequence'[:sequence_width]:<{sequence_width}}"
 oe_header = f"{'Odd/Even'[:oe_width]:<{oe_width}}"
 binary_header = f"{'Binary'[:binary_width]:<{binary_width}}"
 binary_key_header = f"| {' ' * decimal_width} | {' ' * hex_width} | {' ' * binary_width} | {' ' * sequence_width} |\n"
@@ -182,7 +171,7 @@ for i in range(start, end + 1, 1):
     binary_groups = [binary[i:i+binary_split] for i in range(0, len(binary), binary_split)]
     line += f"{(' ' * binary_group_spacing).join(binary_groups)} | "
     # Calculate the stops.
-    stops = generate_collatz(i)
+    stops = Collatz.generate_sequence(i)
     # Generate the chunk (or chunks, if full_sequence).  Build the Odd/Even chain too.
     oe_chain = ''
     chunk = ''
@@ -214,5 +203,7 @@ for i in range(start, end + 1, 1):
     if full_sequence:
         for chunk in chunks[1:]:
             line = f"| {' ' * decimal_width} | {' ' * hex_width} | {' ' * binary_width} | {chunk:<{sequence_width}} |"
+            if oe_width > 0:
+                line += f" {' ' * oe_width} |"
             print(line)
 print(separator)
