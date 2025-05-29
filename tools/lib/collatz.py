@@ -20,33 +20,50 @@ class Collatz:
     def sequence(self):
         return self._sequence
 
+    @property
+    def step(self):
+        return self._step
+
     def __init__(
         self,
-        initial_value: int = 0
+        initial_value: int = 0,
+        step: int = 1,
     ):
         self._initial_value = initial_value
+        self._step = step
         self._sequence = Collatz.generate_sequence(initial_value)
         self._oe_string = ''
         for stop in self.sequence:
             self._oe_string += 'E' if stop % 2 == 0 else 'O'
 
+    def __str__(self):
+        """ Our to-string method of a collatz should, reasonably, be the initial value of its sequence. """
+        prefix = self.find_oe_prefix()
+        if len(prefix) < len(self.oe_string):
+            prefix += "-" + self.oe_string[len(prefix)]
+        return f"{self.initial_value:<4} {prefix}"
+
     def find_oe_prefix(
         self,
-        increase: int,
+        step: int = None,
         max_count: int = 50,
+        messages: bool = False,
     ) -> str:
         """
-        Starts at `self.initial_value` and creates a series of sequences by, adding `increase` each
-        time.  Will generate `count` sequences.
+        Starts at `self.initial_value` and creates a series of sequences by, adding `self.step` each
+        time or `step` if provided.  Will generate `count` sequences.  If `messages` is enabled,
+        additional info will be emitted whenever a sequence has to be removed for terminating before
+        the pattern is finished repeating.
 
         Returns the prefix of Odds and Evens that match the whole series.
         """
         # Generate series of sequences.
         sequences: List[Collatz] = []
         count = 0
+        chosen_step = step if step is not None else self.step
         while count < max_count:
             count += 1
-            iv = self.initial_value + (increase * (count - 1))
+            iv = self.initial_value + (chosen_step * (count - 1))
             sequences.append(Collatz(iv))
         # Determine how much of the string repeats.
         index = 0
@@ -59,14 +76,16 @@ class Collatz:
                 remove_index = None
             # If we find a sequence longer than the exemplar (item 0) can test, remove it.
             if index >= len(sequences[0].oe_string):
-                print(f"Need to remove {sequences[0].initial_value} because it's OE pattern ends before repetition ends.")
+                if messages:
+                    print(f"Need to remove {sequences[0].initial_value} because it's OE pattern ends before repetition ends.")
                 remove_index = 0
                 continue
             new_char = sequences[0].oe_string[index]
             for i, sequence in enumerate(sequences):
                 # If the sequence ends before our pattern ends, remove it.
                 if index >= len(sequence.oe_string):
-                    print(f"Need to remove {sequence.initial_value} because it's OE pattern ends before repetition ends.")
+                    if messages:
+                        print(f"Need to remove {sequence.initial_value} because it's OE pattern ends before repetition ends.")
                     remove_index = i
                     continue
                 if sequence.oe_string[index] != new_char:
@@ -75,7 +94,6 @@ class Collatz:
             index += 1
         index -= 1
         prefix = sequences[0].oe_string[0:index]
-        print(f"Found the sequence starting at {self.initial_value} increasing by {increase}: {prefix}")
         if not Collatz.odd_even_alternates(sequences=sequences, index=index):
             raise "All sequences should go between odd and even after a matching prefix ..."
         return prefix
