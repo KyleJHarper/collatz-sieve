@@ -24,6 +24,20 @@ class Collatz:
     def step(self):
         return self._step
 
+    @property
+    def oe_prefix(self):
+        if self._oe_prefix is None:
+            self._oe_prefix = self.find_oe_prefix()
+        return self._oe_prefix
+
+    @property
+    def oe_prefix_3s_value(self):
+        return pow(3, self.oe_prefix.count('O'))
+
+    @property
+    def oe_prefix_2s_value(self):
+        return pow(2, self.oe_prefix.count('E'))
+
     def __init__(
         self,
         initial_value: int = 0,
@@ -35,13 +49,11 @@ class Collatz:
         self._oe_string = ''
         for stop in self.sequence:
             self._oe_string += 'E' if stop % 2 == 0 else 'O'
+        self._oe_prefix = None
 
     def __str__(self):
         """ Our to-string method of a collatz should, reasonably, be the initial value of its sequence. """
-        prefix = self.find_oe_prefix()
-        if len(prefix) < len(self.oe_string):
-            prefix += "-" + self.oe_string[len(prefix)]
-        return f"{self.initial_value:<4} {prefix}"
+        return str(self.initial_value)
 
     def find_oe_prefix(
         self,
@@ -97,6 +109,17 @@ class Collatz:
         if not Collatz.odd_even_alternates(sequences=sequences, index=index):
             raise "All sequences should go between odd and even after a matching prefix ..."
         return prefix
+
+    def is_below_high_water_mark(self) -> bool:
+        """
+        Determines if the Odd-Even prefix will bring this number below the high-water mark.
+        """
+        prefix = self.find_oe_prefix()
+        numerator = pow(3, prefix.count("O"))
+        denominator = pow(2, prefix.count("E"))
+        if numerator < denominator:
+            return True
+        return False
 
     #
     # Class Methods

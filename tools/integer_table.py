@@ -41,12 +41,12 @@ parser.add_argument(
     dest='end',
 )
 parser.add_argument(
-    '--every',
+    '--step',
     type=int,
-    help="Only calcuate every Nth number.  1 means all numbers.  Default is %(default)s.",
+    help="Only calcuate every Nth number (step over the others).  1 means all numbers.  Default is %(default)s.",
     default=1,
     action='store',
-    dest='every',
+    dest='step',
 )
 parser.add_argument(
     '--full-sequence',
@@ -96,7 +96,7 @@ breakup_size = args.breakup_size
 sequence_width = args.sequence_width
 binary_group_spacing = 2
 full_sequence = args.full_sequence
-every = args.every
+step = args.step
 oe_split = args.oe_split
 oe_width = args.oe_width
 oe_group_spacing = 1
@@ -153,13 +153,13 @@ if oe_width > 0:
 
 # Spit out the table.
 print("Table Details")
-print(f"Start: {start}, End: {end}, Every: {every}, Max Bits: {max_bits}, Decimal Width: {decimal_width}, Hex Width: {hex_width}")
+print(f"Start: {start}, End: {end}, Step: {step}, Max Bits: {max_bits}, Decimal Width: {decimal_width}, Hex Width: {hex_width}")
 print(separator)
 print(all_headers)
 print(separator)
 completed = 0
 for i in range(start, end + 1, 1):
-    if (i - start) % every != 0:
+    if (i - start) % step != 0:
         continue
     completed += 1
     if breakup_size > 0 and completed % breakup_size == 0:
