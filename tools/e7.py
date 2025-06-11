@@ -27,37 +27,51 @@ max_levels = args.levels
 coverage_map = {}
 
 
-def calculate_coverage(sequence: Collatz):
+def calculate_coverage(sequence: Collatz, debug: bool = False):
     msg = f"Number {sequence.initial_value} (step: {sequence.step}) has prefix: {sequence.oe_prefix}."
     numerator = sequence.oe_prefix_3s_value
     denominator = sequence.oe_prefix_2s_value
     if sequence.is_below_high_water_mark():
-        coverage = 100 * 1 / (sequence.step / 16)
+        coverage = 100 * 1 / (sequence.step / BASE_STEP)
         coverage_map[sequence] = coverage
-        msg += f"  It is below high-water mark: {numerator}/{denominator}.  We're done.  Coverage is {coverage:.3f}%"
-        print(msg)
+        if debug:
+            msg += f"  It is below high-water mark: {numerator}/{denominator}.  We're done.  Coverage is {coverage:.3f}%"
+            print(msg)
         return
-    # msg += f"It is NOT below high-water mark: {numerator}/{denominator}.  Must check next level."
-    # print(msg)
-    if sequence.step >= max_step:
-        # print(f"  > Max stepped reached for {sequence}.  Quitting.")
+    sub_1_iv = sequence.initial_value + (sequence.step * 1)
+    sub_2_iv = sequence.initial_value + (sequence.step * 2)
+    if debug:
+        msg += f"It is NOT below high-water mark: {numerator}/{denominator}.  Must check next level with {sub_1_iv} and {sub_2_iv}."
+        print(msg)
+    if sequence.step >= MAX_STEP:
+        if debug:
+            print(f"  > Max stepped reached for {sequence}.  Quitting.")
         return
     new_step = sequence.step * 2
     sub_sequence_1 = Collatz(sequence.initial_value + sequence.step, step=new_step)
     sub_sequence_2 = Collatz(sequence.initial_value + (sequence.step * 2), step=new_step)
-    calculate_coverage(sub_sequence_1)
-    calculate_coverage(sub_sequence_2)
+    calculate_coverage(sub_sequence_1, debug=debug)
+    calculate_coverage(sub_sequence_2, debug=debug)
 
 
 #
 # Main
 #
-step = 16
-max_step = step * pow(2, max_levels - 1)
-E7_ROOT = Collatz(7, step=16)
-calculate_coverage(E7_ROOT)
+BASE_STEP = 2
+MAX_STEP = BASE_STEP * pow(2, max_levels - 1)
+E7_ROOT = Collatz(1, step=BASE_STEP)
+calculate_coverage(E7_ROOT, debug=True)
+# Sort the map so it's prettier output.
+coverage_map = dict(sorted(coverage_map.items(), key=lambda item: item[0].initial_value))
+total_coverage = 0.0
 for sequence, coverage in coverage_map.items():
-    print(f"Sequence {sequence} (step: {sequence.step}) gave us a {coverage:.3f}% coverage.")
+    total_coverage += coverage
+    msg = f"Sequence {sequence} (step: {sequence.step}) gave us a {coverage:.3f}% coverage."
+    msg += f"  Binary: {bin(sequence.initial_value)}.  Odd/Even prefix covered: {sequence.oe_prefix}"
+    print(msg)
+print('')
+print(f"Total Coverage is: {total_coverage:.3f}%")
+
 # while level < max_levels:
 #     level += 1
 #     prefix = E7_ROOT.find_oe_prefix()

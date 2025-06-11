@@ -21,6 +21,10 @@ class Collatz:
         return self._sequence
 
     @property
+    def stop_count(self):
+        return self._stop_count
+
+    @property
     def step(self):
         return self._step
 
@@ -46,6 +50,7 @@ class Collatz:
         self._initial_value = initial_value
         self._step = step
         self._sequence = Collatz.generate_sequence(initial_value)
+        self._stop_count = len(self._sequence)
         self._oe_string = ''
         for stop in self.sequence:
             self._oe_string += 'E' if stop % 2 == 0 else 'O'
