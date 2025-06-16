@@ -25,6 +25,10 @@ class Collatz:
         return self._stop_count
 
     @property
+    def stopping_time(self):
+        return self._stop_count
+
+    @property
     def step(self):
         return self._step
 
@@ -41,6 +45,10 @@ class Collatz:
     @property
     def oe_prefix_2s_value(self):
         return pow(2, self.oe_prefix.count('E'))
+
+    @property
+    def up_down_string(self):
+        return self.oe_string.replace('E', 'd').replace('O', 'i')[0:-1]
 
     def __init__(
         self,
@@ -126,12 +134,30 @@ class Collatz:
             return True
         return False
 
+    def aligns_at(self, other_sequence: Self) -> int:
+        """
+        Compares `this` sequence to `other_sequence` to find an alignment at the same index.  For example,
+        12 and 13 both end at 10 after on the 4th term ([12, 6, 3, 10...] and [13, 40, 20, 10...]).  We
+        would return an index of 3.
+
+        Since the indexes must match, this automatically implies the sequences share the same stopping time.
+
+        Returns 0 if not found.  (Terms at index 0 can never match, so this is safe and aligns with `False`.)
+        """
+        for index in range(1, min(self.stopping_time, other_sequence.stopping_time)):
+            if self.sequence[index] == other_sequence.sequence[index]:
+                return index
+        return 0
+
     #
     # Class Methods
     #
 
     @classmethod
     def generate_sequence(cls, start: int) -> list:
+        """
+        Create a standard list of the stops instead of a full Collatz() object.
+        """
         stops = [start]
         while start > 1:
             if start % 2 == 0:

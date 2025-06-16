@@ -87,6 +87,13 @@ parser.add_argument(
     action='store',
     dest='start',
 )
+parser.add_argument(
+    '--stopping-time',
+    help="Whether to show stopping time (number of stops/steps).",
+    default=False,
+    action='store_true',
+    dest='show_stopping_time',
+)
 args = parser.parse_args()
 start = args.start
 end = args.end
@@ -100,6 +107,7 @@ step = args.step
 oe_split = args.oe_split
 oe_width = args.oe_width
 oe_group_spacing = 1
+show_stopping_time = args.show_stopping_time
 
 
 # Calculate maximum bit size and column widths.
@@ -113,15 +121,25 @@ decimal_width = len(str(end)) if len(str(end)) >= 3 else 3
 hex_width = len(hex(end)) if len(hex(end)) >= 3 else 3
 sequence_width = max(sequence_width, 10)
 binary_width = (group_count * binary_split) + ((group_count - 1) * binary_group_spacing)
+stops_width = 0
+for i in range(start, end + 1, 1):
+    sequence = Collatz(i)
+    widths = [len(str(stop)) for stop in sequence.sequence]
+    widths.append(stops_width)
+    stops_width = max(widths)
+stops_width = max(stops_width, 5)
 
 # Build the headers and separators.
 separator = f"+-{'-' * decimal_width}-+-{'-' * hex_width}-+-{'-' * binary_width}-+-{'-' * sequence_width}-+"
 if oe_width > 0:
     separator += f"-{'-' * oe_width}-+"
+if show_stopping_time:
+    separator += f"-{'-' * stops_width}-+"
 decimal_header = f"{'Decimal'[:decimal_width]:<{decimal_width}}"
 hex_header = f"{'Hex'[:hex_width]:<{hex_width}}"
 collatz_header = f"{'Sequence'[:sequence_width]:<{sequence_width}}"
 oe_header = f"{'Odd/Even'[:oe_width]:<{oe_width}}"
+stopping_header = f"{'Stops'[:stops_width]:<{stops_width}}"
 binary_header = f"{'Binary'[:binary_width]:<{binary_width}}"
 binary_key_header = f"| {' ' * decimal_width} | {' ' * hex_width} | {' ' * binary_width} | {' ' * sequence_width} |\n"
 binary_key_header += f"| {' ' * decimal_width} | {' ' * hex_width} | "
@@ -150,6 +168,8 @@ binary_key_header += f" | {' ' * sequence_width} |"
 all_headers = f"| {decimal_header} | {hex_header} | {binary_header} | {collatz_header} |"
 if oe_width > 0:
     all_headers += f" {oe_header} |"
+if show_stopping_time:
+    all_headers += f" {stopping_header} |"
 
 # Spit out the table.
 print("Table Details")
@@ -171,12 +191,12 @@ for i in range(start, end + 1, 1):
     binary_groups = [binary[i:i+binary_split] for i in range(0, len(binary), binary_split)]
     line += f"{(' ' * binary_group_spacing).join(binary_groups)} | "
     # Calculate the stops.
-    stops = Collatz.generate_sequence(i)
+    sequence = Collatz(i)
     # Generate the chunk (or chunks, if full_sequence).  Build the Odd/Even chain too.
     oe_chain = ''
     chunk = ''
     chunks = []
-    for stop in stops:
+    for stop in sequence.sequence:
         oe_chain += 'E' if stop % 2 == 0 else 'O'
         if len(chunk) + 2 + len(str(stop)) > sequence_width:
             chunks.append(chunk)
@@ -197,6 +217,8 @@ for i in range(start, end + 1, 1):
         if len(oe_formatted) > oe_width:
             oe_formatted = oe_formatted[:oe_width-4] + ' ...'
         line += f" {oe_formatted[:oe_width]:<{oe_width}} |"
+    if show_stopping_time:
+        line += f" {sequence.stopping_time:>{stops_width}} |"
 
     print(line)
     # Print the additional lines if --full-sequence is enabled.
