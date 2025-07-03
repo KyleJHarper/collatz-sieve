@@ -146,7 +146,6 @@ if by_group:
             line += f"    Stops: {str(pair.lower.stopping_time):>{manager.stop_width}}"
             line += f"    End: {str(pair.lower.sequence[pair.index]):>{manager.value_width}}"
             print(line)
-            #print(f"  Pair: {pair.lower}/{pair.upper} -- Stops: {pair.lower.stopping_time} -- Final value: {pair.lower.sequence[pair.index]}")
 else:
     for line in match_results:
         print(line)
