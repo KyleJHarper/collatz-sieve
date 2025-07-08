@@ -5,9 +5,9 @@ function log {
 }
 
 start=0
-count=10000
+count=1000
 total=100200
-max_threads=4
+max_threads=$(nproc)
 while [ ${start} -lt ${total} ] ; do
   # Calculate the end.
   end=$(( ${start} + ${count} - 1 ))
