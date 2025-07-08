@@ -21,6 +21,14 @@ class Collatz:
         return self._high_water_mark_index
 
     @property
+    def high_water_mark_value(self):
+        return self.sequence[self.high_water_mark_index]
+
+    @property
+    def high_water_mark_sequence(self):
+        return self.sequence[0:self.high_water_mark_index]
+
+    @property
     def initial_value(self):
         return self._initial_value
 
@@ -130,6 +138,6 @@ class Collatz:
                 pattern += 'g'
                 i += 1
             else:
-                fg_pattern += 'f'
+                pattern += 'f'
                 i += 2
         return pattern
