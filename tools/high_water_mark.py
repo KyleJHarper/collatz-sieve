@@ -6,6 +6,8 @@ import sys
 import math
 
 
+print("This program was rewritten in C++.  It's about 50x faster.", file=sys.stderr)
+
 parser = argparse.ArgumentParser(description="No idea yet...")
 parser.add_argument(
     '--end',
