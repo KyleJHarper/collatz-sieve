@@ -62,7 +62,7 @@ while [ ${start} -lt ${total} ] ; do
   rate=$((start / (SECONDS + 1)))
   log "Starting: ${start} to ${end}.  Waited ${wait_time}s for a worker.  Rate: ~${rate}/s."
   filename="hwm_results__$(printf "%0${#total}d" ${start})_to_$(printf "%0${#total}d" ${end})"
-  ./high_water_mark.py --start ${start} --end ${end} > ${filename} &
+  ../bin/high_water_mark -s ${start} -e ${end} > ${filename} &
   last_seconds=${SECONDS}
   # Bump up start.
   let 'start+=batch_size'
