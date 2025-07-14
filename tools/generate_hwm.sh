@@ -5,12 +5,13 @@ function log {
 }
 
 function show_help {
-  log "Usage:  ${0} [-b BATCH_SIZE] [-h] [-t MAX_THREADS] <TOTAL>"
+  log "Usage:  ${0} [-b BATCH_SIZE] [-h] [-s START] [-t MAX_THREADS] <MAX>"
   log "   Ex:  ${0} -b 5000 -t 3 100000  ==> Calculate up to 100,000 with 3 threads in batches of 5,000."
   log ""
   log "Options:"
   log "  -b  #  Number of values to put in each batch.  Default is ${BATCH_SIZE_DEFAULT}."
   log "  -h     Show this help."
+  log "  -s  #  Start at this number.  Default is 0."
   log "  -t  #  Number of threads to run in parallel.  Defaults to OS CPU count."
   log ""
   exit 1
@@ -19,11 +20,14 @@ function show_help {
 BATCH_SIZE_DEFAULT=10000
 batch_size=${BATCH_SIZE_DEFAULT}
 max_threads=$(nproc)
-while getopts ':b:ht:' opt ; do
+start=0
+while getopts ':b:hs:t:' opt ; do
   case "${opt}" in
     'b') batch_size=${OPTARG}
          ;;
     'h') show_help
+         ;;
+    's') start=${OPTARG}
          ;;
     't') max_threads=${OPTARG}
          ;;
@@ -33,35 +37,41 @@ while getopts ':b:ht:' opt ; do
   esac
 done
 shift $((OPTIND - 1))
-total=${1}
+max=${1}
+min=${start}
+total=$((max - min))
 
-if [ -z "${total}" ] ; then
-  log "You must specify a total number of exponents to build."
+if [ -z "${max}" ] ; then
+  log "You must specify a total number of exponents to build as arg1."
   exit 1
 fi
-if [ ${total} -lt 1 ] ; then
-  log "You must specify a positive, whole number of exponents to build."
+if [ ${max} -lt 1 ] ; then
+  log "You must specify a positive, whole number of exponents to build as arg1."
   exit 1
 fi
 
 
-start=0
 last_seconds=${SECONDS}
-while [ ${start} -lt ${total} ] ; do
+completed=0
+while [ ${start} -lt ${max} ] ; do
   # Wait if we're full on threads.
   while [ $(jobs -p | wc -l) -ge ${max_threads} ] ; do
     wait -n
   done
   # Calculate the end.
   end=$(( ${start} + ${batch_size} - 1 ))
-  if [ ${end} -gt ${total} ] ; then
-    end=${total}
+  if [ ${end} -gt ${max} ] ; then
+    end=${max}
   fi
   # Run the program.
   wait_time=$((SECONDS - last_seconds))
-  rate=$((start / (SECONDS + 1)))
+  completed=$(( ${end} - ${min} - (${max_threads} * ${batch_size}) ))
+  if [ ${completed} -lt 1 ] ; then
+    completed=0
+  fi
+  rate=$((completed / (SECONDS + 1)))
   log "Starting: ${start} to ${end}.  Waited ${wait_time}s for a worker.  Rate: ~${rate}/s."
-  filename="hwm_results__$(printf "%0${#total}d" ${start})_to_$(printf "%0${#total}d" ${end})"
+  filename="hwm_results__$(printf "%0${#max}d" ${start})_to_$(printf "%0${#max}d" ${end})"
   ../bin/high_water_mark -s ${start} -e ${end} > ${filename} &
   last_seconds=${SECONDS}
   # Bump up start.
