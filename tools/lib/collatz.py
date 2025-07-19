@@ -6,6 +6,8 @@ Collatz object which will have additional data.
 from typing import List, Self
 import math
 from decimal import Decimal
+import drawsvg
+import textwrap
 
 
 class Collatz:
@@ -165,6 +167,10 @@ class Node:
         return False
 
     @property
+    def has_high_water_mark_ancestor(self):
+        return self._has_high_water_mark_ancestor
+
+    @property
     def children(self):
         return self._children
 
@@ -226,6 +232,14 @@ class Node:
                 self._fraction_constant /= 2
             else:
                 self._fraction_constant = (3 * self._fraction_constant) + 1
+        # Track our ancestry's HWM.
+        self._has_high_water_mark_ancestor = False
+        parent = self._parent
+        while parent is not None:
+            if parent.is_below_high_water_mark:
+                self._has_high_water_mark_ancestor = True
+                break
+            parent = parent.parent
 
     def __str__(self):
         return str(self._value)
@@ -272,6 +286,174 @@ class BinaryTree:
                 for child_value in child_values:
                     child_node = parent.add_child(value=child_value)
                     self._levels[child_level].append(child_node)
+
+    def render(
+        self,
+        file: str,
+        node_height: int = 300,
+        node_width: int = 200,
+        node_spacing_pct: float = 0.2,
+        level_spacing_pct: float = 1.0,
+        drawing_padding: int = 0,
+        format: str = 'svg',
+        node_border_radius: float = 0.15,
+        node_fill_default: str = '#ffffff',
+        node_fill_hwm: str = '#00ff00',
+        ancestor_hwm: bool = True,
+    ):
+        """
+        Generates an image of the tree in vector (SVG) or raster (PNG) format.  It leans heavily on
+        the `drawsvg` library.  Everything is done in pixel units unless otherwise stated.
+
+        All values will be truncated to int() wherever possible to avoid skewing things.  This might
+        be a mistake... we'll see.
+
+        Nodes below the high-water mark (or with ancestors below it) will be colored according to
+        the value in `node_fill_hwm`.  You can control ancestry consideration with `ancestor_hwm`,
+        or disable alternate coloring by assigning the same color from `node_fill_default`.
+
+        Attributes
+        -----------
+        file: str, required
+            The path for the output file.  Will be sent directly to drawing.save_svg/png().
+        node_height : int, default 300
+            How tall each node should be.
+        node_width : int, default 200
+            How wide each node should be.
+        node_spacing_pct : float, default 0.2
+            The percent of `node_width` to space the last layer of nodes by.
+        level_spacing_pct : float, default 1.0
+            The percent of `node_height` to space levels by.
+        drawing_padding : int, default 0
+            How much additional padding to add to the whole drawing.
+        format : str, default 'svg'
+            Which format to output: 'svg' or 'png'.
+        node_border_radius : float, default 0.15
+            How much rounding to apply to the x and y corners of the nodes.
+        node_fill_default : str, default '#ffffff'
+            The default color to fill the nodes with.
+        node_fill_hwm : str, default '#00ff00'
+            The color to fill the nodes when they meet the high-water mark.
+        ancestor_hwm : bool, default True
+            Whether an ancestor reaching high-water mark covers descendants.
+        """
+
+        # Calculate our drawing sizes, paddings, and so forth.
+        node_spacing = int(node_width * node_spacing_pct)
+        level_spacing = int(node_height * level_spacing_pct)
+        drawing_height = (node_height + level_spacing) * (self.max_levels + 1) + (2 * drawing_padding)
+        drawing_width = (node_width + node_spacing) * len(self.levels[self.max_levels]) + (2 * drawing_padding)
+
+        # Draw the raw canvas.
+        drawing = drawsvg.Drawing(
+            height=drawing_height,
+            width=drawing_width,
+        )
+
+        # Attach the boxes, lines, and texts to the drawing.
+        x = 0
+        y = drawing_padding + int(level_spacing / 2)
+        for level in self.levels.keys():
+            nodes = self.levels[level]
+            column_width = int(drawing_width / len(nodes))
+            x = drawing_padding + ((column_width - node_width) / 2)
+            for node in nodes:
+                # Build the group using a transform to position it.
+                group = drawsvg.Group(
+                    width=node_width,
+                    height=node_height,
+                    transform=f"translate({x}, {y})",
+                )
+                # Build the rectangle and inner bits with coords relative to the group.
+                fill = node_fill_default
+                if node.is_below_high_water_mark or (ancestor_hwm and node.has_high_water_mark_ancestor):
+                    fill = node_fill_hwm
+                rect = drawsvg.Rectangle(
+                    x=0,
+                    y=0,
+                    height=node_height,
+                    width=node_width,
+                    fill=fill,
+                    stroke='black',
+                    stroke_width=3,
+                    rx=int(node_width * node_border_radius),
+                    ry=int(node_width * node_border_radius),
+                )
+                group.append(rect)
+                # Place the node number and such inside the rectangle.
+                rect_padding = 10
+                center_x = int(node_width / 2)
+                number_font_size = 50
+                number_y = number_font_size + rect_padding
+                fraction_font_size = 40
+                fraction_y = number_y + number_font_size
+                oe_font_size = 30
+                oe_y = fraction_y + fraction_font_size
+                node_number = drawsvg.Text(
+                    text=str(node.value),
+                    font_size=number_font_size,
+                    font_weight='bold',
+                    text_anchor='middle',
+                    center=True,
+                    x=center_x,
+                    y=number_y,
+                )
+                group.append(node_number)
+                node_fraction = drawsvg.Text(
+                    text=f"{node.threes_value}/{node.twos_value}",
+                    font_size=fraction_font_size,
+                    font_weight='normal',
+                    text_anchor='middle',
+                    center=True,
+                    x=center_x,
+                    y=fraction_y,
+                )
+                group.append(node_fraction)
+                lines = textwrap.wrap(
+                    text=node.oe_chain,
+                    width=int(node_width / oe_font_size) + 2,
+                )
+                for index, line in enumerate(lines):
+                    node_oe_pattern = drawsvg.Text(
+                        text=line,
+                        font_size=oe_font_size,
+                        font_weight='normal',
+                        text_anchor='middle',
+                        center=True,
+                        x=center_x,
+                        y=oe_y + (index * oe_font_size),
+                    )
+                    group.append(node_oe_pattern)
+                drawing.append(group)
+                # Connect the group to the parent's group with a line.
+                if node.parent is not None:
+                    start_x = x + int(column_width / 2) + int(node_width / 2)
+                    if node.parent.children[1].value == node.value:
+                        start_x = x - int(column_width / 2) + int(node_width / 2)
+                    start_y = y - level_spacing
+                    end_x = x + int(node_width / 2)
+                    end_y = y
+                    line = drawsvg.Line(
+                        sx=start_x,
+                        sy=start_y,
+                        ex=end_x,
+                        ey=end_y,
+                        stroke='black',
+                        stroke_width=5,
+                    )
+                    drawing.append(line)
+                # Update x based on the drawing width and the number of nodes.
+                x += column_width
+            # Bump y for the new level.
+            y += node_height + level_spacing
+
+        # Save the file.
+        if format == 'svg':
+            drawing.save_svg(file)
+        elif format == 'png':
+            drawing.save_png(file)
+        else:
+            raise Exception(f"You must specify 'svg' or 'png' for format, not: {format}")
 
     @classmethod
     def node_at(
