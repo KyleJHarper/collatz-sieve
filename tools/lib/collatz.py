@@ -153,16 +153,20 @@ class Node:
         return self._value
 
     @property
-    def fraction_portion(self):
-        return self._fraction_portion
+    def fg_n_portion(self):
+        return self._fg_n_portion
 
     @property
-    def fraction_constant(self):
-        return self._fraction_constant
+    def fg_constant(self):
+        return self._fg_constant
+
+    @property
+    def fg_total(self):
+        return (self.fg_n_portion * self.value) + self.fg_constant
 
     @property
     def is_below_high_water_mark(self):
-        if (self.fraction_portion * self.value) + self.fraction_constant < self.value:
+        if self.fg_total < self.value:
             return True
         return False
 
@@ -225,13 +229,13 @@ class Node:
         self._twos_value = pow(2, self._oe_chain.count('E'))
         # We need the fractional portion and constant, and their total.
         # Decimal values for real precision, not a float.
-        self._fraction_portion = Decimal(self._threes_value) / Decimal(self._twos_value)
-        self._fraction_constant = Decimal(0)
+        self._fg_n_portion = Decimal(self._threes_value) / Decimal(self._twos_value)
+        self._fg_constant = Decimal(0)
         for oe in self._oe_chain:
             if oe == 'E':
-                self._fraction_constant /= 2
+                self._fg_constant /= 2
             else:
-                self._fraction_constant = (3 * self._fraction_constant) + 1
+                self._fg_constant = (3 * self._fg_constant) + 1
         # Track our ancestry's HWM.
         self._has_high_water_mark_ancestor = False
         parent = self._parent
@@ -290,16 +294,16 @@ class BinaryTree:
     def render(
         self,
         file: str,
-        node_height: int = 300,
-        node_width: int = 200,
+        node_height: int = 100,
+        node_width: int = 75,
         node_spacing_pct: float = 0.2,
         level_spacing_pct: float = 1.0,
         drawing_padding: int = 0,
-        format: str = 'svg',
+        format: str = None,
         node_border_radius: float = 0.15,
         node_fill_default: str = '#ffffff',
         node_fill_hwm: str = '#00ff00',
-        ancestor_hwm: bool = True,
+        fill_by_ancestor_hwm: bool = False,
     ):
         """
         Generates an image of the tree in vector (SVG) or raster (PNG) format.  It leans heavily on
@@ -315,10 +319,11 @@ class BinaryTree:
         Attributes
         -----------
         file: str, required
-            The path for the output file.  Will be sent directly to drawing.save_svg/png().
-        node_height : int, default 300
+            The path for the output file.  Will be sent directly to drawing.save_svg/png(), based
+            on the file extension, unless `format` is specified.
+        node_height : int, default 100
             How tall each node should be.
-        node_width : int, default 200
+        node_width : int, default 75
             How wide each node should be.
         node_spacing_pct : float, default 0.2
             The percent of `node_width` to space the last layer of nodes by.
@@ -326,16 +331,17 @@ class BinaryTree:
             The percent of `node_height` to space levels by.
         drawing_padding : int, default 0
             How much additional padding to add to the whole drawing.
-        format : str, default 'svg'
-            Which format to output: 'svg' or 'png'.
+        format : str, default None
+            Which format to output: 'svg' or 'png'.  If None, uses file extension.
         node_border_radius : float, default 0.15
             How much rounding to apply to the x and y corners of the nodes.
         node_fill_default : str, default '#ffffff'
             The default color to fill the nodes with.
         node_fill_hwm : str, default '#00ff00'
             The color to fill the nodes when they meet the high-water mark.
-        ancestor_hwm : bool, default True
-            Whether an ancestor reaching high-water mark covers descendants.
+        fill_by_ancestor_hwm : bool, default False
+            If an ancestor reaching high-water mark should color the entire node with the
+            `node_fill_hwm` value.
         """
 
         # Calculate our drawing sizes, paddings, and so forth.
@@ -343,6 +349,12 @@ class BinaryTree:
         level_spacing = int(node_height * level_spacing_pct)
         drawing_height = (node_height + level_spacing) * (self.max_levels + 1) + (2 * drawing_padding)
         drawing_width = (node_width + node_spacing) * len(self.levels[self.max_levels]) + (2 * drawing_padding)
+        rect_padding = int(node_height * 0.1)
+        number_font_size = int(node_width * 0.2)
+        fg_font_size = int(node_width * 0.15)
+        oe_font_size = int(node_width * 0.1)
+        line_stroke_width = max(int(node_width * 0.01), 1)
+        rect_stroke_width = line_stroke_width + 2
 
         # Draw the raw canvas.
         drawing = drawsvg.Drawing(
@@ -364,10 +376,17 @@ class BinaryTree:
                     height=node_height,
                     transform=f"translate({x}, {y})",
                 )
-                # Build the rectangle and inner bits with coords relative to the group.
+                center_x = int(node_width / 2)
+                number_y = number_font_size + rect_padding
+                fg_fraction_y = number_y + number_font_size
+                fg_n_portion_y = fg_fraction_y + fg_font_size
+                fg_constant_y = fg_n_portion_y + fg_font_size
+                fg_total_y = fg_constant_y + fg_font_size
+                oe_y = fg_total_y + fg_font_size
                 fill = node_fill_default
-                if node.is_below_high_water_mark or (ancestor_hwm and node.has_high_water_mark_ancestor):
+                if node.is_below_high_water_mark or (fill_by_ancestor_hwm and node.has_high_water_mark_ancestor):
                     fill = node_fill_hwm
+                # Build the rectangle and inner bits with coords relative to the group.
                 rect = drawsvg.Rectangle(
                     x=0,
                     y=0,
@@ -375,20 +394,23 @@ class BinaryTree:
                     width=node_width,
                     fill=fill,
                     stroke='black',
-                    stroke_width=3,
+                    stroke_width=rect_stroke_width,
                     rx=int(node_width * node_border_radius),
                     ry=int(node_width * node_border_radius),
                 )
                 group.append(rect)
+                if node.has_high_water_mark_ancestor:
+                    fill = node_fill_hwm
+                number_rect = drawsvg.Rectangle(
+                    x=rect_stroke_width / 2,
+                    y=rect_padding + rect_stroke_width,
+                    height=number_font_size,
+                    width=node_width - rect_stroke_width,
+                    fill=fill,
+                    stroke_width=0,
+                )
+                group.append(number_rect)
                 # Place the node number and such inside the rectangle.
-                rect_padding = 10
-                center_x = int(node_width / 2)
-                number_font_size = 50
-                number_y = number_font_size + rect_padding
-                fraction_font_size = 40
-                fraction_y = number_y + number_font_size
-                oe_font_size = 30
-                oe_y = fraction_y + fraction_font_size
                 node_number = drawsvg.Text(
                     text=str(node.value),
                     font_size=number_font_size,
@@ -401,14 +423,44 @@ class BinaryTree:
                 group.append(node_number)
                 node_fraction = drawsvg.Text(
                     text=f"{node.threes_value}/{node.twos_value}",
-                    font_size=fraction_font_size,
+                    font_size=fg_font_size,
                     font_weight='normal',
                     text_anchor='middle',
                     center=True,
                     x=center_x,
-                    y=fraction_y,
+                    y=fg_fraction_y,
                 )
                 group.append(node_fraction)
+                node_fg_n_portion = drawsvg.Text(
+                    text=f"{node.fg_n_portion:.7f}*N",
+                    font_size=fg_font_size,
+                    font_weight='normal',
+                    text_anchor='middle',
+                    center=True,
+                    x=center_x,
+                    y=fg_n_portion_y,
+                )
+                group.append(node_fg_n_portion)
+                node_fg_constant = drawsvg.Text(
+                    text=f"+ {node.fg_constant:.7f}",
+                    font_size=fg_font_size,
+                    font_weight='normal',
+                    text_anchor='middle',
+                    center=True,
+                    x=center_x,
+                    y=fg_constant_y,
+                )
+                group.append(node_fg_constant)
+                node_fg_total = drawsvg.Text(
+                    text=f"= {node.fg_total:.4f}",
+                    font_size=fg_font_size,
+                    font_weight='bold',
+                    text_anchor='middle',
+                    center=True,
+                    x=center_x,
+                    y=fg_total_y,
+                )
+                group.append(node_fg_total)
                 lines = textwrap.wrap(
                     text=node.oe_chain,
                     width=int(node_width / oe_font_size) + 2,
@@ -439,7 +491,7 @@ class BinaryTree:
                         ex=end_x,
                         ey=end_y,
                         stroke='black',
-                        stroke_width=5,
+                        stroke_width=line_stroke_width,
                     )
                     drawing.append(line)
                 # Update x based on the drawing width and the number of nodes.
@@ -448,6 +500,13 @@ class BinaryTree:
             y += node_height + level_spacing
 
         # Save the file.
+        extension = file[-3:]
+        if format is None:
+            format = extension
+        else:
+            if format != extension:
+                raise Exception(f"The format you specified is '{format}' but your file extension is '{extension}'.")
+        # With a valid format, call save().
         if format == 'svg':
             drawing.save_svg(file)
         elif format == 'png':
