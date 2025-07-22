@@ -11,10 +11,9 @@ EXPDIR = $(SRCDIR)/experiments
 build:
 	$(MAKE) 3n1
 
-3n1:
-	$(CC) $(CFLAGS) -o $(BINDIR)/3n1 \
-		$(EXPDIR)/experiment_a1.cpp \
-		$(SRCDIR)/3n1.cpp
+single_collatz:
+	$(CC) $(CFLAGS) -o $(BINDIR)/single_collatz \
+		$(SRCDIR)/single_collatz.cpp
 
 high_water_mark:
 	$(CC) $(CFLAGS) -o $(BINDIR)/high_water_mark \
