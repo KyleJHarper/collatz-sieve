@@ -145,6 +145,14 @@ class Collatz:
                 i += 2
         return pattern
 
+    @classmethod
+    def generate_oe_pattern(cls, sequence: list) -> str:
+        """ Takes a sequence and creates the OE pattern from it. """
+        rv = ""
+        for stop in sequence:
+            rv += 'E' if stop % 2 == 0 else 'O'
+        return rv
+
 
 class Node:
     """ A Node within the expanding window/binary tree concept we're creating. """
@@ -268,28 +276,56 @@ class BinaryTree:
         return self._levels
 
     @property
+    def level_count(self):
+        return self._level_count
+
+    @property
     def max_levels(self):
         return self._max_levels
 
-    def __init__(self, max_levels: int):
+    def __init__(
+        self,
+        level_count: int,
+        max_levels: int = 0,
+    ):
+        """
+        Build a Binary Tree with `level_count` levels of depth.
+
+        Attributes
+        ----------
+        level_count : int
+            How many levels to build in the initial tree.
+        max_levels : int, default 0 (unlimited)
+            How many levels the tree can grow before throwing an exception.  0 is unlimited.
+
+        Methods
+        -------
+        add_level() : None
+            Will add another level to the tree.  Exception if over `max_levels`.
+        """
+        self._level_count = level_count
         self._max_levels = max_levels
         # Build the tree here.  This is faster than using the node_at class method in a loop.
         self._root_node = Node(value=0, parent=None)
         self._levels = {
             0: [self._root_node],
         }
-        parent_level = 0
-        child_level = 0
-        while child_level < self._max_levels:
-            parent_level = child_level
-            child_level += 1
-            step = pow(2, parent_level)
-            self._levels[child_level] = []
-            for parent in self._levels[parent_level]:
-                child_values = [parent.value + step, parent.value + (2 * step)]
-                for child_value in child_values:
-                    child_node = parent.add_child(value=child_value)
-                    self._levels[child_level].append(child_node)
+        for i in range(0, level_count):
+            self.add_level()
+
+    def add_level(self):
+        """ Adds a level to the current tree. """
+        # This is easy to do, because we just take the last level and use those as parents.
+        # The step is the power of two for that level.
+        parent_level = list(self.levels.keys())[-1]
+        child_level = parent_level + 1
+        self.levels[child_level] = []
+        step = pow(2, parent_level)
+        for parent in self.levels[parent_level]:
+            child_values = [parent.value + step, parent.value + (2 * step)]
+            for child_value in child_values:
+                child_node = parent.add_child(value=child_value)
+                self._levels[child_level].append(child_node)
 
     def render(
         self,
@@ -347,8 +383,8 @@ class BinaryTree:
         # Calculate our drawing sizes, paddings, and so forth.
         node_spacing = int(node_width * node_spacing_pct)
         level_spacing = int(node_height * level_spacing_pct)
-        drawing_height = (node_height + level_spacing) * (self.max_levels + 1) + (2 * drawing_padding)
-        drawing_width = (node_width + node_spacing) * len(self.levels[self.max_levels]) + (2 * drawing_padding)
+        drawing_height = (node_height + level_spacing) * (self.level_count + 1) + (2 * drawing_padding)
+        drawing_width = (node_width + node_spacing) * len(self.levels[self.level_count]) + (2 * drawing_padding)
         rect_padding = int(node_height * 0.1)
         number_font_size = int(node_width * 0.2)
         fg_font_size = int(node_width * 0.15)

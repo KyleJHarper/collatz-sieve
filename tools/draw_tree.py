@@ -33,5 +33,5 @@ MAX_LEVELS = args.levels
 
 
 # Build the tree.
-tree = BinaryTree(max_levels=MAX_LEVELS)
+tree = BinaryTree(level_count=MAX_LEVELS)
 tree.render('zz_sample.svg')
