@@ -12,6 +12,8 @@
 // a template class like this.
 template <typename T>
 class Collatz {
+    static_assert(std::is_integral<T>::value, "T must be an integral type");
+
     private:
     T _initial_value;
     std::vector<T> _sequence;
@@ -21,7 +23,7 @@ class Collatz {
     public:
     Collatz(T initial_value){
         if (initial_value < 0) {
-            throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 1.");
+            throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 0.");
         }
         _initial_value = initial_value;
         // Build the sequence and its related metadata.
@@ -66,19 +68,19 @@ class Collatz {
     }
 
     // Accessors and properties.
-    const T& get_initial_value() {
+    const T& get_initial_value() const {
         return _initial_value;
     }
-    const std::vector<T>& get_sequence() {
+    const std::vector<T>& get_sequence() const {
         return _sequence;
     };
-    const std::string& get_oe_pattern() {
+    const std::string& get_oe_pattern() const {
         return _oe_pattern;
     }
-    const size_t& get_hwm_index() {
+    const size_t& get_hwm_index() const {
         return _hwm_index;
     }
-    size_t get_stop_count() {
+    size_t get_stop_count() const {
         return _sequence.size();
     }
 };

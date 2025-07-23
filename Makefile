@@ -9,11 +9,13 @@ EXPDIR = $(SRCDIR)/experiments
 
 # Targets
 build:
-	$(MAKE) 3n1
+	$(MAKE) coverage
+	$(MAKE) high_water_mark
+	$(MAKE) single_collatz
 
-single_collatz:
-	$(CC) $(CFLAGS) -o $(BINDIR)/single_collatz \
-		$(SRCDIR)/single_collatz.cpp
+clean:
+	rm -f $(BINDIR)/*
+	echo "Cleanup complete!"
 
 coverage:
 	$(CC) $(CFLAGS) -o $(BINDIR)/coverage \
@@ -25,6 +27,7 @@ high_water_mark:
 		$(SRCDIR)/high_water_mark.cpp \
 		-lgmp
 
-clean:
-	rm -f $(BINDIR)/*
-	echo "Cleanup complete!"
+single_collatz:
+	$(CC) $(CFLAGS) -o $(BINDIR)/single_collatz \
+		$(SRCDIR)/single_collatz.cpp
+
