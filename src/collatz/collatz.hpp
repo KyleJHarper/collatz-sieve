@@ -16,7 +16,7 @@ class Collatz {
     T _initial_value;
     std::vector<T> _sequence;
     std::string _oe_pattern;
-    int _hwm_index = 0;
+    size_t _hwm_index = 0;
 
     public:
     Collatz(T initial_value){
@@ -75,7 +75,7 @@ class Collatz {
     const std::string& get_oe_pattern() {
         return _oe_pattern;
     }
-    const int& get_hwm_index() {
+    const size_t& get_hwm_index() {
         return _hwm_index;
     }
     size_t get_stop_count() {
