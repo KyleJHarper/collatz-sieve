@@ -5,15 +5,22 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include "collatz.hpp"
+#include "concepts.hpp"
+#include <unordered_map>
 
 
+//
 // A perfect binary tree mapped to powers of two.  This creates a uniform distribution of nodes in
 // the N+/Z space (positive integers), which Collatz is concerned.
 //
+
+//
+// Node
 // A node will have a fractional value based on the distribution of the Odds and Evens as we
 // process the sequence.  These odd-even chains are evenly patterened as the tree is generated, so
 // we don't want to know the full high-water mark (from Collatz()).
-template <typename T>
+//
+template <IntegralOrMPZClass T>
 class Node {
     private:
     T _value;
@@ -21,28 +28,32 @@ class Node {
     size_t _child_count = 0;
     Node *_children[2];
     Node *_parent;
-    Node *_hwm_ancestor = NULL;
+    Node *_hwm_ancestor = nullptr;
     Collatz<T> *_collatz;
     std::string_view _odd_even_chain_view;
-    mpz_t _twos_value_mpz;
-    mpz_t _threes_value_mpz;
-    mpf_t _fg_n_portion_mpf;
-    mpf_t _fg_constant_mpf;
-    mpf_t _fg_total_mpf;
+    mpz_class _twos_value_mpz_c;
+    mpz_class _threes_value_mpz_c;
+    mpf_class _fg_n_portion_mpf_c;
+    mpf_class _fg_constant_mpf_c;
+    mpf_class _fg_total_mpf_c;
 
     public:
     // Constructor
-    Node(T value, Node *parent = NULL){
+    Node(T value, Node *parent = nullptr){
         // Set the argument values.
         _value = value;
         _parent = parent;
         // Calculate our level.  Formula: floor(log2(N))
-        _level = std::floor(std::log2(_value));
+        if constexpr(std::integral<T>) {
+            _level = std::floor(std::log2(_value));
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            _level = mpz_sizeinbase(_value.get_mpz_t(), 2);
+        }
         // Build the collatz sequence object.
         _collatz = new Collatz<T>(_value);
         // Leverage our parent's oe-chain to determine ours.
         size_t oe_chain_length = 0;
-        if(parent != NULL) {
+        if(parent != nullptr) {
             oe_chain_length = parent->get_odd_even_chain_view().length();
         }
         _odd_even_chain_view = _collatz->get_oe_pattern().substr(0, oe_chain_length);
@@ -52,39 +63,24 @@ class Node {
             oe_chain_length += 2;
         }
         _odd_even_chain_view = _collatz->get_oe_pattern().substr(0, oe_chain_length);
-        // Get the twos and threes values.
-        mpz_init(_twos_value_mpz);
-        mpz_init(_threes_value_mpz);
-        mpz_ui_pow_ui(_twos_value_mpz, 2, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'E'));
-        mpz_ui_pow_ui(_threes_value_mpz, 3, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'O'));
-        // Compute the odd-even fractional N portion.  Requires floats for this.
-        mpf_t twos_value_tmp_mpf;
-        mpf_t threes_value_tmp_mpf;
-        mpf_init(twos_value_tmp_mpf);
-        mpf_init(threes_value_tmp_mpf);
-        mpf_set_z(twos_value_tmp_mpf, _twos_value_mpz);
-        mpf_set_z(threes_value_tmp_mpf, _threes_value_mpz);
-        mpf_init(_fg_n_portion_mpf);
-        mpf_init(_fg_constant_mpf);
-        mpf_div(_fg_n_portion_mpf, threes_value_tmp_mpf, twos_value_tmp_mpf);
-        mpf_clear(twos_value_tmp_mpf);
-        mpf_clear(threes_value_tmp_mpf);
-        // Now calculate the constant portion.
+        // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
+        mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'E'));
+        mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'O'));
+        // Compute the odd-even fractional N portion, the constant, and then tally them up.
+        // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
+        mpf_class tmp_threes_mpf_c = _threes_value_mpz_c;
+        _fg_n_portion_mpf_c = tmp_threes_mpf_c / _twos_value_mpz_c;
         for(auto c : _odd_even_chain_view) {
             if(c == 'E') {
-                mpf_div_ui(_fg_constant_mpf, _fg_constant_mpf, 2);
+                _fg_constant_mpf_c = _fg_constant_mpf_c / 2;
             } else {
-                mpf_mul_ui(_fg_constant_mpf, _fg_constant_mpf, 3);
-                mpf_add_ui(_fg_constant_mpf, _fg_constant_mpf, 1);
+                _fg_constant_mpf_c = _fg_constant_mpf_c * 3 + 1;
             }
         }
-        // Multiply out and sum them for the total.
-        mpf_init(_fg_total_mpf);
-        mpf_mul_ui(_fg_total_mpf, _fg_total_mpf, _value);
-        mpf_add(_fg_total_mpf, _fg_total_mpf, _fg_constant_mpf);
+        _fg_total_mpf_c = (_fg_total_mpf_c * _value) + _fg_constant_mpf_c;
         // Find the closest ancestor who hit high-water mark.
         Node *ancestor = parent;
-        while(ancestor != NULL) {
+        while(ancestor != nullptr) {
             if(ancestor->is_below_high_water_mark()) {
                 _hwm_ancestor = ancestor;
                 break;
@@ -96,11 +92,6 @@ class Node {
     // Destructor
     ~Node() {
         delete _collatz;
-        mpz_clear(_twos_value_mpz);
-        mpz_clear(_threes_value_mpz);
-        mpf_clear(_fg_n_portion_mpf);
-        mpf_clear(_fg_constant_mpf);
-        mpf_clear(_fg_total_mpf);
         for(size_t i=0; i<_child_count; i++) {
             delete _children[i];
         }
@@ -118,36 +109,96 @@ class Node {
     Node* get_parent() const {
         return _parent;
     }
-    const mpz_t& get_twos_value() const {
-        return _twos_value_mpz;
+    const mpz_class& get_twos_value() const {
+        return _twos_value_mpz_c;
     }
-    const mpz_t& get_threes_value() const {
-        return _threes_value_mpz;
+    const mpz_class& get_threes_value() const {
+        return _threes_value_mpz_c;
     }
     const std::string_view& get_odd_even_chain_view() const {
         return _odd_even_chain_view;
     }
-    const mpf_t& get_fg_n_portion() const {
-        return _fg_n_portion_mpf;
+    const mpf_class& get_fg_n_portion() const {
+        return _fg_n_portion_mpf_c;
     }
-    const mpf_t& get_fg_constant() const {
-        return _fg_constant_mpf;
+    const mpf_class& get_fg_constant() const {
+        return _fg_constant_mpf_c;
     }
-    const mpf_t& get_fg_total() const {
-        return _fg_total_mpf;
+    const mpf_class& get_fg_total() const {
+        return _fg_total_mpf_c;
     }
     bool is_below_high_water_mark() const {
-        if(mpf_cmp_ui(_fg_total_mpf, _value) > 0) {
+        if(_fg_total_mpf_c > _value) {
             return true;
         }
         return false;
     }
-    Node* add_child(T value) {
+    Node<T>* add_child(T value) {
         Node *child = new Node(value, this);
         _children[_child_count] = child;
         _child_count += 1;
         return child;
     }
+};
+
+
+
+//
+// Binary Tree
+//
+template<typename T>
+class BinaryTree {
+    private:
+    Node<T> *_root_node = nullptr;
+    size_t _level_count = 0;
+    std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
+
+    public:
+    // Constructor
+    BinaryTree(size_t levels) {
+        _root_node = new Node<T>(0);
+        _level_map[0].push_back(_root_node);
+        for(size_t level = 0; level < levels; level++){
+            this->add_level();
+        }
+    }
+
+    // Add a level to the tree.  We simply take the parent nodes and add two children with a steady
+    // step value.
+    void add_level() {
+        // Get the parent and child level IDs.
+        size_t parent_level = _level_count;
+        size_t child_level = _level_count + 1;
+        _level_count++;
+        // Each level will double the size of the tree, so we can't rely on size_t if we're going to
+        // support GMP-size values.  We need to respect T.
+        T step = 0;
+        if constexpr(std::integral<T>) {
+            step = std::pow(2, parent_level);
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            mpz_ui_pow_ui(step.get_mpz_t(), 2, parent_level);
+        }
+        // Loop through the parents to build the children.
+        T child_values[2];
+        for(Node<T> *parent : _level_map[parent_level]) {
+            // Child values are always type T and step away from parent.
+            child_values[0] = parent->get_value() + step;
+            child_values[1] = child_values[0] + step;
+            for(const T child_value : child_values) {
+                Node<T> *child_node = parent->add_child(child_value);
+                _level_map[child_level].push_back(child_node);
+            }
+        }
+    }
+
+    // Accessors and properties.
+    const size_t& get_level_count() const {
+        return _level_count;
+    }
+    Node<T>* get_root_node() const {
+        return _root_node;
+    }
+
 };
 
 #endif

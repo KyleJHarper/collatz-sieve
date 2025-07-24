@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <gmpxx.h>
 #include <stdint.h>
 #include <inttypes.h>
 #include <iostream>
@@ -7,8 +8,16 @@
 
 
 int main() {
-    Node bob = Node<uint>(1);
-    std::cout << "I am value: " << std::to_string(bob.get_value()) << std::endl;
+    mpz_class value = 1;
+    Node bob = Node<mpz_class>(value);
+    std::cout << "I am value: " << bob.get_value().get_str() << std::endl;
+
+    uint u_value = 1;
+    Node u_bob = Node<uint>(u_value);
+    std::cout << "I am u_value: " << u_bob.get_value() << std::endl;
+
+    BinaryTree tree = BinaryTree<uint>(4);
+    std::cout << "I see this many levels: " << tree.get_level_count() << std::endl;
     // if (argc < 2) {
     //     std::cerr << "You must send a number as arg1." << std::endl;
     //     return 1;
