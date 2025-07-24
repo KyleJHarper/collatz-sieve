@@ -20,14 +20,15 @@ clean:
 coverage:
 	$(CC) $(CFLAGS) -o $(BINDIR)/coverage \
 		$(SRCDIR)/coverage.cpp \
-		-lgmp
+		-lgmp -lgmpxx
 
 high_water_mark:
 	$(CC) $(CFLAGS) -o $(BINDIR)/high_water_mark \
 		$(SRCDIR)/high_water_mark.cpp \
-		-lgmp
+		-lgmp -lgmpxx
 
 single_collatz:
 	$(CC) $(CFLAGS) -o $(BINDIR)/single_collatz \
-		$(SRCDIR)/single_collatz.cpp
+		$(SRCDIR)/single_collatz.cpp \
+		-lgmp -lgmpxx
 

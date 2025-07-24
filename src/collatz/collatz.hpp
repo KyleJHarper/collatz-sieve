@@ -4,18 +4,28 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <concepts>
 
 
+//
 // Basic Collatz sequence object with minimal data to keep it tight.
-// This class only works with types that support direct arithmetic, such as int, uint, int128_t,
-// and so forth.  Specficially, GMP-style math requires function calls, which can't be modeled in
-// a template class like this.
+//
+
+//
+// We will use concepts to unify our template so it can support integrals and GMP.
+//
+template<typename T>
+concept Integral = std::integral<T>;
+
+
+// This is the base template, which handles all supported integral types.  See GMP version below.
 template <typename T>
 class Collatz {
     static_assert(std::is_integral<T>::value, "T must be an integral type");
 
     private:
     T _initial_value;
+    T _peak_value = 0;
     std::vector<T> _sequence;
     std::string _oe_pattern;
     size_t _hwm_index = 0;
@@ -30,6 +40,9 @@ class Collatz {
         T current = _initial_value;
         do {
             _sequence.push_back(current);
+            if(current > _peak_value) {
+                _peak_value = current;
+            }
             if(current % 2 == 0) {
                 _oe_pattern.append("E");
                 current = current / 2;
@@ -70,6 +83,9 @@ class Collatz {
     // Accessors and properties.
     const T& get_initial_value() const {
         return _initial_value;
+    }
+    const T& get_peak_value() const {
+        return _peak_value;
     }
     const std::vector<T>& get_sequence() const {
         return _sequence;

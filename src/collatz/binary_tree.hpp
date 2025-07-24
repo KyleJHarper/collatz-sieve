@@ -2,8 +2,8 @@
 #define SRC_BINARY_TREE_H_
 
 #include <cmath>
-#include <gmpxx.h>
 #include <gmp.h>
+#include <gmpxx.h>
 #include "collatz.hpp"
 
 
