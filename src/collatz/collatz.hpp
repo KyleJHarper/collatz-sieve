@@ -114,6 +114,14 @@ class Collatz {
     size_t get_stop_count() const {
         return _sequence.size();
     }
+    size_t deep_size() const {
+        size_t total = 0;
+        total += sizeof(*this);
+        for (auto &stop : _sequence) {
+            total += sizeof(stop);
+        }
+        return total;
+    }
 
 };
 

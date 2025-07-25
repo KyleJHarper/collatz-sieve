@@ -16,10 +16,10 @@ sudo chown ${USER}:${USER} perf.data
 /usr/lib/linux-tools/6.8.0-64-generic/perf script > out.perf
 
 # Collapse it.
-../Flamegraph/stackcollapse-perf.pl out.perf > collapsed.txt
+../FlameGraph/stackcollapse-perf.pl out.perf > collapsed.txt
 
 # Build the SVG.
-../Flamegraph/flamegraph.pl collapsed.txt > flamegraph.svg
+../FlameGraph/flamegraph.pl --width 2000 collapsed.txt > flamegraph.svg
 
 
 # Clean up.

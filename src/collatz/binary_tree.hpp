@@ -149,6 +149,12 @@ class Node {
         _child_count += 1;
         return child;
     }
+    size_t deep_size() const {
+        size_t total = 0;
+        total += sizeof(*this);
+        total += _collatz->deep_size();
+        return total;
+    }
 };
 
 
@@ -189,6 +195,16 @@ class BinaryTree {
     }
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {
         return _level_map;
+    }
+    size_t deep_size() const {
+        size_t total = 0;
+        total += sizeof(*this);
+        for(const auto& [level, vector] : _level_map) {
+            for(Node<T> *node : vector) {
+                total += node->deep_size();
+            }
+        }
+        return total;
     }
 
     // Add a level to the tree.  We simply take the parent nodes and add two children with a steady
