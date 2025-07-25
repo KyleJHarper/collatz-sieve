@@ -3,33 +3,59 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <iostream>
+#include <unordered_map>
 #include "collatz/binary_tree.hpp"
 // #include "experiments/experiment_a1.hpp"
 
 
-int main() {
-    mpz_class value = 1;
-    Node bob = Node<mpz_class>(value);
-    std::cout << "I am value: " << bob.get_value().get_str() << std::endl;
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << "You must send a number as arg1 for the number of levels." << std::endl;
+        return 1;
+    }
 
-    uint u_value = 1;
-    Node u_bob = Node<uint>(u_value);
-    std::cout << "I am u_value: " << u_bob.get_value() << std::endl;
+    // Build the tree.
+    typedef mpz_class my_type;
+    size_t levels = 0;
+    levels = atoi(argv[1]);
+    BinaryTree tree = BinaryTree<my_type>(levels);
 
-    BinaryTree tree = BinaryTree<uint>(4);
-    std::cout << "I see this many levels: " << tree.get_level_count() << std::endl;
-    // if (argc < 2) {
-    //     std::cerr << "You must send a number as arg1." << std::endl;
-    //     return 1;
+    // Calculate coverage.
+    std::unordered_map<size_t, my_type> coverage_map;
+    for(size_t level=1; level <= tree.get_max_level(); level++) {
+        const std::vector<Node<my_type>*>& nodes = tree.get_level_map().find(level)->second;
+        for(const Node<my_type>* node : nodes) {
+            if(node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+                coverage_map[level] += 1;
+            }
+        }
+    }
+
+    // Print results.
+    my_type global_covered = 0;
+    my_type global_total = 0;
+    my_type total = 0;
+    mpf_class coverage = 0;
+    for(size_t level=1; level <= tree.get_max_level(); level++) {
+        const std::vector<Node<my_type>*>& nodes = tree.get_level_map().find(level)->second;
+        const my_type& covered = coverage_map[level];
+        total = nodes.size();
+        global_total += total;
+        global_covered += covered;
+        coverage = (covered / total) * 100;
+        std::cout << "Level " << level << ": " << coverage << "%  (" << covered << "/" << total << ")" << std::endl;
+    }
+    // for(auto& [level, covered] : coverage_map) {
+    //     const std::vector<Node<my_type>*>& nodes = tree.get_level_map().find(level)->second;
+    //     total = nodes.size();
+    //     global_total += total;
+    //     global_covered += covered;
+    //     coverage = (covered / total) * 100;
+    //     std::cout << "Level " << level << ": " << coverage << "%  (" << covered << "/" << total << ")" << std::endl;
     // }
-    // uint initial_value = atoi(argv[1]);
-    // Collatz c = Collatz<uint>(initial_value);
-    // std::cout << "Value is: " << c << std::endl;
-    // std::cout << c.get_sequence().back() << std::endl;
-    // std::cout << "Sequence is: " << c.get_sequence_string() << std::endl;
-    // std::cout << "OE pattern is: " << c.get_oe_pattern() << std::endl;
-    // std::cout << "HWM index is: " << c.get_hwm_index() << std::endl;
-    // std::cout << "Stop count: " << c.get_stop_count() << std::endl;
+    // Global Print
+    coverage = (global_covered / global_total) * 100;
+    std::cout << "Global Coverage: " << coverage << "%  (" << global_covered << "/" << global_total << ")" << std::endl;
 
     return 0;
 }

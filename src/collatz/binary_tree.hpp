@@ -6,6 +6,7 @@
 #include <gmpxx.h>
 #include "collatz.hpp"
 #include "concepts.hpp"
+#include <stdexcept>
 #include <unordered_map>
 
 
@@ -133,6 +134,12 @@ class Node {
         }
         return false;
     }
+    bool has_high_water_mark_ancestor() const {
+        if(_hwm_ancestor == nullptr) {
+            return true;
+        }
+        return false;
+    }
     Node<T>* add_child(T value) {
         Node *child = new Node(value, this);
         _children[_child_count] = child;
@@ -150,7 +157,7 @@ template<typename T>
 class BinaryTree {
     private:
     Node<T> *_root_node = nullptr;
-    size_t _level_count = 0;
+    size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
 
     public:
@@ -158,18 +165,31 @@ class BinaryTree {
     BinaryTree(size_t levels) {
         _root_node = new Node<T>(0);
         _level_map[0].push_back(_root_node);
-        for(size_t level = 0; level < levels; level++){
+        for(size_t level = 1; level <= levels; level++){
             this->add_level();
         }
+    }
+    // Destructor
+    // We don't need anything special here.  When _root_node is deleted, recrusion will free them all.
+
+    // Accessors and properties.
+    const size_t& get_max_level() const {
+        return _max_level;
+    }
+    Node<T>* get_root_node() const {
+        return _root_node;
+    }
+    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {
+        return _level_map;
     }
 
     // Add a level to the tree.  We simply take the parent nodes and add two children with a steady
     // step value.
     void add_level() {
         // Get the parent and child level IDs.
-        size_t parent_level = _level_count;
-        size_t child_level = _level_count + 1;
-        _level_count++;
+        size_t parent_level = _max_level;
+        size_t child_level = _max_level + 1;
+        _max_level++;
         // Each level will double the size of the tree, so we can't rely on size_t if we're going to
         // support GMP-size values.  We need to respect T.
         T step = 0;
@@ -184,21 +204,76 @@ class BinaryTree {
             // Child values are always type T and step away from parent.
             child_values[0] = parent->get_value() + step;
             child_values[1] = child_values[0] + step;
-            for(const T child_value : child_values) {
+            for(const T &child_value : child_values) {
                 Node<T> *child_node = parent->add_child(child_value);
                 _level_map[child_level].push_back(child_node);
             }
         }
     }
 
-    // Accessors and properties.
-    const size_t& get_level_count() const {
-        return _level_count;
+    // Generate any Node based on its level and position.  It will not be part of any tree.
+    // Throws errors when you ask for invalid positions in a node.
+    static Node<T>* generate_node_at(size_t level, T position) {
+        // Calculate the maximum position and enforce the rules.  We will need the first node's value too.
+        T max_position = 0;
+        T first_node_value = 0;
+        if constexpr(std::integral<T>) {
+            max_position = std::pow(2, level);
+            first_node_value = std::pow(2, level) - 1;
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            mpz_ui_pow_ui(max_position.get_mpz_t(), 2, level);
+            mpz_ui_pow_ui(first_node_value.get_mpz_t(), 2, level);
+            first_node_value = first_node_value - 1;
+        }
+        if(position > max_position) {
+            throw std::runtime_error("Cannot ask for a position outside of a level's limits.");
+        }
+        if(position < 1) {
+            throw std::runtime_error("You cannot specify position 0 or lower (negative).  Positions start at 1 (leftmost).");
+        }
+        // Increases are simple: S1 = ceil((pos - 1) / 2) * (2^L-1)
+        T s1 = 0;
+        mpf_class frequency_mpf_c = position - 1;
+        frequency_mpf_c = frequency_mpf_c / 2;
+        mpf_ceil(frequency_mpf_c.get_mpf_t(), frequency_mpf_c.get_mpf_t());
+        T value = 0;
+        T magnitude = 0;
+        if constexpr(std::integral<T>) {
+            value = std::pow(2, level - 1);
+            s1 = frequency_mpf_c.get_d() * value;
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            mpz_ui_pow_ui(value.get_mpz_t(), 2, level - 1);
+            s1 = frequency_mpf_c * value;
+        }
+        // Decreases require a sigma-style summation, so we loop here.
+        // Formula: [n=2, to L=level] 𝝨 ceil((pos - 2^(n-1)) / 2^n) * (2^n - 3) * 2^(L-n)
+        T s2 = 0;
+        frequency_mpf_c = 0;
+        mpz_class tmp_mpz_c = 0;
+        for(size_t n=2; n<level; n++) {
+            // Frequency.
+            mpz_ui_pow_ui(tmp_mpz_c.get_mpz_t(), 2, n - 1);
+            frequency_mpf_c = position - tmp_mpz_c;
+            mpz_ui_pow_ui(tmp_mpz_c.get_mpz_t(), 2, n);
+            frequency_mpf_c = frequency_mpf_c / tmp_mpz_c;
+            mpf_ceil(frequency_mpf_c.get_mpf_t(), frequency_mpf_c.get_mpf_t());
+            // Value and Magnitude.
+            if constexpr(std::integral<T>) {
+                value = std::pow(2, n) - 3;
+                magnitude = std::pow(2, level - n);
+                s2 = s2 + (frequency_mpf_c.get_d() * value * magnitude);
+            } else if constexpr(std::same_as<T, mpz_class>) {
+                mpz_ui_pow_ui(value.get_mpz_t(), 2, n);
+                value = value - 3;
+                mpz_ui_pow_ui(magnitude.get_mpz_t(), 2, level - n);
+                s2 = s2 + (frequency_mpf_c * value * magnitude);
+            }
+        }
+        // Now sum the values, create the node, and return it.
+        T node_value = first_node_value + s1 - s2;
+        Node<T>* node = new Node<T>(node_value);
+        return node;
     }
-    Node<T>* get_root_node() const {
-        return _root_node;
-    }
-
 };
 
 #endif

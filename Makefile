@@ -11,6 +11,7 @@ EXPDIR = $(SRCDIR)/experiments
 build:
 	$(MAKE) coverage
 	$(MAKE) high_water_mark
+	$(MAKE) performance_stats
 	$(MAKE) single_collatz
 
 clean:
@@ -27,9 +28,9 @@ high_water_mark:
 		$(SRCDIR)/high_water_mark.cpp \
 		-lgmp -lgmpxx
 
-peak_by_bit:
-	$(CC) $(CFLAGS) -o $(BINDIR)/peak_by_bit \
-		$(SRCDIR)/peak_by_bit.cpp \
+performance_stats:
+	$(CC) $(CFLAGS) -o $(BINDIR)/performance_stats \
+		$(SRCDIR)/performance_stats.cpp \
 		-lgmp -lgmpxx
 
 single_collatz:
