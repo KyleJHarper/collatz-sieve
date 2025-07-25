@@ -173,7 +173,12 @@ class BinaryTree {
         }
     }
     // Destructor
-    // We don't need anything special here.  When _root_node is deleted, recrusion will free them all.
+    // We need to destroy the root node, since we're the ones who created it in our constructor.
+    // However, Node objects replicated destruction to children, so we don't need to walk the tree
+    // ourself.
+    ~BinaryTree() {
+        delete _root_node;
+    }
 
     // Accessors and properties.
     const size_t& get_max_level() const {
