@@ -52,18 +52,20 @@ class Node {
         }
         // Build the collatz sequence object.
         _collatz = new Collatz<T>(_value);
-        // Leverage our parent's oe-chain to determine ours.
-        size_t oe_chain_length = 0;
-        if(parent != nullptr) {
-            oe_chain_length = parent->get_odd_even_chain_view().length();
+        // Leverage our parent's oe-chain to determine ours.  When zero, there's no chain to get.
+        if(_value > 0) {
+            size_t oe_chain_length = 0;
+            if(parent != nullptr) {
+                oe_chain_length = parent->get_odd_even_chain_view().length();
+            }
+            _odd_even_chain_view = std::string_view(_collatz->get_oe_pattern().data(), oe_chain_length);
+            if(_odd_even_chain_view.empty() || _odd_even_chain_view.back() == 'E') {
+                oe_chain_length += 1;
+            } else {
+                oe_chain_length += 2;
+            }
+            _odd_even_chain_view = std::string_view(_collatz->get_oe_pattern().data(), oe_chain_length);
         }
-        _odd_even_chain_view = _collatz->get_oe_pattern().substr(0, oe_chain_length);
-        if(_odd_even_chain_view.empty() || _odd_even_chain_view.back() == 'E') {
-            oe_chain_length += 1;
-        } else {
-            oe_chain_length += 2;
-        }
-        _odd_even_chain_view = _collatz->get_oe_pattern().substr(0, oe_chain_length);
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
         mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'E'));
         mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'O'));
@@ -71,6 +73,7 @@ class Node {
         // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
         mpf_class tmp_threes_mpf_c = _threes_value_mpz_c;
         _fg_n_portion_mpf_c = tmp_threes_mpf_c / _twos_value_mpz_c;
+        _fg_constant_mpf_c = 0;
         for(auto c : _odd_even_chain_view) {
             if(c == 'E') {
                 _fg_constant_mpf_c = _fg_constant_mpf_c / 2;
@@ -78,7 +81,7 @@ class Node {
                 _fg_constant_mpf_c = _fg_constant_mpf_c * 3 + 1;
             }
         }
-        _fg_total_mpf_c = (_fg_total_mpf_c * _value) + _fg_constant_mpf_c;
+        _fg_total_mpf_c = (_fg_n_portion_mpf_c * _value) + _fg_constant_mpf_c;
         // Find the closest ancestor who hit high-water mark.
         Node *ancestor = parent;
         while(ancestor != nullptr) {
@@ -129,16 +132,16 @@ class Node {
         return _fg_total_mpf_c;
     }
     bool is_below_high_water_mark() const {
-        if(_fg_total_mpf_c > _value) {
+        if(_fg_total_mpf_c < _value) {
             return true;
         }
         return false;
     }
     bool has_high_water_mark_ancestor() const {
         if(_hwm_ancestor == nullptr) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
     Node<T>* add_child(T value) {
         Node *child = new Node(value, this);

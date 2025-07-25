@@ -65,10 +65,12 @@ int main(int argc, char **argv) {
     }
 
     // Do work.
-    for(size_t bit = 0; bit <= options.max_bit; bit++) {
-        std::cerr << "Processing 2^" << bit << "." << std::endl;
-        // We don't need the whole Collatz object.
-    }
+    std::cerr << "I didn't implement this ... rip." << std::endl;
+    return 1;
+    // for(size_t bit = 0; bit <= options.max_bit; bit++) {
+    //     std::cerr << "Processing 2^" << bit << "." << std::endl;
+    //     // We don't need the whole Collatz object.
+    // }
 
     // Go home.
     return 0;

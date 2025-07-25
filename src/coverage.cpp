@@ -35,26 +35,20 @@ int main(int argc, char **argv) {
     my_type global_covered = 0;
     my_type global_total = 0;
     my_type total = 0;
+    my_type covered = 0;
     mpf_class coverage = 0;
     for(size_t level=1; level <= tree.get_max_level(); level++) {
         const std::vector<Node<my_type>*>& nodes = tree.get_level_map().find(level)->second;
-        const my_type& covered = coverage_map[level];
+        covered = coverage_map[level];
         total = nodes.size();
         global_total += total;
         global_covered += covered;
-        coverage = (covered / total) * 100;
+        // Integer division will make you sad.  Get a float!
+        coverage = (mpf_class(covered) / total) * 100;
         std::cout << "Level " << level << ": " << coverage << "%  (" << covered << "/" << total << ")" << std::endl;
     }
-    // for(auto& [level, covered] : coverage_map) {
-    //     const std::vector<Node<my_type>*>& nodes = tree.get_level_map().find(level)->second;
-    //     total = nodes.size();
-    //     global_total += total;
-    //     global_covered += covered;
-    //     coverage = (covered / total) * 100;
-    //     std::cout << "Level " << level << ": " << coverage << "%  (" << covered << "/" << total << ")" << std::endl;
-    // }
     // Global Print
-    coverage = (global_covered / global_total) * 100;
+    coverage = (mpf_class(global_covered) / global_total) * 100;
     std::cout << "Global Coverage: " << coverage << "%  (" << global_covered << "/" << global_total << ")" << std::endl;
 
     return 0;
