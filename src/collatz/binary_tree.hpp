@@ -335,6 +335,9 @@ class BinaryTree {
         // support GMP-size values.  We need to respect T.
         size_t step = std::pow(2, parent_level);
         // Loop through the parents to build the children.
+        size_t parent_count = _level_map[parent_level].size();
+        _level_map[child_level].reserve(parent_count * 2);
+        _level_map[child_level].resize(parent_count * 2);
         for(Node<T> *parent : _level_map[parent_level]) {
             // Child values are always type T and step away from parent.
             T child_values[2];
@@ -342,7 +345,7 @@ class BinaryTree {
             child_values[1] = child_values[0] + step;
             for(const T &child_value : child_values) {
                 Node<T> *child_node = parent->add_child(child_value);
-                _level_map[child_level].push_back(child_node);
+                _level_map[child_level][child_node->get_position()-1] = child_node;
             }
         }
         // Establish the coverage.  Covered is always 0, but total is simply step * 2.
@@ -354,62 +357,6 @@ class BinaryTree {
             }
         }
     }
-
-
-    // void add_level_parallel() {
-    //     // Get the parent and child level IDs.
-    //     size_t parent_level = _max_level;
-    //     size_t child_level = _max_level + 1;
-    //     _max_level++;
-    //     // Each level will double the size of the tree, so we can't rely on size_t if we're going to
-    //     // support GMP-size values.  We need to respect T.
-    //     T step = 0;
-    //     if constexpr(std::integral<T>) {
-    //         step = std::pow(2, parent_level);
-    //     } else if constexpr(std::same_as<T, mpz_class>) {
-    //         mpz_ui_pow_ui(step.get_mpz_t(), 2, parent_level);
-    //     }
-    //     // Get the parents and calculate the total children.
-    //     auto& parents = _level_map[parent_level];
-    //     const T total_children = parents.size() * 2;
-    //     // Create a temporary holder for the nodes.  Create a mutex for coverage.
-    //     std::vector<Node<T>*> child_nodes(total_children);
-    //     std::mutex coverage_mutex;
-    //     // Launch all our node creation in threads.
-    //     std::vector<std::future<void>> futures;
-    //     for (T i = 0; i < parents.size(); ++i) {
-    //         futures.push_back(std::async(std::launch::async, [&, i]() {
-    //             Node<T>* parent = parents[i];
-
-    //             T val0 = parent->get_value() + step;
-    //             T val1 = val0 + step;
-
-    //             Node<T>* child0 = parent->add_child(val0);
-    //             Node<T>* child1 = parent->add_child(val1);
-
-    //             child_nodes[i * 2]     = child0;
-    //             child_nodes[i * 2 + 1] = child1;
-
-    //             // Coverage updates (optional: can also defer this to single-threaded post-pass)
-    //             {
-    //                 std::lock_guard<std::mutex> lock(coverage_mutex);
-    //                 if (child0->is_below_high_water_mark() || child0->has_high_water_mark_ancestor())
-    //                     _coverage_map[child_level].add_covered(1);
-    //                 if (child1->is_below_high_water_mark() || child1->has_high_water_mark_ancestor())
-    //                     _coverage_map[child_level].add_covered(1);
-    //             }
-    //         }));
-    //     }
-    //     // Wait for threads, then move our items to the main level map.  Should maintain order.
-    //     for (auto& fut : futures) fut.get();
-    //     for (Node<T>* child : child_nodes) {
-    //         _level_map[child_level].push_back(child);
-    //     }
-    // }
-
-
-
-
 
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.
