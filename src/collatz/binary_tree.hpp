@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
+#include <omp.h>
 
 
 //
@@ -335,18 +336,20 @@ class BinaryTree {
         // support GMP-size values.  We need to respect T.
         size_t step = std::pow(2, parent_level);
         // Loop through the parents to build the children.
+        const auto& parents = _level_map[parent_level];
         size_t parent_count = _level_map[parent_level].size();
-        _level_map[child_level].reserve(parent_count * 2);
-        _level_map[child_level].resize(parent_count * 2);
-        for(Node<T> *parent : _level_map[parent_level]) {
-            // Child values are always type T and step away from parent.
-            T child_values[2];
-            child_values[0] = parent->get_value() + step;
-            child_values[1] = child_values[0] + step;
-            for(const T &child_value : child_values) {
-                Node<T> *child_node = parent->add_child(child_value);
-                _level_map[child_level][child_node->get_position()-1] = child_node;
-            }
+        size_t child_count = parent_count * 2;
+        _level_map[child_level].reserve(child_count);
+        _level_map[child_level].resize(child_count);
+        #pragma omp parallel for default(none) shared(parents, _level_map, step, child_level, parent_count)
+        for(size_t i = 0; i < parent_count; i++) {
+            Node<T> *parent = parents[i];
+            T child_value_1 = parent->get_value() + step;
+            T child_value_2 = child_value_1 + step;
+            Node<T> *child_1 = parent->add_child(child_value_1);
+            Node<T> *child_2 = parent->add_child(child_value_2);
+            _level_map[child_level][2 * i] = child_1;
+            _level_map[child_level][2 * i + 1] = child_2;
         }
         // Establish the coverage.  Covered is always 0, but total is simply step * 2.
         _coverage_map[child_level].set_covered(0);

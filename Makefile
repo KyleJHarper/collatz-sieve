@@ -1,5 +1,5 @@
 CC     = g++
-CFLAGS += -Wall -Wextra -std=c++20 -pthread
+CFLAGS += -Wall -Wextra -std=c++20 -pthread -fopenmp
 O2     = -O2
 DEBUG  = -O0 -g -fno-omit-frame-pointer
 
