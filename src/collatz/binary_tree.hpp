@@ -8,6 +8,7 @@
 #include "concepts.hpp"
 #include <stdexcept>
 #include <unordered_map>
+#include <vector>
 
 
 //
@@ -26,6 +27,7 @@ class Node {
     private:
     T _value;
     size_t _level;
+    size_t _position = 0;
     size_t _child_count = 0;
     Node *_children[2];
     Node *_parent;
@@ -40,7 +42,7 @@ class Node {
     inline static bool keep_sequences = false;
 
     public:
-    // Constructor
+    // Constructors
     Node(T value, Node *parent = nullptr) {
         // Set the argument values.
         _value = value;
@@ -50,6 +52,16 @@ class Node {
             _level = std::floor(std::log2(_value));
         } else if constexpr(std::same_as<T, mpz_class>) {
             _level = mpz_sizeinbase(_value.get_mpz_t(), 2);
+        }
+        // Calculate our position if the parent exists.  Formula: 2 * (parent_position - 1) + [1 or 2]
+        if(parent != nullptr) {
+            size_t child_position = 1;
+            if(parent->get_child_count() > 0) {
+                child_position = 2;
+            }
+            _position = ((parent->get_position() - 1) * 2) + child_position;
+        } else {
+            _position = 1;
         }
         // Build the collatz sequence object.
         _collatz = new Collatz<T>(_value);
@@ -123,8 +135,17 @@ class Node {
     const T& get_value() const {
         return _value;
     }
+    const size_t& get_level() const {
+        return _level;
+    }
+    const size_t& get_position() const {
+        return _position;
+    }
     Node* get_parent() const {
         return _parent;
+    }
+    const size_t& get_child_count() const {
+        return _child_count;
     }
     const Collatz<T>* get_collatz() const {
         return _collatz;
@@ -188,38 +209,37 @@ class Node {
 //
 // Tree Coverage Class
 //
-template<IntegralOrMPZClass T>
 class BinaryTreeCoverage {
     private:
-    T _covered = 0;
-    T _total = 0;
+    size_t _covered = 0;
+    size_t _total = 0;
 
     public:
     // Constructors
     BinaryTreeCoverage() {}
-    BinaryTreeCoverage(T covered, T total) {
+    BinaryTreeCoverage(size_t covered, size_t total) {
         _covered = covered;
         _total = total;
     }
 
     // Setters
-    void set_covered(T covered) {
+    void set_covered(size_t covered) {
         _covered = covered;
     }
-    void set_total(T total) {
+    void set_total(size_t total) {
         _total = total;
     }
-    void add_covered(T count=1) {
+    void add_covered(size_t count=1) {
         _covered += count;
     }
-    void add_total(T count=1) {
+    void add_total(size_t count=1) {
         _total += count;
     }
     // Getters
-    const T& get_covered() const {
+    const size_t& get_covered() const {
         return _covered;
     }
-    const T& get_total() const {
+    const size_t& get_total() const {
         return _total;
     }
     // Get the ratio.  If total is 0 or negative, we will throw an error.
@@ -247,7 +267,7 @@ class BinaryTree {
     Node<T> *_root_node = nullptr;
     size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
-    std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
+    std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
 
     public:
     // Constructor
@@ -257,6 +277,7 @@ class BinaryTree {
         _coverage_map[0].set_covered(0);
         for(size_t level = 1; level <= levels; level++){
             this->add_level();
+            // this->add_level_parallel();
         }
     }
     // Destructor
@@ -299,7 +320,7 @@ class BinaryTree {
         }
         return total;
     }
-    const std::unordered_map<size_t, BinaryTreeCoverage<T>> get_coverage_map() const {
+    const std::unordered_map<size_t, BinaryTreeCoverage> get_coverage_map() const {
         return _coverage_map;
     }
 
@@ -312,30 +333,83 @@ class BinaryTree {
         _max_level++;
         // Each level will double the size of the tree, so we can't rely on size_t if we're going to
         // support GMP-size values.  We need to respect T.
-        T step = 0;
-        if constexpr(std::integral<T>) {
-            step = std::pow(2, parent_level);
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            mpz_ui_pow_ui(step.get_mpz_t(), 2, parent_level);
-        }
-        // Establish the coverage.  Covered is always 0, but total is simply step * 2.
-        _coverage_map[child_level].set_covered(0);
-        _coverage_map[child_level].set_total(step * 2);
+        size_t step = std::pow(2, parent_level);
         // Loop through the parents to build the children.
-        T child_values[2];
         for(Node<T> *parent : _level_map[parent_level]) {
             // Child values are always type T and step away from parent.
+            T child_values[2];
             child_values[0] = parent->get_value() + step;
             child_values[1] = child_values[0] + step;
             for(const T &child_value : child_values) {
                 Node<T> *child_node = parent->add_child(child_value);
                 _level_map[child_level].push_back(child_node);
-                if(child_node->is_below_high_water_mark() || child_node->has_high_water_mark_ancestor()) {
-                    _coverage_map[child_level].add_covered(1);
-                }
+            }
+        }
+        // Establish the coverage.  Covered is always 0, but total is simply step * 2.
+        _coverage_map[child_level].set_covered(0);
+        _coverage_map[child_level].set_total(step * 2);
+        for(Node<T> *child_node : _level_map[child_level]) {
+            if(child_node->is_below_high_water_mark() || child_node->has_high_water_mark_ancestor()) {
+                _coverage_map[child_level].add_covered(1);
             }
         }
     }
+
+
+    // void add_level_parallel() {
+    //     // Get the parent and child level IDs.
+    //     size_t parent_level = _max_level;
+    //     size_t child_level = _max_level + 1;
+    //     _max_level++;
+    //     // Each level will double the size of the tree, so we can't rely on size_t if we're going to
+    //     // support GMP-size values.  We need to respect T.
+    //     T step = 0;
+    //     if constexpr(std::integral<T>) {
+    //         step = std::pow(2, parent_level);
+    //     } else if constexpr(std::same_as<T, mpz_class>) {
+    //         mpz_ui_pow_ui(step.get_mpz_t(), 2, parent_level);
+    //     }
+    //     // Get the parents and calculate the total children.
+    //     auto& parents = _level_map[parent_level];
+    //     const T total_children = parents.size() * 2;
+    //     // Create a temporary holder for the nodes.  Create a mutex for coverage.
+    //     std::vector<Node<T>*> child_nodes(total_children);
+    //     std::mutex coverage_mutex;
+    //     // Launch all our node creation in threads.
+    //     std::vector<std::future<void>> futures;
+    //     for (T i = 0; i < parents.size(); ++i) {
+    //         futures.push_back(std::async(std::launch::async, [&, i]() {
+    //             Node<T>* parent = parents[i];
+
+    //             T val0 = parent->get_value() + step;
+    //             T val1 = val0 + step;
+
+    //             Node<T>* child0 = parent->add_child(val0);
+    //             Node<T>* child1 = parent->add_child(val1);
+
+    //             child_nodes[i * 2]     = child0;
+    //             child_nodes[i * 2 + 1] = child1;
+
+    //             // Coverage updates (optional: can also defer this to single-threaded post-pass)
+    //             {
+    //                 std::lock_guard<std::mutex> lock(coverage_mutex);
+    //                 if (child0->is_below_high_water_mark() || child0->has_high_water_mark_ancestor())
+    //                     _coverage_map[child_level].add_covered(1);
+    //                 if (child1->is_below_high_water_mark() || child1->has_high_water_mark_ancestor())
+    //                     _coverage_map[child_level].add_covered(1);
+    //             }
+    //         }));
+    //     }
+    //     // Wait for threads, then move our items to the main level map.  Should maintain order.
+    //     for (auto& fut : futures) fut.get();
+    //     for (Node<T>* child : child_nodes) {
+    //         _level_map[child_level].push_back(child);
+    //     }
+    // }
+
+
+
+
 
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.

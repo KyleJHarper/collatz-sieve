@@ -72,12 +72,12 @@ void test_generate_node_at_mpz() {
 
 void test_binary_tree_16_levels() {
     BinaryTree<int> tree(16);
-    BinaryTreeCoverage<int> global_coverage;
-    int target_covered = 0;
-    int target_total = 0;
+    BinaryTreeCoverage global_coverage;
+    size_t target_covered = 0;
+    size_t target_total = 0;
     for (size_t level=1; level<=tree.get_max_level(); level++) {
         target_total = std::pow(2, level);
-        const BinaryTreeCoverage<int>* coverage = &tree.get_coverage_map().find(level)->second;
+        const BinaryTreeCoverage* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
         switch (level) {

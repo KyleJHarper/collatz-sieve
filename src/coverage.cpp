@@ -17,9 +17,9 @@ int main(int argc, char **argv) {
     levels = atoi(argv[1]);
     BinaryTree tree = BinaryTree<my_type>(levels);
 
-    BinaryTreeCoverage<my_type> global_coverage;
+    BinaryTreeCoverage global_coverage;
     for (size_t level=1; level<=tree.get_max_level(); level++) {
-        BinaryTreeCoverage<my_type> coverage = tree.get_coverage_map().find(level)->second;
+        BinaryTreeCoverage coverage = tree.get_coverage_map().find(level)->second;
         std::cout << "Level " << level << ": " << coverage.get_ratio(true) << "%  (" << coverage.get_covered() << "/" << coverage.get_total() << ")" << std::endl;
         global_coverage.add_covered(coverage.get_covered());
         global_coverage.add_total(coverage.get_total());
