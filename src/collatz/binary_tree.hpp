@@ -87,14 +87,22 @@ class Node {
             }
         }
         _fg_total_mpf_c = (_fg_n_portion_mpf_c * _value) + _fg_constant_mpf_c;
-        // Find the closest ancestor who hit high-water mark.
-        Node *ancestor = parent;
-        while(ancestor != nullptr) {
-            if(ancestor->is_below_high_water_mark()) {
-                _hwm_ancestor = ancestor;
-                break;
+        // Find the closest ancestor who hit high-water mark, even if we hit it ourself too.
+        // This will keep track of the earliest ancestor for any depth of nodes.
+        // We don't have to scan all ancestors either: we can simply assign the parent's ancestor
+        // and then, if it's null, scan the tree for one.
+        if(parent != nullptr) {
+            _hwm_ancestor = parent->get_hwm_ancestor();
+        }
+        if(_hwm_ancestor == nullptr) {
+            Node *ancestor = parent;
+            while(ancestor != nullptr) {
+                if(ancestor->is_below_high_water_mark()) {
+                    _hwm_ancestor = ancestor;
+                    break;
+                }
+                ancestor = ancestor->get_parent();
             }
-            ancestor = ancestor->get_parent();
         }
     };
 
@@ -118,6 +126,9 @@ class Node {
     Node* get_parent() const {
         return _parent;
     }
+    const Collatz<T>* get_collatz() const {
+        return _collatz;
+    }
     const mpz_class& get_twos_value() const {
         return _twos_value_mpz_c;
     }
@@ -135,6 +146,9 @@ class Node {
     }
     const mpf_class& get_fg_total() const {
         return _fg_total_mpf_c;
+    }
+    Node<T>* get_hwm_ancestor() const {
+        return _hwm_ancestor;
     }
     bool is_below_high_water_mark() const {
         if(_fg_total_mpf_c < _value) {
@@ -171,6 +185,58 @@ class Node {
 };
 
 
+//
+// Tree Coverage Class
+//
+template<IntegralOrMPZClass T>
+class BinaryTreeCoverage {
+    private:
+    T _covered = 0;
+    T _total = 0;
+
+    public:
+    // Constructors
+    BinaryTreeCoverage() {}
+    BinaryTreeCoverage(T covered, T total) {
+        _covered = covered;
+        _total = total;
+    }
+
+    // Setters
+    void set_covered(T covered) {
+        _covered = covered;
+    }
+    void set_total(T total) {
+        _total = total;
+    }
+    void add_covered(T count=1) {
+        _covered += count;
+    }
+    void add_total(T count=1) {
+        _total += count;
+    }
+    // Getters
+    const T& get_covered() const {
+        return _covered;
+    }
+    const T& get_total() const {
+        return _total;
+    }
+    // Get the ratio.  If total is 0 or negative, we will throw an error.
+    const mpf_class get_ratio(bool as_percent = false) {
+        if (_total < 1) {
+            throw std::runtime_error("You cannot call get_ratio() when 'total' is 0 or less.");
+        }
+        // Set r first so it's converted to a float.  Otherwise int/int ==> truncated int.
+        mpf_class ratio = _covered;
+        ratio = ratio / _total;
+        if(as_percent) {
+            ratio = ratio * 100;
+        }
+        return ratio;
+    }
+};
+
 
 //
 // Binary Tree
@@ -181,12 +247,14 @@ class BinaryTree {
     Node<T> *_root_node = nullptr;
     size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
+    std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
 
     public:
     // Constructor
     BinaryTree(size_t levels) {
         _root_node = new Node<T>(0);
         _level_map[0].push_back(_root_node);
+        _coverage_map[0].set_covered(0);
         for(size_t level = 1; level <= levels; level++){
             this->add_level();
         }
@@ -209,6 +277,18 @@ class BinaryTree {
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {
         return _level_map;
     }
+    const T node_count() const {
+        // It should be: 2^(max_levels + 1) - 2
+        if constexpr(std::integral<T>) {
+            return (std::pow(2, _max_level + 1) - 2);
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            T result = 0;
+            mpz_ui_pow_ui(result.get_mpz_t(), 2, _max_level);
+            result = result - 2;
+            return result;
+        }
+        throw std::runtime_error("Unable to determine type for calculating node_count().");
+    }
     size_t deep_size() const {
         size_t total = 0;
         total += sizeof(*this);
@@ -219,9 +299,12 @@ class BinaryTree {
         }
         return total;
     }
+    const std::unordered_map<size_t, BinaryTreeCoverage<T>> get_coverage_map() const {
+        return _coverage_map;
+    }
 
     // Add a level to the tree.  We simply take the parent nodes and add two children with a steady
-    // step value.
+    // step value.  We also calculate the coverage for this level.
     void add_level() {
         // Get the parent and child level IDs.
         size_t parent_level = _max_level;
@@ -235,6 +318,9 @@ class BinaryTree {
         } else if constexpr(std::same_as<T, mpz_class>) {
             mpz_ui_pow_ui(step.get_mpz_t(), 2, parent_level);
         }
+        // Establish the coverage.  Covered is always 0, but total is simply step * 2.
+        _coverage_map[child_level].set_covered(0);
+        _coverage_map[child_level].set_total(step * 2);
         // Loop through the parents to build the children.
         T child_values[2];
         for(Node<T> *parent : _level_map[parent_level]) {
@@ -244,6 +330,9 @@ class BinaryTree {
             for(const T &child_value : child_values) {
                 Node<T> *child_node = parent->add_child(child_value);
                 _level_map[child_level].push_back(child_node);
+                if(child_node->is_below_high_water_mark() || child_node->has_high_water_mark_ancestor()) {
+                    _coverage_map[child_level].add_covered(1);
+                }
             }
         }
     }

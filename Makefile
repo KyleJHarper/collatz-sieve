@@ -5,6 +5,7 @@ DEBUG  = -O0 -g -fno-omit-frame-pointer
 
 SRCDIR = src
 BINDIR = bin
+TESTDIR = $(SRCDIR)/test
 EXPDIR = $(SRCDIR)/experiments
 
 # Targets
@@ -54,3 +55,20 @@ single_collatz__debug:
 		$(SRCDIR)/single_collatz.cpp \
 		-lgmp -lgmpxx
 
+tests:
+	echo "Compiling classes."
+	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__collatz_class \
+		$(TESTDIR)/collatz_class.cpp \
+		-lgmp -lgmpxx
+	echo "Running tests."
+	$(BINDIR)/test__collatz_class
+	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__node_class \
+		$(TESTDIR)/node_class.cpp \
+		-lgmp -lgmpxx
+	echo "Running tests."
+	$(BINDIR)/test__node_class
+	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__binary_tree_class \
+		$(TESTDIR)/binary_tree_class.cpp \
+		-lgmp -lgmpxx
+	echo "Running tests."
+	$(BINDIR)/test__binary_tree_class

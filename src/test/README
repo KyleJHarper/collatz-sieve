@@ -1,0 +1,8 @@
+These tests are largely AI generated and then hand-modified.
+
+They are not expected to catch every last bug.
+
+They are designed to give a higher level of confidence when working on these
+systems and classes.
+
+tl;dr  They're largely for regression testing.

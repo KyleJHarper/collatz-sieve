@@ -61,6 +61,7 @@ std::vector<std::string> add(const char *name, size_t u_version, size_t z_versio
 
 int main() {
     // Size Data
+    size_t levels = 16;
     std::cout << "Bulding objects for size data..." << std::flush;
     Collatz collatz_uint64_t = Collatz<uint64_t>(27);
     Collatz collatz_mpz_c = Collatz<mpz_class>(27);
@@ -73,15 +74,15 @@ int main() {
     Node<uint64_t>::disable_sequenes();
     Node<mpz_class>::disable_sequenes();
     auto tree_uint64_t_start = std::chrono::high_resolution_clock::now();
-    BinaryTree tree_uint64_t = BinaryTree<uint64_t>(16);
+    BinaryTree tree_uint64_t = BinaryTree<uint64_t>(levels);
     auto tree_uint64_t_end = std::chrono::high_resolution_clock::now();
     auto tree_mpz_c_start = std::chrono::high_resolution_clock::now();
-    BinaryTree tree_mpz_c = BinaryTree<mpz_class>(16);
+    BinaryTree tree_mpz_c = BinaryTree<mpz_class>(levels);
     auto tree_mpz_c_end = std::chrono::high_resolution_clock::now();
     Node<uint64_t>::enable_sequenes();
     Node<mpz_class>::enable_sequenes();
-    BinaryTree tree_uint64_t_keep_collatz = BinaryTree<uint64_t>(16);
-    BinaryTree tree_mpz_c_keep_collatz = BinaryTree<mpz_class>(16);
+    BinaryTree tree_uint64_t_keep_collatz = BinaryTree<uint64_t>(levels);
+    BinaryTree tree_mpz_c_keep_collatz = BinaryTree<mpz_class>(levels);
     Node<uint64_t>::disable_sequenes();
     Node<mpz_class>::disable_sequenes();
     std::cout << " done." << std::endl << std::endl;
