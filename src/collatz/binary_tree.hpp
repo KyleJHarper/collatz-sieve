@@ -31,16 +31,17 @@ class Node {
     Node *_parent;
     Node *_hwm_ancestor = nullptr;
     Collatz<T> *_collatz;
-    std::string_view _odd_even_chain_view;
+    std::string _odd_even_chain;
     mpz_class _twos_value_mpz_c;
     mpz_class _threes_value_mpz_c;
     mpf_class _fg_n_portion_mpf_c;
     mpf_class _fg_constant_mpf_c;
     mpf_class _fg_total_mpf_c;
+    inline static bool keep_sequences = false;
 
     public:
     // Constructor
-    Node(T value, Node *parent = nullptr){
+    Node(T value, Node *parent = nullptr) {
         // Set the argument values.
         _value = value;
         _parent = parent;
@@ -56,25 +57,29 @@ class Node {
         if(_value > 0) {
             size_t oe_chain_length = 0;
             if(parent != nullptr) {
-                oe_chain_length = parent->get_odd_even_chain_view().length();
+                oe_chain_length = parent->get_odd_even_chain().length();
             }
-            _odd_even_chain_view = std::string_view(_collatz->get_oe_pattern().data(), oe_chain_length);
-            if(_odd_even_chain_view.empty() || _odd_even_chain_view.back() == 'E') {
+            _odd_even_chain = _collatz->get_oe_pattern().substr(0, oe_chain_length);
+            if(_odd_even_chain.empty() || _odd_even_chain.back() == 'E') {
                 oe_chain_length += 1;
             } else {
                 oe_chain_length += 2;
             }
-            _odd_even_chain_view = std::string_view(_collatz->get_oe_pattern().data(), oe_chain_length);
+            _odd_even_chain = _collatz->get_oe_pattern().substr(0, oe_chain_length);
+        }
+        // We're done with the sequence.  Discard it if the user doesn't want it.
+        if(Node::keep_sequences == false) {
+            _collatz->clear_sequence();
         }
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
-        mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'E'));
-        mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain_view.begin(), _odd_even_chain_view.end(), 'O'));
+        mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), 'E'));
+        mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), 'O'));
         // Compute the odd-even fractional N portion, the constant, and then tally them up.
         // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
         mpf_class tmp_threes_mpf_c = _threes_value_mpz_c;
         _fg_n_portion_mpf_c = tmp_threes_mpf_c / _twos_value_mpz_c;
         _fg_constant_mpf_c = 0;
-        for(auto c : _odd_even_chain_view) {
+        for(auto c : _odd_even_chain) {
             if(c == 'E') {
                 _fg_constant_mpf_c = _fg_constant_mpf_c / 2;
             } else {
@@ -119,8 +124,8 @@ class Node {
     const mpz_class& get_threes_value() const {
         return _threes_value_mpz_c;
     }
-    const std::string_view& get_odd_even_chain_view() const {
-        return _odd_even_chain_view;
+    const std::string& get_odd_even_chain() const {
+        return _odd_even_chain;
     }
     const mpf_class& get_fg_n_portion() const {
         return _fg_n_portion_mpf_c;
@@ -152,8 +157,16 @@ class Node {
     size_t deep_size() const {
         size_t total = 0;
         total += sizeof(*this);
-        total += _collatz->deep_size();
+        if(_collatz != nullptr) {
+            total += _collatz->deep_size();
+        }
         return total;
+    }
+    static void enable_sequenes() {
+        Node<T>::keep_sequences = true;
+    }
+    static void disable_sequenes() {
+        Node<T>::keep_sequences = false;
     }
 };
 
@@ -162,7 +175,7 @@ class Node {
 //
 // Binary Tree
 //
-template<typename T>
+template<IntegralOrMPZClass T>
 class BinaryTree {
     private:
     Node<T> *_root_node = nullptr;
