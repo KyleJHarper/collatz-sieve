@@ -9,7 +9,7 @@ if [ -z "${1}" ] ; then
 fi
 
 # The symlink is busted on 24.04.  Use 6.8, per recommendation.
-sudo /usr/lib/linux-tools/6.8.0-64-generic/perf record -F 99 -g "${@}"
+sudo -E /usr/lib/linux-tools/6.8.0-64-generic/perf record -F 99 -g "${@}"
 sudo chown ${USER}:${USER} perf.data
 
 # Script it.

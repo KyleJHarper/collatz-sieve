@@ -11,8 +11,8 @@ int main(int argc, char **argv) {
     }
 
     // Build the tree.
-    typedef mpz_class my_type;
-    // typedef uint64_t my_type;
+    // typedef mpz_class my_type;
+    typedef uint64_t my_type;
     size_t levels = 0;
     levels = atoi(argv[1]);
     BinaryTree tree = BinaryTree<my_type>(levels);

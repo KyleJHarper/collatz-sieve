@@ -8,10 +8,16 @@
 #include "concepts.hpp"
 
 
+
+namespace CollatzConstants {
+    constexpr bool ODD = true;
+    constexpr bool EVEN = false;
+}
+
+
 //
 // Basic Collatz sequence object with minimal data to keep it tight.
 //
-
 template <IntegralOrMPZClass T>
 class Collatz {
     static_assert(std::is_integral<T>::value || std::is_same<T, mpz_class>::value, "T must be an integral or mpz_class type");
@@ -20,7 +26,7 @@ class Collatz {
     T _initial_value;
     T _peak_value = 0;
     std::vector<T> _sequence;
-    std::string _oe_pattern;
+    std::vector<bool> _oe_pattern;
     size_t _hwm_index = 0;
     bool _must_reset = false;
 
@@ -46,16 +52,18 @@ class Collatz {
         // Build the sequence and its related metadata.
         T current = _initial_value;
         do {
-            _sequence.push_back(current);
+            _sequence.emplace_back(current);
+            // _sequence.push_back(current);
             if(current > _peak_value) {
                 _peak_value = current;
             }
             if(current % 2 == 0) {
-                _oe_pattern.append("E");
-                current = current / 2;
+                _oe_pattern.push_back(CollatzConstants::EVEN);
+                current /= 2;
             } else {
-                _oe_pattern.append("O");
-                current = current * 3 + 1;
+                _oe_pattern.push_back(CollatzConstants::ODD);
+                current *= 3;
+                current += 1;
             }
             // If the next value is going to be lower, use current vector size as index.
             if(_hwm_index == 0 && current < _initial_value) {
@@ -65,7 +73,7 @@ class Collatz {
         // Now add element '1', unless the IV was 1 or 0.
         if(_initial_value > 1) {
             _sequence.push_back(1);
-            _oe_pattern.append("O");
+            _oe_pattern.push_back(CollatzConstants::ODD);
         }
         // Finally, if the IV is 0, set OE to blank.
         if(_initial_value == 0) {
@@ -105,8 +113,16 @@ class Collatz {
     const std::vector<T>& get_sequence() const {
         return _sequence;
     };
-    const std::string& get_oe_pattern() const {
+    const std::vector<bool>& get_oe_pattern() const {
         return _oe_pattern;
+    }
+    std::string get_oe_pattern_string() const {
+        std::string result;
+        result.reserve(_oe_pattern.size());
+        for (bool bit : _oe_pattern) {
+            result += bit == CollatzConstants::ODD ? 'O' : 'E';
+        }
+        return result;
     }
     const size_t& get_hwm_index() const {
         return _hwm_index;
@@ -123,6 +139,9 @@ class Collatz {
         for (auto &stop : _sequence) {
             total += sizeof(stop);
         }
+        total += sizeof(T) * _sequence.capacity();
+        // Vector<bool> is a specialized template in c++.  Bit-packed.
+        total += ((_oe_pattern.capacity() + 7) / 8);
         return total;
     }
 

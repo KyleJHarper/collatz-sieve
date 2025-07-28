@@ -1,6 +1,7 @@
 #ifndef SRC_BINARY_TREE_H_
 #define SRC_BINARY_TREE_H_
 
+#include <iostream>
 #include <cmath>
 #include <gmp.h>
 #include <gmpxx.h>
@@ -24,6 +25,7 @@
 // we don't want to know the full high-water mark (from Collatz()).
 //
 template <IntegralOrMPZClass T>
+
 class Node {
     private:
     T _value;
@@ -34,7 +36,7 @@ class Node {
     Node *_parent;
     Node *_hwm_ancestor = nullptr;
     Collatz<T> *_collatz;
-    std::string _odd_even_chain;
+    std::vector<bool> _odd_even_chain;
     mpz_class _twos_value_mpz_c;
     mpz_class _threes_value_mpz_c;
     mpf_class _fg_n_portion_mpf_c;
@@ -70,30 +72,32 @@ class Node {
         if(_value > 0) {
             size_t oe_chain_length = 0;
             if(parent != nullptr) {
-                oe_chain_length = parent->get_odd_even_chain().length();
+                oe_chain_length = parent->get_odd_even_chain().size();
             }
-            _odd_even_chain = _collatz->get_oe_pattern().substr(0, oe_chain_length);
-            if(_odd_even_chain.empty() || _odd_even_chain.back() == 'E') {
+            _odd_even_chain.resize(oe_chain_length);
+            std::copy_n(_collatz->get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
+            if(_odd_even_chain.empty() || _odd_even_chain.back() == CollatzConstants::EVEN) {
                 oe_chain_length += 1;
             } else {
                 oe_chain_length += 2;
             }
-            _odd_even_chain = _collatz->get_oe_pattern().substr(0, oe_chain_length);
+            _odd_even_chain.resize(oe_chain_length);
+            std::copy_n(_collatz->get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
         }
         // We're done with the sequence.  Discard it if the user doesn't want it.
         if(Node::keep_sequences == false) {
             _collatz->clear_sequence();
         }
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
-        mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), 'E'));
-        mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), 'O'));
+        mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), CollatzConstants::EVEN));
+        mpz_ui_pow_ui(_threes_value_mpz_c.get_mpz_t(), 3, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), CollatzConstants::ODD));
         // Compute the odd-even fractional N portion, the constant, and then tally them up.
         // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
         mpf_class tmp_threes_mpf_c = _threes_value_mpz_c;
         _fg_n_portion_mpf_c = tmp_threes_mpf_c / _twos_value_mpz_c;
         _fg_constant_mpf_c = 0;
         for(auto c : _odd_even_chain) {
-            if(c == 'E') {
+            if(c == CollatzConstants::EVEN) {
                 _fg_constant_mpf_c = _fg_constant_mpf_c / 2;
             } else {
                 _fg_constant_mpf_c = _fg_constant_mpf_c * 3 + 1;
@@ -122,7 +126,7 @@ class Node {
     // Destructor
     ~Node() {
         delete _collatz;
-        for(size_t i=0; i<_child_count; i++) {
+        for (size_t i = 0 ; i < _child_count; i++) {
             delete _children[i];
         }
     }
@@ -157,8 +161,16 @@ class Node {
     const mpz_class& get_threes_value() const {
         return _threes_value_mpz_c;
     }
-    const std::string& get_odd_even_chain() const {
+    const std::vector<bool>& get_odd_even_chain() const {
         return _odd_even_chain;
+    }
+    std::string get_odd_even_chain_string() const {
+        std::string result;
+        result.reserve(_odd_even_chain.size());
+        for (bool bit : _odd_even_chain) {
+            result += bit == CollatzConstants::ODD ? 'O' : 'E';
+        }
+        return result;
     }
     const mpf_class& get_fg_n_portion() const {
         return _fg_n_portion_mpf_c;
@@ -186,8 +198,7 @@ class Node {
     }
     Node<T>* add_child(T value) {
         Node *child = new Node(value, this);
-        _children[_child_count] = child;
-        _child_count += 1;
+        _children[_child_count++] = child;
         return child;
     }
     size_t deep_size() const {
@@ -196,6 +207,8 @@ class Node {
         if(_collatz != nullptr) {
             total += _collatz->deep_size();
         }
+        // Vector<bool> is a specialized template in c++.  Bit-packed.
+        total += ((_odd_even_chain.capacity() + 7) / 8);
         return total;
     }
     static void enable_sequenes() {
@@ -250,9 +263,9 @@ class BinaryTreeCoverage {
         }
         // Set r first so it's converted to a float.  Otherwise int/int ==> truncated int.
         mpf_class ratio = _covered;
-        ratio = ratio / _total;
+        ratio /= _total;
         if(as_percent) {
-            ratio = ratio * 100;
+            ratio *= 100;
         }
         return ratio;
     }
@@ -278,7 +291,6 @@ class BinaryTree {
         _coverage_map[0].set_covered(0);
         for(size_t level = 1; level <= levels; level++){
             this->add_level();
-            // this->add_level_parallel();
         }
     }
     // Destructor
@@ -341,15 +353,17 @@ class BinaryTree {
         size_t child_count = parent_count * 2;
         _level_map[child_level].reserve(child_count);
         _level_map[child_level].resize(child_count);
-        #pragma omp parallel for default(none) shared(parents, _level_map, step, child_level, parent_count)
-        for(size_t i = 0; i < parent_count; i++) {
-            Node<T> *parent = parents[i];
+        #pragma omp parallel for schedule(dynamic, 1) default(none) shared(parents, _level_map, step, child_level, parent_count)
+        for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
+            // Get the child values.
+            Node<T> *parent = parents[parent_idx];
             T child_value_1 = parent->get_value() + step;
             T child_value_2 = child_value_1 + step;
+            // Create the children.  Add them to the map.
             Node<T> *child_1 = parent->add_child(child_value_1);
             Node<T> *child_2 = parent->add_child(child_value_2);
-            _level_map[child_level][2 * i] = child_1;
-            _level_map[child_level][2 * i + 1] = child_2;
+            _level_map[child_level][2 * parent_idx] = child_1;
+            _level_map[child_level][2 * parent_idx + 1] = child_2;
         }
         // Establish the coverage.  Covered is always 0, but total is simply step * 2.
         _coverage_map[child_level].set_covered(0);

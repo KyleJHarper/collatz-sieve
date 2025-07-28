@@ -12,7 +12,7 @@ void test_with_int() {
     assert(c.get_stop_count() == 9);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
-    assert(c.get_oe_pattern() == "EOEOEEEEO");
+    assert(c.get_oe_pattern_string() == "EOEOEEEEO");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
     assert(c.get_sequence_string() == "6, 3, 10, 5, 16, 8, 4, 2, 1");
 }
@@ -26,7 +26,7 @@ void test_reset_and_reuse() {
     assert(c.get_stop_count() == 9);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
-    assert(c.get_oe_pattern() == "EOEOEEEEO");
+    assert(c.get_oe_pattern_string() == "EOEOEEEEO");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
     assert(c.get_sequence_string() == "6, 3, 10, 5, 16, 8, 4, 2, 1");
 }
@@ -41,7 +41,7 @@ void test_one() {
     Collatz<int> c(1);
     assert(c.get_sequence().size() == 1);
     assert(c.get_sequence()[0] == 1);
-    assert(c.get_oe_pattern() == "O");  // It adds "O" in the last step
+    assert(c.get_oe_pattern_string() == "O");  // It adds "O" in the last step
 }
 
 void test_negative_exception() {
@@ -60,7 +60,7 @@ void test_with_mpz() {
     assert(c.get_stop_count() == 9);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
-    assert(c.get_oe_pattern() == "EOEOEEEEO");
+    assert(c.get_oe_pattern_string() == "EOEOEEEEO");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
     assert(c.get_sequence_string() == "6, 3, 10, 5, 16, 8, 4, 2, 1");
 }
