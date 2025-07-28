@@ -36,6 +36,14 @@ high_water_mark:
 		$(SRCDIR)/high_water_mark.cpp \
 		-lgmp -lgmpxx
 
+peak_by_bit:
+	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/peak_by_bit \
+		$(SRCDIR)/peak_by_bit.cpp \
+		-lgmp -lgmpxx
+	$(CC) $(CFLAGS) $(DEBUG) -o $(BINDIR)/peak_by_bit__debug \
+		$(SRCDIR)/peak_by_bit.cpp \
+		-lgmp -lgmpxx
+
 performance_stats:
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/performance_stats \
 		$(SRCDIR)/performance_stats.cpp \

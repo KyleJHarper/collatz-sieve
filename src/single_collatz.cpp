@@ -24,8 +24,6 @@ int main(int argc, char **argv) {
     std::cout << "Stop count: " << c.get_stop_count() << std::endl;
     std::cout << "Peak value: " << c.get_peak_value() << std::endl;
     std::cout << "Deep size is: " << c.deep_size() << std::endl;
-    std::cout << "vector: " << c.get_oe_pattern().size() * sizeof(bool) << std::endl;
-    std::cout << "string: " << c.get_oe_pattern_string().size() * sizeof(char) << std::endl;
 
     return 0;
 }

@@ -1,8 +1,14 @@
+#include <cstdint>
 #include <unistd.h>
 #include <iostream>
+#include <stdint.h>
+#include <math.h>
+#include <gmpxx.h>
+#include <array>
+#include "collatz/collatz.hpp"
 
 
-#define OPT_MAX_BIT_DEFAULT 16
+#define OPT_MAX_BIT_DEFAULT 8
 #define OPT_VERBOSE_DEFAULT false
 struct Options {
     size_t max_bit = OPT_MAX_BIT_DEFAULT;
@@ -65,12 +71,62 @@ int main(int argc, char **argv) {
     }
 
     // Do work.
-    std::cerr << "I didn't implement this ... rip." << std::endl;
-    return 1;
-    // for(size_t bit = 0; bit <= options.max_bit; bit++) {
-    //     std::cerr << "Processing 2^" << bit << "." << std::endl;
-    //     // We don't need the whole Collatz object.
-    // }
+    typedef uint64_t my_type;
+    // typedef mpz_class my_type;
+    my_type base_initial_value = 1;
+    my_type max_allowed_value = 0;
+    // In order to parallelize this, we need to build several buffers to check at once.
+    const size_t buffer_size = 1000;
+    std::array<Collatz<my_type>, buffer_size> collatz;
+
+    // The per-bit loop cannot be parallelized reasonably.
+    std::cout << "Max is: " << UINT64_MAX << std::endl;
+    uint64_t x = UINT64_MAX;
+    std::cout << "Before: " << x << std::endl;
+    x += 1;
+    std::cout << "After: " << x << std::endl;
+    for(size_t bit = 0; bit <= options.max_bit; bit++) {
+        max_allowed_value = std::pow(2, bit);
+        // mpz_ui_pow_ui(max_allowed_value.get_mpz_t(), 2, bit);
+        while (true) {
+            // Generate a buffer to scan, using reduction later.
+            #pragma omp parallel for schedule(auto) default(none) shared(collatz, base_initial_value)
+            for(size_t i = 0; i < buffer_size; i++) {
+                // We skip even values, so it's always i*2.
+                my_type my_iv = base_initial_value + (i * 2);
+                collatz[i].init(my_iv);
+            }
+
+            // Now test all values in the buffer, using reduction to find the minimum.
+            size_t failing_index = buffer_size;
+            #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(collatz, max_allowed_value)
+            for (size_t i = 0; i < buffer_size; i++) {
+                if (collatz[i].get_peak_value() > max_allowed_value || collatz[i].get_peak_value() >= UINT64_MAX) {
+                    failing_index = i;
+                    // Calling 'break;' inside OMP is invalid.  Set the threads 'i' to buffer_size so we can short-circuit quit.
+                    i = buffer_size;
+                }
+            }
+
+            // If failing_index was set lower than buffer_size (above the highest index), we found an offender.
+            if (failing_index < buffer_size) {
+                const auto& failure_point = collatz[failing_index];
+                std::cout
+                    << "Initial value " << failure_point.get_initial_value()
+                    << " has a step landing on " << failure_point.get_peak_value()
+                    << " which would exceed 2^" << bit
+                    << " (" << max_allowed_value << ")."
+                    << "  Therefore the largest initial value for 2^" << bit
+                    << " is " << (failure_point.get_initial_value() - 1)
+                    << "." << std::endl;
+                base_initial_value = failure_point.get_initial_value();
+                break;  // Leave the while(true).  Move to next bit.
+            }
+
+            // Didn't find it.  Bump the initial value, remembering we skip evens.
+            base_initial_value += buffer_size * 2;
+        }
+    }
 
     // Go home.
     return 0;

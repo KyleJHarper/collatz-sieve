@@ -31,7 +31,8 @@ class Collatz {
     bool _must_reset = false;
 
     public:
-    // Constructor.  Offload to init() so objects can be reused.
+    // Constructors.  Offload to init() so objects can be reused.
+    Collatz() {}
     Collatz(T initial_value) {
         init(initial_value);
     };
@@ -53,7 +54,6 @@ class Collatz {
         T current = _initial_value;
         do {
             _sequence.emplace_back(current);
-            // _sequence.push_back(current);
             if(current > _peak_value) {
                 _peak_value = current;
             }
