@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <stdint.h>
 #include "concepts.hpp"
 
 
@@ -12,6 +13,7 @@
 namespace CollatzConstants {
     constexpr bool ODD = true;
     constexpr bool EVEN = false;
+    constexpr uint64_t PEAK_64BIT_ODD = 6148914691236517203;
 }
 
 
@@ -31,6 +33,7 @@ class Collatz {
     bool _must_reset = false;
 
     public:
+    inline static bool detect_overflow = false;
     // Constructors.  Offload to init() so objects can be reused.
     Collatz() {}
     Collatz(T initial_value) {
@@ -61,6 +64,21 @@ class Collatz {
                 _oe_pattern.push_back(CollatzConstants::EVEN);
                 current /= 2;
             } else {
+                if constexpr(std::integral<T>) {
+                    if (Collatz::detect_overflow) {
+                        if(current > CollatzConstants::PEAK_64BIT_ODD) {
+                            std::string msg;
+                            msg += "While building the sequence for initial value ";
+                            msg += std::to_string(_initial_value);
+                            msg += " we reached a step whose value exceeds the limit.";
+                            msg += "  Its value is " + std::to_string(current);
+                            msg += ", but the limit to remain under 2^64 (UINT64_MAX) is ";
+                            msg += std::to_string(CollatzConstants::PEAK_64BIT_ODD);
+                            msg += "  We must abort because this would cause an integer overflow.";
+                            throw std::runtime_error(msg);
+                        }
+                    }
+                }
                 _oe_pattern.push_back(CollatzConstants::ODD);
                 current *= 3;
                 current += 1;

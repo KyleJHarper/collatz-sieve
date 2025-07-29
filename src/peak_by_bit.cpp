@@ -80,11 +80,7 @@ int main(int argc, char **argv) {
     std::array<Collatz<my_type>, buffer_size> collatz;
 
     // The per-bit loop cannot be parallelized reasonably.
-    std::cout << "Max is: " << UINT64_MAX << std::endl;
-    uint64_t x = UINT64_MAX;
-    std::cout << "Before: " << x << std::endl;
-    x += 1;
-    std::cout << "After: " << x << std::endl;
+    Collatz<my_type>::detect_overflow = true;
     for(size_t bit = 0; bit <= options.max_bit; bit++) {
         max_allowed_value = std::pow(2, bit);
         // mpz_ui_pow_ui(max_allowed_value.get_mpz_t(), 2, bit);
