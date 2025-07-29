@@ -12,6 +12,7 @@ EXPDIR = $(SRCDIR)/experiments
 build:
 	$(MAKE) coverage
 	$(MAKE) high_water_mark
+	$(MAKE) peak_by_bit
 	$(MAKE) performance_stats
 	$(MAKE) single_collatz
 	$(MAKE) tests

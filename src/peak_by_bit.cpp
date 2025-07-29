@@ -71,8 +71,8 @@ int main(int argc, char **argv) {
     }
 
     // Do work.
-    typedef uint64_t my_type;
-    // typedef mpz_class my_type;
+    // typedef uint64_t my_type;
+    typedef mpz_class my_type;
     my_type base_initial_value = 1;
     my_type max_allowed_value = 0;
     // In order to parallelize this, we need to build several buffers to check at once.
@@ -80,10 +80,13 @@ int main(int argc, char **argv) {
     std::array<Collatz<my_type>, buffer_size> collatz;
 
     // The per-bit loop cannot be parallelized reasonably.
-    Collatz<my_type>::detect_overflow = true;
+    // Collatz<my_type>::detect_overflow = true;
     for(size_t bit = 0; bit <= options.max_bit; bit++) {
-        max_allowed_value = std::pow(2, bit);
-        // mpz_ui_pow_ui(max_allowed_value.get_mpz_t(), 2, bit);
+        // max_allowed_value = std::pow(2, bit);
+        // if(bit == 64) {
+        //     max_allowed_value = UINT64_MAX;
+        // }
+        mpz_ui_pow_ui(max_allowed_value.get_mpz_t(), 2, bit);
         while (true) {
             // Generate a buffer to scan, using reduction later.
             #pragma omp parallel for schedule(auto) default(none) shared(collatz, base_initial_value)
