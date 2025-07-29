@@ -31,12 +31,14 @@ class Collatz {
     std::vector<bool> _oe_pattern;
     size_t _hwm_index = 0;
     bool _must_reset = false;
+    bool _track_sequence = false;
 
     public:
     inline static bool detect_overflow = false;
     // Constructors.  Offload to init() so objects can be reused.
     Collatz() {}
-    Collatz(T initial_value) {
+    Collatz(T initial_value, bool track_sequence = false) {
+        _track_sequence = track_sequence;
         init(initial_value);
     };
     void init(T initial_value) {
@@ -53,10 +55,12 @@ class Collatz {
         _must_reset = true;
         // Now process the new value.
         _initial_value = initial_value;
-        // Build the sequence and its related metadata.
+        // Build the sequence (optional) and its related metadata.
         T current = _initial_value;
         do {
-            _sequence.emplace_back(current);
+            if(_track_sequence) {
+                _sequence.emplace_back(current);
+            }
             if(current > _peak_value) {
                 _peak_value = current;
             }
@@ -90,7 +94,9 @@ class Collatz {
         } while(current > 1 && _initial_value > 1);
         // Now add element '1', unless the IV was 1 or 0.
         if(_initial_value > 1) {
-            _sequence.push_back(1);
+            if(_track_sequence) {
+                _sequence.push_back(1);
+            }
             _oe_pattern.push_back(CollatzConstants::ODD);
         }
         // Finally, if the IV is 0, set OE to blank.
@@ -129,6 +135,9 @@ class Collatz {
         return _peak_value;
     }
     const std::vector<T>& get_sequence() const {
+        if(!_track_sequence) {
+            throw std::logic_error("You disabled sequence tracking when you created this object.");
+        }
         return _sequence;
     };
     const std::vector<bool>& get_oe_pattern() const {
