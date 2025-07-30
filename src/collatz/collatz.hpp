@@ -30,6 +30,7 @@ class Collatz {
     std::vector<T> _sequence;
     std::vector<bool> _oe_pattern;
     size_t _hwm_index = 0;
+    size_t _step_count = 0;
     bool _must_reset = false;
     bool _track_sequence = false;
 
@@ -51,6 +52,7 @@ class Collatz {
             _peak_value = 0;
             _oe_pattern.clear();
             _hwm_index = 0;
+            _step_count = 0;
         }
         _must_reset = true;
         // Now process the new value.
@@ -58,6 +60,7 @@ class Collatz {
         // Build the sequence (optional) and its related metadata.
         T current = _initial_value;
         do {
+            _step_count++;
             if(_track_sequence) {
                 _sequence.emplace_back(current);
             }
@@ -87,9 +90,9 @@ class Collatz {
                 current *= 3;
                 current += 1;
             }
-            // If the next value is going to be lower, use current vector size as index.
+            // If the next value is going to be lower, mark the index.
             if(_hwm_index == 0 && current < _initial_value) {
-                _hwm_index = _sequence.size();
+                _hwm_index = _step_count;
             }
         } while(current > 1 && _initial_value > 1);
         // Now add element '1', unless the IV was 1 or 0.
@@ -98,10 +101,12 @@ class Collatz {
                 _sequence.push_back(1);
             }
             _oe_pattern.push_back(CollatzConstants::ODD);
+            _step_count++;
         }
         // Finally, if the IV is 0, set OE to blank.
         if(_initial_value == 0) {
             _oe_pattern.clear();
+            _step_count = 0;
         }
     }
 
@@ -154,8 +159,11 @@ class Collatz {
     const size_t& get_hwm_index() const {
         return _hwm_index;
     }
-    size_t get_stop_count() const {
-        return _sequence.size();
+    size_t get_step_count() const {
+        return _step_count;
+    }
+    size_t get_sequence_size() const {
+        return _step_count + 1;
     }
     void clear_sequence() {
         _sequence.clear();

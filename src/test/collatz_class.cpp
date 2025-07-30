@@ -3,13 +3,15 @@
 #include "../collatz/collatz.hpp" // your class file
 // Include GMP if using mpz_class
 #include <gmpxx.h>
+#include <stdexcept>
 
 void test_with_int() {
-    Collatz<int> c(6);
+    Collatz<int> c(6, true);
 
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_stop_count() == 9);
+    assert(c.get_step_count() == 9);
+    assert(c.get_sequence_size() == 10);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
@@ -18,12 +20,12 @@ void test_with_int() {
 }
 
 void test_reset_and_reuse() {
-    Collatz<int> c(7);
+    Collatz<int> c(7, true);
     assert(c.get_initial_value() == 7);
     c.init(6);  // Reuse with new value
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_stop_count() == 9);
+    assert(c.get_step_count() == 9);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
@@ -31,16 +33,32 @@ void test_reset_and_reuse() {
     assert(c.get_sequence_string() == "6, 3, 10, 5, 16, 8, 4, 2, 1");
 }
 
+void test_reset_and_reuse_without_sequence() {
+    Collatz<int> c(7);
+    assert(c.get_initial_value() == 7);
+    c.init(6);  // Reuse with new value
+    assert(c.get_initial_value() == 6);
+    assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
+    assert(c.get_step_count() == 9);
+    try {
+        assert(c.get_sequence()[0] == 6);
+        assert(false); // Should not reach here
+    } catch (const std::logic_error& e) {
+        assert(std::string(e.what()).find("disabled sequence tracking") != std::string::npos);
+    }
+    assert(c.get_oe_pattern_string() == "EOEOEEEEO");
+    assert(c.get_hwm_index() == 1);  // index where value drops below initial
+}
+
 void test_zero() {
-    Collatz<int> c(0);
+    Collatz<int> c(0, true);
     assert(c.get_sequence().size() == 1);
     assert(c.get_oe_pattern().empty());
 }
 
 void test_one() {
     Collatz<int> c(1);
-    assert(c.get_sequence().size() == 1);
-    assert(c.get_sequence()[0] == 1);
+    assert(c.get_step_count() == 1);
     assert(c.get_oe_pattern_string() == "O");  // It adds "O" in the last step
 }
 
@@ -55,9 +73,9 @@ void test_negative_exception() {
 
 void test_with_mpz() {
     mpz_class val("6");
-    Collatz<mpz_class> c(val);
+    Collatz<mpz_class> c(val, true);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_stop_count() == 9);
+    assert(c.get_step_count() == 9);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
@@ -70,6 +88,8 @@ int main() {
     std::cout << "test_with_int() passed\n";
     test_reset_and_reuse();
     std::cout << "test_reset_and_reuse() passed\n";
+    test_reset_and_reuse_without_sequence();
+    std::cout << "test_reset_and_reuse_without_sequence() passed\n";
     test_zero();
     std::cout << "test_zero() passed\n";
     test_one();
