@@ -1,6 +1,7 @@
 #ifndef SRC_COLLATZ_H_
 #define SRC_COLLATZ_H_
 
+#include <iostream>
 #include <gmpxx.h>
 #include <stdexcept>
 #include <vector>

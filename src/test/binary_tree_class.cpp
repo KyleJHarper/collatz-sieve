@@ -140,6 +140,77 @@ void test_binary_tree_16_levels() {
     assert(global_coverage.get_total() == 131070);
     // Tree should always have: 2^(level+1) - 2 nodes total.
     assert(tree.node_count() == (std::pow(2, tree.get_max_level() + 1) - 2));
+    assert(tree.node_count_with_root() == (std::pow(2, tree.get_max_level() + 1) - 1));
+    BinaryTree<mpz_class> tree_mpz(16);
+    BinaryTreeCoverage global_coverage_mpz;
+    size_t target_covered_mpz = 0;
+    size_t target_total_mpz = 0;
+    for (size_t level=1; level<=tree_mpz.get_max_level(); level++) {
+        target_total_mpz = std::pow(2, level);
+        const BinaryTreeCoverage* coverage_mpz = &tree_mpz.get_coverage_map().find(level)->second;
+        global_coverage_mpz.add_covered(coverage_mpz->get_covered());
+        global_coverage_mpz.add_total(coverage_mpz->get_total());
+        switch (level) {
+            case 1:
+                target_covered_mpz = 1;
+                break;
+            case 2:
+                target_covered_mpz = 3;
+                break;
+            case 3:
+                target_covered_mpz = 6;
+                break;
+            case 4:
+                target_covered_mpz = 13;
+                break;
+            case 5:
+                target_covered_mpz = 28;
+                break;
+            case 6:
+                target_covered_mpz = 56;
+                break;
+            case 7:
+                target_covered_mpz = 115;
+                break;
+            case 8:
+                target_covered_mpz = 237;
+                break;
+            case 9:
+                target_covered_mpz = 474;
+                break;
+            case 10:
+                target_covered_mpz = 960;
+                break;
+            case 11:
+                target_covered_mpz = 1920;
+                break;
+            case 12:
+                target_covered_mpz = 3870;
+                break;
+            case 13:
+                target_covered_mpz = 7825;
+                break;
+            case 14:
+                target_covered_mpz = 15650;
+                break;
+            case 15:
+                target_covered_mpz = 31473;
+                break;
+            case 16:
+                target_covered_mpz = 63422;
+                break;
+            default:
+                assert(false);
+                break;
+        }
+        assert(coverage_mpz->get_covered() == target_covered_mpz);
+        assert(coverage_mpz->get_total() == target_total_mpz);
+    }
+    assert(global_coverage_mpz.get_covered() == 126053);
+    assert(global_coverage_mpz.get_total() == 131070);
+    // Tree should always have: 2^(level+1) - 2 nodes total.
+    assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_max_level() + 1) - 2));
+    assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_max_level() + 1) - 1));
 }
 
 int main() {

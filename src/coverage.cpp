@@ -11,12 +11,14 @@ int main(int argc, char **argv) {
     }
 
     // Build the tree.
-    typedef mpz_class my_type;
-    // typedef uint64_t my_type;
+    // typedef mpz_class my_type;
+    typedef uint64_t my_type;
     size_t levels = 0;
     levels = atoi(argv[1]);
-    BinaryTree tree = BinaryTree<my_type>(levels);
 
+    Collatz<my_type>::detect_overflow = true;
+    Node<my_type>::disable_sequenes();
+    BinaryTree tree = BinaryTree<my_type>(levels);
     BinaryTreeCoverage global_coverage;
     for (size_t level=1; level<=tree.get_max_level(); level++) {
         BinaryTreeCoverage coverage = tree.get_coverage_map().find(level)->second;

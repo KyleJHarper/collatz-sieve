@@ -1,3 +1,4 @@
+#include <climits>
 #include <cstdint>
 #include <gmpxx.h>
 #include <iostream>
@@ -49,7 +50,7 @@ void printTable(const std::vector<std::vector<std::string>>& table) {
         }
     }
 }
-std::vector<std::string> add(const char *name, int u_version, int z_version, const char* unit="bytes") {
+std::vector<std::string> add(const char *name, int64_t u_version, int64_t z_version, const char* unit="bytes") {
     std::vector<std::string> vector;
     int delta_abs = z_version - u_version;
     vector.push_back(name);
@@ -95,6 +96,10 @@ int main(int argc, char **argv) {
     BinaryTree tree_mpz_c_keep_collatz = BinaryTree<mpz_class>(levels);
     Node<uint64_t>::disable_sequenes();
     Node<mpz_class>::disable_sequenes();
+    size_t bytes_per_node_uint64_t = tree_uint64_t.deep_size() / tree_uint64_t.node_count();
+    size_t bytes_per_node_mpz_c = tree_mpz_c.deep_size() / tree_mpz_c.node_count().get_ui();
+    size_t bytes_per_node_uint64_t_keep_collatz = tree_uint64_t_keep_collatz.deep_size() / tree_uint64_t_keep_collatz.node_count();
+    size_t bytes_per_node_mpz_c_keep_collatz = tree_mpz_c_keep_collatz.deep_size() / tree_mpz_c_keep_collatz.node_count().get_ui();
     std::cout << " done." << std::endl;
 
     // Rate Data
@@ -119,9 +124,16 @@ int main(int argc, char **argv) {
     table.push_back(add("Node(27) (deep, 112 stops)", node_uint64_t_keep_collatz.deep_size(), node_mpz_c_keep_collatz.deep_size()));
     table.push_back(add("Node(27) (deep, stops removed)", node_uint64_t.deep_size(), node_mpz_c.deep_size()));
     table.push_back(add("BinaryTree (shallow)", sizeof(BinaryTree<uint64_t>), sizeof(BinaryTree<mpz_class>)));
-    // table.push_back(add("BinaryTree (deep, " + "16 levels, without stops)", tree_uint64_t.deep_size(), tree_mpz_c.deep_size()));
     table.push_back(add(std::format("BinaryTree (deep, {} levels, without stops)", levels).c_str(), tree_uint64_t.deep_size(), tree_mpz_c.deep_size()));
+    table.push_back(add("  As Megabytes", tree_uint64_t.deep_size()/1024/1024, tree_mpz_c.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("  As Gigabytes", tree_uint64_t.deep_size()/1024/1024/1024, tree_mpz_c.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("  Nodes", tree_uint64_t.node_count(), tree_mpz_c.node_count().get_ui(), "nodes"));
+    table.push_back(add("  Bytes per Node", bytes_per_node_uint64_t, bytes_per_node_mpz_c));
     table.push_back(add(std::format("BinaryTree (deep, {} levels, with stops)", levels).c_str(), tree_uint64_t_keep_collatz.deep_size(), tree_mpz_c_keep_collatz.deep_size()));
+    table.push_back(add("  As Megabytes", tree_uint64_t_keep_collatz.deep_size()/1024/1024, tree_mpz_c_keep_collatz.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("  As Gigabytes", tree_uint64_t_keep_collatz.deep_size()/1024/1024/1024, tree_mpz_c_keep_collatz.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("  Nodes", tree_uint64_t_keep_collatz.node_count(), tree_mpz_c_keep_collatz.node_count().get_ui(), "nodes"));
+    table.push_back(add("  Bytes per Node", bytes_per_node_uint64_t_keep_collatz, bytes_per_node_mpz_c_keep_collatz));
     // This is tricky because we need floats.
     float uint_ratio = 100.0f * tree_uint64_t_keep_collatz.deep_size() / tree_uint64_t.deep_size();
     float mpz_ratio = 100.0f * tree_mpz_c_keep_collatz.deep_size() / tree_mpz_c.deep_size();

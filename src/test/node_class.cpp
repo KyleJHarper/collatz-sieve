@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <gmpxx.h>
-#include "../collatz/binary_tree.hpp" // Include your Node<T> and Collatz<T> headers
+#include "../collatz/node.hpp"
 
 void test_basic_node_int() {
     Node<int>::enable_sequenes();
@@ -61,7 +61,12 @@ void test_keep_sequences_toggle() {
     Node<int>::disable_sequenes();
     Node<int> node(6);
     // Internal _collatz sequence should be cleared
-    assert(node.get_collatz()->get_sequence().empty() == true);
+    try {
+        assert(node.get_collatz()->get_sequence().empty() == true);
+        assert(false); // Should not reach here
+    } catch (const std::logic_error& e) {
+        assert(std::string(e.what()).find("disabled sequence tracking") != std::string::npos);
+    }
 }
 
 int main() {
