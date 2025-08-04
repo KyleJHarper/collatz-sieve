@@ -25,6 +25,7 @@ allocations when building the BinaryTree.
 #### Results
 * Allocations increased, probably because `Node<T>` has allocations inside it anyway.  Namely, `mpz_class` and `mpf_class`.
 * OMP stopped threading the work, probably because it doesn't believe that assignment to the vector is thread safe.
+  * I'm an idiot and had the `#pragma omp parallel...` part commented out.  Performance is fine.
 * Single-threaded performance remained the same, despite more allocations.
 
 I executed `bin/coverage 16` to obtain the following:

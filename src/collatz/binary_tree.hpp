@@ -8,6 +8,7 @@
 #include <omp.h>
 #include "node.hpp"
 #include "binary_tree_coverage.hpp"
+#include "slab.hpp"
 
 
 //
@@ -19,15 +20,18 @@ class BinaryTree {
     private:
     Node<T> *_root_node = nullptr;
     size_t _max_level = 0;
-    std::unordered_map<size_t, std::vector<Node<T>>> _level_map;
+    std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
     std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
+    ThreadLocalSlabAllocator<Node<T>> _node_allocator{4096};
+
 
     public:
     // Constructor
     BinaryTree(size_t levels) {
+        _root_node = _node_allocator.allocate();
+        new (_root_node) Node<T>(0, nullptr);
         _level_map[0].resize(1);
-        _level_map[0][0] = Node<T>(0);
-        _root_node = &_level_map[0][0];
+        _level_map[0][0] = _root_node;
         _coverage_map[0].set_covered(0);
         for (size_t level = 1; level <= levels; ++level) {
             this->add_level();
@@ -38,7 +42,10 @@ class BinaryTree {
     // However, Node objects replicated destruction to children, so we don't need to walk the tree
     // ourself.
     ~BinaryTree() {
-        // delete _root_node;
+        // Don't use `delete`.  These are placement-new constructed, not new constructed.
+        // The allocator will handle destruction when clear is called.
+        // Release the slab's memory.
+        // _node_allocator.clear_all();
     }
 
 
@@ -49,7 +56,7 @@ class BinaryTree {
     Node<T>* get_root_node() const {
         return _root_node;
     }
-    const std::unordered_map<size_t, std::vector<Node<T>>>& get_level_map() const {
+    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {
         return _level_map;
     }
     const T node_count() const {
@@ -69,17 +76,22 @@ class BinaryTree {
     }
     size_t deep_size() const {
         size_t total = sizeof(*this);
+        // Account for each level and its vector of node pointers
         for (const auto& [level, nodes_vec] : _level_map) {
             total += sizeof(level);
             total += sizeof(nodes_vec);
-            total += nodes_vec.size() * sizeof(Node<T>);
-            for (const auto& node : nodes_vec) {
-                total += node.deep_size();
+            total += nodes_vec.capacity() * sizeof(Node<T>*);
+            // For each Node*, include its deep size
+            for (const Node<T>* node_ptr : nodes_vec) {
+                if (node_ptr) {
+                    total += node_ptr->deep_size();
+                }
             }
         }
+        // Account for coverage map
         for (const auto& [level, coverage] : _coverage_map) {
             total += sizeof(level);
-            total += sizeof(BinaryTreeCoverage);
+            total += sizeof(coverage);
         }
         return total;
     }
@@ -96,31 +108,34 @@ class BinaryTree {
         _max_level++;
         // Each level will double the size of the tree, so we can't rely on size_t if we're going to
         // support GMP-size values.  We need to respect T.
-        size_t step = std::pow(2, parent_level);
+        size_t step = 1ULL << parent_level;
         // Loop through the parents to build the children.
         auto& parents = _level_map[parent_level];
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
-        _level_map[child_level].reserve(child_count);
         _level_map[child_level].resize(child_count);
-        //#pragma omp parallel for schedule(dynamic, 1) default(none) shared(parents, _level_map, step, child_level, parent_count)
+        #pragma omp parallel for schedule(dynamic, 1) default(none) shared(parents, _level_map, step, child_level, parent_count)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
             // Get the child values.
-            Node<T>& parent = parents[parent_idx];
-            T child_value_1 = parent.get_value() + step;
+            Node<T>* parent = parents[parent_idx];
+            T child_value_1 = parent->get_value() + step;
             T child_value_2 = child_value_1 + step;
             // Create the children.  Add them to the map.
-            _level_map[child_level][2 * parent_idx] = Node<T>(child_value_1, &parent);
-            _level_map[child_level][2 * parent_idx + 1] = Node<T>(child_value_2, &parent);
+            Node<T>* child_1 = _node_allocator.allocate();
+            Node<T>* child_2 = _node_allocator.allocate();
+            new (child_1) Node<T>(child_value_1, parent); // placement-new construct
+            new (child_2) Node<T>(child_value_2, parent);
+            _level_map[child_level][2 * parent_idx] = child_1;
+            _level_map[child_level][2 * parent_idx + 1] = child_2;
             // Add children to the parent.
-            parent.assign_child(&_level_map[child_level][2 * parent_idx]);
-            parent.assign_child(&_level_map[child_level][2 * parent_idx + 1]);
+            parent->assign_child(child_1);
+            parent->assign_child(child_2);
         }
         // Establish the coverage.  Covered is always 0, but total is simply step * 2.
         _coverage_map[child_level].set_covered(0);
         _coverage_map[child_level].set_total(step * 2);
-        for(const Node<T>& child_node : _level_map[child_level]) {
-            if(child_node.is_below_high_water_mark() || child_node.has_high_water_mark_ancestor()) {
+        for(const Node<T>* child_node : _level_map[child_level]) {
+            if(child_node->is_below_high_water_mark() || child_node->has_high_water_mark_ancestor()) {
                 _coverage_map[child_level].add_covered(1);
             }
         }

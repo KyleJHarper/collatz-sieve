@@ -15,12 +15,12 @@ void test_binary_tree_basic_construction() {
 
     // Level 0: root
     assert(map.at(0).size() == 1);
-    assert(map.at(0)[0].get_value() == 0);
+    assert(map.at(0)[0]->get_value() == 0);
 
     // Level 1: 2 children (0 + 1, 0 + 2)
     assert(map.at(1).size() == 2);
-    assert(map.at(1)[0].get_value() == 1);
-    assert(map.at(1)[1].get_value() == 2);
+    assert(map.at(1)[0]->get_value() == 1);
+    assert(map.at(1)[1]->get_value() == 2);
 
     // Level 2: each child has 2 children, total 4
     assert(map.at(2).size() == 4);
@@ -76,7 +76,9 @@ void test_generate_node_at_mpz() {
 }
 
 void test_binary_tree_16_levels() {
+    std::cout << "1\n";
     BinaryTree<int> tree(16);
+    std::cout << "2\n";
     BinaryTreeCoverage global_coverage;
     size_t target_covered = 0;
     size_t target_total = 0;
@@ -223,18 +225,18 @@ int main() {
 
     test_binary_tree_basic_construction();
     std::cout << "test_binary_tree_basic_construction() passed\n";
-    // test_binary_tree_deep_size();
-    // std::cout << "test_binary_tree_deep_size() passed\n";
-    // test_binary_tree_generate_node_at_valid();
-    // std::cout << "test_binary_tree_generate_node_at_valid() passed\n";
-    // test_binary_tree_generate_node_at_invalid_pos();
-    // std::cout << "test_binary_tree_generate_node_at_invalid_pos() passed\n";
-    // test_binary_tree_with_mpz();
-    // std::cout << "test_binary_tree_with_mpz() passed\n";
-    // test_generate_node_at_mpz();
-    // std::cout << "test_generate_node_at_mpz() passed\n";
-    // test_binary_tree_16_levels();
-    // std::cout << "test_binary_tree_16_levels() passed\n";
+    test_binary_tree_deep_size();
+    std::cout << "test_binary_tree_deep_size() passed\n";
+    test_binary_tree_generate_node_at_valid();
+    std::cout << "test_binary_tree_generate_node_at_valid() passed\n";
+    test_binary_tree_generate_node_at_invalid_pos();
+    std::cout << "test_binary_tree_generate_node_at_invalid_pos() passed\n";
+    test_binary_tree_with_mpz();
+    std::cout << "test_binary_tree_with_mpz() passed\n";
+    test_generate_node_at_mpz();
+    std::cout << "test_generate_node_at_mpz() passed\n";
+    test_binary_tree_16_levels();
+    std::cout << "test_binary_tree_16_levels() passed\n";
 
     std::cout << "All BinaryTree<T> tests passed.\n";
     return 0;

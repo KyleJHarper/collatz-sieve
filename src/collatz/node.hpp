@@ -30,7 +30,7 @@ class Node {
     mpf_class _fg_n_portion_mpf_c;
     mpf_class _fg_constant_mpf_c;
     mpf_class _fg_total_mpf_c;
-    inline static bool keep_sequences = false;
+    static inline bool keep_sequences = false;
 
     public:
     // Constructors
