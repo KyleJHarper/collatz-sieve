@@ -1,5 +1,4 @@
-#ifndef SRC_CONCEPTS_H_
-#define SRC_CONCEPTS_H_
+#pragma once
 
 #include <concepts>
 #include <gmpxx.h>
@@ -9,5 +8,3 @@
 //
 template<typename T>
 concept IntegralOrMPZClass = std::integral<T> || std::same_as<T, mpz_class>;
-
-#endif

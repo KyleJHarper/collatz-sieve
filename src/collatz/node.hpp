@@ -1,10 +1,10 @@
-#ifndef SRC_NODE_H_
-#define SRC_NODE_H_
+#pragma once
 
 #include "collatz.hpp"
 #include "concepts.hpp"
 #include <vector>
 #include <cmath>
+#include "gmp_helpers.hpp"
 
 
 //
@@ -23,7 +23,7 @@ class Node {
     Node *_children[2];
     Node *_parent;
     Node *_hwm_ancestor = nullptr;
-    Collatz<T> *_collatz;
+    Collatz<T> _collatz;
     std::vector<bool> _odd_even_chain;
     mpz_class _twos_value_mpz_c;
     mpz_class _threes_value_mpz_c;
@@ -34,6 +34,10 @@ class Node {
 
     public:
     // Constructors
+    Node() {
+        _value= T{};
+        _parent = nullptr;
+    }
     Node(T value, Node *parent = nullptr) {
         // Set the argument values.
         _value = value;
@@ -55,7 +59,7 @@ class Node {
             _position = 1;
         }
         // Build the collatz sequence object.
-        _collatz = new Collatz<T>(_value, keep_sequences);
+        _collatz.init(_value, keep_sequences);
         // Leverage our parent's oe-chain to determine ours.  When zero, there's no chain to get.
         if(_value > 0) {
             size_t oe_chain_length = 0;
@@ -63,14 +67,14 @@ class Node {
                 oe_chain_length = parent->get_odd_even_chain().size();
             }
             _odd_even_chain.resize(oe_chain_length);
-            std::copy_n(_collatz->get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
+            std::copy_n(_collatz.get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
             if(_odd_even_chain.empty() || _odd_even_chain.back() == CollatzConstants::EVEN) {
                 oe_chain_length += 1;
             } else {
                 oe_chain_length += 2;
             }
             _odd_even_chain.resize(oe_chain_length);
-            std::copy_n(_collatz->get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
+            std::copy_n(_collatz.get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
         }
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
         mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), CollatzConstants::EVEN));
@@ -109,10 +113,11 @@ class Node {
 
     // Destructor
     ~Node() {
-        delete _collatz;
-        for (size_t i = 0 ; i < _child_count; i++) {
-            delete _children[i];
-        }
+        // delete _collatz;  Not needed.  Collatz is inlined onto the stack.
+        // for (size_t i = 0 ; i < _child_count; i++) {
+        //     delete _children[i];
+        // }
+        // Children are value-added by the BinaryTree.  Don't free them here.
     }
 
     // Cout and string-ified methods.
@@ -136,7 +141,7 @@ class Node {
     const size_t& get_child_count() const {
         return _child_count;
     }
-    const Collatz<T>* get_collatz() const {
+    const Collatz<T>& get_collatz() const {
         return _collatz;
     }
     const mpz_class& get_twos_value() const {
@@ -180,19 +185,28 @@ class Node {
         }
         return true;
     }
+    void assign_child(Node<T>* child) {
+        _children[_child_count++] = child;
+    }
     Node<T>* add_child(T value) {
         Node *child = new Node(value, this);
         _children[_child_count++] = child;
         return child;
     }
     size_t deep_size() const {
-        size_t total = 0;
-        total += sizeof(*this);
-        if(_collatz != nullptr) {
-            total += _collatz->deep_size();
-        }
+        size_t total = sizeof(*this);
+        // The _collatz is inlined.  Add its deep size, but subtract is shallow size.
+        total += _collatz.deep_size();
+        total -= sizeof(_collatz);
         // Vector<bool> is a specialized template in c++.  Bit-packed.
-        total += ((_odd_even_chain.capacity() + 7) / 8);
+        total += (_odd_even_chain.capacity() + 7) / 8;
+        if constexpr (std::same_as<T, mpz_class>) {
+            total += gmp_deep_sizeof(_twos_value_mpz_c);
+            total += gmp_deep_sizeof(_threes_value_mpz_c);
+            total += gmp_deep_sizeof(_fg_n_portion_mpf_c);
+            total += gmp_deep_sizeof(_fg_constant_mpf_c);
+            total += gmp_deep_sizeof(_fg_total_mpf_c);
+        }
         return total;
     }
     static void enable_sequenes() {
@@ -202,5 +216,3 @@ class Node {
         Node<T>::keep_sequences = false;
     }
 };
-
-#endif

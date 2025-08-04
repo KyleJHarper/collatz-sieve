@@ -1,6 +1,4 @@
-#ifndef SRC_BINARY_TREE_COVERAGE_H_
-#define SRC_BINARY_TREE_COVERAGE_H_
-
+#pragma once
 
 #include <gmp.h>
 #include <gmpxx.h>
@@ -56,5 +54,3 @@ class BinaryTreeCoverage {
         return ratio;
     }
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SRC_FACTORY_H_
-#define SRC_FACTORY_H_
+#pragma once
 
 #include <vector>
 #include <cstddef>
@@ -99,5 +98,3 @@ class ThreadSafeObjectPool {
     }
 
 };
-
-#endif

@@ -9,7 +9,21 @@
 #include "collatz/binary_tree.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/concepts.hpp"
+#include <fstream>
+#include <unistd.h>
 
+
+size_t getCurrentRSSBytes() {
+    long rss_pages = 0;
+    std::ifstream statm("/proc/self/statm");
+    if (statm.good()) {
+        long dummy;
+        statm >> dummy >> rss_pages;
+        statm.close();
+    }
+    long page_size_bytes = sysconf(_SC_PAGE_SIZE); // bytes per page
+    return rss_pages * page_size_bytes; // RSS in bytes
+}
 
 std::vector<size_t> calculateColumnWidths(const std::vector<std::vector<std::string>>& table) {
     if (table.empty()) return {};
@@ -88,18 +102,35 @@ int main(int argc, char **argv) {
     Node node_mpz_c_keep_collatz = Node<mpz_class>(27);
     Node<uint64_t>::disable_sequenes();
     Node<mpz_class>::disable_sequenes();
+    //
+    size_t rss_t1 = getCurrentRSSBytes();
     BinaryTree tree_uint64_t = BinaryTree<uint64_t>(levels);
+    size_t rss_uint64_t = getCurrentRSSBytes() - rss_t1;
+    //
+    rss_t1 = getCurrentRSSBytes();
     BinaryTree tree_mpz_c = BinaryTree<mpz_class>(levels);
+    size_t rss_mpz_c = getCurrentRSSBytes() - rss_t1;
+    //
     Node<uint64_t>::enable_sequenes();
     Node<mpz_class>::enable_sequenes();
+    rss_t1 = getCurrentRSSBytes();
     BinaryTree tree_uint64_t_keep_collatz = BinaryTree<uint64_t>(levels);
+    size_t rss_uint64_t_keep_collatz = getCurrentRSSBytes() - rss_t1;
+    //
+    rss_t1 = getCurrentRSSBytes();
     BinaryTree tree_mpz_c_keep_collatz = BinaryTree<mpz_class>(levels);
+    size_t rss_mpz_c_keep_collatz = getCurrentRSSBytes() - rss_t1;
     Node<uint64_t>::disable_sequenes();
     Node<mpz_class>::disable_sequenes();
     size_t bytes_per_node_uint64_t = tree_uint64_t.deep_size() / tree_uint64_t.node_count();
     size_t bytes_per_node_mpz_c = tree_mpz_c.deep_size() / tree_mpz_c.node_count().get_ui();
     size_t bytes_per_node_uint64_t_keep_collatz = tree_uint64_t_keep_collatz.deep_size() / tree_uint64_t_keep_collatz.node_count();
     size_t bytes_per_node_mpz_c_keep_collatz = tree_mpz_c_keep_collatz.deep_size() / tree_mpz_c_keep_collatz.node_count().get_ui();
+    // RSS
+    size_t rss_bytes_per_node_uint64_t = rss_uint64_t / tree_uint64_t.node_count();
+    size_t rss_bytes_per_node_mpz_c = rss_mpz_c / tree_mpz_c.node_count().get_ui();
+    size_t rss_bytes_per_node_uint64_t_keep_collatz = rss_uint64_t_keep_collatz / tree_uint64_t_keep_collatz.node_count();
+    size_t rss_bytes_per_node_mpz_c_keep_collatz = rss_mpz_c_keep_collatz / tree_mpz_c_keep_collatz.node_count().get_ui();
     std::cout << " done." << std::endl;
 
     // Rate Data
@@ -128,12 +159,18 @@ int main(int argc, char **argv) {
     table.push_back(add("  As Megabytes", tree_uint64_t.deep_size()/1024/1024, tree_mpz_c.deep_size()/1024/1024, "Mbytes"));
     table.push_back(add("  As Gigabytes", tree_uint64_t.deep_size()/1024/1024/1024, tree_mpz_c.deep_size()/1024/1024/1024, "Gbytes"));
     table.push_back(add("  Nodes", tree_uint64_t.node_count(), tree_mpz_c.node_count().get_ui(), "nodes"));
-    table.push_back(add("  Bytes per Node", bytes_per_node_uint64_t, bytes_per_node_mpz_c));
+    table.push_back(add("  According to RSS", rss_uint64_t, rss_mpz_c));
+    table.push_back(add("  Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t, bytes_per_node_mpz_c));
+    table.push_back(add("  Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t, rss_bytes_per_node_mpz_c));
+    table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t - bytes_per_node_uint64_t, rss_bytes_per_node_mpz_c - bytes_per_node_mpz_c));
     table.push_back(add(std::format("BinaryTree (deep, {} levels, with stops)", levels).c_str(), tree_uint64_t_keep_collatz.deep_size(), tree_mpz_c_keep_collatz.deep_size()));
     table.push_back(add("  As Megabytes", tree_uint64_t_keep_collatz.deep_size()/1024/1024, tree_mpz_c_keep_collatz.deep_size()/1024/1024, "Mbytes"));
     table.push_back(add("  As Gigabytes", tree_uint64_t_keep_collatz.deep_size()/1024/1024/1024, tree_mpz_c_keep_collatz.deep_size()/1024/1024/1024, "Gbytes"));
     table.push_back(add("  Nodes", tree_uint64_t_keep_collatz.node_count(), tree_mpz_c_keep_collatz.node_count().get_ui(), "nodes"));
-    table.push_back(add("  Bytes per Node", bytes_per_node_uint64_t_keep_collatz, bytes_per_node_mpz_c_keep_collatz));
+    table.push_back(add("  According to RSS", rss_uint64_t_keep_collatz, rss_mpz_c_keep_collatz));
+    table.push_back(add("  Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_keep_collatz, bytes_per_node_mpz_c_keep_collatz));
+    table.push_back(add("  Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_keep_collatz, rss_bytes_per_node_mpz_c_keep_collatz));
+    table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t_keep_collatz - bytes_per_node_uint64_t_keep_collatz, rss_bytes_per_node_mpz_c_keep_collatz - bytes_per_node_mpz_c_keep_collatz));
     // This is tricky because we need floats.
     float uint_ratio = 100.0f * tree_uint64_t_keep_collatz.deep_size() / tree_uint64_t.deep_size();
     float mpz_ratio = 100.0f * tree_mpz_c_keep_collatz.deep_size() / tree_mpz_c.deep_size();

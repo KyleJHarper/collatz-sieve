@@ -15,7 +15,7 @@ void test_basic_node_int() {
     assert(root.get_fg_total() >= 0);
     assert(root.get_fg_n_portion() > 0);
     assert(root.get_fg_constant() >= 0);
-    assert(!root.get_collatz()->get_sequence().empty());
+    assert(!root.get_collatz().get_sequence().empty());
 }
 
 void test_high_water_mark_behavior() {
@@ -62,7 +62,7 @@ void test_keep_sequences_toggle() {
     Node<int> node(6);
     // Internal _collatz sequence should be cleared
     try {
-        assert(node.get_collatz()->get_sequence().empty() == true);
+        assert(node.get_collatz().get_sequence().empty() == true);
         assert(false); // Should not reach here
     } catch (const std::logic_error& e) {
         assert(std::string(e.what()).find("disabled sequence tracking") != std::string::npos);

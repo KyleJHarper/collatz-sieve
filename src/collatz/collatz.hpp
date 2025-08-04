@@ -1,5 +1,4 @@
-#ifndef SRC_COLLATZ_H_
-#define SRC_COLLATZ_H_
+#pragma once
 
 #include <iostream>
 #include <gmpxx.h>
@@ -8,6 +7,7 @@
 #include <string>
 #include <stdint.h>
 #include "concepts.hpp"
+#include "gmp_helpers.hpp"
 
 
 
@@ -32,7 +32,7 @@ class Collatz {
     std::vector<bool> _oe_pattern;
     size_t _hwm_index = 0;
     size_t _step_count = 0;
-    bool _must_reset = false;
+    bool _is_initialized = false;
     bool _track_sequence = false;
 
     public:
@@ -40,22 +40,22 @@ class Collatz {
     // Constructors.  Offload to init() so objects can be reused.
     Collatz() {}
     Collatz(T initial_value, bool track_sequence = false) {
-        _track_sequence = track_sequence;
-        init(initial_value);
+        init(initial_value, track_sequence);
     };
-    void init(T initial_value) {
+    void init(T initial_value, bool track_sequence = false) {
         if (initial_value < 0) {
             throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 0.");
         }
+        _track_sequence = track_sequence;
         // Reset if necessary.
-        if(_must_reset) {
+        if(_is_initialized) {
             _sequence.clear();
             _peak_value = 0;
             _oe_pattern.clear();
             _hwm_index = 0;
             _step_count = 0;
         }
-        _must_reset = true;
+        _is_initialized = true;
         // Now process the new value.
         _initial_value = initial_value;
         // Build the sequence (optional) and its related metadata.
@@ -109,6 +109,9 @@ class Collatz {
             _oe_pattern.clear();
             _step_count = 0;
         }
+        // Trim up vectors.
+        _sequence.shrink_to_fit();
+        _oe_pattern.shrink_to_fit();
     }
 
     // Cout and string-ified methods.
@@ -149,6 +152,9 @@ class Collatz {
     const std::vector<bool>& get_oe_pattern() const {
         return _oe_pattern;
     }
+    bool get_is_initialized() const {
+        return _is_initialized;
+    }
     std::string get_oe_pattern_string() const {
         std::string result;
         result.reserve(_oe_pattern.size());
@@ -170,17 +176,20 @@ class Collatz {
         _sequence.clear();
     }
     size_t deep_size() const {
-        size_t total = 0;
-        total += sizeof(*this);
-        for (auto &stop : _sequence) {
-            total += sizeof(stop);
+        size_t total = sizeof(*this);
+        // For _sequence
+        if constexpr (std::is_same<T, mpz_class>::value) {
+            total += sizeof(mpz_class) * _sequence.capacity(); // object headers
+            for (const auto& val : _sequence) {
+                total += gmp_deep_sizeof(val);
+            }
+        } else {
+            total += sizeof(T) * _sequence.capacity();
         }
-        total += sizeof(T) * _sequence.capacity();
+        // For _oe_pattern (bit-packed)
         // Vector<bool> is a specialized template in c++.  Bit-packed.
-        total += ((_oe_pattern.capacity() + 7) / 8);
+        total += (_oe_pattern.capacity() + 7) / 8;
         return total;
     }
 
 };
-
-#endif

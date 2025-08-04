@@ -3,4 +3,5 @@ data/
 massif.*
 flamegraph.svg
 .vscode/
+heaptrack*
 

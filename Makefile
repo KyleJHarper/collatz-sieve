@@ -49,6 +49,9 @@ performance_stats:
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/performance_stats \
 		$(SRCDIR)/performance_stats.cpp \
 		-lgmp -lgmpxx
+	$(CC) $(CFLAGS) $(DEBUG) -o $(BINDIR)/performance_stats__debug \
+		$(SRCDIR)/performance_stats.cpp \
+		-lgmp -lgmpxx
 
 single_collatz:
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/single_collatz \
@@ -59,19 +62,29 @@ single_collatz:
 		-lgmp -lgmpxx
 
 tests:
-	echo "Compiling classes."
+	echo "Compiling classes and running with $(DEBUG) (debug)."
+	$(CC) $(CFLAGS) $(DEBUG) -o $(BINDIR)/test__collatz_class__debug \
+		$(TESTDIR)/collatz_class.cpp \
+		-lgmp -lgmpxx
+	$(BINDIR)/test__collatz_class__debug
+	$(CC) $(CFLAGS) $(DEBUG) -o $(BINDIR)/test__node_class__debug \
+		$(TESTDIR)/node_class.cpp \
+		-lgmp -lgmpxx
+	$(BINDIR)/test__node_class__debug
+	$(CC) $(CFLAGS) $(DEBUG) -o $(BINDIR)/test__binary_tree_class__debug \
+		$(TESTDIR)/binary_tree_class.cpp \
+		-lgmp -lgmpxx
+	$(BINDIR)/test__binary_tree_class__debug
+	echo "Compiling classes and running with $(O2)."
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__collatz_class \
 		$(TESTDIR)/collatz_class.cpp \
 		-lgmp -lgmpxx
-	echo "Running tests."
 	$(BINDIR)/test__collatz_class
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__node_class \
 		$(TESTDIR)/node_class.cpp \
 		-lgmp -lgmpxx
-	echo "Running tests."
 	$(BINDIR)/test__node_class
 	$(CC) $(CFLAGS) $(O2) -o $(BINDIR)/test__binary_tree_class \
 		$(TESTDIR)/binary_tree_class.cpp \
 		-lgmp -lgmpxx
-	echo "Running tests."
 	$(BINDIR)/test__binary_tree_class

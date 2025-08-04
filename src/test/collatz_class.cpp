@@ -22,7 +22,7 @@ void test_with_int() {
 void test_reset_and_reuse() {
     Collatz<int> c(7, true);
     assert(c.get_initial_value() == 7);
-    c.init(6);  // Reuse with new value
+    c.init(6, true);  // Reuse with new value
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
     assert(c.get_step_count() == 9);
