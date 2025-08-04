@@ -10,6 +10,7 @@ EXPDIR = $(SRCDIR)/experiments
 
 # Targets
 build:
+	$(MAKE) clean
 	$(MAKE) coverage
 	$(MAKE) high_water_mark
 	$(MAKE) peak_by_bit
