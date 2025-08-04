@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <cmath>
 #include <gmp.h>
 #include <gmpxx.h>
@@ -26,28 +25,14 @@ class BinaryTree {
     public:
     // Constructor
     BinaryTree(size_t levels) {
-        std::cout << "Constructor called\n";
-        _level_map[0].resize(1);                     // Ensure space for root
-        std::cout << "Constructor called 1\n";
-        _level_map[0][0] = Node<T>(0);               // Place the root node in-place
-        std::cout << "Constructor called 2\n";
-        _root_node = &_level_map[0][0];              // Store address of root
-        std::cout << "Constructor called 3\n";
-        _coverage_map[0].set_covered(0);             // Initialize coverage
-        std::cout << "Constructor called 4\n";
+        _level_map[0].resize(1);
+        _level_map[0][0] = Node<T>(0);
+        _root_node = &_level_map[0][0];
+        _coverage_map[0].set_covered(0);
         for (size_t level = 1; level <= levels; ++level) {
-            this->add_level();                       // Build rest of tree
+            this->add_level();
         }
     }
-    // BinaryTree(size_t levels) {
-    //     _level_map[0].resize(1);
-    //     _level_map[0].emplace_back(0);
-    //     _root_node = &_level_map[0].back();
-    //     _coverage_map[0].set_covered(0);
-    //     for(size_t level = 1; level <= levels; level++){
-    //         this->add_level();
-    //     }
-    // }
     // Destructor
     // We need to destroy the root node, since we're the ones who created it in our constructor.
     // However, Node objects replicated destruction to children, so we don't need to walk the tree
@@ -84,8 +69,6 @@ class BinaryTree {
     }
     size_t deep_size() const {
         size_t total = sizeof(*this);
-
-        std::cout << "1\n" << std::flush;
         for (const auto& [level, nodes_vec] : _level_map) {
             total += sizeof(level);
             total += sizeof(nodes_vec);
@@ -94,12 +77,10 @@ class BinaryTree {
                 total += node.deep_size();
             }
         }
-        std::cout << "2\n" << std::flush;
         for (const auto& [level, coverage] : _coverage_map) {
             total += sizeof(level);
             total += sizeof(BinaryTreeCoverage);
         }
-        std::cout << "3\n" << std::flush;
         return total;
     }
     const std::unordered_map<size_t, BinaryTreeCoverage> get_coverage_map() const {

@@ -4,48 +4,33 @@
 #include "../collatz/binary_tree.hpp" // Include your BinaryTree and Node classes
 
 void test_binary_tree_basic_construction() {
-    std::cout << "Building one...\n";
     BinaryTree<int> tree(3); // builds root + 3 levels
-    std::cout << "Building one...\n";
     BinaryTree<int> tree2(2); // builds root + 3 levels
-    std::cout << "Building one...\n";
     BinaryTree<int> tree3(4); // builds root + 3 levels
-    std::cout << "Building one...\n";
     BinaryTree<int> tree4(5); // builds root + 3 levels
-    std::cout << "Building one...\n";
     BinaryTree<int> tree5(6); // builds root + 3 levels
-    std::cout << "Building one...\n";
     BinaryTree<int> tree6(7); // builds root + 3 levels
-    std::cout << "Moving on: 1\n";
     assert(tree.get_max_level() == 3);
-    std::cout << "Moving on: 2\n";
     const auto& map = tree.get_level_map();
 
     // Level 0: root
-    std::cout << "Moving on: 3\n";
     assert(map.at(0).size() == 1);
     assert(map.at(0)[0].get_value() == 0);
 
     // Level 1: 2 children (0 + 1, 0 + 2)
-    std::cout << "Moving on: 4\n";
     assert(map.at(1).size() == 2);
     assert(map.at(1)[0].get_value() == 1);
     assert(map.at(1)[1].get_value() == 2);
 
     // Level 2: each child has 2 children, total 4
-    std::cout << "Moving on: 5\n";
     assert(map.at(2).size() == 4);
 
     // Level 3: 8 nodes expected
-    std::cout << "Moving on: 6\n";
     assert(map.at(3).size() == 8);
-    std::cout << "Moving on: 7\n";
 }
 
 void test_binary_tree_deep_size() {
-    std::cout << "Hmm... 1\n";
     BinaryTree<int> tree(2);
-    std::cout << "Hmm... 2\n";
     size_t size = tree.deep_size();
     assert(size > sizeof(tree)); // Make sure something was counted
 }
