@@ -15,11 +15,29 @@ I will tag things as new features are developed and list those features in the c
 
 ### 0.6.0
 Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many
-allocations when building the BinaryTree.  Goals:
+allocations when building the BinaryTree.
+
+#### Goals
 
 * Improve locality by calling `.reserve()` and `.resize()` with `child_count` since it's a deterministic value.
 * Reduce allocations by storing Node objects as values instead of pointers to heap.
-* TODO: Results???
+
+#### Results
+* Allocations increased, probably because `Node<T>` has allocations inside it anyway.  Namely, `mpz_class` and `mpf_class`.
+* OMP stopped threading the work, probably because it doesn't believe that assignment to the vector is thread safe.
+* Single-threaded performance remained the same, despite more allocations.
+
+I executed `bin/coverage 16` to obtain the following:
+
+| Version | Data Type | Allocations | For GMP |
+| :------ | :-------- | ----------: | ------: |
+| 0.5.1 | Node<uint64_t>* | 1,462,735 | 786,477 |
+| 0.6.0 | Node<uint64_t> | 2,158,447 | 1,441,832 |
+| 0.5.1 | Node<mpz_class>* | 7,566,388 | 6,759,076 |
+| 0.6.0 | Node<mpz_class> | 8,393,170 | 7,545,501 |
+
+#### Conclusion
+The loss of parallel construction is unacceptable.  We should either switch back to `Node<T>*` or build a slab allocator.
 
 ### 0.5.1
 This is the last build before switching to value-based Node storage in BinaryTree.  This is mostly so we can compare performance
