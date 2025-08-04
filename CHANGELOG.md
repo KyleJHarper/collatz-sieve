@@ -12,3 +12,5 @@ I will tag things as new features are developed and list those features in the c
 
 # Change Log
 
+### 0.1.0
+Beginning work on the conversion from Python programs in the tools/ directory to C/C++ in src/.
