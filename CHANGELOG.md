@@ -13,6 +13,9 @@ I will tag things as new features are developed and list those features in the c
 
 # Change Log
 
+### 0.6.1
+Reverted to to `std::vector<size_t, std::vector<Node<T>*>>` and threw the SlabAllocator away.
+
 ### 0.6.0
 Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many
 allocations when building the BinaryTree.
