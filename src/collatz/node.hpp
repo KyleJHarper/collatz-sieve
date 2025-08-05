@@ -13,15 +13,20 @@
 // process the sequence.  These odd-even chains are evenly patterened as the tree is generated, so
 // we don't want to know the full high-water mark (from Collatz()).
 //
+// BIG FAT NOTE!
+// By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.
+// If you want to delete a node without affecting its children, call own_children(false).
+//
 template <IntegralOrMPZClass T>
 class Node {
     private:
+    static constexpr size_t MAX_CHILDREN = 2;
     T _value;
     size_t _level;
     size_t _position = 0;
     size_t _child_count = 0;
-    Node *_children[2];
-    Node *_parent;
+    Node *_children[MAX_CHILDREN] = {nullptr, nullptr};
+    Node *_parent = nullptr;
     Node *_hwm_ancestor = nullptr;
     Collatz<T> _collatz;
     std::vector<bool> _odd_even_chain;
@@ -30,6 +35,8 @@ class Node {
     mpf_class _fg_n_portion_mpf_c;
     mpf_class _fg_constant_mpf_c;
     mpf_class _fg_total_mpf_c;
+    bool _is_initialized = false;
+    bool _own_children = true;
     static inline bool keep_sequences = false;
 
     public:
@@ -39,6 +46,26 @@ class Node {
         _parent = nullptr;
     }
     Node(T value, Node *parent = nullptr) {
+        init(value, parent);
+    }
+    // Use an init so we can reset and reuse objects.
+    void init(T value, Node *parent = nullptr) {
+        // Reset if necessary.
+        if(_is_initialized) {
+            // The _collatz object has its own resetting logic in its init().  Nothing to do here.
+            _level = 0;
+            _position = 0;
+            release_children();
+            _parent = nullptr;
+            _hwm_ancestor = nullptr;
+            _odd_even_chain.clear();
+            _twos_value_mpz_c = 0;
+            _threes_value_mpz_c = 0;
+            _fg_n_portion_mpf_c = 0;
+            _fg_constant_mpf_c = 0;
+            _fg_total_mpf_c = 0;
+        }
+        _is_initialized = true;
         // Set the argument values.
         _value = value;
         _parent = parent;
@@ -110,14 +137,21 @@ class Node {
             }
         }
     };
+    // Release children tracking and, if enabled, their memory.
+    void release_children() {
+        for (size_t i = 0; i < MAX_CHILDREN; i++) {
+            if (_own_children) {
+                delete _children[i];
+            }
+            _children[i] = nullptr;
+        }
+        _child_count = 0;
+    }
 
     // Destructor
     ~Node() {
         // delete _collatz;  Not needed.  Collatz is inlined onto the stack.
-        // for (size_t i = 0 ; i < _child_count; i++) {
-        //     delete _children[i];
-        // }
-        // Children are managed by the BinaryTree node allocator.
+        release_children();
     }
 
     // Cout and string-ified methods.
@@ -132,11 +166,17 @@ class Node {
     const size_t& get_level() const {
         return _level;
     }
+    bool is_initialized() const {
+        return _is_initialized;
+    }
     const size_t& get_position() const {
         return _position;
     }
     Node* get_parent() const {
         return _parent;
+    }
+    bool own_children() const {
+        return _own_children;
     }
     const size_t& get_child_count() const {
         return _child_count;
@@ -192,6 +232,9 @@ class Node {
         Node *child = new Node(value, this);
         _children[_child_count++] = child;
         return child;
+    }
+    void own_children(bool value) {
+        _own_children = value;
     }
     size_t deep_size() const {
         size_t total = sizeof(*this);
