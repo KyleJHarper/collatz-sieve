@@ -4,12 +4,13 @@
 #include "../collatz/binary_tree.hpp" // Include your BinaryTree and Node classes
 
 void test_binary_tree_basic_construction() {
-    BinaryTree<int> tree(3); // builds root + 3 levels
-    BinaryTree<int> tree2(2); // builds root + 3 levels
-    BinaryTree<int> tree3(4); // builds root + 3 levels
-    BinaryTree<int> tree4(5); // builds root + 3 levels
-    BinaryTree<int> tree5(6); // builds root + 3 levels
-    BinaryTree<int> tree6(7); // builds root + 3 levels
+    BinaryTree<int> tree(3);
+    // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
+    BinaryTree<int> tree2(2);
+    BinaryTree<int> tree3(4);
+    BinaryTree<int> tree4(5);
+    BinaryTree<int> tree5(6);
+    BinaryTree<int> tree6(7);
     assert(tree.get_max_level() == 3);
     const auto& map = tree.get_level_map();
 
@@ -218,6 +219,20 @@ void test_binary_tree_16_levels() {
     assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_max_level() + 1) - 1));
 }
 
+void test_binary_tree_node_count_should_match_map() {
+    // We do NOT consider root node.  It's a placeholder.
+    size_t levels = 4;
+    BinaryTree<uint64_t> tree(levels);
+    size_t expected_count = (2ULL << levels) - 2;
+    size_t map_count = 0;
+    const auto& map = tree.get_level_map();
+    for (size_t i = 1; i <= tree.get_max_level(); i++) {
+        map_count += map.at(i).size();
+    }
+    assert(tree.node_count() == expected_count);
+    assert(map_count == expected_count);
+}
+
 int main() {
     Node<int>::enable_sequenes();  // Ensure Collatz data is kept
 
@@ -235,6 +250,8 @@ int main() {
     std::cout << "test_generate_node_at_mpz() passed\n";
     test_binary_tree_16_levels();
     std::cout << "test_binary_tree_16_levels() passed\n";
+    test_binary_tree_node_count_should_match_map();
+    std::cout << "test_binary_tree_node_count_should_match_map() passed\n";
 
     std::cout << "All BinaryTree<T> tests passed.\n";
     return 0;

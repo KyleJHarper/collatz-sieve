@@ -67,23 +67,26 @@ class BinaryTree {
     }
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        // Account for each level and its vector of node pointers
-        for (const auto& [level, nodes_vec] : _level_map) {
+        // Account for _level_map
+        total += sizeof(_level_map);
+        for (const auto& [level, nodes] : _level_map) {
             total += sizeof(level);
-            total += sizeof(nodes_vec);
-            total += nodes_vec.capacity() * sizeof(Node<T>*);
-            // For each Node*, include its deep size
-            for (const Node<T>* node_ptr : nodes_vec) {
-                if (node_ptr) {
-                    total += node_ptr->deep_size();
+            total += sizeof(nodes);
+            total += nodes.capacity() * sizeof(Node<T>*);
+            for (const Node<T>* node : nodes) {
+                if (node) {
+                    total += node->deep_size();
                 }
             }
         }
-        // Account for coverage map
+        // Account for _coverage_map
+        total += sizeof(_coverage_map);
         for (const auto& [level, coverage] : _coverage_map) {
             total += sizeof(level);
             total += sizeof(coverage);
         }
+        // Unordered map buckets.
+        total += _level_map.bucket_count() * sizeof(void*);
         return total;
     }
     const std::unordered_map<size_t, BinaryTreeCoverage> get_coverage_map() const {

@@ -175,7 +175,7 @@ class Node {
     Node* get_parent() const {
         return _parent;
     }
-    bool own_children() const {
+    bool get_own_children() const {
         return _own_children;
     }
     const size_t& get_child_count() const {

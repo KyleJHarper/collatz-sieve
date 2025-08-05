@@ -10,6 +10,33 @@ void test_basic_node_int() {
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
     assert(!root.get_odd_even_chain().empty());
+    assert(root.get_odd_even_chain_string() == "O");
+    assert(root.get_twos_value() > 0);
+    assert(root.get_threes_value() > 0);
+    assert(root.get_fg_total() >= 0);
+    assert(root.get_fg_n_portion() > 0);
+    assert(root.get_fg_constant() >= 0);
+    assert(!root.get_collatz().get_sequence().empty());
+}
+
+void test_reuse_with_init() {
+    Node<int>::enable_sequenes();
+    Node<int> root(7);
+    assert(root.get_value() == 7);
+    assert(root.get_parent() == nullptr);
+    assert(!root.get_odd_even_chain().empty());
+    assert(root.get_odd_even_chain_string() == "O");
+    assert(root.get_twos_value() > 0);
+    assert(root.get_threes_value() > 0);
+    assert(root.get_fg_total() >= 0);
+    assert(root.get_fg_n_portion() > 0);
+    assert(root.get_fg_constant() >= 0);
+    assert(!root.get_collatz().get_sequence().empty());
+    root.init(6);
+    assert(root.get_value() == 6);
+    assert(root.get_odd_even_chain_string() == "E");
+    assert(root.get_parent() == nullptr);
+    assert(!root.get_odd_even_chain().empty());
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
     assert(root.get_fg_total() >= 0);
@@ -43,6 +70,7 @@ void test_add_child_and_deep_size() {
     Node<int>* c2 = root.add_child(5);
     assert(c1->get_parent() == &root);
     assert(c2->get_parent() == &root);
+    assert(root.get_own_children() == true);
     assert(root.deep_size() > 0);
 }
 
@@ -82,6 +110,8 @@ int main() {
     std::cout << "test_node_with_mpz() passed\n";
     test_keep_sequences_toggle();
     std::cout << "test_keep_sequences_toggle() passed\n";
+    test_reuse_with_init();
+    std::cout << "test_reuse_with_init() passed\n";
 
     std::cout << "All Node<T> tests passed.\n";
     return 0;

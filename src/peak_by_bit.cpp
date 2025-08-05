@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <stdexcept>
 #include <unistd.h>
 #include <iostream>
 #include <stdint.h>
@@ -6,68 +7,88 @@
 #include <gmpxx.h>
 #include <array>
 #include "collatz/collatz.hpp"
+#include "collatz/concepts.hpp"
+#include "include/CLI11.hpp"
 
 
-#define OPT_MAX_BIT_DEFAULT 8
-#define OPT_VERBOSE_DEFAULT false
-struct Options {
-    size_t max_bit = OPT_MAX_BIT_DEFAULT;
-    bool verbose = OPT_VERBOSE_DEFAULT;
-};
-Options options;
+template<IntegralOrMPZClass T>
+class PeakTest {
+    private:
+    static constexpr size_t BUFFER_SIZE = 1000;
+    T _base_initial_value = 1;
+    T _max_allowed_value = 0;
+    size_t _max_bit = 8;
+    std::array<Collatz<T>, BUFFER_SIZE> _collatz;
 
-void show_help() {
-    std::cerr << "Finds the highest initial value for a Collatz sequence whose sequence members don't exist 2^BIT size." << std::endl;
-    std::cerr << std::endl;
-    std::cerr << "Usage: ./peak_by_bit [-m #]" << std::endl;
-    std::cerr << "Options:" << std::endl;
-    std::cerr << "    -m  #   Max bits to find the peak value for.  Default is " << OPT_MAX_BIT_DEFAULT << " bits." << std::endl;
-    std::cerr << "    -v      Enable verbose output." << std::endl;
-    std::cerr << std::endl;
-}
+    public:
+    PeakTest() {}
+    PeakTest(size_t max_bit) {
+        _max_bit = max_bit;
+    }
 
-int process_options(int argc, char **argv) {
-    int c;
-    opterr = 0;
-    while ((c = getopt(argc, argv, "hm:v")) != -1) {
-        switch (c) {
-            case 'h':
-                show_help();
-                exit(0);
-                break;
-            case 'm':
-                options.max_bit = atoi(optarg);
-                break;
-            case 'v':
-                options.verbose = true;
-                break;
-            case '?':
-                if (optopt == 'c')
-                    fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-                else if (isprint (optopt))
-                    fprintf (stderr, "Unknown option `-%c'.\n", optopt);
-                else
-                    fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
-                return 1;
-            default:
-                abort ();
+    void run() {
+        // Main loop for each bit.
+        for (size_t bit = 0; bit <= _max_bit; bit++) {
+            // Setup variables based on Integral or mpz_class type.
+            if constexpr(std::integral<T>) {
+                if (bit < 64) {
+                    _max_allowed_value = 2ULL << bit;
+                } else {
+                    _max_allowed_value = UINT64_MAX;
+                }
+            } else if constexpr(std::same_as<T, mpz_class>) {
+                mpz_ui_pow_ui(_max_allowed_value.get_mpz_t(), 2, bit);
+            } else {
+                throw std::runtime_error("I don't know how to handle the data type you specified for me.");
+            }
+
+            // The main scanning loop.  We will process in batches and stop when we find our value.
+            // To achieve parallel execution, we must fill the buffer and allow OMP to loop over it in sections.
+            while (true) {
+                // Fill the buffer.
+                #pragma omp parallel for schedule(auto) default(none) shared(collatz, base_initial_value)
+                for(size_t i = 0; i < BUFFER_SIZE; i++) {
+                    // We skip even values, so it's always i*2.
+                    T my_iv = _base_initial_value + (i * 2);
+                    _collatz[i].init(my_iv);
+                }
+
+                // Test all values in the buffer, using OMP's reduction to find the minimum offending index, if any.
+                size_t failing_index = BUFFER_SIZE;
+                #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(_collatz, _max_allowed_value)
+                for (size_t i = 0; i < BUFFER_SIZE; i++) {
+                    if (_collatz[i].get_peak_value() > _max_allowed_value) {
+                        failing_index = i;
+                        i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
+                    }
+                }
+
+                //
+            }
+
         }
     }
-    return 0;
-}
+};
 
-void print_options() {
+void print_options(size_t& max_bit, bool& verbose) {
     std::cerr << "Selected options were:" << std::endl;
-    std::cerr << "  Max Bit: " << options.max_bit << std::endl;
-    std::cerr << "  Verbose: " << options.verbose << std::endl;
+    std::cerr << "  Max Bit: " << max_bit << std::endl;
+    std::cerr << "  Verbose: " << (verbose ? "true" : "false") << std::endl;
 }
 
 
 int main(int argc, char **argv) {
     // Process options.
-    process_options(argc, argv);
-    if(options.verbose) {
-        print_options();
+    size_t max_bit;
+    bool verbose;
+    CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.");
+    options.add_option("-b,--bits", max_bit, "Number of bits to test to.")->default_val(8);
+    options.add_flag("-v,--verbose", verbose, "Enable verbosity.");
+    CLI11_PARSE(options, argc, argv);
+
+    // If verbose, show options.
+    if (verbose) {
+        print_options(max_bit, verbose);
     }
 
     // Do work.
@@ -81,7 +102,7 @@ int main(int argc, char **argv) {
 
     // The per-bit loop cannot be parallelized reasonably.
     // Collatz<my_type>::detect_overflow = true;
-    for(size_t bit = 0; bit <= options.max_bit; bit++) {
+    for(size_t bit = 0; bit <= max_bit; bit++) {
         // max_allowed_value = std::pow(2, bit);
         // if(bit == 64) {
         //     max_allowed_value = UINT64_MAX;
