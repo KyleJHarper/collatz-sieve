@@ -18,17 +18,33 @@
 template<IntegralOrMPZClass T>
 class BinaryTree {
     private:
+    static constexpr size_t MAX_THREADS = 256;
+    static constexpr size_t ALLOCATOR_SLAB_SIZE = 1024;
     Node<T> *_root_node = nullptr;
     size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
     std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
-    ThreadLocalSlabAllocator<Node<T>> _node_allocator{4096};
+    std::vector<SlabAllocator<Node<T>>> _allocators;
 
+    // Get the allocator for our thread.
+    SlabAllocator<Node<T>>& get_thread_allocator() {
+        int tid = omp_get_thread_num();
+        // std::cout << "Trying to use tid " << tid << " and allocator has " << _allocators[tid].allocated_count() << " items." << std::endl;
+        return _allocators[tid];
+    }
 
     public:
     // Constructor
     BinaryTree(size_t levels) {
-        _root_node = _node_allocator.allocate();
+        // Build the slab allocators.
+        _allocators.reserve(MAX_THREADS);
+        if(omp_get_max_threads() > int(MAX_THREADS)) {
+            throw std::runtime_error("Number of OMP threads in BinaryTree exceeds MAX_THREADS value.");
+        }
+        for (size_t i = 0 ; i < MAX_THREADS ; i++) {
+            _allocators.emplace_back(ALLOCATOR_SLAB_SIZE);
+        }
+        _root_node = _allocators[0].allocate();
         new (_root_node) Node<T>(0, nullptr);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
@@ -44,8 +60,10 @@ class BinaryTree {
     ~BinaryTree() {
         // Don't use `delete`.  These are placement-new constructed, not new constructed.
         // The allocator will handle destruction when clear is called.
-        // Release the slab's memory.
-        // _node_allocator.clear_all();
+        // Reset all the allocators so the Node destructors are called.
+        // for (size_t i = 0; i < MAX_THREADS; i++) {
+        //     _allocators[i].reset();
+        // }
     }
 
 
@@ -116,13 +134,15 @@ class BinaryTree {
         _level_map[child_level].resize(child_count);
         #pragma omp parallel for schedule(dynamic, 1) default(none) shared(parents, _level_map, step, child_level, parent_count)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
+            // Find our allocator.
+            auto& allocator = get_thread_allocator();
             // Get the child values.
             Node<T>* parent = parents[parent_idx];
             T child_value_1 = parent->get_value() + step;
             T child_value_2 = child_value_1 + step;
             // Create the children.  Add them to the map.
-            Node<T>* child_1 = _node_allocator.allocate();
-            Node<T>* child_2 = _node_allocator.allocate();
+            Node<T>* child_1 = allocator.allocate();
+            Node<T>* child_2 = allocator.allocate();
             new (child_1) Node<T>(child_value_1, parent); // placement-new construct
             new (child_2) Node<T>(child_value_2, parent);
             _level_map[child_level][2 * parent_idx] = child_1;

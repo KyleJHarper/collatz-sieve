@@ -76,9 +76,7 @@ void test_generate_node_at_mpz() {
 }
 
 void test_binary_tree_16_levels() {
-    std::cout << "1\n";
     BinaryTree<int> tree(16);
-    std::cout << "2\n";
     BinaryTreeCoverage global_coverage;
     size_t target_covered = 0;
     size_t target_total = 0;

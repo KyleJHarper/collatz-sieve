@@ -22,7 +22,6 @@ class SlabAllocator {
     std::vector<T*> _free_list;
     std::vector<T*> _allocated_list;
     size_t _total_allocated = 0;
-    bool _initialized = false;
 
     public:
     // Constructor: slab size in elements (not bytes)
@@ -33,19 +32,24 @@ class SlabAllocator {
         }
     }
 
+    // Destructor to help avoid double-free.
+    ~SlabAllocator() {}
+
+    // Make this non-copyable.
+    SlabAllocator(const SlabAllocator&) = delete;
+    SlabAllocator& operator=(const SlabAllocator&) = delete;
+    SlabAllocator(SlabAllocator&&) = default;
+    SlabAllocator& operator=(SlabAllocator&&) = default;
+
     // Allocate a new T object from the slab (uninitialized memory).
     T* allocate() {
-        if (!_initialized) {
-            allocate_new_slab();
-            _initialized = true;
-        }
         if (_free_list.empty()) {
             allocate_new_slab();
         }
         T* ptr = _free_list.back();
         _free_list.pop_back();
         _allocated_list.push_back(ptr);
-        ++_total_allocated;
+        _total_allocated++;
         return ptr;
     }
 
@@ -61,30 +65,12 @@ class SlabAllocator {
                 _allocated_list.erase(it);
             }
 
-            --_total_allocated;
+            _total_allocated--;
         }
-    }
-
-    // Destroy all objects and frees the slabs from memory.  See reset().
-    void clear() {
-        if (!_initialized || _slabs.empty()) {
-            return;
-        }
-        for (T* ptr : _allocated_list) {
-            ptr->~T();
-        }
-        _allocated_list.clear();
-        _free_list.clear();
-        _slabs.clear();
-        _total_allocated = 0;
-        _initialized = false;
     }
 
     // Reset allocator but keep existing memory slabs.
     void reset() {
-        if (!_initialized || _slabs.empty()) {
-            return;
-        }
         for (T* ptr : _allocated_list) {
             ptr->~T();
             _free_list.push_back(ptr);
@@ -94,10 +80,6 @@ class SlabAllocator {
     }
 
     // Stats accessors
-    bool is_initialized() const {
-        return _initialized;
-    }
-
     size_t slab_size() const {
         return _slab_size;
     }
@@ -183,51 +165,3 @@ public:
     }
 };
 
-
-
-//
-// Thread Local Version using OMP
-//
-template <typename T>
-class ThreadLocalSlabAllocator {
-    private:
-    size_t _slab_size;
-
-    public:
-    explicit ThreadLocalSlabAllocator(size_t slab_size = 1024)
-        : _slab_size(slab_size) {}
-
-    T* allocate() {
-        return get_allocator().allocate();
-    }
-
-    void reset_all() {
-        #pragma omp parallel
-        {
-            auto& alloc = get_allocator();
-            if (alloc.is_initialized()) {
-                alloc.reset();
-            }
-        }
-    }
-
-    void clear_all() {
-        #pragma omp parallel
-        {
-            auto& alloc = get_allocator();
-            if (alloc.is_initialized()) {
-                alloc.clear();
-            }
-        }
-    }
-
-    // Optional stats (approximate, per thread access)
-    size_t slab_size() const { return _slab_size; }
-
-
-    private:
-    SlabAllocator<T>& get_allocator() {
-        thread_local SlabAllocator<T> tls_alloc(_slab_size);
-        return tls_alloc;
-    }
-};

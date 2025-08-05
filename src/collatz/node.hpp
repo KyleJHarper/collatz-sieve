@@ -117,7 +117,7 @@ class Node {
         // for (size_t i = 0 ; i < _child_count; i++) {
         //     delete _children[i];
         // }
-        // Children are value-added by the BinaryTree.  Don't free them here.
+        // Children are managed by the BinaryTree node allocator.
     }
 
     // Cout and string-ified methods.
