@@ -14,9 +14,6 @@ int main(int argc, char **argv) {
     initial_value.set_str(argv[1], 10);
     Collatz c = Collatz<mpz_class>(initial_value);
 
-    // uint64_t initial_value = std::atoll(argv[1]);
-    // Collatz c = Collatz<uint64_t>(initial_value);
-
     std::cout << "Value is: " << c << std::endl;
     std::cout << "Sequence is: " << c.get_sequence_string() << std::endl;
     std::cout << "OE pattern is: " << c.get_oe_pattern_string() << std::endl;
