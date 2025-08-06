@@ -10,11 +10,18 @@
 #include "gmp_helpers.hpp"
 
 
+// Custom Exceptions
+class CollatzSequenceOverflow : public std::runtime_error {
+    public:
+    explicit CollatzSequenceOverflow(const std::string& msg) : std::runtime_error(msg) {}
+};
 
-#define PEAK_64BIT_ODD 6148914691236517203
+
 namespace CollatzConstants {
     constexpr bool ODD = true;
     constexpr bool EVEN = false;
+    // Trying to perform 3X+1 on any (odd) value higher than this would overflow a 64-bit unsigned integer.
+    constexpr uint64_t MAX_64BIT_ODD = 6148914691236517203;
 }
 
 
@@ -34,9 +41,9 @@ class Collatz {
     size_t _step_count = 0;
     bool _is_initialized = false;
     bool _track_sequence = false;
+    bool _sequence_overflow = false;
 
     public:
-    inline static bool detect_overflow = false;
     // Constructors.  Offload to init() so objects can be reused.
     Collatz() {}
     Collatz(T initial_value, bool track_sequence = false) {
@@ -54,6 +61,7 @@ class Collatz {
             _oe_pattern.clear();
             _hwm_index = 0;
             _step_count = 0;
+            _sequence_overflow = false;
         }
         _is_initialized = true;
         // Now process the new value.
@@ -73,18 +81,13 @@ class Collatz {
                 current /= 2;
             } else {
                 if constexpr(std::integral<T>) {
-                    if (Collatz::detect_overflow) {
-                        if(current > PEAK_64BIT_ODD) {
-                            std::string msg;
-                            msg += "While building the sequence for initial value ";
-                            msg += std::to_string(_initial_value);
-                            msg += " we reached a step whose value exceeds the limit.";
-                            msg += "  Its value is " + std::to_string(current);
-                            msg += ", but the limit to remain under 2^64 (UINT64_MAX) is ";
-                            msg += std::to_string(PEAK_64BIT_ODD);
-                            msg += "  We must abort because this would cause an integer overflow.";
-                            throw std::runtime_error(msg);
-                        }
+                    if(current > CollatzConstants::MAX_64BIT_ODD) {
+                        _sequence_overflow = true;
+                        std::string msg;
+                        msg += "Overflow of 64-bit uint will happen for Initial Value " + std::to_string(_initial_value);
+                        msg += " if we try to perform 3X+1 on current value: " + std::to_string(current) + ".";
+                        msg += "  Cannot continue with sequence.  Flagging _sequence_overflow=true and aborting.";
+                        throw CollatzSequenceOverflow(msg);
                     }
                 }
                 _oe_pattern.push_back(CollatzConstants::ODD);
@@ -151,6 +154,9 @@ class Collatz {
     };
     const std::vector<bool>& get_oe_pattern() const {
         return _oe_pattern;
+    }
+    bool get_is_overflowed() const {
+        return _sequence_overflow;
     }
     bool get_is_initialized() const {
         return _is_initialized;
