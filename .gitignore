@@ -1,7 +1,13 @@
-bin
+bin/
+bin_debug/
+obj/
+obj_debug/
 data/
 massif.*
 flamegraph.svg
 .vscode/
 heaptrack*
+compile_commands.json
+src/include/spdlog
+.cache
 

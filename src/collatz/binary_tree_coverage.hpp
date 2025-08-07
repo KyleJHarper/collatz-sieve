@@ -20,6 +20,11 @@ class BinaryTreeCoverage {
         _total = total;
     }
 
+    // Merge results from another coverage into ours.
+    void merge(const BinaryTreeCoverage& other_coverage) {
+        _covered += other_coverage.get_covered();
+        _total += other_coverage.get_total();
+    }
     // Setters
     void set_covered(size_t covered) {
         _covered = covered;
@@ -53,4 +58,5 @@ class BinaryTreeCoverage {
         }
         return ratio;
     }
+
 };

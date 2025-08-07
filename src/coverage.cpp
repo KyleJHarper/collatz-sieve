@@ -1,32 +1,79 @@
 #include <gmpxx.h>
-#include <iostream>
 #include <stdint.h>
 #include "collatz/binary_tree.hpp"
+#include "collatz/concepts.hpp"
+#include "CLI11.hpp"
+#include "logging.hpp"
+
+
+//
+// Dump a simple class here for ease-of-use to report and not muck up the BinaryTree class.
+//
+template<IntegralOrMPZClass T>
+class CoverageBuilder {
+    private:
+    BinaryTree<T> _tree;
+
+    public:
+    CoverageBuilder() {
+        _tree.init(0);
+    }
+
+    const BinaryTree<T>& get_tree() const { return _tree; }
+    // Add levels until we reach `levels` from caller.
+    void run(size_t levels) {
+        while(_tree.get_max_level() < levels) {
+            add_level();
+        }
+    }
+    void add_level() {
+        size_t next_level = _tree.get_max_level() + 1;
+        logger->debug("Building level {}...", next_level);
+        _tree.add_level();
+        BinaryTreeCoverage coverage = _tree.get_coverage_map().find(next_level)->second;
+        logger->debug("Level {} coverage was: {:.4f}% ({}/{})", next_level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total());
+    }
+};
 
 
 int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << "You must send a number as arg1 for the number of levels." << std::endl;
-        return 1;
+    // Get logger.
+    init_logger();
+    // Process options.
+    size_t levels;
+    bool verbose;
+    bool force_mpz;
+    CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
+    options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
+    options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
+    options.add_flag(
+        "-v,--verbose"
+        , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
+        , "Enable verbosity."
+    );
+    CLI11_PARSE(options, argc, argv);
+    logger->debug("Selected options were:");
+    logger->debug("  Force MPZ: {}", force_mpz);
+    logger->debug("  Levels: {}", levels);
+    logger->debug("  Verbose: {}", verbose);
+
+    // Build the tree object with no levels to start.
+    logger->info("Building tree with {} levels, using {}.", levels, force_mpz ? "GMP" : "uint64_t");
+    std::unordered_map<size_t, BinaryTreeCoverage> coverage_map;
+    if (force_mpz) {
+        CoverageBuilder<mpz_class> builder;
+        builder.run(levels);
+        coverage_map = builder.get_tree().get_coverage_map();
+    } else {
+        CoverageBuilder<uint64_t> builder;
+        builder.run(levels);
+        coverage_map = builder.get_tree().get_coverage_map();
     }
-
-    // Build the tree.
-    // typedef mpz_class my_type;
-    typedef uint64_t my_type;
-    size_t levels = 0;
-    levels = atoi(argv[1]);
-
-    Collatz<my_type>::detect_overflow = true;
-    Node<my_type>::disable_sequenes();
-    BinaryTree tree = BinaryTree<my_type>(levels);
     BinaryTreeCoverage global_coverage;
-    for (size_t level=1; level<=tree.get_max_level(); level++) {
-        BinaryTreeCoverage coverage = tree.get_coverage_map().find(level)->second;
-        std::cout << "Level " << level << ": " << coverage.get_ratio(true) << "%  (" << coverage.get_covered() << "/" << coverage.get_total() << ")" << std::endl;
-        global_coverage.add_covered(coverage.get_covered());
-        global_coverage.add_total(coverage.get_total());
+    for (auto& [level, coverage] : coverage_map) {
+        global_coverage.merge(coverage);
     }
-    std::cout << "Global Coverage: " << global_coverage.get_ratio(true) << "%  (" << global_coverage.get_covered() << "/" << global_coverage.get_total() << ")" << std::endl;
+    logger->info("Global Coverage: {:.4f}% ({}/{})", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total());
 
     return 0;
 }

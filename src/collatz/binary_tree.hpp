@@ -21,10 +21,20 @@ class BinaryTree {
     size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
     std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
+    bool _is_initialized = false;
 
     public:
-    // Constructor
+    // Constructor and Init
+    BinaryTree() {}
     BinaryTree(size_t levels) {
+        init(levels);
+    }
+    void init(size_t levels) {
+        if (_is_initialized) {
+            delete _root_node;
+            _max_level = 0;
+        }
+        _is_initialized = true;
         _root_node = new Node<T>(0);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
