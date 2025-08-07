@@ -4,7 +4,7 @@
 CXX                  = g++
 CXXFLAGS            += -Wall -Wextra -std=c++20 -pthread -fopenmp -ljemalloc -Isrc/include
 OLEVEL              ?= -O2
-DEBUG_EXTRA_FLAGS    = -O0 -g -fno-omit-frame-pointer
+DEBUG_EXTRA_FLAGS    = -O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors
 RELEASE_FLAGS        = $(CXXFLAGS) $(OLEVEL)
 DEBUG_FLAGS          = $(CXXFLAGS) $(DEBUG_EXTRA_FLAGS)
 DEBUG_SUFFIX         = _debug

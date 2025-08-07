@@ -64,7 +64,7 @@ void test_one() {
 
 void test_negative_exception() {
     try {
-        Collatz<uint> c(-5);
+        Collatz<int> c(-5);
         assert(false); // Should not reach here
     } catch (const std::runtime_error& e) {
         assert(std::string(e.what()).find("lower than 0") != std::string::npos);

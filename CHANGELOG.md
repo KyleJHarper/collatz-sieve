@@ -13,12 +13,24 @@ I will tag things as new features are developed and list those features in the c
 
 # Change Log
 
+### 0.7.0
+Refactored the Makefile to be a little better.  We can parallel build now.
+
+Started profiling and we're doing okay with padding, alignment, and so forth, but there's a lot
+of waste too with size_t in areas and bools not bit-packed.
+
+Added better CLI support with CLI11.  It's fat, but convenient.
+
+Added a global logger from spdlog.
+
+At this piont I'm not sure better speed is a goal.  Our problems are now in memory, both with size and
+allocation.  Resolving these gives more speed and space to work.
+
 ### 0.6.1
 Reverted to to `std::vector<size_t, std::vector<Node<T>*>>` and threw the SlabAllocator away.
 
 ### 0.6.0
-Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many
-allocations when building the BinaryTree.
+Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many allocations when building the BinaryTree.
 
 #### Goals
 
