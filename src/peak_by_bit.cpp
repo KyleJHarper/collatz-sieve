@@ -1,8 +1,7 @@
-#include "collatz/collatz.hpp"
 #include <gmpxx.h>
 #include "CLI11.hpp"
 #include "logging.hpp"
-#include "spdlog/common.h"
+#include "collatz/collatz.hpp"
 
 
 //

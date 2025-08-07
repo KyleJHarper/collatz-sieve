@@ -7,3 +7,6 @@ declare JEMALLOC_PATH='/usr/lib/x86_64-linux-gnu/libjemalloc.so.2'
 echo "Setting LD_PRELOAD to use JEMALLOC at: ${JEMALLOC_PATH}" >&2
 export LD_PRELOAD="${JEMALLOC_PATH}"
 
+echo "Setting MAKEFLAGS=4 for parallel builds."
+export MAKEFLAGS="-j4"
+

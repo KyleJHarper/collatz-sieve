@@ -4,8 +4,8 @@
 #include "../collatz/node.hpp"
 
 void test_basic_node_int() {
-    Node<int>::enable_sequenes();
-    Node<int> root(7);
+    Node<uint>::enable_sequenes();
+    Node<uint> root(7);
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
@@ -20,8 +20,8 @@ void test_basic_node_int() {
 }
 
 void test_reuse_with_init() {
-    Node<int>::enable_sequenes();
-    Node<int> root(7);
+    Node<uint>::enable_sequenes();
+    Node<uint> root(7);
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
     assert(!root.get_odd_even_chain().empty());
@@ -46,9 +46,9 @@ void test_reuse_with_init() {
 }
 
 void test_high_water_mark_behavior() {
-    Node<int>::enable_sequenes();
-    Node<int> root(6);
-    Node<int>* child = root.add_child(5);
+    Node<uint>::enable_sequenes();
+    Node<uint> root(6);
+    Node<uint>* child = root.add_child(5);
 
     assert(child->get_parent() == &root);
     assert(child->has_high_water_mark_ancestor()); // child is below HWM
@@ -56,18 +56,18 @@ void test_high_water_mark_behavior() {
 }
 
 void test_high_water_mark_root_case() {
-    Node<int>::enable_sequenes();
-    Node<int> root(15);
+    Node<uint>::enable_sequenes();
+    Node<uint> root(15);
     assert(!root.has_high_water_mark_ancestor());
     assert(root.get_hwm_ancestor() == nullptr);
     assert(!root.is_below_high_water_mark());
 }
 
 void test_add_child_and_deep_size() {
-    Node<int>::enable_sequenes();
-    Node<int> root(7);
-    Node<int>* c1 = root.add_child(3);
-    Node<int>* c2 = root.add_child(5);
+    Node<uint>::enable_sequenes();
+    Node<uint> root(7);
+    Node<uint>* c1 = root.add_child(3);
+    Node<uint>* c2 = root.add_child(5);
     assert(c1->get_parent() == &root);
     assert(c2->get_parent() == &root);
     assert(root.get_own_children() == true);
@@ -86,8 +86,8 @@ void test_node_with_mpz() {
 }
 
 void test_keep_sequences_toggle() {
-    Node<int>::disable_sequenes();
-    Node<int> node(6);
+    Node<uint>::disable_sequenes();
+    Node<uint> node(6);
     // Internal _collatz sequence should be cleared
     try {
         assert(node.get_collatz().get_sequence().empty() == true);

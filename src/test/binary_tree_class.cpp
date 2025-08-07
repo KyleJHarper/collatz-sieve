@@ -4,13 +4,13 @@
 #include "../collatz/binary_tree.hpp" // Include your BinaryTree and Node classes
 
 void test_binary_tree_basic_construction() {
-    BinaryTree<int> tree(3);
+    BinaryTree<uint> tree(3);
     // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
-    BinaryTree<int> tree2(2);
-    BinaryTree<int> tree3(4);
-    BinaryTree<int> tree4(5);
-    BinaryTree<int> tree5(6);
-    BinaryTree<int> tree6(7);
+    BinaryTree<uint> tree2(2);
+    BinaryTree<uint> tree3(4);
+    BinaryTree<uint> tree4(5);
+    BinaryTree<uint> tree5(6);
+    BinaryTree<uint> tree6(7);
     assert(tree.get_max_level() == 3);
     const auto& map = tree.get_level_map();
 
@@ -31,13 +31,13 @@ void test_binary_tree_basic_construction() {
 }
 
 void test_binary_tree_deep_size() {
-    BinaryTree<int> tree(2);
+    BinaryTree<uint> tree(2);
     size_t size = tree.deep_size();
     assert(size > sizeof(tree)); // Make sure something was counted
 }
 
 void test_binary_tree_generate_node_at_valid() {
-    Node<int>* node = BinaryTree<int>::generate_node_at(3, 4);
+    Node<uint>* node = BinaryTree<uint>::generate_node_at(3, 4);
     assert(node != nullptr);
     assert(node->get_value() > 0);
     delete node;
@@ -45,14 +45,14 @@ void test_binary_tree_generate_node_at_valid() {
 
 void test_binary_tree_generate_node_at_invalid_pos() {
     try {
-        BinaryTree<int>::generate_node_at(3, 0);
+        BinaryTree<uint>::generate_node_at(3, 0);
         assert(false); // Should throw
     } catch (const std::runtime_error& e) {
         assert(std::string(e.what()).find("position 0") != std::string::npos);
     }
 
     try {
-        BinaryTree<int>::generate_node_at(3, 9); // 2^3 = 8 max
+        BinaryTree<uint>::generate_node_at(3, 9); // 2^3 = 8 max
         assert(false); // Should throw
     } catch (const std::runtime_error& e) {
         assert(std::string(e.what()).find("outside of a level") != std::string::npos);
@@ -77,7 +77,7 @@ void test_generate_node_at_mpz() {
 }
 
 void test_binary_tree_16_levels() {
-    BinaryTree<int> tree(16);
+    BinaryTree<uint> tree(16);
     BinaryTreeCoverage global_coverage;
     size_t target_covered = 0;
     size_t target_total = 0;
@@ -234,7 +234,7 @@ void test_binary_tree_node_count_should_match_map() {
 }
 
 int main() {
-    Node<int>::enable_sequenes();  // Ensure Collatz data is kept
+    Node<uint>::enable_sequenes();  // Ensure Collatz data is kept
 
     test_binary_tree_basic_construction();
     std::cout << "test_binary_tree_basic_construction() passed\n";

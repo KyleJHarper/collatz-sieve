@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 void test_with_int() {
-    Collatz<int> c(6, true);
+    Collatz<uint> c(6, true);
 
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
@@ -20,7 +20,7 @@ void test_with_int() {
 }
 
 void test_reset_and_reuse() {
-    Collatz<int> c(7, true);
+    Collatz<uint> c(7, true);
     assert(c.get_initial_value() == 7);
     c.init(6, true);  // Reuse with new value
     assert(c.get_initial_value() == 6);
@@ -34,7 +34,7 @@ void test_reset_and_reuse() {
 }
 
 void test_reset_and_reuse_without_sequence() {
-    Collatz<int> c(7);
+    Collatz<uint> c(7);
     assert(c.get_initial_value() == 7);
     c.init(6);  // Reuse with new value
     assert(c.get_initial_value() == 6);
@@ -51,20 +51,20 @@ void test_reset_and_reuse_without_sequence() {
 }
 
 void test_zero() {
-    Collatz<int> c(0, true);
+    Collatz<uint> c(0, true);
     assert(c.get_sequence().size() == 1);
     assert(c.get_oe_pattern().empty());
 }
 
 void test_one() {
-    Collatz<int> c(1);
+    Collatz<uint> c(1);
     assert(c.get_step_count() == 1);
     assert(c.get_oe_pattern_string() == "O");  // It adds "O" in the last step
 }
 
 void test_negative_exception() {
     try {
-        Collatz<int> c(-5);
+        Collatz<uint> c(-5);
         assert(false); // Should not reach here
     } catch (const std::runtime_error& e) {
         assert(std::string(e.what()).find("lower than 0") != std::string::npos);
