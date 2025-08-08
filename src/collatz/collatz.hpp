@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <gmpxx.h>
+#include <limits>
 #include <stdexcept>
 #include <vector>
 #include <string>
@@ -36,7 +37,6 @@ class Collatz {
     T _initial_value;
     T _peak_value = 0;
     std::vector<T> _sequence;
-    std::vector<bool> _oe_pattern;
     size_t _hwm_index = 0;
     size_t _step_count = 0;
     bool _is_initialized = false;
@@ -58,15 +58,13 @@ class Collatz {
         if(_is_initialized) {
             _sequence.clear();
             _peak_value = 0;
-            _oe_pattern.clear();
             _hwm_index = 0;
             _step_count = 0;
             _sequence_overflow = false;
         }
         _is_initialized = true;
-        // Now process the new value.
+        // Process the sequence and store any related metadata.
         _initial_value = initial_value;
-        // Build the sequence (optional) and its related metadata.
         T current = _initial_value;
         do {
             _step_count++;
@@ -77,7 +75,6 @@ class Collatz {
                 _peak_value = current;
             }
             if(current % 2 == 0) {
-                _oe_pattern.push_back(CollatzConstants::EVEN);
                 current /= 2;
             } else {
                 if constexpr(std::integral<T>) {
@@ -90,7 +87,6 @@ class Collatz {
                         throw CollatzSequenceOverflow(msg);
                     }
                 }
-                _oe_pattern.push_back(CollatzConstants::ODD);
                 current *= 3;
                 current += 1;
             }
@@ -104,17 +100,14 @@ class Collatz {
             if(_track_sequence) {
                 _sequence.push_back(1);
             }
-            _oe_pattern.push_back(CollatzConstants::ODD);
             _step_count++;
         }
-        // Finally, if the IV is 0, set OE to blank.
+        // Finally, if the IV is 0, set step count to zero.
         if(_initial_value == 0) {
-            _oe_pattern.clear();
             _step_count = 0;
         }
         // Trim up vectors.
         _sequence.shrink_to_fit();
-        _oe_pattern.shrink_to_fit();
     }
 
     // Cout and string-ified methods.
@@ -152,22 +145,11 @@ class Collatz {
         }
         return _sequence;
     };
-    const std::vector<bool>& get_oe_pattern() const {
-        return _oe_pattern;
-    }
     bool get_is_overflowed() const {
         return _sequence_overflow;
     }
     bool get_is_initialized() const {
         return _is_initialized;
-    }
-    std::string get_oe_pattern_string() const {
-        std::string result;
-        result.reserve(_oe_pattern.size());
-        for (bool bit : _oe_pattern) {
-            result += bit == CollatzConstants::ODD ? 'O' : 'E';
-        }
-        return result;
     }
     const size_t& get_hwm_index() const {
         return _hwm_index;
@@ -185,17 +167,54 @@ class Collatz {
         size_t total = sizeof(*this);
         // For _sequence
         if constexpr (std::is_same<T, mpz_class>::value) {
-            total += sizeof(mpz_class) * _sequence.capacity(); // object headers
+            total += sizeof(mpz_class) * _sequence.capacity();
             for (const auto& val : _sequence) {
                 total += gmp_deep_sizeof(val);
             }
         } else {
             total += sizeof(T) * _sequence.capacity();
         }
-        // For _oe_pattern (bit-packed)
-        // Vector<bool> is a specialized template in c++.  Bit-packed.
-        total += (_oe_pattern.capacity() + 7) / 8;
         return total;
+    }
+
+    template<typename Func>
+    void for_each_odd_even_bit(size_t max_bits, Func&& func) const {
+        T current = _initial_value;
+        size_t count = 0;
+
+        // Special case for 0.  Note: we allow 0 because it's a BinaryTree root.
+        if (current == 0) {return;}
+
+        // Loop while we're over 1.  We catch 1 below for its ODD bit.
+        while (current >= 1 && count < max_bits) {
+            bool is_even = (current % 2 == 0);
+            func(is_even ? CollatzConstants::EVEN : CollatzConstants::ODD);
+            if (current == 1) {
+                break;
+            }
+            if (is_even) {
+                current /= 2;
+            } else {
+                if constexpr(std::integral<T>) {
+                    if (current > CollatzConstants::MAX_64BIT_ODD) {
+                        throw CollatzSequenceOverflow("Overflow when building for_each_odd_even_bit().");
+                    }
+                }
+                current *= 3;
+                current += 1;
+            }
+            count++;
+        }
+    }
+
+    std::string get_oe_pattern_string(size_t count = std::numeric_limits<size_t>::max()) const {
+        std::string result;
+        size_t desired_count = std::min(count, _step_count);
+        result.reserve(desired_count);
+        for_each_odd_even_bit(_step_count, [&](bool bit) {
+            result += (bit ? 'O' : 'E');
+        });
+        return result;
     }
 
 };

@@ -10,6 +10,7 @@ void test_basic_node_int() {
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
     assert(!root.get_odd_even_chain().empty());
+    std::cout << root.get_odd_even_chain_string() << std::endl;
     assert(root.get_odd_even_chain_string() == "O");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);

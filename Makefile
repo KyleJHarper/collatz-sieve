@@ -23,9 +23,9 @@ OBJDIR_DEBUG = $(OBJDIR)$(DEBUG_SUFFIX)
 #
 # Program and test names.
 #
-TESTS = binary_tree_class \
-	collatz_class \
-	node_class
+TESTS = collatz_class \
+	node_class \
+	binary_tree_class
 DEBUG_TESTS = $(addsuffix $(DEBUG_SUFFIX), $(TESTS))
 PROGRAMS = coverage \
     high_water_mark \

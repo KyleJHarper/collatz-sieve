@@ -87,21 +87,25 @@ class Node {
         }
         // Build the collatz sequence object.
         _collatz.init(_value, keep_sequences);
-        // Leverage our parent's oe-chain to determine ours.  When zero, there's no chain to get.
-        if(_value > 0) {
+        // Leverage our parent's oe-chain size to determine ours.  When zero, there's no chain to get.
+        // We don't want to double-scan, so we'll employ optimism and pull back locally.
+        if (_value > 0) {
             size_t oe_chain_length = 0;
-            if(parent != nullptr) {
-                oe_chain_length = parent->get_odd_even_chain().size();
-            }
-            _odd_even_chain.resize(oe_chain_length);
-            std::copy_n(_collatz.get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
-            if(_odd_even_chain.empty() || _odd_even_chain.back() == CollatzConstants::EVEN) {
-                oe_chain_length += 1;
+            if (parent == nullptr) {
+                oe_chain_length = 1;
             } else {
-                oe_chain_length += 2;
+                oe_chain_length = parent->get_odd_even_chain().size() + (_value > 2 ? 2 : 1);
             }
-            _odd_even_chain.resize(oe_chain_length);
-            std::copy_n(_collatz.get_oe_pattern().begin(), oe_chain_length, _odd_even_chain.begin());
+            _odd_even_chain.reserve(oe_chain_length);
+            _collatz.for_each_odd_even_bit(oe_chain_length, [&](bool bit) {
+                _odd_even_chain.push_back(bit);
+            });
+            // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
+            if (_odd_even_chain.size() > 2) {
+                if (_odd_even_chain[_odd_even_chain.size() - 3] == CollatzConstants::EVEN) {
+                    _odd_even_chain.pop_back();
+                }
+            }
         }
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
         mpz_ui_pow_ui(_twos_value_mpz_c.get_mpz_t(), 2, std::count(_odd_even_chain.begin(), _odd_even_chain.end(), CollatzConstants::EVEN));
@@ -197,7 +201,7 @@ class Node {
         std::string result;
         result.reserve(_odd_even_chain.size());
         for (bool bit : _odd_even_chain) {
-            result += bit == CollatzConstants::ODD ? 'O' : 'E';
+            result += (bit ? 'O' : 'E');
         }
         return result;
     }

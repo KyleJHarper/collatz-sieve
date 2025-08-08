@@ -53,7 +53,7 @@ void test_reset_and_reuse_without_sequence() {
 void test_zero() {
     Collatz<uint> c(0, true);
     assert(c.get_sequence().size() == 1);
-    assert(c.get_oe_pattern().empty());
+    assert(c.get_oe_pattern_string().empty());
 }
 
 void test_one() {
