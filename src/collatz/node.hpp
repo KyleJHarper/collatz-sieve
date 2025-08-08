@@ -97,9 +97,15 @@ class Node {
                 oe_chain_length = parent->get_odd_even_chain().size() + (_value > 2 ? 2 : 1);
             }
             _odd_even_chain.reserve(oe_chain_length);
-            _collatz.for_each_odd_even_bit(oe_chain_length, [&](bool bit) {
-                _odd_even_chain.push_back(bit);
+            size_t count = 0;
+            _collatz.for_each_sequence_step([&](T step) {
+                count++;
+                _odd_even_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                return count >= oe_chain_length;
             });
+            // _collatz.for_each_odd_even_bit(oe_chain_length, [&](bool bit) {
+            //     _odd_even_chain.push_back(bit);
+            // });
             // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
             if (_odd_even_chain.size() > 2) {
                 if (_odd_even_chain[_odd_even_chain.size() - 3] == CollatzConstants::EVEN) {
