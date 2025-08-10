@@ -8,7 +8,6 @@ void test_basic_node_int() {
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
-    assert(!root.get_odd_even_chain().empty());
     assert(root.get_odd_even_chain_string() == "O");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
@@ -21,7 +20,6 @@ void test_reuse_with_init() {
     Node<uint> root(7, true);
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
-    assert(!root.get_odd_even_chain().empty());
     assert(root.get_odd_even_chain_string() == "O");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
@@ -32,7 +30,6 @@ void test_reuse_with_init() {
     assert(root.get_value() == 6);
     assert(root.get_odd_even_chain_string() == "E");
     assert(root.get_parent() == nullptr);
-    assert(!root.get_odd_even_chain().empty());
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
     assert(root.get_fg_total() >= 0);

@@ -103,6 +103,7 @@ class Collatz {
     std::vector<T> _sequence;                 //       24 |    40 |        24 |    48
     CollatzMetadata<T>* _metadata = nullptr;  //        8 |    48 |         8 |    56
     // Free Padding to Cacheline              //       16 |    64 |         8 |    64
+    // -- Cache Line --
 
     public:
     // Reusable messages.
@@ -110,7 +111,7 @@ class Collatz {
     static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
     // Constructors.  Offload to init() so objects can be reused.
     Collatz() {}
-    Collatz(T initial_value, bool track_sequence = false, bool track_metadata = false) {
+    Collatz(const T& initial_value, bool track_sequence = false, bool track_metadata = false) {
         init(initial_value, track_sequence, track_metadata);
     };
     // Destructor
@@ -118,7 +119,7 @@ class Collatz {
         release_metadata();
     }
 
-    void init(T initial_value, bool track_sequence = false, bool track_metadata = false) {
+    void init(const T& initial_value, bool track_sequence = false, bool track_metadata = false) {
         if (initial_value < 0) {
             throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 0.");
         }
@@ -247,28 +248,18 @@ class Collatz {
         return total;
     }
 
-    // Run through the sequence with a callback each step.  Will use _sequence if it's populated.
+    // Run through the sequence with a callback each step.
     // Caller MUST return true or false to continue or stop.
     template<typename Func>
-    void for_each_sequence_step(Func&& callback) const {
+    static void for_each_sequence_step(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
 
         // Zero is a special case, mostly for BinaryTree building a root.
-        if (_initial_value == 0) { return; }
+        if (initial_value == 0) { return; }
 
-        // Sequence exists?  Use it directly.
-        if (_sequence.size() > 0) {
-            for (const T& current_step : _sequence) {
-                bool stop = callback(current_step);
-                if (stop) { return; }
-            }
-            return;
-        }
-
-        // Sequence didn't exist.  Calculate it on-the-fly.
         thread_local T current_step;
-        current_step = _initial_value;
+        current_step = initial_value;
         // Native and GMP types differ.  Handle them separately to reduce allocs().
         if constexpr(std::integral<T>) {
             // Native integrals can use intrinsic arithmetic operators for "free", but can overflow.
@@ -290,7 +281,7 @@ class Collatz {
             while (current_step >= CollatzConstants::MPZ_ONE) {
                 bool stop = callback(current_step);
                 if (stop || current_step == 1) { return; }
-                if (mpz_divisible_p(current_step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t())) {
+                if (mpz_even_p(current_step.get_mpz_t())) {
                     current_step /= 2;
                 } else {
                     current_step *= 3;
@@ -298,6 +289,25 @@ class Collatz {
                 }
             }
         }
+    }
+
+    // Helper to run through the sequence.  Leans on the static version.
+    template<typename Func>
+    void for_each_sequence_step(Func&& callback) const {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+
+        // Sequence exists?  Use it directly.
+        if (_sequence.size() > 0) {
+            for (const T& current_step : _sequence) {
+                bool stop = callback(current_step);
+                if (stop) { return; }
+            }
+            return;
+        }
+
+        // Sequence didn't exist.  Calculate it on-the-fly via the static method.
+        Collatz<T>::for_each_sequence_step(_initial_value, std::forward<Func>(callback));
     }
 
     // The Odd-Even string for the sequence.

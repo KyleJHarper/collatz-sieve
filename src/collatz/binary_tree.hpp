@@ -126,11 +126,13 @@ class BinaryTree {
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
         _level_map[child_level].resize(child_count);
-        #pragma omp parallel for schedule(static, 100) default(none) shared(parents, _level_map, step, child_level, parent_count)
+        // Making these thread-local is a bit of a trick; it makes OMP think they're shared, but the
+        // thread-local nature means they stay separated.  Prevents realloc() within the loop.
+        thread_local T child_value_1;
+        thread_local T child_value_2;
+        #pragma omp parallel for schedule(guided) default(none) shared(parents, _level_map, step, child_level, parent_count)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
             // Get the child values.  Avoid alloc() with GMP with arithmetic operators.
-            T child_value_1;
-            T child_value_2;
             Node<T>* parent = parents[parent_idx];
             if constexpr(std::same_as<T, mpz_class>) {
                 mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());

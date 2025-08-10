@@ -81,23 +81,25 @@ class Node {
     static inline thread_local mpf_class tls_fg_n_portion_mpf_c;
     static inline thread_local mpf_class tls_fg_constant_mpf_c;
     static inline thread_local mpf_class tls_fg_total_mpf_c;
-    // Thread-local version of the collatz to prevent alloc on init().
-    static inline thread_local Collatz<T>tls_collatz;
     // Object members.
-    T _value;
-    Node *_parent = nullptr;
-    Node *_hwm_ancestor = nullptr;
-    Node *_children[MAX_CHILDREN] = {nullptr, nullptr};
-    NodeMetadata<T>* _metadata = nullptr;
-
-    bool _is_below_hwm : 1 = false;
-    bool _has_hwm_ancestor : 1 = false;
-    bool _is_initialized : 1 = false;
-    bool _owns_children : 1 = true;
-    bool _track_metadata : 1 = false;
-    uint8_t _child_count = 0;
-
-    std::vector<bool> _odd_even_chain;   // This is super heavy for what it does ... refactor lifetime?
+    // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
+    // All data must fit within one cache line.
+    //                                                       uint64_t | total | mpz_class | total
+    T _value;                                            //         8 |     8 |        16 |    16
+    Node *_parent = nullptr;                             //         8 |    16 |         8 |    24
+    Node *_hwm_ancestor = nullptr;                       //         8 |    24 |         8 |    32
+    Node *_children[MAX_CHILDREN] = {nullptr, nullptr};  //        16 |    40 |        16 |    48
+    NodeMetadata<T>* _metadata = nullptr;                //         8 |    48 |         8 |    56
+    bool _is_below_hwm : 1 = false;                      //       1:1 |    49 |       1:1 |    57
+    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    49 |       1:2 |    57
+    bool _is_initialized : 1 = false;                    //       1:3 |    49 |       1:3 |    57
+    bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57
+    bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57  (3 bits padding)
+    uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58
+    uint16_t _oe_chain_length = 0;                       //         2 |    52 |         2 |    60
+    // Alignment Padding                                 //         4 |    56 |         4 |    64
+    // Free Padding to Cacheline                         //         8 |    64 |         0 |    64
+    // -- Cache Line --
 
 
     public:
@@ -106,11 +108,11 @@ class Node {
         _value= T{};
         _parent = nullptr;
     }
-    Node(T value, bool track_metadata, Node *parent = nullptr) {
+    Node(const T& value, bool track_metadata, Node *parent = nullptr) {
         init(value, track_metadata, parent);
     }
     // Use an init so we can reset and reuse objects.
-    void init(T value, bool track_metadata, Node *parent = nullptr) {
+    void init(const T& value, bool track_metadata, Node *parent = nullptr) {
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
@@ -120,8 +122,6 @@ class Node {
         _track_metadata = track_metadata;
         _value = value;
         _parent = parent;
-        // Rebuild our collatz object.
-        tls_collatz.init(_value, false, false);
 
         // Calculate our position if the parent exists.  Formula: 2 * (parent_position - 1) + [1 or 2]
         if (_track_metadata) {
@@ -134,30 +134,31 @@ class Node {
 
         // Leverage our parent's oe-chain size to determine ours.  When zero, there's no chain to get.
         // We don't want to double-scan, so we'll employ optimism and pull back locally.
+        std::vector<bool> tmp_oe_chain;
         if (_value > 0) {
-            size_t oe_chain_length = 0;
             if (parent == nullptr) {
-                oe_chain_length = 1;
+                _oe_chain_length = 1;
             } else {
-                oe_chain_length = parent->get_odd_even_chain().size() + (_value > 2 ? 2 : 1);
+                _oe_chain_length = parent->get_oe_chain_length() + (_value > 2 ? 2 : 1);
             }
-            _odd_even_chain.reserve(oe_chain_length);
+            tmp_oe_chain.reserve(_oe_chain_length);
             size_t count = 0;
-            tls_collatz.for_each_sequence_step([&](const T& step) {
+            Collatz<T>::for_each_sequence_step(_value, [&](const T& step) {
                 count++;
                 if constexpr(std::same_as<T, mpz_class>) {
-                    // CMP modulo is expensive from allocations.
-                    _odd_even_chain.push_back(mpz_divisible_p(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                    // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
+                    tmp_oe_chain.push_back(mpz_even_p(step.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
                 } else {
-                    // Integral modulo is cheap.
-                    _odd_even_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                    // Integral modulo is cheap.  Usually bitwise.
+                    tmp_oe_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
                 }
-                return count >= oe_chain_length;
+                return count >= _oe_chain_length;
             });
             // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
-            if (_odd_even_chain.size() > 2) {
-                if (_odd_even_chain[_odd_even_chain.size() - 3] == CollatzConstants::EVEN) {
-                    _odd_even_chain.pop_back();
+            if (tmp_oe_chain.size() > 2) {
+                if (tmp_oe_chain[tmp_oe_chain.size() - 3] == CollatzConstants::EVEN) {
+                    tmp_oe_chain.pop_back();
+                    _oe_chain_length -= 1;
                 }
             }
         }
@@ -166,13 +167,13 @@ class Node {
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
         // Compute the odd-even fractional N portion, the constant, and then tally them up.
         // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
-        size_t odd_count = std::count(_odd_even_chain.begin(), _odd_even_chain.end(), CollatzConstants::ODD);
-        mpz_ui_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), 2, _odd_even_chain.size() - odd_count);
+        size_t odd_count = std::count(tmp_oe_chain.begin(), tmp_oe_chain.end(), CollatzConstants::ODD);
+        mpz_ui_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), 2, tmp_oe_chain.size() - odd_count);
         mpz_ui_pow_ui(tls_threes_value_mpz_c.get_mpz_t(), 3, odd_count);
         tls_threes_value_mpf_c = tls_threes_value_mpz_c;
         tls_fg_n_portion_mpf_c = tls_threes_value_mpf_c / tls_twos_value_mpz_c;
         tls_fg_constant_mpf_c = 0;
-        for (auto c : _odd_even_chain) {
+        for (auto c : tmp_oe_chain) {
             if (c == CollatzConstants::EVEN) {
                 tls_fg_constant_mpf_c /= 2;
             } else {
@@ -213,7 +214,6 @@ class Node {
         release_children();
         _parent = nullptr;
         _hwm_ancestor = nullptr;
-        _odd_even_chain.clear();
         _is_below_hwm = false;
         _has_hwm_ancestor = false;
         _is_initialized = false;
@@ -252,12 +252,6 @@ class Node {
         return os << m._value;
     }
 
-    // Accessors and properties.
-    const T& get_value() const {
-        return _value;
-    }
-
-
     // Calculate our level.  Formula: floor(log2(N))
     size_t get_level() const {
         size_t level = 0;
@@ -270,24 +264,17 @@ class Node {
     }
 
 
-    bool is_initialized() const { return _is_initialized; }
+    // Accessors and properties.
+    const T& get_value() const { return _value; }
+    Node* get_parent() const { return _parent; }
+    Node<T>* get_hwm_ancestor() const { return _hwm_ancestor; }
     bool is_below_high_water_mark() const { return _is_below_hwm; }
     bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
-    Node* get_parent() const { return _parent; }
+    bool is_initialized() const { return _is_initialized; }
     bool does_own_children() const { return _owns_children; }
     size_t get_child_count() const { return static_cast<size_t>(_child_count); }
-    const std::vector<bool>& get_odd_even_chain() const {
-        return _odd_even_chain;
-    }
-    std::string get_odd_even_chain_string() const {
-        std::string result;
-        result.reserve(_odd_even_chain.size());
-        for (bool bit : _odd_even_chain) {
-            result += (bit ? 'O' : 'E');
-        }
-        return result;
-    }
-
+    size_t get_oe_chain_length() const { return static_cast<size_t>(_oe_chain_length); }
+    // Metadata
     const T& get_position() const {
         if (! _track_metadata) {
             throw std::logic_error(E_NO_METADATA_TRACKING);
@@ -325,9 +312,26 @@ class Node {
         return _metadata->fg_total;
     }
 
-    Node<T>* get_hwm_ancestor() const {
-        return _hwm_ancestor;
+    // Get the odd-even chain.  Requires a collatz object.
+    std::string get_odd_even_chain_string() const {
+        std::string result;
+        result.reserve(_oe_chain_length);
+        size_t count = 0;
+        Collatz<T>::for_each_sequence_step(_value, [&] (const T& step) {
+            count++;
+            if constexpr(std::same_as<T, mpz_class>) {
+                // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
+                result.push_back(mpz_even_p(step.get_mpz_t()) ? 'E' : 'O');
+            } else {
+                // Integral modulo is cheap.  Usually bitwise.
+                result.push_back(step % 2 == 0 ? 'E' : 'O');
+            }
+            return count >= _oe_chain_length;
+        });
+        return result;
     }
+
+    // Child Management
     void assign_child(Node<T>* child) {
         _children[_child_count++] = child;
     }
@@ -339,10 +343,10 @@ class Node {
     void own_children(bool value) {
         _owns_children = value;
     }
+
+    // Size data.
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        // Vector<bool> is a specialized template in c++.  Bit-packed.
-        total += (_odd_even_chain.capacity() + 7) / 8;
         if (_metadata != nullptr) {
             total += _metadata->deep_size();
         }

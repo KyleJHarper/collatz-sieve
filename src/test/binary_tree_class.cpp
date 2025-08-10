@@ -139,6 +139,10 @@ void test_binary_tree_16_levels() {
                 assert(false);
                 break;
         }
+        // std::cout << "Level: " << level << std::endl;
+        // std::cout << "coverage_mpz->get_covered(): " << coverage->get_covered() << "  (target: " << target_covered << ")" << std::endl;
+        // std::cout << "coverage_mpz->get_total(): " << coverage->get_total() << "  (target: " << target_total << ")" << std::endl;
+        // std::cout << std::endl;
         assert(coverage->get_covered() == target_covered);
         assert(coverage->get_total() == target_total);
     }
