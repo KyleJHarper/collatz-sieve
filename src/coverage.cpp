@@ -16,7 +16,7 @@ class CoverageBuilder {
 
     public:
     CoverageBuilder() {
-        _tree.init(0);
+        _tree.init(0, false);
     }
 
     const BinaryTree<T>& get_tree() const { return _tree; }

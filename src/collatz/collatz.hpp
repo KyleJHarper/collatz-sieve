@@ -86,16 +86,15 @@ class Collatz {
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
     // All data must fit within one cache line.
     //                                 uint64_t | total | mpz_class | total
-    T _initial_value;               //        8 |     8 |        16 |    16
-    //TODO FIX THIS
-    bool _is_initialized : 1;       //      1:1 |    25 |       1:1 |    41
-    bool _track_sequence : 1;       //      1:2 |    25 |       1:2 |    41
-    bool _track_metadata : 1;       //      1:3 |    25 |       1:3 |    41
-    bool _sequence_overflow : 1;    //      1:4 |    25 |       1:4 |    41  (5 bits padding)
-    //                              //        X |    32 |         X |    48  (7 bytes padding)
-    std::vector<T> _sequence;       //       24 |    56 |        24 |    72
-    //New stuff
-    CollatzMetadata<T>* _metadata = nullptr;
+    T _initial_value;                         //        8 |     8 |        16 |    16
+    bool _is_initialized : 1;                 //      1:1 |     9 |       1:1 |    17
+    bool _track_sequence : 1;                 //      1:2 |     9 |       1:2 |    17
+    bool _track_metadata : 1;                 //      1:3 |     9 |       1:3 |    17
+    bool _sequence_overflow : 1;              //      1:4 |     9 |       1:4 |    17  (4 bits padding)
+    // Alignment Padding                      //        7 |    16 |         7 |    24
+    std::vector<T> _sequence;                 //       24 |    40 |        24 |    48
+    CollatzMetadata<T>* _metadata = nullptr;  //        8 |    48 |         8 |    56
+    // Free Padding to Cacheline              //       16 |    64 |         8 |    64
 
     public:
     // Reusable messages.
@@ -106,6 +105,11 @@ class Collatz {
     Collatz(T initial_value, bool track_sequence = false, bool track_metadata = false) {
         init(initial_value, track_sequence, track_metadata);
     };
+    // Destructor
+    ~Collatz() {
+        release_metadata();
+    }
+
     void init(T initial_value, bool track_sequence = false, bool track_metadata = false) {
         if (initial_value < 0) {
             throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 0.");
@@ -114,7 +118,7 @@ class Collatz {
         if(_is_initialized) { reset(); }
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
         if (_metadata == nullptr && track_metadata) { _metadata = new CollatzMetadata<T>(); }
-        if (_metadata != nullptr && ! track_metadata) { delete _metadata; }
+        if (_metadata != nullptr && ! track_metadata) { release_metadata(); }
         _track_sequence = track_sequence;
         _track_metadata = track_metadata;
         _is_initialized = true;
@@ -122,7 +126,7 @@ class Collatz {
         // Process the sequence and store any related metadata, if needed.  Otherwise, leave.
         if (_track_sequence || _track_metadata) {
             try {
-                for_each_sequence_step([&](T step) {
+                for_each_sequence_step([&](const T& step) {
                     if (_track_sequence) { _sequence.push_back(step); }
                     if (_track_metadata) {
                         _metadata->step_count++;
@@ -130,7 +134,7 @@ class Collatz {
                             _metadata->peak_value = step;
                         }
                         if (_metadata->hwm_index == 0 && step < _initial_value) {
-                            _metadata->hwm_index = _metadata->step_count;
+                            _metadata->hwm_index = _metadata->step_count - 1;
                         }
                     }
                     return false;
@@ -148,10 +152,19 @@ class Collatz {
     // Reset to make this act like a new() object.  Do NOT allocate Metadata here.
     void reset() {
         _sequence.clear();
+        _sequence.shrink_to_fit();
         _sequence_overflow = false;
         _track_sequence = false;
         _track_metadata = false;
         if (_metadata != nullptr) { _metadata->reset(); }
+    }
+
+    // Let callers decide when they're done with metadata.
+    void release_metadata() {
+        if (_metadata == nullptr) { return; }
+        delete _metadata;
+        _metadata = nullptr;
+        _track_metadata = false;
     }
 
     // Cout and string-ified methods.
@@ -180,6 +193,8 @@ class Collatz {
     const T& get_initial_value() const { return _initial_value; }
     bool get_is_overflowed() const { return _sequence_overflow; }
     bool get_is_initialized() const { return _is_initialized; }
+    bool get_track_sequence() const { return _track_sequence; }
+    bool get_track_metadata() const { return _track_metadata; }
     const CollatzMetadata<T>& get_metadata() const { return _metadata; }
     // Sequence and metadata accessors.
     const std::vector<T>& get_sequence() const {
@@ -228,6 +243,9 @@ class Collatz {
     // Caller MUST return true or false to continue or stop.
     template<typename Func>
     void for_each_sequence_step(Func&& callback) const {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+
         // Zero is a special case, mostly for BinaryTree building a root.
         if (_initial_value == 0) { return; }
 
@@ -241,7 +259,8 @@ class Collatz {
         }
 
         // Sequence didn't exist.  Calculate it on-the-fly.
-        T current_step = _initial_value;
+        thread_local T current_step;
+        current_step = _initial_value;
         while (current_step >= 1) {
             bool stop = callback(current_step);
             if (stop || current_step == 1) { return; }
@@ -263,7 +282,7 @@ class Collatz {
     std::string get_oe_pattern_string(size_t max_chars = std::numeric_limits<size_t>::max()) const {
         std::string result;
         size_t count = 0;
-        for_each_sequence_step([&](T step) {
+        for_each_sequence_step([&](const T& step) {
             count++;
             result += (step % 2 == 0 ? 'E' : 'O');
             return count >= max_chars;

@@ -234,8 +234,6 @@ void test_binary_tree_node_count_should_match_map() {
 }
 
 int main() {
-    Node<uint>::enable_sequenes();  // Ensure Collatz data is kept
-
     test_binary_tree_basic_construction();
     std::cout << "test_binary_tree_basic_construction() passed\n";
     test_binary_tree_deep_size();

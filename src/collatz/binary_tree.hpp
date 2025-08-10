@@ -22,20 +22,22 @@ class BinaryTree {
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
     std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
     bool _is_initialized = false;
+    bool _track_node_metadata = false;
 
     public:
     // Constructor and Init
     BinaryTree() {}
-    BinaryTree(size_t levels) {
-        init(levels);
+    BinaryTree(size_t levels, bool track_node_metadata = false) {
+        init(levels, track_node_metadata);
     }
-    void init(size_t levels) {
+    void init(size_t levels, bool track_node_metadata = false) {
         if (_is_initialized) {
             delete _root_node;
             _max_level = 0;
         }
         _is_initialized = true;
-        _root_node = new Node<T>(0);
+        _track_node_metadata = track_node_metadata;
+        _root_node = new Node<T>(0, _track_node_metadata);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
         _coverage_map[0].set_covered(0);
@@ -125,8 +127,8 @@ class BinaryTree {
             T child_value_1 = parent->get_value() + step;
             T child_value_2 = child_value_1 + step;
             // Create the children.  Add them to the map.
-            Node<T>* child_1 = new Node<T>(child_value_1, parent);
-            Node<T>* child_2 = new Node<T>(child_value_2, parent);
+            Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
+            Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
             _level_map[child_level][2 * parent_idx] = child_1;
             _level_map[child_level][2 * parent_idx + 1] = child_2;
             // Add children to the parent.
@@ -145,7 +147,7 @@ class BinaryTree {
 
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.
-    static Node<T>* generate_node_at(size_t level, T position) {
+    static Node<T>* generate_node_at(size_t level, T position, bool with_metadata = true) {
         // Calculate the maximum position and enforce the rules.  We will need the first node's value too.
         T max_position = 0;
         T first_node_value = 0;
@@ -203,7 +205,7 @@ class BinaryTree {
         }
         // Now sum the values, create the node, and return it.
         T node_value = first_node_value + s1 - s2;
-        Node<T>* node = new Node<T>(node_value);
+        Node<T>* node = new Node<T>(node_value, with_metadata);
         return node;
     }
 };
