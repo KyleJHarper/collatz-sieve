@@ -13,6 +13,49 @@ I will tag things as new features are developed and list those features in the c
 
 # Change Log
 
+### 0.8.0
+Major rework on the memory layout and usage in Collatz and Node.
+
+#### Memory Usage Improved
+* Metadata is stored separately, and is per-instance, up to the caller if they want it.
+* Memory fits in a single cache line for Collatz (both) and Node<uint64_t>.  Only Node<mpz_class> remains.
+* All temporary variables were removed:
+  * Use of thread_local creates scratch-pads for temporary mpz/mpf items.
+  * Use of mpz_*() methods avoid arithmetic operators which use temp vars.
+  * Passing by reference (const T& x), helps.  This is now enforced in for_each() methods with callbacks.
+* A bug in coverage was found and fixed (we passed by value, not reference).
+
+#### Tree Building Performance
+The tree builds much faster now, as shown in this table
+
+| Version | Data Type | RAM (bytes) | RSS (bytes) | CPU (ms, 1 thr) |
+| :------ | :-------- | ----------: | ----------: | --------------: |
+| 0.5.1   | uint64_t  |  45,662,928 |         n/a |             245 |
+| 0.6.0   | uint64_t  |  85,173,336 |  60,030,976 |             282 |
+| 0.8.0   | uint64_t  |  14,681,376 |  14,942,208 |             135 |
+| 0.5.1   | mpz_class |  48,808,632 |         n/a |             865 |
+| 0.6.0   | mpz_class | 114,115,904 |  66,453,504 |             887 |
+| 0.8.0   | mpz_class |  15,730,216 |  18,087,936 |             241 |
+
+
+#### Allocation Performance Improved
+Here is an updated table running `bin/coverage 16`:
+
+| Version | Data Type | Allocations | For GMP | Temp |
+| :------ | :-------- | ----------: | ------: | ---: |
+| 0.5.1 | Node<uint64_t>* | 1,462,735 | 786,477 | ?? |
+| 0.6.0 | Node<uint64_t> | 2,158,447 | 1,441,832 | ?? |
+| 0.8.0 | Node<uint64_t>* | 79 | 47 | 17 |
+| 0.5.1 | Node<mpz_class>* | 7,566,388 | 6,759,076 | ?? |
+| 0.6.0 | Node<mpz_class> | 8,393,170 | 7,545,501 | ?? |
+| 0.8.0 | Node<mpz_class>* | 665,703 | 655,636 | 131,138 |
+
+Note: further reduction is possible if we can get Node and Collatz to store T `_value` and `_initial_value`
+as references without ending up with dangling pointers/invalid references.
+
+
+
+
 ### 0.7.0
 Refactored the Makefile to be a little better.  We can parallel build now.
 

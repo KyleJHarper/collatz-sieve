@@ -1,9 +1,12 @@
 #pragma once
 
+#include <concepts>
+#include <gmp.h>
 #include <iostream>
 #include <gmpxx.h>
 #include <limits>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 #include <string>
 #include <stdint.h>
@@ -22,6 +25,11 @@ typedef uint32_t seq_size_t;
 
 // Constants for our sequences.
 namespace CollatzConstants {
+    // GMP will sometimes alloc() if you operate on a non-GMP (e.g.: ui) value.
+    static const mpz_class MPZ_ONE = 1;
+    static const mpz_class MPZ_TWO = 2;
+    static const mpz_class MPZ_THREE = 3;
+    // Let's lock in what "odd" and "even" mean.
     constexpr bool ODD = true;
     constexpr bool EVEN = false;
     // Trying to perform 3X+1 on any (odd) value higher than this would overflow a 64-bit unsigned integer.
@@ -195,7 +203,7 @@ class Collatz {
     bool get_is_initialized() const { return _is_initialized; }
     bool get_track_sequence() const { return _track_sequence; }
     bool get_track_metadata() const { return _track_metadata; }
-    const CollatzMetadata<T>& get_metadata() const { return _metadata; }
+    const CollatzMetadata<T>* get_metadata() const { return _metadata; }
     // Sequence and metadata accessors.
     const std::vector<T>& get_sequence() const {
         if(!_track_sequence) {
@@ -261,19 +269,33 @@ class Collatz {
         // Sequence didn't exist.  Calculate it on-the-fly.
         thread_local T current_step;
         current_step = _initial_value;
-        while (current_step >= 1) {
-            bool stop = callback(current_step);
-            if (stop || current_step == 1) { return; }
-            if (current_step % 2 == 0) {
-                current_step /= 2;
-            } else {
-                if constexpr(std::integral<T>) {
+        // Native and GMP types differ.  Handle them separately to reduce allocs().
+        if constexpr(std::integral<T>) {
+            // Native integrals can use intrinsic arithmetic operators for "free", but can overflow.
+            while (current_step >= 1) {
+                bool stop = callback(current_step);
+                if (stop || current_step == 1) { return; }
+                if (current_step % 2 == 0) {
+                    current_step /= 2;
+                } else {
                     if (current_step > CollatzConstants::MAX_64BIT_ODD) {
                         throw CollatzSequenceOverflow("Overflow when building for_each_sequence_step().");
                     }
+                    current_step *= 3;
+                    current_step += 1;
                 }
-                current_step *= 3;
-                current_step += 1;
+            }
+        } else {
+            // GMP integers will alloc() with certain arithmetic operators, but can't overflow.
+            while (current_step >= CollatzConstants::MPZ_ONE) {
+                bool stop = callback(current_step);
+                if (stop || current_step == 1) { return; }
+                if (mpz_divisible_p(current_step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t())) {
+                    current_step /= 2;
+                } else {
+                    current_step *= 3;
+                    current_step += 1;
+                }
             }
         }
     }

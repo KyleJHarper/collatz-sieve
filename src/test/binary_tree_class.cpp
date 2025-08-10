@@ -78,12 +78,12 @@ void test_generate_node_at_mpz() {
 
 void test_binary_tree_16_levels() {
     BinaryTree<uint> tree(16);
-    BinaryTreeCoverage global_coverage;
+    BinaryTreeCoverage<uint> global_coverage;
     size_t target_covered = 0;
     size_t target_total = 0;
     for (size_t level=1; level<=tree.get_max_level(); level++) {
-        target_total = std::pow(2, level);
-        const BinaryTreeCoverage* coverage = &tree.get_coverage_map().find(level)->second;
+        target_total = size_t(1) << level;
+        const BinaryTreeCoverage<uint>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
         switch (level) {
@@ -148,12 +148,12 @@ void test_binary_tree_16_levels() {
     assert(tree.node_count() == (std::pow(2, tree.get_max_level() + 1) - 2));
     assert(tree.node_count_with_root() == (std::pow(2, tree.get_max_level() + 1) - 1));
     BinaryTree<mpz_class> tree_mpz(16);
-    BinaryTreeCoverage global_coverage_mpz;
-    size_t target_covered_mpz = 0;
-    size_t target_total_mpz = 0;
+    BinaryTreeCoverage<mpz_class> global_coverage_mpz;
+    mpz_class target_covered_mpz = 0;
+    mpz_class target_total_mpz = 0;
     for (size_t level=1; level<=tree_mpz.get_max_level(); level++) {
-        target_total_mpz = std::pow(2, level);
-        const BinaryTreeCoverage* coverage_mpz = &tree_mpz.get_coverage_map().find(level)->second;
+        target_total_mpz = CollatzConstants::MPZ_ONE << level;
+        const BinaryTreeCoverage<mpz_class>* coverage_mpz = &tree_mpz.get_coverage_map().find(level)->second;
         global_coverage_mpz.add_covered(coverage_mpz->get_covered());
         global_coverage_mpz.add_total(coverage_mpz->get_total());
         switch (level) {
@@ -209,6 +209,10 @@ void test_binary_tree_16_levels() {
                 assert(false);
                 break;
         }
+        // std::cout << "Level: " << level << std::endl;
+        // std::cout << "coverage_mpz->get_covered(): " << coverage_mpz->get_covered() << "  (target: " << target_covered_mpz << ")" << std::endl;
+        // std::cout << "coverage_mpz->get_total(): " << coverage_mpz->get_total() << "  (target: " << target_total_mpz << ")" << std::endl;
+        // std::cout << std::endl;
         assert(coverage_mpz->get_covered() == target_covered_mpz);
         assert(coverage_mpz->get_total() == target_total_mpz);
     }

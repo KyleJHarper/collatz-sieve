@@ -30,10 +30,24 @@ class CoverageBuilder {
         size_t next_level = _tree.get_max_level() + 1;
         logger->debug("Building level {}...", next_level);
         _tree.add_level();
-        BinaryTreeCoverage coverage = _tree.get_coverage_map().find(next_level)->second;
+        BinaryTreeCoverage<T> coverage = _tree.get_coverage_map().find(next_level)->second;
         logger->debug("Level {} coverage was: {:.4f}% ({}/{})", next_level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total());
     }
 };
+
+
+template<IntegralOrMPZClass T>
+void run(size_t levels) {
+    std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
+    CoverageBuilder<T> builder;
+    builder.run(levels);
+    coverage_map = builder.get_tree().get_coverage_map();
+    BinaryTreeCoverage<T> global_coverage;
+    for (auto& [level, coverage] : coverage_map) {
+        global_coverage.merge(coverage);
+    }
+    logger->info("Global Coverage: {:.4f}% ({}/{})", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total());
+}
 
 
 int main(int argc, char **argv) {
@@ -58,22 +72,13 @@ int main(int argc, char **argv) {
     logger->debug("  Verbose: {}", verbose);
 
     // Build the tree object with no levels to start.
-    logger->info("Building tree with {} levels, using {}.", levels, force_mpz ? "GMP" : "uint64_t");
-    std::unordered_map<size_t, BinaryTreeCoverage> coverage_map;
-    if (force_mpz) {
-        CoverageBuilder<mpz_class> builder;
-        builder.run(levels);
-        coverage_map = builder.get_tree().get_coverage_map();
+    bool use_mpz = (force_mpz || levels > 63) ? true : false;
+    logger->info("Building tree with {} levels, using {}.", levels, use_mpz ? "GMP" : "uint64_t");
+    if (use_mpz) {
+        run<mpz_class>(levels);
     } else {
-        CoverageBuilder<uint64_t> builder;
-        builder.run(levels);
-        coverage_map = builder.get_tree().get_coverage_map();
+        run<uint64_t>(levels);
     }
-    BinaryTreeCoverage global_coverage;
-    for (auto& [level, coverage] : coverage_map) {
-        global_coverage.merge(coverage);
-    }
-    logger->info("Global Coverage: {:.4f}% ({}/{})", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total());
 
     return 0;
 }

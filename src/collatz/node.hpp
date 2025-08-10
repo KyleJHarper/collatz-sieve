@@ -2,6 +2,7 @@
 
 #include "collatz.hpp"
 #include "concepts.hpp"
+#include <gmp.h>
 #include <vector>
 #include <cmath>
 #include "gmp_helpers.hpp"
@@ -144,7 +145,13 @@ class Node {
             size_t count = 0;
             tls_collatz.for_each_sequence_step([&](const T& step) {
                 count++;
-                _odd_even_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                if constexpr(std::same_as<T, mpz_class>) {
+                    // CMP modulo is expensive from allocations.
+                    _odd_even_chain.push_back(mpz_divisible_p(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                } else {
+                    // Integral modulo is cheap.
+                    _odd_even_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
+                }
                 return count >= oe_chain_length;
             });
             // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.

@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <omp.h>
+#include "collatz.hpp"
 #include "node.hpp"
 #include "binary_tree_coverage.hpp"
 
@@ -20,7 +21,7 @@ class BinaryTree {
     Node<T> *_root_node = nullptr;
     size_t _max_level = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
-    std::unordered_map<size_t, BinaryTreeCoverage> _coverage_map;
+    std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     bool _is_initialized = false;
     bool _track_node_metadata = false;
 
@@ -101,7 +102,7 @@ class BinaryTree {
         total += _level_map.bucket_count() * sizeof(void*);
         return total;
     }
-    const std::unordered_map<size_t, BinaryTreeCoverage> get_coverage_map() const {
+    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const {
         return _coverage_map;
     }
 
@@ -114,18 +115,30 @@ class BinaryTree {
         _max_level++;
         // Each level will double the size of the tree, so we can't rely on size_t if we're going to
         // support GMP-size values.  We need to respect T.
-        size_t step = 1ULL << parent_level;
+        T step;
+        if constexpr(std::same_as<T, mpz_class>) {
+            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), parent_level);
+        } else {
+            step = static_cast<T>(1ULL << parent_level);
+        }
         // Loop through the parents to build the children.
         auto& parents = _level_map[parent_level];
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
         _level_map[child_level].resize(child_count);
-        #pragma omp parallel for schedule(dynamic, 1) default(none) shared(parents, _level_map, step, child_level, parent_count)
+        #pragma omp parallel for schedule(static, 100) default(none) shared(parents, _level_map, step, child_level, parent_count)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
-            // Get the child values.
+            // Get the child values.  Avoid alloc() with GMP with arithmetic operators.
+            T child_value_1;
+            T child_value_2;
             Node<T>* parent = parents[parent_idx];
-            T child_value_1 = parent->get_value() + step;
-            T child_value_2 = child_value_1 + step;
+            if constexpr(std::same_as<T, mpz_class>) {
+                mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
+                mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
+            } else {
+                child_value_1 = parent->get_value() + step;
+                child_value_2 = child_value_1 + step;
+            }
             // Create the children.  Add them to the map.
             Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
             Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
@@ -136,13 +149,15 @@ class BinaryTree {
             parent->assign_child(child_2);
         }
         // Establish the coverage.  Covered is always 0, but total is simply step * 2.
-        _coverage_map[child_level].set_covered(0);
-        _coverage_map[child_level].set_total(step * 2);
+        // GMP Internals are not default-initialized to 0.
+        _coverage_map[child_level] = BinaryTreeCoverage<T>(0, step * 2);
+        T newly_covered = 0;
         for(const Node<T>* child_node : _level_map[child_level]) {
             if(child_node->is_below_high_water_mark() || child_node->has_high_water_mark_ancestor()) {
-                _coverage_map[child_level].add_covered(1);
+                newly_covered += 1;
             }
         }
+        _coverage_map[child_level].add_covered(newly_covered);
     }
 
     // Generate any Node based on its level and position.  It will not be part of any tree.

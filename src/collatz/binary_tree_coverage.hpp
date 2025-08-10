@@ -1,5 +1,6 @@
 #pragma once
 
+#include "concepts.hpp"
 #include <gmp.h>
 #include <gmpxx.h>
 
@@ -7,15 +8,19 @@
 //
 // Tree Coverage Class
 //
+template<IntegralOrMPZClass T>
 class BinaryTreeCoverage {
     private:
-    size_t _covered = 0;
-    size_t _total = 0;
+    T _covered = 0;
+    T _total = 0;
 
     public:
     // Constructors
-    BinaryTreeCoverage() {}
-    BinaryTreeCoverage(size_t covered, size_t total) {
+    BinaryTreeCoverage() {
+        _covered = 0;
+        _total = 0;
+    }
+    BinaryTreeCoverage(T covered, T total) {
         _covered = covered;
         _total = total;
     }
@@ -26,23 +31,23 @@ class BinaryTreeCoverage {
         _total += other_coverage.get_total();
     }
     // Setters
-    void set_covered(size_t covered) {
+    void set_covered(T covered) {
         _covered = covered;
     }
-    void set_total(size_t total) {
+    void set_total(T total) {
         _total = total;
     }
-    void add_covered(size_t count=1) {
+    void add_covered(T count=1) {
         _covered += count;
     }
-    void add_total(size_t count=1) {
+    void add_total(T count=1) {
         _total += count;
     }
     // Getters
-    const size_t& get_covered() const {
+    const T& get_covered() const {
         return _covered;
     }
-    const size_t& get_total() const {
+    const T& get_total() const {
         return _total;
     }
     // Get the ratio.  If total is 0 or negative, we will throw an error.
