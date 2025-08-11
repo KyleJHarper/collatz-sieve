@@ -13,6 +13,11 @@ I will tag things as new features are developed and list those features in the c
 
 # Change Log
 
+__System Build for All Tests__
+* Ubuntu 24.04 64-bit, Desktop Version
+* Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
+* 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
+
 ### 0.8.1
 Final allocation changes are made.  We reduced the GMP copying and reallocations.  Here are the results:
 

@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <gmpxx.h>
+#include <stdexcept>
 #include "../collatz/binary_tree.hpp" // Include your BinaryTree and Node classes
 
 void test_binary_tree_basic_construction() {
@@ -241,6 +242,27 @@ void test_binary_tree_node_count_should_match_map() {
     assert(map_count == expected_count);
 }
 
+void test_binary_tree_too_many_levels() {
+    // 8 bit can't build a 16 level tree
+    try {
+        BinaryTree<uint8_t> tree(16);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
+    }
+    // A 32-bit tree type can.
+    BinaryTree<uint32_t> tree(16);
+    // An 8 bit can, however,  handle a 4-level tree.
+    BinaryTree<uint8_t> tree2(4);
+    // Adding another level should break.
+    try {
+        tree2.add_level();
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 5") != std::string::npos);
+    }
+}
+
 int main() {
     test_binary_tree_basic_construction();
     std::cout << "test_binary_tree_basic_construction() passed\n";
@@ -258,6 +280,8 @@ int main() {
     std::cout << "test_binary_tree_16_levels() passed\n";
     test_binary_tree_node_count_should_match_map();
     std::cout << "test_binary_tree_node_count_should_match_map() passed\n";
+    test_binary_tree_too_many_levels();
+    std::cout << "test_binary_tree_too_many_levels() passed\n";
 
     std::cout << "All BinaryTree<T> tests passed.\n";
     return 0;

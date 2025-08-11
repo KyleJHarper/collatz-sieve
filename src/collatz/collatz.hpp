@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
+#include <array>
 #include <string>
 #include <stdint.h>
 #include "concepts.hpp"
@@ -34,6 +35,82 @@ namespace CollatzConstants {
     constexpr bool EVEN = false;
     // Trying to perform 3X+1 on any (odd) value higher than this would overflow a 64-bit unsigned integer.
     constexpr uint64_t MAX_64BIT_ODD = 6148914691236517203;
+    // Precomputed maximum initial values for a given bit size.  The next value would overflow during its sequence.
+    constexpr size_t MAX_IV_KNOWN_BITS = 65;
+    constexpr std::array<size_t, MAX_IV_KNOWN_BITS> MAX_INITIAL_VALUE_BY_BIT = {
+        0,  // 0
+        2,  // 1
+        2,  // 2
+        2,  // 3
+        6,  // 4
+        6,  // 5
+        14,  // 6
+        14,  // 7
+        26,  // 8
+        26,  // 9
+        26,  // 10
+        26,  // 11
+        26,  // 12
+        26,  // 13
+        446,  // 14
+        446,  // 15
+        702,  // 16
+        702,  // 17
+        1818,  // 18
+        1818,  // 19
+        1818,  // 20
+        4254,  // 21
+        4254,  // 22
+        9662,  // 23
+        9662,  // 24
+        20894,  // 25
+        26622,  // 26
+        60974,  // 27
+        60974,  // 28
+        60974,  // 29
+        77670,  // 30
+        113382,  // 31
+        159486,  // 32
+        159486,  // 33
+        159486,  // 34
+        665214,  // 35
+        1042430,  // 36
+        1212414,  // 37
+        2684646,  // 38
+        3041126,  // 39
+        4637978,  // 40
+        5656190,  // 41
+        6416622,  // 42
+        6631674,  // 43
+        6631674,  // 44
+        6631674,  // 45
+        19638398,  // 46
+        19638398,  // 47
+        19638398,  // 48
+        80049390,  // 49
+        80049390,  // 50
+        120080894,  // 51
+        210964382,  // 52
+        319804830,  // 53
+        319804830,  // 54
+        319804830,  // 55
+        319804830,  // 56
+        319804830,  // 57
+        319804830,  // 58
+        319804830,  // 59
+        319804830,  // 60
+        1410123942,  // 61
+        1410123942,  // 62
+        8528817510,  // 63
+        12327829502,  // 64
+    };
+    // Works for runtime or compile-time
+    inline size_t get_max_initial_value_by_bit(size_t bit_size) {
+        if (bit_size >= MAX_INITIAL_VALUE_BY_BIT.size()) {
+            throw std::out_of_range("Bit size not found");
+        }
+        return MAX_INITIAL_VALUE_BY_BIT[bit_size];
+    }
 }
 
 
@@ -60,7 +137,8 @@ class CollatzMetadata {
     // None, just make them public.
 
     public:
-    T peak_value;
+    // Set to zero!  GMP types are not default initialized to 0.
+    T peak_value = 0;
     seq_size_t hwm_index = 0;
     seq_size_t step_count = 0;
     CollatzMetadata() {}

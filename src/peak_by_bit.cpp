@@ -2,6 +2,7 @@
 #include "CLI11.hpp"
 #include "logging.hpp"
 #include "collatz/collatz.hpp"
+#include "collatz/binary_tree.hpp"
 
 
 //
@@ -55,10 +56,19 @@ class PeakIVScanner {
         _base_initial_value = base_initial_value;
     }
 
-    PeakIVScannerResults run() {
+    PeakIVScannerResults run(bool use_table = false) {
         PeakIVScannerResults results;
+        if (use_table) { logger->debug("Using precomputed table where possible."); }
         // Main loop for each bit.
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
+            // If we're using the precomputed table, send it.
+            if (use_table && bit < CollatzConstants::MAX_IV_KNOWN_BITS) {
+                T max_iv = CollatzConstants::get_max_initial_value_by_bit(bit);
+                logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
+                results.set(bit, mpz_class(max_iv));
+                continue;
+            }
+
             // Setup variables based on Integral or mpz_class type.
             if constexpr(std::integral<T>) {
                 _max_allowed_value = 1ULL << (bit);
@@ -76,7 +86,7 @@ class PeakIVScanner {
                     // We skip even values, so it's always i*2.
                     T my_iv = _base_initial_value + (i * 2);
                     try {
-                        _collatz[i].init(my_iv);
+                        _collatz[i].init(my_iv, false, true);
                     } catch (const CollatzSequenceOverflow& ex) {
                         overflow_index = i;
                         i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
@@ -101,7 +111,7 @@ class PeakIVScanner {
                 if (promote_test) {
                     PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, mpz_class(_base_initial_value));
                     PeakIVScannerResults promoted_results;
-                    promoted_results = promoted_test.run();
+                    promoted_results = promoted_test.run(use_table);
                     // Merge the results and return them.
                     results.merge(promoted_results);
                     return results;
@@ -120,12 +130,9 @@ class PeakIVScanner {
                 // If failing_index was set lower than buffer_size (above the highest index), we found an offender.
                 if (failing_index < BUFFER_SIZE) {
                     const Collatz<T>& failure_point = _collatz[failing_index];
-                    if constexpr(std::integral<T>) {
-                        logger->debug("Found a max IV of {} for 2^{}", failure_point.get_initial_value(), bit);
-                    } else {
-                        logger->debug("Found a max IV of {} for 2^{}", failure_point.get_initial_value().get_str(), bit);
-                    }
-                    results.set(bit, mpz_class(failure_point.get_initial_value() - 1));
+                    T max_iv = failure_point.get_initial_value() - 1;
+                    logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
+                    results.set(bit, mpz_class(max_iv));
                     _base_initial_value = failure_point.get_initial_value();
                     // Leave the while(true).  Move to next bit.
                     break;
@@ -149,6 +156,7 @@ int main(int argc, char **argv) {
     size_t max_bit;
     bool verbose;
     bool force_mpz;
+    bool use_table;
     CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.  Starts with uint64_t type and upgrades to GMP (mpz_class) automatically.");
     options.add_option("-b,--bits", max_bit, "Number of bits to test to.")->default_val(8);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class immediately instead of escalating to it.");
@@ -157,24 +165,27 @@ int main(int argc, char **argv) {
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
         , "Enable verbosity."
     );
+    options.add_flag("-t,--table", use_table, "Use the precomputed table when possible.");
     CLI11_PARSE(options, argc, argv);
     logger->debug("Selected options were:");
     logger->debug("  Force MPZ: {}", force_mpz);
     logger->debug("  Max Bit: {}", max_bit);
+    logger->debug("  Use Table: {}", use_table);
     logger->debug("  Verbose: {}", verbose);
 
     // Build the tester and run it.
     PeakIVScannerResults results;
     if (force_mpz) {
         PeakIVScanner<mpz_class> test(max_bit);
-        results = test.run();
+        results = test.run(use_table);
     } else {
         PeakIVScanner<uint64_t> test(max_bit);
-        results = test.run();
+        results = test.run(use_table);
     }
 
+    // Print results.
     for (auto& [bit, max_iv] : results.get_results()) {
-        logger->info("2^{} max IV: {}", bit, max_iv.get_str());
+        logger->info("2^{} max IV: {:'} (max level: {})", bit, max_iv, BinaryTree<mpz_class>::max_full_level_of_n(max_iv));
     }
 
     // Go home.

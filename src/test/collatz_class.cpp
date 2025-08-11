@@ -34,6 +34,12 @@ void test_reset_and_reuse() {
 
 void test_reset_and_reuse_without_sequence() {
     Collatz<uint> c(7);
+    try {
+        assert(c.get_peak_value() > 1);
+        assert(false); // Should not reach here
+    } catch (const std::logic_error& e) {
+        assert(std::string(e.what()).find("disabled metadata when") != std::string::npos);
+    }
     assert(c.get_initial_value() == 7);
     c.init(6, false, true);  // Reuse with new value
     assert(c.get_initial_value() == 6);

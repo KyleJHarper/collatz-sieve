@@ -3,7 +3,9 @@
 #include <cmath>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <limits>
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
 #include <omp.h>
 #include "collatz.hpp"
@@ -32,6 +34,8 @@ class BinaryTree {
         init(levels, track_node_metadata);
     }
     void init(size_t levels, bool track_node_metadata = false) {
+        // Sanity check.  T must support requested tree size.
+        assert_level_will_fit(levels);
         if (_is_initialized) {
             delete _root_node;
             _max_level = 0;
@@ -113,6 +117,7 @@ class BinaryTree {
         size_t parent_level = _max_level;
         size_t child_level = _max_level + 1;
         _max_level++;
+        assert_level_will_fit(_max_level);
         // Each level will double the size of the tree, so we can't rely on size_t if we're going to
         // support GMP-size values.  We need to respect T.
         T step;
@@ -160,6 +165,47 @@ class BinaryTree {
             }
         }
         _coverage_map[child_level].add_covered(newly_covered);
+    }
+
+    // Helper to determine if the level requested is going to fit within the bit-size of T.
+    void assert_level_will_fit(size_t level) {
+        if constexpr(std::integral<T>) {
+            size_t bits = std::numeric_limits<T>::digits;
+            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
+            mpz_class max_iv_needed = max_node_n(level);
+            if (max_iv_needed > max_iv_allowed) {
+                std::string type_id = typeid(T).name();
+                std::string s_level = std::to_string(level);
+                std::string s_bits = std::to_string(bits);
+                throw std::out_of_range("Cannot build a BinaryTree with " + s_level + " levels and type '" + type_id + "' with " + s_bits + " bits.  It will overflow.");
+            }
+        }
+    }
+
+    // Calculate level.  Formula: floor(log2(N))
+    static size_t level(T value) {
+        size_t level = 0;
+        if constexpr(std::integral<T>) {
+            level = std::floor(std::log2(value));
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            level = mpz_sizeinbase(value.get_mpz_t(), 2);
+        }
+        return level;
+    }
+
+    // Calculate max node N value at a level.  Formula: 2^level - 2.
+    static mpz_class max_node_n(size_t level) {
+        mpz_class max_n;
+        mpz_pow_ui(max_n.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), level);
+        max_n -= 2;
+        return max_n;
+    }
+
+    // Max FULL level of a BinaryTree we can build with node N as the highest initial value before failure/overflow.
+    // Formula: level(max_iv + 1) - 1.
+    //    i.e.: level of (failure point) - 1 == safest level we can fully build.
+    static size_t max_full_level_of_n(mpz_class max_iv) {
+        return BinaryTree<mpz_class>::level(max_iv + 1) - 1;
     }
 
     // Generate any Node based on its level and position.  It will not be part of any tree.

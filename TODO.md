@@ -1,14 +1,14 @@
 # Things To Do
 
-### Performance Tuning
-* Optimize Collatz and Node classes as lean as possible.
-  * Pack bools as bits.
-  * Switch from size_t to uint8_t for items like _child_count.
-  * Remove unnecessary members, if any, or decide if they can be calculated in getters realtime.
-* Revisit slab allocation and a Pool.
-  * When the tree begins to self prune, this will become critical.
-  * With so much of our time spent in GMP init/alloc, I wonder if a global pool can help.
-  * We're still off by nearly 75% on our deep_size() vs RSS reporting on uint64_t.
+### Arbitrary Tree Level
+* We should support building a tree from level M-N, where M >=1 and N > M.
+* We can build level M manually, which will be expensive.
+  * We can build a smaller set of levels (e.g. 1-16) to capture 95+% exclusion to help build M faster.
+
+### Distributed Computing
+* The tree should be buildable in an asynchronous manner by multiple systems.
+* Requires arbitrary levels, from above.
+* Requires an export feature.  Maybe add an import feature to, to save time when testing large trees?
 
 ### Refactor for Cleanliness
 * Code is ugly in a lot of areas.  Let's clean that up.

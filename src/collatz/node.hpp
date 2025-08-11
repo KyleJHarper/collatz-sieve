@@ -12,7 +12,9 @@
 // We need a forward declaration for NodeMetadata to see Node.
 template<IntegralOrMPZClass T>
 class Node;
-
+// Also need a declaraion of BinaryTree so Node can look up its "level", even though that's a Tree decision.
+template<IntegralOrMPZClass T>
+class BinaryTree;
 
 
 //
@@ -252,15 +254,9 @@ class Node {
         return os << m._value;
     }
 
-    // Calculate our level.  Formula: floor(log2(N))
+    // Helper as a private member.
     size_t get_level() const {
-        size_t level = 0;
-        if constexpr(std::integral<T>) {
-            level = std::floor(std::log2(_value));
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            level = mpz_sizeinbase(_value.get_mpz_t(), 2);
-        }
-        return level;
+        return BinaryTree<T>::level(_value);
     }
 
 
