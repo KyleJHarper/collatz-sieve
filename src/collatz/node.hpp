@@ -198,7 +198,7 @@ class Node {
         if (parent != nullptr) {
             // Assign whoever the ancestor is, even if it's nullptr.
             _hwm_ancestor = parent->get_hwm_ancestor();
-            // If we have an ancestor, just flag our boolean and leave.
+            // If we have an ancestor, just flag our boolean.
             if (_hwm_ancestor != nullptr) {
                 _has_hwm_ancestor = true;
             }

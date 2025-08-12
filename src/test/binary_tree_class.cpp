@@ -1,8 +1,11 @@
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <gmpxx.h>
 #include <stdexcept>
 #include "../collatz/binary_tree.hpp" // Include your BinaryTree and Node classes
+#include "../collatz/binary_tree_coverage.hpp"
+
 
 void test_binary_tree_basic_construction() {
     BinaryTree<uint> tree(3);
@@ -77,155 +80,54 @@ void test_generate_node_at_mpz() {
     delete node;
 }
 
-void test_binary_tree_16_levels() {
-    BinaryTree<uint> tree(16);
+void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const BinaryTreeOptions& opts = BinaryTree<uint>::DEFAULT_OPTS) {
+    // Set threads.
+    omp_set_num_threads(threads);
+
+    // Unsigned integral form.
+    BinaryTree<uint> tree(levels, opts);
     BinaryTreeCoverage<uint> global_coverage;
-    size_t target_covered = 0;
     size_t target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
         target_total = size_t(1) << level;
         const BinaryTreeCoverage<uint>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
-        switch (level) {
-            case 1:
-                target_covered = 1;
-                break;
-            case 2:
-                target_covered = 3;
-                break;
-            case 3:
-                target_covered = 6;
-                break;
-            case 4:
-                target_covered = 13;
-                break;
-            case 5:
-                target_covered = 28;
-                break;
-            case 6:
-                target_covered = 56;
-                break;
-            case 7:
-                target_covered = 115;
-                break;
-            case 8:
-                target_covered = 237;
-                break;
-            case 9:
-                target_covered = 474;
-                break;
-            case 10:
-                target_covered = 960;
-                break;
-            case 11:
-                target_covered = 1920;
-                break;
-            case 12:
-                target_covered = 3870;
-                break;
-            case 13:
-                target_covered = 7825;
-                break;
-            case 14:
-                target_covered = 15650;
-                break;
-            case 15:
-                target_covered = 31473;
-                break;
-            case 16:
-                target_covered = 63422;
-                break;
-            default:
-                assert(false);
-                break;
-        }
-        // std::cout << "Level: " << level << std::endl;
-        // std::cout << "coverage_mpz->get_covered(): " << coverage->get_covered() << "  (target: " << target_covered << ")" << std::endl;
-        // std::cout << "coverage_mpz->get_total(): " << coverage->get_total() << "  (target: " << target_total << ")" << std::endl;
-        // std::cout << std::endl;
-        assert(coverage->get_covered() == target_covered);
+        assert(coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
         assert(coverage->get_total() == target_total);
     }
-    assert(global_coverage.get_covered() == 126053);
-    assert(global_coverage.get_total() == 131070);
-    // Tree should always have: 2^(level+1) - 2 nodes total.
-    assert(tree.node_count() == (std::pow(2, tree.get_level_count() + 1) - 2));
-    assert(tree.node_count_with_root() == (std::pow(2, tree.get_level_count() + 1) - 1));
-    BinaryTree<mpz_class> tree_mpz(16);
+    assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
+    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
+    if (tree.is_high_water_mark_pruned()) {
+        // Pruned trees should have their node count match the known coverage + count == total
+        assert(tree.node_count() + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    } else {
+        assert(tree.node_count() == (std::pow(2, tree.get_level_count() + 1) - 2));
+        assert(tree.node_count_with_root() == (std::pow(2, tree.get_level_count() + 1) - 1));
+    }
+
+    // GMP (mpz_class) form.
+    BinaryTree<mpz_class> tree_mpz(levels, opts);
     BinaryTreeCoverage<mpz_class> global_coverage_mpz;
-    mpz_class target_covered_mpz = 0;
     mpz_class target_total_mpz = 0;
     for (size_t level=1; level<=tree_mpz.get_level_count(); level++) {
         target_total_mpz = CollatzConstants::MPZ_ONE << level;
         const BinaryTreeCoverage<mpz_class>* coverage_mpz = &tree_mpz.get_coverage_map().find(level)->second;
         global_coverage_mpz.add_covered(coverage_mpz->get_covered());
         global_coverage_mpz.add_total(coverage_mpz->get_total());
-        switch (level) {
-            case 1:
-                target_covered_mpz = 1;
-                break;
-            case 2:
-                target_covered_mpz = 3;
-                break;
-            case 3:
-                target_covered_mpz = 6;
-                break;
-            case 4:
-                target_covered_mpz = 13;
-                break;
-            case 5:
-                target_covered_mpz = 28;
-                break;
-            case 6:
-                target_covered_mpz = 56;
-                break;
-            case 7:
-                target_covered_mpz = 115;
-                break;
-            case 8:
-                target_covered_mpz = 237;
-                break;
-            case 9:
-                target_covered_mpz = 474;
-                break;
-            case 10:
-                target_covered_mpz = 960;
-                break;
-            case 11:
-                target_covered_mpz = 1920;
-                break;
-            case 12:
-                target_covered_mpz = 3870;
-                break;
-            case 13:
-                target_covered_mpz = 7825;
-                break;
-            case 14:
-                target_covered_mpz = 15650;
-                break;
-            case 15:
-                target_covered_mpz = 31473;
-                break;
-            case 16:
-                target_covered_mpz = 63422;
-                break;
-            default:
-                assert(false);
-                break;
-        }
-        // std::cout << "Level: " << level << std::endl;
-        // std::cout << "coverage_mpz->get_covered(): " << coverage_mpz->get_covered() << "  (target: " << target_covered_mpz << ")" << std::endl;
-        // std::cout << "coverage_mpz->get_total(): " << coverage_mpz->get_total() << "  (target: " << target_total_mpz << ")" << std::endl;
-        // std::cout << std::endl;
-        assert(coverage_mpz->get_covered() == target_covered_mpz);
+        assert(coverage_mpz->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
         assert(coverage_mpz->get_total() == target_total_mpz);
     }
-    assert(global_coverage_mpz.get_covered() == 126053);
-    assert(global_coverage_mpz.get_total() == 131070);
-    // Tree should always have: 2^(level+1) - 2 nodes total.
-    assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_level_count() + 1) - 2));
-    assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_level_count() + 1) - 1));
+    assert(global_coverage_mpz.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
+    assert(global_coverage_mpz.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
+    if (tree_mpz.is_high_water_mark_pruned()) {
+        assert(tree_mpz.node_count() + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    } else {
+        assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_level_count() + 1) - 2));
+        assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_level_count() + 1) - 1));
+    }
 }
 
 void test_binary_tree_node_count_should_match_map() {
@@ -263,6 +165,29 @@ void test_binary_tree_too_many_levels() {
     }
 }
 
+void test_binary_tree_multi_threaded() {
+    test_binary_tree_coverage(16, 4);
+}
+
+void test_binary_tree_pruned() {
+    BinaryTreeOptions opts_with_prune;
+    opts_with_prune.high_water_mark_pruning = true;
+    test_binary_tree_coverage(16, 1, opts_with_prune);
+    // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
+    for (size_t level = 1; level <= BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL - 1; level ++) {
+        test_binary_tree_coverage(level, 1, opts_with_prune);
+    }
+    // A pruned tree should always have a drastically smaller size.
+    size_t levels = 16;
+    float reduction_factor = 0.9;
+    BinaryTree<uint64_t> tree_raw(levels);
+    BinaryTree<uint64_t> tree_pruned(levels, opts_with_prune);
+    assert(tree_raw.deep_size() * reduction_factor > tree_pruned.deep_size());
+    BinaryTree<mpz_class> tree_raw_mpz(levels);
+    BinaryTree<mpz_class> tree_pruned_mpz(levels, opts_with_prune);
+    assert(tree_raw_mpz.deep_size() * reduction_factor > tree_pruned_mpz.deep_size());
+}
+
 int main() {
     test_binary_tree_basic_construction();
     std::cout << "test_binary_tree_basic_construction() passed\n";
@@ -276,12 +201,16 @@ int main() {
     std::cout << "test_binary_tree_with_mpz() passed\n";
     test_generate_node_at_mpz();
     std::cout << "test_generate_node_at_mpz() passed\n";
-    test_binary_tree_16_levels();
-    std::cout << "test_binary_tree_16_levels() passed\n";
+    test_binary_tree_coverage();
+    std::cout << "test_binary_tree_coverage() passed\n";
     test_binary_tree_node_count_should_match_map();
     std::cout << "test_binary_tree_node_count_should_match_map() passed\n";
     test_binary_tree_too_many_levels();
     std::cout << "test_binary_tree_too_many_levels() passed\n";
+    test_binary_tree_multi_threaded();
+    std::cout << "test_binary_tree_multi_threaded() passed\n";
+    test_binary_tree_pruned();
+    std::cout << "test_binary_tree_pruned() passed\n";
 
     std::cout << "All BinaryTree<T> tests passed.\n";
     return 0;

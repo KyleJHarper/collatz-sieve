@@ -7,6 +7,7 @@
 #include <string>
 #include <format>
 #include "collatz/binary_tree.hpp"
+#include "collatz/binary_tree_coverage.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/concepts.hpp"
 #include <fstream>
@@ -90,6 +91,15 @@ int main(int argc, char **argv) {
     size_t levels;
     options.add_option("-l,--levels", levels, "How many levels to check.")->default_val(16);
     CLI11_PARSE(options, argc, argv);
+
+    BinaryTreeOptions opts;
+    opts.high_water_mark_pruning = true;
+    BinaryTree<uint64_t> pruned_tree(16, opts);
+    std::cout << "Tree has size: " << pruned_tree.deep_size() << std::endl;
+    std::cout << "  Node count: " << pruned_tree.node_count() << std::endl;
+    std::cout << "  Coverage sum: " << BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(16) << std::endl;
+    std::cout << "  Total sum: " << BinaryTreeCoverageConstants::get_total_sum_to_level(16) << std::endl;
+    return 0;
 
     // Size Data
     std::cout << "Building objects for size data with " << levels << " levels..." << std::flush;

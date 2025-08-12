@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstddef>
 #include <gmp.h>
 #include <gmpxx.h>
 #include <limits>
@@ -82,19 +83,16 @@ class BinaryTree {
     bool tracking_metadata() const { return _track_node_metadata; }
 
     // Node Counts
-    const T node_count() const {
+    T node_count() const {
         // It should be: 2^(max_levels + 1) - 1 (if we count node 0)
-        if constexpr(std::integral<T>) {
-            return (std::pow(2, _level_count + 1) - 2);
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            T result = 0;
-            mpz_ui_pow_ui(result.get_mpz_t(), 2, _level_count + 1);
-            result = result - 2;
-            return result;
+        // However, due to pruning, just add up the size() values of each level.
+        T total = 0;
+        for (size_t level = 1; level <= _level_count; level++) {
+            total += _level_map.at(level).size();
         }
-        throw std::runtime_error("Unable to determine type for calculating node_count().");
+        return total;
     }
-    const T node_count_with_root() const {
+    T node_count_with_root() const {
         return node_count() + 1;
     }
 
@@ -144,19 +142,23 @@ class BinaryTree {
             step = static_cast<T>(1ULL << parent_level);
         }
         // Loop through the parents to build the children.
+        // Use size_t because that's more objects than we could ever hold in RAM anyway, and if we're past 2^64, we're
+        // obviously using HWM pruning, which means counts will fit in size_t anyway.
         auto& parents = _level_map[parent_level];
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
-        size_t pruned_count = 0;
+        size_t covered_or_pruned = 0;
+        // Resize the vector.
         _level_map[child_level].resize(child_count);
         // Making these thread-local is a bit of a trick; it makes OMP think they're shared, but the
         // thread-local nature means they stay separated.  Prevents realloc() within the loop.
         thread_local T child_value_1;
         thread_local T child_value_2;
-        #pragma omp parallel for schedule(guided) reduction(+:pruned_count) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_hwm_pruned)
+        #pragma omp parallel for schedule(guided) reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_hwm_pruned)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
-            // Get the child values.  Avoid alloc() with GMP with arithmetic operators.
+            // Find parent.
             Node<T>* parent = parents[parent_idx];
+            // Get the child values.  Avoid alloc() with GMP with arithmetic operators.
             if constexpr(std::same_as<T, mpz_class>) {
                 mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
                 mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
@@ -167,29 +169,53 @@ class BinaryTree {
             // Create the children.
             Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
             Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
-            // Prune them if necessesary.  Otherwise add them to the map.
-            if (_is_hwm_pruned && child_1->is_below_high_water_mark()) {
-                delete child_1;
-                child_1 = nullptr;
-                pruned_count += 1;
-            } else {
+            // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
+            bool assign_to_map = true;
+            if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
+                covered_or_pruned += 1;
+                if (_is_hwm_pruned) {
+                    delete child_1;
+                    child_1 = nullptr;
+                    assign_to_map = false;
+                }
+            }
+            if (assign_to_map) {
                 _level_map[child_level][2 * parent_idx] = child_1;
                 parent->assign_child(child_1);
             }
-            if (_is_hwm_pruned && child_2->is_below_high_water_mark()) {
-                delete child_2;
-                child_2 = nullptr;
-                pruned_count += 1;
-            } else {
+            assign_to_map = true;
+            if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
+                covered_or_pruned += 1;
+                if (_is_hwm_pruned) {
+                    delete child_2;
+                    child_2 = nullptr;
+                    assign_to_map = false;
+                }
+            }
+            if (assign_to_map) {
                 _level_map[child_level][2 * parent_idx + 1] = child_2;
                 parent->assign_child(child_2);
             }
         }
-        // Establish the coverage.  Covered is always 0, but total is simply step * 2.
-        // GMP Internals are not default-initialized to 0.
-        // Since we prune, we need to track not-covered and subtract from the total.
+
+        // When pruning, we need to remove any nullptr (pruned) children from the vector to keep counts accurate on next loop.
+        if (_is_hwm_pruned) {
+            std::vector<Node<T>*>& children = _level_map[child_level];
+            children.erase(
+                std::remove(children.begin(), children.end(), nullptr),
+                children.end()
+            );
+            children.shrink_to_fit();
+        }
+
+        // Coverage is added above.  If pruning, logic is different because ancestors were purged already, which means
+        // their descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, we
+        // can rely on .size() to tell us how many are *not* covered, which means covered = total - .size().
         T total = step * 2;
-        T covered = total - _level_map[child_level].size() + pruned_count;
+        T covered = covered_or_pruned;
+        if (_is_hwm_pruned ) {
+            covered = total - _level_map[child_level].size();
+        }
         _coverage_map[child_level] = BinaryTreeCoverage<T>(covered, total);
     }
 

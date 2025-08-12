@@ -107,7 +107,7 @@ namespace CollatzConstants {
     // Works for runtime or compile-time
     inline size_t get_max_initial_value_by_bit(size_t bit_size) {
         if (bit_size >= MAX_INITIAL_VALUE_BY_BIT.size()) {
-            throw std::out_of_range("Bit size not found");
+            throw std::out_of_range("Bit size " + std::to_string(bit_size) + " not found in MAX_INITIAL_VALUE_BY_BIT");
         }
         return MAX_INITIAL_VALUE_BY_BIT[bit_size];
     }
