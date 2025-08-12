@@ -16,18 +16,20 @@ class CoverageBuilder {
 
     public:
     CoverageBuilder() {
-        _tree.init(0, false);
+        BinaryTreeOptions opts;
+        opts.track_node_metadata = true;
+        _tree.init(0, opts);
     }
 
     const BinaryTree<T>& get_tree() const { return _tree; }
     // Add levels until we reach `levels` from caller.
     void run(size_t levels) {
-        while(_tree.get_max_level() < levels) {
+        while(_tree.get_level_count() < levels) {
             add_level();
         }
     }
     void add_level() {
-        size_t next_level = _tree.get_max_level() + 1;
+        size_t next_level = _tree.get_level_count() + 1;
         logger->debug("Building level {}...", next_level);
         _tree.add_level();
         BinaryTreeCoverage<T> coverage = _tree.get_coverage_map().find(next_level)->second;

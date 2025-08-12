@@ -225,6 +225,26 @@ class Node {
     }
 
     // Release children tracking and, if enabled, their memory.
+    void release_child(Node<T>* child) {
+        for (size_t i = 0; i < MAX_CHILDREN; i++) {
+            // Find the Child
+            if (_children[i] == child) {
+                // Delete if owned.
+                if (_owns_children) {
+                    delete _children[i];
+                }
+                // Null out our reference.
+                _children[i] = nullptr;
+                // Push any other children toward the front.
+                for (size_t j = i + 1; j < MAX_CHILDREN; j++) {
+                    _children[j - 1] = _children[j];
+                }
+                // Decrement the count and leave.
+                _child_count--;
+                break;
+            }
+        }
+    }
     void release_children() {
         for (size_t i = 0; i < MAX_CHILDREN; i++) {
             if (_owns_children) {

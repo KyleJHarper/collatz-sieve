@@ -12,7 +12,7 @@ void test_binary_tree_basic_construction() {
     BinaryTree<uint> tree4(5);
     BinaryTree<uint> tree5(6);
     BinaryTree<uint> tree6(7);
-    assert(tree.get_max_level() == 3);
+    assert(tree.get_level_count() == 3);
     const auto& map = tree.get_level_map();
 
     // Level 0: root
@@ -82,7 +82,7 @@ void test_binary_tree_16_levels() {
     BinaryTreeCoverage<uint> global_coverage;
     size_t target_covered = 0;
     size_t target_total = 0;
-    for (size_t level=1; level<=tree.get_max_level(); level++) {
+    for (size_t level=1; level<=tree.get_level_count(); level++) {
         target_total = size_t(1) << level;
         const BinaryTreeCoverage<uint>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
@@ -150,13 +150,13 @@ void test_binary_tree_16_levels() {
     assert(global_coverage.get_covered() == 126053);
     assert(global_coverage.get_total() == 131070);
     // Tree should always have: 2^(level+1) - 2 nodes total.
-    assert(tree.node_count() == (std::pow(2, tree.get_max_level() + 1) - 2));
-    assert(tree.node_count_with_root() == (std::pow(2, tree.get_max_level() + 1) - 1));
+    assert(tree.node_count() == (std::pow(2, tree.get_level_count() + 1) - 2));
+    assert(tree.node_count_with_root() == (std::pow(2, tree.get_level_count() + 1) - 1));
     BinaryTree<mpz_class> tree_mpz(16);
     BinaryTreeCoverage<mpz_class> global_coverage_mpz;
     mpz_class target_covered_mpz = 0;
     mpz_class target_total_mpz = 0;
-    for (size_t level=1; level<=tree_mpz.get_max_level(); level++) {
+    for (size_t level=1; level<=tree_mpz.get_level_count(); level++) {
         target_total_mpz = CollatzConstants::MPZ_ONE << level;
         const BinaryTreeCoverage<mpz_class>* coverage_mpz = &tree_mpz.get_coverage_map().find(level)->second;
         global_coverage_mpz.add_covered(coverage_mpz->get_covered());
@@ -224,8 +224,8 @@ void test_binary_tree_16_levels() {
     assert(global_coverage_mpz.get_covered() == 126053);
     assert(global_coverage_mpz.get_total() == 131070);
     // Tree should always have: 2^(level+1) - 2 nodes total.
-    assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_max_level() + 1) - 2));
-    assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_max_level() + 1) - 1));
+    assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_level_count() + 1) - 2));
+    assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_level_count() + 1) - 1));
 }
 
 void test_binary_tree_node_count_should_match_map() {
@@ -235,7 +235,7 @@ void test_binary_tree_node_count_should_match_map() {
     size_t expected_count = (2ULL << levels) - 2;
     size_t map_count = 0;
     const auto& map = tree.get_level_map();
-    for (size_t i = 1; i <= tree.get_max_level(); i++) {
+    for (size_t i = 1; i <= tree.get_level_count(); i++) {
         map_count += map.at(i).size();
     }
     assert(tree.node_count() == expected_count);

@@ -104,20 +104,22 @@ int main(int argc, char **argv) {
     Node node_uint64_t_with_metadata = Node<uint64_t>(27, true);
     Node node_mpz_c_with_metadata = Node<mpz_class>(27, true);
     //
+    BinaryTreeOptions BTWithMetadata = {.track_node_metadata = true };
+    BinaryTreeOptions BTWithoutMetadata = {.track_node_metadata = false };
     size_t rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t = BinaryTree<uint64_t>(levels, false);
+    BinaryTree tree_uint64_t = BinaryTree<uint64_t>(levels, BTWithoutMetadata);
     size_t rss_uint64_t = getCurrentRSSBytes() - rss_t1;
     //
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c = BinaryTree<mpz_class>(levels, false);
+    BinaryTree tree_mpz_c = BinaryTree<mpz_class>(levels, BTWithoutMetadata);
     size_t rss_mpz_c = getCurrentRSSBytes() - rss_t1;
     //
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t_with_metadata = BinaryTree<uint64_t>(levels, true);
+    BinaryTree tree_uint64_t_with_metadata = BinaryTree<uint64_t>(levels, BTWithMetadata);
     size_t rss_uint64_t_with_metadata = getCurrentRSSBytes() - rss_t1;
     //
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c_with_metadata = BinaryTree<mpz_class>(levels, true);
+    BinaryTree tree_mpz_c_with_metadata = BinaryTree<mpz_class>(levels, BTWithMetadata);
     size_t rss_mpz_c_with_metadata = getCurrentRSSBytes() - rss_t1;
     size_t bytes_per_node_uint64_t = tree_uint64_t.deep_size() / tree_uint64_t.node_count();
     size_t bytes_per_node_mpz_c = tree_mpz_c.deep_size() / tree_mpz_c.node_count().get_ui();
