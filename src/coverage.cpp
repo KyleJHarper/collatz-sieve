@@ -23,6 +23,7 @@ class CoverageBuilder {
         BinaryTreeOptions opts;
         opts.track_node_metadata = false;
         opts.pruned = true;
+        opts.preserve_ancestors = true;
         _tree.init(0, opts);
     }
 
@@ -67,7 +68,7 @@ class CoverageBuilder {
 
 
 template<IntegralOrMPZClass T>
-void run(size_t levels, bool use_precomputed) {
+void run(size_t levels, bool use_precomputed, bool show_ancestors) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T> builder;
     builder.get_tree().assert_level_will_fit(levels);
@@ -88,6 +89,23 @@ void run(size_t levels, bool use_precomputed) {
         }
     }
     logger->info("Global Coverage: {:.4f}% ({}/{} | {} uncovered)", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total(), global_coverage.get_uncovered());
+    if (show_ancestors) {
+        std::string merged = "";
+        for (Node<T>* ancestor : builder.get_tree().get_ancestors()) {
+            std::string s_val;
+            if constexpr(std::integral<T>) {
+                s_val = std::to_string(ancestor->get_value());
+            } else {
+                s_val = ancestor->get_value().get_str();
+            }
+            if (merged.empty()) {
+                merged = s_val;
+            } else {
+                merged += ", " + s_val;
+            }
+        }
+        logger->info("Ancestors: " + merged);
+    }
 }
 
 
@@ -99,7 +117,9 @@ int main(int argc, char **argv) {
     bool verbose = false;
     bool force_mpz = false;
     bool use_precomputed = false;
+    bool show_ancestors = false;
     CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
+    options.add_flag("-a,--ancestors", show_ancestors, "Show a list of all the high-water mark ancestors when done.");
     options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
     options.add_flag("-p,--precomputed", use_precomputed, "Use the precomputed table in BinaryTreeCoverage when possible.");
@@ -122,9 +142,9 @@ int main(int argc, char **argv) {
         logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
     }
     if (use_mpz) {
-        run<mpz_class>(levels, use_precomputed);
+        run<mpz_class>(levels, use_precomputed, show_ancestors);
     } else {
-        run<uint64_t>(levels, use_precomputed);
+        run<uint64_t>(levels, use_precomputed, show_ancestors);
     }
 
     return 0;

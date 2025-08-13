@@ -5,6 +5,7 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <limits>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -20,6 +21,7 @@
 struct BinaryTreeOptions {
     bool track_node_metadata = false;
     bool pruned = false;
+    bool preserve_ancestors = false;
 };
 
 
@@ -37,9 +39,11 @@ class BinaryTree {
     size_t _level_count = 0;
     std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
+    std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
     bool _track_node_metadata = false;
     bool _is_pruned = false;
+    bool _preserve_ancestors = false;
 
     public:
     // Constructor and Init
@@ -56,6 +60,7 @@ class BinaryTree {
         _is_initialized = true;
         _track_node_metadata = opts.track_node_metadata;
         _is_pruned = opts.pruned;
+        _preserve_ancestors = opts.preserve_ancestors;
         _root_node = new Node<T>(0, _track_node_metadata);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
@@ -70,6 +75,7 @@ class BinaryTree {
         _is_initialized = false;
         _track_node_metadata = BinaryTreeOptions{}.track_node_metadata;
         _is_pruned = BinaryTreeOptions{}.pruned;
+        _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
 
     // Destructor
@@ -95,6 +101,7 @@ class BinaryTree {
     Node<T>* get_root_node() const { return _root_node; }
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
+    const std::vector<Node<T>*> get_ancestors() const { return _ancestors; }
     bool is_pruned() const { return _is_pruned; }
     bool tracking_metadata() const { return _track_node_metadata; }
 
@@ -170,7 +177,9 @@ class BinaryTree {
         // thread-local nature means they stay separated.  Prevents realloc() within the loop.
         thread_local T child_value_1;
         thread_local T child_value_2;
-        #pragma omp parallel for schedule(guided) reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruned)
+        // Guard _ancestors with a mutex.
+        std::mutex ancestor_lock;
+        #pragma omp parallel for schedule(guided) reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruned, ancestor_lock)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
             // Find parent.
             Node<T>* parent = parents[parent_idx];
@@ -187,6 +196,10 @@ class BinaryTree {
             Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
             // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
             bool assign_to_map = true;
+            if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
+                std::lock_guard<std::mutex> lock(ancestor_lock);
+                _ancestors.push_back(new Node<T>(child_1->get_value(), false));
+            }
             if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
                 covered_or_pruned += 1;
                 if (_is_pruned) {
@@ -202,6 +215,10 @@ class BinaryTree {
                 }
             }
             assign_to_map = true;
+            if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
+                std::lock_guard<std::mutex> lock(ancestor_lock);
+                _ancestors.push_back(new Node<T>(child_2->get_value(), false));
+            }
             if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
                 covered_or_pruned += 1;
                 if (_is_pruned) {
