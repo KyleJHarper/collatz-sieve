@@ -27,7 +27,8 @@ TESTS = collatz_class \
 	node_class \
 	binary_tree_class
 DEBUG_TESTS = $(addsuffix $(DEBUG_SUFFIX), $(TESTS))
-PROGRAMS = coverage \
+PROGRAMS = ancestor_coverage \
+	coverage \
     high_water_mark \
 	peak_by_bit \
 	performance_stats \

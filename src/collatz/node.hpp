@@ -288,6 +288,7 @@ class Node {
     bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
     bool is_initialized() const { return _is_initialized; }
     bool does_own_children() const { return _owns_children; }
+    const Node<T>* get_child(size_t index) const { return _children[index]; }
     size_t get_child_count() const { return static_cast<size_t>(_child_count); }
     size_t get_oe_chain_length() const { return static_cast<size_t>(_oe_chain_length); }
     // Metadata
