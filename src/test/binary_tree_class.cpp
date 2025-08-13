@@ -85,12 +85,12 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     omp_set_num_threads(threads);
 
     // Unsigned integral form.
-    BinaryTree<uint> tree(levels, opts);
-    BinaryTreeCoverage<uint> global_coverage;
+    BinaryTree<uint64_t> tree(levels, opts);
+    BinaryTreeCoverage<uint64_t> global_coverage;
     size_t target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
         target_total = size_t(1) << level;
-        const BinaryTreeCoverage<uint>* coverage = &tree.get_coverage_map().find(level)->second;
+        const BinaryTreeCoverage<uint64_t>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
         assert(coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
@@ -99,9 +99,14 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
     assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-    if (tree.is_high_water_mark_pruned()) {
+    if (tree.is_pruned()) {
         // Pruned trees should have their node count match the known coverage + count == total
-        assert(tree.node_count() + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+        // However, their actual node count will be smaller because entire levels are deleted.  So the coverage needs added in.
+        size_t node_count_plus_uncovered = tree.node_count();
+        for (size_t level = 1; level<tree.get_level_count(); level++) {
+            node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
+        }
+        assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     } else {
         assert(tree.node_count() == (std::pow(2, tree.get_level_count() + 1) - 2));
         assert(tree.node_count_with_root() == (std::pow(2, tree.get_level_count() + 1) - 1));
@@ -122,8 +127,14 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     assert(global_coverage_mpz.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
     assert(global_coverage_mpz.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-    if (tree_mpz.is_high_water_mark_pruned()) {
-        assert(tree_mpz.node_count() + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    if (tree_mpz.is_pruned()) {
+        // Pruned trees should have their node count match the known coverage + count == total
+        // However, their actual node count will be smaller because entire levels are deleted.  So the coverage needs added in.
+        mpz_class node_count_plus_uncovered_mpz = tree.node_count();
+        for (size_t level = 1; level<tree.get_level_count(); level++) {
+            node_count_plus_uncovered_mpz += tree.get_coverage_map().find(level)->second.get_uncovered();
+        }
+        assert(node_count_plus_uncovered_mpz + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     } else {
         assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_level_count() + 1) - 2));
         assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_level_count() + 1) - 1));
@@ -171,10 +182,11 @@ void test_binary_tree_multi_threaded() {
 
 void test_binary_tree_pruned() {
     BinaryTreeOptions opts_with_prune;
-    opts_with_prune.high_water_mark_pruning = true;
+    opts_with_prune.pruned = true;
     test_binary_tree_coverage(16, 1, opts_with_prune);
     // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
-    for (size_t level = 1; level <= BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL - 1; level ++) {
+    size_t max_test_level = 20;
+    for (size_t level = 1; level <= max_test_level; level ++) {
         test_binary_tree_coverage(level, 1, opts_with_prune);
     }
     // A pruned tree should always have a drastically smaller size.

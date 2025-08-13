@@ -1,6 +1,9 @@
 #include <gmpxx.h>
+#include <stdexcept>
 #include <stdint.h>
+#include <string>
 #include "collatz/binary_tree.hpp"
+#include "collatz/binary_tree_coverage.hpp"
 #include "collatz/concepts.hpp"
 #include "CLI11.hpp"
 #include "logging.hpp"
@@ -13,20 +16,39 @@ template<IntegralOrMPZClass T>
 class CoverageBuilder {
     private:
     BinaryTree<T> _tree;
+    bool _use_precomputed = false;
 
     public:
     CoverageBuilder() {
         BinaryTreeOptions opts;
         opts.track_node_metadata = false;
-        opts.high_water_mark_pruning = true;
+        opts.pruned = true;
         _tree.init(0, opts);
     }
 
     const BinaryTree<T>& get_tree() const { return _tree; }
     // Add levels until we reach `levels` from caller.
     void run(size_t levels) {
-        while(_tree.get_level_count() < levels) {
-            add_level();
+        if (_use_precomputed) {
+            if (levels > BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL) {
+                std::string msg = "You can't use precomputed coverage after level ";
+                msg += std::to_string(BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL) + ".";
+                msg += "  (You requested " + std::to_string(levels) + " levels.)";
+                throw std::out_of_range(msg);
+            }
+            // Just spit out the results.
+            BinaryTreeCoverage<T> global_coverage;
+            for (size_t level = 1; level <= levels; level++) {
+                BinaryTreeCoverage<T> coverage;
+                coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage(level));
+                coverage.set_total(BinaryTreeCoverageConstants::get_total(level));
+                global_coverage.merge(coverage);
+                logger->debug("Level {} coverage was: {:.4f}% ({}/{} | {} uncovered globally)", level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total(), global_coverage.get_uncovered());
+            }
+        } else {
+            while(_tree.get_level_count() < levels) {
+                add_level();
+            }
         }
     }
     void add_level() {
@@ -40,19 +62,30 @@ class CoverageBuilder {
         }
         logger->debug("Level {} coverage was: {:.4f}% ({}/{} | {} uncovered globally)", next_level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total(), global_coverage.get_uncovered());
     }
+    void use_precomputed(bool value) { _use_precomputed = value; }
 };
 
 
 template<IntegralOrMPZClass T>
-void run(size_t levels) {
+void run(size_t levels, bool use_precomputed) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T> builder;
     builder.get_tree().assert_level_will_fit(levels);
+    builder.use_precomputed(use_precomputed);
     builder.run(levels);
-    coverage_map = builder.get_tree().get_coverage_map();
     BinaryTreeCoverage<T> global_coverage;
-    for (auto& [level, coverage] : coverage_map) {
-        global_coverage.merge(coverage);
+    if (use_precomputed) {
+        for (size_t level = 1; level <= levels; level++) {
+            BinaryTreeCoverage<T> coverage;
+            coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage(level));
+            coverage.set_total(BinaryTreeCoverageConstants::get_total(level));
+            global_coverage.merge(coverage);
+        }
+    } else {
+        coverage_map = builder.get_tree().get_coverage_map();
+        for (auto& [level, coverage] : coverage_map) {
+            global_coverage.merge(coverage);
+        }
     }
     logger->info("Global Coverage: {:.4f}% ({}/{} | {} uncovered)", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total(), global_coverage.get_uncovered());
 }
@@ -63,11 +96,13 @@ int main(int argc, char **argv) {
     init_logger();
     // Process options.
     size_t levels;
-    bool verbose;
-    bool force_mpz;
+    bool verbose = false;
+    bool force_mpz = false;
+    bool use_precomputed = false;
     CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
     options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
+    options.add_flag("-p,--precomputed", use_precomputed, "Use the precomputed table in BinaryTreeCoverage when possible.");
     options.add_flag(
         "-v,--verbose"
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
@@ -77,15 +112,19 @@ int main(int argc, char **argv) {
     logger->debug("Selected options were:");
     logger->debug("  Force MPZ: {}", force_mpz);
     logger->debug("  Levels: {}", levels);
+    logger->debug("  Use Precomputed: {}", use_precomputed);
     logger->debug("  Verbose: {}", verbose);
 
     // Build the tree object with no levels to start.
     bool use_mpz = (force_mpz || levels > 63) ? true : false;
     logger->info("Building tree with {} levels, using {}.", levels, use_mpz ? "GMP" : "uint64_t");
+    if (use_precomputed) {
+        logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
+    }
     if (use_mpz) {
-        run<mpz_class>(levels);
+        run<mpz_class>(levels, use_precomputed);
     } else {
-        run<uint64_t>(levels);
+        run<uint64_t>(levels, use_precomputed);
     }
 
     return 0;

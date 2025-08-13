@@ -11,8 +11,8 @@
 //
 namespace BinaryTreeCoverageConstants {
     // Precomputed coverage for given levels.
-    constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 17;
-    constexpr std::array<size_t, MAX_KNOWN_COVERAGE_LEVEL> KNOWN_COVERAGE = {
+    constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 32;
+    constexpr std::array<size_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE = {
         0,  // 0
         1,  // 1
         3,  // 2
@@ -30,9 +30,25 @@ namespace BinaryTreeCoverageConstants {
         15650,  // 14
         31473,  // 15
         63422,  // 16
+        126844, // 17
+        254649,  //18
+        509298,  // 19
+        1021248,  // 20
+        2050541,  // 21
+        4101082,  // 22
+        8219801,  // 23
+        16490635,  // 24
+        32981270,  // 25
+        66071490,  // 26
+        132455435,  // 27
+        264910870,  // 28
+        530485275,  // 29
+        1060970550,  // 30
+        2123841570,  // 31
+        4253619813,  // 32
     };
     inline size_t get_known_coverage(size_t level) {
-        if (level >= KNOWN_COVERAGE.size()) {
+        if (level > MAX_KNOWN_COVERAGE_LEVEL) {
             throw std::out_of_range("Level " + std::to_string(level) + " not found in KNOWN_COVERAGE");
         }
         return KNOWN_COVERAGE[level];

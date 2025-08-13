@@ -18,6 +18,19 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 1.1.0
+When `prune` is enabled, the BinaryTree will also remove parent nodes at the end of `add_level()`.  This cuts the tree in half
+(RAM) without affecting the `_coverage_map` data.
+
+| Version | Data Type | RAM (bytes) | RSS (bytes) | CPU (ms, 1 thr) |
+| :------ | :-------- | ----------: | ----------: | --------------: |
+| 0.8.1   | uint64_t  |   8,389,976 |   9,830,400 |             127 |
+| 1.0.0   | uint64_t  |     322,584 |     524,288 |               6 |
+| 1.1.0   | uint64_t  |     136,728 |     393,216 |               2 |
+| 0.8.1   | mpz_class |   9,438,816 |  10,747,904 |             187 |
+| 1.0.0   | mpz_class |     363,000 |     393,216 |               8 |
+| 1.1.0   | mpz_class |     153,912 |     393,216 |               4 |
+
 ### 1.0.0
 The first full implementation of my algorithm!
 
