@@ -83,25 +83,14 @@ class BinaryTreeCoverage {
         _total += other_coverage.get_total();
     }
     // Setters
-    void set_covered(T covered) {
-        _covered = covered;
-    }
-    void set_total(T total) {
-        _total = total;
-    }
-    void add_covered(T count=1) {
-        _covered += count;
-    }
-    void add_total(T count=1) {
-        _total += count;
-    }
+    void set_covered(T covered) { _covered = covered; }
+    void set_total(T total) { _total = total; }
+    void add_covered(T count=1) { _covered += count; }
+    void add_total(T count=1) { _total += count; }
     // Getters
-    const T& get_covered() const {
-        return _covered;
-    }
-    const T& get_total() const {
-        return _total;
-    }
+    const T& get_covered() const { return _covered; }
+    const T& get_total() const { return _total; }
+    T get_uncovered() const { return _total - _covered; }
     // Get the ratio.  If total is 0 or negative, we will throw an error.
     const mpf_class get_ratio(bool as_percent = false) {
         if (_total < 1) {

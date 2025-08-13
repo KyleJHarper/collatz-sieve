@@ -17,7 +17,8 @@ class CoverageBuilder {
     public:
     CoverageBuilder() {
         BinaryTreeOptions opts;
-        opts.track_node_metadata = true;
+        opts.track_node_metadata = false;
+        opts.high_water_mark_pruning = true;
         _tree.init(0, opts);
     }
 
@@ -33,7 +34,11 @@ class CoverageBuilder {
         logger->debug("Building level {}...", next_level);
         _tree.add_level();
         BinaryTreeCoverage<T> coverage = _tree.get_coverage_map().find(next_level)->second;
-        logger->debug("Level {} coverage was: {:.4f}% ({}/{})", next_level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total());
+        BinaryTreeCoverage<T> global_coverage;
+        for (auto& [level, coverage] : _tree.get_coverage_map()) {
+            global_coverage.merge(_tree.get_coverage_map().find(level)->second);
+        }
+        logger->debug("Level {} coverage was: {:.4f}% ({}/{} | {} uncovered globally)", next_level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total(), global_coverage.get_uncovered());
     }
 };
 
@@ -42,13 +47,14 @@ template<IntegralOrMPZClass T>
 void run(size_t levels) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T> builder;
+    builder.get_tree().assert_level_will_fit(levels);
     builder.run(levels);
     coverage_map = builder.get_tree().get_coverage_map();
     BinaryTreeCoverage<T> global_coverage;
     for (auto& [level, coverage] : coverage_map) {
         global_coverage.merge(coverage);
     }
-    logger->info("Global Coverage: {:.4f}% ({}/{})", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total());
+    logger->info("Global Coverage: {:.4f}% ({}/{} | {} uncovered)", global_coverage.get_ratio(true).get_d(), global_coverage.get_covered(), global_coverage.get_total(), global_coverage.get_uncovered());
 }
 
 

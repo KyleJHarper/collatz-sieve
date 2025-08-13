@@ -220,16 +220,18 @@ class BinaryTree {
     }
 
     // Helper to determine if the level requested is going to fit within the bit-size of T.
-    void assert_level_will_fit(size_t level) {
+    void assert_level_will_fit(size_t level) const {
         if constexpr(std::integral<T>) {
             size_t bits = std::numeric_limits<T>::digits;
             T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
+            size_t max_level_allowed = max_full_level_of_n(max_iv_allowed);
             mpz_class max_iv_needed = max_node_n(level);
             if (max_iv_needed > max_iv_allowed) {
-                std::string type_id = typeid(T).name();
-                std::string s_level = std::to_string(level);
-                std::string s_bits = std::to_string(bits);
-                throw std::out_of_range("Cannot build a BinaryTree with " + s_level + " levels and type '" + type_id + "' with " + s_bits + " bits.  It will overflow.");
+                std::string msg = "Cannot build a BinaryTree with ";
+                msg += std::to_string(level) + " levels and type '" + typeid(T).name() + "' with ";
+                msg += std::to_string(bits) + " bits. A Collatz sequence will overflow.";
+                msg += " Max level for this type is " + std::to_string(max_level_allowed) + ".";
+                throw std::out_of_range(msg);
             }
         }
     }

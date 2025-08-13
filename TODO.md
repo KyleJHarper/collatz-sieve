@@ -1,5 +1,9 @@
 # Things To Do
 
+### Pruning
+The tree can prune now, but needs extra features.
+* Prune older levels entirely.  Just remove them from the `_level_map`.
+
 ### Arbitrary Tree Level
 * We should support building a tree from level M-N, where M >=1 and N > M.
 * We can build level M manually, which will be expensive.
