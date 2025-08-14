@@ -98,7 +98,7 @@ class Node {
     bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57
     bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57  (3 bits padding)
     uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58
-    uint16_t _oe_chain_length = 0;                       //         2 |    52 |         2 |    60
+    // uint16_t _fg_chain_length = 0;                       //         2 |    52 |         2 |    60
     // Alignment Padding                                 //         4 |    56 |         4 |    64
     // Free Padding to Cacheline                         //         8 |    64 |         0 |    64
     // -- Cache Line --
@@ -134,36 +134,42 @@ class Node {
             }
         }
 
-        // Leverage our parent's oe-chain size to determine ours.  When zero, there's no chain to get.
-        // We don't want to double-scan, so we'll employ optimism and pull back locally.
-        std::vector<bool> tmp_oe_chain;
-        if (_value > 0) {
-            if (parent == nullptr) {
-                _oe_chain_length = 1;
-            } else {
-                _oe_chain_length = parent->get_oe_chain_length() + (_value > 2 ? 2 : 1);
-            }
-            tmp_oe_chain.reserve(_oe_chain_length);
-            size_t count = 0;
-            Collatz<T>::for_each_sequence_step(_value, [&](const T& step) {
-                count++;
-                if constexpr(std::same_as<T, mpz_class>) {
-                    // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
-                    tmp_oe_chain.push_back(mpz_even_p(step.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
-                } else {
-                    // Integral modulo is cheap.  Usually bitwise.
-                    tmp_oe_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
-                }
-                return count >= _oe_chain_length;
-            });
-            // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
-            if (tmp_oe_chain.size() > 2) {
-                if (tmp_oe_chain[tmp_oe_chain.size() - 3] == CollatzConstants::EVEN) {
-                    tmp_oe_chain.pop_back();
-                    _oe_chain_length -= 1;
-                }
-            }
-        }
+        // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather
+        // tightly, but that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
+        size_t fg_size = get_level();
+        std::string fg_chain = Collatz<T>::get_fg_pattern_string(_value, fg_size);
+        std::string oe_chain = Collatz<T>::fg_to_oe(fg_chain);
+
+        // // Leverage our parent's oe-chain size to determine ours.  When zero, there's no chain to get.
+        // // We don't want to double-scan, so we'll employ optimism and pull back locally.
+        // std::vector<bool> tmp_oe_chain;
+        // if (_value > 0) {
+        //     if (parent == nullptr) {
+        //         _oe_chain_length = 1;
+        //     } else {
+        //         _oe_chain_length = parent->get_oe_chain_length() + (_value > 2 ? 2 : 1);
+        //     }
+        //     tmp_oe_chain.reserve(_oe_chain_length);
+        //     size_t count = 0;
+        //     Collatz<T>::for_each_sequence_step(_value, [&](const T& step) {
+        //         count++;
+        //         if constexpr(std::same_as<T, mpz_class>) {
+        //             // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
+        //             tmp_oe_chain.push_back(mpz_even_p(step.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
+        //         } else {
+        //             // Integral modulo is cheap.  Usually bitwise.
+        //             tmp_oe_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
+        //         }
+        //         return count >= _oe_chain_length;
+        //     });
+        //     // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
+        //     if (tmp_oe_chain.size() > 2) {
+        //         if (tmp_oe_chain[tmp_oe_chain.size() - 3] == CollatzConstants::EVEN) {
+        //             tmp_oe_chain.pop_back();
+        //             _oe_chain_length -= 1;
+        //         }
+        //     }
+        // }
 
         // Calculating twos, threes, fg data, and is_hwm uses thread_locals.  Reset/use them wisely!
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
@@ -289,8 +295,8 @@ class Node {
     bool is_initialized() const { return _is_initialized; }
     bool does_own_children() const { return _owns_children; }
     const Node<T>* get_child(size_t index) const { return _children[index]; }
-    size_t get_child_count() const { return static_cast<size_t>(_child_count); }
-    size_t get_oe_chain_length() const { return static_cast<size_t>(_oe_chain_length); }
+    size_t get_child_count() const { return static_cast<size_t>( _child_count); }
+    size_t get_oe_chain_length() const { return static_cast<size_t>( _oe_chain_length); }
     // Metadata
     const T& get_position() const {
         if (! _track_metadata) {
@@ -329,23 +335,13 @@ class Node {
         return _metadata->fg_total;
     }
 
-    // Get the odd-even chain.  Requires a collatz object.
+    // Get the F-G chain.  Use the Collatz static method for this.
+    // std::string get_fg_chain_string() const {
+
+    // }
+    // Get the odd-even chain.  Use the Collatz static method for this.
     std::string get_odd_even_chain_string() const {
-        std::string result;
-        result.reserve(_oe_chain_length);
-        size_t count = 0;
-        Collatz<T>::for_each_sequence_step(_value, [&] (const T& step) {
-            count++;
-            if constexpr(std::same_as<T, mpz_class>) {
-                // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
-                result.push_back(mpz_even_p(step.get_mpz_t()) ? 'E' : 'O');
-            } else {
-                // Integral modulo is cheap.  Usually bitwise.
-                result.push_back(step % 2 == 0 ? 'E' : 'O');
-            }
-            return count >= _oe_chain_length;
-        });
-        return result;
+        return Collatz<T>::get_oe_pattern_string(_value, _oe_chain_length);
     }
 
     // Child Management
