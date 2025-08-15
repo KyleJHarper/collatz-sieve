@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
     CLI11_PARSE(options, argc, argv);
     logger->debug("Selected options were:");
     logger->debug("  Levels: {}", levels);
+    logger->debug("  Scan Levels: {}", scan_levels);
     logger->debug("  Verbose: {}", verbose);
 
     // Build the tree.
@@ -40,7 +41,6 @@ int main(int argc, char **argv) {
 
     // Scan.
     const Node<tree_type> *descendant;
-    Collatz<tree_type> collatz;
     for (size_t level = 1; level < scan_levels; level++) {
         logger->debug("Scanning level {}", level);
         for (Node<tree_type>* node : tree.get_level_map().at(level)) {
@@ -49,29 +49,27 @@ int main(int argc, char **argv) {
             }
             logger->debug("Node {} doesn't have a HWM ancestor and needs help.", node->get_value());
             descendant = node;
-            collatz.init(node->get_value());
             while (true) {
-                logger->info("starting loop");
                 for (uint8_t i = 0; i < descendant->get_child_count(); i++) {
-                    logger->info("trying child {}", i);
                     // If the child matches the parent's next step, it is the correct child.
                     const Node<tree_type>* child = descendant->get_child(i);
-                    std::string node_full_pattern = collatz.get_oe_pattern_string();
-                    std::string child_oe_chain = child->get_odd_even_chain_string();
+                    logger->info("trying child {} with value {}", i, child->get_value());
+                    std::string node_full_fg_pattern = Collatz<uint64_t>::st_get_fg_pattern_string(node->get_value());
+                    std::string child_fg_chain = child->get_fg_chain_string();
                     // One (1) is a special case.
                     if (node->get_value() == 1) {
-                        node_full_pattern += "EE";
+                        node_full_fg_pattern += "G";
                     }
-                    logger->info("collatz.get_oe_pattern_string:    {}", node_full_pattern);
-                    logger->info("child->get_odd_even_chain_string: {}", child_oe_chain);
-                    if (node_full_pattern.starts_with(child_oe_chain)) {
+                    logger->info("node_full_fg_pattern: {}", node_full_fg_pattern);
+                    logger->info("child_fg_chain:       {}", child_fg_chain);
+                    if (node_full_fg_pattern.starts_with(child_fg_chain)) {
                         logger->debug("  > found the right descendant at: {}", child->get_value());
                         descendant = child;
                         break;
                     }
                 }
                 if (descendant->is_below_high_water_mark()) {
-                    logger->info("Found it");
+                    logger->info("Found a HWM descendant at {} to cover node {}", descendant->get_value(), node->get_value());
                     break;
                 }
             }

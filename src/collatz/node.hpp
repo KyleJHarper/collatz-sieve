@@ -3,8 +3,8 @@
 #include "collatz.hpp"
 #include "concepts.hpp"
 #include <gmp.h>
-#include <vector>
 #include <cmath>
+#include <limits>
 #include "gmp_helpers.hpp"
 
 
@@ -98,8 +98,8 @@ class Node {
     bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57
     bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57  (3 bits padding)
     uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58
-    // uint16_t _fg_chain_length = 0;                       //         2 |    52 |         2 |    60
-    // Alignment Padding                                 //         4 |    56 |         4 |    64
+    uint8_t _fg_chain_length = 0;                        //         1 |    51 |         1 |    59
+    // Alignment Padding                                 //         5 |    56 |         5 |    64
     // Free Padding to Cacheline                         //         8 |    64 |         0 |    64
     // -- Cache Line --
 
@@ -136,57 +136,28 @@ class Node {
 
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather
         // tightly, but that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
-        size_t fg_size = get_level();
-        std::string fg_chain = Collatz<T>::get_fg_pattern_string(_value, fg_size);
-        std::string oe_chain = Collatz<T>::fg_to_oe(fg_chain);
+        _fg_chain_length = get_level();
+        std::string fg_chain = Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
+        _fg_chain_length = fg_chain.size();
 
-        // // Leverage our parent's oe-chain size to determine ours.  When zero, there's no chain to get.
-        // // We don't want to double-scan, so we'll employ optimism and pull back locally.
-        // std::vector<bool> tmp_oe_chain;
-        // if (_value > 0) {
-        //     if (parent == nullptr) {
-        //         _oe_chain_length = 1;
-        //     } else {
-        //         _oe_chain_length = parent->get_oe_chain_length() + (_value > 2 ? 2 : 1);
-        //     }
-        //     tmp_oe_chain.reserve(_oe_chain_length);
-        //     size_t count = 0;
-        //     Collatz<T>::for_each_sequence_step(_value, [&](const T& step) {
-        //         count++;
-        //         if constexpr(std::same_as<T, mpz_class>) {
-        //             // CMP modulo is expensive from allocations.  Use mpz_even_p macro.
-        //             tmp_oe_chain.push_back(mpz_even_p(step.get_mpz_t()) ? CollatzConstants::EVEN : CollatzConstants::ODD);
-        //         } else {
-        //             // Integral modulo is cheap.  Usually bitwise.
-        //             tmp_oe_chain.push_back(step % 2 == 0 ? CollatzConstants::EVEN : CollatzConstants::ODD);
-        //         }
-        //         return count >= _oe_chain_length;
-        //     });
-        //     // We now have the parent's OE chain, possibly with 2 extra steps.  Trim if parent ended in Even.
-        //     if (tmp_oe_chain.size() > 2) {
-        //         if (tmp_oe_chain[tmp_oe_chain.size() - 3] == CollatzConstants::EVEN) {
-        //             tmp_oe_chain.pop_back();
-        //             _oe_chain_length -= 1;
-        //         }
-        //     }
-        // }
-
-        // Calculating twos, threes, fg data, and is_hwm uses thread_locals.  Reset/use them wisely!
+        // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
         // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
         // Compute the odd-even fractional N portion, the constant, and then tally them up.
         // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
-        size_t odd_count = std::count(tmp_oe_chain.begin(), tmp_oe_chain.end(), CollatzConstants::ODD);
-        mpz_ui_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), 2, tmp_oe_chain.size() - odd_count);
+        size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
+        // Even count is just size().
+        mpz_ui_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), 2, fg_chain.size());
         mpz_ui_pow_ui(tls_threes_value_mpz_c.get_mpz_t(), 3, odd_count);
         tls_threes_value_mpf_c = tls_threes_value_mpz_c;
         tls_fg_n_portion_mpf_c = tls_threes_value_mpf_c / tls_twos_value_mpz_c;
         tls_fg_constant_mpf_c = 0;
-        for (auto c : tmp_oe_chain) {
-            if (c == CollatzConstants::EVEN) {
+        for (char& c : fg_chain) {
+            if (c == 'G') {
                 tls_fg_constant_mpf_c /= 2;
             } else {
                 tls_fg_constant_mpf_c *= 3;
                 tls_fg_constant_mpf_c += 1;
+                tls_fg_constant_mpf_c /= 2;
             }
         }
         tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * _value) + tls_fg_constant_mpf_c;
@@ -280,9 +251,21 @@ class Node {
         return os << m._value;
     }
 
-    // Helper as a private member.
+    // Helper as a private member.  Copies logic from BinaryTree, but I don't care to fix the circular dependency.
+    // Remember to add 1 since our tree starts at 0 on level 0.
     size_t get_level() const {
-        return BinaryTree<T>::level(_value);
+        size_t level = 0;
+        if constexpr(std::integral<T>) {
+            // Integer truncation will cover us with a static cast.
+            level = static_cast<size_t>(std::log2(_value + 1));
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            // GMP doesn't have a logarithm function, but we can exploit sizeinbase() - 1 for the same.
+            // Adding 1 is a waste of alloc here, so use a scratch variable.
+            static thread_local mpz_class junk = 0;
+            mpz_add_ui(junk.get_mpz_t(), _value.get_mpz_t(), 1);
+            level = mpz_sizeinbase(junk.get_mpz_t(), 2) - 1;
+        }
+        return level;
     }
 
 
@@ -296,7 +279,7 @@ class Node {
     bool does_own_children() const { return _owns_children; }
     const Node<T>* get_child(size_t index) const { return _children[index]; }
     size_t get_child_count() const { return static_cast<size_t>( _child_count); }
-    size_t get_oe_chain_length() const { return static_cast<size_t>( _oe_chain_length); }
+    size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
     // Metadata
     const T& get_position() const {
         if (! _track_metadata) {
@@ -336,12 +319,12 @@ class Node {
     }
 
     // Get the F-G chain.  Use the Collatz static method for this.
-    // std::string get_fg_chain_string() const {
-
-    // }
+    std::string get_fg_chain_string() const {
+        return Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
+    }
     // Get the odd-even chain.  Use the Collatz static method for this.
     std::string get_odd_even_chain_string() const {
-        return Collatz<T>::get_oe_pattern_string(_value, _oe_chain_length);
+        return Collatz<T>::fg_to_oe(get_fg_chain_string(), std::numeric_limits<size_t>::max(), false);
     }
 
     // Child Management

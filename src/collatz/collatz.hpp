@@ -389,7 +389,7 @@ class Collatz {
     }
 
     // Generate the F-G string for a sequence with some initial value.
-    static std::string get_fg_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
+    static std::string st_get_fg_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
         std::string result;
         size_t count = 0;
         bool skip = false;
@@ -413,22 +413,26 @@ class Collatz {
     //
     // Wrapper for the instance implementation.
     std::string get_fg_pattern_string(size_t max_chars = std::numeric_limits<size_t>::max()) const {
-        return Collatz<T>::get_fg_pattern_string(_initial_value, max_chars);
+        return Collatz<T>::st_get_fg_pattern_string(_initial_value, max_chars);
     }
 
     // Generate the odd-even string for the sequence, which is just an expansion of the F-G string.
-    static std::string get_oe_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
-        std::string fg_pattern = Collatz<T>::get_fg_pattern_string(initial_value, max_chars);
+    static std::string st_get_oe_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
+        std::string fg_pattern = Collatz<T>::st_get_fg_pattern_string(initial_value, max_chars);
         return fg_to_oe(fg_pattern, max_chars);
     }
     //
     // Wrapper for the instance implementation.
     std::string get_oe_pattern_string(size_t max_chars = std::numeric_limits<size_t>::max()) {
-        return Collatz<T>::get_oe_pattern_string(_initial_value, max_chars);
+        return Collatz<T>::st_get_oe_pattern_string(_initial_value, max_chars);
     }
 
     // Convert an FG string to an OE string.
-    static std::string fg_to_oe(const std::string& fg_pattern, size_t max_oe_chars = std::numeric_limits<size_t>::max()) {
+    static std::string fg_to_oe(
+        const std::string& fg_pattern
+        , size_t max_oe_chars = std::numeric_limits<size_t>::max()
+        , bool strip_last_e = true
+    ) {
         std::string oe_string;
         for (const char& c : fg_pattern) {
             if (c == 'F') {
@@ -442,7 +446,8 @@ class Collatz {
         }
         // If we didn't hit the max_chars, remove the last E.  Why?  Because all sequences end in 1 (odd) and therefore get an "F" -> "OE"
         // But that last "E" is 1 going to 4 (1 * 3 + 1).
-        if (oe_string.size() < max_oe_chars && oe_string.size() > 0) {
+        // If the caller forbids this, skip it.
+        if (strip_last_e && oe_string.size() < max_oe_chars && oe_string.size() > 0) {
             oe_string.pop_back();
         }
         // If we're over the max_chars requested, trim.

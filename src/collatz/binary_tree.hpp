@@ -283,13 +283,18 @@ class BinaryTree {
         }
     }
 
-    // Calculate level.  Formula: floor(log2(N))
+    // Calculate level.  Formula: floor(log2(N+1))
     static size_t level(T value) {
         size_t level = 0;
         if constexpr(std::integral<T>) {
-            level = std::floor(std::log2(value));
+            // Integer truncation will cover us with a static cast.
+            level = static_cast<size_t>(std::log2(value + 1));
         } else if constexpr(std::same_as<T, mpz_class>) {
-            level = mpz_sizeinbase(value.get_mpz_t(), 2);
+            // GMP doesn't have a logarithm function, but we can exploit sizeinbase() - 1 for the same.
+            // Adding 1 is a waste of alloc here, so use a scratch variable.
+            static thread_local mpz_class junk = 0;
+            mpz_add_ui(junk.get_mpz_t(), value.get_mpz_t(), 1);
+            level = mpz_sizeinbase(junk.get_mpz_t(), 2) - 1;
         }
         return level;
     }
