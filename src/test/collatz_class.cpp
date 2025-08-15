@@ -14,7 +14,6 @@ void test_with_int() {
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
-    std::cout << "1\n";
     assert(c.get_fg_pattern_string() == "GFFGGGF");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
     assert(c.get_sequence_string() == "6, 3, 10, 5, 16, 8, 4, 2, 1");

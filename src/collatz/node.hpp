@@ -5,6 +5,7 @@
 #include <gmp.h>
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 #include "gmp_helpers.hpp"
 
 
@@ -277,9 +278,12 @@ class Node {
     bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
     bool is_initialized() const { return _is_initialized; }
     bool does_own_children() const { return _owns_children; }
+    bool get_track_metadata() const { return _track_metadata; }
     const Node<T>* get_child(size_t index) const { return _children[index]; }
+    Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
     size_t get_child_count() const { return static_cast<size_t>( _child_count); }
     size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
+
     // Metadata
     const T& get_position() const {
         if (! _track_metadata) {
@@ -318,6 +322,15 @@ class Node {
         return _metadata->fg_total;
     }
 
+    // HWM data is available in the Collatz object.
+    static size_t st_get_hwm_index(T value) {
+        Collatz<T> collatz(value, true, true);
+        return collatz.get_hwm_index();
+    }
+    size_t get_hwm_index() const {
+        return st_get_hwm_index(_value);
+    }
+
     // Get the F-G chain.  Use the Collatz static method for this.
     std::string get_fg_chain_string() const {
         return Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
@@ -338,6 +351,33 @@ class Node {
     }
     void own_children(bool value) {
         _owns_children = value;
+    }
+    // Children are usually part of a BinaryTree, but in free-form mode, allow a node to generate its own children.
+    // The logic is maybe better suited for BinaryTree?  But our coupling between Tree and Node is already solid, so meh.
+    static void st_spawn_children(Node<T>* node) {
+        if (node->get_child_count() > 0) {
+            throw std::logic_error("You can't spawn children on a node that already has children.");
+        }
+        T step;
+        if constexpr(std::same_as<T, mpz_class>) {
+            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), node->get_level());
+        } else {
+            step = static_cast<T>(1ULL << node->get_level());
+        }
+        T child_value = node->get_value();
+        for (uint8_t i = 0; i < MAX_CHILDREN; i++) {
+            // Step forward.  Avoid alloc() with GMP in the += operator.
+            if constexpr(std::same_as<T, mpz_class>) {
+                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
+            } else {
+                child_value += step;
+            }
+            Node<T>* child = new Node<T>(child_value, node->get_track_metadata(), node);
+            node->assign_child(child);
+        }
+    }
+    void spawn_children() {
+        st_spawn_children(this);
     }
 
     // Size data.
