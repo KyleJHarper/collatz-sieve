@@ -1,6 +1,7 @@
 #pragma once
 
 #include "collatz.hpp"
+#include "binary_tree_math.hpp"
 #include "concepts.hpp"
 #include <gmp.h>
 #include <cmath>
@@ -13,9 +14,6 @@
 // We need a forward declaration for NodeMetadata to see Node.
 template<IntegralOrMPZClass T>
 class Node;
-// Also need a declaraion of BinaryTree so Node can look up its "level", even though that's a Tree decision.
-template<IntegralOrMPZClass T>
-class BinaryTree;
 
 
 //
@@ -31,7 +29,6 @@ class NodeMetadata {
     // None, just make them public.
 
     public:
-    T position;
     Node<T> *hwm_ancestor = nullptr;
     mpz_class fg_twos_value_mpz_c = 0;
     mpz_class fg_threes_value_mpz_c = 0;
@@ -40,7 +37,6 @@ class NodeMetadata {
     mpf_class fg_total = 0;
     NodeMetadata() {}
     void reset() {
-        position = 0;
         hwm_ancestor = nullptr;
         fg_twos_value_mpz_c = 0;
         fg_threes_value_mpz_c = 0;
@@ -125,15 +121,6 @@ class Node {
         _track_metadata = track_metadata;
         _value = value;
         _parent = parent;
-
-        // Calculate our position if the parent exists.  Formula: 2 * (parent_position - 1) + [1 or 2]
-        if (_track_metadata) {
-            if (parent == nullptr) {
-                _metadata->position = 1;
-            } else {
-                _metadata->position = ((parent->get_position() - 1) * 2) + (parent->get_child_count() + 1);
-            }
-        }
 
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather
         // tightly, but that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
@@ -252,22 +239,7 @@ class Node {
         return os << m._value;
     }
 
-    // Helper as a private member.  Copies logic from BinaryTree, but I don't care to fix the circular dependency.
-    // Remember to add 1 since our tree starts at 0 on level 0.
-    size_t get_level() const {
-        size_t level = 0;
-        if constexpr(std::integral<T>) {
-            // Integer truncation will cover us with a static cast.
-            level = static_cast<size_t>(std::log2(_value + 1));
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            // GMP doesn't have a logarithm function, but we can exploit sizeinbase() - 1 for the same.
-            // Adding 1 is a waste of alloc here, so use a scratch variable.
-            static thread_local mpz_class junk = 0;
-            mpz_add_ui(junk.get_mpz_t(), _value.get_mpz_t(), 1);
-            level = mpz_sizeinbase(junk.get_mpz_t(), 2) - 1;
-        }
-        return level;
-    }
+
 
 
     // Accessors and properties.
@@ -284,13 +256,11 @@ class Node {
     size_t get_child_count() const { return static_cast<size_t>( _child_count); }
     size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
 
+    // Tree level and position come from BinaryTree, but we'll make them accessible here.
+    size_t get_level() const { return BinaryTreeMath<T>::st_node_level(_value); }
+    T get_position() const { return BinaryTreeMath<T>::st_node_position(_value); }
+
     // Metadata
-    const T& get_position() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->position;
-    }
     const mpz_class& get_twos_value() const {
         if (! _track_metadata) {
             throw std::logic_error(E_NO_METADATA_TRACKING);

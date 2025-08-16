@@ -22,7 +22,6 @@ void test_fg_values() {
     node.init(2, false);
     assert(node.get_fg_chain_string() == "G");
     node.init(3, false);
-    std::cout << "I see string " << node.get_fg_chain_string() << " with length " << node.get_fg_chain_length() << std::endl;
     assert(node.get_fg_chain_string() == "FF");
     node.init(4, false);
     assert(node.get_fg_chain_string() == "GG");

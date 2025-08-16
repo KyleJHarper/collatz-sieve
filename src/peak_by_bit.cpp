@@ -2,7 +2,7 @@
 #include "CLI11.hpp"
 #include "logging.hpp"
 #include "collatz/collatz.hpp"
-#include "collatz/binary_tree.hpp"
+#include "collatz/binary_tree_math.hpp"
 
 
 //
@@ -185,7 +185,7 @@ int main(int argc, char **argv) {
 
     // Print results.
     for (auto& [bit, max_iv] : results.get_results()) {
-        logger->info("2^{} max IV: {:'} (max level: {})", bit, max_iv, BinaryTree<mpz_class>::max_full_level_of_n(max_iv));
+        logger->info("2^{} max IV: {:'} (max level: {})", bit, max_iv, BinaryTreeMath<mpz_class>::st_max_full_level_at_node(max_iv));
     }
 
     // Go home.

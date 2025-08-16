@@ -18,6 +18,45 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 1.3.0
+Moved all the math for the BinaryTree into BinaryTreeMath.  This helped decouple Node from BinaryTree, and provides a cleaner way
+to handle the math across all programs and classes.
+
+Discovered that we can use the reversal of the least-significant bits in Node values and positions to translate between them.
+
+```
+Given:
+static inline T st_reverse_low_bits(const T& value, size_t bits)
+  ==> converts the last "bits" on the LSB side by reversing them (e.g.: 110 -> 011)
+  ==> when related to Level, allows neat tricks with node values and positions
+```
+
+This allowed me to generate two important functions:
+
+__Node Position By Value__
+```
+position(N) = reverse_bits_L((N+1) mod 2^L, L) + 1
+```
+
+__Node Value by Level and Position__
+```
+value(P,L) == 2^L + reverse_bits_L(P - 1, L) - 1
+```
+
+Note: I previously had a summation-style logic which used concepts called first_node_value, s1, and s2.  While mathematically
+correct, they are a summation, and I prefered a more closed-form algebraic expression.  You can see the details of this logic in
+the method `st_node_value_by_position_and_level__deprecated()`.
+
+Also modified pruning to distinguish between HWM pruning (nodes and descendants) vs parent-level pruning.  This has no effect on
+the `_coverage_map` within the tree at all.  You can still use `.node_count()` to get a real count of nodes in the vectors.
+
+Extended support of binary_tree_class tests, because I ran into a huge headache hidden beneath a double-free. Tests are slower, but
+will hammer the snot out of tree-building with all pruning types.
+
+Confirmed that none of these changes affected the `performance_stats` output.  We're still speedy.
+
+Started on an update for the Ancestor tracking, but I'm still in flux on what this will do.  Need to output a more meaninful table.
+
 ### 1.2.0
 The high-water mark ancestors are now trackable in the BinaryTree.  It added about 1% overhead.
 
