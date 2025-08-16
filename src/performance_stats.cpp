@@ -107,9 +107,9 @@ int main(int argc, char **argv) {
     Node node_mpz_c_with_metadata = Node<mpz_class>(27, true);
 
     // Binrary Tree Option Sets
-    BinaryTreeOptions BTWithoutPruneWithMetadata = {.track_node_metadata = true, .pruned = false };
-    BinaryTreeOptions BTWithoutPruneWithoutMetadata = {.track_node_metadata = false, .pruned = false };
-    BinaryTreeOptions BTWithPruneWithoutMetadata = {.track_node_metadata = false, .pruned = true};
+    BinaryTreeOptions BTWithoutPruneWithMetadata = {.track_node_metadata = true, .prune_hwm_nodes = false };
+    BinaryTreeOptions BTWithoutPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = false };
+    BinaryTreeOptions BTWithPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = true};
 
     // BT no metadata, no pruning
     size_t rss_t1 = getCurrentRSSBytes();

@@ -14,7 +14,7 @@ void run (size_t levels) {
     logger->info("Building tree with {} levels.", levels);
     BinaryTreeOptions opts;
     opts.preserve_ancestors = true;
-    opts.pruned = false;
+    opts.prune_hwm_nodes = false;
     opts.track_node_metadata = true;
     BinaryTree<T> tree(levels, opts);
 
@@ -88,7 +88,7 @@ void run (size_t levels) {
                                 numeric_width = lineage.back()->get_value().get_str().length();
                             }
                             for (const Node<T>* ancestor : lineage) {
-                                std::string direction = "-";
+                                std::string direction = "";
                                 if (ancestor != root) {
                                     direction = ancestor->get_parent()->get_child(0)->get_value() == ancestor->get_value() ? "L" : "R";
                                 }

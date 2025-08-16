@@ -22,7 +22,7 @@ class CoverageBuilder {
     CoverageBuilder() {
         BinaryTreeOptions opts;
         opts.track_node_metadata = false;
-        opts.pruned = true;
+        opts.prune_hwm_nodes = true;
         opts.preserve_ancestors = true;
         _tree.init(0, opts);
     }

@@ -86,6 +86,13 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
 
     // Unsigned integral form.
     BinaryTree<uint64_t> tree(levels, opts);
+std::cerr << "DBG: constructed tree level_count=" << tree.get_level_count()
+          << " coverage_map_size=" << tree.get_coverage_map().size() << std::endl;
+for (auto &p : tree.get_coverage_map()) {
+    std::cerr << " DBG: level=" << p.first << " covered=" << p.second.get_covered()
+              << " total=" << p.second.get_total() << " level_map_size=" << tree.get_level_map().at(p.first).size() << std::endl;
+}
+
     BinaryTreeCoverage<uint64_t> global_coverage;
     size_t target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
@@ -93,23 +100,44 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         const BinaryTreeCoverage<uint64_t>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
+        std::cout << "level " << level << "  coverage->get_covered(): " << coverage->get_covered() << "  get_known_coverage: " << BinaryTreeCoverageConstants::get_known_coverage(level) << std::endl;
         assert(coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
         assert(coverage->get_total() == target_total);
     }
     assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
     assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-    if (tree.is_pruned()) {
-        // Pruned trees should have their node count match the known coverage + count == total
-        // However, their actual node count will be smaller because entire levels are deleted.  So the coverage needs added in.
+    // We allow pruning of HWM nodes and/or levels.  Need tests for each.
+    //
+    // Option 1: false and false
+    // This is a tree with all its nodes.  Counts should line up without adjustment.
+    if (!tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
+        assert(tree.node_count() == (1ULL << (tree.get_level_count() + 1)) - 2);
+        assert(tree.node_count_with_root() == (1ULL << (tree.get_level_count() + 1)) - 1);
+    }
+    // Option 2: true and false
+    // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
+    if (tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
+        size_t node_count_summary = tree.node_count();
+        for (size_t level = 1; level <= tree.get_level_count(); level++) {
+            node_count_summary += tree.get_coverage_map().find(level)->second.get_covered();
+        }
+        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    }
+    // Option 3: false and true
+    // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
+    if (!tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
+        size_t node_count_summary = tree.node_count() + BinaryTreeCoverageConstants::get_total_sum_to_level(levels - 1);
+        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    }
+    // Option 4: true and true
+    // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
+    if (tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
         size_t node_count_plus_uncovered = tree.node_count();
-        for (size_t level = 1; level<tree.get_level_count(); level++) {
+        for (size_t level = 1; level < tree.get_level_count(); level++) {
             node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
         }
         assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
-    } else {
-        assert(tree.node_count() == (std::pow(2, tree.get_level_count() + 1) - 2));
-        assert(tree.node_count_with_root() == (std::pow(2, tree.get_level_count() + 1) - 1));
     }
 
     // GMP (mpz_class) form.
@@ -127,17 +155,41 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     assert(global_coverage_mpz.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
     assert(global_coverage_mpz.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-    if (tree_mpz.is_pruned()) {
-        // Pruned trees should have their node count match the known coverage + count == total
-        // However, their actual node count will be smaller because entire levels are deleted.  So the coverage needs added in.
-        mpz_class node_count_plus_uncovered_mpz = tree.node_count();
-        for (size_t level = 1; level<tree.get_level_count(); level++) {
-            node_count_plus_uncovered_mpz += tree.get_coverage_map().find(level)->second.get_uncovered();
+    // We allow pruning of HWM nodes and/or levels.  Need tests for each.
+    //
+    // Option 1: false and false
+    // This is a tree with all its nodes.  Counts should line up without adjustment.
+    if (!tree_mpz.is_pruning_hwm_nodes() && !tree_mpz.is_pruning_parent_levels()) {
+        mpz_class node_count_mpz = 0;
+        mpz_ui_pow_ui(node_count_mpz.get_mpz_t(), 2, tree.get_level_count() + 1);
+        node_count_mpz -= 2;
+        assert(tree_mpz.node_count() == node_count_mpz);
+        node_count_mpz += 1;
+        assert(tree_mpz.node_count_with_root() == node_count_mpz);
+    }
+    // Option 2: true and false
+    // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
+    if (tree_mpz.is_pruning_hwm_nodes() && !tree_mpz.is_pruning_parent_levels()) {
+        mpz_class node_count_summary = tree_mpz.node_count();
+        for (size_t level = 1; level <= tree_mpz.get_level_count(); level++) {
+            node_count_summary += tree_mpz.get_coverage_map().find(level)->second.get_covered();
         }
-        assert(node_count_plus_uncovered_mpz + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
-    } else {
-        assert(tree_mpz.node_count() == (std::pow(2, tree_mpz.get_level_count() + 1) - 2));
-        assert(tree_mpz.node_count_with_root() == (std::pow(2, tree_mpz.get_level_count() + 1) - 1));
+        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    }
+    // Option 3: false and true
+    // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
+    if (!tree_mpz.is_pruning_hwm_nodes() && tree_mpz.is_pruning_parent_levels()) {
+        mpz_class node_count_summary = tree_mpz.node_count() + BinaryTreeCoverageConstants::get_total_sum_to_level(levels - 1);
+        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
+    }
+    // Option 4: true and true
+    // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
+    if (tree_mpz.is_pruning_hwm_nodes() && tree_mpz.is_pruning_parent_levels()) {
+        mpz_class node_count_plus_uncovered = tree_mpz.node_count();
+        for (size_t level = 1; level < tree_mpz.get_level_count(); level++) {
+            node_count_plus_uncovered += tree_mpz.get_coverage_map().find(level)->second.get_uncovered();
+        }
+        assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(levels));
     }
 }
 
@@ -181,22 +233,47 @@ void test_binary_tree_multi_threaded() {
 }
 
 void test_binary_tree_pruned() {
-    BinaryTreeOptions opts_with_prune;
-    opts_with_prune.pruned = true;
-    test_binary_tree_coverage(16, 1, opts_with_prune);
-    // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
+    BinaryTreeOptions opts_with_hwm_prune_without_level_prune;
+    opts_with_hwm_prune_without_level_prune.prune_hwm_nodes = true;
+    opts_with_hwm_prune_without_level_prune.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_hwm_prune_with_level_prune;
+    opts_with_hwm_prune_with_level_prune.prune_hwm_nodes = true;
+    opts_with_hwm_prune_with_level_prune.prune_parent_levels = true;
+    BinaryTreeOptions opts_without_hwm_prune_with_level_prune;
+    opts_without_hwm_prune_with_level_prune.prune_hwm_nodes = false;
+    opts_without_hwm_prune_with_level_prune.prune_parent_levels = true;
+    std::cout << "1\n";
+    test_binary_tree_coverage(16, 1, opts_with_hwm_prune_without_level_prune);
+    std::cout << "2\n";
+    test_binary_tree_coverage(16, 1, opts_with_hwm_prune_with_level_prune);
+    std::cout << "3.1\n";
+    test_binary_tree_coverage(1, 1, opts_without_hwm_prune_with_level_prune);
+    std::cout << "3.2\n";
+    test_binary_tree_coverage(2, 1, opts_without_hwm_prune_with_level_prune);
+    std::cout << "3.3\n";
+    test_binary_tree_coverage(3, 1, opts_without_hwm_prune_with_level_prune);
+    std::cout << "3.4\n";
+    test_binary_tree_coverage(4, 1, opts_without_hwm_prune_with_level_prune);
+    std::cout << "4\n";
+    // Now test levels 1-20 and make sure the node count returned adds up (literally) to the total.
     size_t max_test_level = 20;
-    for (size_t level = 1; level <= max_test_level; level ++) {
-        test_binary_tree_coverage(level, 1, opts_with_prune);
+    for (size_t level = 1; level <= max_test_level; level++) {
+        std::cout << "Testing tree build and coverage level " << level << std::endl;
+        test_binary_tree_coverage(3, 1, opts_with_hwm_prune_without_level_prune);
+        std::cout << "xxTesting tree build and coverage level " << level << std::endl;
+        test_binary_tree_coverage(level, 1, opts_with_hwm_prune_with_level_prune);
+        std::cout << "yyTesting tree build and coverage level " << level << std::endl;
+        test_binary_tree_coverage(level, 1, opts_without_hwm_prune_with_level_prune);
     }
+    // Now test with level pruning too.
     // A pruned tree should always have a drastically smaller size.
     size_t levels = 16;
     float reduction_factor = 0.9;
     BinaryTree<uint64_t> tree_raw(levels);
-    BinaryTree<uint64_t> tree_pruned(levels, opts_with_prune);
+    BinaryTree<uint64_t> tree_pruned(levels, opts_with_hwm_prune_without_level_prune);
     assert(tree_raw.deep_size() * reduction_factor > tree_pruned.deep_size());
     BinaryTree<mpz_class> tree_raw_mpz(levels);
-    BinaryTree<mpz_class> tree_pruned_mpz(levels, opts_with_prune);
+    BinaryTree<mpz_class> tree_pruned_mpz(levels, opts_with_hwm_prune_without_level_prune);
     assert(tree_raw_mpz.deep_size() * reduction_factor > tree_pruned_mpz.deep_size());
 }
 
