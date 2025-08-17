@@ -19,12 +19,30 @@ class BinaryTreeMath {
     private:
     static inline const mpz_class _MPZ_TWO = 2;
     static inline const mpf_class _MPF_TWO = 2;
+    static inline const T _ROOT_VALUE_DEFAULT = 0;
+    static inline T _root_value = _ROOT_VALUE_DEFAULT;
 
     public:
     // Don't instanitate this.
     BinaryTreeMath() {
         throw std::logic_error("The BinaryTreeMath class isn't meant to be instanitated.");
     }
+
+
+
+    //
+    // Getter and Setter for Root Value
+    //
+    static const T get_default_root_value() { return _ROOT_VALUE_DEFAULT; }
+    static const T get_root_value() { return _root_value; }
+    static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
+    static void set_root_value(T value) {
+        if (value != 0 && value != 1) {
+            throw std::out_of_range("You cannot set the BinaryTreeMath root value to anything other than 0 or 1.");
+        }
+        _root_value = value;
+    }
+
 
 
     //
@@ -34,6 +52,8 @@ class BinaryTreeMath {
     // from a node value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side.
     // There are a lot of ways to do this, and some compilers have intrisics for this, but I'm going to use the loop meethod to
     // keep the intention clear.  We can replace it with a black-box function later
+    //
+    // Formula: reverse(bits)[0:size]
     static inline T st_reverse_low_bits(const T& value, size_t bits) {
         static thread_local T result;
         result = 0;

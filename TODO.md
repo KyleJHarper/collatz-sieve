@@ -3,6 +3,20 @@
 ### Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?
 
+### Update BinaryTreeMath
+The tree is currently rooted at 0.  Can we root it at 1?  Should we?
+
+### HWM Ancestor Filter
+for each number N:
+  if some_func(N) proves N is a descendant of any_ancestor
+    skip it
+
+^ This would mean precomputation of HWM ancestors and the coverage they create can now be applied
+without building a whole tree, or even the the last level of a tree.
+
+^ This would also mean you could build any arbitrary level, and optionally scan for HWM ancestors in
+it manually.
+
 
 ### Arbitrary Tree Level
 * We should support building a tree from level M-N, where M >=1 and N > M.
@@ -12,8 +26,6 @@
 ### Distributed Computing
 * The tree should be buildable in an asynchronous manner by multiple systems.
 * Requires arbitrary levels, from above.
-* Requires an export feature.  Maybe add an import feature to, to save time when testing large trees?
-* Modify BinaryTree to store a copy of all HWM Ancestors (Nodes) when scanning the tree, even if pruned.
 
 I believe we can track HWM ancestors and put them in a table.  A future node can determine if it is a
 descendant of a HWM ancestor by using the level the ancestor is on as the "step" value and the difference

@@ -235,7 +235,25 @@ void test_binary_tree_multi_threaded() {
 }
 
 template<IntegralOrMPZClass T>
-void test_binary_tree_math__type_helper() {
+void test_binary_tree_math__type_helper(T root_value) {
+    // Root value.
+    BinaryTreeMath<T>::reset_root_value();
+    assert(BinaryTreeMath<T>::get_root_value() == BinaryTreeMath<T>::get_default_root_value());
+    BinaryTreeMath<T>::set_root_value(root_value);
+    assert(BinaryTreeMath<T>::get_root_value() == root_value);
+    //
+    // Bit Reversal
+    T value = 421;  // Binary: 110100101
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 1) == 1);   //         1
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 2) == 2);   //        10
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 3) == 5);   //       101
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 4) == 10);  //      1010
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 5) == 20);  //     10100
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 6) == 41);  //    101001
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 7) == 82);  //   1010010
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 8) == 165); //  10100101
+    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 9) == 331); // 101001011
+    //
     // Node Levels
     size_t level = 0;  // Always returns size_t
     level = BinaryTreeMath<T>::st_node_level(4);
@@ -268,7 +286,19 @@ void test_binary_tree_math__type_helper() {
     position = BinaryTreeMath<T>::st_node_position(46);
     assert(position == 31);
     //
-    // Max Node at Level
+    // Max Position of Level
+    T max_position = BinaryTreeMath<T>::st_max_position_of_level(0);
+    assert(max_position == 1);
+    max_position = BinaryTreeMath<T>::st_max_position_of_level(1);
+    assert(max_position == 2);
+    max_position = BinaryTreeMath<T>::st_max_position_of_level(2);
+    assert(max_position == 4);
+    max_position = BinaryTreeMath<T>::st_max_position_of_level(3);
+    assert(max_position == 8);
+    max_position = BinaryTreeMath<T>::st_max_position_of_level(4);
+    assert(max_position == 16);
+    //
+    // Max Node Value at Level
     mpz_class max_node = 0; // Always returns MPZ
     max_node = BinaryTreeMath<T>::st_max_node_value_at_level(0);
     assert(max_node == 0);
@@ -303,10 +333,48 @@ void test_binary_tree_math__type_helper() {
     assert(max_level == 5);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(126);
     assert(max_level == 6);
+    //
+    // First Node of Level
+    T first_node = BinaryTreeMath<T>::st_first_node_of_level(0);
+    assert(first_node == 0);
+    first_node = BinaryTreeMath<T>::st_first_node_of_level(1);
+    assert(first_node == 1);
+    first_node = BinaryTreeMath<T>::st_first_node_of_level(2);
+    assert(first_node == 3);
+    first_node = BinaryTreeMath<T>::st_first_node_of_level(3);
+    assert(first_node == 7);
+    first_node = BinaryTreeMath<T>::st_first_node_of_level(4);
+    assert(first_node == 15);
+    first_node = BinaryTreeMath<T>::st_first_node_of_level(5);
+    assert(first_node == 31);
+    //
+    // Node Value by Position and Level
+    T node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 1);
+    assert(node_position == 1);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 1);
+    assert(node_position == 2);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 2);
+    assert(node_position == 3);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 2);
+    assert(node_position == 5);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level(7, 5);
+    assert(node_position == 43);
+    //
+    // Deprecated Form
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 1);
+    assert(node_position == 1);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 1);
+    assert(node_position == 2);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 2);
+    assert(node_position == 3);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 2);
+    assert(node_position == 5);
+    node_position = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(7, 5);
+    assert(node_position == 43);
 }
 void test_binary_tree_math() {
-    test_binary_tree_math__type_helper<uint64_t>();
-    test_binary_tree_math__type_helper<mpz_class>();
+    test_binary_tree_math__type_helper<uint64_t>(0);
+    test_binary_tree_math__type_helper<mpz_class>(0);
 
     // Level Will Fit
     // 8-bit

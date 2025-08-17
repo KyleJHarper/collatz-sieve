@@ -65,7 +65,7 @@ class BinaryTree {
         _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
         _is_pruning_parent_levels = opts.prune_parent_levels;
         _preserve_ancestors = opts.preserve_ancestors;
-        _root_node = new Node<T>(0, _track_node_metadata);
+        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
         _coverage_map[0].set_covered(0);
