@@ -27,6 +27,7 @@ struct BinaryTreeOptions {
 };
 
 
+
 //
 // A perfect binary tree mapped to powers of two.  This creates a uniform distribution of nodes in
 // the N+/Z space (positive integers), which Collatz is concerned.
@@ -49,44 +50,21 @@ class BinaryTree {
     bool _preserve_ancestors = false;
 
     public:
-    // Constructor and Init
+
+    //
+    // Constructors
+    //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
     BinaryTree() {}
     BinaryTree(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
         init(levels, opts);
     }
-    void init(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
-        // Sanity check.  T must support requested tree size.
-        assert_level_will_fit(levels);
-        // Reset object if necessary.
-        if(_is_initialized) { reset(); }
-        _is_initialized = true;
-        _track_node_metadata = opts.track_node_metadata;
-        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
-        _is_pruning_parent_levels = opts.prune_parent_levels;
-        _preserve_ancestors = opts.preserve_ancestors;
-        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
-        _level_map[0].resize(1);
-        _level_map[0][0] = _root_node;
-        _coverage_map[0].set_covered(0);
-        for (size_t level = 1; level <= levels; ++level) {
-            this->add_level();
-        }
-    }
 
-    // Reset to make this act like a new() object.
-    void reset() {
-        _is_initialized = false;
-        _coverage_map.clear();
-        _level_map.clear();
-        _ancestors.clear();
-        _track_node_metadata = BinaryTreeOptions{}.track_node_metadata;
-        _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
-        _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
-        _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
-    }
 
+
+    //
     // Destructor
+    //
     ~BinaryTree() {
         if (_is_pruning_hwm_nodes) {
             // We need to scan all levels manually and call delete explicitly.
@@ -104,7 +82,54 @@ class BinaryTree {
         }
     }
 
-    // Accessors and properties.
+
+
+    //
+    // Initialize
+    // Builds the object, resuing it if necessary.
+    //
+    void init(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        // Sanity check.  T must support requested tree size.
+        assert_level_will_fit(levels);
+        // Reset object if necessary.
+        if(_is_initialized) { reset(); }
+        _is_initialized = true;
+        _track_node_metadata = opts.track_node_metadata;
+        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
+        _is_pruning_parent_levels = opts.prune_parent_levels;
+        _preserve_ancestors = opts.preserve_ancestors;
+        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
+        _level_map[0].resize(1);
+        _level_map[0][0] = _root_node;
+        _coverage_map[0].set_covered(0);
+        _coverage_map[0].set_total(BinaryTreeMath<T>::get_root_value() == 0 ? 0 : 1);
+        for (size_t level = 1; level <= levels; ++level) {
+            this->add_level();
+        }
+    }
+
+
+
+    //
+    // Reset Object
+    // Reset members to make this act like a new() object.
+    //
+    void reset() {
+        _is_initialized = false;
+        _coverage_map.clear();
+        _level_map.clear();
+        _ancestors.clear();
+        _track_node_metadata = BinaryTreeOptions{}.track_node_metadata;
+        _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
+        _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
+        _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
+    }
+
+
+
+    //
+    // Getters and Accessors
+    //
     size_t get_level_count() const { return _level_count; }
     Node<T>* get_root_node() const { return _root_node; }
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
@@ -114,28 +139,27 @@ class BinaryTree {
     bool is_pruning_parent_levels() const { return _is_pruning_parent_levels; }
     bool tracking_metadata() const { return _track_node_metadata; }
 
-    // // Tree Math Wrappers.
-    // static inline size_t st_node_level(const T& value) { return BinaryTreeMath<T>::st_node_level(value); }
-    // static inline T st_node_position(const T& value) { return BinaryTreeMath<T>::st_node_position(value); }
-    // static inline T st_max_node_value_at_level(size_t level) { return BinaryTreeMath<T>::st_max_node_value_at_level(level); }
-    // static inline size_t st_max_full_level_at_node(const T& value) { return BinaryTreeMath<T>::st_max_full_level_at_node(value); }
 
-    // Node Counts
-    // Returns the REAL node count in the _level_map.
+
+    //
+    // Node Count
+    // Returns the REAL node count in the _level_map.  Includes level 0 if tree is 1-based (no dead root).
+    //
     T node_count() const {
-        // It should be: 2^(max_levels + 1) - 1 (if we count node 0)
-        // However, due to pruning, just add up the size() values of each level.
         T total = 0;
-        for (size_t level = 1; level <= _level_count; level++) {
+        for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= _level_count; level++) {
             total += _level_map.at(level).size();
         }
         return total;
     }
-    T node_count_with_root() const {
-        return node_count() + 1;
-    }
 
+
+
+    //
     // Object Size
+    // Deeply scan the object, all nodes, and so forth, tallying up the expect bytes used.  This won't match RSS because we can't
+    // track alignment and such without massive headaches.
+    //
     size_t deep_size() const {
         size_t total = sizeof(*this);
         // Account for _level_map
@@ -161,45 +185,57 @@ class BinaryTree {
         return total;
     }
 
-    // Add a level to the tree.  We simply take the parent nodes and add two children with a steady step value.  We
-    // also calculate the coverage for this level.
+
+
     //
-    // When WHM pruning is enabled we trim all grandparents who meet HWM.  We need the parents to build the child level
-    // currently.  We assume the parent generation was already pruned, and we'll test children after we make them.
+    // Add Level
+    // Add a level to the tree.  We simply take the parent nodes and add two children with a steady step value.  We also calculate
+    // the coverage for this level.
+    //
+    // When WHM pruning is enabled we trim all grandparents who meet HWM.  We need the parents to build the child level currently.
+    // We assume the parent generation was already pruned, and we'll test children after we make them.
+    //
     void add_level() {
-        // Get the parent and child level IDs.
+        // Get the parent and child levels.  Then confirm the new one will fit.  Then bump count.
         size_t parent_level = _level_count;
         size_t child_level = _level_count + 1;
+        assert_level_will_fit(child_level);
         _level_count++;
-        assert_level_will_fit(_level_count);
-        // Each level will double the size of the tree, so we can't rely on size_t if we're going to
-        // support GMP-size values.  We need to respect T.
+
+        // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
         T step;
         if constexpr(std::same_as<T, mpz_class>) {
             mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), parent_level);
         } else {
             step = static_cast<T>(1ULL << parent_level);
         }
-        // Loop through the parents to build the children.
-        // Use size_t because that's more objects than we could ever hold in RAM anyway, and if we're past 2^64, we're
-        // obviously using HWM pruning, which means counts will fit in size_t anyway.
+
+        // Calculate parent and child counts for looping and indexing.
+        // Note: size_t is safe, because no one can fit 2^64 nodes in RAM.  Vectors require size_t for indexes.
         auto& parents = _level_map[parent_level];
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
-        size_t covered_or_pruned = 0;
-        // Resize the vector.
+
+        // Resize the vector to contain all children.  Otherwise assigning to indexes ([]) will fail.
         _level_map[child_level].resize(child_count);
-        // Making these thread-local is a bit of a trick; it makes OMP think they're shared, but the
-        // thread-local nature means they stay separated.  Prevents realloc() within the loop.
+
+        // Create child value objects.  OMP is okay, because the thread_local keeps them separated.  Prevents GMP reallocs().
         static thread_local T child_value_1;
         static thread_local T child_value_2;
+
         // Guard _ancestors with a mutex.
         std::mutex ancestor_lock;
+
+        // Keep a record of covered or pruned values for coverage math after the loop.
+        size_t covered_or_pruned = 0;
+
+        // Run the loop with OMP.
         #pragma omp parallel for schedule(guided) reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, ancestor_lock, _preserve_ancestors, _track_node_metadata)
         for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
-            // Find parent.
+            // Find the parent.
             Node<T>* parent = parents[parent_idx];
-            // Get the child values.  Avoid alloc() with GMP with arithmetic operators.
+
+            // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
             if constexpr(std::same_as<T, mpz_class>) {
                 mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
                 mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
@@ -207,10 +243,13 @@ class BinaryTree {
                 child_value_1 = parent->get_value() + step;
                 child_value_2 = child_value_1 + step;
             }
-            // Create the children.
+
+            // Instaniate the children.
             Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
             Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
+
             // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
+            // -- Child 1
             bool assign_to_map = true;
             if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
                 std::lock_guard<std::mutex> lock(ancestor_lock);
@@ -230,6 +269,7 @@ class BinaryTree {
                     parent->assign_child(child_1);
                 }
             }
+            // -- Child 2
             assign_to_map = true;
             if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
                 std::lock_guard<std::mutex> lock(ancestor_lock);
@@ -251,7 +291,7 @@ class BinaryTree {
             }
         }
 
-        // When pruning nodes, we need to remove any nullptr (pruned) children from the vector to keep counts accurate on next loop.
+        // When pruning nodes,remove any nullptr (pruned) children from the vector to keep counts accurate on next loop.
         if (_is_pruning_hwm_nodes) {
             std::vector<Node<T>*>& children = _level_map[child_level];
             children.erase(
@@ -276,9 +316,9 @@ class BinaryTree {
             _level_map[parent_level].shrink_to_fit();
         }
 
-        // Coverage is tallied above.  If pruning, logic is different because ancestors were purged already, which means
-        // their descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, we
-        // can rely on .size() to tell us how many are *not* covered, which means covered = total - .size().
+        // Coverage is tallied above.  If pruning, logic is different because ancestors were purged already, which means their
+        // descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, we can rely on
+        // .size() to tell us how many are *not* covered, which means covered = total - .size().
         T total = step * 2;
         T covered = covered_or_pruned;
         if (_is_pruning_hwm_nodes) {
@@ -287,7 +327,12 @@ class BinaryTree {
         _coverage_map[child_level] = BinaryTreeCoverage<T>(covered, total);
     }
 
+
+
+    //
+    // Assert Level Fits
     // Helper to determine if the level requested is going to fit within the bit-size of T.  Only applies to native integrals.
+    //
     void assert_level_will_fit(size_t level) const {
         if (! BinaryTreeMath<T>::st_level_will_fit(level)) {
             size_t bits = std::numeric_limits<T>::digits;
@@ -302,9 +347,13 @@ class BinaryTree {
     }
 
 
+
+    //
+    // Generate Node At
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.
-    static Node<T>* generate_node_at(size_t level, T position, bool with_metadata = true) {
+    //
+    static Node<T>* st_generate_node_at(size_t level, T position, bool with_metadata = true) {
         // Calculate the maximum position and enforce the rules.  We will need the first node's value too.
         T max_position = BinaryTreeMath<T>::st_max_position_of_level(level);
         if(position > max_position) {

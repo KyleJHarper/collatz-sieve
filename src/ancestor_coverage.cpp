@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string>
 #include "collatz/binary_tree.hpp"
+#include "collatz/binary_tree_math.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/node.hpp"
 #include "collatz/collatz.hpp"
@@ -33,7 +34,7 @@ std::vector<AncestorResult<T>> run (size_t levels) {
     // Instead, build children on-the-fly.
     std::vector<AncestorResult<T>> results;
     // std::vector<Node<T>*> lineage;
-    for (size_t level = 1; level <= tree.get_level_count(); level++) {
+    for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= tree.get_level_count(); level++) {
         logger->debug("Scanning level {}", level);
         for (const Node<T>* node : tree.get_level_map().at(level)) {
             if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
@@ -105,6 +106,7 @@ int main(int argc, char **argv) {
     init_logger();
     // Process options.
     typedef mpz_class my_type;
+    BinaryTreeMath<my_type>::set_root_value(1);
     // typedef uint64_t my_type;
     size_t levels;
     bool verbose = false;
@@ -145,44 +147,3 @@ int main(int argc, char **argv) {
     // All done.
     return 0;
 }
-
-
-
-                            // logger->info(
-                            //     "{} is covered by a descendant at {} (level {}) matching F-G chain {} ({}/{}, +{})."
-                            //     , root_preamble
-                            //     , child->get_value()
-                            //     , child->get_level()
-                            //     , child_fg_chain
-                            //     , child->get_threes_value()
-                            //     , child->get_twos_value()
-                            //     , child->get_fg_constant()
-                            // );
-                            // size_t chain_width = lineage.back()->get_fg_chain_length();
-                            // size_t numeric_width = 0;
-                            // if constexpr(std::integral<T>) {
-                            //     numeric_width = std::to_string(lineage.back()->get_value()).length();
-                            // } else {
-                            //     numeric_width = lineage.back()->get_value().get_str().length();
-                            // }
-                            // for (const Node<T>* ancestor : lineage) {
-                            //     std::string direction = "";
-                            //     if (ancestor != root) {
-                            //         direction = ancestor->get_parent()->get_child(0)->get_value() == ancestor->get_value() ? "L" : "R";
-                            //     }
-                            //     // FMT gets weird with GMP, even with our custom stuff in logging.hpp/cpp.  Just stringify it.
-                            //     std::string value = "";
-                            //     if constexpr(std::integral<T>) {
-                            //         value = std::to_string(ancestor->get_value());
-                            //     } else {
-                            //         value = ancestor->get_value().get_str();
-                            //     }
-                            //     logger->info(
-                            //         "  -> {:<{}}  {:>{}}  {}"
-                            //         , ancestor->get_fg_chain_string()
-                            //         , chain_width
-                            //         , value
-                            //         , numeric_width
-                            //         , direction
-                            //     );
-                            // }

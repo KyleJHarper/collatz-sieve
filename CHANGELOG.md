@@ -18,6 +18,20 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 1.4.0
+The BinaryTree and its associated BinaryTreeMath now support building a 1-based (root node == 1) tree.  This wasn't necessary for
+my purposes, but it aligns with how people often view perfect binary trees.  It has zero effect on my coverage or testing, so I
+will likely switch to it as the default in an upcoming version.
+
+Important Notes:
+* Coverage doesn't change.  The only way it would've, is if an edge node became a high-water mark ancestor.  This isn't possible
+with any value other than 2.  Since 2 remains on level 1 (right-hand side in 0-based, left-hand side in 1-based), nothing changes.
+* Unit tests were expanded extensively to support integral, MPZ, 0-based, and 1-based roots, and all combinations thereof.
+* A few tweaks were needed in our programs, but only to rely on BinaryTreeMath.  E.g.: starting at "base level" instead of assuming
+all nodes start at level 1 (from the 0-based original approach).
+* The ancestor searching provides the same results: coverage of an ancestor happens at the same descendant regardless of 0-based or
+1-based tree structure, which was expected but nice to see.
+
 ### 1.3.0
 Moved all the math for the BinaryTree into BinaryTreeMath.  This helped decouple Node from BinaryTree, and provides a cleaner way
 to handle the math across all programs and classes.

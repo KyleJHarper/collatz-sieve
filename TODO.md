@@ -3,9 +3,6 @@
 ### Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?
 
-### Update BinaryTreeMath
-The tree is currently rooted at 0.  Can we root it at 1?  Should we?
-
 ### HWM Ancestor Filter
 for each number N:
   if some_func(N) proves N is a descendant of any_ancestor

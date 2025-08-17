@@ -38,6 +38,13 @@ class BinaryTreeMath {
     static const T get_root_value() { return _root_value; }
     static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
     static T get_offset() { return _offset; }
+    static size_t get_base_level() {
+        if constexpr(std::integral<T>) {
+            return _offset;
+        } else {
+            return _offset.get_ui();
+        }
+    }
     static void set_root_value(T value) {
         if (value != 0 && value != 1) {
             throw std::out_of_range("You cannot set the BinaryTreeMath root value to anything other than 0 or 1.");

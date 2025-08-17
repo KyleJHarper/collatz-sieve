@@ -55,7 +55,7 @@ namespace BinaryTreeCoverageConstants {
     }
     inline size_t get_known_coverage_sum_to_level(size_t max_level) {
         size_t total = 0;
-        for (size_t level = 1; level <= max_level; level++) {
+        for (size_t level = 0; level <= max_level; level++) {
             total += get_known_coverage(level);
         }
         return total;
@@ -63,9 +63,9 @@ namespace BinaryTreeCoverageConstants {
     inline size_t get_total(size_t level) {
         return size_t(1) << level;
     }
-    inline size_t get_total_sum_to_level(size_t max_level) {
+    inline size_t get_total_sum_to_level(size_t min_level, size_t max_level) {
         size_t total = 0;
-        for (size_t level = 1; level <= max_level; level++) {
+        for (size_t level = min_level; level <= max_level; level++) {
             total += get_total(level);
         }
         return total;

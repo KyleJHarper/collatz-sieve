@@ -76,7 +76,7 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors) {
     builder.run(levels);
     BinaryTreeCoverage<T> global_coverage;
     if (use_precomputed) {
-        for (size_t level = 1; level <= levels; level++) {
+        for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= levels; level++) {
             BinaryTreeCoverage<T> coverage;
             coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage(level));
             coverage.set_total(BinaryTreeCoverageConstants::get_total(level));
