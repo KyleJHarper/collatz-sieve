@@ -21,6 +21,7 @@ class BinaryTreeMath {
     static inline const mpf_class _MPF_TWO = 2;
     static inline const T _ROOT_VALUE_DEFAULT = 0;
     static inline T _root_value = _ROOT_VALUE_DEFAULT;
+    static inline T _offset = 1 - _root_value;
 
     public:
     // Don't instanitate this.
@@ -36,11 +37,13 @@ class BinaryTreeMath {
     static const T get_default_root_value() { return _ROOT_VALUE_DEFAULT; }
     static const T get_root_value() { return _root_value; }
     static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
+    static T get_offset() { return _offset; }
     static void set_root_value(T value) {
         if (value != 0 && value != 1) {
             throw std::out_of_range("You cannot set the BinaryTreeMath root value to anything other than 0 or 1.");
         }
         _root_value = value;
+        _offset = 1 - _root_value;
     }
 
 
@@ -80,17 +83,17 @@ class BinaryTreeMath {
     // Node Level
     // Calculate node level.
     //
-    // Formula: floor(log2(N+1))
+    // Formula: floor(log2(N+Offset))
     static inline size_t st_node_level(const T& value) {
         size_t level = 0;
         if constexpr(std::integral<T>) {
             // Integer truncation will cover us with a static cast.
-            level = static_cast<size_t>(std::log2(value + 1));
+            level = static_cast<size_t>(std::log2(value + _offset));
         } else if constexpr(std::same_as<T, mpz_class>) {
             // GMP doesn't have a logarithm function, but we can exploit sizeinbase() - 1 for the same.
             // Adding 1 is a waste of alloc here, so use a scratch variable.
             static thread_local mpz_class junk = 0;
-            mpz_add_ui(junk.get_mpz_t(), value.get_mpz_t(), 1);
+            mpz_add(junk.get_mpz_t(), value.get_mpz_t(), _offset.get_mpz_t());
             level = mpz_sizeinbase(junk.get_mpz_t(), 2) - 1;
         }
         return level;
@@ -102,16 +105,16 @@ class BinaryTreeMath {
     // Position
     // Calculate the position from left to right, using 1-based index, of any node value.
     //
-    // Formula: bit_reverse_L((N+1) % 2^L, L) + 1   Where L = floor(log2(N+1))
+    // Formula: bit_reverse_L((N+Offset) % 2^L, L) + 1   Where L = floor(log2(N+1))
     static inline T st_node_position(const T& value) {
         size_t level = BinaryTreeMath<T>::st_node_level(value);
-        T value_plus_1 = value + 1;
+        T value_plus_offset = value + _offset;
         T low_bits;
         if constexpr(std::integral<T>) {
-            low_bits = value_plus_1 & ((T(1) << level) - 1);
+            low_bits = value_plus_offset & ((T(1) << level) - 1);
         } else {
             mpz_class mask = (mpz_class(1) << level) - 1;
-            low_bits = value_plus_1 & mask;
+            low_bits = value_plus_offset & mask;
         }
         T position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level);
         if constexpr(std::integral<T>) {
@@ -145,11 +148,16 @@ class BinaryTreeMath {
     // Max Node Value at Level
     // Calculate max node value at a level.
     //
-    // Formula: 2^(level+1) - 2.
+    // Formula: 2^(level+1) - 1 - Offset.
     static inline mpz_class st_max_node_value_at_level(size_t level) {
         static thread_local mpz_class max_n;
         mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level + 1));
-        mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 2);
+        mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 1);
+        if constexpr(std::integral<T>) {
+            mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
+        } else {
+            mpz_sub(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset.get_mpz_t());
+        }
         return max_n;
     }
 
@@ -191,14 +199,14 @@ class BinaryTreeMath {
     // First Node Value
     // The value of the first node of any level.
     //
-    // Formula: 2^level - 1
+    // Formula: 2^level - Offset
     static inline T st_first_node_of_level(const size_t level) {
         static thread_local T first_node_value;
         if constexpr(std::integral<T>) {
-            first_node_value = (1ULL << level) - 1;
+            first_node_value = (1ULL << level) - _offset;
         } else if constexpr(std::same_as<T, mpz_class>) {
             mpz_pow_ui(first_node_value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
-            mpz_sub_ui(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), 1);
+            mpz_sub(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), _offset.get_mpz_t());
         }
         return first_node_value;
     }
@@ -319,7 +327,7 @@ class BinaryTreeMath {
     // Node Value by Position and Level
     // Calculate a node's value by it's position and level.  It supersedes the deprecated version following it.
     //
-    // Formula: 2^L  + bit_reverse_L(pos - 1, L) - 1
+    // Formula: 2^L  + bit_reverse_L(pos - 1, L) - Offset
     //    i.e.: Lift + New_Position              - Offset
     static inline T st_node_value_by_position_and_level(const T& position, size_t level) {
         static thread_local T lift;
@@ -341,7 +349,7 @@ class BinaryTreeMath {
         new_position = st_reverse_low_bits(new_position, level);
 
         // Return
-        return lift + new_position - 1;
+        return lift + new_position - _offset;
     }
     //
     // Now here's the old, deprecated form which uses summations.

@@ -114,11 +114,11 @@ class BinaryTree {
     bool is_pruning_parent_levels() const { return _is_pruning_parent_levels; }
     bool tracking_metadata() const { return _track_node_metadata; }
 
-    // Tree Math Wrappers.
-    static inline size_t st_node_level(const T& value) { return BinaryTreeMath<T>::st_node_level(value); }
-    static inline T st_node_position(const T& value) { return BinaryTreeMath<T>::st_node_position(value); }
-    static inline T st_max_node_value_at_level(size_t level) { return BinaryTreeMath<T>::st_max_node_value_at_level(level); }
-    static inline size_t st_max_full_level_at_node(const T& value) { return BinaryTreeMath<T>::st_max_full_level_at_node(value); }
+    // // Tree Math Wrappers.
+    // static inline size_t st_node_level(const T& value) { return BinaryTreeMath<T>::st_node_level(value); }
+    // static inline T st_node_position(const T& value) { return BinaryTreeMath<T>::st_node_position(value); }
+    // static inline T st_max_node_value_at_level(size_t level) { return BinaryTreeMath<T>::st_max_node_value_at_level(level); }
+    // static inline size_t st_max_full_level_at_node(const T& value) { return BinaryTreeMath<T>::st_max_full_level_at_node(value); }
 
     // Node Counts
     // Returns the REAL node count in the _level_map.
