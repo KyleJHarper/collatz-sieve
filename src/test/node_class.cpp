@@ -8,7 +8,7 @@ void test_basic_node_int() {
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
-    assert(root.get_odd_even_chain_string() == "OEOEOE");
+    assert(root.get_odd_even_chain_string() == "OEOE");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
     assert(root.get_fg_total() >= 0);
@@ -18,11 +18,11 @@ void test_basic_node_int() {
 
 void test_fg_values() {
     Node<uint64_t> node(1, false);
-    assert(node.get_fg_chain_string() == "F");
+    assert(node.get_fg_chain_string() == "F"); // Special case
     node.init(2, false);
     assert(node.get_fg_chain_string() == "G");
     node.init(3, false);
-    assert(node.get_fg_chain_string() == "FF");
+    assert(node.get_fg_chain_string() == "F");
     node.init(4, false);
     assert(node.get_fg_chain_string() == "GG");
     node.init(5, false);
@@ -30,7 +30,7 @@ void test_fg_values() {
     node.init(6, false);
     assert(node.get_fg_chain_string() == "GF");
     node.init(7, false);
-    assert(node.get_fg_chain_string() == "FFF");
+    assert(node.get_fg_chain_string() == "FF");
     node.init(8, false);
     assert(node.get_fg_chain_string() == "GGG");
     node.init(9, false);
@@ -52,7 +52,7 @@ void test_reuse_with_init() {
     Node<uint64_t> root(7, true);
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
-    assert(root.get_odd_even_chain_string() == "OEOEOE");
+    assert(root.get_odd_even_chain_string() == "OEOE");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
     assert(root.get_fg_total() >= 0);

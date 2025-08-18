@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cassert>
-#include "../collatz/collatz.hpp" // your class file
-// Include GMP if using mpz_class
+#include "../collatz/collatz.hpp"
 #include <gmpxx.h>
 #include <stdexcept>
 

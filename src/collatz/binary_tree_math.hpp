@@ -19,7 +19,7 @@ class BinaryTreeMath {
     private:
     static inline const mpz_class _MPZ_TWO = 2;
     static inline const mpf_class _MPF_TWO = 2;
-    static inline const T _ROOT_VALUE_DEFAULT = 0;
+    static inline const T _ROOT_VALUE_DEFAULT = 1;
     static inline T _root_value = _ROOT_VALUE_DEFAULT;
     static inline T _offset = 1 - _root_value;
 

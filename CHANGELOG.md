@@ -18,6 +18,13 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 2.0.0
+BinaryTreeMath is now rooted at 1 by default.  This is a major breaking change, hence the version bump.
+
+All the python tools are going to need to be adjusted, or retired if not needed anymore.
+
+The major fix will be to the tools which create, walk, or diagram trees (e.g.: tools/draw_tree.py).
+
 ### 1.4.0
 The BinaryTree and its associated BinaryTreeMath now support building a 1-based (root node == 1) tree.  This wasn't necessary for
 my purposes, but it aligns with how people often view perfect binary trees.  It has zero effect on my coverage or testing, so I

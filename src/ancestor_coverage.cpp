@@ -106,7 +106,6 @@ int main(int argc, char **argv) {
     init_logger();
     // Process options.
     typedef mpz_class my_type;
-    BinaryTreeMath<my_type>::set_root_value(1);
     // typedef uint64_t my_type;
     size_t levels;
     bool verbose = false;

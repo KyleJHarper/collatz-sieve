@@ -195,6 +195,9 @@ void test_binary_tree_multi_threaded() {
 
 template<IntegralOrMPZClass T>
 void test_binary_tree_math() {
+    // Root Default
+    assert(BinaryTreeMath<T>::get_default_root_value() == 1);
+    //
     // Bit Reversal
     T value = 421;  // Binary: 110100101
     assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 1) == 1);   //         1

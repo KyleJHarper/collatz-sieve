@@ -1,12 +1,50 @@
 # Things To Do
 
+We have two major goals, and I've slid into disarray and scope creep, so we'll keep it straight here.
+
+
+## Goal 1: Sieve
+
+I want to build a sieve that exceeds anything previously built.  Here are the guidelines:
+
+* Is fully deterministic and complete: no probability.
+* Optimizes the problem space (higher rejection rate).  Don't care about faster hardware or software.
+* Results in a new algorithm for space testing that is employable in a reasonable manner (easy iteration through uncovered nodes).
+
+
+## Goal 2: Solution
+
+Pride isn't the goal: this problem might not be solvable.  However, I coined a term in my career called "optimization toward zero".
+This technique takes a problem and attempts to resolve it by eliminating it.  While most often used by removing steps in a chain or
+pipeline which had issues (thereby optimizing the problem away), it might apply here.
+
+As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
+
+* Create a sieve with such coverage the space is completely tested (sieve == 100% exclusion).
+
+## Current Work
+
+### Update Python Tools
+Several items in the tools directory are either useless or need updated for the 1-base tree logic now.
+
+### Return to Linear Performance
+We've lost linear performance when going over ~3-4 threads.  Find out why.  Easy to see around 28+ levels in `bin/coverage`.
+* Mutex for HWM ancestor?
+* Memory thrashing?
+* Scanning through lists for level pruning?
+
+### Remove parents immediately
+The when level pruning is enabled, we can remove the parent as soon as we have the children.
+
 ### Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?
 
 ### HWM Ancestor Filter
+```
 for each number N:
   if some_func(N) proves N is a descendant of any_ancestor
     skip it
+```
 
 ^ This would mean precomputation of HWM ancestors and the coverage they create can now be applied
 without building a whole tree, or even the the last level of a tree.
@@ -14,6 +52,8 @@ without building a whole tree, or even the the last level of a tree.
 ^ This would also mean you could build any arbitrary level, and optionally scan for HWM ancestors in
 it manually.
 
+### Sieve Basics
+We need a for_each or next() style method for fetching survivors from our tree, giving us a sieve.
 
 ### Arbitrary Tree Level
 * We should support building a tree from level M-N, where M >=1 and N > M.
@@ -130,6 +170,3 @@ Iteration 2 (i == 1)
   ==> FOUND_IT(true)
 
 ```
-
-### Refactor for Cleanliness
-* Code is ugly in a lot of areas.  Let's clean that up.

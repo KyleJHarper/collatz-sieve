@@ -18,14 +18,14 @@ void init_logger();
 
 //
 // BIG FAT NOTE!
-// The following two methods are simple, basic functions for printing GMP (mpz_class/mpf_class) items with spdlog,
-// which is using fmt under the hood.  It's solid and works.
+// The following two methods are simple, basic functions for printing GMP (mpz_class/mpf_class) items with spdlog, which is using
+// fmt under the hood.  It's solid and works.
 //
 // The remaining functions are AI slop!
-// To get better formatting support (thousands separator, etc) I asked AI to slop out something, and after much wailing
-// and gnashing of teeth, it gave something close-ish, and I got it to work.  I have zero faith in it to be complete,
-// bug-free, and performant.  But since it's just logging crap, I don't care.  If it's ever a problem, just delete it
-// and revert to the two solid methods below.
+// To get better formatting support (thousands separator, etc) I asked AI to slop out something, and after much wailing and
+// gnashing of teeth, it gave something close-ish, and I got it to work.  I have zero faith in it to be complete, bug-free, and
+// performant.  But since it's just logging crap, I don't care.  If it's ever a problem, just delete it and revert to the two solid
+// methods below.
 //
 
 
