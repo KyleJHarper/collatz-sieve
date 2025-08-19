@@ -38,7 +38,6 @@ int main(int argc, char **argv) {
     logger->debug("  Start Exponent: {}", start_exponent);
     logger->debug("  Verbose: {}", verbose);
 
-logger->info("hi");
     // Do work.
     size_t total = end_exponent - start_exponent;
     size_t done = 0;
@@ -47,8 +46,9 @@ logger->info("hi");
     mpz_init(power_of_3_value_mpz);
     mpf_t base_3_mpf;
     mpf_t power_of_3_value_mpf, result_mpf;
-    mpf_inits(base_3_mpf);
-    mpf_inits(power_of_3_value_mpf, result_mpf);
+    mpf_init(base_3_mpf);
+    mpf_init(power_of_3_value_mpf);
+    mpf_init(result_mpf);
     mpf_set_ui(base_3_mpf, 3);
     float next_progress_report = progress_percent;
     float current_progress = 0;

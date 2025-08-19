@@ -394,6 +394,26 @@ void test_binary_tree_pruned() {
 }
 
 
+template<IntegralOrMPZClass T>
+void test_binary_tree_ancestors() {
+    // When disabled, they shouldn't be tracked.
+    size_t levels = 4;
+    BinaryTreeOptions opts;
+    opts.preserve_ancestors = false;
+    BinaryTree<T> tree(levels, opts);
+    assert(tree.get_ancestors().size() == 0);
+    //
+    // Tracking them should work.
+    opts.preserve_ancestors = true;
+    BinaryTree<T> tree_with_ancestors(levels, opts);
+    assert(tree_with_ancestors.get_ancestors().size() == 3);
+    assert(tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
+    assert(tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
+    assert(tree_with_ancestors.get_ancestors()[2]->get_value() == 19);
+}
+
+
+
 
 //
 // Wrapper to run all tests.
@@ -420,6 +440,10 @@ void run_all(T root_value) {
 
     std::cout << "test_binary_tree_coverage() ...";
     test_binary_tree_coverage<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_binary_tree_ancestors() ...";
+    test_binary_tree_ancestors<T>();
     std::cout << " passed.\n";
 
     std::cout << "test_binary_tree_node_count_should_match_map() ...";

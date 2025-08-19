@@ -5,7 +5,6 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <limits>
-#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -203,12 +202,7 @@ class BinaryTree {
         _level_count++;
 
         // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
-        T step;
-        if constexpr(std::same_as<T, mpz_class>) {
-            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), parent_level);
-        } else {
-            step = static_cast<T>(1ULL << parent_level);
-        }
+        T step = BinaryTreeMath<T>::st_step(parent_level);
 
         // Calculate parent and child counts for looping and indexing.
         // Note: size_t is safe, because no one can fit 2^64 nodes in RAM.  Vectors require size_t for indexes.
@@ -223,71 +217,83 @@ class BinaryTree {
         static thread_local T child_value_1;
         static thread_local T child_value_2;
 
-        // Guard _ancestors with a mutex.
-        std::mutex ancestor_lock;
-
         // Keep a record of covered or pruned values for coverage math after the loop.
         size_t covered_or_pruned = 0;
 
-        // Run the loop with OMP.
-        #pragma omp parallel for schedule(guided) reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, ancestor_lock, _preserve_ancestors, _track_node_metadata)
-        for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
-            // Find the parent.
-            Node<T>* parent = parents[parent_idx];
+        // Create an external tracker for ancestors for OMP local threads to utilize by-ref.
+        std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(omp_get_max_threads());
 
-            // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
-            if constexpr(std::same_as<T, mpz_class>) {
-                mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
-                mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
-            } else {
-                child_value_1 = parent->get_value() + step;
-                child_value_2 = child_value_1 + step;
-            }
+        // Begin the critical section, but don't loop yet.
+        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _preserve_ancestors, _track_node_metadata, omp_local_ancestors_group)
+        {
+            // Grab our personal ancestors vector to avoid locking.
+            auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
 
-            // Instaniate the children.
-            Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
-            Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
+            // Now Loop
+            #pragma omp for schedule(guided)
+            for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
+                // Find the parent.
+                Node<T>* parent = parents[parent_idx];
 
-            // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
-            // -- Child 1
-            bool assign_to_map = true;
-            if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
-                std::lock_guard<std::mutex> lock(ancestor_lock);
-                _ancestors.push_back(new Node<T>(child_1->get_value(), false));
-            }
-            if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
-                covered_or_pruned += 1;
-                if (_is_pruning_hwm_nodes) {
-                    delete child_1;
-                    child_1 = nullptr;
-                    assign_to_map = false;
+                // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
+                if constexpr(std::same_as<T, mpz_class>) {
+                    mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
+                    mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
+                } else {
+                    child_value_1 = parent->get_value() + step;
+                    child_value_2 = child_value_1 + step;
+                }
+
+                // Instaniate the children.
+                Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
+                Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
+
+                // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
+                // -- Child 1
+                bool assign_to_map = true;
+                if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
+                    my_ancestors.push_back(new Node<T>(child_1->get_value(), false));
+                }
+                if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
+                    covered_or_pruned += 1;
+                    if (_is_pruning_hwm_nodes) {
+                        delete child_1;
+                        child_1 = nullptr;
+                        assign_to_map = false;
+                    }
+                }
+                if (assign_to_map) {
+                    _level_map[child_level][2 * parent_idx] = child_1;
+                    if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                        parent->assign_child(child_1);
+                    }
+                }
+                // -- Child 2
+                assign_to_map = true;
+                if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
+                    my_ancestors.push_back(new Node<T>(child_2->get_value(), false));
+                }
+                if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
+                    covered_or_pruned += 1;
+                    if (_is_pruning_hwm_nodes) {
+                        delete child_2;
+                        child_2 = nullptr;
+                        assign_to_map = false;
+                    }
+                }
+                if (assign_to_map) {
+                    _level_map[child_level][2 * parent_idx + 1] = child_2;
+                    if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                        parent->assign_child(child_2);
+                    }
                 }
             }
-            if (assign_to_map) {
-                _level_map[child_level][2 * parent_idx] = child_1;
-                if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
-                    parent->assign_child(child_1);
-                }
-            }
-            // -- Child 2
-            assign_to_map = true;
-            if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
-                std::lock_guard<std::mutex> lock(ancestor_lock);
-                _ancestors.push_back(new Node<T>(child_2->get_value(), false));
-            }
-            if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
-                covered_or_pruned += 1;
-                if (_is_pruning_hwm_nodes) {
-                    delete child_2;
-                    child_2 = nullptr;
-                    assign_to_map = false;
-                }
-            }
-            if (assign_to_map) {
-                _level_map[child_level][2 * parent_idx + 1] = child_2;
-                if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
-                    parent->assign_child(child_2);
-                }
+        }
+
+        // Merge Ancestors.
+        if (_preserve_ancestors) {
+            for (std::vector<Node<T>*>& omp_ancestors : omp_local_ancestors_group) {
+                _ancestors.insert(_ancestors.end(), omp_ancestors.begin(), omp_ancestors.end());
             }
         }
 
@@ -308,7 +314,9 @@ class BinaryTree {
             if (parent_level == 0) {
                 _root_node = nullptr;
             }
-            for (Node<T>* parent : _level_map[parent_level]) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < _level_map[parent_level].size(); i++) {
+                Node<T>* parent = _level_map[parent_level][i];
                 parent->own_children(false);
                 delete parent;
             }

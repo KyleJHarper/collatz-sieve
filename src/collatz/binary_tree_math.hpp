@@ -135,6 +135,23 @@ class BinaryTreeMath {
 
 
     //
+    // Step
+    // Trees grow in a consistent manner, making the "step" calculation easy based on level.  The "level" should be the current
+    // level of the tree you're stepping away from.  E.g.: parent level when building children.
+    //
+    static inline T st_step(size_t level) {
+        static thread_local T step;
+        if constexpr(std::same_as<T, mpz_class>) {
+            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), level);
+        } else {
+            step = static_cast<T>(1ULL << level);
+        }
+        return step;
+    }
+
+
+
+    //
     // Max Position of Level
     // The maximum position that can exist for a node on a level.
     //

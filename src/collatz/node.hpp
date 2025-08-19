@@ -58,15 +58,15 @@ class NodeMetadata {
 };
 
 
+
 //
 // Node
-// A node will have a fractional value based on the distribution of the Odds and Evens as we
-// process the sequence.  These odd-even chains are evenly patterned as the tree is generated, so
-// we don't want to know the full high-water mark (from Collatz()).
+// A node will have a fractional value based on the distribution of the Odds and Evens as we process the sequence.  These odd-even
+// chains are evenly patterned as the tree is generated, so we don't want to know the full high-water mark (from Collatz()).
 //
 // BIG FAT NOTE!
-// By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.
-// If you want to delete a node without affecting its children, call own_children(false).
+// By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.  If you want to delete
+// a node without affecting its children, call own_children(false).
 //
 template <IntegralOrMPZClass T>
 class Node {
@@ -101,8 +101,11 @@ class Node {
     // -- Cache Line --
 
 
+
     public:
+    //
     // Constructors
+    //
     Node() {
         _value= T{};
         _parent = nullptr;
@@ -110,10 +113,36 @@ class Node {
     Node(const T& value, bool track_metadata, Node *parent = nullptr) {
         init(value, track_metadata, parent);
     }
-    // Use an init so we can reset and reuse objects.
+
+
+
+    //
+    // Destructor
+    //
+    ~Node() {
+        release_children();
+        release_metadata();
+    }
+
+
+
+    //
+    // Cout and string-ified methods.
+    //
+    friend std::ostream& operator<<(std::ostream &os, const Node<T>& m) {
+        return os << m._value;
+    }
+
+
+
+    //
+    // Initialize
+    // Builds the object, resuing it if necessary.
+    //
     void init(const T& value, bool track_metadata, Node *parent = nullptr) {
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
+
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
         if (_metadata == nullptr && track_metadata) { _metadata = new NodeMetadata<T>(); }
         if (_metadata != nullptr && ! track_metadata) { release_metadata(); }
@@ -122,30 +151,30 @@ class Node {
         _value = value;
         _parent = parent;
 
-        // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather
-        // tightly, but that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
+        // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
+        // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
         _fg_chain_length = get_level();
         std::string fg_chain = Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
         _fg_chain_length = fg_chain.size();
 
         // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
-        // Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
-        // Compute the odd-even fractional N portion, the constant, and then tally them up.
-        // We need at least 1 float for GMP to handle this as a floating point division.  The mpf_class will get auto-cleaned up at function end.
+        //   > Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
+        //   > Compute the odd-even fractional N portion, the constant, and then tally them up.
+        //   > We need at least 1 float for GMP to handle this as a floating point division.
+        //   > Odd count is number of F's, and even count is just size().
         size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
-        // Even count is just size().
-        mpz_ui_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), 2, fg_chain.size());
-        mpz_ui_pow_ui(tls_threes_value_mpz_c.get_mpz_t(), 3, odd_count);
+        mpz_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
+        mpz_pow_ui(tls_threes_value_mpz_c.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
         tls_threes_value_mpf_c = tls_threes_value_mpz_c;
         tls_fg_n_portion_mpf_c = tls_threes_value_mpf_c / tls_twos_value_mpz_c;
         tls_fg_constant_mpf_c = 0;
         for (char& c : fg_chain) {
             if (c == 'G') {
-                tls_fg_constant_mpf_c /= 2;
+                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
             } else {
-                tls_fg_constant_mpf_c *= 3;
-                tls_fg_constant_mpf_c += 1;
-                tls_fg_constant_mpf_c /= 2;
+                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
+                mpf_add(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
+                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
             }
         }
         tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * _value) + tls_fg_constant_mpf_c;
@@ -175,7 +204,11 @@ class Node {
         }
     };
 
+
+
+    //
     // Reset to make this act like a new() object.
+    //
     void reset() {
         // The _collatz object has its own resetting logic in its init().  Nothing to do here.
         release_children();
@@ -189,7 +222,56 @@ class Node {
         if (_metadata != nullptr) { _metadata->reset(); }
     }
 
-    // Release children tracking and, if enabled, their memory.
+
+
+    //
+    // Release Metadata
+    // Let callers decide when they're done with metadata.
+    //
+    void release_metadata() {
+        if (_metadata == nullptr) { return; }
+        delete _metadata;
+        _metadata = nullptr;
+        _track_metadata = false;
+    }
+
+
+
+    //
+    // Add Child
+    // Creates a child and assigns it to this parent.
+    //
+    Node<T>* add_child(T value) {
+        Node *child = new Node(value, _track_metadata, this);
+        _children[_child_count++] = child;
+        return child;
+    }
+
+
+
+    //
+    // Assign Child
+    // Assign a child.  No safety checks.  Increment counter.
+    void assign_child(Node<T>* child) {
+        _children[_child_count++] = child;
+    }
+
+
+
+    //
+    // Own Children
+    // Gain or relinquish ownership of children, mostly for destruction cascading purposes later.
+    //
+    void own_children(bool value) {
+        _owns_children = value;
+    }
+
+
+
+    //
+    // Release Child
+    // Release (delete) a single child if _owns_children is true, based on the object passed in. Compares pointer value to memory.
+    //
     void release_child(Node<T>* child) {
         for (size_t i = 0; i < MAX_CHILDREN; i++) {
             // Find the Child
@@ -210,6 +292,13 @@ class Node {
             }
         }
     }
+
+
+
+    //
+    // Release Children
+    // Releases (delete) all children if _owns_children is true.
+    //
     void release_children() {
         for (size_t i = 0; i < MAX_CHILDREN; i++) {
             if (_owns_children) {
@@ -220,29 +309,38 @@ class Node {
         _child_count = 0;
     }
 
-    // Let callers decide when they're done with metadata.
-    void release_metadata() {
-        if (_metadata == nullptr) { return; }
-        delete _metadata;
-        _metadata = nullptr;
-        _track_metadata = false;
+
+
+    // Children are usually generated by a BinaryTree, but in free-form mode, allow a node to generate its own children.
+    static void st_spawn_children(Node<T>* node) {
+        if (node->get_child_count() > 0) {
+            throw std::logic_error("You can't spawn children on a node that already has children.");
+        }
+        T step = BinaryTreeMath<T>::st_step(node->get_level());
+
+        T child_value = node->get_value();
+        for (uint8_t i = 0; i < MAX_CHILDREN; i++) {
+            // Step forward.  Avoid alloc() with GMP in the += operator.
+            if constexpr(std::same_as<T, mpz_class>) {
+                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
+            } else {
+                child_value += step;
+            }
+            Node<T>* child = new Node<T>(child_value, node->get_track_metadata(), node);
+            node->assign_child(child);
+        }
+    }
+    //
+    // Instance helper.
+    void spawn_children() {
+        st_spawn_children(this);
     }
 
-    // Destructor
-    ~Node() {
-        release_children();
-        release_metadata();
-    }
-
-    // Cout and string-ified methods.
-    friend std::ostream& operator<<(std::ostream &os, const Node<T>& m) {
-        return os << m._value;
-    }
 
 
-
-
+    //
     // Accessors and properties.
+    //
     const T& get_value() const { return _value; }
     Node* get_parent() const { return _parent; }
     Node<T>* get_hwm_ancestor() const { return _hwm_ancestor; }
@@ -255,12 +353,16 @@ class Node {
     Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
     size_t get_child_count() const { return static_cast<size_t>( _child_count); }
     size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
-
+    //
     // Tree level and position come from BinaryTree, but we'll make them accessible here.
     size_t get_level() const { return BinaryTreeMath<T>::st_node_level(_value); }
     T get_position() const { return BinaryTreeMath<T>::st_node_position(_value); }
 
-    // Metadata
+
+
+    //
+    // Metadata Accessors
+    //
     const mpz_class& get_twos_value() const {
         if (! _track_metadata) {
             throw std::logic_error(E_NO_METADATA_TRACKING);
@@ -292,6 +394,9 @@ class Node {
         return _metadata->fg_total;
     }
 
+
+
+    //
     // HWM data is available in the Collatz object.
     static size_t st_get_hwm_index(T value) {
         Collatz<T> collatz(value, true, true);
@@ -300,57 +405,23 @@ class Node {
     size_t get_hwm_index() const {
         return st_get_hwm_index(_value);
     }
-
+    //
     // Get the F-G chain.  Use the Collatz static method for this.
     std::string get_fg_chain_string() const {
         return Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
     }
+    //
     // Get the odd-even chain.  Use the Collatz static method for this.
     std::string get_odd_even_chain_string() const {
         return Collatz<T>::fg_to_oe(get_fg_chain_string(), std::numeric_limits<size_t>::max(), false);
     }
 
-    // Child Management
-    void assign_child(Node<T>* child) {
-        _children[_child_count++] = child;
-    }
-    Node<T>* add_child(T value) {
-        Node *child = new Node(value, _track_metadata, this);
-        _children[_child_count++] = child;
-        return child;
-    }
-    void own_children(bool value) {
-        _owns_children = value;
-    }
-    // Children are usually part of a BinaryTree, but in free-form mode, allow a node to generate its own children.
-    // The logic is maybe better suited for BinaryTree?  But our coupling between Tree and Node is already solid, so meh.
-    static void st_spawn_children(Node<T>* node) {
-        if (node->get_child_count() > 0) {
-            throw std::logic_error("You can't spawn children on a node that already has children.");
-        }
-        T step;
-        if constexpr(std::same_as<T, mpz_class>) {
-            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), node->get_level());
-        } else {
-            step = static_cast<T>(1ULL << node->get_level());
-        }
-        T child_value = node->get_value();
-        for (uint8_t i = 0; i < MAX_CHILDREN; i++) {
-            // Step forward.  Avoid alloc() with GMP in the += operator.
-            if constexpr(std::same_as<T, mpz_class>) {
-                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
-            } else {
-                child_value += step;
-            }
-            Node<T>* child = new Node<T>(child_value, node->get_track_metadata(), node);
-            node->assign_child(child);
-        }
-    }
-    void spawn_children() {
-        st_spawn_children(this);
-    }
 
-    // Size data.
+
+    //
+    // Object Size
+    // Deeply scan the object.
+    //
     size_t deep_size() const {
         size_t total = sizeof(*this);
         if (_metadata != nullptr) {

@@ -24,17 +24,9 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
-### Update Python Tools
-Several items in the tools directory are either useless or need updated for the 1-base tree logic now.
-
-### Return to Linear Performance
-We've lost linear performance when going over ~3-4 threads.  Find out why.  Easy to see around 28+ levels in `bin/coverage`.
-* Mutex for HWM ancestor?
-* Memory thrashing?
-* Scanning through lists for level pruning?
-
-### Remove parents immediately
-The when level pruning is enabled, we can remove the parent as soon as we have the children.
+### Update Tree Generator
+The draw_tree.py script works, but only for 0-based tree.  We should probably rewrite the whole thing (Tree/Node classes) to follow
+our BinaryTreeMath logic in C.
 
 ### Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?

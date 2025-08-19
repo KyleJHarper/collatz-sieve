@@ -5,7 +5,7 @@ from lib.collatz import Collatz
 from typing import List
 
 
-parser = argparse.ArgumentParser(description="Step through the binary representation of a number.")
+parser = argparse.ArgumentParser(description="Step through the binary representation of a number and puts it into a columnar layout.")
 parser.add_argument(
     'initial_values',
     type=int,

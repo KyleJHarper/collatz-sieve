@@ -30,6 +30,11 @@ namespace CollatzConstants {
     static const mpz_class MPZ_ONE = 1;
     static const mpz_class MPZ_TWO = 2;
     static const mpz_class MPZ_THREE = 3;
+    // GMP float-style values used in a lot of calculations.
+    static const mpf_class MPF_ONE = 1;
+    static const mpf_class MPF_TWO = 2;
+    static const mpf_class MPF_THREE = 3;
+    static const mpf_class MPF_HALF = 0.5;
     // Let's lock in what "odd" and "even" mean.
     constexpr bool ODD = true;
     constexpr bool EVEN = false;
@@ -360,10 +365,10 @@ class Collatz {
                 bool stop = callback(current_step);
                 if (stop || current_step == 1) { return; }
                 if (mpz_even_p(current_step.get_mpz_t())) {
-                    current_step /= 2;
+                    mpz_tdiv_q_2exp(current_step.get_mpz_t(), current_step.get_mpz_t(), 1);  // current_step >> 1   ==>  current_step /= 2
                 } else {
-                    current_step *= 3;
-                    current_step += 1;
+                    mpz_mul(current_step.get_mpz_t(), current_step.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());  // current_step *= 3
+                    mpz_add(current_step.get_mpz_t(), current_step.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());    // current_step += 1
                 }
             }
         }
