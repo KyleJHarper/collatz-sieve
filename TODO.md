@@ -24,6 +24,9 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
+### Clean up Collatz.hpp
+Yep
+
 ### Update Tree Generator
 The draw_tree.py script works, but only for 0-based tree.  We should probably rewrite the whole thing (Tree/Node classes) to follow
 our BinaryTreeMath logic in C.

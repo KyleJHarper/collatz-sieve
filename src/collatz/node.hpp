@@ -137,7 +137,7 @@ class Node {
 
     //
     // Initialize
-    // Builds the object, resuing it if necessary.
+    // Builds the object, reusing it if necessary.
     //
     void init(const T& value, bool track_metadata, Node *parent = nullptr) {
         // Reset object if necessary.

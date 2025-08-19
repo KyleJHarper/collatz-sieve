@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
     // Binrary Tree Option Sets
     BinaryTreeOptions BTWithoutPruneWithMetadata = {.track_node_metadata = true, .prune_hwm_nodes = false };
     BinaryTreeOptions BTWithoutPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = false };
-    BinaryTreeOptions BTWithPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = true};
+    BinaryTreeOptions BTWithPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = true, .prune_parent_levels = true};
 
     // BT no metadata, no pruning
     size_t rss_t1 = getCurrentRSSBytes();
@@ -196,7 +196,7 @@ int main(int argc, char **argv) {
     table.push_back(add("    Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_with_metadata, bytes_per_node_mpz_c_with_metadata));
     table.push_back(add("    Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata));
     table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t_with_metadata - bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata - bytes_per_node_mpz_c_with_metadata));
-    table.push_back(add(std::format("BinaryTree (deep, {} levels, with HWM pruning)", levels).c_str(), tree_uint64_t_with_pruning.deep_size(), tree_mpz_c_with_pruning.deep_size()));
+    table.push_back(add(std::format("BinaryTree (deep, {} levels, with all pruning)", levels).c_str(), tree_uint64_t_with_pruning.deep_size(), tree_mpz_c_with_pruning.deep_size()));
     table.push_back(add("  As Megabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024, "Mbytes"));
     table.push_back(add("  As Gigabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024/1024, "Gbytes"));
     table.push_back(add("  According to RSS", rss_uint64_t_with_pruning, rss_mpz_c_with_pruning));

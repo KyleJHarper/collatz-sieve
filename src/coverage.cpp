@@ -24,7 +24,7 @@ class CoverageBuilder {
         opts.track_node_metadata = false;
         opts.prune_hwm_nodes = true;
         opts.preserve_ancestors = false;
-        opts.prune_parent_levels = false;
+        opts.prune_parent_levels = true;
         _tree.init(0, opts);
     }
 

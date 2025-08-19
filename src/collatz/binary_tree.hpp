@@ -85,7 +85,7 @@ class BinaryTree {
 
     //
     // Initialize
-    // Builds the object, resuing it if necessary.
+    // Builds the object, reusing it if necessary.
     //
     void init(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
         // Sanity check.  T must support requested tree size.
