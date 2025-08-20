@@ -1,6 +1,10 @@
 #pragma once
 #include "concepts.hpp"
 #include "binary_tree.hpp"
+#include <vector>
+#include "node.hpp"
+#include <tbb/tbb.h>
+#include <execution>
 
 
 
@@ -18,11 +22,21 @@
 template<IntegralOrMPZClass T>
 class Sieve {
     private:
-    BinaryTree<T>* _tree = nullptr;
-    bool _owns_tree = false;
-    size_t _current_level = 0;
-    T _current_position = 1;
-    T _max_position = 1;
+    //
+    // Big Fat Note About Data Types
+    //
+    // We can't fit more than 2^64 nodes in memory.  Even at 1 byte that would be 16 exabytes.  Even if we reduced the test space
+    // by 99.9%, a 64-level tree would have ~18 quadrillion survivors and 16 petabytes of RAM.  This means neither the count, step,
+    // offset, or even survivor list itself can exceed uint64_t.
+    //
+    // We can ISSUE values larger than 2^64 via .next(), so it'll be type T returned.  But none of the private members need it.
+    //
+    std::vector<size_t> _survivors;
+    size_t _step = 0;
+    size_t _offset = 0;
+    size_t _survivor_count = 0;
+    size_t _multiplier = 1;
+    size_t _incrementer;
 
 
     public:
@@ -44,13 +58,13 @@ class Sieve {
     //
     // User-defined tree.  Store a reference.  Do not own.
     Sieve(BinaryTree<T>& tree) {
-        init(&tree, false);
+        init(&tree);
     }
     //
     // Sieve-built tree.  Owns tree.
     Sieve(size_t tree_levels, BinaryTreeOptions opts = Sieve<T>::SIEVE_PRUNE_DEFAULTS) {
         BinaryTree<T>* tree = new BinaryTree<T>(tree_levels, opts);
-        init(tree, true);
+        init(tree);
     }
 
 
@@ -59,9 +73,6 @@ class Sieve {
     // Destructor
     //
     ~Sieve() {
-        if (_owns_tree) {
-            delete _tree;
-        }
     }
 
 
@@ -70,12 +81,52 @@ class Sieve {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(BinaryTree<T>* tree, bool owns_tree) {
-        _tree = tree;
-        _owns_tree = owns_tree;
-        _current_level = _tree->get_level_count() + 1;
-        _current_position = 1;
-        _max_position = tree->get_level_map()[tree->get_level_count()].size();
+    void init(BinaryTree<T>* tree) {
+        // Reset the multiplier and step values.
+        _multiplier = 1;
+        _step = BinaryTreeMath<T>::st_step(tree->get_level_count());
+
+        // Build the incrementer based on step and multiplier.
+        _incrementer = (_multiplier * _step);
+
+        // Get a reference to the last level.
+        std::vector<Node<T>*>& last_level = tree->get_level_map(tree->get_level_count());
+
+        // Resize the survivor list to keep memory close.
+        _survivors.clear();
+        _survivors.shrink_to_fit();
+        _survivors.reserve(last_level.size());
+
+        // Build a list of surviving children.
+        for (Node<T>* survivor : tree->get_level_map()[tree->get_level_count()]) {
+            if constexpr(std::integral<T>) {
+                _survivors.push_back(survivor->get_value());
+            } else {
+                // Move the GMP object.  Don't alloc.
+                _survivors.push_back(std::move(survivor->get_value()));
+            }
+        }
+
+        // Save the count externally.  Probably unecessary, but whatever.
+        _survivor_count = _survivors.size();
+
+        // Now sort the T list.  This can be millions of items.
+        std::sort(std::execution::par, _survivors.begin(), _survivors.end());
+    }
+
+
+
+    //
+    // Increment Offset
+    // Bump the offset and perform overflow.
+    //
+    inline void bump_offset() {
+        _offset += 1;
+        if (_offset >= _survivor_count) {
+            _offset = 0;
+            _multiplier += 1;
+            _incrementer = _step * _multiplier;
+        }
     }
 
 
@@ -85,41 +136,14 @@ class Sieve {
     // Returns the next value from the sieve.  This is a single-threaded, one-by-one iterator.
     //
     T next() {
-        // What if we just treat each parent node as the root of a subtree, which will be a perfect binary tree unto itself.
-        // We then iterate through it, moving to the next parent and calling get_descendants() or whatever as we go.
-        //
-        // We'll need the same protection against memory explosion as we have when building the tree.  We'll need a yielding
-        // function and/or tracking of the current descendant position so we can have reentrance.
-
-
-
-        // Bump position.
-        // How do we handle left/right?
-        // The level and position are for the next node.  We need to find the parent.
-        _current_position += 1;
-        if (_current_position > _max_position) {
-            _current_level += 1;
-            _current_position = 1;
+        T result = _survivors[_offset];
+        if constexpr(std::integral<T>) {
+            result += _incrementer;
+        } else {
+            mpz_add_ui(result.get_mpz_t(), result.get_mpz_t(), _incrementer);
         }
-
-        // Who is the parent?
-        // If the position is odd/even that tells us the extra offset, right?
-        // We have to do that at each level, right?
-        // Pretty sure we need to offload this to BinaryTreeMath...
-
-        // Maybe it's easier to track parent_position and offset according to level delta?
-        // L4       parent
-        //         /     \
-        // L5    c1       c2
-        //      / \       / \
-        // L6  g1  g2    g1  g2
-        //
-        // position = 1
-        // max_descendents = 2^(L6 - L4) == 2^2 == 4
-        // val(g1) == ??
-        // val(g2) == ??
-        //
-
+        bump_offset();
+        return result;
     }
 
 };
