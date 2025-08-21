@@ -1,9 +1,10 @@
 #pragma once
 #include "concepts.hpp"
 #include "binary_tree.hpp"
+#include "gmp_helpers.hpp"
+#include <cstdint>
 #include <vector>
 #include "node.hpp"
-#include <tbb/tbb.h>
 #include <execution>
 
 
@@ -31,12 +32,12 @@ class Sieve {
     //
     // We can ISSUE values larger than 2^64 via .next(), so it'll be type T returned.  But none of the private members need it.
     //
-    std::vector<size_t> _survivors;
-    size_t _step = 0;
-    size_t _offset = 0;
-    size_t _survivor_count = 0;
-    size_t _multiplier = 1;
-    size_t _incrementer;
+    std::vector<uint64_t> _survivors;
+    uint64_t _step = 0;
+    uint64_t _offset = 0;
+    uint64_t _survivor_count = 0;
+    uint64_t _multiplier = 1;
+    uint64_t _incrementer;
 
 
     public:
@@ -56,12 +57,12 @@ class Sieve {
     // Default Constructor.
     Sieve() {}
     //
-    // User-defined tree.  Store a reference.  Do not own.
+    // User-supplied tree.
     Sieve(BinaryTree<T>& tree) {
         init(&tree);
     }
     //
-    // Sieve-built tree.  Owns tree.
+    // Sieve-built tree.
     Sieve(size_t tree_levels, BinaryTreeOptions opts = Sieve<T>::SIEVE_PRUNE_DEFAULTS) {
         BinaryTree<T>* tree = new BinaryTree<T>(tree_levels, opts);
         init(tree);
@@ -84,31 +85,35 @@ class Sieve {
     void init(BinaryTree<T>* tree) {
         // Reset the multiplier and step values.
         _multiplier = 1;
-        _step = BinaryTreeMath<T>::st_step(tree->get_level_count());
+        _step = BinaryTreeMath<uint64_t>::st_step(tree->get_level_count());
 
         // Build the incrementer based on step and multiplier.
         _incrementer = (_multiplier * _step);
 
         // Get a reference to the last level.
-        std::vector<Node<T>*>& last_level = tree->get_level_map(tree->get_level_count());
+        const std::vector<Node<T>*>& last_level = tree->get_level_map().at(tree->get_level_count());
 
         // Resize the survivor list to keep memory close.
         _survivors.clear();
         _survivors.shrink_to_fit();
-        _survivors.reserve(last_level.size());
+        _survivors.resize(last_level.size());
+        _survivor_count = _survivors.size();
 
+        for (Node<T>* survivor : last_level) {
+
+            std::cout << "adding survivor node: " << survivor->get_value() << std::endl;
+        }
         // Build a list of surviving children.
-        for (Node<T>* survivor : tree->get_level_map()[tree->get_level_count()]) {
+        #pragma omp parallel for schedule(static, 1000) default(none) shared(_survivors, last_level)
+        for (uint64_t i = 0; i < _survivor_count; i++) {
+            Node<T>* survivor = last_level[i];
             if constexpr(std::integral<T>) {
-                _survivors.push_back(survivor->get_value());
+                _survivors[i] = survivor->get_value();
             } else {
-                // Move the GMP object.  Don't alloc.
-                _survivors.push_back(std::move(survivor->get_value()));
+                // Convert the GMP to uint64_t.  See private member for why.
+                _survivors[i] = mpz_get_ui64(survivor->get_value().get_mpz_t());
             }
         }
-
-        // Save the count externally.  Probably unecessary, but whatever.
-        _survivor_count = _survivors.size();
 
         // Now sort the T list.  This can be millions of items.
         std::sort(std::execution::par, _survivors.begin(), _survivors.end());
@@ -123,6 +128,7 @@ class Sieve {
     inline void bump_offset() {
         _offset += 1;
         if (_offset >= _survivor_count) {
+            std::cout << "bumping to new multiplier" << std::endl;
             _offset = 0;
             _multiplier += 1;
             _incrementer = _step * _multiplier;

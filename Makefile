@@ -32,6 +32,7 @@ PROGRAMS = ancestor_coverage \
     high_water_mark \
 	peak_by_bit \
 	performance_stats \
+	sieve_stuff \
 	single_collatz
 DEBUG_PROGRAMS = $(addsuffix $(DEBUG_SUFFIX), $(PROGRAMS))
 OBJECTS = $(OBJDIR)/logging.o
@@ -101,13 +102,13 @@ $(PROGRAMS): $(OBJECTS) | $(BINDIR)
 	$(CXX) $(RELEASE_FLAGS) -o $(BINDIR)/$@ \
 		$(SRCDIR)/$@.cpp \
 		$^ \
-		-lgmp -lgmpxx
+		-lgmp -lgmpxx -ltbb
 
 $(DEBUG_PROGRAMS): $(DEBUG_OBJECTS) | $(BINDIR_DEBUG)
 	$(CXX) $(DEBUG_FLAGS) -o $(BINDIR_DEBUG)/$@ \
 		$(SRCDIR)/$(subst $(DEBUG_SUFFIX),,$(@)).cpp \
 		$^ \
-		-lgmp -lgmpxx
+		-lgmp -lgmpxx -ltbb
 
 
 
