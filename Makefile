@@ -5,6 +5,7 @@ CXX                  = g++
 CXXFLAGS            += -Wall -Wextra -std=c++20 -pthread -fopenmp -ljemalloc -Isrc/include
 OLEVEL              ?= -O2
 DEBUG_EXTRA_FLAGS    = -O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors
+LDFLAGS              += -lgmp -lgmpxx -ltbb
 RELEASE_FLAGS        = $(CXXFLAGS) $(OLEVEL)
 DEBUG_FLAGS          = $(CXXFLAGS) $(DEBUG_EXTRA_FLAGS)
 DEBUG_SUFFIX         = _debug
@@ -25,7 +26,8 @@ OBJDIR_DEBUG = $(OBJDIR)$(DEBUG_SUFFIX)
 #
 TESTS = collatz_class \
 	node_class \
-	binary_tree_class
+	binary_tree_class \
+	sieve_class
 DEBUG_TESTS = $(addsuffix $(DEBUG_SUFFIX), $(TESTS))
 PROGRAMS = ancestor_coverage \
 	coverage \
@@ -102,13 +104,13 @@ $(PROGRAMS): $(OBJECTS) | $(BINDIR)
 	$(CXX) $(RELEASE_FLAGS) -o $(BINDIR)/$@ \
 		$(SRCDIR)/$@.cpp \
 		$^ \
-		-lgmp -lgmpxx -ltbb
+		$(LDFLAGS)
 
 $(DEBUG_PROGRAMS): $(DEBUG_OBJECTS) | $(BINDIR_DEBUG)
 	$(CXX) $(DEBUG_FLAGS) -o $(BINDIR_DEBUG)/$@ \
 		$(SRCDIR)/$(subst $(DEBUG_SUFFIX),,$(@)).cpp \
 		$^ \
-		-lgmp -lgmpxx -ltbb
+		$(LDFLAGS)
 
 
 
@@ -125,7 +127,7 @@ $(TESTS): $(OBJECTS) | $(BINDIR)
 	$(CXX) $(RELEASE_FLAGS) -o $(BINDIR)/test__$@ \
 		$(SRCDIR)/test/$@.cpp \
 		$^ \
-		-lgmp -lgmpxx
+		$(LDFLAGS)
 	$(BINDIR)/test__$@
 
 $(DEBUG_TESTS): $(DEBUG_OBJECTS) | $(BINDIR_DEBUG)
@@ -133,7 +135,7 @@ $(DEBUG_TESTS): $(DEBUG_OBJECTS) | $(BINDIR_DEBUG)
 	$(CXX) $(DEBUG_FLAGS) -o $(BINDIR_DEBUG)/test__$(subst $(DEBUG_SUFFIX),,$(@)) \
 		$(SRCDIR)/test/$(subst $(DEBUG_SUFFIX),,$(@)).cpp \
 		$^ \
-		-lgmp -lgmpxx
+		$(LDFLAGS)
 	$(BINDIR_DEBUG)/test__$(subst $(DEBUG_SUFFIX),,$(@))
 
 

@@ -1,4 +1,5 @@
 #include <climits>
+#include <cstddef>
 #include <gmpxx.h>
 #include <string>
 #include <unistd.h>
@@ -13,17 +14,9 @@ int main(int argc, char **argv) {
     CLI11_PARSE(options, argc, argv);
 
     Sieve<mpz_class> sieve(levels);
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
-    std::cout << sieve.next() << std::endl;
+    for (size_t i = 0; i < 100; i++) {
+        std::cout << sieve.next() << std::endl;
+    }
 
     return 0;
 }
