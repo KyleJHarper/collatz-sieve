@@ -18,6 +18,9 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 2.1.0
+Sieve works and produces values based on the survivors of a BinaryTree.  Supports batch `next()`.
+
 ### 2.0.0
 BinaryTreeMath is now rooted at 1 by default.  This is a major breaking change, hence the version bump.
 

@@ -28,9 +28,8 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 Yep
 
 ### Sieve
-* Switch from tree to `std::vector<T>`.  We don't need the whole node object, let alone the tree.
-  * This would mean a prebuilt tree could be loaded from disk without heavy RAM usage.
-
+* Add forward-looking cache.
+* Add sieve building or iterating speed to performance test.
 
 ### Update Tree Generator
 The draw_tree.py script works, but only for 0-based tree.  We should probably rewrite the whole thing (Tree/Node classes) to follow
