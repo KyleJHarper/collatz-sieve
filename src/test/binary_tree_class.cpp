@@ -422,51 +422,51 @@ template<IntegralOrMPZClass T>
 void run_all(T root_value) {
     BinaryTreeMath<T>::set_root_value(root_value);
 
-    std::cout << "test_binary_tree_basic_construction() ...";
+    std::cout << "test_binary_tree_basic_construction() ..." << std::flush;
     test_binary_tree_basic_construction<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_deep_size() ...";
+    std::cout << "test_binary_tree_deep_size() ..." << std::flush;
     test_binary_tree_deep_size<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_generate_node_at_valid() ...";
+    std::cout << "test_binary_tree_generate_node_at_valid() ..." << std::flush;
     test_binary_tree_generate_node_at_valid<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_generate_node_at_invalid_pos() ...";
+    std::cout << "test_binary_tree_generate_node_at_invalid_pos() ..." << std::flush;
     test_binary_tree_generate_node_at_invalid_pos<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_coverage() ...";
+    std::cout << "test_binary_tree_coverage() ..." << std::flush;
     test_binary_tree_coverage<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_ancestors() ...";
+    std::cout << "test_binary_tree_ancestors() ..." << std::flush;
     test_binary_tree_ancestors<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_node_count_should_match_map() ...";
+    std::cout << "test_binary_tree_node_count_should_match_map() ..." << std::flush;
     test_binary_tree_node_count_should_match_map<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_too_many_levels() ...";
+    std::cout << "test_binary_tree_too_many_levels() ..." << std::flush;
     test_binary_tree_too_many_levels<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_multi_threaded() ...";
+    std::cout << "test_binary_tree_multi_threaded() ..." << std::flush;
     test_binary_tree_multi_threaded<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_math() ...";
+    std::cout << "test_binary_tree_math() ..." << std::flush;
     test_binary_tree_math<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_pruned() ...";
+    std::cout << "test_binary_tree_pruned() ..." << std::flush;
     test_binary_tree_pruned<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_level_will_fit() ...";
+    std::cout << "test_binary_tree_level_will_fit() ..." << std::flush;
     test_binary_tree_level_will_fit<T>();
     std::cout << " passed.\n";
 

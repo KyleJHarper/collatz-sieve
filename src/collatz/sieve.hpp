@@ -4,6 +4,7 @@
 #include "gmp_helpers.hpp"
 #include <cstddef>
 #include <cstdint>
+#include <ctime>
 #include <limits>
 #include <ratio>
 #include <stdexcept>
@@ -21,7 +22,7 @@
 // Options Package for Sieve
 //
 struct SieveOptions {
-    size_t pool_size = size_t{1} << 16;  // 65,536
+    size_t pool_size = size_t{1} << 20;  // 1,048,576  (~1M)
     BinaryTreeOptions tree_opts = {
         .track_node_metadata = false,
         .prune_hwm_nodes = true,
@@ -209,14 +210,24 @@ class Sieve {
 
     //
     // Refill Pool
+    // Optionally send a vector to fill first, then the pool will fill afterward.
     //
-    void refill_pool() {
-        // Use chromo a lot here.  Namespace it.  Start the clock.
+    void refill_pool(std::vector<T>* partial_buffer_ptr = nullptr, size_t* partial_buffer_fill_index_ptr = nullptr) {
+        // Test for a valid partial buffer, if sent.
+        if (partial_buffer_ptr != nullptr) {
+            if (partial_buffer_fill_index_ptr == nullptr) {
+                throw std::logic_error("You can't send a partial buffer without an index.");
+            }
+            if (partial_buffer_ptr->size() == 0) {
+                throw std::logic_error("You can't send a partial buffer with a .size() of zero.  Resize() first.");
+            }
+        }
+        // Use chrono a lot here.  Namespace it.  Start the clock.
         using namespace std::chrono;
+        time_point start = high_resolution_clock::now();
 
         // Move unused pool objects to the front if refill was called early.
-        time_point start = high_resolution_clock::now();
-        size_t fill_index = _pool_size - _pool_index;
+        size_t pool_fill_index = _pool_size - _pool_index;
         if (_pool_index > 0 && _pool_index < _pool_size) {
             _pool_premature_refills++;
             #pragma omp parallel for default(none) schedule(static) shared(_pool, _pool_index, _pool_size)
@@ -232,27 +243,45 @@ class Sieve {
         // Reset the pool index safely now.
         _pool_index = 0;
 
-        // Now fill.
+        // Now fill.  We'll try to fill the caller's partial buffer, if necessary, then the pool.
+        std::vector<T>* current_buffer;
+        size_t current_fill_index;
+        if (partial_buffer_ptr != nullptr && partial_buffer_fill_index_ptr != nullptr) {
+            current_buffer = partial_buffer_ptr;
+            current_fill_index = *partial_buffer_fill_index_ptr;
+        } else {
+            current_buffer = &_pool;
+            current_fill_index = pool_fill_index;
+        }
         size_t fill_limit = 0;
-        while (fill_index < _pool_size) {
+        while (current_buffer != &_pool || current_fill_index < current_buffer->size()) {
+            // Swap buffers if if we were filling a partial.
+            if (current_buffer == partial_buffer_ptr && current_fill_index >= current_buffer->size()) {
+                // Update the partial's count
+                *partial_buffer_fill_index_ptr = current_fill_index;
+                // Now swap to pool structures.
+                current_buffer = &_pool;
+                current_fill_index = pool_fill_index;
+            }
+
             // We can only parallelize within the _surivior_index/count.  After it, _incrementor changes.
             // We also can't overflow the pool. Ergo, pick the lowest.
-            fill_limit = std::min(_survivor_count - _survivor_index, _pool_size - fill_index);
+            fill_limit = std::min(_survivor_count - _survivor_index, current_buffer->size() - current_fill_index);
 
             // Loop within limits.  Skip it to avoid thread overhead if limit is 0 this round.
             if (fill_limit != 0) {
-                #pragma omp parallel for default(none) schedule(static) shared(_pool, _survivors, _incrementer, _survivor_index, fill_index, fill_limit)
+                #pragma omp parallel for default(none) schedule(static) shared(current_buffer, _survivors, _incrementer, _survivor_index, current_fill_index, fill_limit)
                 for (size_t i = 0; i < fill_limit; i++) {
                     if constexpr(std::integral<T>) {
-                        _pool[fill_index + i] = _survivors[_survivor_index + i] + _incrementer;
+                        (*current_buffer)[current_fill_index + i] = _survivors[_survivor_index + i] + _incrementer;
                     } else {
-                        mpz_add_ui(_pool[fill_index + i].get_mpz_t(), _incrementer.get_mpz_t(), _survivors[_survivor_index + i]);
+                        mpz_add_ui((*current_buffer)[current_fill_index + i].get_mpz_t(), _incrementer.get_mpz_t(), _survivors[_survivor_index + i]);
                     }
                 }
             }
 
             // Adjust counters.
-            fill_index += fill_limit;
+            current_fill_index += fill_limit;
             _pool_generated_count += fill_limit;
             _pool_refill_fill_loops++;
             bump_survivor_index(fill_limit);
@@ -351,7 +380,8 @@ class Sieve {
             filled += limit;
             _pool_index += limit;
             if (_pool_index >= _pool_size) {
-                refill_pool();
+                refill_pool(&buffer, &filled);
+                break;
             }
         }
     }

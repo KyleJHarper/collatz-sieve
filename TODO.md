@@ -29,7 +29,16 @@ Yep
 
 ### Sieve
 * Add forward-looking cache.
-* Add sieve building or iterating speed to performance test.
+  * Steps to scan is equal to tree level, because we're guaranteed to still be over HWM
+  * We know the F-G chain size is equal to level - 1, or close.
+* Decide on size and vector vs array.
+* Cost of step scanning can be zero if we return data to caller about where we stopped.
+* Need huuuge tracking for this.
+* Build a chart of average steps per N per level for all integers.
+
+### Checker
+* We need a program that will leverage a sieve and report progress meaningfully.
+
 
 ### Update Tree Generator
 The draw_tree.py script works, but only for 0-based tree.  We should probably rewrite the whole thing (Tree/Node classes) to follow

@@ -62,7 +62,7 @@ const std::array<uint64_t, L4_SIZE> L4_VALUES = {
 template<IntegralOrMPZClass T>
 void test_sieve_default_opts() {
     SieveOptions opts;
-    assert(opts.pool_size == 65536);
+    assert(opts.pool_size == 1048576);
     assert(opts.tree_opts.track_node_metadata == false);
     assert(opts.tree_opts.prune_hwm_nodes == true);
     assert(opts.tree_opts.prune_parent_levels == true);
@@ -112,7 +112,7 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
 // L4 Internals Should Match
 //
 template<IntegralOrMPZClass T>
-void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls) {
+void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_overflowed = false) {
     // Only works for l4 trees.
     assert(sieve.get_tree_level_count() == 4);
 
@@ -120,7 +120,10 @@ void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls) {
     assert(sieve.get_pool_premature_refills() == 0);
 
     // Refills should match: floor(next_calls / pool_size) + 1
-    assert(sieve.get_pool_refills() == std::floor(next_calls / sieve.get_pool_size()) + 1);
+    // Only if bulk fills didn't overflow.
+    if (! bulk_fill_overflowed) {
+        assert(sieve.get_pool_refills() == std::floor(next_calls / sieve.get_pool_size()) + 1);
+    }
 
     // L4 survivor count is 3.
     assert(sieve.get_survivor_count() == 3);
@@ -130,14 +133,21 @@ void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls) {
     assert(sieve.get_step() == BinaryTreeMath<T>::st_step(sieve.get_tree_level_count()));
 
     // Pool index math: next_calls % pool_size
-    assert(next_calls % sieve.get_pool_size() == sieve.get_pool_index());
+    if (bulk_fill_overflowed) {
+        assert(0 == sieve.get_pool_index());
+    } else {
+        assert(next_calls % sieve.get_pool_size() == sieve.get_pool_index());
+    }
 
     // Multiplier is tied to pool filling.
     // Math: floor(pool_generated_count / survivor_count) + 1
-    size_t expected_generated = (std::floor(next_calls / sieve.get_pool_size()) + 1) * sieve.get_pool_size();
-    assert(sieve.get_pool_generated_count() == expected_generated);
-    size_t expected_multiplier = std::floor(expected_generated / sieve.get_survivor_count()) + 1;
-    assert(std::floor(sieve.get_pool_generated_count() / sieve.get_survivor_count()) + 1 == expected_multiplier);
+    // Math falls apart if bulk overflows happened.
+    if (! bulk_fill_overflowed) {
+        size_t expected_generated = (std::floor(next_calls / sieve.get_pool_size()) + 1) * sieve.get_pool_size();
+        assert(sieve.get_pool_generated_count() == expected_generated);
+        size_t expected_multiplier = std::floor(expected_generated / sieve.get_survivor_count()) + 1;
+        assert(std::floor(sieve.get_pool_generated_count() / sieve.get_survivor_count()) + 1 == expected_multiplier);
+    }
 }
 
 
@@ -181,6 +191,7 @@ void test_sieve_bulk_next() {
     Sieve<T> sieve(tree, opts);
     std::vector<T> bulk;
     size_t next_count = 20;
+    T x;
 
     // Behavior: we will NOT change your size() data.  We will error.
     sieve.init(&tree, opts);
@@ -206,11 +217,11 @@ void test_sieve_bulk_next() {
     sieve.next(bulk);
     assert(bulk.size() == next_count);
     assert(sieve.get_pool_index() == next_count);
-    for (size_t i = 0; i < next_count; i++) {
+    for (size_t i = 0; i < 20; i++) {
         assert(bulk[i] == L4_VALUES[i]);
     }
     assert(sieve.get_pool().at(next_count) == L4_VALUES[next_count]);
-    test_sieve_l4_internals(sieve, next_count);
+    test_sieve_l4_internals(sieve, next_count, false);
 
     // A vector same size as pool has left.
     next_count = 64;
@@ -226,7 +237,7 @@ void test_sieve_bulk_next() {
     for (size_t i = 0; i < 20; i++) {
         assert(bulk[i] == L4_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count);
+    test_sieve_l4_internals(sieve, next_count, true);
 
     // A vector larger than pool has left, should wrap.
     next_count = 68;
@@ -236,13 +247,26 @@ void test_sieve_bulk_next() {
     bulk.resize(next_count);
     assert(bulk.capacity() == next_count);
     assert(bulk.size() == next_count);
+    // With next(T&) we get an index of 4: 68 % 64 == 4.
+    for (size_t i = 0; i < next_count; i++) {
+        sieve.next(x);
+        if (i <= 20) {
+            assert(x == L4_VALUES[i]);
+        }
+    }
+    assert(sieve.get_pool_index() == 4);
+    // Reset and redo test with bulk.  Next(vector&) should direct fill and leave pool index at 0.
+    sieve.init(&tree, opts);
+    bulk.clear();
+    bulk.shrink_to_fit();
+    bulk.resize(next_count);
     sieve.next(bulk);
     assert(bulk.size() == next_count);
-    assert(sieve.get_pool_index() == 4);  // Should reset/wrap to 68 % 64 == 4.
+    assert(sieve.get_pool_index() == 0);
     for (size_t i = 0; i < 20; i++) {
         assert(bulk[i] == L4_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count);
+    test_sieve_l4_internals(sieve, next_count, true);
 
     // A massive vector requiring multiple refills.
     next_count = 6003;
@@ -252,14 +276,26 @@ void test_sieve_bulk_next() {
     bulk.resize(next_count);
     assert(bulk.capacity() == next_count);
     assert(bulk.size() == next_count);
+    // With next(T&) we get an index of 4: 6003 % 64 == 51.
+    for (size_t i = 0; i < next_count; i++) {
+        sieve.next(x);
+        if (i <= 20) {
+            assert(x == L4_VALUES[i]);
+        }
+    }
+    assert(sieve.get_pool_index() == 51);
+    // Reset and redo test with bulk.  Next(vector&) should direct fill and leave pool index at 0.
+    sieve.init(&tree, opts);
+    bulk.clear();
+    bulk.shrink_to_fit();
+    bulk.resize(next_count);
     sieve.next(bulk);
     assert(bulk.size() == next_count);
-    assert(sieve.get_pool_index() == 51);  // Should reset/wrap to 6003 % 64 == 51.
+    assert(sieve.get_pool_index() == 0);
     for (size_t i = 0; i < 20; i++) {
         assert(bulk[i] == L4_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count);
-
+    test_sieve_l4_internals(sieve, next_count, true);
 }
 
 
@@ -303,23 +339,23 @@ void test_sieve_over_64_bit() {
 //
 template<IntegralOrMPZClass T>
 void run_all() {
-    std::cout << "test_sieve_default_opts ...";
+    std::cout << "test_sieve_default_opts ..." << std::flush;
     test_sieve_default_opts<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_sieve_pool_filling ...";
+    std::cout << "test_sieve_pool_filling ..." << std::flush;
     test_sieve_pool_filling<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_sieve_tree_source ...";
+    std::cout << "test_sieve_tree_source ..." << std::flush;
     test_sieve_tree_source<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_sieve_bulk_next ...";
+    std::cout << "test_sieve_bulk_next ..." << std::flush;
     test_sieve_bulk_next<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_sieve_over_64_bit ...";
+    std::cout << "test_sieve_over_64_bit ..." << std::flush;
     test_sieve_over_64_bit<T>();
     std::cout << " passed.\n";
 }
