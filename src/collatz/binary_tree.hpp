@@ -161,6 +161,7 @@ class BinaryTree {
     //
     size_t deep_size() const {
         size_t total = sizeof(*this);
+
         // Account for _level_map
         total += sizeof(_level_map);
         for (const auto& [level, nodes] : _level_map) {
@@ -173,12 +174,14 @@ class BinaryTree {
                 }
             }
         }
+
         // Account for _coverage_map
         total += sizeof(_coverage_map);
         for (const auto& [level, coverage] : _coverage_map) {
             total += sizeof(level);
             total += sizeof(coverage);
         }
+
         // Unordered map buckets.
         total += _level_map.bucket_count() * sizeof(void*);
         return total;

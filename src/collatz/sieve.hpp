@@ -5,11 +5,13 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <ratio>
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include "node.hpp"
 #include <execution>
+#include <chrono>
 
 
 
@@ -72,6 +74,8 @@ class Sieve {
     size_t _pool_generated_count;
     size_t _pool_refills;
     size_t _pool_premature_refills;
+    size_t _pool_refill_fill_loops;
+    std::chrono::duration<double, std::micro> _pool_refill_time_us;
     //
     // Tree metadata.
     size_t _tree_level_count;
@@ -134,6 +138,7 @@ class Sieve {
         _pool_generated_count = 0;
         _pool_refills = 0;
         _pool_premature_refills = 0;
+        _pool_refill_fill_loops = 0;
 
         // Build a list of surviving children.
         #pragma omp parallel for schedule(static) default(none) shared(_survivors, last_level)
@@ -163,6 +168,7 @@ class Sieve {
 
         // Refill the pool.  Extend the pool index to ensure a full flush.
         _pool_index = _pool_size;
+        _pool_refill_time_us.zero();
         refill_pool();
 
         // Attach tree metadata before discarding tree.
@@ -187,7 +193,9 @@ class Sieve {
     size_t get_pool_generated_count() const { return _pool_generated_count; }
     size_t get_pool_refills() const { return _pool_refills; }
     size_t get_pool_premature_refills() const { return _pool_premature_refills; }
+    size_t get_pool_refill_fill_loops() const { return _pool_refill_fill_loops; }
     size_t get_tree_level_count() const { return _tree_level_count; }
+    std::chrono::duration<double, std::micro> get_pool_refill_time_us() const { return _pool_refill_time_us; }
 
 
 
@@ -203,7 +211,11 @@ class Sieve {
     // Refill Pool
     //
     void refill_pool() {
+        // Use chromo a lot here.  Namespace it.  Start the clock.
+        using namespace std::chrono;
+
         // Move unused pool objects to the front if refill was called early.
+        time_point start = high_resolution_clock::now();
         size_t fill_index = _pool_size - _pool_index;
         if (_pool_index > 0 && _pool_index < _pool_size) {
             _pool_premature_refills++;
@@ -229,15 +241,12 @@ class Sieve {
 
             // Loop within limits.  Skip it to avoid thread overhead if limit is 0 this round.
             if (fill_limit != 0) {
-                static thread_local T new_value;
                 #pragma omp parallel for default(none) schedule(static) shared(_pool, _survivors, _incrementer, _survivor_index, fill_index, fill_limit)
                 for (size_t i = 0; i < fill_limit; i++) {
                     if constexpr(std::integral<T>) {
                         _pool[fill_index + i] = _survivors[_survivor_index + i] + _incrementer;
                     } else {
-                        new_value = _survivors[_survivor_index + i];
-                        mpz_add(new_value.get_mpz_t(), new_value.get_mpz_t(), _incrementer.get_mpz_t());
-                        _pool[fill_index + i] = new_value;
+                        mpz_add_ui(_pool[fill_index + i].get_mpz_t(), _incrementer.get_mpz_t(), _survivors[_survivor_index + i]);
                     }
                 }
             }
@@ -245,10 +254,13 @@ class Sieve {
             // Adjust counters.
             fill_index += fill_limit;
             _pool_generated_count += fill_limit;
+            _pool_refill_fill_loops++;
             bump_survivor_index(fill_limit);
         }
 
         // Increment counter.
+        time_point end = high_resolution_clock::now();
+        _pool_refill_time_us += (end - start);
         _pool_refills++;
     }
 
@@ -307,12 +319,15 @@ class Sieve {
     // Next
     // Returns the next value from the sieve.  This is a single-threaded, one-by-one iterator.
     //
-    T next() {
-        T result = _pool[_pool_index++];
+    void next(T& out) {
+        if constexpr(std::integral<T>) {
+            out = _pool[_pool_index++];
+        } else {
+            std::swap(_pool[_pool_index++], out);
+        }
         if (_pool_index >= _pool_size) {
             refill_pool();
         }
-        return result;
     }
     //
     // Overload to get multiple.  Fills your buffer from 0 to buffer.size().  Threaded.
@@ -340,4 +355,28 @@ class Sieve {
             }
         }
     }
+
+
+
+    //
+    // Object Size
+    // Deeply scan the object, including pool and buffers.
+    //
+    size_t deep_size() const {
+        size_t total = sizeof(*this);
+
+        // Account for _pool
+        if constexpr(std::integral<T>) {
+            total += (_pool.size() * sizeof(T));
+        } else {
+            total += (_pool.size() * gmp_deep_sizeof(_pool[0]));
+        }
+
+        // Forward Looking Cache
+        // TODO
+
+        // Done
+        return total;
+    }
+
 };

@@ -76,13 +76,14 @@ void test_sieve_default_opts() {
 //
 template<IntegralOrMPZClass T>
 void test_sieve_level_4_values(Sieve<T>& sieve) {
-    assert(sieve.next() == L4_VALUES[0]);
-    assert(sieve.next() == L4_VALUES[1]);
-    assert(sieve.next() == L4_VALUES[2]);
-    assert(sieve.next() == L4_VALUES[3]);
-    assert(sieve.next() == L4_VALUES[4]);
-    assert(sieve.next() == L4_VALUES[5]);
-    assert(sieve.next() == L4_VALUES[6]);
+    T val;
+    sieve.next(val); assert(val == L4_VALUES[0]);
+    sieve.next(val); assert(val == L4_VALUES[1]);
+    sieve.next(val); assert(val == L4_VALUES[2]);
+    sieve.next(val); assert(val == L4_VALUES[3]);
+    sieve.next(val); assert(val == L4_VALUES[4]);
+    sieve.next(val); assert(val == L4_VALUES[5]);
+    sieve.next(val); assert(val == L4_VALUES[6]);
 
     // Calling refill without exhasuting the pool shouldn't be an issue.
     assert(sieve.get_pool_index() != 0);
@@ -90,19 +91,19 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
     assert(sieve.get_pool_index() == 0);
 
     // Values should continue on without missing a beat.
-    assert(sieve.next() == L4_VALUES[7]);
-    assert(sieve.next() == L4_VALUES[8]);
-    assert(sieve.next() == L4_VALUES[9]);
-    assert(sieve.next() == L4_VALUES[10]);
+    sieve.next(val); assert(val == L4_VALUES[7]);
+    sieve.next(val); assert(val == L4_VALUES[8]);
+    sieve.next(val); assert(val == L4_VALUES[9]);
+    sieve.next(val); assert(val == L4_VALUES[10]);
 
     // Refilling repeatedly should be safe.
     sieve.refill_pool();
     sieve.refill_pool();
     sieve.refill_pool();
     sieve.refill_pool();
-    assert(sieve.next() == L4_VALUES[11]);
-    assert(sieve.next() == L4_VALUES[12]);
-    assert(sieve.next() == L4_VALUES[13]);
+    sieve.next(val); assert(val == L4_VALUES[11]);
+    sieve.next(val); assert(val == L4_VALUES[12]);
+    sieve.next(val); assert(val == L4_VALUES[13]);
 }
 
 
