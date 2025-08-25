@@ -5,7 +5,7 @@ CXX                  = g++
 CXXFLAGS            += -Wall -Wextra -std=c++20 -pthread -fopenmp -ljemalloc -Isrc/include
 OLEVEL              ?= -O2
 DEBUG_EXTRA_FLAGS    = -O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors
-LDFLAGS              += -lgmp -lgmpxx -ltbb
+LDFLAGS              += -lgmp -lgmpxx -ltbb -labsl_hash -labsl_container -labsl_base
 RELEASE_FLAGS        = $(CXXFLAGS) $(OLEVEL)
 DEBUG_FLAGS          = $(CXXFLAGS) $(DEBUG_EXTRA_FLAGS)
 DEBUG_SUFFIX         = _debug
@@ -27,6 +27,7 @@ OBJDIR_DEBUG = $(OBJDIR)$(DEBUG_SUFFIX)
 TESTS = collatz_class \
 	node_class \
 	binary_tree_class \
+	forward_looking_cache_class \
 	sieve_class
 DEBUG_TESTS = $(addsuffix $(DEBUG_SUFFIX), $(TESTS))
 PROGRAMS = ancestor_coverage \
