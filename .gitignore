@@ -3,12 +3,12 @@ bin_debug/
 obj/
 obj_debug/
 data/
+src/include/external_repos
 massif.*
 flamegraph.svg
 .vscode/
 heaptrack*
 compile_commands.json
-src/include/spdlog
 .cache
 tools/*.svg
 tools/*.png
