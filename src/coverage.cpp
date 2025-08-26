@@ -5,8 +5,8 @@
 #include "collatz/binary_tree.hpp"
 #include "collatz/binary_tree_coverage.hpp"
 #include "collatz/concepts.hpp"
-#include "CLI11.hpp"
-#include "logging.hpp"
+#include <CLI.hpp>
+#include "collatz/logging.hpp"
 
 
 //

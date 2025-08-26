@@ -2,10 +2,10 @@
 # Build flags and such.
 #
 CXX                  = g++
-CXXFLAGS            += -Wall -Wextra -std=c++20 -pthread -fopenmp -ljemalloc -Isrc/include
+CXXFLAGS            += -Wall -Wextra -std=c++20 -pthread -fopenmp -ljemalloc -I/usr/local/include -Isrc/include/spdlog/include -Isrc/include/CLI11/include/CLI -L/usr/local/lib
 OLEVEL              ?= -O2
 DEBUG_EXTRA_FLAGS    = -O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors
-LDFLAGS              += -lgmp -lgmpxx -ltbb -labsl_hash -labsl_container -labsl_base
+LDFLAGS              += -ltbb -lgmp -lgmpxx
 RELEASE_FLAGS        = $(CXXFLAGS) $(OLEVEL)
 DEBUG_FLAGS          = $(CXXFLAGS) $(DEBUG_EXTRA_FLAGS)
 DEBUG_SUFFIX         = _debug

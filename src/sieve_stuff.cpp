@@ -3,7 +3,7 @@
 #include <gmpxx.h>
 #include <string>
 #include <unistd.h>
-#include "include/CLI11.hpp"
+#include "CLI.hpp"
 #include "collatz/sieve.hpp"
 
 

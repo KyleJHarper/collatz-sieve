@@ -1,6 +1,6 @@
 #include <gmpxx.h>
-#include "CLI11.hpp"
-#include "logging.hpp"
+#include "CLI.hpp"
+#include "collatz/logging.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
 

@@ -5,8 +5,8 @@
 #include <gmpxx.h>
 #include <gmp.h>
 #include <ctime>
-#include "logging.hpp"
-#include "CLI11.hpp"
+#include "collatz/logging.hpp"
+#include "CLI.hpp"
 
 
 int main(int argc, char **argv) {

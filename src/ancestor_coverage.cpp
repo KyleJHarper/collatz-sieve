@@ -6,8 +6,8 @@
 #include "collatz/concepts.hpp"
 #include "collatz/node.hpp"
 #include "collatz/collatz.hpp"
-#include "CLI11.hpp"
-#include "logging.hpp"
+#include <CLI.hpp>
+#include "collatz/logging.hpp"
 
 
 template<IntegralOrMPZClass T>
