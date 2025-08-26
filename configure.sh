@@ -35,10 +35,14 @@ else
   git clone https://github.com/abseil/abseil-cpp.git
   cd abseil-cpp
   git checkout 20250814.0
-  mkdir build
-  cd build
-  cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_BUILD_TYPE=Release ..
-  make
-  sudo make install
 fi
+
+
+#
+# CMake
+#
+cmake -S . -B build/Debug -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B build/Release -DCMAKE_BUILD_TYPE=Release
+touch build/Release/compile_commands.json
+[ -e compile_commands.json ] || ln -s build/Release/compile_commands.json compile_commands.json
 

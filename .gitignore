@@ -3,6 +3,7 @@ bin_debug/
 obj/
 obj_debug/
 data/
+build/
 src/include/CLI11/
 src/include/spdlog/
 src/include/abseil-cpp
