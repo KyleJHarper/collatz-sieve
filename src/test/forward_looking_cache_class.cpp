@@ -32,7 +32,11 @@ void test_flc_basic() {
     T val = 42;
     FLCKey<T> key(val);
     flc.contains(key);
-    assert(flc.contains(key));
+    std::cout << flc.get_size() << std::endl;
+    assert(flc.contains(key) == false);
+    flc.insert(key);
+    std::cout << flc.get_size() << std::endl;
+    assert(flc.contains(key) == true);
 }
 
 

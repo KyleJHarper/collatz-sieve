@@ -155,6 +155,7 @@ class ForwardLookingCache {
     size_t get_misses() const { return _misses; }
     size_t get_new_insertions() const { return _new_insertions; }
     size_t get_overlap_insertions() const { return _overlap_insertions; }
+    size_t get_size() const { return _set.size(); }
 
 
 
