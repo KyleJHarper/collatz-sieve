@@ -91,13 +91,8 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
     assert(sieve.get_pool_index() == 0);
 
     // Values should continue on without missing a beat.
-    std::cout << std::endl;
-    for (size_t i = 0; i < 20; i++) {
-        sieve.next(val);
-
-        std::cout << val << std::endl;
-    }
-    assert(val == L4_VALUES[8]);
+    sieve.next(val); assert(val == L4_VALUES[7]);
+    sieve.next(val); assert(val == L4_VALUES[8]);
     sieve.next(val); assert(val == L4_VALUES[9]);
     sieve.next(val); assert(val == L4_VALUES[10]);
 

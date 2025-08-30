@@ -2,7 +2,6 @@
 #include "absl/container/flat_hash_map.h"
 #include <array>
 #include <cstdint>
-#include <list>
 #include <stdexcept>
 #include "concepts.hpp"
 
@@ -31,6 +30,158 @@
 
 
 //
+// LRU Tracker
+// Tracks values in an LRU-style eviction.
+//
+template <typename Key>
+class LRUTracker {
+    private:
+    struct Node {
+        size_t prev = SIZE_MAX;
+        size_t next = SIZE_MAX;
+        bool in_use = false;
+    };
+    std::vector<Node> _nodes;
+    size_t _head = SIZE_MAX;
+    size_t _tail = SIZE_MAX;
+    size_t _capacity;
+
+
+
+    public:
+    //
+    // Constructors
+    //
+    LRUTracker(size_t capacity) {
+        init(capacity);
+    }
+
+
+
+    //
+    // Initialize
+    // Builds the object, reusing it if necessary.
+    //
+    void init(size_t capacity) {
+        _capacity = capacity;
+        _head = SIZE_MAX;
+        _tail = SIZE_MAX;
+        _nodes.clear();
+        _nodes.shrink_to_fit();
+        _nodes.resize(capacity);
+    }
+
+
+
+    //
+    // Getters
+    //
+    size_t head() const { return _head; }
+    size_t tail() const { return _tail; }
+
+
+
+    //
+    // Insert
+    // Add index to the front.  It if already exists, just touch it.
+    //
+    void insert(size_t idx) {
+        if (_nodes[idx].in_use) {
+            touch(idx);
+            return;
+        }
+        _nodes[idx].in_use = true;
+        push(idx);
+    }
+
+
+
+    //
+    // Erase
+    // Remove a node.
+    //
+    void erase(size_t idx) {
+        if (!_nodes[idx].in_use) return;
+        pop(idx);
+        _nodes[idx].in_use = false;
+    }
+
+
+
+    //
+    // Touch
+    // Move an index to the front.
+    //
+    void touch(size_t idx) {
+        if (!_nodes[idx].in_use || idx == _head) return;
+        pop(idx);
+        push(idx);
+    }
+
+
+
+    //
+    // Evict
+    // Remove the least-recently used node (the tail).
+    //
+    size_t evict() {
+        size_t idx = _tail;
+        erase(idx);
+        return idx;
+    }
+
+
+
+    //
+    // Pop
+    // Remove a node from the list.
+    //
+    void pop(size_t idx) {
+        size_t prev = _nodes[idx].prev;
+        size_t next = _nodes[idx].next;
+        if (prev != SIZE_MAX) {
+            _nodes[prev].next = next;
+        }
+        if (next != SIZE_MAX) {
+            _nodes[next].prev = prev;
+        }
+        if (_head == idx) {
+            _head = next;
+        }
+        if (_tail == idx) {
+            _tail = prev;
+        }
+    }
+
+
+
+    //
+    // Push
+    // Add a node to the front of the list.
+    //
+    void push(size_t idx) {
+        _nodes[idx].prev = SIZE_MAX;
+        _nodes[idx].next = _head;
+        if (_head != SIZE_MAX) _nodes[_head].prev = idx;
+        _head = idx;
+        if (_tail == SIZE_MAX) _tail = idx;
+    }
+
+
+
+    //
+    // Object Size
+    // Deeply scan the object, including pool and buffers.
+    //
+    size_t deep_size() const {
+        return sizeof(*this) + _nodes.size() * sizeof(Node);
+    }
+};
+
+
+
+
+//
 // Forward-Looking Cache Key
 // Stores the bytes and equality operator.  Also leans on the Absl helper for hashing.
 //
@@ -49,6 +200,7 @@ class FLCKey {
     FLCKey(const T& value) {
         serialize(value);
     }
+
 
 
     //
@@ -83,6 +235,9 @@ class FLCKey {
         } else {
             size_t count = 0;
             mpz_export(_bytes.data(), &count, 1, 1, 1, 0, value.get_mpz_t());
+            if (count > FLCKeySize) {
+                throw std::overflow_error("FLCKey serialize overflow from mpz_export.");
+            }
             // Zero-fill rest if count < FLCKeySize
             std::fill(_bytes.begin() + count, _bytes.end(), 0);
         }
@@ -98,19 +253,17 @@ class FLCKey {
 //
 template<IntegralOrMPZClass T>
 class ForwardLookingCache {
-    // Absl needs a typename here for clarity to compile.
-    using List_T      = std::list<FLCKey<T>>;
-    using Iterator_T  = typename List_T::iterator;
-
     private:
+    absl::flat_hash_map<FLCKey<T>, size_t> _map;
+    std::vector<FLCKey<T>> _entries;
+    LRUTracker<FLCKey<T>> _lru;
     size_t _evictions;
     size_t _hits;
+    size_t _size;
     size_t _max_entries;
     size_t _misses;
     size_t _new_insertions;
     size_t _overlap_insertions;
-    List_T _lru_list;
-    absl::flat_hash_map<FLCKey<T>, Iterator_T> _set;
 
 
 
@@ -118,7 +271,7 @@ class ForwardLookingCache {
     //
     // Constructors
     //
-    ForwardLookingCache(size_t max_entries) {
+    ForwardLookingCache(size_t max_entries) : _lru(max_entries) {
         init(max_entries);
     }
 
@@ -134,14 +287,15 @@ class ForwardLookingCache {
         }
         _evictions = 0;
         _hits = 0;
+        _size = 0;
         _max_entries = max_entries;
         _misses = 0;
         _new_insertions = 0;
         _overlap_insertions = 0;
-        _lru_list.clear();
-        _set.clear();
-        // Add a little extra padding to (hopefully) avoid as much rehashing.
-        _set.reserve(static_cast<size_t>(max_entries * 1.25));
+        _lru.init(max_entries);
+        _entries.clear();
+        _entries.shrink_to_fit();
+        _entries.resize(max_entries);
     }
 
 
@@ -155,7 +309,7 @@ class ForwardLookingCache {
     size_t get_misses() const { return _misses; }
     size_t get_new_insertions() const { return _new_insertions; }
     size_t get_overlap_insertions() const { return _overlap_insertions; }
-    size_t get_size() const { return _set.size(); }
+    size_t get_size() const { return _size; }
 
 
 
@@ -165,18 +319,18 @@ class ForwardLookingCache {
     //
     bool contains(const FLCKey<T>& k, bool track = true) {
         // Not found means nothing to do.
-        auto it = _set.find(k);
-        if (it == _set.end()) {
+        auto it = _map.find(k);
+        if (it == _map.end()) {
             _misses++;
             return false;
         }
 
         // Found requires sending it to the front of LRU cache, if allowed.
         if (track) {
-            _lru_list.splice(_lru_list.begin(), _lru_list, it->second);
-            it->second = _lru_list.begin();
+            _lru.touch(it->second);
             _hits++;
         }
+
         return true;
     }
 
@@ -186,29 +340,32 @@ class ForwardLookingCache {
     // Insert Key
     // Inserts a key.  Returns true if successful, false if key already existed.
     //
-    bool insert(const FLCKey<T>& k) {
+    bool insert(const FLCKey<T>& key) {
         // If it already exists, just update LRU cache.
-        auto it = _set.find(k);
-        if (it != _set.end()) {
-            _lru_list.splice(_lru_list.begin(), _lru_list, it->second);
-            it->second = _lru_list.begin();
+        auto it = _map.find(key);
+        if (it != _map.end()) {
+            _lru.touch(it->second);
             _overlap_insertions++;
             return false;
         }
 
-        // Didn't exist.  Add it and track with LRU.
-        _lru_list.push_front(k);
-        _set.emplace(k, _lru_list.begin());
-        _new_insertions++;
-
-        // Clean up if we're over sized now.
-        if (_set.size() > _max_entries) {
-            // Evict LRU
-            FLCKey<T> lru = _lru_list.back();
-            _set.erase(lru);
-            _lru_list.pop_back();
+        // Didn't exist.  Get an index, respecting eviction if necessary.
+        size_t index;
+        if (_size < _max_entries) {
+            // Have room, so just add.
+            index = _size++;
+        } else {
+            // Evict to make room.  Clear the map of whoever was evicted.
+            index = _lru.evict();
+            _map.erase(_entries[index]);
             _evictions++;
         }
+
+        // Now set the key into the map and track it.
+        _entries[index] = key;
+        _map[key] = index;
+        _lru.insert(index);
+        _new_insertions++;
 
         // Return successful insert.
         return true;
@@ -222,18 +379,9 @@ class ForwardLookingCache {
     //
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        // list nodes: estimate node size = sizeof(FLCKey) + pointer overhead.
-        // std::list node typically contains 2 pointers (prev, next) + value.
-        const size_t list_node_overhead = sizeof(void*) * 2;
-        total += _lru_list.size() * (sizeof(FLCKey<T>) + list_node_overhead);
-
-        // map elements: estimate per-element size (key + value + overhead)
-        // flat_hash_map stores keys/values in contiguous bucket storage; approximate as pair size * size
-        total += _set.size() * (sizeof(FLCKey<T>) + sizeof(Iterator_T));
-
-        // bucket overhead: approximate using bucket count (if available)
-        // absl::flat_hash_map doesn't have bucket_count(); approximate extra overhead:
-        total += _set.size() / 8 + 64; // small fudge-factor for buckets/metadata
+        total += _lru.deep_size();
+        total += _map.size() * (sizeof(FLCKey<T>) + sizeof(size_t));
+        total += _entries.size() * sizeof(FLCKey<T>);
 
         return total;
     }

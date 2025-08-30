@@ -227,6 +227,7 @@ class Sieve {
         time_point start = high_resolution_clock::now();
 
         // Move unused pool objects to the front if refill was called early.
+        // Do not parallelize this.  It creates an ABA situation reading+writing to _pool and itsn't worth it.
         size_t pool_fill_index = _pool_size - _pool_index;
         if (_pool_index > 0 && _pool_index < _pool_size) {
             _pool_premature_refills++;
@@ -235,7 +236,7 @@ class Sieve {
                 if constexpr(std::integral<T>) {
                     _pool[i] = _pool[i + _pool_index];
                 } else {
-                    std::swap(_pool[i - _pool_index], _pool[i]);
+                    std::swap(_pool[i + _pool_index], _pool[i]);
                 }
             }
         }
@@ -270,7 +271,7 @@ class Sieve {
 
             // Loop within limits.  Skip it to avoid thread overhead if limit is 0 this round.
             if (fill_limit != 0) {
-                // #pragma omp parallel for default(none) schedule(static) shared(current_buffer, _survivors, _incrementer, _survivor_index, current_fill_index, fill_limit)
+                #pragma omp parallel for default(none) schedule(static) shared(current_buffer, _survivors, _incrementer, _survivor_index, current_fill_index, fill_limit)
                 for (size_t i = 0; i < fill_limit; i++) {
                     if constexpr(std::integral<T>) {
                         (*current_buffer)[current_fill_index + i] = _survivors[_survivor_index + i] + _incrementer;
@@ -369,7 +370,7 @@ class Sieve {
         while (filled < buffer.size()) {
             size_t pool_left = _pool_size - _pool_index;
             size_t limit = std::min(buffer.size() - filled, pool_left);
-            // #pragma omp parallel for default(none) schedule(static) shared(buffer, _pool, _pool_index, filled, limit)
+            #pragma omp parallel for default(none) schedule(static) shared(buffer, _pool, _pool_index, filled, limit)
             for (size_t i = 0; i < limit; i++) {
                 if constexpr(std::integral<T>) {
                     buffer[filled + i] = _pool[_pool_index + i];

@@ -28,15 +28,47 @@ void test_flc_default_opts() {
 //
 template<IntegralOrMPZClass T>
 void test_flc_basic() {
-    ForwardLookingCache<T> flc(1000);
+    size_t size = 10;
+    ForwardLookingCache<T> flc(size);
     T val = 42;
     FLCKey<T> key(val);
-    flc.contains(key);
-    std::cout << flc.get_size() << std::endl;
+    // Miss
+    assert(flc.get_misses() == 0);
     assert(flc.contains(key) == false);
+    assert(flc.get_misses() == 1);
+    // Insert
+    assert(flc.get_new_insertions() == 0);
     flc.insert(key);
-    std::cout << flc.get_size() << std::endl;
+    assert(flc.get_new_insertions() == 1);
+    // Hit
+    assert(flc.get_hits() == 0);
     assert(flc.contains(key) == true);
+    assert(flc.get_hits() == 1);
+    // Overlap
+    assert(flc.get_overlap_insertions() == 0);
+    flc.insert(key);
+    assert(flc.get_overlap_insertions() == 1);
+    // Evictions
+    assert(flc.get_evictions() == 0);
+    for (T value = 1; value <= size; value += 1) {
+        key.serialize(value);
+        flc.insert(key);
+    }
+    assert(flc.get_evictions() == 1);
+}
+
+
+
+//
+// LRU Order
+//
+template<IntegralOrMPZClass T>
+void test_flc_lru() {
+    size_t size = 10;
+    ForwardLookingCache<T> flc(size);
+    T val = 42;
+    FLCKey<T> key(val);
+
 }
 
 
