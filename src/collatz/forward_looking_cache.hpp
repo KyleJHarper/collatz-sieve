@@ -76,8 +76,9 @@ class LRUTracker {
     //
     // Getters
     //
-    size_t head() const { return _head; }
-    size_t tail() const { return _tail; }
+    size_t get_head() const { return _head; }
+    size_t get_tail() const { return _tail; }
+    const std::vector<Node>& get_nodes() const { return _nodes; }
 
 
 
@@ -197,6 +198,7 @@ class FLCKey {
     //
     // Constructors
     //
+    FLCKey() = default;
     FLCKey(const T& value) {
         serialize(value);
     }
@@ -310,6 +312,7 @@ class ForwardLookingCache {
     size_t get_new_insertions() const { return _new_insertions; }
     size_t get_overlap_insertions() const { return _overlap_insertions; }
     size_t get_size() const { return _size; }
+    const LRUTracker<FLCKey<T>> get_lru() const { return _lru; }
 
 
 

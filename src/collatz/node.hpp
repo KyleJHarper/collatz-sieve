@@ -3,6 +3,7 @@
 #include "collatz.hpp"
 #include "binary_tree_math.hpp"
 #include "concepts.hpp"
+#include <concepts>
 #include <gmp.h>
 #include <cmath>
 #include <limits>

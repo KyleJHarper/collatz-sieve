@@ -1,13 +1,28 @@
 #pragma once
 
 #include <concepts>
+#include <gmp.h>
 #include <gmpxx.h>
 
+
+
 //
-// We will use concepts to unify our template so it can support integrals and GMP.
+// We will use concepts to unify our template so it can support native integrals and GMP.
 //
+//
+// Native Integrals
+// These cover everything up to 64 bits, and are the fastest possible option.
+//
+// GMP
+// Adds infinite bitsize at the cost of heap allocation.
+template<typename T> struct is_mpz_class : std::false_type {};
+template<> struct is_mpz_class<mpz_class> : std::true_type {};
+//
+// Generic concept for all types.
 template<typename T>
-concept IntegralOrMPZClass = std::integral<T> || std::same_as<T, mpz_class>;
+concept IntegralOrMPZClass = std::integral<T> || is_mpz_class<T>::value;
+
+
 
 
 //

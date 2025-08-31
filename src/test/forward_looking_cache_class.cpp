@@ -68,9 +68,18 @@ void test_flc_lru() {
     ForwardLookingCache<T> flc(size);
     T val = 42;
     FLCKey<T> key(val);
-
+    for (size_t i = 0; i < size; i++) {
+        key.serialize(i);
+        flc.insert(key);
+    }
+    // The LRU should be insert ordered, with 1 at the back.
+    assert(flc.get_lru().get_head() == 9);
+    assert(flc.get_lru().get_tail() == 0);
+    val = 4;
+    key.serialize(val);
+    flc.contains(key);
+    assert(flc.get_lru().get_head() == 4);
 }
-
 
 
 //
@@ -85,6 +94,10 @@ void run_all() {
     std::cout << "test_flc_basic ..." << std::flush;
     test_flc_basic<T>();
     std::cout << " passed.\n";
+
+    std::cout << "test_flc_lru ..." << std::flush;
+    test_flc_lru<T>();
+    std::cout << " passed.\n";
 }
 
 
@@ -92,6 +105,7 @@ void run_all() {
 int main() {
     std::cout << "Performing tests with uint64_t." << std::endl;
     run_all<uint64_t>();
+
     std::cout << "Performing tests with mpz_class." << std::endl;
     run_all<mpz_class>();
 

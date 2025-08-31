@@ -1,6 +1,5 @@
 #pragma once
 
-#include <concepts>
 #include <gmp.h>
 #include <iostream>
 #include <gmpxx.h>
@@ -15,31 +14,46 @@
 #include "gmp_helpers.hpp"
 
 
+
+//
 // Custom Exceptions
+//
 class CollatzSequenceOverflow : public std::runtime_error {
     public:
     explicit CollatzSequenceOverflow(const std::string& msg) : std::runtime_error(msg) {}
 };
 
+
+
+//
 // Sequences are not size_t in length.  Use a common type that's smaller.
+//
 typedef uint32_t seq_size_t;
 
-// Constants for our sequences.
+
+
+//
+// Constants and helpers for our sequences.
+//
 namespace CollatzConstants {
     // GMP will sometimes alloc() if you operate on a non-GMP (e.g.: ui) value.
     static const mpz_class MPZ_ONE = 1;
     static const mpz_class MPZ_TWO = 2;
     static const mpz_class MPZ_THREE = 3;
+
     // GMP float-style values used in a lot of calculations.
     static const mpf_class MPF_ONE = 1;
     static const mpf_class MPF_TWO = 2;
     static const mpf_class MPF_THREE = 3;
     static const mpf_class MPF_HALF = 0.5;
+
     // Let's lock in what "odd" and "even" mean.
     constexpr bool ODD = true;
     constexpr bool EVEN = false;
-    // Trying to perform 3X+1 on any (odd) value higher than this would overflow a 64-bit unsigned integer.
+
+    // Trying to perform 3X+1 on any value higher than this would overflow a 64-bit unsigned integer.
     constexpr uint64_t MAX_64BIT_ODD = 6148914691236517203;
+
     // Precomputed maximum initial values for a given bit size.  The next value would overflow during its sequence.
     constexpr size_t MAX_IV_KNOWN_BITS = 65;
     constexpr std::array<size_t, MAX_IV_KNOWN_BITS> MAX_INITIAL_VALUE_BY_BIT = {
@@ -119,6 +133,8 @@ namespace CollatzConstants {
 }
 
 
+
+
 //
 // Collatz Metadata
 //
@@ -136,10 +152,10 @@ namespace CollatzConstants {
 //
 template<IntegralOrMPZClass T>
 class CollatzMetadata {
-    static_assert(std::is_integral<T>::value || std::is_same<T, mpz_class>::value, "T must be an integral or mpz_class type");
-
     private:
     // None, just make them public.
+
+
 
     public:
     // Set to zero!  GMP types are not default initialized to 0.
@@ -147,11 +163,25 @@ class CollatzMetadata {
     seq_size_t hwm_index = 0;
     seq_size_t step_count = 0;
     CollatzMetadata() {}
+
+
+
+    //
+    // Reset
+    // Default-initialize manually.
+    //
     void reset() {
         peak_value = 0;
         hwm_index = 0;
         step_count = 0;
     }
+
+
+
+    //
+    // Object Size
+    // Deeply scan the object, including pool and buffers.
+    //
     size_t deep_size() const {
         size_t total = sizeof(*this);
         if constexpr(std::is_same<T, mpz_class>::value) {
@@ -163,6 +193,7 @@ class CollatzMetadata {
 
 
 
+
 //
 // Collatz
 //
@@ -171,12 +202,10 @@ class CollatzMetadata {
 //
 template<IntegralOrMPZClass T>
 class Collatz {
-    static_assert(std::is_integral<T>::value || std::is_same<T, mpz_class>::value, "T must be an integral or mpz_class type");
-
     private:
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
     // All data must fit within one cache line.
-    //                                 uint64_t | total | mpz_class | total
+    //                                           uint64_t | total | mpz_class | total
     T _initial_value;                         //        8 |     8 |        16 |    16
     bool _is_initialized : 1;                 //      1:1 |     9 |       1:1 |    17
     bool _track_sequence : 1;                 //      1:2 |     9 |       1:2 |    17
@@ -186,28 +215,58 @@ class Collatz {
     std::vector<T> _sequence;                 //       24 |    40 |        24 |    48
     CollatzMetadata<T>* _metadata = nullptr;  //        8 |    48 |         8 |    56
     // Free Padding to Cacheline              //       16 |    64 |         8 |    64
+    // Max uintxxx_t to fit: 192
     // -- Cache Line --
+
+
 
     public:
     // Reusable messages.
     static inline std::string E_NO_SEQUENCE_TRACKING = "You disabled sequence tracking when you created this object.";
     static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
+
+
+    //
     // Constructors.  Offload to init() so objects can be reused.
+    //
     Collatz() {}
     Collatz(const T& initial_value, bool track_sequence = false, bool track_metadata = false) {
         init(initial_value, track_sequence, track_metadata);
     };
+
+
+
+    //
     // Destructor
+    //
     ~Collatz() {
         release_metadata();
     }
 
+
+
+    //
+    // Cout Friend
+    // Treat the initial value as the <<() output.
+    //
+    friend std::ostream& operator<<(std::ostream &os, const Collatz<T>& m) {
+        return os << m._initial_value;
+    }
+
+
+
+    //
+    // Initialize
+    // Builds the object, reusing it if necessary.
+    //
     void init(const T& initial_value, bool track_sequence = false, bool track_metadata = false) {
         if (initial_value < 0) {
             throw std::runtime_error("You cannot create a Collatz sequence with a value lower than 0.");
         }
+
         // Reset if necessary.
         if(_is_initialized) { reset(); }
+
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
         if (_metadata == nullptr && track_metadata) { _metadata = new CollatzMetadata<T>(); }
         if (_metadata != nullptr && ! track_metadata) { release_metadata(); }
@@ -215,6 +274,7 @@ class Collatz {
         _track_metadata = track_metadata;
         _is_initialized = true;
         _initial_value = initial_value;
+
         // Process the sequence and store any related metadata, if needed.  Otherwise, leave.
         if (_track_sequence || _track_metadata) {
             try {
@@ -241,7 +301,12 @@ class Collatz {
         }
     }
 
-    // Reset to make this act like a new() object.  Do NOT allocate Metadata here.
+
+
+    //
+    // Reset Object
+    // Reset members to make this act like a new() object.
+    //
     void reset() {
         _sequence.clear();
         _sequence.shrink_to_fit();
@@ -251,7 +316,12 @@ class Collatz {
         if (_metadata != nullptr) { _metadata->reset(); }
     }
 
+
+
+    //
+    // Release Metadata
     // Let callers decide when they're done with metadata.
+    //
     void release_metadata() {
         if (_metadata == nullptr) { return; }
         delete _metadata;
@@ -259,35 +329,18 @@ class Collatz {
         _track_metadata = false;
     }
 
-    // Cout and string-ified methods.
-    friend std::ostream& operator<<(std::ostream &os, const Collatz<T>& m) {
-        return os << m._initial_value;
-    }
-    std::string get_sequence_string() {
-        std::string rv;
-        if constexpr(std::integral<T>) {
-            rv.append(std::to_string(_initial_value));
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            rv.append(_initial_value.get_str());
-        }
-        for(size_t i=1; i<_sequence.size(); i++) {
-            rv.append(", ");
-            if constexpr(std::integral<T>) {
-                rv.append(std::to_string(_sequence[i]));
-            } else if constexpr(std::same_as<T, mpz_class>) {
-                rv.append(_sequence[i].get_str());
-            }
-        }
-        return rv;
-    }
 
-    // Accessors.
+
+    //
+    // Getters
+    //
     const T& get_initial_value() const { return _initial_value; }
     bool get_is_overflowed() const { return _sequence_overflow; }
     bool get_is_initialized() const { return _is_initialized; }
     bool get_track_sequence() const { return _track_sequence; }
     bool get_track_metadata() const { return _track_metadata; }
     const CollatzMetadata<T>* get_metadata() const { return _metadata; }
+    //
     // Sequence and metadata accessors.
     const std::vector<T>& get_sequence() const {
         if(!_track_sequence) {
@@ -314,25 +367,64 @@ class Collatz {
         return static_cast<size_t>(_metadata->step_count);
     }
 
+
+
+    //
+    // Sequence String
+    // Build a string version of all steps in a single, comma-separated string.
+    //
+    std::string get_sequence_string() {
+        std::string rv;
+
+        if constexpr(std::integral<T>) {
+            rv.append(std::to_string(_initial_value));
+        } else if constexpr(std::same_as<T, mpz_class>) {
+            rv.append(_initial_value.get_str());
+        }
+
+        for(size_t i=1; i<_sequence.size(); i++) {
+            rv.append(", ");
+            if constexpr(std::integral<T>) {
+               rv.append(std::to_string(_sequence[i]));
+            } else if constexpr(std::same_as<T, mpz_class>) {
+                rv.append(_sequence[i].get_str());
+            }
+        }
+
+        return rv;
+    }
+
+
+
+    //
+    // Object Size
+    // Deeply scan the object, including pool and buffers.
+    //
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        // For _sequence
-        if constexpr (std::is_same<T, mpz_class>::value) {
+
+        if constexpr(std::integral<T>) {
+            total += sizeof(T) * _sequence.capacity();
+        } else {
             total += sizeof(mpz_class) * _sequence.capacity();
             for (const auto& val : _sequence) {
                 total += gmp_deep_sizeof(val);
             }
-        } else {
-            total += sizeof(T) * _sequence.capacity();
         }
+
         if (_metadata != nullptr) {
             total += _metadata->deep_size();
         }
+
         return total;
     }
 
-    // Run through the sequence with a callback each step.
-    // Caller MUST return true or false to continue or stop.
+
+
+    //
+    // For-Each Step
+    // Run through the sequence with a callback each step.  Caller MUST return true or false to continue or stop.
+    //
     template<typename Func>
     static void for_each_sequence_step(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
@@ -343,9 +435,9 @@ class Collatz {
 
         thread_local T current_step;
         current_step = initial_value;
-        // Native and GMP types differ.  Handle them separately to reduce allocs().
+        // Fixed width and GMP types differ.  Handle them separately to reduce allocs().
         if constexpr(std::integral<T>) {
-            // Native integrals can use intrinsic arithmetic operators for "free", but can overflow.
+            // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
             while (current_step >= 1) {
                 bool stop = callback(current_step);
                 if (stop || current_step == 1) { return; }
@@ -393,7 +485,12 @@ class Collatz {
         Collatz<T>::for_each_sequence_step(_initial_value, std::forward<Func>(callback));
     }
 
+
+
+    //
+    // Get FG String
     // Generate the F-G string for a sequence with some initial value.
+    //
     static std::string st_get_fg_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
         std::string result;
         size_t count = 0;
@@ -421,7 +518,12 @@ class Collatz {
         return Collatz<T>::st_get_fg_pattern_string(_initial_value, max_chars);
     }
 
+
+
+    //
+    // Get OE String
     // Generate the odd-even string for the sequence, which is just an expansion of the F-G string.
+    //
     static std::string st_get_oe_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
         std::string fg_pattern = Collatz<T>::st_get_fg_pattern_string(initial_value, max_chars);
         return fg_to_oe(fg_pattern, max_chars);
@@ -432,7 +534,12 @@ class Collatz {
         return Collatz<T>::st_get_oe_pattern_string(_initial_value, max_chars);
     }
 
+
+
+    //
+    // FG to OE
     // Convert an FG string to an OE string.
+    //
     static std::string fg_to_oe(
         const std::string& fg_pattern
         , size_t max_oe_chars = std::numeric_limits<size_t>::max()
@@ -449,16 +556,19 @@ class Collatz {
                 break;
             }
         }
+
         // If we didn't hit the max_chars, remove the last E.  Why?  Because all sequences end in 1 (odd) and therefore get an "F" -> "OE"
         // But that last "E" is 1 going to 4 (1 * 3 + 1).
         // If the caller forbids this, skip it.
         if (strip_last_e && oe_string.size() < max_oe_chars && oe_string.size() > 0) {
             oe_string.pop_back();
         }
+
         // If we're over the max_chars requested, trim.
         if (oe_string.size() > max_oe_chars) {
             oe_string.resize(max_oe_chars);
         }
+
         return oe_string;
     }
 };
