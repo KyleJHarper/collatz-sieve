@@ -1,5 +1,6 @@
 #include <gmpxx.h>
 #include "CLI.hpp"
+#include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
@@ -35,8 +36,6 @@ class PeakIVScannerResults {
 //
 template<AnySupportedIntegral T>
 class PeakIVScanner {
-    static_assert(std::integral<T> || std::same_as<T, mpz_class>, "Unsupported type for PeakIVScanner");
-
     private:
     static constexpr size_t BUFFER_SIZE = 1000;
     T _base_initial_value = 1;
@@ -50,6 +49,21 @@ class PeakIVScanner {
     PeakIVScanner(size_t max_bit) {
         _max_bit = max_bit;
     }
+    PeakIVScanner(size_t max_bit, size_t start_bit) {
+        _max_bit = max_bit;
+        _start_bit = start_bit;
+        size_t selected_initial_bit = _start_bit;
+        size_t max_known_bit = CollatzConstants::get_max_initial_value_max_bits<T>();
+        if (start_bit >= max_known_bit) {
+            logger->warn("You started a new PeakIVScanner with a start bit (" + std::to_string(_start_bit) + ") that doesn't have a known base initial value.  It will start at max known bit: " + to_string_any(max_known_bit));
+            selected_initial_bit = max_known_bit;
+        }
+        if constexpr(GMPIntegral<T>) {
+            uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(selected_initial_bit), _base_initial_value);
+        } else  {
+            _base_initial_value = CollatzConstants::get_max_initial_value_by_bit<T>(selected_initial_bit);
+        }
+    }
     PeakIVScanner(size_t max_bit, size_t start_bit, T base_initial_value) {
         _max_bit = max_bit;
         _start_bit = start_bit;
@@ -59,19 +73,28 @@ class PeakIVScanner {
     PeakIVScannerResults run(bool use_table = false) {
         PeakIVScannerResults results;
         if (use_table) { logger->debug("Using precomputed table where possible."); }
+        logger->debug("Starting with bit " + std::to_string(_start_bit) +" and base initial value of " + to_string_any(_base_initial_value));
         // Main loop for each bit.
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
             // If we're using the precomputed table, send it.
-            if (use_table && bit < CollatzConstants::MAX_IV_KNOWN_BITS) {
-                T max_iv = CollatzConstants::get_max_initial_value_by_bit(bit);
-                logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
-                results.set(bit, mpz_class(max_iv));
-                continue;
+            if constexpr(is_builtin_integral_v<T>) {
+                if (use_table && bit < CollatzConstants::get_max_initial_value_max_bits<T>()) {
+                    T max_iv = CollatzConstants::get_max_initial_value_by_bit<T>(bit);
+                    logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
+                    if constexpr(ExtendedIntegral<T>) {
+                        _base_initial_value = max_iv;
+                        results.set(bit, uint128_to_mpz(max_iv));
+                    } else {
+                        _base_initial_value = max_iv;
+                        results.set(bit, mpz_class(max_iv));
+                    }
+                    continue;
+                }
             }
 
             // Setup variables based on Integral or mpz_class type.
-            if constexpr(std::integral<T>) {
-                _max_allowed_value = 1ULL << (bit);
+            if constexpr(BuiltinIntegral<T>) {
+                _max_allowed_value = T(1) << bit;
             } else {
                 mpz_ui_pow_ui(_max_allowed_value.get_mpz_t(), 2, bit);
             }
@@ -97,9 +120,9 @@ class PeakIVScanner {
                 // Don't change base value or anything (i.e.: we need to re-run the sequences with GMP support.)
                 // We also need to stop if we hit bit > 63 for integral types.
                 bool promote_test = false;
-                if constexpr(std::integral<T>) {
+                if constexpr(NativeIntegral<T>) {
                     if (bit > 63) {
-                        logger->warn("Reached 64+ bits and must upgrade to GMP.");
+                        logger->warn("Reached 64+ bits and must upgrade to uint128_t.");
                         promote_test = true;
                     }
                     if (overflow_index < BUFFER_SIZE) {
@@ -107,11 +130,28 @@ class PeakIVScanner {
                         logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_point.get_initial_value());
                         promote_test = true;
                     }
+                } else if constexpr(ExtendedIntegral<T>) {
+                    if (bit > 127) {
+                        logger->warn("Reached 128+ bits and must upgrade to GMP.");
+                        promote_test = true;
+                    }
+                    if (overflow_index < BUFFER_SIZE) {
+                        const Collatz<T>& overflow_point = _collatz[overflow_index];
+                        logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_point.get_initial_value());
+                        promote_test = true;
+                    }
                 }
+
+                // Promote if needed.
                 if (promote_test) {
-                    PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, mpz_class(_base_initial_value));
                     PeakIVScannerResults promoted_results;
-                    promoted_results = promoted_test.run(use_table);
+                    if constexpr(NativeIntegral<T>) {
+                        PeakIVScanner<uint128_t> promoted_test(_max_bit, bit, uint128_t(_base_initial_value));
+                        promoted_results = promoted_test.run(use_table);
+                    } else if constexpr(ExtendedIntegral<T>) {
+                        PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, uint128_to_mpz(_base_initial_value));
+                        promoted_results = promoted_test.run(use_table);
+                    }
                     // Merge the results and return them.
                     results.merge(promoted_results);
                     return results;
@@ -132,7 +172,11 @@ class PeakIVScanner {
                     const Collatz<T>& failure_point = _collatz[failing_index];
                     T max_iv = failure_point.get_initial_value() - 1;
                     logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
-                    results.set(bit, mpz_class(max_iv));
+                    if constexpr(ExtendedIntegral<T>) {
+                        results.set(bit, uint128_to_mpz(max_iv));
+                    } else {
+                        results.set(bit, mpz_class(max_iv));
+                    }
                     _base_initial_value = failure_point.get_initial_value();
                     // Leave the while(true).  Move to next bit.
                     break;
@@ -153,13 +197,17 @@ class PeakIVScanner {
 int main(int argc, char **argv) {
     init_logger();
     // Process options.
+    size_t start_bit;
     size_t max_bit;
     bool verbose;
     bool force_mpz;
+    bool force_i128;
     bool use_table;
     CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.  Starts with uint64_t type and upgrades to GMP (mpz_class) automatically.");
     options.add_option("-b,--bits", max_bit, "Number of bits to test to.")->default_val(8);
+    options.add_flag("-i,--int128", force_i128, "Use 128-bit native immediately instead of escalating to it.");
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class immediately instead of escalating to it.");
+    options.add_option("-s,--start", start_bit, "Bit numer to start at.")->default_val(0);
     options.add_flag(
         "-v,--verbose"
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
@@ -168,18 +216,31 @@ int main(int argc, char **argv) {
     options.add_flag("-t,--table", use_table, "Use the precomputed table when possible.");
     CLI11_PARSE(options, argc, argv);
     logger->debug("Selected options were:");
+    logger->debug("  Force int128: {}", force_i128);
     logger->debug("  Force MPZ: {}", force_mpz);
+    logger->debug("  Start Bit: {}", start_bit);
     logger->debug("  Max Bit: {}", max_bit);
     logger->debug("  Use Table: {}", use_table);
     logger->debug("  Verbose: {}", verbose);
+    if (force_i128 && force_mpz) {
+        logger->error("You can't specify both uint128 start and mpz start.");
+        exit(1);
+    }
+    if (start_bit > max_bit) {
+        logger->error("You can't set the start bit after the max bit.");
+        exit(1);
+    }
 
     // Build the tester and run it.
     PeakIVScannerResults results;
     if (force_mpz) {
-        PeakIVScanner<mpz_class> test(max_bit);
+        PeakIVScanner<mpz_class> test(max_bit, start_bit);
+        results = test.run(use_table);
+    } else if (force_i128) {
+        PeakIVScanner<uint128_t> test(max_bit, start_bit);
         results = test.run(use_table);
     } else {
-        PeakIVScanner<uint64_t> test(max_bit);
+        PeakIVScanner<uint64_t> test(max_bit, start_bit);
         results = test.run(use_table);
     }
 

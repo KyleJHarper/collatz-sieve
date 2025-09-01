@@ -3,8 +3,14 @@
 #include <gmpxx.h>
 #include "../collatz/node.hpp"
 
-void test_basic_node_int() {
-    Node<uint64_t> root(7, true);
+
+
+//
+// Basic Node Creation
+//
+template<AnySupportedIntegral T>
+void test_basic_node() {
+    Node<T> root(7, true);
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
@@ -16,8 +22,14 @@ void test_basic_node_int() {
     assert(root.get_fg_constant() >= 0);
 }
 
+
+
+//
+// FG Values
+//
+template<AnySupportedIntegral T>
 void test_fg_values() {
-    Node<uint64_t> node(1, false);
+    Node<T> node(1, false);
     assert(node.get_fg_chain_string() == "F"); // Special case
     node.init(2, false);
     assert(node.get_fg_chain_string() == "G");
@@ -48,8 +60,13 @@ void test_fg_values() {
 }
 
 
+
+//
+// Resuse via init()
+//
+template<AnySupportedIntegral T>
 void test_reuse_with_init() {
-    Node<uint64_t> root(7, true);
+    Node<T> root(7, true);
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
     assert(root.get_odd_even_chain_string() == "OEOE");
@@ -69,43 +86,58 @@ void test_reuse_with_init() {
     assert(root.get_fg_constant() >= 0);
 }
 
+
+
+//
+// HWM Behavior
+//
+template<AnySupportedIntegral T>
 void test_high_water_mark_behavior() {
-    Node<uint64_t> root(2, true);
-    Node<uint64_t>* child = root.add_child(6);
+    Node<T> root(2, true);
+    Node<T>* child = root.add_child(6);
 
     assert(child->get_parent() == &root);
     assert(child->has_high_water_mark_ancestor() == true);
     assert(child->get_hwm_ancestor() == &root);
 }
 
+
+
+//
+// HWM Root Case is Special
+//
+template<AnySupportedIntegral T>
 void test_high_water_mark_root_case() {
-    Node<uint64_t> root(15, true);
+    Node<T> root(15, true);
     assert(!root.has_high_water_mark_ancestor());
     assert(root.get_hwm_ancestor() == nullptr);
     assert(!root.is_below_high_water_mark());
 }
 
+
+
+//
+// Children and Deep Size
+//
+template<AnySupportedIntegral T>
 void test_add_child_and_deep_size() {
-    Node<uint64_t> root(7, false);
-    Node<uint64_t>* c1 = root.add_child(3);
-    Node<uint64_t>* c2 = root.add_child(5);
+    Node<T> root(7, false);
+    Node<T>* c1 = root.add_child(3);
+    Node<T>* c2 = root.add_child(5);
     assert(c1->get_parent() == &root);
     assert(c2->get_parent() == &root);
     assert(root.does_own_children() == true);
     assert(root.deep_size() > 0);
 }
 
-void test_node_with_mpz() {
-    mpz_class val("9");
-    Node<mpz_class> node(val, true);
-    assert(node.get_value() == val);
-    assert(node.get_twos_value() > 0);
-    assert(node.get_threes_value() > 0);
-    assert(node.get_fg_total() >= 0);
-}
 
+
+//
+//  Metadata Tracking
+//
+template<AnySupportedIntegral T>
 void test_metadata_tracking() {
-    Node<uint64_t> node(7, true);
+    Node<T> node(7, true);
     assert(node.get_fg_constant() > 0);  // This should work.
     node.init(6, false);  // This should cause an error when we get metadata.
     try {
@@ -116,23 +148,54 @@ void test_metadata_tracking() {
     }
 }
 
+
+
+//
+// Helper to run all
+//
+template<AnySupportedIntegral T>
+void run_all() {
+    std::cout << "test_basic_int_node() ..." << std::flush;
+    test_basic_node<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_fg_values() ..." << std::flush;
+    test_fg_values<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_high_water_mark_behavior() ..." << std::flush;
+    test_high_water_mark_behavior<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_high_water_mark_root_case() ..." << std::flush;
+    test_high_water_mark_root_case<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_add_child_and_deep_size() ..." << std::flush;
+    test_add_child_and_deep_size<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_metadata_tracking() ..." << std::flush;
+    test_metadata_tracking<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_reuse_with_init() ..." << std::flush;
+    test_reuse_with_init<T>();
+    std::cout << " passed.\n";
+}
+
+
+
+
 int main() {
-    test_basic_node_int();
-    std::cout << "test_basic_int_node() passed\n";
-    test_fg_values();
-    std::cout << "test_fg_values() passed\n";
-    test_high_water_mark_behavior();
-    std::cout << "test_high_water_mark_behavior() passed\n";
-    test_high_water_mark_root_case();
-    std::cout << "test_high_water_mark_root_case() passed\n";
-    test_add_child_and_deep_size();
-    std::cout << "test_add_child_and_deep_size() passed\n";
-    test_node_with_mpz();
-    std::cout << "test_node_with_mpz() passed\n";
-    test_metadata_tracking();
-    std::cout << "test_metadata_tracking() passed\n";
-    test_reuse_with_init();
-    std::cout << "test_reuse_with_init() passed\n";
+    std::cout << "Performing tests with uint64_t." << std::endl;
+    run_all<uint64_t>();
+
+    std::cout << "Performing tests with uint128_t." << std::endl;
+    run_all<uint128_t>();
+
+    std::cout << "Performing tests with mpz_class." << std::endl;
+    run_all<mpz_class>();
 
     std::cout << "All Node<T> tests passed.\n";
     return 0;

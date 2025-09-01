@@ -227,6 +227,7 @@ class BinaryTreeMath {
     //
     // We can just use node level of max_iv + 1 (the failure point) and subtract one level.
     static inline size_t st_max_full_level_at_node(T max_iv) {
+        if (max_iv == 0) { return 0; }
         static thread_local T failure_point;
         failure_point = max_iv + 1;
         return st_node_level(failure_point) - 1;
@@ -242,9 +243,15 @@ class BinaryTreeMath {
     static inline bool st_level_will_fit(size_t level) {
         if constexpr(BuiltinIntegral<T>) {
             size_t bits = sizeof(T) * 8;
-            mpz_class max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
-            mpz_class max_iv_needed = st_max_node_value_at_level(level);
-            return (max_iv_allowed >= max_iv_needed);
+            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit<T>(bits);
+            mpz_class max_iv_allowed_mpz;
+            if constexpr(NativeIntegral<T>) {
+                max_iv_allowed_mpz = max_iv_allowed;
+            } else if constexpr(ExtendedIntegral<T>) {
+                uint128_to_mpz(max_iv_allowed, max_iv_allowed_mpz);
+            }
+            mpz_class max_iv_needed_mpz = st_max_node_value_at_level(level);
+            return (max_iv_allowed_mpz >= max_iv_needed_mpz);
         }
         return true;
     }

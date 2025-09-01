@@ -481,6 +481,11 @@ int main() {
     std::cout << "Performing tests with uint64_t, 1-based tree." << std::endl;
     run_all<uint64_t>(1);
 
+    // std::cout << "Performing tests with uint128_t, 0-based tree." << std::endl;
+    // run_all<uint128_t>(0);
+    // std::cout << "Performing tests with uint128_t, 1-based tree." << std::endl;
+    // run_all<uint128_t>(1);
+
     std::cout << "Performing tests with mpz_class, 0-based tree." << std::endl;
     run_all<mpz_class>(0);
     std::cout << "Performing tests with mpz_class, 1-based tree." << std::endl;
