@@ -39,9 +39,9 @@ class LRUTracker {
     struct Node {
         size_t prev = SIZE_MAX;
         size_t next = SIZE_MAX;
-        bool in_use = false;
     };
     std::vector<Node> _nodes;
+    std::vector<bool> _in_use;
     size_t _head = SIZE_MAX;
     size_t _tail = SIZE_MAX;
     size_t _capacity;
@@ -69,6 +69,9 @@ class LRUTracker {
         _nodes.clear();
         _nodes.shrink_to_fit();
         _nodes.resize(capacity);
+        _in_use.clear();
+        _in_use.shrink_to_fit();
+        _in_use.resize(capacity, false);
     }
 
 
@@ -87,11 +90,11 @@ class LRUTracker {
     // Add index to the front.  It if already exists, just touch it.
     //
     void insert(size_t idx) {
-        if (_nodes[idx].in_use) {
+        if (_in_use[idx]) {
             touch(idx);
             return;
         }
-        _nodes[idx].in_use = true;
+        _in_use[idx] = true;
         push(idx);
     }
 
@@ -102,9 +105,9 @@ class LRUTracker {
     // Remove a node.
     //
     void erase(size_t idx) {
-        if (!_nodes[idx].in_use) return;
+        if (!_in_use[idx]) { return; }
         pop(idx);
-        _nodes[idx].in_use = false;
+        _in_use[idx] = false;
     }
 
 
@@ -114,7 +117,7 @@ class LRUTracker {
     // Move an index to the front.
     //
     void touch(size_t idx) {
-        if (!_nodes[idx].in_use || idx == _head) return;
+        if (!_in_use[idx] || idx == _head) { return; }
         pop(idx);
         push(idx);
     }
@@ -175,7 +178,11 @@ class LRUTracker {
     // Deeply scan the object, including pool and buffers.
     //
     size_t deep_size() const {
-        return sizeof(*this) + _nodes.size() * sizeof(Node);
+        size_t total = 0;
+        total += sizeof(*this);
+        total += _nodes.size() * sizeof(Node);
+        total += (_in_use.size() + 7) / 8;
+        return total;
     }
 };
 
@@ -187,7 +194,7 @@ class LRUTracker {
 // Stores the bytes and equality operator.  Also leans on the Absl helper for hashing.
 //
 static constexpr size_t FLCKeySize = 24;
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class FLCKey {
     private:
     std::array<uint8_t, FLCKeySize> _bytes{};
@@ -230,11 +237,11 @@ class FLCKey {
     // Compute the bytes of an integral or mpz_class.  Endianness doesn't matter since all type T are the same within an instance.
     //
     void serialize(const T& value) {
-        if constexpr (std::integral<T>) {
+        if constexpr (BuiltinIntegral<T>) {
             for (size_t i = 0; i < sizeof(T); ++i) {
                 _bytes[FLCKeySize - 1 - i] = static_cast<uint8_t>((value >> (i * 8)) & 0xFF);
             }
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             size_t count = 0;
             mpz_export(_bytes.data(), &count, 1, 1, 1, 0, value.get_mpz_t());
             if (count > FLCKeySize) {
@@ -253,7 +260,7 @@ class FLCKey {
 // Forward-Looking Cache
 // This class is NOT thread-safe!
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class ForwardLookingCache {
     private:
     absl::flat_hash_map<FLCKey<T>, size_t> _map;

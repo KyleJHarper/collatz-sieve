@@ -16,7 +16,7 @@
 //
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_basic_construction() {
     BinaryTree<T> tree(3);
     // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
@@ -45,7 +45,7 @@ void test_binary_tree_basic_construction() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_deep_size() {
     BinaryTree<T> tree(2);
     size_t size = tree.deep_size();
@@ -53,7 +53,7 @@ void test_binary_tree_deep_size() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_generate_node_at_valid() {
     Node<T>* node = BinaryTree<T>::st_generate_node_at(2, 1);
     assert(node != nullptr);
@@ -74,7 +74,7 @@ void test_binary_tree_generate_node_at_valid() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_generate_node_at_invalid_pos() {
     try {
         BinaryTree<T>::st_generate_node_at(3, 0);
@@ -92,7 +92,7 @@ void test_binary_tree_generate_node_at_invalid_pos() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const BinaryTreeOptions& opts = BinaryTree<T>::DEFAULT_OPTS) {
     // Set threads.
     omp_set_num_threads(threads);
@@ -146,7 +146,7 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_node_count_should_match_map() {
     size_t levels = 4;
     BinaryTree<T> tree(levels);
@@ -161,7 +161,7 @@ void test_binary_tree_node_count_should_match_map() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_too_many_levels() {
     // 8 bit can't build a 16 level tree
     try {
@@ -184,7 +184,7 @@ void test_binary_tree_too_many_levels() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_multi_threaded() {
     size_t max_threads = 4;
     for (size_t threads = 1; threads <= max_threads; threads++) {
@@ -193,7 +193,7 @@ void test_binary_tree_multi_threaded() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_math() {
     // Root Default
     assert(BinaryTreeMath<T>::get_default_root_value() == 1);
@@ -340,7 +340,7 @@ void test_binary_tree_math() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_level_will_fit() {
     // Level Will Fit
     // 8-bit
@@ -363,7 +363,7 @@ void test_binary_tree_level_will_fit() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_pruned() {
     BinaryTreeOptions opts_with_hwm_prune_without_level_prune;
     opts_with_hwm_prune_without_level_prune.prune_hwm_nodes = true;
@@ -394,7 +394,7 @@ void test_binary_tree_pruned() {
 }
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_binary_tree_ancestors() {
     // When disabled, they shouldn't be tracked.
     size_t levels = 4;
@@ -418,8 +418,8 @@ void test_binary_tree_ancestors() {
 //
 // Wrapper to run all tests.
 //
-template<IntegralOrMPZClass T>
-void run_all(T root_value) {
+template<AnySupportedIntegral T>
+void run_all(size_t root_value) {
     BinaryTreeMath<T>::set_root_value(root_value);
 
     std::cout << "test_binary_tree_basic_construction() ..." << std::flush;

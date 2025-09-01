@@ -12,7 +12,7 @@
 //
 // Dump a simple class here for ease-of-use to report and not muck up the BinaryTree class.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class CoverageBuilder {
     private:
     BinaryTree<T> _tree;
@@ -68,7 +68,7 @@ class CoverageBuilder {
 };
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void run(size_t levels, bool use_precomputed, bool show_ancestors) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T> builder;

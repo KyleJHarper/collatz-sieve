@@ -33,7 +33,7 @@ class PeakIVScannerResults {
 // Find the highest initial value for each 2^bit requested.
 // Auto-upgrade to mpz_class when upon first encountering an overflow: CollatzSequenceOverflow (or reaching 64 bits).
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class PeakIVScanner {
     static_assert(std::integral<T> || std::same_as<T, mpz_class>, "Unsupported type for PeakIVScanner");
 

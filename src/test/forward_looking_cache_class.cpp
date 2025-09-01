@@ -16,7 +16,7 @@
 //
 // Defaults Regressions
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_flc_default_opts() {
     assert(FLCKeySize == 24);
 }
@@ -26,7 +26,7 @@ void test_flc_default_opts() {
 //
 // Basic Usage
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_flc_basic() {
     size_t size = 10;
     ForwardLookingCache<T> flc(size);
@@ -62,7 +62,7 @@ void test_flc_basic() {
 //
 // LRU Order
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_flc_lru() {
     size_t size = 10;
     ForwardLookingCache<T> flc(size);
@@ -85,7 +85,7 @@ void test_flc_lru() {
 //
 // Wrapper to run all tests.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void run_all() {
     std::cout << "test_flc_default_opts ..." << std::flush;
     test_flc_default_opts<T>();

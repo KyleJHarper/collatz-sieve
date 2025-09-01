@@ -10,7 +10,7 @@
 #include "collatz/logging.hpp"
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class AncestorResult {
     // Just make it all public.  Could use a struct, but whatever.
     public:
@@ -18,7 +18,7 @@ class AncestorResult {
 };
 
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 std::vector<AncestorResult<T>> run (size_t levels) {
     // Build the tree.
     logger->info("Building tree with {} levels.", levels);

@@ -3,7 +3,6 @@
 #include "collatz.hpp"
 #include "binary_tree_math.hpp"
 #include "concepts.hpp"
-#include <concepts>
 #include <gmp.h>
 #include <cmath>
 #include <limits>
@@ -13,7 +12,7 @@
 
 
 // We need a forward declaration for NodeMetadata to see Node.
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class Node;
 
 
@@ -22,10 +21,8 @@ class Node;
 //
 // Similar to CollatzMetadata, we offload stuff here and disable it by default, saving memory.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class NodeMetadata {
-    static_assert(std::is_integral<T>::value || std::is_same<T, mpz_class>::value, "T must be an integral or mpz_class type");
-
     private:
     // None, just make them public.
 
@@ -47,7 +44,7 @@ class NodeMetadata {
     }
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        if constexpr(std::is_same<T, mpz_class>::value) {
+        if constexpr(GMPIntegral<T>) {
             total += gmp_deep_sizeof(fg_twos_value_mpz_c);
             total += gmp_deep_sizeof(fg_threes_value_mpz_c);
             total += gmp_deep_sizeof(fg_n_portion_mpf_c);
@@ -69,12 +66,13 @@ class NodeMetadata {
 // By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.  If you want to delete
 // a node without affecting its children, call own_children(false).
 //
-template <IntegralOrMPZClass T>
+template <AnySupportedIntegral T>
 class Node {
     private:
     static constexpr size_t MAX_CHILDREN = 2;
     static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
     // Make some thread-local MPZ and MPF items so they're safe for re-use with threading.
+    static inline thread_local mpz_class tls_value_mpz_c;
     static inline thread_local mpz_class tls_twos_value_mpz_c;
     static inline thread_local mpz_class tls_threes_value_mpz_c;
     static inline thread_local mpf_class tls_threes_value_mpf_c;
@@ -178,8 +176,15 @@ class Node {
                 mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
             }
         }
-        tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * _value) + tls_fg_constant_mpf_c;
-        if (tls_fg_total_mpf_c < _value) { _is_below_hwm = true; }
+        if constexpr(ExtendedIntegral<T>) {
+            // Cannot perform arithmetic with uint128_t and GMP.  have to cast a value copy.
+            uint128_to_mpz(_value, tls_value_mpz_c);
+            tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * tls_value_mpz_c) + tls_fg_constant_mpf_c;
+            if (tls_fg_total_mpf_c < tls_value_mpz_c) { _is_below_hwm = true; }
+        } else {
+            tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * _value) + tls_fg_constant_mpf_c;
+            if (tls_fg_total_mpf_c < _value) { _is_below_hwm = true; }
+        }
         if (_track_metadata) {
             _metadata->fg_twos_value_mpz_c = tls_twos_value_mpz_c;
             _metadata->fg_threes_value_mpz_c = tls_threes_value_mpf_c;
@@ -322,10 +327,10 @@ class Node {
         T child_value = node->get_value();
         for (uint8_t i = 0; i < MAX_CHILDREN; i++) {
             // Step forward.  Avoid alloc() with GMP in the += operator.
-            if constexpr(std::same_as<T, mpz_class>) {
-                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
-            } else {
+            if constexpr(BuiltinIntegral<T>) {
                 child_value += step;
+            } else if constexpr(GMPIntegral<T>) {
+                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
             }
             Node<T>* child = new Node<T>(child_value, node->get_track_metadata(), node);
             node->assign_child(child);

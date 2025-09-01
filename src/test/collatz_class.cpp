@@ -7,6 +7,28 @@
 
 
 //
+// Type Testing
+//
+template<typename T>
+void test_collatz_types() {
+    static_assert(NativeIntegral<int>);
+    static_assert(NativeIntegral<uint64_t>);
+    static_assert(!NativeIntegral<uint128_t>);
+
+    static_assert(ExtendedIntegral<uint128_t>);
+    static_assert(!ExtendedIntegral<uint64_t>);
+
+    static_assert(GMPIntegral<mpz_class>);
+    static_assert(!GMPIntegral<uint64_t>);
+
+    static_assert(AnySupportedIntegral<int>);
+    static_assert(AnySupportedIntegral<uint128_t>);
+    static_assert(AnySupportedIntegral<mpz_class>);
+}
+
+
+
+//
 // Basic Test
 //
 template<typename T>
@@ -126,6 +148,10 @@ void test_collatz_one() {
 template<typename T>
 void run_all() {
     std::cout << "test_collatz_basic ..." << std::flush;
+    test_collatz_types<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_collatz_basic ..." << std::flush;
     test_collatz_basic<T>();
     std::cout << " passed.\n";
 
@@ -156,6 +182,9 @@ void run_all() {
 int main() {
     std::cout << "Performing tests with uint64_t." << std::endl;
     run_all<uint64_t>();
+
+    std::cout << "Performing tests with uint128_t." << std::endl;
+    run_all<uint128_t>();
 
     std::cout << "Performing tests with mpz_class." << std::endl;
     run_all<mpz_class>();

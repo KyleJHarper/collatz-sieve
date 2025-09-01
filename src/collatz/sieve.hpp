@@ -45,7 +45,7 @@ struct SieveOptions {
 //
 // Further optimizations, such as a forward-looking cache are still TBD.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class Sieve {
     private:
     //
@@ -145,9 +145,9 @@ class Sieve {
         // #pragma omp parallel for schedule(static) default(none) shared(_survivors, last_level)
         for (size_t i = 0; i < _survivor_count; i++) {
             Node<T>* survivor = last_level[i];
-            if constexpr(std::integral<T>) {
+            if constexpr(BuiltinIntegral<T>) {
                 _survivors[i] = survivor->get_value();
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 // Convert the GMP to uint64_t.  See private member for why.
                 _survivors[i] = mpz_get_ui64(survivor->get_value().get_mpz_t());
             }
@@ -159,13 +159,12 @@ class Sieve {
         // Reset the multiplier and step values.  Recalculate incrementer.
         _multiplier = 1;
         _step = BinaryTreeMath<uint64_t>::st_step(tree->get_level_count());
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             _max_multiplier = std::floor((std::numeric_limits<uint64_t>::max() - _survivors.back()) / _step);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             _max_multiplier = std::numeric_limits<uint64_t>::max();
         }
         recalculate_incrementer();
-
 
         // Refill the pool.  Extend the pool index to ensure a full flush.
         _pool_index = _pool_size;
@@ -233,9 +232,9 @@ class Sieve {
             _pool_premature_refills++;
             // #pragma omp parallel for default(none) schedule(static) shared(_pool, _pool_index)
             for (size_t i = 0; i < pool_fill_index; i++) {
-                if constexpr(std::integral<T>) {
+                if constexpr(BuiltinIntegral<T>) {
                     _pool[i] = _pool[i + _pool_index];
-                } else {
+                } else if constexpr(GMPIntegral<T>) {
                     std::swap(_pool[i + _pool_index], _pool[i]);
                 }
             }
@@ -273,9 +272,9 @@ class Sieve {
             if (fill_limit != 0) {
                 #pragma omp parallel for default(none) schedule(static) shared(current_buffer, _survivors, _incrementer, _survivor_index, current_fill_index, fill_limit)
                 for (size_t i = 0; i < fill_limit; i++) {
-                    if constexpr(std::integral<T>) {
+                    if constexpr(BuiltinIntegral<T>) {
                         (*current_buffer)[current_fill_index + i] = _survivors[_survivor_index + i] + _incrementer;
-                    } else {
+                    } else if constexpr(GMPIntegral<T>) {
                         mpz_add_ui((*current_buffer)[current_fill_index + i].get_mpz_t(), _incrementer.get_mpz_t(), _survivors[_survivor_index + i]);
                     }
                 }
@@ -302,9 +301,9 @@ class Sieve {
     //
     inline void recalculate_incrementer() {
         // Build the incrementer based on step and multiplier.
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             _incrementer = _multiplier * _step;
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             _incrementer = _multiplier;
             mpz_mul_ui(_incrementer.get_mpz_t(), _incrementer.get_mpz_t(), _step);
         }
@@ -323,14 +322,14 @@ class Sieve {
         }
         if (_survivor_index == _survivor_count) {
             _survivor_index = 0;
-            if constexpr(std::integral<T>) {
+            if constexpr(BuiltinIntegral<T>) {
                 if (_multiplier >= _max_multiplier) {
                     std::string msg = "Multiplier " + std::to_string(_multiplier);
                     msg += " exceeeds max allowed multiplier for 64-bit type (" + std::to_string(_max_multiplier) + ").";
                     msg += "  Pool values would overflow if we continued.";
                     throw std::overflow_error(msg);
                 }
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 if (_multiplier >= _max_multiplier) {
                     std::string msg = "Multiplier " + std::to_string(_multiplier);
                     msg += " exceeeds max allowed multiplier for GMP type (" + std::to_string(_max_multiplier) + ").";
@@ -350,9 +349,9 @@ class Sieve {
     // Returns the next value from the sieve.  This is a single-threaded, one-by-one iterator.
     //
     void next(T& out) {
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             out = _pool[_pool_index++];
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             std::swap(_pool[_pool_index++], out);
         }
         if (_pool_index >= _pool_size) {
@@ -372,9 +371,9 @@ class Sieve {
             size_t limit = std::min(buffer.size() - filled, pool_left);
             #pragma omp parallel for default(none) schedule(static) shared(buffer, _pool, _pool_index, filled, limit)
             for (size_t i = 0; i < limit; i++) {
-                if constexpr(std::integral<T>) {
+                if constexpr(BuiltinIntegral<T>) {
                     buffer[filled + i] = _pool[_pool_index + i];
-                } else {
+                } else if constexpr(GMPIntegral<T>) {
                     std::swap(buffer[filled + i], _pool[_pool_index + i]);
                 }
             }
@@ -397,14 +396,14 @@ class Sieve {
         size_t total = sizeof(*this);
 
         // Account for _pool
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             total += (_pool.size() * sizeof(T));
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             total += (_pool.size() * gmp_deep_sizeof(_pool[0]));
         }
 
         // Forward Looking Cache
-        // TODO
+        //TODO
 
         // Done
         return total;

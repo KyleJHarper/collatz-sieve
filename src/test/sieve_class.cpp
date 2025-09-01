@@ -59,7 +59,7 @@ const std::array<uint64_t, L4_SIZE> L4_VALUES = {
 //
 // Defaults Regressions
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_default_opts() {
     SieveOptions opts;
     assert(opts.pool_size == 1048576);
@@ -74,7 +74,7 @@ void test_sieve_default_opts() {
 //
 // Hard code level 4 values for tests.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_level_4_values(Sieve<T>& sieve) {
     T val;
     sieve.next(val); assert(val == L4_VALUES[0]);
@@ -111,7 +111,7 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
 //
 // L4 Internals Should Match
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_overflowed = false) {
     // Only works for l4 trees.
     assert(sieve.get_tree_level_count() == 4);
@@ -155,7 +155,7 @@ void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_
 //
 // Pool filling should work under all circumstances.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_pool_filling() {
     SieveOptions opts;
     opts.pool_size = 64;
@@ -168,7 +168,7 @@ void test_sieve_pool_filling() {
 //
 // Tree source shouldn't matter.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_tree_source() {
     SieveOptions opts;
     BinaryTree<T> tree(4, opts.tree_opts);
@@ -183,7 +183,7 @@ void test_sieve_tree_source() {
 //
 // Bulk Next
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_bulk_next() {
     SieveOptions opts;
     opts.pool_size = 64;
@@ -303,7 +303,7 @@ void test_sieve_bulk_next() {
 //
 // Above 64 bit
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void test_sieve_over_64_bit() {
     // Build the sieve, and then coerce the step for testing.
     SieveOptions opts;
@@ -337,7 +337,7 @@ void test_sieve_over_64_bit() {
 //
 // Wrapper to run all tests.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 void run_all() {
     std::cout << "test_sieve_default_opts ..." << std::flush;
     test_sieve_default_opts<T>();

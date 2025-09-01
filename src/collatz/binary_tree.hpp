@@ -4,12 +4,12 @@
 #include <cstddef>
 #include <gmp.h>
 #include <gmpxx.h>
-#include <limits>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <omp.h>
 #include "collatz.hpp"
+#include "concepts.hpp"
 #include "node.hpp"
 #include "binary_tree_coverage.hpp"
 #include "binary_tree_math.hpp"
@@ -34,7 +34,7 @@ struct BinaryTreeOptions {
 // When pruning is enabled, we will remove any nodes hitting "hwm", leaving only nodes that still
 // need to be tested.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class BinaryTree {
     private:
     Node<T> *_root_node = nullptr;
@@ -239,12 +239,12 @@ class BinaryTree {
                 Node<T>* parent = parents[parent_idx];
 
                 // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
-                if constexpr(std::same_as<T, mpz_class>) {
-                    mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
-                    mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
-                } else {
+                if constexpr(BuiltinIntegral<T>) {
                     child_value_1 = parent->get_value() + step;
                     child_value_2 = child_value_1 + step;
+                } else if constexpr(GMPIntegral<T>) {
+                    mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
+                    mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
                 }
 
                 // Instaniate the children.
@@ -346,13 +346,13 @@ class BinaryTree {
     //
     void assert_level_will_fit(size_t level) const {
         if (! BinaryTreeMath<T>::st_level_will_fit(level)) {
-            size_t bits = std::numeric_limits<T>::digits;
+            size_t bits = sizeof(T) * 8;
             T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
             size_t max_level_allowed = BinaryTreeMath<T>::st_max_full_level_at_node(max_iv_allowed);
             std::string msg = "Cannot build a BinaryTree with ";
-            msg += std::to_string(level) + " levels and type '" + typeid(T).name() + "' with ";
-            msg += std::to_string(bits) + " bits. A Collatz sequence will overflow.";
-            msg += " Max level for this type is " + std::to_string(max_level_allowed) + ".";
+            msg += to_string_any(level) + " levels and type '" + typeid(T).name() + "' with ";
+            msg += to_string_any(bits) + " bits. A Collatz sequence will overflow.";
+            msg += " Max level for this type is " + to_string_any(max_level_allowed) + ".";
             throw std::out_of_range(msg);
         }
     }

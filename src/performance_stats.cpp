@@ -99,7 +99,7 @@ std::vector<std::string> add(const char *name, int64_t u_version, int64_t z_vers
 //
 // Tree Build Time
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 duration<double, std::milli> tree_build_time(size_t levels, const BinaryTreeOptions& opts) {
     auto start = high_resolution_clock::now();
     BinaryTree tree = BinaryTree<T>(levels, opts);
@@ -120,7 +120,7 @@ struct sieve_timings {
     size_t refill_fill_loops;
     size_t premature_refills;
 };
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 sieve_timings sieve_iteration_time(
     size_t levels
     , const SieveOptions& opts

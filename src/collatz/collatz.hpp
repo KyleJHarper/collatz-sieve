@@ -52,7 +52,27 @@ namespace CollatzConstants {
     constexpr bool EVEN = false;
 
     // Trying to perform 3X+1 on any value higher than this would overflow a 64-bit unsigned integer.
-    constexpr uint64_t MAX_64BIT_ODD = 6148914691236517203;
+    constexpr std::array<uint128_t, 5> MAX_3XP1 = {
+        ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
+        ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
+        ((uint128_t(1) << 32) - 1 - 1) / 3,   // 32 bit
+        ((uint128_t(1) << 64) - 1 - 1) / 3,   // 64 bit
+        ((uint128_t(1) << 127) + ((uint128_t(1) << 127) - 1) - 1) / 3  // 128 bit
+        // Requires a little juggling to avoid overflow.  Yay PEMDAS!
+    };
+    //
+    // Now a helper for it.
+    template<BuiltinIntegral T>
+    inline constexpr uint128_t get_max_3xp1() {
+        switch (sizeof(T) * 8) {
+            case   8: return MAX_3XP1[0];
+            case  16: return MAX_3XP1[1];
+            case  32: return MAX_3XP1[2];
+            case  64: return MAX_3XP1[3];
+            case 128: return MAX_3XP1[4];
+            default: throw std::logic_error("Bit size not supported: " + std::to_string(sizeof(T) * 8));
+        }
+    }
 
     // Precomputed maximum initial values for a given bit size.  The next value would overflow during its sequence.
     constexpr size_t MAX_IV_KNOWN_BITS = 65;
@@ -150,7 +170,7 @@ namespace CollatzConstants {
 //   time  -> callers who don't want CollatzMetadata will calculated it each time a getter for metadata is called.
 //   memory-> callers who do want CollatzMetadata have it on-demand, computed when Collatz().init() is called.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class CollatzMetadata {
     private:
     // None, just make them public.
@@ -184,7 +204,7 @@ class CollatzMetadata {
     //
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        if constexpr(std::is_same<T, mpz_class>::value) {
+        if constexpr(GMPIntegral<T>) {
             total += gmp_deep_sizeof(peak_value);
         }
         return total;
@@ -200,7 +220,7 @@ class CollatzMetadata {
 // Basic Collatz sequence object with minimal data to keep it tight.
 // see: CollatzMetadata for details about time-memory trade-offs with _enable_metadata.
 //
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class Collatz {
     private:
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
@@ -375,20 +395,11 @@ class Collatz {
     //
     std::string get_sequence_string() {
         std::string rv;
-
-        if constexpr(std::integral<T>) {
-            rv.append(std::to_string(_initial_value));
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            rv.append(_initial_value.get_str());
-        }
+        rv.append(to_string_any(_initial_value));
 
         for(size_t i=1; i<_sequence.size(); i++) {
             rv.append(", ");
-            if constexpr(std::integral<T>) {
-               rv.append(std::to_string(_sequence[i]));
-            } else if constexpr(std::same_as<T, mpz_class>) {
-                rv.append(_sequence[i].get_str());
-            }
+            rv.append(to_string_any(_sequence[i]));
         }
 
         return rv;
@@ -403,9 +414,9 @@ class Collatz {
     size_t deep_size() const {
         size_t total = sizeof(*this);
 
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             total += sizeof(T) * _sequence.capacity();
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             total += sizeof(mpz_class) * _sequence.capacity();
             for (const auto& val : _sequence) {
                 total += gmp_deep_sizeof(val);
@@ -435,8 +446,7 @@ class Collatz {
 
         thread_local T current_step;
         current_step = initial_value;
-        // Fixed width and GMP types differ.  Handle them separately to reduce allocs().
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
             while (current_step >= 1) {
                 bool stop = callback(current_step);
@@ -444,14 +454,14 @@ class Collatz {
                 if (current_step % 2 == 0) {
                     current_step /= 2;
                 } else {
-                    if (current_step > CollatzConstants::MAX_64BIT_ODD) {
+                    if (current_step > CollatzConstants::get_max_3xp1<T>()) {
                         throw CollatzSequenceOverflow("Overflow when building for_each_sequence_step().");
                     }
                     current_step *= 3;
                     current_step += 1;
                 }
             }
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             // GMP integers will alloc() with certain arithmetic operators, but can't overflow.
             while (current_step >= CollatzConstants::MPZ_ONE) {
                 bool stop = callback(current_step);
@@ -501,9 +511,9 @@ class Collatz {
                 skip = false;
             } else {
                 count++;
-                if constexpr(std::integral<T>) {
+                if constexpr(BuiltinIntegral<T>) {
                     result += (step % 2 == 0 ? 'G' : 'F');
-                } else {
+                } else if constexpr(GMPIntegral<T>) {
                     result += (mpz_even_p(step.get_mpz_t()) ? 'G' : 'F');
                 }
                 skip = result.back() == 'F';

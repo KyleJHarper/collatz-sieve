@@ -14,14 +14,13 @@
 // Ergo, much of this will be exposed with BinaryTree too in wrapper methods.
 //
 
-template<IntegralOrMPZClass T>
+template<AnySupportedIntegral T>
 class BinaryTreeMath {
     private:
     static inline const mpz_class _MPZ_TWO = 2;
-    static inline const mpf_class _MPF_TWO = 2;
-    static inline const T _ROOT_VALUE_DEFAULT = 1;
-    static inline T _root_value = _ROOT_VALUE_DEFAULT;
-    static inline T _offset = 1 - _root_value;
+    static inline const size_t _ROOT_VALUE_DEFAULT = 1;
+    static inline size_t _root_value = _ROOT_VALUE_DEFAULT;
+    static inline size_t _offset = 1 - _root_value;
 
     public:
     // Don't instanitate this.
@@ -34,18 +33,12 @@ class BinaryTreeMath {
     //
     // Getter and Setter for Root Value
     //
-    static const T get_default_root_value() { return _ROOT_VALUE_DEFAULT; }
-    static const T get_root_value() { return _root_value; }
+    static size_t get_default_root_value() { return _ROOT_VALUE_DEFAULT; }
+    static size_t get_root_value() { return _root_value; }
     static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
-    static T get_offset() { return _offset; }
-    static size_t get_base_level() {
-        if constexpr(std::integral<T>) {
-            return _offset;
-        } else {
-            return _offset.get_ui();
-        }
-    }
-    static void set_root_value(T value) {
+    static size_t get_offset() { return _offset; }
+    static size_t get_base_level() { return _offset; }
+    static void set_root_value(size_t value) {
         if (value != 0 && value != 1) {
             throw std::out_of_range("You cannot set the BinaryTreeMath root value to anything other than 0 or 1.");
         }
@@ -71,15 +64,44 @@ class BinaryTreeMath {
 
         // No built-in and/or non-integral.  Use a loop.
         for (size_t bit = 0; bit < bits; bit++) {
-            if constexpr(std::integral<T>) {
+            if constexpr(BuiltinIntegral<T>) {
                 if ((value >> bit) & 1) {
                     result |= (T(1) << (bits - 1 - bit));
                 }
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 if (mpz_tstbit(value.get_mpz_t(), bit)) {
                     mpz_setbit(result.get_mpz_t(), bits - 1 - bit);
                 }
+            } else {
+                throw std::logic_error("Unknown type.");
             }
+        }
+        return result;
+    }
+
+
+
+    //
+    // Log2 for Integers (Most Significant Bit Based)
+    // The std::log2() returns double precision which only affords 53 bits for integrer portio.  This means it doesn't even work
+    // for uint64_t.  GMP also has its own means for log2 (sizeinbase()).  Int 128 would fail too.
+    //
+    // To resolve this we make our own method.
+    static inline size_t floor_log2(const T& val) {
+        if (val == 0) { return 0; }
+        size_t result = 0;
+        if constexpr(NativeIntegral<T>) {
+            result = 63 - __builtin_clzll(val);
+        } else if constexpr(ExtendedIntegral<T>) {
+            if (val >> 64) {
+                result = 127 - __builtin_clzll((uint64_t)(val >> 64));
+            } else {
+                result = 63 - __builtin_clzll((uint64_t)val);
+            }
+        } else if constexpr(GMPIntegral<T>) {
+            result = mpz_sizeinbase(val.get_mpz_t(), 2) - 1;
+        } else {
+            throw std::logic_error("Unknown type.");
         }
         return result;
     }
@@ -93,15 +115,15 @@ class BinaryTreeMath {
     // Formula: floor(log2(N+Offset))
     static inline size_t st_node_level(const T& value) {
         size_t level = 0;
-        if constexpr(std::integral<T>) {
-            // Integer truncation will cover us with a static cast.
-            level = static_cast<size_t>(std::log2(value + _offset));
-        } else if constexpr(std::same_as<T, mpz_class>) {
-            // GMP doesn't have a logarithm function, but we can exploit sizeinbase() - 1 for the same.
+        if constexpr(BuiltinIntegral<T>) {
+            level = floor_log2(value + _offset);
+        } else if constexpr(GMPIntegral<T>) {
             // Adding 1 is a waste of alloc here, so use a scratch variable.
             static thread_local mpz_class junk = 0;
-            mpz_add(junk.get_mpz_t(), value.get_mpz_t(), _offset.get_mpz_t());
-            level = mpz_sizeinbase(junk.get_mpz_t(), 2) - 1;
+            mpz_add_ui(junk.get_mpz_t(), value.get_mpz_t(), _offset);
+            level = floor_log2(junk);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
         return level;
     }
@@ -117,18 +139,27 @@ class BinaryTreeMath {
         size_t level = BinaryTreeMath<T>::st_node_level(value);
         T value_plus_offset = value + _offset;
         T low_bits;
-        if constexpr(std::integral<T>) {
+
+        // Get lower bits.
+        if constexpr(BuiltinIntegral<T>) {
             low_bits = value_plus_offset & ((T(1) << level) - 1);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             mpz_class mask = (mpz_class(1) << level) - 1;
             low_bits = value_plus_offset & mask;
-        }
-        T position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level);
-        if constexpr(std::integral<T>) {
-            position += 1;
         } else {
-            mpz_add_ui(position.get_mpz_t(), position.get_mpz_t(), 1);
+            throw std::logic_error("Unknown type.");
         }
+
+        // Get the position now.
+        T position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level);
+        if constexpr(BuiltinIntegral<T>) {
+            position += 1;
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_add_ui(position.get_mpz_t(), position.get_mpz_t(), 1);
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+
         return position;
     }
 
@@ -141,10 +172,12 @@ class BinaryTreeMath {
     //
     static inline T st_step(size_t level) {
         static thread_local T step;
-        if constexpr(std::same_as<T, mpz_class>) {
+        if constexpr(BuiltinIntegral<T>) {
+            step = T(1) << level;
+        } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), level);
         } else {
-            step = static_cast<T>(1ULL << level);
+            throw std::logic_error("Unknown type.");
         }
         return step;
     }
@@ -158,10 +191,12 @@ class BinaryTreeMath {
     // Formula: 2^level
     static inline T st_max_position_of_level(size_t level) {
         static thread_local T max_position;
-        if constexpr(std::integral<T>) {
-            max_position = 1ULL << level;
-        } else {
+        if constexpr(BuiltinIntegral<T>) {
+            max_position = T(1) << level;
+        } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(max_position.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
         return max_position;
     }
@@ -177,11 +212,7 @@ class BinaryTreeMath {
         static thread_local mpz_class max_n;
         mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level + 1));
         mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 1);
-        if constexpr(std::integral<T>) {
-            mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
-        } else {
-            mpz_sub(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset.get_mpz_t());
-        }
+        mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
         return max_n;
     }
 
@@ -203,14 +234,15 @@ class BinaryTreeMath {
 
 
 
+    //
     // Level Will Fit
     // Determine if the level requested is going to fit within the bit-size of T.  Only applies to native integrals.
     // Leverages the CollatzConstants to know max IV for the given bit size.  IV's higher than this will overflow the bit during
     // sequence generation.
     static inline bool st_level_will_fit(size_t level) {
-        if constexpr(std::integral<T>) {
-            size_t bits = std::numeric_limits<T>::digits;
-            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
+        if constexpr(BuiltinIntegral<T>) {
+            size_t bits = sizeof(T) * 8;
+            mpz_class max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit(bits);
             mpz_class max_iv_needed = st_max_node_value_at_level(level);
             return (max_iv_allowed >= max_iv_needed);
         }
@@ -226,11 +258,13 @@ class BinaryTreeMath {
     // Formula: 2^level - Offset
     static inline T st_first_node_of_level(const size_t level) {
         static thread_local T first_node_value;
-        if constexpr(std::integral<T>) {
-            first_node_value = (1ULL << level) - _offset;
+        if constexpr(BuiltinIntegral<T>) {
+            first_node_value = (T(1) << level) - _offset;
         } else if constexpr(std::same_as<T, mpz_class>) {
             mpz_pow_ui(first_node_value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
-            mpz_sub(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), _offset.get_mpz_t());
+            mpz_sub_ui(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), _offset);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
         return first_node_value;
     }
@@ -249,28 +283,18 @@ class BinaryTreeMath {
     static inline T st_s1_summation(const T& position, size_t level) {
         static thread_local T frequency;
         static thread_local T value;
-        static thread_local float frequency_tmp_f;
-        static thread_local mpf_class frequency_tmp_mpf_c;
 
         // Frequency: ceil((pos - 1) / 2)
-        if constexpr(std::integral<T>) {
-            frequency_tmp_f = position;
-            frequency_tmp_f -= 1;
-            frequency_tmp_f /= 2;
-            frequency = std::ceil(frequency_tmp_f);
-        } else {
-            frequency_tmp_mpf_c = position;
-            mpf_sub_ui(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t(), 1);
-            mpf_div_ui(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t(), 2);
-            mpf_ceil(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t());
-            mpz_set_f(frequency.get_mpz_t(), frequency_tmp_mpf_c.get_mpf_t());
-        }
+        // We can cheat because...: ceil((pos-1)/2) ==> ((pos-1)+1)/2 ==> pos / 2
+        frequency = position / 2;
 
         // Value: 2^(L-1)
-        if constexpr(std::integral<T>) {
-            value = 1ULL << (level - 1);
-        } else {
+        if constexpr(BuiltinIntegral<T>) {
+            value = T(1) << (level - 1);
+        } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level - 1);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
 
         // Result of multiplication should be correctly typed.
@@ -292,49 +316,35 @@ class BinaryTreeMath {
         static thread_local T value;
         static thread_local T magnitude;
         static thread_local T summation;
-        static thread_local float frequency_tmp_f;
-        static thread_local mpf_class frequency_tmp_mpf_c;
-        static thread_local mpf_class junk_mpf_c;
 
         // Summation Loop
         summation = 0;
         for(size_t n=2; n<level; n++) {
             // Frequency: ceil((pos - 2^(n-1)) / 2^n)
-            if constexpr(std::integral<T>) {
-                frequency_tmp_f = position;
-                frequency_tmp_f -= (1ULL << (n - 1));
-                frequency_tmp_f /= (1ULL << n);
-                frequency = std::ceil(frequency_tmp_f);
-            } else {
-                // Assign position.
-                frequency_tmp_mpf_c = position;
-                // Build the 2^(n-1)
-                mpf_pow_ui(junk_mpf_c.get_mpf_t(), _MPF_TWO.get_mpf_t(), (n - 1));
-                // Subtract: pos - 2^(n-1)
-                mpf_sub(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t(), junk_mpf_c.get_mpf_t());
-                // Build the 2^n
-                mpf_pow_ui(junk_mpf_c.get_mpf_t(), _MPF_TWO.get_mpf_t(), n);
-                // Divide: (pos - 2^(n-1)) / (2^n)
-                mpf_div(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t(), junk_mpf_c.get_mpf_t());
-                // Apply ceiling.
-                mpf_ceil(frequency_tmp_mpf_c.get_mpf_t(), frequency_tmp_mpf_c.get_mpf_t());
-                // Save to MPZ.
-                mpz_set_f(frequency.get_mpz_t(), frequency_tmp_mpf_c.get_mpf_t());
-            }
+            // Again we can cheat ...
+            //   Numerator  : (pos - 2^(n-1))  ==>  (pos - (1 << (n-1)))
+            //   Denominator: 2^n              ==>  >> n
+            //   Ceiling    : ceil(x/y)        ==>  (x + y - 1) / y
+            // Final: (pos - (1 << (n-1)) + (1 << n) - 1) >> n
+            frequency = (position - (T(1) << (n - 1)) + (T(1) << n) - 1) >> n;
 
             // Value: (2^n - 3)
-            if constexpr(std::integral<T>) {
-                value = (1ULL << n) - 3;
-            } else {
+            if constexpr(BuiltinIntegral<T>) {
+                value = (T(1) << n) - 3;
+            } else if constexpr(GMPIntegral<T>) {
                 mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), n);
                 mpz_sub_ui(value.get_mpz_t(), value.get_mpz_t(), 3);
+            } else {
+                throw std::logic_error("Unknown type.");
             }
 
             // Magnitude: 2^(L-n)
-            if constexpr(std::integral<T>) {
-                magnitude = 1ULL << (level - n);
-            } else {
+            if constexpr(BuiltinIntegral<T>) {
+                magnitude = T(1) << (level - n);
+            } else if constexpr(GMPIntegral<T>) {
                 mpz_pow_ui(magnitude.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - n));
+            } else {
+                throw std::logic_error("Unknown type.");
             }
 
             // Add to Summation
@@ -358,17 +368,21 @@ class BinaryTreeMath {
         static thread_local T new_position;
 
         // Lift: 2^L
-        if constexpr(std::integral<T>) {
-            lift = 1ULL << level;
-        } else {
+        if constexpr(BuiltinIntegral<T>) {
+            lift = T(1) << level;
+        } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
 
         // New Position: bit_reverse_L(pos - 1)
-        if constexpr(std::integral<T>) {
+        if constexpr(BuiltinIntegral<T>) {
             new_position = position - 1;
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             mpz_sub_ui(new_position.get_mpz_t(), position.get_mpz_t(), 1);
+        } else {
+            throw std::logic_error("Unknown type.");
         }
         new_position = st_reverse_low_bits(new_position, level);
 
