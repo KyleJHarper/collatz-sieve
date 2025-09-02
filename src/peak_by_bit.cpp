@@ -38,7 +38,7 @@ class PeakIVScannerResults {
 template<AnySupportedIntegral T>
 class PeakIVScanner {
     private:
-    static constexpr size_t BUFFER_SIZE = 1000;
+    static constexpr size_t BUFFER_SIZE = 100000;
     T _base_initial_value = 1;
     T _max_allowed_value = 0;
     size_t _start_bit = 0;
