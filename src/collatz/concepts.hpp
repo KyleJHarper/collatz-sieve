@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <stdint.h>
+#include <string_view>
 #include <gmp.h>
 #include <gmpxx.h>
 
@@ -9,6 +10,29 @@
 // Make 128-bit types match naming pattern of others.
 typedef __uint128_t uint128_t;
 typedef __int128_t int128_t;
+
+
+
+
+//
+// Make a UDL for str-to-uint128 since we can't trust the compiler to undrstand it.
+//
+// Helper method.
+constexpr uint128_t parse_u128(std::string_view s) {
+    uint128_t value = 0;
+    for (char c : s) {
+        if (c < '0' || c > '9')
+            throw "invalid digit in _u128 literal";
+        value = value * 10 + (c - '0');
+    }
+    return value;
+}
+//
+// Here's the UDL.
+constexpr uint128_t operator""_u128(const char* str, size_t len) {
+    return parse_u128(std::string_view{str, len});
+}
+
 
 
 //
@@ -97,6 +121,22 @@ inline mpf_class uint128_to_mpf(uint128_t v) {
 // String Helper
 //
 // Generic to_string that works with uint128_t, GMP, and native integrals
+inline std::string int128_to_string(__int128_t value) {
+    if (value == 0) return "0";
+
+    bool negative = value < 0;
+    unsigned __int128 v = negative ? -value : value;
+
+    std::string result;
+    while (v > 0) {
+        int digit = v % 10;
+        result.push_back('0' + digit);
+        v /= 10;
+    }
+    if (negative) result.push_back('-');
+    std::reverse(result.begin(), result.end());
+    return result;
+}
 inline std::string uint128_to_string(uint128_t value) {
     if (value == 0) return "0";
     std::string s;
