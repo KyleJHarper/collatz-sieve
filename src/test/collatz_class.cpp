@@ -37,7 +37,7 @@ void test_collatz_basic() {
 
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_step_count() == 9);
+    assert(c.get_step_count() == 8);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
@@ -60,7 +60,7 @@ void test_collatz_reset_and_reuse() {
     c.init(6, true, true);  // Reuse with new value
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_step_count() == 9);
+    assert(c.get_step_count() == 8);
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
@@ -86,7 +86,7 @@ void test_collatz_reset_and_reuse_without_sequence() {
     c.init(6, false, true);  // Reuse with new value
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
-    assert(c.get_step_count() == 9);
+    assert(c.get_step_count() == 8);
     try {
         assert(c.get_sequence()[0] == 6);
         assert(false); // Should not reach here
@@ -136,7 +136,7 @@ void test_collatz_zero() {
 template<typename T>
 void test_collatz_one() {
     Collatz<T> c(1, true, true);
-    assert(c.get_step_count() == 1);
+    assert(c.get_step_count() == 0);
     assert(c.get_oe_pattern_string() == "O");  // It adds "O" in the last step
 }
 

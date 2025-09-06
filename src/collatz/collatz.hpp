@@ -407,7 +407,9 @@ class Collatz {
                     return false;
                 });
                 // Decrement 1 to account for start position
-                _metadata->step_count--;
+                if (_track_metadata && _metadata->step_count > 0) {
+                    _metadata->step_count--;
+                }
             } catch(const CollatzSequenceOverflow& err) {
                 _sequence_overflow = true;
                 throw(err);
