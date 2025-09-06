@@ -13,4 +13,5 @@ compile_commands.json
 *.swp
 tools/*.svg
 tools/*.png
+*.progress
 

@@ -148,6 +148,20 @@ inline std::string uint128_to_string(uint128_t value) {
     std::reverse(s.begin(), s.end());
     return s;
 }
+inline uint128_t str_to_uint128(const std::string& s) {
+    if (s.empty()) {
+        throw std::invalid_argument("Empty string for uint128_t");
+    }
+    uint128_t result = 0;
+    for (char c : s) {
+        if (!std::isdigit(c)) {
+            throw std::invalid_argument("Invalid character in uint128_t: " + s);
+        }
+        int digit = c - '0';
+        result = result * 10 + digit;
+    }
+    return result;
+}
 template<AnySupportedIntegral T>
 inline std::string to_string_any(const T& val) {
     if constexpr(NativeIntegral<T>) {
