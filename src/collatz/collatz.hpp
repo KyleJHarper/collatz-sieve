@@ -463,6 +463,8 @@ class Collatz {
                     }
                     return false;
                 });
+                // Decrement 1 to account for start position
+                _metadata->step_count--;
             } catch(const CollatzSequenceOverflow& err) {
                 _sequence_overflow = true;
                 throw(err);
@@ -645,6 +647,21 @@ class Collatz {
 
         // Sequence didn't exist.  Calculate it on-the-fly via the static method.
         Collatz<T>::for_each_sequence_step(_initial_value, std::forward<Func>(callback));
+    }
+
+
+
+    //
+    // Step Count
+    // Returns the step count for any initial value.  Recall it's sequence - 1.
+    //
+    static size_t st_get_step_count(const T& initial_value) {
+        size_t steps = 0;
+        for_each_sequence_step(initial_value, [&](const T& step) {
+            steps++;
+            return step < 0;  // We need to return false anyway, might as well get rid of a compiler warning.
+        });
+        return steps - 1;
     }
 
 
