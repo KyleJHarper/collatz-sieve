@@ -1,3 +1,4 @@
+#include <gmp.h>
 #include <gmpxx.h>
 #include "CLI.hpp"
 #include "collatz/concepts.hpp"
@@ -37,12 +38,12 @@ class PeakIVScannerResults {
 template<AnySupportedIntegral T>
 class PeakIVScanner {
     private:
-    static constexpr size_t BUFFER_SIZE = 1000;
+    static constexpr size_t BUFFER_SIZE = 100000;
     T _base_initial_value = 1;
     T _max_allowed_value = 0;
     size_t _start_bit = 0;
     size_t _max_bit = 8;
-    std::array<Collatz<T>, BUFFER_SIZE> _collatz;
+    std::array<T, BUFFER_SIZE> _collatz_peaks;
 
     public:
     PeakIVScanner() {}
@@ -54,8 +55,8 @@ class PeakIVScanner {
         _start_bit = start_bit;
         size_t selected_initial_bit = _start_bit;
         size_t max_known_bit = CollatzConstants::get_max_initial_value_max_bits<T>();
-        if (start_bit >= max_known_bit) {
-            logger->warn("You started a new PeakIVScanner with a start bit (" + std::to_string(_start_bit) + ") that doesn't have a known base initial value.  It will start at max known bit: " + to_string_any(max_known_bit));
+        if (start_bit > max_known_bit) {
+            logger->warn("You started a new PeakIVScanner with a start bit ({}) that doesn't have a known base initial value.  It will start at max known bit: {}", start_bit, max_known_bit);
             selected_initial_bit = max_known_bit;
         }
         if constexpr(GMPIntegral<T>) {
@@ -73,7 +74,7 @@ class PeakIVScanner {
     PeakIVScannerResults run(bool use_table = false) {
         PeakIVScannerResults results;
         if (use_table) { logger->debug("Using precomputed table where possible."); }
-        logger->debug("Starting with bit " + std::to_string(_start_bit) +" and base initial value of " + to_string_any(_base_initial_value));
+        logger->debug("Starting with bit {} and base initial value of {}", _start_bit, _base_initial_value);
         // Main loop for each bit.
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
             // If we're using the precomputed table, send it.
@@ -98,18 +99,30 @@ class PeakIVScanner {
             } else {
                 mpz_ui_pow_ui(_max_allowed_value.get_mpz_t(), 2, bit);
             }
+            // Subtract one for 0-based uinsigned integer reality.
+            _max_allowed_value -= 1;
+            logger->debug("Looking for max_allowed_value of 2^{} - 1 == {}, starting with base_initial_value of {}", bit, _max_allowed_value, _base_initial_value);
 
             // The main scanning loop.  We will process in batches and stop when we find our value.
             // To achieve parallel execution, we must fill the buffer and allow OMP to loop over it in sections.
             while (true) {
                 // Fill the buffer.
                 size_t overflow_index = BUFFER_SIZE;
-                #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz, _base_initial_value)
+                #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz_peaks, _base_initial_value)
                 for(size_t i = 0; i < BUFFER_SIZE; i++) {
-                    // We skip even values, so it's always i*2.
-                    T my_iv = _base_initial_value + (i * 2);
+                    T my_iv = _base_initial_value + i;
                     try {
-                        _collatz[i].init(my_iv, false, true);
+                        // Start with N as the peak.
+                        _collatz_peaks[i] = my_iv;
+                        // Loop throug sequence.
+                        Collatz<T>::for_each_sequence_step(my_iv, [&](const T& step) {
+                            // Promote peaks.
+                            if (step > _collatz_peaks[i]) {
+                                _collatz_peaks[i] = step;
+                            }
+                            // Skip when we hit HWM.
+                            return step < my_iv;
+                        });
                     } catch (const CollatzSequenceOverflow& ex) {
                         overflow_index = i;
                         i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
@@ -126,8 +139,8 @@ class PeakIVScanner {
                         promote_test = true;
                     }
                     if (overflow_index < BUFFER_SIZE) {
-                        const Collatz<T>& overflow_point = _collatz[overflow_index];
-                        logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_point.get_initial_value());
+                        T overflow_initial_value = _base_initial_value + overflow_index;
+                        logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
                         promote_test = true;
                     }
                 } else if constexpr(ExtendedIntegral<T>) {
@@ -136,8 +149,8 @@ class PeakIVScanner {
                         promote_test = true;
                     }
                     if (overflow_index < BUFFER_SIZE) {
-                        const Collatz<T>& overflow_point = _collatz[overflow_index];
-                        logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_point.get_initial_value());
+                        T overflow_initial_value= _base_initial_value + overflow_index;
+                        logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
                         promote_test = true;
                     }
                 }
@@ -159,9 +172,9 @@ class PeakIVScanner {
 
                 // Test all values in the buffer, using OMP's reduction to find the minimum offending index, if any.
                 size_t failing_index = BUFFER_SIZE;
-                #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(_collatz, _max_allowed_value)
+                #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(_collatz_peaks, _max_allowed_value)
                 for (size_t i = 0; i < BUFFER_SIZE; i++) {
-                    if (_collatz[i].get_peak_value() > _max_allowed_value) {
+                    if (_collatz_peaks[i] > _max_allowed_value) {
                         failing_index = i;
                         i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
                     }
@@ -169,21 +182,22 @@ class PeakIVScanner {
 
                 // If failing_index was set lower than buffer_size (above the highest index), we found an offender.
                 if (failing_index < BUFFER_SIZE) {
-                    const Collatz<T>& failure_point = _collatz[failing_index];
-                    T max_iv = failure_point.get_initial_value() - 1;
+                    T failure_initial_value = _base_initial_value + failing_index;
+                    T max_iv = failure_initial_value - 1;
+                    logger->debug("Found a peak over allowed at index {}.  Next value ({}) hit a peak of {}.", failing_index, failure_initial_value, _collatz_peaks[failing_index]);
                     logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
                     if constexpr(ExtendedIntegral<T>) {
                         results.set(bit, uint128_to_mpz(max_iv));
                     } else {
                         results.set(bit, mpz_class(max_iv));
                     }
-                    _base_initial_value = failure_point.get_initial_value();
+                    _base_initial_value += failing_index;
                     // Leave the while(true).  Move to next bit.
                     break;
                 }
 
-                // Didn't find an offender.  Bump the initial value, remembering we skip evens.
-                _base_initial_value += BUFFER_SIZE * 2;
+                // Didn't find an offender.  Bump the initial value.
+                _base_initial_value += BUFFER_SIZE;
             }
         }
 
@@ -203,7 +217,9 @@ int main(int argc, char **argv) {
     bool force_mpz;
     bool force_i128;
     bool use_table;
+    bool array_output;
     CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.  Starts with uint64_t type and upgrades to GMP (mpz_class) automatically.");
+    options.add_flag("-a,--array-output", array_output, "Emit the results as an array for easy copy/paste.");
     options.add_option("-b,--bits", max_bit, "Number of bits to test to.")->default_val(8);
     options.add_flag("-i,--int128", force_i128, "Use 128-bit native immediately instead of escalating to it.");
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class immediately instead of escalating to it.");
@@ -245,8 +261,22 @@ int main(int argc, char **argv) {
     }
 
     // Print results.
+    mpz_class twos_power;
     for (auto& [bit, max_iv] : results.get_results()) {
-        logger->info("2^{} max IV: {:'} (max level: {})", bit, max_iv, BinaryTreeMath<mpz_class>::st_max_full_level_at_node(max_iv));
+        mpz_ui_pow_ui(twos_power.get_mpz_t(), 2, bit);
+        logger->info("2^{} ({}) has max IV: {:'} (max full level: {})", bit, twos_power, max_iv, BinaryTreeMath<mpz_class>::st_max_full_level_at_node(max_iv));
+    }
+
+    // Array output/
+    if (array_output) {
+        logger->info("Array output requested.  Voila:");
+        size_t result_count = results.get_results().size();
+        std::string type = result_count > 65 ? "uint128_t" : "uint64_t";
+        std::cerr << "constexpr std::array<" << type << ", " << result_count << "> MY_ARRAY = {" << std::endl;
+        for (auto& [bit, max_iv] : results.get_results()) {
+            std::cerr << "    " << max_iv << ",  // " << bit << std::endl;
+        }
+        std::cerr << "};" << std::endl;
     }
 
     // Go home.

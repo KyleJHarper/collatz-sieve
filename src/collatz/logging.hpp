@@ -4,6 +4,7 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <string_view>
+#include "concepts.hpp"
 #include <cctype>
 #include <algorithm>
 
@@ -62,6 +63,28 @@ void init_logger();
 //     }
 // };
 
+
+
+
+
+//
+// Int 128 Support
+//
+// Signed
+template <>
+struct fmt::formatter<__int128_t> : fmt::formatter<std::string> {
+    auto format(const __int128_t& value, format_context& ctx) const {
+        return fmt::formatter<std::string>::format(int128_to_string(value), ctx);
+    }
+};
+//
+// Unsigned
+template <>
+struct fmt::formatter<unsigned __int128> : fmt::formatter<std::string> {
+    auto format(const unsigned __int128& value, format_context& ctx) const {
+        return fmt::formatter<std::string>::format(uint128_to_string(value), ctx);
+    }
+};
 
 
 
