@@ -271,10 +271,14 @@ int main(int argc, char **argv) {
     if (array_output) {
         logger->info("Array output requested.  Voila:");
         size_t result_count = results.get_results().size();
-        std::string type = result_count > 65 ? "uint128_t" : "uint64_t";
+        std::string type = max_bit > 65 ? "uint128_t" : "uint64_t";
         std::cerr << "constexpr std::array<" << type << ", " << result_count << "> MY_ARRAY = {" << std::endl;
         for (auto& [bit, max_iv] : results.get_results()) {
-            std::cerr << "    " << max_iv << ",  // " << bit << std::endl;
+            if (bit > 64) {
+                std::cerr << "    \"" << max_iv << "\"_u128,  // " << bit << std::endl;
+            } else {
+                std::cerr << "    " << max_iv << ",  // " << bit << std::endl;
+            }
         }
         std::cerr << "};" << std::endl;
     }
