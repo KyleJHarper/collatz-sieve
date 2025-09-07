@@ -78,6 +78,7 @@ set(PROGRAMS
     performance_stats
     sieve_stuff
     single_collatz
+    step_counter
 )
 
 foreach(prog ${PROGRAMS})
