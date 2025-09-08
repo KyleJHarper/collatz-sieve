@@ -5,6 +5,7 @@
 #include "collatz/logging.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
+#include "collatz/progress.hpp"
 
 
 //
@@ -93,6 +94,10 @@ class PeakIVScanner {
                 }
             }
 
+            // Establish progress tracking.
+            Progress progress(std::filesystem::current_path().string() + "/peak_by_bit.progress");
+            progress.monitor(_base_initial_value);
+
             // Setup variables based on Integral or mpz_class type.
             if constexpr(BuiltinIntegral<T>) {
                 _max_allowed_value = T(1) << bit;
@@ -157,6 +162,7 @@ class PeakIVScanner {
 
                 // Promote if needed.
                 if (promote_test) {
+                    progress.join();
                     PeakIVScannerResults promoted_results;
                     if constexpr(NativeIntegral<T>) {
                         PeakIVScanner<uint128_t> promoted_test(_max_bit, bit, uint128_t(_base_initial_value));

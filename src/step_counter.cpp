@@ -78,6 +78,7 @@ StepResults run_it(size_t start_bit, size_t max_bit, uint128_t starting_value = 
         // Overflow check.
         if (bit > bit_limit) {
             if constexpr(NativeIntegral<T>) {
+                progress.join();
                 StepResults other_results = run_it<uint128_t>(bit, max_bit);
                 results.merge(other_results);
                 return results;
