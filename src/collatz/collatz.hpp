@@ -142,7 +142,7 @@ namespace CollatzConstants {
         8528817510,  // 63
         12327829502,  // 64
     };
-    constexpr std::array<uint128_t, 91> MAX_INITIAL_VALUE_BY_128BIT = {
+    constexpr std::array<uint128_t, 129> MAX_INITIAL_VALUE_BY_128BIT = {
         0,  // 0
         2,  // 1
         2,  // 2
@@ -234,6 +234,45 @@ namespace CollatzConstants {
         "64848224337146"_u128,  // 88
         "64848224337146"_u128,  // 89
         "64848224337146"_u128,  // 90
+        // The following are placeholders until I can compute them.
+        "64848224337146"_u128,  // 91
+        "64848224337146"_u128,  // 92
+        "64848224337146"_u128,  // 93
+        "64848224337146"_u128,  // 94
+        "64848224337146"_u128,  // 95
+        "64848224337146"_u128,  // 96
+        "64848224337146"_u128,  // 97
+        "64848224337146"_u128,  // 98
+        "64848224337146"_u128,  // 99
+        "64848224337146"_u128,  // 100
+        "64848224337146"_u128,  // 101
+        "64848224337146"_u128,  // 102
+        "64848224337146"_u128,  // 103
+        "64848224337146"_u128,  // 104
+        "64848224337146"_u128,  // 105
+        "64848224337146"_u128,  // 106
+        "64848224337146"_u128,  // 107
+        "64848224337146"_u128,  // 108
+        "64848224337146"_u128,  // 109
+        "64848224337146"_u128,  // 110
+        "64848224337146"_u128,  // 111
+        "64848224337146"_u128,  // 112
+        "64848224337146"_u128,  // 113
+        "64848224337146"_u128,  // 114
+        "64848224337146"_u128,  // 115
+        "64848224337146"_u128,  // 116
+        "64848224337146"_u128,  // 117
+        "64848224337146"_u128,  // 118
+        "64848224337146"_u128,  // 119
+        "64848224337146"_u128,  // 120
+        "64848224337146"_u128,  // 121
+        "64848224337146"_u128,  // 122
+        "64848224337146"_u128,  // 123
+        "64848224337146"_u128,  // 124
+        "64848224337146"_u128,  // 125
+        "64848224337146"_u128,  // 126
+        "64848224337146"_u128,  // 127
+        "64848224337146"_u128,  // 128
     };
 
     //
@@ -340,17 +379,17 @@ class Collatz {
     private:
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
     // All data must fit within one cache line.
-    //                                           uint64_t | total | mpz_class | total
-    T _initial_value;                         //        8 |     8 |        16 |    16
-    bool _is_initialized : 1;                 //      1:1 |     9 |       1:1 |    17
-    bool _track_sequence : 1;                 //      1:2 |     9 |       1:2 |    17
-    bool _track_metadata : 1;                 //      1:3 |     9 |       1:3 |    17
-    bool _sequence_overflow : 1;              //      1:4 |     9 |       1:4 |    17  (4 bits padding)
-    // Alignment Padding                      //        7 |    16 |         7 |    24
-    std::vector<T> _sequence;                 //       24 |    40 |        24 |    48
-    CollatzMetadata<T>* _metadata = nullptr;  //        8 |    48 |         8 |    56
-    // Free Padding to Cacheline              //       16 |    64 |         8 |    64
-    // Max uintxxx_t to fit: 192
+    //                                           uint64_t | total | uint128_t | total | mpz_class | total
+    T _initial_value;                         //        8 |     8 |        16 |    16 |        16 |    16
+    bool _is_initialized : 1;                 //      1:1 |     9 |       1:1 |    17 |       1:1 |    17
+    bool _track_sequence : 1;                 //      1:2 |     9 |       1:2 |    17 |       1:2 |    17
+    bool _track_metadata : 1;                 //      1:3 |     9 |       1:3 |    17 |       1:3 |    17
+    bool _sequence_overflow : 1;              //      1:4 |     9 |       1:4 |    17 |       1:4 |    17  (4 bits padding)
+    // Alignment Padding                      //        7 |    16 |         7 |    24 |         7 |    24
+    std::vector<T> _sequence;                 //       24 |    40 |        24 |    48 |        24 |    48
+    CollatzMetadata<T>* _metadata = nullptr;  //        8 |    48 |         8 |    56 |         8 |    56
+    // Struct Alignment Padding (u128 only)   //        0 |    48 |         8 |    64 |         0 |    56
+    // Free Padding to Cacheline              //       16 |    64 |         0 |    64 |         8 |    64
     // -- Cache Line --
 
 

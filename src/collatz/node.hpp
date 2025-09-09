@@ -82,21 +82,22 @@ class Node {
     // Object members.
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
     // All data must fit within one cache line.
-    //                                                       uint64_t | total | mpz_class | total
-    T _value;                                            //         8 |     8 |        16 |    16
-    Node *_parent = nullptr;                             //         8 |    16 |         8 |    24
-    Node *_hwm_ancestor = nullptr;                       //         8 |    24 |         8 |    32
-    Node *_children[MAX_CHILDREN] = {nullptr, nullptr};  //        16 |    40 |        16 |    48
-    NodeMetadata<T>* _metadata = nullptr;                //         8 |    48 |         8 |    56
-    bool _is_below_hwm : 1 = false;                      //       1:1 |    49 |       1:1 |    57
-    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    49 |       1:2 |    57
-    bool _is_initialized : 1 = false;                    //       1:3 |    49 |       1:3 |    57
-    bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57
-    bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57  (3 bits padding)
-    uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58
-    uint8_t _fg_chain_length = 0;                        //         1 |    51 |         1 |    59
-    // Alignment Padding                                 //         5 |    56 |         5 |    64
-    // Free Padding to Cacheline                         //         8 |    64 |         0 |    64
+    //                                                       uint64_t | total | uint128_t | total | mpz_class | total
+    T _value;                                            //         8 |     8 |        16 |    16 |        16 |    16
+    Node *_parent = nullptr;                             //         8 |    16 |         8 |    24 |         8 |    24
+    Node *_hwm_ancestor = nullptr;                       //         8 |    24 |         8 |    32 |         8 |    32
+    Node *_children[MAX_CHILDREN] = {nullptr, nullptr};  //        16 |    40 |        16 |    48 |        16 |    48
+    NodeMetadata<T>* _metadata = nullptr;                //         8 |    48 |         8 |    56 |         8 |    56
+    bool _is_below_hwm : 1 = false;                      //       1:1 |    49 |       1:1 |    57 |       1:1 |    57
+    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    49 |       1:2 |    57 |       1:2 |    57
+    bool _is_initialized : 1 = false;                    //       1:3 |    49 |       1:3 |    57 |       1:3 |    57
+    bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57 |       1:4 |    57
+    bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57 |       1:5 |    57  (3 bits padding)
+    uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58 |         1 |    58
+    uint8_t _fg_chain_length = 0;                        //         1 |    51 |         1 |    59 |         1 |    59
+    // Alignment Padding                                 //         5 |    56 |         5 |    64 |         5 |    64
+    // Struct Alignment Padding (u128 only)              //         0 |    56 |         0 |    64 |         0 |    64
+    // Free Padding to Cacheline                         //         8 |    64 |         0 |    64 |         0 |    64
     // -- Cache Line --
 
 
