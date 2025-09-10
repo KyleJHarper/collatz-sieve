@@ -11,6 +11,7 @@ heaptrack*
 compile_commands.json
 .cache
 *.swp
+*.log
 tools/*.svg
 tools/*.png
 *.progress

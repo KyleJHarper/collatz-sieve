@@ -51,13 +51,13 @@ class PeakIVScanner {
     PeakIVScanner(size_t max_bit) {
         _max_bit = max_bit;
     }
-    PeakIVScanner(size_t max_bit, size_t start_bit) {
+    PeakIVScanner(size_t max_bit, size_t start_bit, T base_initial_value = 0) {
         _max_bit = max_bit;
         _start_bit = start_bit;
         size_t selected_initial_bit = _start_bit;
         size_t max_known_bit = CollatzConstants::get_max_initial_value_max_bits<T>();
         if (start_bit > max_known_bit) {
-            logger->warn("You started a new PeakIVScanner with a start bit ({}) that doesn't have a known base initial value.  It will start at max known bit: {}", start_bit, max_known_bit);
+            logger->warn("You started a new PeakIVScanner with a start bit ({}) that doesn't have a known base initial value.  It will attempt to start start at max known bit: {}", start_bit, max_known_bit);
             selected_initial_bit = max_known_bit;
         }
         if constexpr(GMPIntegral<T>) {
@@ -65,11 +65,10 @@ class PeakIVScanner {
         } else  {
             _base_initial_value = CollatzConstants::get_max_initial_value_by_bit<T>(selected_initial_bit);
         }
-    }
-    PeakIVScanner(size_t max_bit, size_t start_bit, T base_initial_value) {
-        _max_bit = max_bit;
-        _start_bit = start_bit;
-        _base_initial_value = base_initial_value;
+        if (_base_initial_value < base_initial_value) {
+            logger->warn("The base initial value you passed in ({}) is higher than the default we know of ({}).  Using yours instead.", base_initial_value, _base_initial_value);
+            _base_initial_value = base_initial_value;
+        }
     }
 
     PeakIVScannerResults run(bool use_table = false) {
@@ -224,12 +223,15 @@ int main(int argc, char **argv) {
     bool force_i128;
     bool use_table;
     bool array_output;
+    std::string starting_value_s;
+    uint128_t starting_value = 0;
     CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.  Starts with uint64_t type and upgrades to GMP (mpz_class) automatically.");
     options.add_flag("-a,--array-output", array_output, "Emit the results as an array for easy copy/paste.");
     options.add_option("-b,--bits", max_bit, "Number of bits to test to.")->default_val(8);
     options.add_flag("-i,--int128", force_i128, "Use 128-bit native immediately instead of escalating to it.");
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class immediately instead of escalating to it.");
     options.add_option("-s,--start", start_bit, "Bit numer to start at.")->default_val(0);
+    options.add_option("-S,--starting-value", starting_value_s, "Use this starting value, if larger than bit mapped value (for continuation).")->default_val("0");
     options.add_flag(
         "-v,--verbose"
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
@@ -237,11 +239,13 @@ int main(int argc, char **argv) {
     );
     options.add_flag("-t,--table", use_table, "Use the precomputed table when possible.");
     CLI11_PARSE(options, argc, argv);
+    starting_value = str_to_uint128(starting_value_s);
     logger->debug("Selected options were:");
     logger->debug("  Force int128: {}", force_i128);
     logger->debug("  Force MPZ: {}", force_mpz);
     logger->debug("  Start Bit: {}", start_bit);
     logger->debug("  Max Bit: {}", max_bit);
+    logger->debug("  Starting Value: {}", starting_value);
     logger->debug("  Use Table: {}", use_table);
     logger->debug("  Verbose: {}", verbose);
     if (force_i128 && force_mpz) {
@@ -256,13 +260,13 @@ int main(int argc, char **argv) {
     // Build the tester and run it.
     PeakIVScannerResults results;
     if (force_mpz) {
-        PeakIVScanner<mpz_class> test(max_bit, start_bit);
+        PeakIVScanner<mpz_class> test(max_bit, start_bit, uint128_to_mpz(starting_value));
         results = test.run(use_table);
     } else if (force_i128) {
-        PeakIVScanner<uint128_t> test(max_bit, start_bit);
+        PeakIVScanner<uint128_t> test(max_bit, start_bit, starting_value);
         results = test.run(use_table);
     } else {
-        PeakIVScanner<uint64_t> test(max_bit, start_bit);
+        PeakIVScanner<uint64_t> test(max_bit, start_bit, uint64_t(starting_value));
         results = test.run(use_table);
     }
 

@@ -20,6 +20,6 @@ while true ; do
   current=$(get_latest)
   delta=$((current - start))
   rate=$((delta / SECONDS))
-  echo "Current: ${current}   Rate: ${rate}/s   Total Processed: ${delta}"
+  printf "Current: %'d   Rate: %'d/s   Total Processed: %'d\n" ${current} ${rate} ${delta}
 done
 
