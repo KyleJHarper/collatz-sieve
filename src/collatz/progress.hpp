@@ -40,7 +40,11 @@ class Progress {
         if (!fh) {
            throw std::runtime_error("Could not open file: " + _file_path);
         }
-        fh << "[" << std::put_time(&local_tm, "%Y-%m-%d %H:%M:%S") << "]  " << to_string_any(x) << std::endl;
+        if constexpr(std::is_pointer_v<AnyPrintable>) {
+            fh << "[" << std::put_time(&local_tm, "%Y-%m-%d %H:%M:%S") << "]  " << to_string_any(*x) << std::endl;
+        } else {
+            fh << "[" << std::put_time(&local_tm, "%Y-%m-%d %H:%M:%S") << "]  " << to_string_any(x) << std::endl;
+        }
     }
 
     template<typename AnyPrintable>

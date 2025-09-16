@@ -77,10 +77,10 @@ namespace CollatzConstants {
     // Precomputed maximum initial values for a given bit size.  The next value would overflow during its sequence.
     constexpr std::array<uint64_t, 65> MAX_INITIAL_VALUE_BY_64BIT = {
         0,  // 0
-        2,  // 1
+        1,  // 1
         2,  // 2
         2,  // 3
-        6,  // 4
+        2,  // 4
         6,  // 5
         14,  // 6
         14,  // 7
@@ -207,7 +207,7 @@ namespace CollatzConstants {
         1410123942,  // 61
         1410123942,  // 62
         8528817510,  // 63
-        "12327829502"_u128,  // 64
+        12327829502,  // 64
         "23035537406"_u128,  // 65
         "45871962270"_u128,  // 66
         "59152641054"_u128,  // 67
