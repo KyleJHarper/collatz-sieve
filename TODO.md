@@ -10,7 +10,7 @@ I want to build a sieve that exceeds anything previously built.  Here are the gu
 * Is fully deterministic and complete: no probability.
 * Optimizes the problem space (higher rejection rate).  Don't care about faster hardware or software.
 * Results in a new algorithm for space testing that is employable in a reasonable manner (easy iteration through uncovered nodes).
-
+* Exposes new facts which might help future analysts, such as the peak_by_bit program.
 
 ## Goal 2: Solution
 
@@ -23,15 +23,6 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 * Create a sieve with such coverage the space is completely tested (sieve == 100% exclusion).
 
 ## Current Work
-
-### GPU Support
-Many tasks will simply be faster on a GPU.  Add support for basic sequence iteration.
-
-### Peak by Bit and 3XP1
-Update the test__collatz to scan all of the peak IVs to ensure they, at a minimum, match up.
-
-### Clean up Collatz.hpp
-Yep
 
 ### Sieve
 * Add forward-looking cache.

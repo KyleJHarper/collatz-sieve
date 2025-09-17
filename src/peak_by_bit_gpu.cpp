@@ -278,7 +278,7 @@ class PeakIVScanner {
                     T overflow_initial_value= _base_initial_value + *unified_overflow_index_ptr;
                     logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
                     promote_test = true;
-                } else {logger->debug("didn't overflow");}
+                }
             }
 
             // Promote if needed.
@@ -433,6 +433,22 @@ int main(int argc, char **argv) {
             }
         }
         std::cerr << "};" << std::endl;
+    }
+
+    // Sanity check.
+    bool coherent = true;
+    mpz_class comparison = 0;
+    for (auto& [bit, max_iv] : results.get_results()) {
+        comparison = uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(bit));
+        if (max_iv != comparison) {
+            coherent = false;
+            logger->warn("For 2^{} the calculated IV was {} but our records show {}.", bit, max_iv, comparison);
+        }
+    }
+    if (!coherent) {
+        logger->warn("Coherency test failed!  See warnings above.");
+    } else {
+        logger->info("Coherency passed.  Computed values match known values.");
     }
 
     // Go home.
