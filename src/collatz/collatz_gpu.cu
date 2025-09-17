@@ -91,7 +91,7 @@ __device__ T collatz_get_peak(
 //
 template<typename T>
 __global__ void collatz_peaks_kernel(
-    T* base_initial_value
+    T base_initial_value
     , T max_allowed_value
     , size_t count
     , T* d_peaks
@@ -100,23 +100,26 @@ __global__ void collatz_peaks_kernel(
     , bool skip_after_hwm
 ) {
     // Get our index.
-    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
-    if (index >= count) { return; }
+    size_t base_index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    if (base_index >= count) { return; }
 
-    // Build our IV and then run it.
-    T my_iv = *base_initial_value + index;
+    for (size_t index = base_index; index < count; index += stride) {
+        // Build our IV and then run it.
+        T my_iv = base_initial_value + index;
 
-    // Store the peak no matter what.
-    d_peaks[index] = collatz_get_peak(my_iv, skip_after_hwm);
+        // Store the peak no matter what.
+        d_peaks[index] = collatz_get_peak(my_iv, skip_after_hwm);
 
-    // If it's equal to 3XP1, we overflowed.
-    if (d_peaks[index] == get_max_3xp1<T>()) {
-        atomicMin(overflow_index, static_cast<int>(index));
-    }
+        // If it's equal to 3XP1, we overflowed.
+        if (d_peaks[index] == get_max_3xp1<T>()) {
+            atomicMin(overflow_index, static_cast<int>(index));
+        }
 
-    // If it exceeded, flag that.
-    if (d_peaks[index] > max_allowed_value) {
-        atomicMin(failing_index, static_cast<int>(index));
+        // If it exceeded, flag that.
+        if (d_peaks[index] > max_allowed_value) {
+            atomicMin(failing_index, static_cast<int>(base_index));
+        }
     }
 }
 
@@ -172,7 +175,7 @@ class CollatzPeakRunner {
         size_t bit
         , bool skip_after_hwm
     ) {
-        const int threads_per_block = 512;
+        const int threads_per_block = 128;
         int blocks = (_buffer_size + threads_per_block - 1) / threads_per_block;
         T max_allowed_value = (T(1) << bit) - 1;
         *_unified_failing_index_ptr = INT_MAX;
@@ -181,7 +184,7 @@ class CollatzPeakRunner {
         while (true) {
             // Launch kernel
             collatz_peaks_kernel<T><<<blocks, threads_per_block, 0, _stream>>>(
-                _unified_base_initial_value_ptr
+                *_unified_base_initial_value_ptr
                 , max_allowed_value
                 , _buffer_size
                 , _d_peaks
@@ -222,7 +225,7 @@ void destroy_runner(CollatzPeakRunner<T>* runner) {
 }
 
 template<typename T>
-void compute_peak(CollatzPeakRunner<T>* runner, size_t bit, bool skip_after_hwm) {
+void find_max_iv_for_bit_gpu(CollatzPeakRunner<T>* runner, size_t bit, bool skip_after_hwm) {
     runner->compute_collatz_peak(bit, skip_after_hwm);
 }
 
@@ -233,8 +236,8 @@ template CollatzPeakRunner<uint64_t>* create_runner(uint64_t*, size_t, uint64_t*
 template CollatzPeakRunner<__uint128_t>* create_runner(__uint128_t*, size_t, uint128_t*, int*, int*);
 template void destroy_runner(CollatzPeakRunner<uint64_t>*);
 template void destroy_runner(CollatzPeakRunner<__uint128_t>*);
-template void compute_peak(CollatzPeakRunner<uint64_t>*, size_t, bool);
-template void compute_peak(CollatzPeakRunner<__uint128_t>*, size_t, bool);
+template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint64_t>*, size_t, bool);
+template void find_max_iv_for_bit_gpu(CollatzPeakRunner<__uint128_t>*, size_t, bool);
 
 
 

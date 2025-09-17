@@ -8,7 +8,13 @@
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
 #include "collatz/collatz_gpu_interface.hpp"
-
+bool can_use_gpu() {
+    int count = 0;
+    if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
+        return false;
+    }
+    return true;
+}
 
 //
 // Peak VI Scan Results
@@ -49,12 +55,13 @@ struct NullGPURunner {
 template<AnySupportedIntegral T>
 class PeakIVScanner {
     private:
-    static constexpr size_t BUFFER_SIZE = 1ULL << 16;
+    static constexpr size_t BUFFER_SIZE = 1ULL << 24;
     T _base_initial_value = 1;
     T _max_allowed_value = 0;
     size_t _start_bit = 0;
     size_t _max_bit = 8;
     std::vector<T> _collatz_peaks;
+
 
     public:
     PeakIVScanner() {}
@@ -81,45 +88,114 @@ class PeakIVScanner {
         }
     }
 
+
+
+    //
+    // Find Max IV for Bit
+    // Finds the maximum initial value for 2^bit.  Same behavior as the GPU version.
+    //
+    inline void find_max_iv_for_bit(int& failing_index, int& overflow_index) {
+        // Loop until we get a failing index or overflow index.
+        while(true) {
+            // Load up the buffer.
+            #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz_peaks, _base_initial_value)
+            for(size_t i = 0; i < BUFFER_SIZE; i++) {
+                T my_iv = _base_initial_value + i;
+                try {
+                    // Start with N as the peak.
+                    _collatz_peaks[i] = my_iv;
+                    // Loop throug sequence.
+                    Collatz<T>::for_each_sequence_step(my_iv, [&](const T& step) {
+                        // Promote peaks.
+                        if (step > _collatz_peaks[i]) {
+                            _collatz_peaks[i] = step;
+                        }
+                        // Skip when we hit HWM.
+                        return step < my_iv;
+                    });
+                } catch (const CollatzSequenceOverflow& ex) {
+                    overflow_index = i;
+                    i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
+                }
+            }
+
+            // Reduce into the failing index.
+            #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(_collatz_peaks, _max_allowed_value)
+            for (size_t i = 0; i < BUFFER_SIZE; i++) {
+                if (_collatz_peaks[i] > _max_allowed_value) {
+                    failing_index = i;
+                    i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
+                }
+            }
+
+            // If either indexes were set, leave.
+            if (failing_index < INT_MAX || overflow_index < INT_MAX) {
+                break;
+            }
+
+            // Nothing found.  Bump the base initial value and continue.
+            _base_initial_value += BUFFER_SIZE;
+        }
+    }
+
+
+    //
+    // Run
+    // Runs the scanner and returns results.  Tries to use a GPU if available.
+    //
     PeakIVScannerResults run(bool use_table = false) {
+        // Setup the vector for result storage.  Reserve the space to avoid realloc() messing with the cuda memcpy later.
         _collatz_peaks.clear();
         _collatz_peaks.shrink_to_fit();
         _collatz_peaks.reserve(BUFFER_SIZE);
-        // Unify the base initial value.
+
+        // Setup the failing_index and overflow_index, which are checked in our main loop.  Add pointers for GPU too.
+        // int overflow_index = INT_MAX;
+        // int failing_index = INT_MAX;
         T* unified_base_initial_value_ptr = nullptr;
+        int* unified_overflow_index_ptr = nullptr;
+        int* unified_failing_index_ptr = nullptr;
+
+        // Flags.
+        bool has_gpu = can_use_gpu();
+        bool used_gpu = false;
+        bool promote_test = false;
+
+        // Unify memory for the host-device connection if needed.
+        // Base Initial Value is a private member, but we need it sync'd for Progress() to track.
         cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
         *unified_base_initial_value_ptr = _base_initial_value;
-        // Unify the overflow index.
-        int overflow_index = INT_MAX;
-        int* unified_overflow_index_ptr = nullptr;
+
+        // Now track the overflow and failing indexes, setting them to the host values to start.
         cudaMallocManaged(&unified_overflow_index_ptr, sizeof(int));
         *unified_overflow_index_ptr = INT_MAX;
-        // Unify the failing index.
-        int failing_index = INT_MAX;
-        int* unified_failing_index_ptr = nullptr;
         cudaMallocManaged(&unified_failing_index_ptr, sizeof(int));
         *unified_failing_index_ptr = INT_MAX;
-        // Make the runner.
-        auto gpu_runner = [&] {
-            if constexpr(BuiltinIntegral<T>) {
-                return create_runner(
+
+        // Create a GPU runner, in case the GPU is leveraged.
+        CollatzPeakRunner<T>* gpu_runner = nullptr;
+        if constexpr(BuiltinIntegral<T>) {
+            if (has_gpu) {
+                gpu_runner = create_runner(
                     _collatz_peaks.data()
                     , BUFFER_SIZE
                     , unified_base_initial_value_ptr
                     , unified_overflow_index_ptr
                     , unified_failing_index_ptr
                 );
-            } else {
-                return NullGPURunner{};
             }
-        }();
+        }
+
+        // Create the results hash for tracking.
         PeakIVScannerResults results;
+
+        // When the user wants precomputed values, use the table.
         if (use_table) { logger->debug("Using precomputed table where possible."); }
         logger->debug("Starting with bit {} and base initial value of {}", _start_bit, _base_initial_value);
 
         // Establish progress tracking.
         Progress progress(std::filesystem::current_path().string() + "/peak_by_bit_gpu.progress");
-        progress.monitor(_base_initial_value, 2);
+        progress.monitor(unified_base_initial_value_ptr, 2);
 
         // Main loop for each bit.
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
@@ -139,164 +215,89 @@ class PeakIVScanner {
                 }
             }
 
-            // Setup variables based on Integral or mpz_class type.
+            // Calculate the max allowed value.  It will be -1 since unisgned values start at 0.
             if constexpr(BuiltinIntegral<T>) {
                 _max_allowed_value = T(1) << bit;
             } else {
                 mpz_ui_pow_ui(_max_allowed_value.get_mpz_t(), 2, bit);
             }
-            // Subtract one for 0-based uinsigned integer reality.
             _max_allowed_value -= 1;
             logger->debug("Looking for max_allowed_value of 2^{} - 1 == {}, starting with base_initial_value of {}", bit, _max_allowed_value, _base_initial_value);
 
-            // The main scanning loop.  We will process in batches and stop when we find our value.
-            // To achieve parallel execution, we must fill the buffer and allow OMP to loop over it in sections.
-            // Can leverage GPU.  Hard code this for now until I find a smart way to detect it.
-            bool has_gpu = true;
-            while (true) {
-                // Fill the buffer.
-                overflow_index = INT_MAX;
-                *unified_overflow_index_ptr = INT_MAX;
-                failing_index = INT_MAX;
-                *unified_failing_index_ptr = INT_MAX;
-                if constexpr(BuiltinIntegral<T>) {
-                    if (has_gpu) {
-                        // Find the peak via a kernel which will do all the work.  Then continue.
-                        compute_peak(gpu_runner, bit, true);
-                        overflow_index = *unified_overflow_index_ptr;
-                        failing_index = *unified_failing_index_ptr;
-                        _base_initial_value = *unified_base_initial_value_ptr;
-                    } else {
-                        #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz_peaks, _base_initial_value)
-                        for(size_t i = 0; i < BUFFER_SIZE; i++) {
-                            T my_iv = _base_initial_value + i;
-                            try {
-                                // Start with N as the peak.
-                                _collatz_peaks[i] = my_iv;
-                                // Loop throug sequence.
-                                Collatz<T>::for_each_sequence_step(my_iv, [&](const T& step) {
-                                    // Promote peaks.
-                                    if (step > _collatz_peaks[i]) {
-                                        _collatz_peaks[i] = step;
-                                    }
-                                    // Skip when we hit HWM.
-                                    return step < my_iv;
-                                });
-                            } catch (const CollatzSequenceOverflow& ex) {
-                                overflow_index = i;
-                                i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
-                            }
-                        }
+            // Reset indexes.
+            *unified_overflow_index_ptr = INT_MAX;
+            *unified_failing_index_ptr = INT_MAX;
 
-                    }
-                } else {
-                    // Must be GMP.
-                    #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz_peaks, _base_initial_value)
-                    for(size_t i = 0; i < BUFFER_SIZE; i++) {
-                        T my_iv = _base_initial_value + i;
-                        try {
-                            // Start with N as the peak.
-                            _collatz_peaks[i] = my_iv;
-                            // Loop throug sequence.
-                            Collatz<T>::for_each_sequence_step(my_iv, [&](const T& step) {
-                                // Promote peaks.
-                                if (step > _collatz_peaks[i]) {
-                                    _collatz_peaks[i] = step;
-                                }
-                                // Skip when we hit HWM.
-                                return step < my_iv;
-                            });
-                        } catch (const CollatzSequenceOverflow& ex) {
-                            overflow_index = i;
-                            i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
-                        }
-                    }
-                }
-
-                // If we overflowed, we've reached the limit of uint64.  Time to upgrade to GMP.
-                // Don't change base value or anything (i.e.: we need to re-run the sequences with GMP support.)
-                // We also need to stop if we hit bit > 63 for integral types.
-                bool promote_test = false;
-                if constexpr(NativeIntegral<T>) {
-                    if (bit > 63) {
-                        logger->warn("Reached 64+ bits and must upgrade to uint128_t.");
-                        promote_test = true;
-                    }
-                    if (overflow_index < INT_MAX) {
-                        T overflow_initial_value = _base_initial_value + overflow_index;
-                        logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
-                        promote_test = true;
-                    }
-                } else if constexpr(ExtendedIntegral<T>) {
-                    if (bit > 127) {
-                        logger->warn("Reached 128+ bits and must upgrade to GMP.");
-                        promote_test = true;
-                    }
-                    if (overflow_index < INT_MAX) {
-                        T overflow_initial_value= _base_initial_value + overflow_index;
-                        logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
-                        promote_test = true;
-                    } else {logger->debug("didn't overflow");}
-                }
-
-                // Promote if needed.
-                if (promote_test) {
-                    progress.join();
-                    PeakIVScannerResults promoted_results;
-                    if constexpr(NativeIntegral<T>) {
-                        PeakIVScanner<uint128_t> promoted_test(_max_bit, bit, uint128_t(_base_initial_value));
-                        promoted_results = promoted_test.run(use_table);
-                    } else if constexpr(ExtendedIntegral<T>) {
-                        PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, uint128_to_mpz(_base_initial_value));
-                        promoted_results = promoted_test.run(use_table);
-                    }
-                    // Merge the results and return them.
-                    results.merge(promoted_results);
-                    progress.join();
-                    cudaFree(unified_base_initial_value_ptr);
-                    cudaFree(unified_failing_index_ptr);
-                    cudaFree(unified_overflow_index_ptr);
-                    return results;
-                }
-
-                // Test all values in the buffer, using OMP's reduction to find the minimum offending index, if any.
+            // Find the first failing index.  Use the GPU if we can, otherwise use the CPU.
+            used_gpu = false;
+            if constexpr(BuiltinIntegral<T>) {
                 if (has_gpu) {
-                    // We already got the failing index from the GPU logic.
-                } else {
-                    #pragma omp parallel for reduction(min:failing_index) schedule(auto) default(none) shared(_collatz_peaks, _max_allowed_value)
-                    for (size_t i = 0; i < BUFFER_SIZE; i++) {
-                        if (_collatz_peaks[i] > _max_allowed_value) {
-                            failing_index = i;
-                            i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
-                        }
-                    }
+                    // Find the peak via a kernel which will do all the work.
+                    find_max_iv_for_bit_gpu(gpu_runner, bit, true);
+                    _base_initial_value = *unified_base_initial_value_ptr;
+                    used_gpu = true;
                 }
-
-                // If failing_index was set lower than buffer_size (above the highest index), we found an offender.
-                if (failing_index < INT_MAX) {
-                    T failure_initial_value = _base_initial_value + failing_index;
-                    T max_iv = failure_initial_value - 1;
-                    logger->debug("Found a peak over allowed at index {}.  Next value ({}) hit a peak of {}.", failing_index, failure_initial_value, _collatz_peaks[failing_index]);
-                    logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
-                    if constexpr(ExtendedIntegral<T>) {
-                        results.set(bit, uint128_to_mpz(max_iv));
-                    } else {
-                        results.set(bit, mpz_class(max_iv));
-                    }
-                    _base_initial_value += failing_index;
-                    *unified_base_initial_value_ptr = _base_initial_value;
-                    // Leave the while(true).  Move to next bit.
-                    break;
-                }
-
-                // Didn't find an offender.  Bump the initial value.
-                logger->debug("No failing index found.  Bumping buffer.");
-                _base_initial_value += BUFFER_SIZE;
-                if (has_gpu) {
-                    *unified_base_initial_value_ptr = _base_initial_value;
-                }
-                logger->debug("Buffer is now {} and {}", _base_initial_value, *unified_base_initial_value_ptr);
             }
+            if (used_gpu == false) {
+                find_max_iv_for_bit(*unified_failing_index_ptr, *unified_overflow_index_ptr);
+            }
+
+            // Check for overflows with 64 and 128 bit integrals.
+            promote_test = false;
+            if constexpr(NativeIntegral<T>) {
+                if (bit > 63) {
+                    logger->warn("Reached 64+ bits and must upgrade to uint128_t.");
+                    promote_test = true;
+                }
+                if (*unified_overflow_index_ptr < INT_MAX) {
+                    T overflow_initial_value = _base_initial_value + *unified_overflow_index_ptr;
+                    logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
+                    promote_test = true;
+                }
+            } else if constexpr(ExtendedIntegral<T>) {
+                if (bit > 127) {
+                    logger->warn("Reached 128+ bits and must upgrade to GMP.");
+                    promote_test = true;
+                }
+                if (*unified_overflow_index_ptr < INT_MAX) {
+                    T overflow_initial_value= _base_initial_value + *unified_overflow_index_ptr;
+                    logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
+                    promote_test = true;
+                } else {logger->debug("didn't overflow");}
+            }
+
+            // Promote if needed.
+            if (promote_test) {
+                progress.join();
+                PeakIVScannerResults promoted_results;
+                if constexpr(NativeIntegral<T>) {
+                    PeakIVScanner<uint128_t> promoted_test(_max_bit, bit, uint128_t(_base_initial_value));
+                    promoted_results = promoted_test.run(use_table);
+                } else if constexpr(ExtendedIntegral<T>) {
+                    PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, uint128_to_mpz(_base_initial_value));
+                    promoted_results = promoted_test.run(use_table);
+                }
+                // Merge the results and return them.
+                results.merge(promoted_results);
+                progress.join();
+                cudaFree(unified_base_initial_value_ptr);
+                cudaFree(unified_failing_index_ptr);
+                cudaFree(unified_overflow_index_ptr);
+                return results;
+            }
+
+            // We must have found a failing index.  Let's log it and update tracking.
+            T failure_initial_value = _base_initial_value + *unified_failing_index_ptr;
+            T max_iv = failure_initial_value - 1;
+            logger->debug("Found a peak over allowed at index {}.  Next value ({}) hit a peak of {}.", *unified_failing_index_ptr, failure_initial_value, _collatz_peaks[*unified_failing_index_ptr]);
+            logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
+            if constexpr(ExtendedIntegral<T>) {
+                results.set(bit, uint128_to_mpz(max_iv));
+            } else {
+                results.set(bit, mpz_class(max_iv));
+            }
+            _base_initial_value += *unified_failing_index_ptr;
+            *unified_base_initial_value_ptr = _base_initial_value;
         }
 
         // All done.  Return results.
