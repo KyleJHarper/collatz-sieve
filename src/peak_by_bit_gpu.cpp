@@ -162,14 +162,12 @@ class PeakIVScanner {
         int* unified_failing_index_ptr = nullptr;
 
         // Flags.
-        std::cout << "1\n";
         bool has_gpu = can_use_gpu();
         bool used_gpu = false;
         bool promote_test = false;
 
         // Unify memory for the host-device connection if needed.  Juggle between cuda and host alloc.
         // Base Initial Value is a private member, but we need it sync'd for Progress() to track.
-        std::cout << "2\n";
 #ifdef HAVE_CUDA
         if (has_gpu) {
             cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
@@ -185,11 +183,9 @@ class PeakIVScanner {
         unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
         unified_overflow_index_ptr = (int*) std::malloc(sizeof(int));
 #endif
-        std::cout << "3\n";
         *unified_base_initial_value_ptr = _base_initial_value;
         *unified_overflow_index_ptr = INT_MAX;
         *unified_failing_index_ptr = INT_MAX;
-        std::cout << "4\n";
 
         // Create a GPU runner, in case the GPU is leveraged.
         CollatzPeakRunner<T>* gpu_runner = nullptr;
@@ -399,6 +395,11 @@ int main(int argc, char **argv) {
     }
 
     // Build the tester and run it.
+    if (can_use_gpu()) {
+        logger->info("GPU was detected.  Will use it.");
+    } else {
+        logger->info("GPU not found.  Falling back to CPU processing.");
+    }
     PeakIVScannerResults results;
     if (force_mpz) {
         PeakIVScanner<mpz_class> test(max_bit, start_bit, uint128_to_mpz(starting_value));

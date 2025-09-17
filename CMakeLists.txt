@@ -7,6 +7,8 @@ project(Collatz LANGUAGES CXX)
 # Cuda is optional.
 find_package(CUDAToolkit QUIET)
 if(CUDAToolkit_FOUND)
+    message(STATUS "CUDA found, enabling CUDA builds")
+    add_definitions(-DHAVE_CUDA)
     enable_language(CUDA)
 
     add_library(collatz_gpu STATIC src/collatz/collatz_gpu.cu)
