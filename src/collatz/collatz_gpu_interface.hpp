@@ -1,7 +1,10 @@
 #pragma once
 #include <cstddef>
 #include <stdint.h>
+
+#ifdef HAVE_CUDA
 #include <cuda_runtime.h>
+#endif
 
 
 template<typename T>

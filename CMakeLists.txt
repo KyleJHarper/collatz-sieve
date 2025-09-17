@@ -4,9 +4,24 @@
 cmake_minimum_required(VERSION 3.16)
 project(Collatz LANGUAGES CXX)
 
-# Cuda is optional.
+# Cuda is optional.  Try to test the runtime.
+include(CheckCXXSourceRuns)
+set(CUDA_RUNTIME_TEST "
+#include <cuda_runtime.h>
+int main() {
+    int count = 0;
+    cudaError_t err = cudaGetDeviceCount(&count);
+    return (err == cudaSuccess && count > 0) ? 0 : 1;
+}")
+check_cxx_source_runs("${CUDA_RUNTIME_TEST}" CUDA_DRIVER_WORKS)
+
+# Find the package.
 find_package(CUDAToolkit QUIET)
-if(CUDAToolkit_FOUND)
+
+# Decide if we have CUDA support (Toolkit + Driver + Device)
+if(CUDAToolkit_FOUND AND CUDA_DRIVER_WORKS)
+    message(STATUS "CUDA found, enabling CUDA builds")
+    add_definitions(-DHAVE_CUDA)
     enable_language(CUDA)
 
     add_library(collatz_gpu STATIC src/collatz/collatz_gpu.cu)
@@ -17,6 +32,8 @@ if(CUDAToolkit_FOUND)
         CUDA_ARCHITECTURES "89;90"
     )
     target_link_libraries(collatz_gpu PRIVATE ${PROJECT_LIBS})
+else()
+    message(STATUS "CUDA not found — building CPU-only version")
 endif()
 
 # Write binaries to a bin dir.

@@ -1,4 +1,3 @@
-#include <cuda_runtime_api.h>
 #include <gmp.h>
 #include <gmpxx.h>
 #include "CLI.hpp"
@@ -8,6 +7,9 @@
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
 #include "collatz/collatz_gpu_interface.hpp"
+
+#ifdef HAVE_CUDA
+#include <cuda_runtime_api.h>
 bool can_use_gpu() {
     int count = 0;
     if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
@@ -15,6 +17,11 @@ bool can_use_gpu() {
     }
     return true;
 }
+#else
+bool can_use_gpu() { return false; }
+#endif
+
+
 
 //
 // Peak VI Scan Results
@@ -150,27 +157,33 @@ class PeakIVScanner {
         _collatz_peaks.reserve(BUFFER_SIZE);
 
         // Setup the failing_index and overflow_index, which are checked in our main loop.  Add pointers for GPU too.
-        // int overflow_index = INT_MAX;
-        // int failing_index = INT_MAX;
         T* unified_base_initial_value_ptr = nullptr;
         int* unified_overflow_index_ptr = nullptr;
         int* unified_failing_index_ptr = nullptr;
 
         // Flags.
+        std::cout << "1\n";
         bool has_gpu = can_use_gpu();
         bool used_gpu = false;
         bool promote_test = false;
 
-        // Unify memory for the host-device connection if needed.
+        // Unify memory for the host-device connection if needed.  Juggle between cuda and host alloc.
         // Base Initial Value is a private member, but we need it sync'd for Progress() to track.
+        std::cout << "2\n";
+#ifdef HAVE_CUDA
         cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
-        *unified_base_initial_value_ptr = _base_initial_value;
-
-        // Now track the overflow and failing indexes, setting them to the host values to start.
         cudaMallocManaged(&unified_overflow_index_ptr, sizeof(int));
-        *unified_overflow_index_ptr = INT_MAX;
         cudaMallocManaged(&unified_failing_index_ptr, sizeof(int));
+#else
+        unified_base_initial_value_ptr = (T*) std::malloc(sizeof(T));
+        unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
+        unified_overflow_index_ptr = (int*) std::malloc(sizeof(int));
+#endif
+        std::cout << "3\n";
+        *unified_base_initial_value_ptr = _base_initial_value;
+        *unified_overflow_index_ptr = INT_MAX;
         *unified_failing_index_ptr = INT_MAX;
+        std::cout << "4\n";
 
         // Create a GPU runner, in case the GPU is leveraged.
         CollatzPeakRunner<T>* gpu_runner = nullptr;
@@ -280,9 +293,15 @@ class PeakIVScanner {
                 // Merge the results and return them.
                 results.merge(promoted_results);
                 progress.join();
+#ifdef HAVE_CUDA
                 cudaFree(unified_base_initial_value_ptr);
                 cudaFree(unified_failing_index_ptr);
                 cudaFree(unified_overflow_index_ptr);
+#else
+                std::free(unified_base_initial_value_ptr);
+                std::free(unified_failing_index_ptr);
+                std::free(unified_overflow_index_ptr);
+#endif
                 return results;
             }
 
@@ -302,9 +321,15 @@ class PeakIVScanner {
 
         // All done.  Return results.
         progress.join();
+#ifdef HAVE_CUDA
         cudaFree(unified_base_initial_value_ptr);
         cudaFree(unified_failing_index_ptr);
         cudaFree(unified_overflow_index_ptr);
+#else
+        std::free(unified_base_initial_value_ptr);
+        std::free(unified_failing_index_ptr);
+        std::free(unified_overflow_index_ptr);
+#endif
         return results;
     }
 
