@@ -171,9 +171,15 @@ class PeakIVScanner {
         // Base Initial Value is a private member, but we need it sync'd for Progress() to track.
         std::cout << "2\n";
 #ifdef HAVE_CUDA
-        cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
-        cudaMallocManaged(&unified_overflow_index_ptr, sizeof(int));
-        cudaMallocManaged(&unified_failing_index_ptr, sizeof(int));
+        if (has_gpu) {
+            cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
+            cudaMallocManaged(&unified_overflow_index_ptr, sizeof(int));
+            cudaMallocManaged(&unified_failing_index_ptr, sizeof(int));
+        } else {
+            unified_base_initial_value_ptr = (T*) std::malloc(sizeof(T));
+            unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
+            unified_overflow_index_ptr = (int*) std::malloc(sizeof(int));
+        }
 #else
         unified_base_initial_value_ptr = (T*) std::malloc(sizeof(T));
         unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
@@ -294,9 +300,15 @@ class PeakIVScanner {
                 results.merge(promoted_results);
                 progress.join();
 #ifdef HAVE_CUDA
-                cudaFree(unified_base_initial_value_ptr);
-                cudaFree(unified_failing_index_ptr);
-                cudaFree(unified_overflow_index_ptr);
+                if (has_gpu) {
+                    cudaFree(unified_base_initial_value_ptr);
+                    cudaFree(unified_failing_index_ptr);
+                    cudaFree(unified_overflow_index_ptr);
+                } else {
+                    std::free(unified_base_initial_value_ptr);
+                    std::free(unified_failing_index_ptr);
+                    std::free(unified_overflow_index_ptr);
+                }
 #else
                 std::free(unified_base_initial_value_ptr);
                 std::free(unified_failing_index_ptr);
@@ -322,9 +334,15 @@ class PeakIVScanner {
         // All done.  Return results.
         progress.join();
 #ifdef HAVE_CUDA
-        cudaFree(unified_base_initial_value_ptr);
-        cudaFree(unified_failing_index_ptr);
-        cudaFree(unified_overflow_index_ptr);
+        if (has_gpu) {
+            cudaFree(unified_base_initial_value_ptr);
+            cudaFree(unified_failing_index_ptr);
+            cudaFree(unified_overflow_index_ptr);
+        } else {
+            std::free(unified_base_initial_value_ptr);
+            std::free(unified_failing_index_ptr);
+            std::free(unified_overflow_index_ptr);
+        }
 #else
         std::free(unified_base_initial_value_ptr);
         std::free(unified_failing_index_ptr);
