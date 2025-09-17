@@ -24,6 +24,12 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
+### GPU Support
+Many tasks will simply be faster on a GPU.  Add support for basic sequence iteration.
+
+### Peak by Bit and 3XP1
+Update the test__collatz to scan all of the peak IVs to ensure they, at a minimum, match up.
+
 ### Clean up Collatz.hpp
 Yep
 
