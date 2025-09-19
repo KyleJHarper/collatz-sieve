@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include "concepts_for_cuda.hpp"
 #include <cuda_runtime.h>
-#include "collatz_gpu_interface.hpp"
+
 
 #define CUDA_CHECK(call) do { \
-  cudaError_t e = (call); \
-  if (e != cudaSuccess) { \
-    fprintf(stderr, "CUDA error %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(e)); \
-    exit(1); \
-  } \
+    cudaError_t e = (call); \
+    if (e != cudaSuccess) { \
+        fprintf(stderr, "CUDA error %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(e)); \
+        exit(1); \
+    } \
 } while(0)
 
 
@@ -238,70 +238,3 @@ template void destroy_runner(CollatzPeakRunner<uint64_t>*);
 template void destroy_runner(CollatzPeakRunner<__uint128_t>*);
 template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint64_t>*, size_t, bool);
 template void find_max_iv_for_bit_gpu(CollatzPeakRunner<__uint128_t>*, size_t, bool);
-
-
-
-
-//
-// Testing of a single IV for now.  Should probably make this a test suite.
-//
-template<typename T>
-__global__ void test_single_iv_kernel(
-    const T* iv_ptr,
-    bool skip_after_hwm,
-    T* out_peak,
-    int* out_overflow_flag,
-    T* out_max3xp1 // returns the get_max_3xp1<uint64_t>() value for sanity
-) {
-    T iv = *iv_ptr;
-    T peak = collatz_get_peak<T>(iv, skip_after_hwm);
-    *out_peak = peak;
-    *out_overflow_flag = (peak == (T)get_max_3xp1<T>()) ? 1 : 0;
-    *out_max3xp1 = (T)get_max_3xp1<T>();
-}
-
-template<typename T>
-void run_single_iv(
-    T iv,
-    bool skip_after_hwm,
-    T* h_out_peak,
-    int* h_out_overflow_flag,
-    T* h_out_max3xp1 // returns the get_max_3xp1<uint64_t>() value for sanity
-) {
-    // Device pointers
-    T *d_iv = nullptr;
-    T *d_peak = nullptr, *d_max3xp1 = nullptr;
-    int *d_overflow_flag = nullptr;
-
-    cudaMalloc(&d_iv, sizeof(T));
-    cudaMalloc(&d_peak, sizeof(T));
-    cudaMalloc(&d_max3xp1, sizeof(T));
-    cudaMalloc(&d_overflow_flag, sizeof(int));
-    cudaMemcpy(d_iv, &iv, sizeof(T), cudaMemcpyHostToDevice);
-
-    // Launch with a single thread (<<<1,1>>>)
-    test_single_iv_kernel<T><<<1,1>>>(
-        d_iv,
-        skip_after_hwm,
-        d_peak,
-        d_overflow_flag,
-        d_max3xp1
-    );
-
-    // Synchronize and save the values.
-    cudaDeviceSynchronize();
-    cudaMemcpy(h_out_peak, d_peak, sizeof(T), cudaMemcpyDeviceToHost);
-    cudaMemcpy(h_out_overflow_flag, d_overflow_flag, sizeof(int), cudaMemcpyDeviceToHost);
-    cudaMemcpy(h_out_max3xp1, d_max3xp1, sizeof(T), cudaMemcpyDeviceToHost);
-
-    // Free
-    cudaFree(d_iv);
-    cudaFree(d_peak);
-    cudaFree(d_max3xp1);
-    cudaFree(d_overflow_flag);
-}
-// explicit instantiations for run_single_iv
-template void run_single_iv<uint64_t>(uint64_t, bool, uint64_t*, int*, uint64_t*);
-
-// if you plan to use 128-bit version too (when device supports it)
-template void run_single_iv<__uint128_t>(__uint128_t, bool, __uint128_t*, int*, __uint128_t*);

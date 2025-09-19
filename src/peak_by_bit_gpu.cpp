@@ -6,7 +6,7 @@
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
-#include "collatz/collatz_gpu_interface.hpp"
+#include "collatz/peak_by_bit_gpu_interface.hpp"
 
 #ifdef HAVE_CUDA
 #include <cuda_runtime_api.h>

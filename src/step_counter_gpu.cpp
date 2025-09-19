@@ -10,6 +10,19 @@
 #include "collatz/progress.hpp"
 #include "collatz/step_counter_gpu_interface.hpp"
 
+#ifdef HAVE_CUDA
+#include <cuda_runtime_api.h>
+bool can_use_gpu() {
+    int count = 0;
+    if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
+        return false;
+    }
+    return true;
+}
+#else
+bool can_use_gpu() { return false; }
+#endif
+
 
 
 template<AnySupportedIntegral T>
@@ -50,12 +63,21 @@ template<AnySupportedIntegral T>
 StepResults run_it(size_t start_bit, size_t max_bit) {
     StepResults results;
     size_t bit_limit = CollatzConstants::get_max_initial_value_max_bits<T>();
+    bool has_gpu = can_use_gpu();
     T* unified_start_value_ptr = nullptr;
     T max_value = 0;
     size_t level;
 
     // Allocate the memory of the shared start value, for tracking purposes (Progress()).
-    unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+#ifdef HAVE_CUDA
+        if (has_gpu) {
+            cudaMallocManaged(&unified_start_value_ptr, sizeof(T));
+        } else {
+            unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+        }
+#else
+        unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+#endif
 
     // Establish progress tracking.
     Progress progress(std::filesystem::current_path().string() + "/step_counter.progress");
@@ -84,7 +106,11 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
         }
 
         // Process the level.
-        process_level(unified_start_value_ptr, max_value, level, &results);
+        if (can_use_gpu()) {
+            process_level_gpu(unified_start_value_ptr, max_value, level, &results);
+        } else {
+            process_level(unified_start_value_ptr, max_value, level, &results);
+        }
     }
 
     // Return results.
