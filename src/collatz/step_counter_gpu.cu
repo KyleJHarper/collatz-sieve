@@ -1,8 +1,15 @@
 #include <cuda_runtime_api.h>
 #include <stdint.h>
+#include <stdio.h>
 #include "concepts_for_cuda.hpp"
 #include <cuda_runtime.h>
 #include "step_counter_gpu_interface.hpp"
+#include <thrust/device_ptr.h>
+#include <thrust/device_vector.h>
+#include <thrust/iterator/constant_iterator.h>
+#include <thrust/sort.h>
+#include <thrust/reduce.h>
+#include <thrust/functional.h>
 
 
 #define CUDA_CHECK(call) do { \
@@ -49,7 +56,7 @@ __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
 //
 template<typename T>
 __device__ tally_t collatz_step_count(T initial_value) {
-    T steps = 0;
+    tally_t steps = 0;
     T current_step = initial_value;
     while (current_step > 1) {
         steps += 1;
@@ -84,7 +91,6 @@ __global__ void collatz_steps_kernel(
     // Compute our index and stride, so we can roll more work into a single resultset.
     size_t base_index = blockIdx.x * blockDim.x + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
-    T steps = 0;
     if (base_index >= count) { return; }
 
     // Loop
@@ -93,7 +99,7 @@ __global__ void collatz_steps_kernel(
         if (my_iv > max_value) { return; }
         d_steps[index] = collatz_step_count(my_iv);
         // If it's equal to 3XP1, we overflowed.
-        if (d_peaks[index] == get_max_3xp1<T>()) {
+        if (d_steps[index] == get_max_3xp1<T>()) {
             atomicMin(overflow_index, static_cast<int>(index));
         }
     }
@@ -105,39 +111,21 @@ __global__ void collatz_steps_kernel(
 template<typename T>
 class CollatzStepRunner {
     private:
-    T* _d_steps = nullptr;
-    T* _h_steps_pin = nullptr;
     T* _unified_start_value_ptr = nullptr;
-    cudaStream_t _stream;
     size_t _buffer_size;
 
 
     public:
     CollatzStepRunner(
-        T* host_buffer
-        , size_t buffer_size
+        size_t buffer_size
         , T* unified_start_value_ptr
     ) {
         // Save buffer and size.
-        _h_steps_pin = host_buffer;
         _buffer_size = buffer_size;
-        _unified_start_value_pointer = unified_start_value_ptr;
-
-        // Allocate device buffer
-        CUDA_CHECK(cudaMalloc(&_d_steps, buffer_size * sizeof(T)));
-
-        // Register host memory as pinned
-        CUDA_CHECK(cudaHostRegister(_h_steps_pin, buffer_size * sizeof(T), cudaHostRegisterDefault));
-
-        // Create stream
-        CUDA_CHECK(cudaStreamCreate(&_stream));
+        _unified_start_value_ptr = unified_start_value_ptr;
     }
 
-    ~CollatzStepRunner() {
-        cudaFree(_d_steps);
-        cudaHostUnregister(_h_steps_pin);
-        cudaStreamDestroy(_stream);
-    }
+    ~CollatzStepRunner() {}
 
     //
     // Host code to compute a bunch of peaks and then bring them to the host.  We will alloc on the device for you.
@@ -149,47 +137,100 @@ class CollatzStepRunner {
     ) {
         const int threads_per_block = 128;
         int blocks = (_buffer_size + threads_per_block - 1) / threads_per_block;
-        int overflow_index = INT_MAX;
 
-        while (*start_value <= max_value) {
+        // Everything can be done in this method.  Make device and host pools here.
+        tally_t* host_steps = (tally_t*) std::malloc(_buffer_size * sizeof(tally_t));
+
+        // Now the device memory.
+        tally_t* d_steps = nullptr;
+        CUDA_CHECK(cudaMalloc(&d_steps, _buffer_size * sizeof(tally_t)));
+
+        // Now make a stream to sync with.
+        cudaStream_t stream;
+        CUDA_CHECK(cudaStreamCreate(&stream));
+
+        // Create an overflow index for overflows.
+        int* d_overflow_index = nullptr;
+        CUDA_CHECK(cudaMallocManaged(&d_overflow_index, sizeof(int)));
+
+        // Perform the main loop.
+        while (*_unified_start_value_ptr <= max_value) {
+            // Reset overflow.
+            *d_overflow_index = INT_MAX;
+
             // Launch kernel
-            collatz_steps_kernel<T><<<blocks, threads_per_block, 0, _stream>>>(
-                *_unified_start_value
-                , max_allowed_value
+            collatz_steps_kernel<T><<<blocks, threads_per_block, 0, stream>>>(
+                _unified_start_value_ptr
+                , max_value
                 , _buffer_size
-                , _d_steps
-                , &overflow_index
+                , d_steps
+                , d_overflow_index
             );
 
-            // Synchronize to get updated values.
-            cudaDeviceSynchronize();
-            CUDA_CHECK(cudaMemcpyAsync(_h_steps_pin, _d_steps, _buffer_size * sizeof(T), cudaMemcpyDeviceToHost, _stream));
-            CUDA_CHECK(cudaStreamSynchronize(_stream));
+            // Check launch for errors without global sync:
+            CUDA_CHECK(cudaGetLastError());
 
-            // Set a limit based on whether we overflowed.
-            size_t limit = std::min(_buffer_size, overflow_index);
+            // Synchronzie the stream.
+            CUDA_CHECK(cudaStreamSynchronize(stream));
+
+            // Set a limit based on how many items we were able to scan.
+            size_t limit = _buffer_size;
+            T remaining_items = max_value - (*_unified_start_value_ptr) + 1;
+            if (remaining_items < _buffer_size) {
+                limit = remaining_items;
+            }
+
+            // Further restrict the limit to the overflow index, if one was set.
+            limit = std::min(limit, static_cast<size_t>(*d_overflow_index));
+
+            // Aggregate the values on-device with Thrust.
+            thrust::device_ptr<tally_t> d_ptr(d_steps);
+            thrust::sort(d_ptr, d_ptr + limit);
+            thrust::device_vector<tally_t> unique_keys(limit);
+            thrust::device_vector<tally_t> counts(limit);
+
+            // Calculate a new end-pair from our reduction by the key (step count).
+            auto new_end = thrust::reduce_by_key(
+                d_ptr
+                , d_ptr + limit
+                , thrust::make_constant_iterator(1)
+                , unique_keys.begin()
+                , counts.begin()
+            );
+
+            // Get our counts, and copy the results into our keys (steps) and counts vectors.
+            size_t num_unique = new_end.first - unique_keys.begin();
+            std::vector<tally_t> h_keys(num_unique);
+            std::vector<tally_t> h_counts(num_unique);
+            thrust::copy(unique_keys.begin(), unique_keys.begin() + num_unique, h_keys.begin());
+            thrust::copy(counts.begin(), counts.begin() + num_unique, h_counts.begin());
+
+            // Merge aggregated counts into global_results
+            for (size_t i = 0; i < num_unique; i++) {
+                global_results->add_aggregate(level, h_keys[i], h_counts[i]);
+            }
 
             // Bump the start value for the next loop or caller, and so our tracker can see it.
-            *start_value += limit;
-
-            // We now have a host-side array of type T, add the results to the global tracker.
-            for(size_t index = 0; index < limit; index++) {
-                global_results->add(level, _h_steps_pin[index]);
-            }
+            *_unified_start_value_ptr += limit;
 
             // If we overflowed, we have to quit.
-            if (overflow_index < INT_MAX) {
+            if (*d_overflow_index < INT_MAX) {
                 break;
             }
-
         }
+
+        // Clean up.
+        CUDA_CHECK(cudaFree(d_steps));
+        std::free(host_steps);
+        CUDA_CHECK(cudaFree(d_overflow_index));
+        CUDA_CHECK(cudaStreamDestroy(stream));
     }
 };
 
 // Factory functions
 template<typename T>
-CollatzStepRunner<T>* create_runner(T* host_buffer, size_t buffer_size, T* unified_start_value) {
-    return new CollatzStepRunner<T>(host_buffer, buffer_size, unified_start_value);
+CollatzStepRunner<T>* create_runner(size_t buffer_size, T* unified_start_value_ptr) {
+    return new CollatzStepRunner<T>(buffer_size, unified_start_value_ptr);
 }
 
 template<typename T>
@@ -202,12 +243,12 @@ void process_level_gpu(CollatzStepRunner<T>* runner, T max_value, size_t level, 
     runner->compute_collatz_steps(max_value, level, global_results);
 }
 
-// // Explicit instantiations
-// template class CollatzPeakRunner<uint64_t>;
-// template class CollatzPeakRunner<__uint128_t>;
-// template CollatzPeakRunner<uint64_t>* create_runner(uint64_t*, size_t, uint64_t*, int*, int*);
-// template CollatzPeakRunner<__uint128_t>* create_runner(__uint128_t*, size_t, uint128_t*, int*, int*);
-// template void destroy_runner(CollatzPeakRunner<uint64_t>*);
-// template void destroy_runner(CollatzPeakRunner<__uint128_t>*);
-// template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint64_t>*, size_t, bool);
-// template void find_max_iv_for_bit_gpu(CollatzPeakRunner<__uint128_t>*, size_t, bool);
+// Explicit instantiation definitions.
+template class CollatzStepRunner<uint64_t>;
+template class CollatzStepRunner<uint128_t>;
+template CollatzStepRunner<uint64_t>* create_runner<uint64_t>(size_t, uint64_t*);
+template CollatzStepRunner<uint128_t>* create_runner<uint128_t>(size_t, uint128_t*);
+template void process_level_gpu<uint64_t>(CollatzStepRunner<uint64_t>*, uint64_t, size_t, StepResults*);
+template void process_level_gpu<uint128_t>(CollatzStepRunner<uint128_t>*, uint128_t, size_t, StepResults*);
+template void destroy_runner<uint64_t>(CollatzStepRunner<uint64_t>*);
+template void destroy_runner<uint128_t>(CollatzStepRunner<uint128_t>*);

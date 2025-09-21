@@ -24,11 +24,12 @@ bool can_use_gpu() { return false; }
 #endif
 
 
+constexpr size_t BUFFER_SIZE = 1ULL << 24;
 
 template<AnySupportedIntegral T>
 void process_level(T* start_value, T max_value, size_t level, StepResults *results) {
     // Do the work in batches.  Gives us the ability to parallelize better.
-    size_t loop_limit = SIZE_MAX;
+    size_t loop_limit = BUFFER_SIZE;
     size_t loops_needed = 0;
     while(*start_value <= max_value) {
         loops_needed = max_value - (*start_value) + 1;  // +1 because inclusive counting
@@ -71,13 +72,21 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
     // Allocate the memory of the shared start value, for tracking purposes (Progress()).
 #ifdef HAVE_CUDA
         if (has_gpu) {
-            cudaMallocManaged(&unified_start_value_ptr, sizeof(T));
+            cudaMallocManaged((void**)&unified_start_value_ptr, sizeof(T));
         } else {
             unified_start_value_ptr = (T*) std::malloc(sizeof(T));
         }
 #else
         unified_start_value_ptr = (T*) std::malloc(sizeof(T));
 #endif
+
+    // Make the runner.
+    CollatzStepRunner<T>* gpu_runner = nullptr;
+    if constexpr(BuiltinIntegral<T>) {
+        if (has_gpu) {
+            gpu_runner = create_runner(BUFFER_SIZE, unified_start_value_ptr);
+        }
+    }
 
     // Establish progress tracking.
     Progress progress(std::filesystem::current_path().string() + "/step_counter.progress");
@@ -107,7 +116,7 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
 
         // Process the level.
         if (can_use_gpu()) {
-            process_level_gpu(unified_start_value_ptr, max_value, level, &results);
+            process_level_gpu(gpu_runner, max_value, level, &results);
         } else {
             process_level(unified_start_value_ptr, max_value, level, &results);
         }
