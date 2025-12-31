@@ -1,18 +1,19 @@
 #pragma once
 
+//
+// Contains both the BinaryTreeMaterialized and BinaryTreeImplicit implementations, along with the BinaryTree facade.
+//
 #include <cmath>
 #include <cstddef>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <memory>
 #include <stdexcept>
-#include <string>
 #include <unordered_map>
 #include <omp.h>
-#include "collatz.hpp"
 #include "concepts.hpp"
-#include "node.hpp"
-#include "binary_tree_coverage.hpp"
-#include "binary_tree_math.hpp"
+#include "binary_tree_backend_interface.hpp"
+
 
 
 //
@@ -29,13 +30,13 @@ struct BinaryTreeOptions {
 
 //
 // A perfect binary tree mapped to powers of two.  This creates a uniform distribution of nodes in
-// the N+/Z space (positive integers), which Collatz is concerned.
+// the N/Z+ space (positive integers), which Collatz is concerned.
 //
 // When pruning is enabled, we will remove any nodes hitting "hwm", leaving only nodes that still
 // need to be tested.
 //
 template<AnySupportedIntegral T>
-class BinaryTree {
+class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     private:
     Node<T> *_root_node = nullptr;
     size_t _level_count = 0;
@@ -53,9 +54,11 @@ class BinaryTree {
     // Constructors
     //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
-    BinaryTree() {}
-    BinaryTree(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
-        init(levels, opts);
+    BinaryTreeMaterialized(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        _track_node_metadata = opts.track_node_metadata;
+        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
+        _is_pruning_parent_levels = opts.prune_parent_levels;
+        _preserve_ancestors = opts.preserve_ancestors;
     }
 
 
@@ -63,7 +66,7 @@ class BinaryTree {
     //
     // Destructor
     //
-    ~BinaryTree() {
+    ~BinaryTreeMaterialized() {
         if (_is_pruning_hwm_nodes) {
             // We need to scan all levels manually and call delete explicitly.
             for (size_t level = 0; level <= _level_count; level++) {
@@ -86,16 +89,12 @@ class BinaryTree {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+    void init(size_t levels) override {
         // Sanity check.  T must support requested tree size.
-        assert_level_will_fit(levels);
+        this->assert_level_will_fit(levels);
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
         _is_initialized = true;
-        _track_node_metadata = opts.track_node_metadata;
-        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
-        _is_pruning_parent_levels = opts.prune_parent_levels;
-        _preserve_ancestors = opts.preserve_ancestors;
         _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
         _level_map[0].resize(1);
         _level_map[0][0] = _root_node;
@@ -112,7 +111,7 @@ class BinaryTree {
     // Reset Object
     // Reset members to make this act like a new() object.
     //
-    void reset() {
+    void reset() override {
         _is_initialized = false;
         _coverage_map.clear();
         _level_map.clear();
@@ -128,14 +127,14 @@ class BinaryTree {
     //
     // Getters and Accessors
     //
-    size_t get_level_count() const { return _level_count; }
-    Node<T>* get_root_node() const { return _root_node; }
-    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
-    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
-    const std::vector<Node<T>*> get_ancestors() const { return _ancestors; }
-    bool is_pruning_hwm_nodes() const { return _is_pruning_hwm_nodes; }
-    bool is_pruning_parent_levels() const { return _is_pruning_parent_levels; }
-    bool tracking_metadata() const { return _track_node_metadata; }
+    size_t get_level_count() const override { return _level_count; }
+    Node<T>* get_root_node() const override { return _root_node; }
+    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override { return _level_map; }
+    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
+    const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
+    bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
+    bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
+    bool tracking_metadata() const override { return _track_node_metadata; }
 
 
 
@@ -143,7 +142,7 @@ class BinaryTree {
     // Node Count
     // Returns the REAL node count in the _level_map.  Includes level 0 if tree is 1-based (no dead root).
     //
-    T node_count() const {
+    T node_count() const override {
         T total = 0;
         for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= _level_count; level++) {
             total += _level_map.at(level).size();
@@ -158,7 +157,7 @@ class BinaryTree {
     // Deeply scan the object, all nodes, and so forth, tallying up the expect bytes used.  This won't match RSS because we can't
     // track alignment and such without massive headaches.
     //
-    size_t deep_size() const {
+    size_t deep_size() const override {
         size_t total = sizeof(*this);
 
         // Account for _level_map
@@ -196,11 +195,11 @@ class BinaryTree {
     // When WHM pruning is enabled we trim all grandparents who meet HWM.  We need the parents to build the child level currently.
     // We assume the parent generation was already pruned, and we'll test children after we make them.
     //
-    void add_level() {
+    void add_level() override {
         // Get the parent and child levels.  Then confirm the new one will fit.  Then bump count.
         size_t parent_level = _level_count;
         size_t child_level = _level_count + 1;
-        assert_level_will_fit(child_level);
+        this->assert_level_will_fit(child_level);
         _level_count++;
 
         // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
@@ -340,31 +339,6 @@ class BinaryTree {
 
 
     //
-    // Assert Level Fits
-    // Helper to determine if the level requested is going to fit within the bit-size of T.  Only applies to native integrals.
-    //
-    void assert_level_will_fit(size_t level) const {
-        if (! BinaryTreeMath<T>::st_level_will_fit(level)) {
-            size_t bits = sizeof(T) * 8;
-            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit<T>(bits);
-            mpz_class max_iv_allowed_mpz;
-            if constexpr(NativeIntegral<T>) {
-                max_iv_allowed_mpz = max_iv_allowed;
-            } else if constexpr(ExtendedIntegral<T>) {
-                uint128_to_mpz(max_iv_allowed, max_iv_allowed_mpz);
-            }
-            size_t max_level_allowed = BinaryTreeMath<T>::st_max_full_level_at_node(max_iv_allowed);
-            std::string msg = "Cannot build a BinaryTree with ";
-            msg += to_string_any(level) + " levels and type '" + typeid(T).name() + "' with ";
-            msg += to_string_any(bits) + " bits. A Collatz sequence will overflow.";
-            msg += " Max level for this type is " + to_string_any(max_level_allowed) + ".";
-            throw std::out_of_range(msg);
-        }
-    }
-
-
-
-    //
     // Generate Node At
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.
@@ -382,4 +356,52 @@ class BinaryTree {
         Node<T>* node = new Node<T>(node_value, with_metadata);
         return node;
     }
+};
+
+
+
+
+
+template<AnySupportedIntegral T>
+class BinaryTree {
+    private:
+    std::unique_ptr<IBinaryTreeBackend<T>> _impl;
+
+    public:
+    static constexpr BinaryTreeOptions DEFAULT_OPTS{};
+    BinaryTree() = default;
+    BinaryTree(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        init(levels, opts);
+    }
+
+
+    //
+    // Method delegates for facade.
+    //
+    void init(size_t levels, const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        reset();
+
+        // For now, always materialized
+        _impl = std::make_unique<BinaryTreeMaterialized<T>>(opts);
+        _impl->init(levels);
+    }
+    void reset() { _impl.reset(); }
+    void add_level() { _impl->add_level(); }
+    void assert_level_will_fit(size_t level) const { _impl->assert_level_will_fit(level); }
+
+
+    //
+    // Getters and Accessors
+    //
+    T node_count() const { return _impl->node_count(); }
+    size_t get_level_count() const { return _impl->get_level_count(); }
+    Node<T>* get_root_node() const { return _impl->get_root_node(); }
+    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const { return _impl->get_level_map(); }
+    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _impl->get_coverage_map(); }
+    const std::vector<Node<T>*> get_ancestors() const { return _impl->get_ancestors(); }
+    size_t deep_size() const { return _impl->deep_size(); }
+    bool is_pruning_hwm_nodes() const { return _impl->is_pruning_hwm_nodes(); }
+    bool is_pruning_parent_levels() const { return _impl->is_pruning_parent_levels(); }
+    bool tracking_metadata() const { return _impl->tracking_metadata(); }
+
 };
