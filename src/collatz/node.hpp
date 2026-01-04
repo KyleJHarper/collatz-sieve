@@ -16,6 +16,7 @@ template<AnySupportedIntegral T>
 class Node;
 
 
+
 //
 // Node Metadata
 //

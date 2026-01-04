@@ -34,9 +34,12 @@ struct IBinaryTreeBackend {
     virtual size_t deep_size() const = 0;
     //
     // Property exposure.
+    virtual bool tracking_metadata() const { return false; }
+    // (Materialized Only)
     virtual bool is_pruning_hwm_nodes() const = 0;
     virtual bool is_pruning_parent_levels() const = 0;
-    virtual bool tracking_metadata() const { return false; }
+    // (Implicit Only)
+    virtual const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const = 0;
 
 
 
