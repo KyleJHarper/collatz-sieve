@@ -24,6 +24,15 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
+### Coverage uint128_t
+* Make it support this and/or auto-upgrade to it based on predictions.
+
+### Tree Memory Reduction
+* See if we can reduce RAM when building a pruned tree by killing off nodes sooner.
+* See if we can write to a disk (memmap-ish) to build larger trees.
+  * If so, find a way to store these final trees as data files so they can be loaded.
+
+
 ### Sieve
 * Add forward-looking cache.
   * Steps to scan is equal to tree level, because we're guaranteed to still be over HWM

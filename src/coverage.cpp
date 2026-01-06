@@ -19,11 +19,11 @@ class CoverageBuilder {
     bool _use_precomputed = false;
 
     public:
-    CoverageBuilder() {
+    CoverageBuilder(bool preserve_ancestors) {
         BinaryTreeOptions opts;
         opts.track_node_metadata = false;
         opts.prune_hwm_nodes = true;
-        opts.preserve_ancestors = false;
+        opts.preserve_ancestors = preserve_ancestors;
         opts.prune_parent_levels = true;
         _tree.init(0, opts);
     }
@@ -71,7 +71,7 @@ class CoverageBuilder {
 template<AnySupportedIntegral T>
 void run(size_t levels, bool use_precomputed, bool show_ancestors) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
-    CoverageBuilder<T> builder;
+    CoverageBuilder<T> builder(show_ancestors);
     builder.get_tree().assert_level_will_fit(levels);
     builder.use_precomputed(use_precomputed);
     builder.run(levels);
