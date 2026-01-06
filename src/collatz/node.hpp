@@ -16,6 +16,7 @@ template<AnySupportedIntegral T>
 class Node;
 
 
+
 //
 // Node Metadata
 //
@@ -72,13 +73,22 @@ class Node {
     static constexpr size_t MAX_CHILDREN = 2;
     static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
     // Make some thread-local MPZ and MPF items so they're safe for re-use with threading.
-    static inline thread_local mpz_class tls_value_mpz_c;
-    static inline thread_local mpz_class tls_twos_value_mpz_c;
-    static inline thread_local mpz_class tls_threes_value_mpz_c;
-    static inline thread_local mpf_class tls_threes_value_mpf_c;
-    static inline thread_local mpf_class tls_fg_n_portion_mpf_c;
-    static inline thread_local mpf_class tls_fg_constant_mpf_c;
-    static inline thread_local mpf_class tls_fg_total_mpf_c;
+    // We get a GCC bug sometimes with __tls_guard when it thinks multiple translation units are redefining.
+    // As such, we'll hide them behind accessors.
+    static inline mpz_class& tls_value_mpz_c() { static thread_local mpz_class v; return v; }
+    static inline mpz_class& tls_twos_value_mpz_c() { static thread_local mpz_class v; return v; }
+    static inline mpz_class& tls_threes_value_mpz_c() { static thread_local mpz_class v; return v; }
+    static inline mpf_class& tls_threes_value_mpf_c() { static thread_local mpf_class v; return v; }
+    static inline mpf_class& tls_fg_n_portion_mpf_c() { static thread_local mpf_class v; return v; }
+    static inline mpf_class& tls_fg_constant_mpf_c() { static thread_local mpf_class v; return v; }
+    static inline mpf_class& tls_fg_total_mpf_c() { static thread_local mpf_class v; return v; }
+    // static inline thread_local mpz_class tls_value_mpz_c;
+    // static inline thread_local mpz_class tls_twos_value_mpz_c;
+    // static inline thread_local mpz_class tls_threes_value_mpz_c;
+    // static inline thread_local mpf_class tls_threes_value_mpf_c;
+    // static inline thread_local mpf_class tls_fg_n_portion_mpf_c;
+    // static inline thread_local mpf_class tls_fg_constant_mpf_c;
+    // static inline thread_local mpf_class tls_fg_total_mpf_c;
     // Object members.
     // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
     // All data must fit within one cache line.
@@ -163,35 +173,35 @@ class Node {
         //   > We need at least 1 float for GMP to handle this as a floating point division.
         //   > Odd count is number of F's, and even count is just size().
         size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
-        mpz_pow_ui(tls_twos_value_mpz_c.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
-        mpz_pow_ui(tls_threes_value_mpz_c.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
-        tls_threes_value_mpf_c = tls_threes_value_mpz_c;
-        tls_fg_n_portion_mpf_c = tls_threes_value_mpf_c / tls_twos_value_mpz_c;
-        tls_fg_constant_mpf_c = 0;
+        mpz_pow_ui(Node<T>::tls_twos_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
+        mpz_pow_ui(Node<T>::tls_threes_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
+        Node<T>::tls_threes_value_mpf_c() = Node<T>::tls_threes_value_mpz_c();
+        Node<T>::tls_fg_n_portion_mpf_c() = Node<T>::tls_threes_value_mpf_c() / Node<T>::tls_twos_value_mpz_c();
+        Node<T>::tls_fg_constant_mpf_c() = 0;
         for (char& c : fg_chain) {
             if (c == 'G') {
-                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
+                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
             } else {
-                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
-                mpf_add(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
-                mpf_mul(tls_fg_constant_mpf_c.get_mpf_t(), tls_fg_constant_mpf_c.get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
+                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
+                mpf_add(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
+                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
             }
         }
         if constexpr(ExtendedIntegral<T>) {
             // Cannot perform arithmetic with uint128_t and GMP.  have to cast a value copy.
-            uint128_to_mpz(_value, tls_value_mpz_c);
-            tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * tls_value_mpz_c) + tls_fg_constant_mpf_c;
-            if (tls_fg_total_mpf_c < tls_value_mpz_c) { _is_below_hwm = true; }
+            uint128_to_mpz(_value, Node<T>::tls_value_mpz_c());
+            Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * Node<T>::tls_value_mpz_c()) + Node<T>::tls_fg_constant_mpf_c();
+            if (Node<T>::tls_fg_total_mpf_c() < Node<T>::tls_value_mpz_c()) { _is_below_hwm = true; }
         } else {
-            tls_fg_total_mpf_c = (tls_fg_n_portion_mpf_c * _value) + tls_fg_constant_mpf_c;
-            if (tls_fg_total_mpf_c < _value) { _is_below_hwm = true; }
+            Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * _value) + Node<T>::tls_fg_constant_mpf_c();
+            if (Node<T>::tls_fg_total_mpf_c() < _value) { _is_below_hwm = true; }
         }
         if (_track_metadata) {
-            _metadata->fg_twos_value_mpz_c = tls_twos_value_mpz_c;
-            _metadata->fg_threes_value_mpz_c = tls_threes_value_mpf_c;
-            _metadata->fg_n_portion_mpf_c = tls_fg_n_portion_mpf_c;
-            _metadata->fg_constant_mpf_c = tls_fg_constant_mpf_c;
-            _metadata->fg_total = tls_fg_total_mpf_c;
+            _metadata->fg_twos_value_mpz_c = Node<T>::tls_twos_value_mpz_c();
+            _metadata->fg_threes_value_mpz_c = Node<T>::tls_threes_value_mpf_c();
+            _metadata->fg_n_portion_mpf_c = Node<T>::tls_fg_n_portion_mpf_c();
+            _metadata->fg_constant_mpf_c = Node<T>::tls_fg_constant_mpf_c();
+            _metadata->fg_total = Node<T>::tls_fg_total_mpf_c();
         }
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no

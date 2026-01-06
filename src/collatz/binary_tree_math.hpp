@@ -14,6 +14,26 @@
 // Ergo, much of this will be exposed with BinaryTree too in wrapper methods.
 //
 
+
+
+//
+// LevelInterval
+//
+// Implicit trees leverage NodeCoordinates by converting them to ranges that can be skipped.  That's what this structure holds.
+//
+template<AnySupportedIntegral T>
+struct Interval {
+    T start; // Inclusive
+    T end;   // Inclusive
+
+    T size() const { return end >= start ? (end - start + 1) : 0; }
+};
+
+
+
+//
+// BinaryTreeMath
+//
 template<AnySupportedIntegral T>
 class BinaryTreeMath {
     private:
@@ -44,6 +64,45 @@ class BinaryTreeMath {
         }
         _root_value = value;
         _offset = 1 - _root_value;
+    }
+
+
+
+    //
+    // Node Count of Tree
+    // The number of nodes in a tree of level L depth.
+    //
+    // Formula: 2^level - 1
+    static inline T st_node_count_of_tree(size_t levels) {
+        static thread_local T count;
+        if constexpr(BuiltinIntegral<T>) {
+            count = (T(1) << levels) - 1;
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), levels);
+            mpz_sub_ui(count.get_mpz_t(), count.get_mpz_t(), 1);
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+        return count;
+    }
+
+
+
+    //
+    // Node Count of Level
+    // The number of nodes in a tree's level L.
+    //
+    // Formula: 2^(level - 1)
+    static inline T st_node_count_of_level(size_t level) {
+        static thread_local T count;
+        if constexpr(BuiltinIntegral<T>) {
+            count = T(1) << (level - 1);
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 1));
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+        return count;
     }
 
 
@@ -366,7 +425,7 @@ class BinaryTreeMath {
 
     //
     // Node Value by Position and Level
-    // Calculate a node's value by it's position and level.  It supersedes the deprecated version following it.
+    // Calculate a node's value by its 1-based position and level.  It supersedes the deprecated version following it.
     //
     // Formula: 2^L  + bit_reverse_L(pos - 1, L) - Offset
     //    i.e.: Lift + New_Position              - Offset

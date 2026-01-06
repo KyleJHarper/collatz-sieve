@@ -4,8 +4,6 @@
 #include <gmpxx.h>
 #include <stdexcept>
 #include "../collatz/binary_tree.hpp"
-#include "../collatz/binary_tree_math.hpp"
-#include "../collatz/binary_tree_coverage.hpp"
 
 
 //
@@ -55,19 +53,19 @@ void test_binary_tree_deep_size() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_generate_node_at_valid() {
-    Node<T>* node = BinaryTree<T>::st_generate_node_at(2, 1);
+    Node<T>* node = BinaryTreeMaterialized<T>::st_generate_node_at(2, 1);
     assert(node != nullptr);
     assert(node->get_value() == 3 + BinaryTreeMath<T>::get_root_value());
     delete node;
-    node = BinaryTree<T>::st_generate_node_at(2, 4);
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(2, 4);
     assert(node != nullptr);
     assert(node->get_value() == 6 + BinaryTreeMath<T>::get_root_value());
     delete node;
-    node = BinaryTree<T>::st_generate_node_at(3, 4);
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(3, 4);
     assert(node != nullptr);
     assert(node->get_value() == 13 + BinaryTreeMath<T>::get_root_value());
     delete node;
-    node = BinaryTree<T>::st_generate_node_at(5, 12);
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(5, 12);
     assert(node != nullptr);
     assert(node->get_value() == 57 + BinaryTreeMath<T>::get_root_value());
     delete node;
@@ -77,14 +75,14 @@ void test_binary_tree_generate_node_at_valid() {
 template<AnySupportedIntegral T>
 void test_binary_tree_generate_node_at_invalid_pos() {
     try {
-        BinaryTree<T>::st_generate_node_at(3, 0);
+        BinaryTreeMaterialized<T>::st_generate_node_at(3, 0);
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("position 0") != std::string::npos);
     }
 
     try {
-        BinaryTree<T>::st_generate_node_at(3, 9); // 2^3 = 8 max
+        BinaryTreeMaterialized<T>::st_generate_node_at(3, 9); // 2^3 = 8 max
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("outside of a level") != std::string::npos);
