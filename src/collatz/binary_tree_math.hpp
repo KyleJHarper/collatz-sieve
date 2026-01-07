@@ -26,7 +26,7 @@ struct Interval {
     T start; // Inclusive
     T end;   // Inclusive
 
-    T size() const { return end >= start ? (end - start + 1) : 0; }
+    T size() const { return end >= start ? (end - start + 1) : T(0); }
 };
 
 

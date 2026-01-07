@@ -147,7 +147,9 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
     bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
     bool tracking_metadata() const override { return _track_node_metadata; }
-
+    const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const override {
+        throw std::logic_error("BinaryTreeMaterialized has no coverage interval property.");
+    }
 
 
     //
@@ -458,11 +460,19 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     //
     size_t get_level_count() const override { return _level_count; }
     Node<T>* get_root_node() const override { return _root_node; }
-    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_covered_intervals() const override { return _covered_intervals; }
+    const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const override { return _covered_intervals; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
     bool tracking_metadata() const override { return _track_node_metadata; }
-
+    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override {
+        throw std::logic_error("Implicit trees do not have a level map");
+    }
+    bool is_pruning_hwm_nodes() const override {
+        throw std::logic_error("Implicit trees do not have an is_pruning_hwm_nodes property.");
+    }
+    bool is_pruning_parent_levels() const override {
+        throw std::logic_error("Implicit trees do not have an is_pruning_parent_levels property.");
+    }
 
 
     //
@@ -470,7 +480,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Returns the mathematically correct number of nodes as if they existed in RAM.
     //
     T node_count() const override {
-        BinaryTreeMath<T>::st_node_count_of_tree(_level_count);
+        return BinaryTreeMath<T>::st_node_count_of_tree(_level_count);
     }
 
 
@@ -513,38 +523,49 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     std::vector<Interval<T>> get_uncovered_intervals(size_t requested_level) const {
         // Determine the max level we can pull from for extrapolation.
         size_t max_coverage_level = requested_level <= _level_count ? requested_level : _level_count;
+        std::cout << "Max coverage level starting at: " << max_coverage_level << std::endl;
 
         // Create the results variable and setup our max width and cursor to follow.
         std::vector<Interval<T>> uncovered_intervals;
         T max_position = BinaryTreeMath<T>::st_max_position_of_level(requested_level);
 
-        // If no intervals exist for the max scanned level, assign everything.  Should only happen on level 1.
-        if (_covered_intervals.find(max_coverage_level) == _covered_intervals.end() || _covered_intervals.at(max_coverage_level).empty()) {
-            uncovered_intervals.push_back({1, max_position});
-            return uncovered_intervals;
+        // If no intervals exist, try dropping down a level until we hit zero.
+        while (_covered_intervals.find(max_coverage_level) == _covered_intervals.end() || _covered_intervals.at(max_coverage_level).empty()) {
+            max_coverage_level--;
+            std::cout << "Max coverage level dropped to: " << max_coverage_level << std::endl;
+            if (max_coverage_level == 0) {
+                std::cout << "Couldn't find any covered intervals, so assigning full range as uncovered." << std::endl;
+                uncovered_intervals.push_back({1, max_position});
+                return uncovered_intervals;
+            }
         }
 
         // We must have at least some coverage intervals if we're here.
-        std::vector<Interval<T>>& latest_covered_intervals = _covered_intervals[max_coverage_level];
+        const std::vector<Interval<T>>& latest_covered_intervals = _covered_intervals.at(max_coverage_level);
 
         // Sort them, in case.
         // The add_level() always sorts before storing.  Can skip here.
 
         // Now build the complement of intervals.
-        T prev_end = 1;
+        T prev_end = 0;
         T scale = T(1) << (requested_level - max_coverage_level);
         for (const Interval<T>& covered_interval : latest_covered_intervals) {
             T scaled_start = (covered_interval.start - 1) * scale + 1;
             T scaled_end = covered_interval.end * scale;
+            std::cout << "  > covered interval: start=" << to_string_any(covered_interval.start)
+            << ", end=" << to_string_any(covered_interval.end)
+            << ", scaled_start=" << to_string_any(scaled_start)
+            << ", scaled_end=" << to_string_any(scaled_end)
+            << std::endl;
             if (scaled_start > prev_end + 1) {
-                uncovered_intervals.push_back({prev_end + 1, scaled_start - 1});
+                uncovered_intervals.push_back({T(prev_end + 1), T(scaled_start - 1)});
             }
             prev_end = scaled_end;
         }
 
         // Cover any gap from the last covered to the end of the level.
         if (prev_end < max_position) {
-            uncovered_intervals.push_back({prev_end + 1, max_position});
+            uncovered_intervals.push_back({T(prev_end + 1), max_position});
         }
 
         return uncovered_intervals;
@@ -619,12 +640,27 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         this->assert_level_will_fit(_level_count + 1);
         _level_count++;
 
-        // Grab the uncovered intervals.
+        // Grab the uncovered intervals for the previous level (or whichever has some).
+        std::cout << std::endl;
         std::vector<Interval<T>> uncovered_intervals = get_uncovered_intervals(_level_count);
+        for (Interval<T>& uncovered_interval : uncovered_intervals) {
+            std::cout << "Level " << _level_count
+            << " has uncovered interval: start=" << to_string_any(uncovered_interval.start)
+            << ", end=" << to_string_any(uncovered_interval.end)
+            << std::endl;
+        }
 
         // Partition them to create uniform workloads for OMP.
         size_t thread_count = omp_get_max_threads();
         std::vector<std::vector<Interval<T>>> partitions = partition_intervals(uncovered_intervals, thread_count);
+        for (size_t i = 0; i < partitions.size(); i++) {
+            for (Interval<T>& interval : partitions.at(i)) {
+                std::cout << "Parition index " << i << " has interval: "
+                << "start=" << to_string_any(interval.start)
+                << ", end=" << to_string_any(interval.end)
+                << std::endl;
+            }
+        }
 
         // Create an external tracker for new ancestors (which inherently are the new intervals).
         std::vector<std::vector<Node<T>>> omp_local_ancestors_group(thread_count);
@@ -638,8 +674,8 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             auto& my_partition = partitions[my_thread_id];
 
             // Now loop without triggering OMP again, because the work is already divided by partitions.
-            static thread_local Node<T> tmp_node;
-            static thread_local T value = 0;
+            Node<T> tmp_node;
+            T value = 0;
             for(const Interval<T>& interval : my_partition) {
                 for(T position = interval.start; position <= interval.end; position++) {
                     value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
@@ -658,6 +694,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         T covered = 0;
         for (std::vector<Node<T>>& new_ancestors : omp_local_ancestors_group) {
             for (Node<T>& node : new_ancestors) {
+                std::cout << "HWM Node has value: " << to_string_any(node.get_value()) << std::endl;
                 position = node.get_position();
                 Interval<T> new_interval = {.start = position, .end = position};
                 _covered_intervals[_level_count].push_back(new_interval);
@@ -666,6 +703,17 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                     _ancestors.push_back(new Node<T>(node));
                 }
             }
+        }
+        // Sort the covered intervals so they work correctly later.  Since start always equals end, it's trivial.
+        std::sort(
+            _covered_intervals[_level_count].begin(),
+            _covered_intervals[_level_count].end(),
+            [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
+        );
+        for (Interval<T>& interval : _covered_intervals.at(_level_count)) {
+            std::cout << "Sorted interval start=" << to_string_any(interval.start)
+            << ", end=" << to_string_any(interval.end)
+            << std::endl;
         }
         // Persist the coverage to our new level.
         _coverage_map[_level_count] = BinaryTreeCoverage<T>(covered, total);
@@ -732,14 +780,14 @@ class BinaryTree {
     void reset() { _impl.reset(); }
     void add_level() { _impl->add_level(); }
     void assert_level_will_fit(size_t level) const { _impl->assert_level_will_fit(level); }
-    void assert_materialized(std::string caller) {
+    void assert_materialized(std::string caller) const {
         if (_tree_type != BinaryTreeType::MATERIALIZED) {
-            throw std::logic_error("The method you're trying to call (" + caller + ") is only availabled for materialized trees.");
+            throw std::logic_error("The method you're trying to call (" + caller + ") is only available for materialized trees.");
         }
     }
-    void assert_implicit(std::string caller) {
+    void assert_implicit(std::string caller) const {
         if (_tree_type != BinaryTreeType::IMPLICIT) {
-            throw std::logic_error("The method you're trying to call (" + caller + ") is only availabled for implicit trees.");
+            throw std::logic_error("The method you're trying to call (" + caller + ") is only available for implicit trees.");
         }
     }
 
@@ -770,9 +818,9 @@ class BinaryTree {
     }
     //
     // Implicit-Specific
-    const std::unordered_map<size_t, std::vector<Interval<T>>>& get_skip_intervals() const override {
-        assert_implicit("get_skip_intervals");
-        return _impl->get_skip_intervals();
+    const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const {
+        assert_implicit("get_covered_intervals");
+        return _impl->get_covered_intervals();
     }
 
 };

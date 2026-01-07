@@ -23,7 +23,9 @@ void test_binary_tree_basic_construction() {
     BinaryTree<T> tree4(5);
     BinaryTree<T> tree5(6);
     BinaryTree<T> tree6(7);
+    assert(tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
     assert(tree.get_level_count() == 3);
+    tree.assert_materialized("binary_tree_class");
     const auto& map = tree.get_level_map();
     //
     // Level 0: root
@@ -40,6 +42,40 @@ void test_binary_tree_basic_construction() {
     //
     // Level 3: 8 nodes expected
     assert(map.at(3).size() == 8);
+    //
+    // Build an Implicit tree now.
+    BinaryTreeOptions implicit_opts;
+    implicit_opts.tree_type = BinaryTreeType::IMPLICIT;
+    BinaryTree<T> implicit_tree(4, implicit_opts);
+    assert(implicit_tree.get_level_count() == 4);
+    implicit_tree.assert_implicit("binary_tree_class");
+    const auto& covered_intervals = implicit_tree.get_covered_intervals();
+    //
+    // Positions shift based on the root node being 0-based or 1-based, fyi...
+    size_t root_value = BinaryTreeMath<T>::get_root_value();
+    if (root_value == 0) {
+        //
+        // Level 0: root
+        assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
+        //
+        // Level 1: 2 children, and only one of them is covered.  It's the number 2, which is in position 2.
+        assert(covered_intervals.at(1).size() == 1);
+        assert(covered_intervals.at(1)[0].start == 2);
+        //
+        // Level 2: 4 children, and only one of them is covered.  It's the number 5, which is in position 2.
+        assert(covered_intervals.at(1).size() == 1);
+        assert(covered_intervals.at(2)[0].start == 2);
+        //
+        // Level 3: 8 children, none are covered.
+        std::cout << "Umm?  size: " << covered_intervals.at(3).size() << std::endl;
+        std::cout << "[0] is: " << covered_intervals.at(3)[0].start << std::endl;
+        std::cout << "[1] is: " << covered_intervals.at(3)[1].start << std::endl;
+        std::cout << "[2] is: " << covered_intervals.at(3)[2].start << std::endl;
+        std::cout << "[3] is: " << covered_intervals.at(3)[3].start << std::endl;
+        assert(covered_intervals.at(3).size() == 0);
+    } else {
+
+    }
 }
 
 
