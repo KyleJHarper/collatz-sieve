@@ -13,6 +13,11 @@
 // That said, I can't imagine a time (outside of circular dependecy hell like Tree->Node->Tree) where you'd use this.
 // Ergo, much of this will be exposed with BinaryTree too in wrapper methods.
 //
+// A Note About Indexs and Positions
+//     - Levels are the vertical coordinate of the tree and they are labeled with the counting numbers: 1, 2, 3...
+//     - Positions are the horizontal coordinate of the tree and they are labeled with the counting numbers: 1, 2, 3...
+// This means levels and positions are quantities by default, not zero-based indexes.  We use unordered maps internally iwth level
+// as the key.  This means you can safely iterate keys or iterated *if* you start with i=1, not i=0.
 
 
 
@@ -23,10 +28,16 @@
 //
 template<AnySupportedIntegral T>
 struct Interval {
-    T start; // Inclusive
-    T end;   // Inclusive
+    // Disallow sizes smaller than 16 bits to avoid a GCC bug when used in vectors.
+    using storage_t = std::conditional_t<
+        (sizeof(T) < sizeof(uint16_t)),
+        uint16_t,
+        T
+    >;
+    storage_t start; // Inclusive
+    storage_t end;   // Inclusive
 
-    T size() const { return end >= start ? (end - start + 1) : T(0); }
+    storage_t size() const { return end >= start ? (end - start + 1) : storage_t(0); }
 };
 
 
@@ -57,7 +68,6 @@ class BinaryTreeMath {
     static size_t get_root_value() { return _root_value; }
     static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
     static size_t get_offset() { return _offset; }
-    static size_t get_base_level() { return _offset; }
     static void set_root_value(size_t value) {
         if (value != 0 && value != 1) {
             throw std::out_of_range("You cannot set the BinaryTreeMath root value to anything other than 0 or 1.");
@@ -72,7 +82,7 @@ class BinaryTreeMath {
     // Node Count of Tree
     // The number of nodes in a tree of level L depth.
     //
-    // Formula: 2^level - 1
+    // Formula: 2^(level) - 1
     static inline T st_node_count_of_tree(size_t levels) {
         static thread_local T count;
         if constexpr(BuiltinIntegral<T>) {
@@ -142,7 +152,7 @@ class BinaryTreeMath {
 
     //
     // Log2 for Integers (Most Significant Bit Based)
-    // The std::log2() returns double precision which only affords 53 bits for integrer portio.  This means it doesn't even work
+    // The std::log2() returns double precision which only affords 53 bits for integrer portion.  This means it doesn't even work
     // for uint64_t.  GMP also has its own means for log2 (sizeinbase()).  Int 128 would fail too.
     //
     // To resolve this we make our own method.
@@ -171,16 +181,16 @@ class BinaryTreeMath {
     // Node Level
     // Calculate node level.
     //
-    // Formula: floor(log2(N+Offset))
+    // Formula: floor(log2(N+Offset)) + 1
     static inline size_t st_node_level(const T& value) {
         size_t level = 0;
         if constexpr(BuiltinIntegral<T>) {
-            level = floor_log2(value + _offset);
+            level = floor_log2(value + _offset) + 1;
         } else if constexpr(GMPIntegral<T>) {
             // Adding 1 is a waste of alloc here, so use a scratch variable.
             static thread_local mpz_class junk = 0;
             mpz_add_ui(junk.get_mpz_t(), value.get_mpz_t(), _offset);
-            level = floor_log2(junk);
+            level = floor_log2(junk) + 1;
         } else {
             throw std::logic_error("Unknown type.");
         }
@@ -229,35 +239,17 @@ class BinaryTreeMath {
     // Trees grow in a consistent manner, making the "step" calculation easy based on level.  The "level" should be the current
     // level of the tree you're stepping away from.  E.g.: parent level when building children.
     //
+    // Formula: 2^(level - 1)
     static inline T st_step(size_t level) {
         static thread_local T step;
         if constexpr(BuiltinIntegral<T>) {
-            step = T(1) << level;
+            step = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), level);
+            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 1));
         } else {
             throw std::logic_error("Unknown type.");
         }
         return step;
-    }
-
-
-
-    //
-    // Max Position of Level
-    // The maximum position that can exist for a node on a level.
-    //
-    // Formula: 2^level
-    static inline T st_max_position_of_level(size_t level) {
-        static thread_local T max_position;
-        if constexpr(BuiltinIntegral<T>) {
-            max_position = T(1) << level;
-        } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(max_position.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
-        } else {
-            throw std::logic_error("Unknown type.");
-        }
-        return max_position;
     }
 
 

@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <string>
 #include "collatz/binary_tree.hpp"
-#include "collatz/binary_tree_math.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/node.hpp"
 #include "collatz/collatz.hpp"
@@ -34,7 +33,7 @@ std::vector<AncestorResult<T>> run (size_t levels) {
     // Instead, build children on-the-fly.
     std::vector<AncestorResult<T>> results;
     // std::vector<Node<T>*> lineage;
-    for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= tree.get_level_count(); level++) {
+    for (size_t level = 1; level <= tree.get_level_count(); level++) {
         logger->debug("Scanning level {}", level);
         for (const Node<T>* node : tree.get_level_map().at(level)) {
             if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {

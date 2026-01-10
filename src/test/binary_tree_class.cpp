@@ -16,7 +16,7 @@
 
 template<AnySupportedIntegral T>
 void test_binary_tree_basic_construction() {
-    BinaryTree<T> tree(3);
+    BinaryTree<T> tree(5);
     // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
     BinaryTree<T> tree2(2);
     BinaryTree<T> tree3(4);
@@ -24,66 +24,170 @@ void test_binary_tree_basic_construction() {
     BinaryTree<T> tree5(6);
     BinaryTree<T> tree6(7);
     assert(tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
-    assert(tree.get_level_count() == 3);
+    assert(tree.get_level_count() == 5);
     tree.assert_materialized("binary_tree_class");
     const auto& map = tree.get_level_map();
+    size_t level = 0;
     //
-    // Level 0: root
-    assert(map.at(0).size() == 1);
-    assert(map.at(0)[0]->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
+    // Level 1: root
+    level = 1;
+    assert(map.at(level).size() == 1);
+    assert(map.at(level)[0]->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
     //
-    // Level 1: 2 children (0 + 1 + Offset, 0 + 2 + Offset)
-    assert(map.at(1).size() == 2);
-    assert(map.at(1)[0]->get_value() == 1 + BinaryTreeMath<T>::get_root_value());
-    assert(map.at(1)[1]->get_value() == 2 + BinaryTreeMath<T>::get_root_value());
+    // Level 2: 2 children (0 + 1 + Offset, 0 + 2 + Offset)
+    level = 2;
+    assert(map.at(level).size() == 2);
+    assert(map.at(level)[0]->get_value() == 1 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[1]->get_value() == 2 + BinaryTreeMath<T>::get_root_value());
     //
-    // Level 2: each child has 2 children, total 4
-    assert(map.at(2).size() == 4);
+    // Level 3: each child has 2 children, total 4
+    level = 3;
+    assert(map.at(level).size() == 4);
+    assert(map.at(level)[0]->get_value() == 3 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[1]->get_value() == 5 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[2]->get_value() == 4 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[3]->get_value() == 6 + BinaryTreeMath<T>::get_root_value());
     //
-    // Level 3: 8 nodes expected
-    assert(map.at(3).size() == 8);
+    // Level 4: 8 nodes expected
+    level = 4;
+    assert(map.at(level).size() == 8);
+    assert(map.at(level)[0]->get_value() == 7 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[1]->get_value() == 11 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[2]->get_value() == 9 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[3]->get_value() == 13 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[4]->get_value() == 8 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[5]->get_value() == 12 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[6]->get_value() == 10 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[7]->get_value() == 14 + BinaryTreeMath<T>::get_root_value());
+    //
+    // Level 5: 16 nodes expected
+    level = 5;
+    assert(map.at(level).size() == 16);
+    assert(map.at(level)[0]->get_value() == 15 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[1]->get_value() == 23 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[2]->get_value() == 19 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[3]->get_value() == 27 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[4]->get_value() == 17 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[5]->get_value() == 25 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[6]->get_value() == 21 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[7]->get_value() == 29 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[8]->get_value() == 16 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[9]->get_value() == 24 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[10]->get_value() == 20 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[11]->get_value() == 28 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[12]->get_value() == 18 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[13]->get_value() == 26 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[14]->get_value() == 22 + BinaryTreeMath<T>::get_root_value());
+    assert(map.at(level)[15]->get_value() == 30 + BinaryTreeMath<T>::get_root_value());
+    //
     //
     // Build an Implicit tree now.
     BinaryTreeOptions implicit_opts;
     implicit_opts.tree_type = BinaryTreeType::IMPLICIT;
-    BinaryTree<T> implicit_tree(4, implicit_opts);
-    assert(implicit_tree.get_level_count() == 4);
+    BinaryTree<T> implicit_tree(5, implicit_opts);
+    assert(implicit_tree.get_level_count() == 5);
     implicit_tree.assert_implicit("binary_tree_class");
     const auto& covered_intervals = implicit_tree.get_covered_intervals();
     //
+    // Implicit trees do not have a level map.  Instead, we verify their covered intervals to ensure the positions align with known
+    // subtrees that "pruning" wouldn't caught in a Materialized tree.
     // Positions shift based on the root node being 0-based or 1-based, fyi...
+    // REMEMBER THESE ARE SORTED!  CHANGES THE INDEX THEY'RE ON!
     size_t root_value = BinaryTreeMath<T>::get_root_value();
     if (root_value == 0) {
         //
-        // Level 0: root
+        // Level 1: root
+        level = 1;
         assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
         //
-        // Level 1: 2 children, and only one of them is covered.  It's the number 2, which is in position 2.
-        assert(covered_intervals.at(1).size() == 1);
-        assert(covered_intervals.at(1)[0].start == 2);
+        // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 2.
+        level = 2;
+        assert(covered_intervals.at(level).size() == 1);
+        assert(covered_intervals.at(level)[0].start == 2);
+        assert(covered_intervals.at(level)[0].end == 2);
         //
-        // Level 2: 4 children, and only one of them is covered.  It's the number 5, which is in position 2.
-        assert(covered_intervals.at(1).size() == 1);
-        assert(covered_intervals.at(2)[0].start == 2);
+        // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 2.
+        assert(covered_intervals.at(level).size() == 2);
+        assert(covered_intervals.at(level)[0].start == 2);
+        assert(covered_intervals.at(level)[0].end == 2);
+        // Now scaled intervals...
+        assert(covered_intervals.at(level)[1].start == 3);
+        assert(covered_intervals.at(level)[1].end == 4);
         //
-        // Level 3: 8 children, none are covered.
-        std::cout << "Umm?  size: " << covered_intervals.at(3).size() << std::endl;
-        std::cout << "[0] is: " << covered_intervals.at(3)[0].start << std::endl;
-        std::cout << "[1] is: " << covered_intervals.at(3)[1].start << std::endl;
-        std::cout << "[2] is: " << covered_intervals.at(3)[2].start << std::endl;
-        std::cout << "[3] is: " << covered_intervals.at(3)[3].start << std::endl;
-        assert(covered_intervals.at(3).size() == 0);
+        // Level 4: 8 children, none are covered (total remains 2).
+        level = 4;
+        assert(covered_intervals.at(level).size() == 2);
+        // Now scaled intervals...
+        assert(covered_intervals.at(level)[0].start == 3);
+        assert(covered_intervals.at(level)[0].end == 4);
+        assert(covered_intervals.at(level)[1].start == 5);
+        assert(covered_intervals.at(level)[1].end == 8);
+        //
+        // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 3.
+        level = 5;
+        assert(covered_intervals.at(level).size() == 3);
+        assert(covered_intervals.at(level)[0].start == 3);
+        assert(covered_intervals.at(level)[0].end == 3);
+        // Now scaled intervals...
+        assert(covered_intervals.at(level)[1].start == 5);
+        assert(covered_intervals.at(level)[1].end == 8);
+        assert(covered_intervals.at(level)[2].start == 9);
+        assert(covered_intervals.at(level)[2].end == 16);
     } else {
-
+        //
+        // Level 1: root
+        level = 1;
+        assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
+        //
+        // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 1.
+        level = 2;
+        assert(covered_intervals.at(level).size() == 1);
+        assert(covered_intervals.at(level)[0].start == 1);
+        assert(covered_intervals.at(level)[0].end == 1);
+        //
+        // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 3.
+        level = 3;
+        assert(covered_intervals.at(level).size() == 2);
+        assert(covered_intervals.at(level)[1].start == 3);
+        assert(covered_intervals.at(level)[1].end == 3);
+        // Now scaled intervals... (pay attention to indexes!)
+        assert(covered_intervals.at(level)[0].start == 1);
+        assert(covered_intervals.at(level)[0].end == 2);
+        //
+        // Level 4: 8 children, none are covered (total remains 2).
+        level = 4;
+        assert(covered_intervals.at(level).size() == 2);
+        // Now scaled intervals... (pay attention to indexes!)
+        assert(covered_intervals.at(level)[0].start == 1);
+        assert(covered_intervals.at(level)[0].end == 4);
+        assert(covered_intervals.at(level)[1].start == 5);
+        assert(covered_intervals.at(level)[1].end == 6);
+        //
+        // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 13.
+        level = 5;
+        assert(covered_intervals.at(level).size() == 3);
+        assert(covered_intervals.at(level)[2].start == 13);
+        assert(covered_intervals.at(level)[2].end == 13);
+        // Now scaled intervals... (pay attention to indexes!)
+        assert(covered_intervals.at(level)[0].start == 1);
+        assert(covered_intervals.at(level)[0].end == 8);
+        assert(covered_intervals.at(level)[1].start == 9);
+        assert(covered_intervals.at(level)[1].end == 12);
     }
 }
 
 
 template<AnySupportedIntegral T>
 void test_binary_tree_deep_size() {
-    BinaryTree<T> tree(2);
+    BinaryTreeOptions opts;
+    opts.tree_type = BinaryTreeType::MATERIALIZED;
+    BinaryTree<T> tree(2, opts);
     size_t size = tree.deep_size();
     assert(size > sizeof(tree)); // Make sure something was counted
+    opts.tree_type = BinaryTreeType::IMPLICIT;
+    BinaryTree<T> tree_implicit(2, opts);
+    size_t size_implicit = tree_implicit.deep_size();
+    assert(size_implicit > sizeof(tree_implicit)); // Make sure something was counted
 }
 
 
@@ -105,6 +209,7 @@ void test_binary_tree_generate_node_at_valid() {
     assert(node != nullptr);
     assert(node->get_value() == 57 + BinaryTreeMath<T>::get_root_value());
     delete node;
+    // Note: implicit trees cannot create material nodes, so no test here.
 }
 
 
@@ -135,47 +240,54 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     BinaryTree<T> tree(levels, opts);
     BinaryTreeCoverage<T> global_coverage;
     T target_total = 0;
-    for (size_t level=BinaryTreeMath<T>::get_base_level(); level<=tree.get_level_count(); level++) {
+    for (size_t level=1; level<=tree.get_level_count(); level++) {
         target_total = (T{1} << level);
         const BinaryTreeCoverage<T>* coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(coverage->get_covered());
         global_coverage.add_total(coverage->get_total());
         assert(coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
+        std::cout << "coverage->get_total() = " << to_string_any(coverage->get_total())
+        << ", target_total = " << to_string_any(target_total)
+        << std::endl;
         assert(coverage->get_total() == target_total);
     }
     assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
-    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(BinaryTreeMath<T>::get_base_level(), levels));
-    // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-    // We allow pruning of HWM nodes and/or levels.  Need tests for each.
+    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
     //
-    // Option 1: false and false
-    // This is a tree with all its nodes.  Counts should line up without adjustment.
-    if (!tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
-        assert(tree.node_count() == (T{1} << (tree.get_level_count() + 1)) - 1 - BinaryTreeMath<T>::get_offset());
-    }
-    // Option 2: true and false
-    // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
-    if (tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
-        T node_count_summary = tree.node_count();
-        for (size_t level = BinaryTreeMath<T>::get_base_level(); level <= tree.get_level_count(); level++) {
-            node_count_summary += tree.get_coverage_map().find(level)->second.get_covered();
+    // Materialized trees have pruning options.
+    if (opts.tree_type == BinaryTreeType::MATERIALIZED) {
+        // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
+        // We allow pruning of HWM nodes and/or levels.  Need tests for each.
+        //
+        // Option 1: false and false
+        // This is a tree with all its nodes.  Counts should line up without adjustment.
+        if (!tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
+            assert(tree.node_count() == (T{1} << (tree.get_level_count() + 1)) - 1 - BinaryTreeMath<T>::get_offset());
         }
-        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(BinaryTreeMath<T>::get_base_level(), levels));
-    }
-    // Option 3: false and true
-    // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
-    if (!tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
-        T node_count_summary = tree.node_count() + BinaryTreeCoverageConstants::get_total_sum_to_level(BinaryTreeMath<T>::get_base_level(), levels - 1);
-        assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(BinaryTreeMath<T>::get_base_level(), levels));
-    }
-    // Option 4: true and true
-    // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
-    if (tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
-        T node_count_plus_uncovered = tree.node_count();
-        for (size_t level = BinaryTreeMath<T>::get_base_level(); level < tree.get_level_count(); level++) {
-            node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
+        // Option 2: true and false
+        // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
+        if (tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
+            T node_count_summary = tree.node_count();
+            for (size_t level = 1; level <= tree.get_level_count(); level++) {
+                node_count_summary += tree.get_coverage_map().find(level)->second.get_covered();
+            }
+            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
         }
-        assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(BinaryTreeMath<T>::get_base_level(), levels));
+        // Option 3: false and true
+        // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
+        if (!tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
+            T node_count_summary = tree.node_count() + BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels - 1);
+            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+        }
+        // Option 4: true and true
+        // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
+        if (tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
+            T node_count_plus_uncovered = tree.node_count();
+            for (size_t level = 1; level < tree.get_level_count(); level++) {
+                node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
+            }
+            assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+        }
     }
 }
 
@@ -187,7 +299,7 @@ void test_binary_tree_node_count_should_match_map() {
     T expected_count = (T{2} << levels) - 1 - BinaryTreeMath<T>::get_offset();
     size_t map_count = 0;
     const auto& map = tree.get_level_map();
-    for (size_t i = BinaryTreeMath<T>::get_base_level(); i <= tree.get_level_count(); i++) {
+    for (size_t i = 1; i <= tree.get_level_count(); i++) {
         map_count += map.at(i).size();
     }
     assert(tree.node_count() == expected_count);
@@ -197,20 +309,45 @@ void test_binary_tree_node_count_should_match_map() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_too_many_levels() {
+    BinaryTreeOptions opts;
+    //
+    // Materialized
+    opts.tree_type = BinaryTreeType::MATERIALIZED;
     // 8 bit can't build a 16 level tree
     try {
-        BinaryTree<uint8_t> tree(16);
+        BinaryTree<uint8_t> tree(16, opts);
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
     }
     // A 32-bit tree type can.
-    BinaryTree<uint32_t> tree(16);
+    BinaryTree<uint32_t> tree(16, opts);
     // An 8 bit can, however,  handle a 3-level tree.
-    BinaryTree<uint8_t> tree2(3);
+    BinaryTree<uint8_t> tree2(3, opts);
     // Adding another level should break.
     try {
         tree2.add_level();
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 4") != std::string::npos);
+    }
+    //
+    // Implicit
+    opts.tree_type = BinaryTreeType::IMPLICIT;
+    // 8 bit can't build a 16 level tree
+    try {
+        BinaryTree<uint8_t> tree_implicit(16, opts);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
+    }
+    // A 32-bit tree type can.
+    BinaryTree<uint32_t> tree_implicit(16, opts);
+    // An 8 bit can, however,  handle a 3-level tree.
+    BinaryTree<uint8_t> tree2_implicit(3, opts);
+    // Adding another level should break.
+    try {
+        tree2_implicit.add_level();
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("Cannot build a BinaryTree with 4") != std::string::npos);
@@ -220,9 +357,17 @@ void test_binary_tree_too_many_levels() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_multi_threaded() {
+    BinaryTreeOptions opts = BinaryTree<T>::DEFAULT_OPTS;
     size_t max_threads = 4;
+    // Materialized
+    opts.tree_type = BinaryTreeType::MATERIALIZED;
     for (size_t threads = 1; threads <= max_threads; threads++) {
-        test_binary_tree_coverage<T>(16, threads);
+        test_binary_tree_coverage<T>(16, threads, opts);
+    }
+    // Implicit
+    opts.tree_type = BinaryTreeType::IMPLICIT;
+    for (size_t threads = 1; threads <= max_threads; threads++) {
+        test_binary_tree_coverage<T>(16, threads, opts);
     }
 }
 
@@ -246,20 +391,20 @@ void test_binary_tree_math() {
     //
     // Node Levels
     size_t level = 0;  // Always returns size_t
-    level = BinaryTreeMath<T>::st_node_level(4);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 2) : assert(level == 2);
-    level = BinaryTreeMath<T>::st_node_level(101);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 6) : assert(level == 6);
     level = BinaryTreeMath<T>::st_node_level(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 1) : assert(level == 0);
-    level = BinaryTreeMath<T>::st_node_level(2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 1) : assert(level == 1);
-    level = BinaryTreeMath<T>::st_node_level(3);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 2) : assert(level == 1);
-    level = BinaryTreeMath<T>::st_node_level(7);
+    level = BinaryTreeMath<T>::st_node_level(2);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 2) : assert(level == 2);
+    level = BinaryTreeMath<T>::st_node_level(3);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 3) : assert(level == 2);
-    level = BinaryTreeMath<T>::st_node_level(14);
+    level = BinaryTreeMath<T>::st_node_level(4);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 3) : assert(level == 3);
+    level = BinaryTreeMath<T>::st_node_level(7);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 4) : assert(level == 3);
+    level = BinaryTreeMath<T>::st_node_level(14);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 4) : assert(level == 4);
+    level = BinaryTreeMath<T>::st_node_level(101);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 7) : assert(level == 7);
     //
     // Node Positions
     T position = 0;
@@ -280,16 +425,16 @@ void test_binary_tree_math() {
     position = BinaryTreeMath<T>::st_node_position(46);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 31) : assert(position == 15);
     //
-    // Max Position of Level
-    T max_position = BinaryTreeMath<T>::st_max_position_of_level(0);
+    // Max Position of Level (AKA node count)
+    T max_position = BinaryTreeMath<T>::st_node_count_of_level(0);
     assert(max_position == 1);
-    max_position = BinaryTreeMath<T>::st_max_position_of_level(1);
+    max_position = BinaryTreeMath<T>::st_node_count_of_level(1);
     assert(max_position == 2);
-    max_position = BinaryTreeMath<T>::st_max_position_of_level(2);
+    max_position = BinaryTreeMath<T>::st_node_count_of_level(2);
     assert(max_position == 4);
-    max_position = BinaryTreeMath<T>::st_max_position_of_level(3);
+    max_position = BinaryTreeMath<T>::st_node_count_of_level(3);
     assert(max_position == 8);
-    max_position = BinaryTreeMath<T>::st_max_position_of_level(4);
+    max_position = BinaryTreeMath<T>::st_node_count_of_level(4);
     assert(max_position == 16);
     //
     // Max Node Value at Level

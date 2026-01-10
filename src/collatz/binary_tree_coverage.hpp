@@ -10,7 +10,7 @@
 // Keep a record of known coverages.
 //
 namespace BinaryTreeCoverageConstants {
-    // Precomputed coverage for given levels.
+    // Precomputed coverage for given levels.  Level-indexed (aka element 0 means nothing).
     constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 32;
     constexpr std::array<size_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE = {
         0,  // 0
