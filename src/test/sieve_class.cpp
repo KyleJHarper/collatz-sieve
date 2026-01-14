@@ -363,6 +363,10 @@ void run_all() {
 
 
 int main() {
+    std::cout << "=====================" << std::endl;
+    std::cout << "Sieve Tests" << std::endl;
+    std::cout << "=====================" << std::endl;
+
     std::cout << "Performing tests with uint64_t." << std::endl;
     run_all<uint64_t>();
     std::cout << "Performing tests with mpz_class." << std::endl;

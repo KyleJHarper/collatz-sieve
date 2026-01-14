@@ -163,7 +163,7 @@ class Node {
 
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
         // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
-        _fg_chain_length = get_level();
+        _fg_chain_length = get_level() - 1;
         std::string fg_chain = Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
         _fg_chain_length = fg_chain.size();
 

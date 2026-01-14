@@ -14,6 +14,7 @@ void test_basic_node() {
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
+    std::cout << root.get_odd_even_chain_string() << std::endl;
     assert(root.get_odd_even_chain_string() == "OEOE");
     assert(root.get_twos_value() > 0);
     assert(root.get_threes_value() > 0);
@@ -188,6 +189,10 @@ void run_all() {
 
 
 int main() {
+    std::cout << "=====================" << std::endl;
+    std::cout << "Node Tests" << std::endl;
+    std::cout << "=====================" << std::endl;
+
     std::cout << "Performing tests with uint64_t." << std::endl;
     run_all<uint64_t>();
 

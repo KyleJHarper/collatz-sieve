@@ -9,31 +9,28 @@
 // The BinaryTree class could maintain all of this, but we might want to seprate the math from the tree itself, even though the
 // tree will intrinsically build (via add_level()) according to this math.
 //
-// This also allows other classes or units to leverage the math without needing BinaryTree.
-// That said, I can't imagine a time (outside of circular dependecy hell like Tree->Node->Tree) where you'd use this.
-// Ergo, much of this will be exposed with BinaryTree too in wrapper methods.
-//
-// A Note About Indexs and Positions
+// A Note About Indexes and Positions
 //     - Levels are the vertical coordinate of the tree and they are labeled with the counting numbers: 1, 2, 3...
 //     - Positions are the horizontal coordinate of the tree and they are labeled with the counting numbers: 1, 2, 3...
-// This means levels and positions are quantities by default, not zero-based indexes.  We use unordered maps internally iwth level
-// as the key.  This means you can safely iterate keys or iterated *if* you start with i=1, not i=0.
-
+// This means levels and positions are quantities by default, not zero-based indexes.  We use unordered maps internally with level
+// as the key.  This means you can safely iterate keys or indexes *if* you start with i=1, not i=0.
+//
+// A Note About 0- and 1-Based Roots
+// The research for this project initially built the tree with a 0-based root node.  This was later changed to be 1-based, but we
+// kept the 0-based logic available by extracting the math into this BinaryTreeMath class and tracking some offsets and such.  You
+// can expect 1-based trees to work perfect, and we've given a best effort for 0-based.
+//
 
 
 //
 // LevelInterval
 //
-// Implicit trees leverage NodeCoordinates by converting them to ranges that can be skipped.  That's what this structure holds.
+// Implicit trees leverage NodeCoordinates by converting them to ranges that represent covered or uncovered nodes.
 //
 template<AnySupportedIntegral T>
 struct Interval {
     // Disallow sizes smaller than 16 bits to avoid a GCC bug when used in vectors.
-    using storage_t = std::conditional_t<
-        (sizeof(T) < sizeof(uint16_t)),
-        uint16_t,
-        T
-    >;
+    using storage_t = std::conditional_t<(sizeof(T) < sizeof(uint16_t)), uint16_t, T>;
     storage_t start; // Inclusive
     storage_t end;   // Inclusive
 
@@ -118,12 +115,35 @@ class BinaryTreeMath {
 
 
     //
+    // Node Count of Levels
+    // The number of nodes in a tree between min_level and max_level, inclusive.
+    //
+    // Formula: (2^(max_level) - 1) - (2^(min_level-1) - 1)
+    static inline T st_node_count_of_levels(size_t min_level, size_t max_level) {
+        static thread_local T full_tree_count;
+        static thread_local T sub_tree_count;
+        static thread_local T final_count;
+        if constexpr(BuiltinIntegral<T>) {
+            final_count = (T(1) << max_level) - (T(1) << (min_level - 1));
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_pow_ui(full_tree_count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), max_level);
+            mpz_pow_ui(sub_tree_count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), min_level - 1);
+            mpz_sub(final_count.get_mpz_t(), full_tree_count.get_mpz_t(), sub_tree_count.get_mpz_t());
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+        return final_count;
+    }
+
+
+
+    //
     // Bit Reversal
     // The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values
     // within the tree, largely due to the constant power-of-two increase.  In order leverage this, we need to be able to take bits
     // from a node value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side.
-    // There are a lot of ways to do this, and some compilers have intrisics for this, but I'm going to use the loop meethod to
-    // keep the intention clear.  We can replace it with a black-box function later
+    // There are a lot of ways to do this, and some compilers have intrisics for this, but I'm going to use the loop method to keep
+    // the intention clear.  We can replace it with a black-box function later
     //
     // Formula: reverse(bits)[0:size]
     static inline T st_reverse_low_bits(const T& value, size_t bits) {
@@ -179,7 +199,8 @@ class BinaryTreeMath {
 
     //
     // Node Level
-    // Calculate node level.
+    // Calculate node level.  Since they grow dyadically, we just need a log2(N) essentially, but have to respect the root node
+    // and the subsequent offset.
     //
     // Formula: floor(log2(N+Offset)) + 1
     static inline size_t st_node_level(const T& value) {
@@ -203,24 +224,25 @@ class BinaryTreeMath {
     // Position
     // Calculate the position from left to right, using 1-based index, of any node value.
     //
-    // Formula: bit_reverse_L((N+Offset) % 2^L, L) + 1   Where L = floor(log2(N+1))
+    // Formula: bit_reverse_L((N+Offset) % 2^(L-1), (L-1)) + 1   Where L = floor(log2(N+1))
     static inline T st_node_position(const T& value) {
         size_t level = BinaryTreeMath<T>::st_node_level(value);
         T value_plus_offset = value + _offset;
         T low_bits;
+        static thread_local T position;
 
         // Get lower bits.
         if constexpr(BuiltinIntegral<T>) {
-            low_bits = value_plus_offset & ((T(1) << level) - 1);
+            low_bits = value_plus_offset & ((T(1) << (level - 1)) - 1);
         } else if constexpr(GMPIntegral<T>) {
-            mpz_class mask = (mpz_class(1) << level) - 1;
+            mpz_class mask = (mpz_class(1) << (level - 1)) - 1;
             low_bits = value_plus_offset & mask;
         } else {
             throw std::logic_error("Unknown type.");
         }
 
         // Get the position now.
-        T position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level);
+        position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level - 1);
         if constexpr(BuiltinIntegral<T>) {
             position += 1;
         } else if constexpr(GMPIntegral<T>) {
@@ -258,10 +280,10 @@ class BinaryTreeMath {
     // Max Node Value at Level
     // Calculate max node value at a level.
     //
-    // Formula: 2^(level+1) - 1 - Offset.
+    // Formula: 2^(level) - 1 - Offset.
     static inline mpz_class st_max_node_value_at_level(size_t level) {
         static thread_local mpz_class max_n;
-        mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level + 1));
+        mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
         mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 1);
         mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
         return max_n;
@@ -313,13 +335,13 @@ class BinaryTreeMath {
     // First Node Value
     // The value of the first node of any level.
     //
-    // Formula: 2^level - Offset
+    // Formula: 2^(level - 1) - Offset
     static inline T st_first_node_of_level(const size_t level) {
         static thread_local T first_node_value;
         if constexpr(BuiltinIntegral<T>) {
-            first_node_value = (T(1) << level) - _offset;
+            first_node_value = (T(1) << (level - 1)) - _offset;
         } else if constexpr(std::same_as<T, mpz_class>) {
-            mpz_pow_ui(first_node_value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
+            mpz_pow_ui(first_node_value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
             mpz_sub_ui(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), _offset);
         } else {
             throw std::logic_error("Unknown type.");
@@ -336,27 +358,31 @@ class BinaryTreeMath {
     //
     // Note: This is an OLD technique using summation, used by: st_node_value_by_position_and_level__deprecated().
     //
-    // Formula: ceil((pos - 1) / 2) * (2^(L-1)) [* 1]
-    //    i.e.: Frequency           * Value   [* Magnitude, always 1]
+    // Formula: 1     * ceil((P - 1) / 2) * (2^(L-2)) [* 1]
+    //    i.e.: Value * Quantity          * Scale
     static inline T st_s1_summation(const T& position, size_t level) {
-        static thread_local T frequency;
-        static thread_local T value;
+        static thread_local T value = 1;
+        static thread_local T quantity;
+        static thread_local T scale;
 
-        // Frequency: ceil((pos - 1) / 2)
-        // We can cheat because...: ceil((pos-1)/2) ==> ((pos-1)+1)/2 ==> pos / 2
-        frequency = position / 2;
+        // Leave unless the level is high enough to have any quantity.  AKA: L > 1
+        if (level < 2) { return T(0); }
 
-        // Value: 2^(L-1)
+        // Quantity: ceil((pos - 1) / 2)
+        // We can simplify because: ceil((P - 1) / 2) ==> ((P - 1)+1)/2 ==> pos / 2
+        quantity = position / 2;
+
+        // Scale: 2^(L-2)
         if constexpr(BuiltinIntegral<T>) {
-            value = T(1) << (level - 1);
+            scale = T(1) << (level - 2);
         } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level - 1);
+            mpz_pow_ui(scale.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 2));
         } else {
             throw std::logic_error("Unknown type.");
         }
 
         // Result of multiplication should be correctly typed.
-        return frequency * value;
+        return value * quantity * scale;
     }
 
 
@@ -367,46 +393,72 @@ class BinaryTreeMath {
     //
     // Note: This is an OLD technique using summation, used by: st_node_value_by_position_and_level__deprecated().
     //
-    // Formula: [n=2, to L=level] 𝝨 ceil((pos - 2^(n-1)) / 2^n) * (2^n - 3) * 2^(L-n)
-    //    i.e.: for 2 to L      sum(Frequency                   * Value     * Magnitude)
+    // Formula: [a=3, to L=level] 𝝨 -(2^(a-1) - 3) * ceil((P - 2^(a-2)) / 2^(a-1)) * 2^(L-a)
+    //    i.e.: for 3 to L    sum(  Value          * Quantity                      * Scale)
+    //
+    // NOTE!  We return S2 as a positive value since we use unsigned data types!  Subtract it when you use it!!
     static inline T st_s2_summation(const T& position, size_t level) {
-        static thread_local T frequency;
+        static thread_local T quantity;
         static thread_local T value;
-        static thread_local T magnitude;
+        static thread_local T scale;
         static thread_local T summation;
 
         // Summation Loop
         summation = 0;
-        for(size_t n=2; n<level; n++) {
-            // Frequency: ceil((pos - 2^(n-1)) / 2^n)
-            // Again we can cheat ...
-            //   Numerator  : (pos - 2^(n-1))  ==>  (pos - (1 << (n-1)))
-            //   Denominator: 2^n              ==>  >> n
-            //   Ceiling    : ceil(x/y)        ==>  (x + y - 1) / y
-            // Final: (pos - (1 << (n-1)) + (1 << n) - 1) >> n
-            frequency = (position - (T(1) << (n - 1)) + (T(1) << n) - 1) >> n;
+        for(size_t a=3; a<level; a++) {
+            // Quantity: ceil((P - 2^(a-2)) / 2^(a-1))
+            // Again we can cheat because ceiling behaves this way:
+            //   ceil(x/y) ==> (x + y - 1) / y
+            //
+            // In our case we have the following:
+            //   x (numerator)  : P - 2^(a-2)
+            //   y (denominator): 2^(a-1)
+            //   ceiling(x/y)   : (x + y - 1) / y
+            //
+            // With ceiling applied it looks like this:
+            //   (P - 2^(a-2) + 2^(a-1) - 1) / 2^(a-1)
+            //
+            // The first subtraction can be rewritten as addition of a negative:
+            //   (P + (-2^(a-2)) + 2^(a-1) - 1) / 2^(a-1)
+            //
+            // Now we isolate the powers of two sections in our numerator to see how they simplify:
+            //   -2^(a-2) + 2^(a-1)
+            //   ==> -2^(a-2) + 2 * 2^(a-2)
+            //   ==> -2^(a-2) + 2^(a-2) + 2^(a-2)
+            //   ==> 2^(a-2)
+            //
+            // The full numerator is now simplified to:
+            //   P + 2^(a-2) - 1
+            //
+            // The full expression is now just:
+            //   (P + 2^(a-2) - 1) / 2^(a-1)
+            //
+            // We can now simply bit shift a couple areas and be done:
+            //   (P + (T(1) << (a - 2)) - 1) >> (a - 1)
+            quantity = (position + (T(1) << (a - 2)) - 1) >> (a - 1);
 
-            // Value: (2^n - 3)
+            // Value: -(2^(a-1) - 3)
+            // Remember to use a positive value, even though it's technically a decreasing summation (negative).
             if constexpr(BuiltinIntegral<T>) {
-                value = (T(1) << n) - 3;
+                value = (T(1) << (a - 1)) - 3;
             } else if constexpr(GMPIntegral<T>) {
-                mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), n);
+                mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (a - 1));
                 mpz_sub_ui(value.get_mpz_t(), value.get_mpz_t(), 3);
             } else {
                 throw std::logic_error("Unknown type.");
             }
 
-            // Magnitude: 2^(L-n)
+            // Scale: 2^(L-a)
             if constexpr(BuiltinIntegral<T>) {
-                magnitude = T(1) << (level - n);
+                scale = T(1) << (level - a);
             } else if constexpr(GMPIntegral<T>) {
-                mpz_pow_ui(magnitude.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - n));
+                mpz_pow_ui(scale.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - a));
             } else {
                 throw std::logic_error("Unknown type.");
             }
 
             // Add to Summation
-            summation += (frequency * value * magnitude);
+            summation += (quantity * value * scale);
         }
 
         // Return it.
@@ -417,40 +469,40 @@ class BinaryTreeMath {
 
     //
     // Node Value by Position and Level
-    // Calculate a node's value by its 1-based position and level.  It supersedes the deprecated version following it.
+    // Calculate a node's value by its position and level.  It supersedes the deprecated version following it.
     //
-    // Formula: 2^L  + bit_reverse_L(pos - 1, L) - Offset
-    //    i.e.: Lift + New_Position              - Offset
+    // Formula: 2^(L-1)  + bit_reverse_L(pos - 1, L-1) - Offset
+    //    i.e.: Lift     + Index                       - Offset
     static inline T st_node_value_by_position_and_level(const T& position, size_t level) {
         static thread_local T lift;
-        static thread_local T new_position;
+        static thread_local T index;
 
-        // Lift: 2^L
+        // Lift: 2^(L-1)
         if constexpr(BuiltinIntegral<T>) {
-            lift = T(1) << level;
+            lift = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
+            mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
         } else {
             throw std::logic_error("Unknown type.");
         }
 
         // New Position: bit_reverse_L(pos - 1)
         if constexpr(BuiltinIntegral<T>) {
-            new_position = position - 1;
+            index = position - 1;
         } else if constexpr(GMPIntegral<T>) {
-            mpz_sub_ui(new_position.get_mpz_t(), position.get_mpz_t(), 1);
+            mpz_sub_ui(index.get_mpz_t(), position.get_mpz_t(), 1);
         } else {
             throw std::logic_error("Unknown type.");
         }
-        new_position = st_reverse_low_bits(new_position, level);
+        index = st_reverse_low_bits(index, (level - 1));
 
         // Return
-        return lift + new_position - _offset;
+        return lift + index - _offset;
     }
     //
     // Now here's the old, deprecated form which uses summations.
     //
-    // Formula: first_node_value + s1 - s2
+    // Formula: first_node_value + s1 + s2   (NOTE! we actually subtract s2, since it returns a positive, unsigned value)
     // (See st_s1... and st_s2... methods for details.)
     static inline T st_node_value_by_position_and_level__deprecated(const T& position, size_t level) {
         return st_first_node_of_level(level) + st_s1_summation(position, level) - st_s2_summation(position, level);

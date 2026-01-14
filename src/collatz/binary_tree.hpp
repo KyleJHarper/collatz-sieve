@@ -702,7 +702,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         static thread_local T position = 0;
         for (std::vector<Node<T>>& new_ancestors : omp_local_ancestors_group) {
             for (Node<T>& node : new_ancestors) {
-                // std::cout << "HWM Node has value: " << to_string_any(node.get_value()) << std::endl;
+                std::cout << "HWM Node has value: " << to_string_any(node.get_value()) << std::endl;
                 position = node.get_position();
                 Interval<T> new_interval = {.start = position, .end = position};
                 _covered_intervals[_level_count].push_back(new_interval);
@@ -717,11 +717,11 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             _covered_intervals[_level_count].end(),
             [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
         );
-        // for (Interval<T>& interval : _covered_intervals.at(_level_count)) {
-        //     std::cout << "Sorted interval start=" << to_string_any(interval.start)
-        //     << ", end=" << to_string_any(interval.end)
-        //     << std::endl;
-        // }
+        for (Interval<T>& interval : _covered_intervals.at(_level_count)) {
+            std::cout << "  Level " << _level_count << ".  Sorted interval start=" << to_string_any(interval.start)
+            << ", end=" << to_string_any(interval.end)
+            << std::endl;
+        }
         // Persist the coverage to our new level.  It's just a sum of the covered size() values.
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T covered = 0;

@@ -107,6 +107,7 @@ void test_binary_tree_basic_construction() {
         assert(covered_intervals.at(level)[0].end == 2);
         //
         // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 2.
+        level = 3;
         assert(covered_intervals.at(level).size() == 2);
         assert(covered_intervals.at(level)[0].start == 2);
         assert(covered_intervals.at(level)[0].end == 2);
@@ -193,22 +194,38 @@ void test_binary_tree_deep_size() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_generate_node_at_valid() {
-    Node<T>* node = BinaryTreeMaterialized<T>::st_generate_node_at(2, 1);
+    // Materialized Tree
+    size_t root_value = BinaryTreeMath<T>::get_root_value();
+    Node<T>* node = nullptr;
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(2, 1);
     assert(node != nullptr);
-    assert(node->get_value() == 3 + BinaryTreeMath<T>::get_root_value());
+    assert(node->get_value() == 1 + root_value);
     delete node;
-    node = BinaryTreeMaterialized<T>::st_generate_node_at(2, 4);
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(3, 1);
     assert(node != nullptr);
-    assert(node->get_value() == 6 + BinaryTreeMath<T>::get_root_value());
+    assert(node->get_value() == 3 + root_value);
     delete node;
     node = BinaryTreeMaterialized<T>::st_generate_node_at(3, 4);
     assert(node != nullptr);
-    assert(node->get_value() == 13 + BinaryTreeMath<T>::get_root_value());
+    assert(node->get_value() == 6 + root_value);
+    delete node;
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(4, 4);
+    assert(node != nullptr);
+    assert(node->get_value() == 13 + root_value);
+    delete node;
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(4, 5);
+    assert(node != nullptr);
+    assert(node->get_value() == 8 + root_value);
+    delete node;
+    node = BinaryTreeMaterialized<T>::st_generate_node_at(4, 8);
+    assert(node != nullptr);
+    assert(node->get_value() == 14 + root_value);
     delete node;
     node = BinaryTreeMaterialized<T>::st_generate_node_at(5, 12);
     assert(node != nullptr);
-    assert(node->get_value() == 57 + BinaryTreeMath<T>::get_root_value());
+    assert(node->get_value() == 28 + root_value);
     delete node;
+    //
     // Note: implicit trees cannot create material nodes, so no test here.
 }
 
@@ -239,20 +256,30 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     // Build trees.
     BinaryTree<T> tree(levels, opts);
     BinaryTreeCoverage<T> global_coverage;
-    T target_total = 0;
+    T level_target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
-        target_total = (T{1} << level);
-        const BinaryTreeCoverage<T>* coverage = &tree.get_coverage_map().find(level)->second;
-        global_coverage.add_covered(coverage->get_covered());
-        global_coverage.add_total(coverage->get_total());
-        assert(coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage(level));
-        std::cout << "coverage->get_total() = " << to_string_any(coverage->get_total())
-        << ", target_total = " << to_string_any(target_total)
+        level_target_total = BinaryTreeMath<T>::st_node_count_of_level(level);
+        // On 0-based trees, we don't count the node "0" because it's not part of Collatz space.
+        if (level == 1) {
+            level_target_total -= BinaryTreeMath<T>::get_offset();
+        }
+        const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
+        global_coverage.add_covered(level_coverage->get_covered());
+        global_coverage.add_total(level_coverage->get_total());
+        std::cout << std::endl << "coverage->get_covered(): " << to_string_any(level_coverage->get_covered())
+        << "   |   BinaryTreeCoverageConstants::get_known_coverage(level=" << level << "): "
+        << to_string_any(BinaryTreeCoverageConstants::get_known_coverage<T>(level)) << std::endl;
+        assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+        std::cout << "level_coverage->get_total() = " << to_string_any(level_coverage->get_total())
+        << ", level_target_total = " << to_string_any(level_target_total)
         << std::endl;
-        assert(coverage->get_total() == target_total);
+        assert(level_coverage->get_total() == level_target_total);
     }
-    assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels));
-    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+    assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(levels));
+    std::cout << std::endl << "global_coverage.get_total(): " << to_string_any(global_coverage.get_total())
+    << "   |   BinaryTreeCoverageConstants::get_total_sum_to_level(): " << to_string_any(BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels))
+    << std::endl;
+    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
     //
     // Materialized trees have pruning options.
     if (opts.tree_type == BinaryTreeType::MATERIALIZED) {
@@ -271,13 +298,13 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
             for (size_t level = 1; level <= tree.get_level_count(); level++) {
                 node_count_summary += tree.get_coverage_map().find(level)->second.get_covered();
             }
-            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
         }
         // Option 3: false and true
         // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
         if (!tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
-            T node_count_summary = tree.node_count() + BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels - 1);
-            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+            T node_count_summary = tree.node_count() + BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels - 1);
+            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
         }
         // Option 4: true and true
         // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
@@ -286,7 +313,7 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
             for (size_t level = 1; level < tree.get_level_count(); level++) {
                 node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
             }
-            assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level(levels) == BinaryTreeCoverageConstants::get_total_sum_to_level(1, levels));
+            assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(levels) == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
         }
     }
 }
@@ -655,6 +682,10 @@ void run_all(size_t root_value) {
 
 
 int main() {
+    std::cout << "=====================" << std::endl;
+    std::cout << "BinaryTree Tests" << std::endl;
+    std::cout << "=====================" << std::endl;
+
     std::cout << "Performing tests with uint64_t, 0-based tree." << std::endl;
     run_all<uint64_t>(0);
     std::cout << "Performing tests with uint64_t, 1-based tree." << std::endl;
