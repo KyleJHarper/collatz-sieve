@@ -259,26 +259,16 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
     T level_target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
         level_target_total = BinaryTreeMath<T>::st_node_count_of_level(level);
-        // On 0-based trees, we don't count the node "0" because it's not part of Collatz space.
-        if (level == 1) {
-            level_target_total -= BinaryTreeMath<T>::get_offset();
-        }
         const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(level_coverage->get_covered());
         global_coverage.add_total(level_coverage->get_total());
-        std::cout << std::endl << "coverage->get_covered(): " << to_string_any(level_coverage->get_covered())
-        << "   |   BinaryTreeCoverageConstants::get_known_coverage(level=" << level << "): "
-        << to_string_any(BinaryTreeCoverageConstants::get_known_coverage<T>(level)) << std::endl;
-        assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
-        std::cout << "level_coverage->get_total() = " << to_string_any(level_coverage->get_total())
-        << ", level_target_total = " << to_string_any(level_target_total)
+        std::cout << std::endl << "level=" << level << ", level_coverage->get_covered()=" << to_string_any(level_coverage->get_covered())
+        << ", BinaryTreeCoverageConstants::get_known_coverage<T>(level)=" << BinaryTreeCoverageConstants::get_known_coverage<T>(level)
         << std::endl;
+        assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
         assert(level_coverage->get_total() == level_target_total);
     }
     assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(levels));
-    std::cout << std::endl << "global_coverage.get_total(): " << to_string_any(global_coverage.get_total())
-    << "   |   BinaryTreeCoverageConstants::get_total_sum_to_level(): " << to_string_any(BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels))
-    << std::endl;
     assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
     //
     // Materialized trees have pruning options.
@@ -289,7 +279,7 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         // Option 1: false and false
         // This is a tree with all its nodes.  Counts should line up without adjustment.
         if (!tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
-            assert(tree.node_count() == (T{1} << (tree.get_level_count() + 1)) - 1 - BinaryTreeMath<T>::get_offset());
+            assert(tree.node_count() == (T{1} << (tree.get_level_count())) - 1);
         }
         // Option 2: true and false
         // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
@@ -321,9 +311,9 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
 
 template<AnySupportedIntegral T>
 void test_binary_tree_node_count_should_match_map() {
-    size_t levels = 4;
+    size_t levels = 5;
     BinaryTree<T> tree(levels);
-    T expected_count = (T{2} << levels) - 1 - BinaryTreeMath<T>::get_offset();
+    T expected_count = (T{1} << levels) - 1;
     size_t map_count = 0;
     const auto& map = tree.get_level_map();
     for (size_t i = 1; i <= tree.get_level_count(); i++) {
@@ -349,14 +339,14 @@ void test_binary_tree_too_many_levels() {
     }
     // A 32-bit tree type can.
     BinaryTree<uint32_t> tree(16, opts);
-    // An 8 bit can, however,  handle a 3-level tree.
-    BinaryTree<uint8_t> tree2(3, opts);
+    // An 8 bit can, however,  handle a 4-level tree.
+    BinaryTree<uint8_t> tree2(4, opts);
     // Adding another level should break.
     try {
         tree2.add_level();
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 4") != std::string::npos);
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 5") != std::string::npos);
     }
     //
     // Implicit
@@ -370,14 +360,14 @@ void test_binary_tree_too_many_levels() {
     }
     // A 32-bit tree type can.
     BinaryTree<uint32_t> tree_implicit(16, opts);
-    // An 8 bit can, however,  handle a 3-level tree.
-    BinaryTree<uint8_t> tree2_implicit(3, opts);
+    // An 8 bit can, however,  handle a 4-level tree.
+    BinaryTree<uint8_t> tree2_implicit(4, opts);
     // Adding another level should break.
     try {
         tree2_implicit.add_level();
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 4") != std::string::npos);
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 5") != std::string::npos);
     }
 }
 
@@ -453,96 +443,100 @@ void test_binary_tree_math() {
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 31) : assert(position == 15);
     //
     // Max Position of Level (AKA node count)
-    T max_position = BinaryTreeMath<T>::st_node_count_of_level(0);
+    T max_position = BinaryTreeMath<T>::st_node_count_of_level(1);
     assert(max_position == 1);
-    max_position = BinaryTreeMath<T>::st_node_count_of_level(1);
-    assert(max_position == 2);
     max_position = BinaryTreeMath<T>::st_node_count_of_level(2);
-    assert(max_position == 4);
+    assert(max_position == 2);
     max_position = BinaryTreeMath<T>::st_node_count_of_level(3);
-    assert(max_position == 8);
+    assert(max_position == 4);
     max_position = BinaryTreeMath<T>::st_node_count_of_level(4);
+    assert(max_position == 8);
+    max_position = BinaryTreeMath<T>::st_node_count_of_level(5);
     assert(max_position == 16);
     //
     // Max Node Value at Level
     mpz_class max_node = 0; // Always returns MPZ
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(0);
-    assert(max_node == 0 + BinaryTreeMath<T>::get_root_value());
     max_node = BinaryTreeMath<T>::st_max_node_value_at_level(1);
-    assert(max_node == 2 + BinaryTreeMath<T>::get_root_value());
+    assert(max_node == 0 + BinaryTreeMath<T>::get_root_value());
     max_node = BinaryTreeMath<T>::st_max_node_value_at_level(2);
-    assert(max_node == 6 + BinaryTreeMath<T>::get_root_value());
+    assert(max_node == 2 + BinaryTreeMath<T>::get_root_value());
     max_node = BinaryTreeMath<T>::st_max_node_value_at_level(3);
-    assert(max_node == 14 + BinaryTreeMath<T>::get_root_value());
+    assert(max_node == 6 + BinaryTreeMath<T>::get_root_value());
     max_node = BinaryTreeMath<T>::st_max_node_value_at_level(4);
+    assert(max_node == 14 + BinaryTreeMath<T>::get_root_value());
+    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(5);
     assert(max_node == 30 + BinaryTreeMath<T>::get_root_value());
     //
     // Max Full Level at Node
     size_t max_level = 0; // Always returns size_t.
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 0) : assert(max_level == 0);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(4);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 1) : assert(max_level == 1);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(6);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 2) : assert(max_level == 1);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(7);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(4);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 2) : assert(max_level == 2);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(6);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 2);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(7);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 3);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(26);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 3);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(29);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 3);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(30);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 3);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 4);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(31);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(49);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
     max_level = BinaryTreeMath<T>::st_max_full_level_at_node(63);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(125);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(126);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 6) : assert(max_level == 5);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(127);
     BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 6) : assert(max_level == 6);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(125);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 6) : assert(max_level == 6);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(126);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 7) : assert(max_level == 6);
+    max_level = BinaryTreeMath<T>::st_max_full_level_at_node(127);
+    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 7) : assert(max_level == 7);
     //
     // First Node of Level
-    T first_node = BinaryTreeMath<T>::st_first_node_of_level(0);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 0) : assert(first_node == 1);
-    first_node = BinaryTreeMath<T>::st_first_node_of_level(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 1) : assert(first_node == 2);
-    first_node = BinaryTreeMath<T>::st_first_node_of_level(2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 3) : assert(first_node == 4);
-    first_node = BinaryTreeMath<T>::st_first_node_of_level(3);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 7) : assert(first_node == 8);
-    first_node = BinaryTreeMath<T>::st_first_node_of_level(4);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 15) : assert(first_node == 16);
-    first_node = BinaryTreeMath<T>::st_first_node_of_level(5);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(first_node == 31) : assert(first_node == 32);
+    assert(BinaryTreeMath<T>::st_first_node_of_level(1) == 0 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_first_node_of_level(2) == 1 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_first_node_of_level(3) == 3 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_first_node_of_level(4) == 7 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_first_node_of_level(5) == 15 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_first_node_of_level(6) == 31 + BinaryTreeMath<T>::get_root_value());
     //
     // Node Value by Position and Level
-    T node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 1) : assert(node_value == 2);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 2) : assert(node_value == 3);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 3) : assert(node_value == 4);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 5) : assert(node_value == 6);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(7, 5);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 43) : assert(node_value == 44);
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 1) == 0 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 2) == 1 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 2) == 2 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 3) == 3 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 3) == 5 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(3, 3) == 4 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(4, 3) == 6 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 4) == 7 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 4) == 11 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(3, 4) == 9 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(4, 4) == 13 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(5, 4) == 8 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(6, 4) == 12 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(7, 4) == 10 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(8, 4) == 14 + BinaryTreeMath<T>::get_root_value());
     //
     // Deprecated Form
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 1) : assert(node_value == 2);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 2) : assert(node_value == 3);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 3) : assert(node_value == 4);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 5) : assert(node_value == 6);
-    node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(7, 5);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(node_value == 43) : assert(node_value == 44);
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 1) == 0 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 2) == 1 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 2) == 2 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 3) == 3 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 3) == 5 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(3, 3) == 4 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(4, 3) == 6 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 4) == 7 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 4) == 11 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(3, 4) == 9 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(4, 4) == 13 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(5, 4) == 8 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(6, 4) == 12 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(7, 4) == 10 + BinaryTreeMath<T>::get_root_value());
+    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(8, 4) == 14 + BinaryTreeMath<T>::get_root_value());
 }
 
 
@@ -585,8 +579,11 @@ void test_binary_tree_pruned() {
     std::cout << "\n  Testing "<< max_test_level << " levels of deep tree build, coverage, and pruning combinations because THIS SHIT CANNOT FAIL!" << std::endl;
     for (size_t level = 1; level <= max_test_level; level++) {
         std::cout << "    Level " << level << "...";
+        std::cout << "(opts_with_hwm_prune_without_level_prune)" << std::endl;
         test_binary_tree_coverage<T>(3, 1, opts_with_hwm_prune_without_level_prune);
+        std::cout << "(opts_with_hwm_prune_with_level_prune)" << std::endl;
         test_binary_tree_coverage<T>(level, 1, opts_with_hwm_prune_with_level_prune);
+        std::cout << "(opts_without_hwm_prune_with_level_prune)" << std::endl;
         test_binary_tree_coverage<T>(level, 1, opts_without_hwm_prune_with_level_prune);
         std::cout << " Okay!" << std::endl;
     }
@@ -603,7 +600,7 @@ void test_binary_tree_pruned() {
 template<AnySupportedIntegral T>
 void test_binary_tree_ancestors() {
     // When disabled, they shouldn't be tracked.
-    size_t levels = 4;
+    size_t levels = 5;
     BinaryTreeOptions opts;
     opts.preserve_ancestors = false;
     BinaryTree<T> tree(levels, opts);

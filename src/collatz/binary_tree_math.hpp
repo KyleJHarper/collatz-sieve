@@ -405,7 +405,7 @@ class BinaryTreeMath {
 
         // Summation Loop
         summation = 0;
-        for(size_t a=3; a<level; a++) {
+        for(size_t a=3; a<=level; a++) {
             // Quantity: ceil((P - 2^(a-2)) / 2^(a-1))
             // Again we can cheat because ceiling behaves this way:
             //   ceil(x/y) ==> (x + y - 1) / y
