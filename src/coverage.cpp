@@ -40,8 +40,8 @@ class CoverageBuilder {
             BinaryTreeCoverage<T> global_coverage;
             for (size_t level = 1; level <= levels; level++) {
                 BinaryTreeCoverage<T> coverage;
-                coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage(level));
-                coverage.set_total(BinaryTreeCoverageConstants::get_total(level));
+                coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+                coverage.set_total(BinaryTreeCoverageConstants::get_total<T>(level));
                 global_coverage.merge(coverage);
                 logger->debug("Level {} coverage was: {:.4f}% ({}/{} | {} uncovered globally)", level, coverage.get_ratio(true).get_d(), coverage.get_covered(), coverage.get_total(), global_coverage.get_uncovered());
             }
@@ -77,8 +77,8 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors) {
     if (use_precomputed) {
         for (size_t level = 1; level <= levels; level++) {
             BinaryTreeCoverage<T> coverage;
-            coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage(level));
-            coverage.set_total(BinaryTreeCoverageConstants::get_total(level));
+            coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+            coverage.set_total(BinaryTreeCoverageConstants::get_total<T>(level));
             global_coverage.merge(coverage);
         }
     } else {
