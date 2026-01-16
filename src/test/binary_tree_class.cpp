@@ -9,6 +9,7 @@
 //
 // All of these tests need to work with native integrals and GMP.
 // All of these tests need to work with 0-rooted and 1-rooted (traditional) binary trees.
+// All of these tests need to work with Materialized and Implicit trees, where applicable.
 //
 // WHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 //
@@ -238,13 +239,15 @@ void test_binary_tree_generate_node_at_invalid_pos() {
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("position 0") != std::string::npos);
     }
-
+    //
     try {
         BinaryTreeMaterialized<T>::st_generate_node_at(3, 9); // 2^3 = 8 max
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("outside of a level") != std::string::npos);
     }
+    //
+    // Implicit trees cannot generate nodes.
 }
 
 
@@ -262,9 +265,6 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(level_coverage->get_covered());
         global_coverage.add_total(level_coverage->get_total());
-        std::cout << std::endl << "level=" << level << ", level_coverage->get_covered()=" << to_string_any(level_coverage->get_covered())
-        << ", BinaryTreeCoverageConstants::get_known_coverage<T>(level)=" << BinaryTreeCoverageConstants::get_known_coverage<T>(level)
-        << std::endl;
         assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
         assert(level_coverage->get_total() == level_target_total);
     }
@@ -321,6 +321,8 @@ void test_binary_tree_node_count_should_match_map() {
     }
     assert(tree.node_count() == expected_count);
     assert(map_count == expected_count);
+    //
+    // No implicit tree test here because there's no map.
 }
 
 
@@ -544,20 +546,20 @@ template<AnySupportedIntegral T>
 void test_binary_tree_level_will_fit() {
     // Level Will Fit
     // 8-bit
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(3) == true);
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(4) == false);
+    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(4) == true);
+    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(5) == false);
     // 16-bit
     assert(BinaryTreeMath<uint16_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(8) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(9) == false);
+    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(9) == true);
+    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(10) == false);
     // 32-bit
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(9) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(16) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(17) == false);
+    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(10) == true);
+    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(17) == true);
+    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(18) == false);
     // 64-bit
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(17) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(32) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(33) == false);
+    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(18) == true);
+    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(33) == true);
+    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(34) == false);
     // MPZ Has No Ceiling
     assert(BinaryTreeMath<mpz_class>::st_level_will_fit(999) == true);
 }
@@ -574,17 +576,34 @@ void test_binary_tree_pruned() {
     BinaryTreeOptions opts_without_hwm_prune_with_level_prune;
     opts_without_hwm_prune_with_level_prune.prune_hwm_nodes = false;
     opts_without_hwm_prune_with_level_prune.prune_parent_levels = true;
+    BinaryTreeOptions opts_implicit_with_hwm_prune_without_level_prune;
+    opts_implicit_with_hwm_prune_without_level_prune.tree_type = BinaryTreeType::IMPLICIT;
+    opts_implicit_with_hwm_prune_without_level_prune.prune_hwm_nodes = true;
+    opts_implicit_with_hwm_prune_without_level_prune.prune_parent_levels = false;
+    BinaryTreeOptions opts_implicit_with_hwm_prune_with_level_prune;
+    opts_implicit_with_hwm_prune_with_level_prune.tree_type = BinaryTreeType::IMPLICIT;
+    opts_implicit_with_hwm_prune_with_level_prune.prune_hwm_nodes = true;
+    opts_implicit_with_hwm_prune_with_level_prune.prune_parent_levels = true;
+    BinaryTreeOptions opts_implicit_without_hwm_prune_with_level_prune;
+    opts_implicit_without_hwm_prune_with_level_prune.tree_type = BinaryTreeType::IMPLICIT;
+    opts_implicit_without_hwm_prune_with_level_prune.prune_hwm_nodes = false;
+    opts_implicit_without_hwm_prune_with_level_prune.prune_parent_levels = true;
     // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
     size_t max_test_level = 16;
-    std::cout << "\n  Testing "<< max_test_level << " levels of deep tree build, coverage, and pruning combinations because THIS SHIT CANNOT FAIL!" << std::endl;
+    size_t max_threads = 4;
+    std::cout << "\n  Testing "<< max_test_level << " levels of multi-threaded deep tree building, coverage, and pruning combinations because THIS SHIT CANNOT FAIL!" << std::endl;
     for (size_t level = 1; level <= max_test_level; level++) {
         std::cout << "    Level " << level << "...";
-        std::cout << "(opts_with_hwm_prune_without_level_prune)" << std::endl;
-        test_binary_tree_coverage<T>(3, 1, opts_with_hwm_prune_without_level_prune);
-        std::cout << "(opts_with_hwm_prune_with_level_prune)" << std::endl;
-        test_binary_tree_coverage<T>(level, 1, opts_with_hwm_prune_with_level_prune);
-        std::cout << "(opts_without_hwm_prune_with_level_prune)" << std::endl;
-        test_binary_tree_coverage<T>(level, 1, opts_without_hwm_prune_with_level_prune);
+        for (size_t thread_count = 1; thread_count <= max_threads; thread_count++) {
+            // Materialized
+            test_binary_tree_coverage<T>(3, 1, opts_with_hwm_prune_without_level_prune);
+            test_binary_tree_coverage<T>(level, 1, opts_with_hwm_prune_with_level_prune);
+            test_binary_tree_coverage<T>(level, 1, opts_without_hwm_prune_with_level_prune);
+            // Implicit trees shouldn't care about pruning options, and work without error.
+            test_binary_tree_coverage<T>(3, 1, opts_implicit_with_hwm_prune_without_level_prune);
+            test_binary_tree_coverage<T>(level, 1, opts_implicit_with_hwm_prune_with_level_prune);
+            test_binary_tree_coverage<T>(level, 1, opts_implicit_without_hwm_prune_with_level_prune);
+        }
         std::cout << " Okay!" << std::endl;
     }
     // Now test with level pruning too.
@@ -613,6 +632,21 @@ void test_binary_tree_ancestors() {
     assert(tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
     assert(tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
     assert(tree_with_ancestors.get_ancestors()[2]->get_value() == 19);
+    //
+    // Implicit should work too.
+    BinaryTreeOptions opts_implicit;
+    opts_implicit.tree_type = BinaryTreeType::IMPLICIT;
+    opts_implicit.preserve_ancestors = false;
+    BinaryTree<T> tree_implicit(levels, opts_implicit);
+    assert(tree.get_ancestors().size() == 0);
+    //
+    // Tracking them should work.
+    opts_implicit.preserve_ancestors = true;
+    BinaryTree<T> tree_implicit_with_ancestors(levels, opts_implicit);
+    assert(tree_implicit_with_ancestors.get_ancestors().size() == 3);
+    assert(tree_implicit_with_ancestors.get_ancestors()[0]->get_value() == 2);
+    assert(tree_implicit_with_ancestors.get_ancestors()[1]->get_value() == 5);
+    assert(tree_implicit_with_ancestors.get_ancestors()[2]->get_value() == 19);
 }
 
 
@@ -688,10 +722,10 @@ int main() {
     std::cout << "Performing tests with uint64_t, 1-based tree." << std::endl;
     run_all<uint64_t>(1);
 
-    // std::cout << "Performing tests with uint128_t, 0-based tree." << std::endl;
-    // run_all<uint128_t>(0);
-    // std::cout << "Performing tests with uint128_t, 1-based tree." << std::endl;
-    // run_all<uint128_t>(1);
+    std::cout << "Performing tests with uint128_t, 0-based tree." << std::endl;
+    run_all<uint128_t>(0);
+    std::cout << "Performing tests with uint128_t, 1-based tree." << std::endl;
+    run_all<uint128_t>(1);
 
     std::cout << "Performing tests with mpz_class, 0-based tree." << std::endl;
     run_all<mpz_class>(0);

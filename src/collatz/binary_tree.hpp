@@ -327,8 +327,8 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         // When pruning parent levels, we need to sweep them out.
         // Nodes default-own children.  We try to avoid this above, but call own_children(false) for safety.
         if (_is_pruning_parent_levels) {
-            // When it's level 0, we need to clear up _root too so it doesn't double-free later.
-            if (parent_level == 0) {
+            // When it's level 1, we need to clear up _root too so it doesn't double-free later.
+            if (parent_level == 1) {
                 _root_node = nullptr;
             }
             #pragma omp parallel for
@@ -527,7 +527,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     std::vector<Interval<T>> get_uncovered_intervals(size_t requested_level) const {
         // Determine the max level we can pull from for extrapolation.
         size_t max_coverage_level = requested_level <= _level_count ? requested_level : _level_count;
-        // std::cout << "Max coverage level starting at: " << max_coverage_level << std::endl;
 
         // Create the results variable and setup our max width and cursor to follow.
         std::vector<Interval<T>> uncovered_intervals;
@@ -536,9 +535,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         // If no intervals exist, try dropping down a level until we hit zero.
         while (_covered_intervals.find(max_coverage_level) == _covered_intervals.end() || _covered_intervals.at(max_coverage_level).empty()) {
             max_coverage_level--;
-            // std::cout << "Max coverage level dropped to: " << max_coverage_level << std::endl;
             if (max_coverage_level == 0) {
-                // std::cout << "Couldn't find any covered intervals, so assigning full range as uncovered." << std::endl;
                 uncovered_intervals.push_back({1, max_position});
                 return uncovered_intervals;
             }
@@ -556,11 +553,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         for (const Interval<T>& covered_interval : latest_covered_intervals) {
             T scaled_start = (covered_interval.start - 1) * scale + 1;
             T scaled_end = covered_interval.end * scale;
-            // std::cout << "  > covered interval: start=" << to_string_any(covered_interval.start)
-            // << ", end=" << to_string_any(covered_interval.end)
-            // << ", scaled_start=" << to_string_any(scaled_start)
-            // << ", scaled_end=" << to_string_any(scaled_end)
-            // << std::endl;
             if (scaled_start > prev_end + 1) {
                 uncovered_intervals.push_back({T(prev_end + 1), T(scaled_start - 1)});
             }
@@ -651,26 +643,11 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         }
 
         // Grab the uncovered intervals.
-        // std::cout << std::endl;
         std::vector<Interval<T>> uncovered_intervals = get_uncovered_intervals(_level_count);
-        // for (Interval<T>& uncovered_interval : uncovered_intervals) {
-        //     std::cout << "Level " << _level_count
-        //     << " has uncovered interval: start=" << to_string_any(uncovered_interval.start)
-        //     << ", end=" << to_string_any(uncovered_interval.end)
-        //     << std::endl;
-        // }
 
         // Partition them to create uniform workloads for OMP.
         size_t thread_count = omp_get_max_threads();
         std::vector<std::vector<Interval<T>>> partitions = partition_intervals(uncovered_intervals, thread_count);
-        // for (size_t i = 0; i < partitions.size(); i++) {
-        //     for (Interval<T>& interval : partitions.at(i)) {
-        //         std::cout << "Parition index " << i << " has interval: "
-        //         << "start=" << to_string_any(interval.start)
-        //         << ", end=" << to_string_any(interval.end)
-        //         << std::endl;
-        //     }
-        // }
 
         // Create an external tracker for new ancestors (which inherently are the new intervals).
         std::vector<std::vector<Node<T>>> omp_local_ancestors_group(thread_count);
@@ -702,7 +679,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         static thread_local T position = 0;
         for (std::vector<Node<T>>& new_ancestors : omp_local_ancestors_group) {
             for (Node<T>& node : new_ancestors) {
-                // std::cout << "HWM Node has value: " << to_string_any(node.get_value()) << std::endl;
                 position = node.get_position();
                 Interval<T> new_interval = {.start = position, .end = position};
                 _covered_intervals[_level_count].push_back(new_interval);
@@ -717,11 +693,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             _covered_intervals[_level_count].end(),
             [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
         );
-        // for (Interval<T>& interval : _covered_intervals.at(_level_count)) {
-        //     std::cout << "  Level " << _level_count << ".  Sorted interval start=" << to_string_any(interval.start)
-        //     << ", end=" << to_string_any(interval.end)
-        //     << std::endl;
-        // }
         // Persist the coverage to our new level.  It's just a sum of the covered size() values.
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T covered = 0;

@@ -17,8 +17,9 @@ class CoverageBuilder {
     bool _use_precomputed = false;
 
     public:
-    CoverageBuilder(bool preserve_ancestors) {
+    CoverageBuilder(bool preserve_ancestors, BinaryTreeType tree_type) {
         BinaryTreeOptions opts;
+        opts.tree_type = tree_type;
         opts.track_node_metadata = false;
         opts.prune_hwm_nodes = true;
         opts.preserve_ancestors = preserve_ancestors;
@@ -67,9 +68,9 @@ class CoverageBuilder {
 
 
 template<AnySupportedIntegral T>
-void run(size_t levels, bool use_precomputed, bool show_ancestors) {
+void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeType tree_type) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
-    CoverageBuilder<T> builder(show_ancestors);
+    CoverageBuilder<T> builder(show_ancestors, tree_type);
     builder.get_tree().assert_level_will_fit(levels);
     builder.use_precomputed(use_precomputed);
     builder.run(levels);
@@ -117,11 +118,13 @@ int main(int argc, char **argv) {
     bool force_mpz = false;
     bool use_precomputed = false;
     bool show_ancestors = false;
+    bool use_materialized_tree = false;
     CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
     options.add_flag("-a,--ancestors", show_ancestors, "Show a list of all the high-water mark ancestors when done.");
     options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
     options.add_flag("-p,--precomputed", use_precomputed, "Use the precomputed table in BinaryTreeCoverage when possible.");
+    options.add_flag("-M,--materialize", use_materialized_tree, "Build a materialized tree instead of an implicit.  Why...?");
     options.add_flag(
         "-v,--verbose"
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
@@ -136,14 +139,19 @@ int main(int argc, char **argv) {
 
     // Build the tree object with no levels to start.
     bool use_mpz = (force_mpz || levels > 63) ? true : false;
-    logger->info("Building tree with {} levels, using {}.", levels, use_mpz ? "GMP" : "uint64_t");
+    BinaryTreeType tree_type = use_materialized_tree ? BinaryTreeType::MATERIALIZED : BinaryTreeType::IMPLICIT;
+    logger->info("Building tree with {} levels, using {}, tree type is {}."
+        , levels
+        , use_mpz ? "GMP" : "uint64_t"
+        , use_materialized_tree ? "Materialized" : "Implicit"
+    );
     if (use_precomputed) {
         logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
     }
     if (use_mpz) {
-        run<mpz_class>(levels, use_precomputed, show_ancestors);
+        run<mpz_class>(levels, use_precomputed, show_ancestors, tree_type);
     } else {
-        run<uint64_t>(levels, use_precomputed, show_ancestors);
+        run<uint64_t>(levels, use_precomputed, show_ancestors, tree_type);
     }
 
     return 0;
