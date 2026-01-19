@@ -27,7 +27,7 @@ set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors" CACHE STRING "Flags used by the compiler during Debug builds." FORCE)
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -march=native" CACHE STRING "Flags used by the compiler during Release builds." FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g -march=native" CACHE STRING "Flags used by the compiler during Release builds." FORCE)
 
 
 # Default build type = Release

@@ -16,10 +16,11 @@
 
 
 //
-// Helper for Level 4 Tests
+// Helper for Level 5 Tests
+// These are known values (survivors) for that level, extrapolated into future descendants.
 //
-const size_t L4_SIZE = 32;
-const std::array<uint64_t, L4_SIZE> L4_VALUES = {
+const size_t L5_SIZE = 32;
+const std::array<uint64_t, L5_SIZE> L5_VALUES = {
     39,
     43,
     47,
@@ -72,18 +73,18 @@ void test_sieve_default_opts() {
 
 
 //
-// Hard code level 4 values for tests.
+// Hard code level 5 values for tests.
 //
 template<AnySupportedIntegral T>
-void test_sieve_level_4_values(Sieve<T>& sieve) {
+void test_sieve_level_5_values(Sieve<T>& sieve) {
     T val;
-    sieve.next(val); assert(val == L4_VALUES[0]);
-    sieve.next(val); assert(val == L4_VALUES[1]);
-    sieve.next(val); assert(val == L4_VALUES[2]);
-    sieve.next(val); assert(val == L4_VALUES[3]);
-    sieve.next(val); assert(val == L4_VALUES[4]);
-    sieve.next(val); assert(val == L4_VALUES[5]);
-    sieve.next(val); assert(val == L4_VALUES[6]);
+    sieve.next(val); assert(val == L5_VALUES[0]);
+    sieve.next(val); assert(val == L5_VALUES[1]);
+    sieve.next(val); assert(val == L5_VALUES[2]);
+    sieve.next(val); assert(val == L5_VALUES[3]);
+    sieve.next(val); assert(val == L5_VALUES[4]);
+    sieve.next(val); assert(val == L5_VALUES[5]);
+    sieve.next(val); assert(val == L5_VALUES[6]);
 
     // Calling refill without exhasuting the pool shouldn't be an issue.
     assert(sieve.get_pool_index() != 0);
@@ -91,19 +92,19 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
     assert(sieve.get_pool_index() == 0);
 
     // Values should continue on without missing a beat.
-    sieve.next(val); assert(val == L4_VALUES[7]);
-    sieve.next(val); assert(val == L4_VALUES[8]);
-    sieve.next(val); assert(val == L4_VALUES[9]);
-    sieve.next(val); assert(val == L4_VALUES[10]);
+    sieve.next(val); assert(val == L5_VALUES[7]);
+    sieve.next(val); assert(val == L5_VALUES[8]);
+    sieve.next(val); assert(val == L5_VALUES[9]);
+    sieve.next(val); assert(val == L5_VALUES[10]);
 
     // Refilling repeatedly should be safe.
     sieve.refill_pool();
     sieve.refill_pool();
     sieve.refill_pool();
     sieve.refill_pool();
-    sieve.next(val); assert(val == L4_VALUES[11]);
-    sieve.next(val); assert(val == L4_VALUES[12]);
-    sieve.next(val); assert(val == L4_VALUES[13]);
+    sieve.next(val); assert(val == L5_VALUES[11]);
+    sieve.next(val); assert(val == L5_VALUES[12]);
+    sieve.next(val); assert(val == L5_VALUES[13]);
 }
 
 
@@ -112,9 +113,9 @@ void test_sieve_level_4_values(Sieve<T>& sieve) {
 // L4 Internals Should Match
 //
 template<AnySupportedIntegral T>
-void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_overflowed = false) {
+void test_sieve_l5_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_overflowed = false) {
     // Only works for l4 trees.
-    assert(sieve.get_tree_level_count() == 4);
+    assert(sieve.get_tree_level_count() == 5);
 
     // Does NOT work if premature refills() were called.
     assert(sieve.get_pool_premature_refills() == 0);
@@ -125,7 +126,7 @@ void test_sieve_l4_internals(Sieve<T>& sieve, size_t next_calls, bool bulk_fill_
         assert(sieve.get_pool_refills() == std::floor(next_calls / sieve.get_pool_size()) + 1);
     }
 
-    // L4 survivor count is 3.
+    // L5 survivor count is 3.
     assert(sieve.get_survivor_count() == 3);
 
     // Step is 2^(L) ==> 2^(4) ==> 16
@@ -159,8 +160,8 @@ template<AnySupportedIntegral T>
 void test_sieve_pool_filling() {
     SieveOptions opts;
     opts.pool_size = 64;
-    Sieve<T> sieve(4, opts);
-    test_sieve_level_4_values(sieve);
+    Sieve<T> sieve(5, opts);
+    test_sieve_level_5_values(sieve);
 }
 
 
@@ -171,11 +172,11 @@ void test_sieve_pool_filling() {
 template<AnySupportedIntegral T>
 void test_sieve_tree_source() {
     SieveOptions opts;
-    BinaryTree<T> tree(4, opts.tree_opts);
+    BinaryTree<T> tree(5, opts.tree_opts);
     Sieve<T> sieve(tree);
-    test_sieve_level_4_values(sieve);
-    Sieve<T> sieve2(4);
-    test_sieve_level_4_values(sieve2);
+    test_sieve_level_5_values(sieve);
+    Sieve<T> sieve2(5);
+    test_sieve_level_5_values(sieve2);
 }
 
 
@@ -187,7 +188,7 @@ template<AnySupportedIntegral T>
 void test_sieve_bulk_next() {
     SieveOptions opts;
     opts.pool_size = 64;
-    BinaryTree<T> tree(4, opts.tree_opts);
+    BinaryTree<T> tree(5, opts.tree_opts);
     Sieve<T> sieve(tree, opts);
     std::vector<T> bulk;
     size_t next_count = 20;
@@ -218,10 +219,10 @@ void test_sieve_bulk_next() {
     assert(bulk.size() == next_count);
     assert(sieve.get_pool_index() == next_count);
     for (size_t i = 0; i < 20; i++) {
-        assert(bulk[i] == L4_VALUES[i]);
+        assert(bulk[i] == L5_VALUES[i]);
     }
-    assert(sieve.get_pool().at(next_count) == L4_VALUES[next_count]);
-    test_sieve_l4_internals(sieve, next_count, false);
+    assert(sieve.get_pool().at(next_count) == L5_VALUES[next_count]);
+    test_sieve_l5_internals(sieve, next_count, false);
 
     // A vector same size as pool has left.
     next_count = 64;
@@ -235,9 +236,9 @@ void test_sieve_bulk_next() {
     assert(bulk.size() == next_count);
     assert(sieve.get_pool_index() == 0);  // Should reset/wrap to 0.
     for (size_t i = 0; i < 20; i++) {
-        assert(bulk[i] == L4_VALUES[i]);
+        assert(bulk[i] == L5_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count, true);
+    test_sieve_l5_internals(sieve, next_count, true);
 
     // A vector larger than pool has left, should wrap.
     next_count = 68;
@@ -251,7 +252,7 @@ void test_sieve_bulk_next() {
     for (size_t i = 0; i < next_count; i++) {
         sieve.next(x);
         if (i <= 20) {
-            assert(x == L4_VALUES[i]);
+            assert(x == L5_VALUES[i]);
         }
     }
     assert(sieve.get_pool_index() == 4);
@@ -264,9 +265,9 @@ void test_sieve_bulk_next() {
     assert(bulk.size() == next_count);
     assert(sieve.get_pool_index() == 0);
     for (size_t i = 0; i < 20; i++) {
-        assert(bulk[i] == L4_VALUES[i]);
+        assert(bulk[i] == L5_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count, true);
+    test_sieve_l5_internals(sieve, next_count, true);
 
     // A massive vector requiring multiple refills.
     next_count = 6003;
@@ -280,7 +281,7 @@ void test_sieve_bulk_next() {
     for (size_t i = 0; i < next_count; i++) {
         sieve.next(x);
         if (i <= 20) {
-            assert(x == L4_VALUES[i]);
+            assert(x == L5_VALUES[i]);
         }
     }
     assert(sieve.get_pool_index() == 51);
@@ -293,9 +294,9 @@ void test_sieve_bulk_next() {
     assert(bulk.size() == next_count);
     assert(sieve.get_pool_index() == 0);
     for (size_t i = 0; i < 20; i++) {
-        assert(bulk[i] == L4_VALUES[i]);
+        assert(bulk[i] == L5_VALUES[i]);
     }
-    test_sieve_l4_internals(sieve, next_count, true);
+    test_sieve_l5_internals(sieve, next_count, true);
 }
 
 
@@ -307,10 +308,10 @@ template<AnySupportedIntegral T>
 void test_sieve_over_64_bit() {
     // Build the sieve, and then coerce the step for testing.
     SieveOptions opts;
-    Sieve<T> sieve(4, opts);
+    Sieve<T> sieve(5, opts);
 
-    // Detect overflow or error
-    if constexpr(std::integral<T>) {
+    // Detect overflow or error.  Both 64-bit and 128-bit use a 64-bit limiter.
+    if constexpr(BuiltinIntegral<T>) {
         assert(sieve.get_max_multiplier() == 1152921504606846976);
         try {
             sieve.unsafe_coerce_multiplier(sieve.get_max_multiplier());
@@ -369,6 +370,8 @@ int main() {
 
     std::cout << "Performing tests with uint64_t." << std::endl;
     run_all<uint64_t>();
+    std::cout << "Performing tests with uint128_t." << std::endl;
+    run_all<uint128_t>();
     std::cout << "Performing tests with mpz_class." << std::endl;
     run_all<mpz_class>();
 

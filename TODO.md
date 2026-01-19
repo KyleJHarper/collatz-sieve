@@ -32,6 +32,8 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 * See if we can write to a disk (memmap-ish) to build larger trees.
   * If so, find a way to store these final trees as data files so they can be loaded.
 
+### Refactor the FG Constant Portion to an Affine Map
+* The biggest computational hotspot is `fg_constant_portion` manipulation within Node::init().
 
 ### Sieve
 * Add forward-looking cache.

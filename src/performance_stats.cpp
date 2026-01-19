@@ -202,6 +202,7 @@ int main(int argc, char **argv) {
     BinaryTreeOptions BTWithoutPruneWithMetadata = {.track_node_metadata = true, .prune_hwm_nodes = false };
     BinaryTreeOptions BTWithoutPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = false };
     BinaryTreeOptions BTWithPruneWithoutMetadata = {.track_node_metadata = false, .prune_hwm_nodes = true, .prune_parent_levels = true};
+    BinaryTreeOptions BTImplicit = {.tree_type = BinaryTreeType::IMPLICIT};
 
     // BT no metadata, no pruning
     size_t rss_t1 = getCurrentRSSBytes();
@@ -236,6 +237,17 @@ int main(int argc, char **argv) {
     BinaryTree tree_mpz_c_with_pruning = BinaryTree<mpz_class>(levels, BTWithPruneWithoutMetadata);
     size_t rss_mpz_c_with_pruning = getCurrentRSSBytes() - rss_t1;
 
+    // BT Implicit
+    rss_t1 = getCurrentRSSBytes();
+    BinaryTree tree_uint64_t_implicit = BinaryTree<uint64_t>(levels, BTImplicit);
+    size_t rss_uint64_t_implicit = getCurrentRSSBytes() - rss_t1;
+    rss_t1 = getCurrentRSSBytes();
+    BinaryTree tree_uint128_t_implicit = BinaryTree<uint128_t>(levels, BTImplicit);
+    size_t rss_uint128_t_implicit = getCurrentRSSBytes() - rss_t1;
+    rss_t1 = getCurrentRSSBytes();
+    BinaryTree tree_mpz_c_implicit = BinaryTree<mpz_class>(levels, BTImplicit);
+    size_t rss_mpz_c_implicit = getCurrentRSSBytes() - rss_t1;
+
     // Bytes Per Node
     size_t bytes_per_node_uint64_t = tree_uint64_t.deep_size() / tree_uint64_t.node_count();
     size_t bytes_per_node_uint128_t = tree_uint128_t.deep_size() / tree_uint128_t.node_count();
@@ -246,6 +258,9 @@ int main(int argc, char **argv) {
     size_t bytes_per_node_uint64_t_with_pruning = tree_uint64_t_with_pruning.deep_size() / tree_uint64_t_with_pruning.node_count();
     size_t bytes_per_node_uint128_t_with_pruning = tree_uint128_t_with_pruning.deep_size() / tree_uint128_t_with_pruning.node_count();
     size_t bytes_per_node_mpz_c_with_pruning = tree_mpz_c_with_pruning.deep_size() / tree_mpz_c_with_pruning.node_count().get_ui();
+    size_t bytes_per_node_uint64_t_implicit = tree_uint64_t_implicit.deep_size() / tree_uint64_t_implicit.node_count();
+    size_t bytes_per_node_uint128_t_implicit = tree_uint128_t_implicit.deep_size() / tree_uint128_t_implicit.node_count();
+    size_t bytes_per_node_mpz_c_implicit = tree_mpz_c_implicit.deep_size() / tree_mpz_c_implicit.node_count().get_ui();
 
     // Sieves
     rss_t1 = getCurrentRSSBytes();
@@ -268,6 +283,9 @@ int main(int argc, char **argv) {
     size_t rss_bytes_per_node_uint64_t_with_pruning = rss_uint64_t_with_pruning / tree_uint64_t_with_pruning.node_count();
     size_t rss_bytes_per_node_uint128_t_with_pruning = rss_uint128_t_with_pruning / tree_uint128_t_with_pruning.node_count();
     size_t rss_bytes_per_node_mpz_c_with_pruning = rss_mpz_c_with_pruning / tree_mpz_c_with_pruning.node_count().get_ui();
+    size_t rss_bytes_per_node_uint64_t_implicit = rss_uint64_t_implicit / tree_uint64_t_implicit.node_count();
+    size_t rss_bytes_per_node_uint128_t_implicit = rss_uint128_t_implicit / tree_uint128_t_implicit.node_count();
+    size_t rss_bytes_per_node_mpz_c_implicit = rss_mpz_c_implicit / tree_mpz_c_implicit.node_count().get_ui();
     std::cout << " done." << std::endl;
 
     // Rate Data
@@ -277,6 +295,9 @@ int main(int argc, char **argv) {
     std::vector<duration<double, std::milli>> duration_uint128_t_with_pruning(max_threads);
     std::vector<duration<double, std::milli>> duration_mpz_class(max_threads);
     std::vector<duration<double, std::milli>> duration_mpz_class_with_pruning(max_threads);
+    std::vector<duration<double, std::milli>> duration_uint64_t_implicit(max_threads);
+    std::vector<duration<double, std::milli>> duration_uint128_t_implicit(max_threads);
+    std::vector<duration<double, std::milli>> duration_mpz_class_implicit(max_threads);
     std::cout << "Benchmarking tree building..." << std::flush;
     for (size_t i = 0; i < max_threads; i++) {
         omp_set_num_threads(i + 1);
@@ -286,6 +307,9 @@ int main(int argc, char **argv) {
         duration_uint128_t_with_pruning[i] = tree_build_time<uint128_t>(levels, BTWithPruneWithoutMetadata);
         duration_mpz_class[i] = tree_build_time<mpz_class>(levels, BTWithoutPruneWithoutMetadata);
         duration_mpz_class_with_pruning[i] = tree_build_time<mpz_class>(levels, BTWithPruneWithoutMetadata);
+        duration_uint64_t_implicit[i] = tree_build_time<uint64_t>(levels, BTImplicit);
+        duration_uint128_t_implicit[i] = tree_build_time<uint128_t>(levels, BTImplicit);
+        duration_mpz_class_implicit[i] = tree_build_time<mpz_class>(levels, BTImplicit);
     }
     std::cout << " done." << std::endl;
 
@@ -311,53 +335,89 @@ int main(int argc, char **argv) {
     // Print Table
     std::vector<std::vector<std::string>> table;
     table.push_back({"Item", "uint64_t", "uint128_t", "mpz_class", "Unit", "u128 Delta", "u128 Delta (+%)", "MPZ Delta", "MPZ Delta (+%)"});
-    table.push_back(add("Base Type", sizeof(uint64_t), sizeof(uint128_t), sizeof(mpz_class)));
-    table.push_back(add("Collatz (shallow)", sizeof(Collatz<uint64_t>), sizeof(Collatz<uint128_t>), sizeof(Collatz<mpz_class>)));
-    table.push_back(add("Collatz(27) (deep, 112 stops, with metadata)", collatz_with_seq_and_metadata_uint64_t.deep_size(), collatz_with_seq_and_metadata_uint128_t.deep_size(), collatz_with_seq_and_metadata_mpz_c.deep_size()));
-    table.push_back(add("Collatz(27) (deep, 112 stops, without metadata)", collatz_with_seq_no_metadata_uint64_t.deep_size(), collatz_with_seq_no_metadata_uint128_t.deep_size(), collatz_with_seq_no_metadata_mpz_c.deep_size()));
-    table.push_back(add("Collatz(27) (deep, no stops, with metadata)", collatz_with_no_seq_metadata_uint64_t.deep_size(), collatz_with_no_seq_metadata_uint128_t.deep_size(), collatz_with_no_seq_metadata_mpz_c.deep_size()));
-    table.push_back(add("Node (shallow)", sizeof(Node<uint64_t>), sizeof(Node<uint128_t>), sizeof(Node<mpz_class>)));
-    table.push_back(add("Node(27) (deep, with metadata)", node_uint64_t_with_metadata.deep_size(), node_uint128_t_with_metadata.deep_size(), node_mpz_c_with_metadata.deep_size()));
-    table.push_back(add("Node(27) (deep, without metadata)", node_uint64_t.deep_size(), node_uint128_t.deep_size(), node_mpz_c.deep_size()));
-    table.push_back(add("BinaryTree (shallow)", sizeof(BinaryTree<uint64_t>), sizeof(BinaryTree<uint128_t>), sizeof(BinaryTree<mpz_class>)));
-    table.push_back(add(std::format("BinaryTree (deep, {} levels, without metadata)", levels).c_str(), tree_uint64_t.deep_size(), tree_uint128_t.deep_size(), tree_mpz_c.deep_size()));
-    table.push_back(add("  As Megabytes", tree_uint64_t.deep_size()/1024/1024, tree_uint128_t.deep_size()/1024/1024, tree_mpz_c.deep_size()/1024/1024, "Mbytes"));
-    table.push_back(add("  As Gigabytes", tree_uint64_t.deep_size()/1024/1024/1024, tree_uint128_t.deep_size()/1024/1024/1024, tree_mpz_c.deep_size()/1024/1024/1024, "Gbytes"));
-    table.push_back(add("  According to RSS", rss_uint64_t, rss_uint128_t, rss_mpz_c));
-    table.push_back(add("  Nodes", tree_uint64_t.node_count(), tree_uint128_t.node_count(), tree_mpz_c.node_count().get_ui(), "nodes"));
-    table.push_back(add("    Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t, bytes_per_node_uint128_t, bytes_per_node_mpz_c));
-    table.push_back(add("    Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t, rss_bytes_per_node_uint128_t, rss_bytes_per_node_mpz_c));
-    table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t - bytes_per_node_uint64_t, rss_bytes_per_node_uint128_t - bytes_per_node_uint128_t, rss_bytes_per_node_mpz_c - bytes_per_node_mpz_c));
-    table.push_back(add(std::format("BinaryTree (deep, {} levels, with metadata)", levels).c_str(), tree_uint64_t_with_metadata.deep_size(), tree_uint128_t_with_metadata.deep_size(), tree_mpz_c_with_metadata.deep_size()));
-    table.push_back(add("  As Megabytes", tree_uint64_t_with_metadata.deep_size()/1024/1024, tree_uint128_t_with_metadata.deep_size()/1024/1024, tree_mpz_c_with_metadata.deep_size()/1024/1024, "Mbytes"));
-    table.push_back(add("  As Gigabytes", tree_uint64_t_with_metadata.deep_size()/1024/1024/1024, tree_uint128_t_with_metadata.deep_size()/1024/1024/1024, tree_mpz_c_with_metadata.deep_size()/1024/1024/1024, "Gbytes"));
-    table.push_back(add("  According to RSS", rss_uint64_t_with_metadata, rss_uint128_t_with_metadata, rss_mpz_c_with_metadata));
-    table.push_back(add("  Nodes", tree_uint64_t_with_metadata.node_count(), tree_uint128_t_with_metadata.node_count(), tree_mpz_c_with_metadata.node_count().get_ui(), "nodes"));
-    table.push_back(add("    Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_with_metadata, bytes_per_node_uint128_t_with_metadata, bytes_per_node_mpz_c_with_metadata));
-    table.push_back(add("    Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_uint128_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata));
-    table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t_with_metadata - bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_uint128_t_with_metadata - bytes_per_node_uint128_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata - bytes_per_node_mpz_c_with_metadata));
-    table.push_back(add(std::format("BinaryTree (deep, {} levels, with all pruning)", levels).c_str(), tree_uint64_t_with_pruning.deep_size(), tree_uint128_t_with_pruning.deep_size(), tree_mpz_c_with_pruning.deep_size()));
-    table.push_back(add("  As Megabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024, tree_uint128_t_with_pruning.deep_size()/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024, "Mbytes"));
-    table.push_back(add("  As Gigabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024/1024, tree_uint128_t_with_pruning.deep_size()/1024/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024/1024, "Gbytes"));
-    table.push_back(add("  According to RSS", rss_uint64_t_with_pruning, rss_uint128_t_with_pruning, rss_mpz_c_with_pruning));
-    table.push_back(add("  Nodes", tree_uint64_t_with_pruning.node_count(), tree_uint128_t_with_pruning.node_count(), tree_mpz_c_with_pruning.node_count().get_ui(), "nodes"));
-    table.push_back(add("    Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_with_pruning, bytes_per_node_uint128_t_with_pruning, bytes_per_node_mpz_c_with_pruning));
-    table.push_back(add("    Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_with_pruning, rss_bytes_per_node_uint128_t_with_pruning, rss_bytes_per_node_mpz_c_with_pruning));
-    table.push_back(add("    Difference: RSS - Internal", rss_bytes_per_node_uint64_t_with_pruning - bytes_per_node_uint64_t_with_pruning, rss_bytes_per_node_uint128_t_with_pruning - bytes_per_node_uint128_t_with_pruning, rss_bytes_per_node_mpz_c_with_pruning - bytes_per_node_mpz_c_with_pruning));
+    table.push_back(add("Base Data Type", sizeof(uint64_t), sizeof(uint128_t), sizeof(mpz_class)));
 
+    // Collatz
+    table.push_back({""});
+    table.push_back(add("Collatz (shallow)", sizeof(Collatz<uint64_t>), sizeof(Collatz<uint128_t>), sizeof(Collatz<mpz_class>)));
+    table.push_back({"Collatz(27) (deep)", "--", "--", "--", "--", "--", "--", "--", "--"});
+    table.push_back(add("  With 112 Stops, With Metadata", collatz_with_seq_and_metadata_uint64_t.deep_size(), collatz_with_seq_and_metadata_uint128_t.deep_size(), collatz_with_seq_and_metadata_mpz_c.deep_size()));
+    table.push_back(add("  With 112 Stops, Without Metadata", collatz_with_seq_no_metadata_uint64_t.deep_size(), collatz_with_seq_no_metadata_uint128_t.deep_size(), collatz_with_seq_no_metadata_mpz_c.deep_size()));
+    table.push_back(add("  Without Stops, With Metadata", collatz_with_no_seq_metadata_uint64_t.deep_size(), collatz_with_no_seq_metadata_uint128_t.deep_size(), collatz_with_no_seq_metadata_mpz_c.deep_size()));
+
+    // Node
+    table.push_back({""});
+    table.push_back(add("Node (shallow)", sizeof(Node<uint64_t>), sizeof(Node<uint128_t>), sizeof(Node<mpz_class>)));
+    table.push_back({"Node(27) (deep)", "--", "--", "--", "--", "--", "--", "--", "--"});
+    table.push_back(add("  With Metadata", node_uint64_t_with_metadata.deep_size(), node_uint128_t_with_metadata.deep_size(), node_mpz_c_with_metadata.deep_size()));
+    table.push_back(add("  Without Metadata)", node_uint64_t.deep_size(), node_uint128_t.deep_size(), node_mpz_c.deep_size()));
+
+    // BinaryTree
+    table.push_back({""});
+    table.push_back(add("BinaryTree (shallow)", sizeof(BinaryTree<uint64_t>), sizeof(BinaryTree<uint128_t>), sizeof(BinaryTree<mpz_class>)));
+    table.push_back({std::format("BinaryTree (deep, {} levels)", levels).c_str(), "--", "--", "--", "--", "--", "--", "--", "--"});
+    table.push_back(add("  Materialized, Without Metadata", tree_uint64_t.deep_size(), tree_uint128_t.deep_size(), tree_mpz_c.deep_size()));
+    table.push_back(add("    As Megabytes", tree_uint64_t.deep_size()/1024/1024, tree_uint128_t.deep_size()/1024/1024, tree_mpz_c.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("    As Gigabytes", tree_uint64_t.deep_size()/1024/1024/1024, tree_uint128_t.deep_size()/1024/1024/1024, tree_mpz_c.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("    According to RSS", rss_uint64_t, rss_uint128_t, rss_mpz_c));
+    table.push_back(add("    Nodes", tree_uint64_t.node_count(), tree_uint128_t.node_count(), tree_mpz_c.node_count().get_ui(), "nodes"));
+    table.push_back(add("      Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t, bytes_per_node_uint128_t, bytes_per_node_mpz_c));
+    table.push_back(add("      Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t, rss_bytes_per_node_uint128_t, rss_bytes_per_node_mpz_c));
+    table.push_back(add("      Difference: RSS - Internal", rss_bytes_per_node_uint64_t - bytes_per_node_uint64_t, rss_bytes_per_node_uint128_t - bytes_per_node_uint128_t, rss_bytes_per_node_mpz_c - bytes_per_node_mpz_c));
+    table.push_back(add("  Materialized, With Metadata", tree_uint64_t_with_metadata.deep_size(), tree_uint128_t_with_metadata.deep_size(), tree_mpz_c_with_metadata.deep_size()));
+    table.push_back(add("    As Megabytes", tree_uint64_t_with_metadata.deep_size()/1024/1024, tree_uint128_t_with_metadata.deep_size()/1024/1024, tree_mpz_c_with_metadata.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("    As Gigabytes", tree_uint64_t_with_metadata.deep_size()/1024/1024/1024, tree_uint128_t_with_metadata.deep_size()/1024/1024/1024, tree_mpz_c_with_metadata.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("    According to RSS", rss_uint64_t_with_metadata, rss_uint128_t_with_metadata, rss_mpz_c_with_metadata));
+    table.push_back(add("    Nodes", tree_uint64_t_with_metadata.node_count(), tree_uint128_t_with_metadata.node_count(), tree_mpz_c_with_metadata.node_count().get_ui(), "nodes"));
+    table.push_back(add("      Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_with_metadata, bytes_per_node_uint128_t_with_metadata, bytes_per_node_mpz_c_with_metadata));
+    table.push_back(add("      Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_uint128_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata));
+    table.push_back(add("      Difference: RSS - Internal", rss_bytes_per_node_uint64_t_with_metadata - bytes_per_node_uint64_t_with_metadata, rss_bytes_per_node_uint128_t_with_metadata - bytes_per_node_uint128_t_with_metadata, rss_bytes_per_node_mpz_c_with_metadata - bytes_per_node_mpz_c_with_metadata));
+    table.push_back(add("  Materialized, With Pruning", tree_uint64_t_with_pruning.deep_size(), tree_uint128_t_with_pruning.deep_size(), tree_mpz_c_with_pruning.deep_size()));
+    table.push_back(add("    As Megabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024, tree_uint128_t_with_pruning.deep_size()/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("    As Gigabytes", tree_uint64_t_with_pruning.deep_size()/1024/1024/1024, tree_uint128_t_with_pruning.deep_size()/1024/1024/1024, tree_mpz_c_with_pruning.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("    According to RSS", rss_uint64_t_with_pruning, rss_uint128_t_with_pruning, rss_mpz_c_with_pruning));
+    table.push_back(add("    Nodes", tree_uint64_t_with_pruning.node_count(), tree_uint128_t_with_pruning.node_count(), tree_mpz_c_with_pruning.node_count().get_ui(), "nodes"));
+    table.push_back(add("      Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_with_pruning, bytes_per_node_uint128_t_with_pruning, bytes_per_node_mpz_c_with_pruning));
+    table.push_back(add("      Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_with_pruning, rss_bytes_per_node_uint128_t_with_pruning, rss_bytes_per_node_mpz_c_with_pruning));
+    table.push_back(add("      Difference: RSS - Internal", rss_bytes_per_node_uint64_t_with_pruning - bytes_per_node_uint64_t_with_pruning, rss_bytes_per_node_uint128_t_with_pruning - bytes_per_node_uint128_t_with_pruning, rss_bytes_per_node_mpz_c_with_pruning - bytes_per_node_mpz_c_with_pruning));
+    table.push_back(add("  Implicit", tree_uint64_t_implicit.deep_size(), tree_uint128_t_implicit.deep_size(), tree_mpz_c_implicit.deep_size()));
+    table.push_back(add("    As Megabytes", tree_uint64_t_implicit.deep_size()/1024/1024, tree_uint128_t_implicit.deep_size()/1024/1024, tree_mpz_c_implicit.deep_size()/1024/1024, "Mbytes"));
+    table.push_back(add("    As Gigabytes", tree_uint64_t_implicit.deep_size()/1024/1024/1024, tree_uint128_t_implicit.deep_size()/1024/1024/1024, tree_mpz_c_implicit.deep_size()/1024/1024/1024, "Gbytes"));
+    table.push_back(add("    According to RSS", rss_uint64_t_implicit, rss_uint128_t_implicit, rss_mpz_c_implicit));
+    table.push_back(add("    Nodes", tree_uint64_t_implicit.node_count(), tree_uint128_t_implicit.node_count(), tree_mpz_c_implicit.node_count().get_ui(), "nodes"));
+    table.push_back(add("      Bytes per Node (Internal Tracking)", bytes_per_node_uint64_t_implicit, bytes_per_node_uint128_t_implicit, bytes_per_node_mpz_c_implicit));
+    table.push_back(add("      Bytes per Node (RSS Usage)", rss_bytes_per_node_uint64_t_implicit, rss_bytes_per_node_uint128_t_implicit, rss_bytes_per_node_mpz_c_implicit));
+    table.push_back(add("      Difference: RSS - Internal", rss_bytes_per_node_uint64_t_implicit - bytes_per_node_uint64_t_implicit, rss_bytes_per_node_uint128_t_implicit - bytes_per_node_uint128_t_implicit, rss_bytes_per_node_mpz_c_implicit - bytes_per_node_mpz_c_implicit));
+
+    // Compare tree sizes
     // This is tricky because we need floats.
-    float u64ratio = 100.0f * tree_uint64_t_with_metadata.deep_size() / tree_uint64_t.deep_size();
-    float u128_ratio = 100.0f * tree_uint128_t_with_metadata.deep_size() / tree_uint128_t.deep_size();
-    float mpz_ratio = 100.0f * tree_mpz_c_with_metadata.deep_size() / tree_mpz_c.deep_size();
-    table.push_back({"BinaryTree Metadata vs No Metadata", std::to_string(u64ratio), std::to_string(u128_ratio), std::to_string(mpz_ratio), "%", "--", "--", "--", "--"});
+    float u64ratio_metadata_vs_no_metadata = 100.0f * tree_uint64_t_with_metadata.deep_size() / tree_uint64_t.deep_size();
+    float u128_ratio_metadata_vs_no_metadata = 100.0f * tree_uint128_t_with_metadata.deep_size() / tree_uint128_t.deep_size();
+    float mpz_ratio_metadata_vs_no_metadata = 100.0f * tree_mpz_c_with_metadata.deep_size() / tree_mpz_c.deep_size();
+    float u64ratio_metadata_vs_pruned = 100.0f * tree_uint64_t_with_metadata.deep_size() / tree_uint64_t_with_pruning.deep_size();
+    float u128_ratio_metadata_vs_pruned = 100.0f * tree_uint128_t_with_metadata.deep_size() / tree_uint128_t_with_pruning.deep_size();
+    float mpz_ratio_metadata_vs_pruned = 100.0f * tree_mpz_c_with_metadata.deep_size() / tree_mpz_c_with_pruning.deep_size();
+    float u64ratio_no_metadata_vs_pruned = 100.0f * tree_uint64_t.deep_size() / tree_uint64_t_with_pruning.deep_size();
+    float u128_ratio_no_metadata_vs_pruned = 100.0f * tree_uint128_t.deep_size() / tree_uint128_t_with_pruning.deep_size();
+    float mpz_ratio_no_metadata_vs_pruned = 100.0f * tree_mpz_c.deep_size() / tree_mpz_c_with_pruning.deep_size();
+    float u64ratio_implicit_vs_pruned = 100.0f * tree_uint64_t_implicit.deep_size() / tree_uint64_t_with_pruning.deep_size();
+    float u128_ratio_implicit_vs_pruned = 100.0f * tree_uint128_t_implicit.deep_size() / tree_uint128_t_with_pruning.deep_size();
+    float mpz_ratio_implicit_vs_pruned = 100.0f * tree_mpz_c_implicit.deep_size() / tree_mpz_c_with_pruning.deep_size();
+    table.push_back({"  Size Comparison", "--", "--", "--", "--", "--", "--", "--", "--"});
+    table.push_back({"    Metadata vs No Metadata", std::to_string(u64ratio_metadata_vs_no_metadata), std::to_string(u128_ratio_metadata_vs_no_metadata), std::to_string(mpz_ratio_metadata_vs_no_metadata), "%", "--", "--", "--", "--"});
+    table.push_back({"    Metadata vs Pruned", std::to_string(u64ratio_metadata_vs_pruned), std::to_string(u128_ratio_metadata_vs_pruned), std::to_string(mpz_ratio_metadata_vs_pruned), "%", "--", "--", "--", "--"});
+    table.push_back({"    No Metadata vs Pruned", std::to_string(u64ratio_no_metadata_vs_pruned), std::to_string(u128_ratio_no_metadata_vs_pruned), std::to_string(mpz_ratio_no_metadata_vs_pruned), "%", "--", "--", "--", "--"});
+    table.push_back({"    Implicit vs Pruned", std::to_string(u64ratio_implicit_vs_pruned), std::to_string(u128_ratio_implicit_vs_pruned), std::to_string(mpz_ratio_implicit_vs_pruned), "%", "--", "--", "--", "--"});
 
     // Now rate data.
+    // -- Without Pruning
+    table.push_back({"  Build Time Comparison", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "BinaryTree Build Time (no pruning, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Without Pruning, " + std::to_string(i + 1) + " threads";
         table.push_back(add(name.c_str(), duration_uint64_t[i].count(), duration_uint128_t[i].count(), duration_mpz_class[i].count(), "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_uint64_t[i].count() - duration_uint64_t[j].count();
                 int delta_uint128_t = duration_uint128_t[i].count() - duration_uint128_t[j].count();
                 int delta_mpz_class = duration_mpz_class[i].count() - duration_mpz_class[j].count();
@@ -365,12 +425,13 @@ int main(int argc, char **argv) {
             }
         }
     }
+    // -- With Pruning
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "BinaryTree Build Time (with pruning, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    With Pruning, " + std::to_string(i + 1) + " threads";
         table.push_back(add(name.c_str(), duration_uint64_t_with_pruning[i].count(), duration_uint128_t_with_pruning[i].count(), duration_mpz_class_with_pruning[i].count(), "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_uint64_t_with_pruning[i].count() - duration_uint64_t_with_pruning[j].count();
                 int delta_uint128_t = duration_uint128_t_with_pruning[i].count() - duration_uint128_t_with_pruning[j].count();
                 int delta_mpz_class = duration_mpz_class_with_pruning[i].count() - duration_mpz_class_with_pruning[j].count();
@@ -378,19 +439,40 @@ int main(int argc, char **argv) {
             }
         }
     }
+    // -- Implicit
+    for (size_t i = 0; i < max_threads; i++) {
+        std::string name = "    Implicit, " + std::to_string(i + 1) + " threads";
+        table.push_back(add(name.c_str(), duration_uint64_t_implicit[i].count(), duration_uint128_t_implicit[i].count(), duration_mpz_class_implicit[i].count(), "ms"));
+        if (compare_threads) {
+            for (size_t j = 0; j < i; j++) {
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+                int delta_uint64_t = duration_uint64_t_implicit[i].count() - duration_uint64_t_implicit[j].count();
+                int delta_uint128_t = duration_uint128_t_implicit[i].count() - duration_uint128_t_implicit[j].count();
+                int delta_mpz_class = duration_mpz_class_implicit[i].count() - duration_mpz_class_implicit[j].count();
+                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_class), "ms", "--", "--", "--", "--"});
+            }
+        }
+    }
+
+    // Comparison Build Speeds
+
+
+
 
     // Sieve Stuff
+    table.push_back({""});
     table.push_back(add("Sieve (shallow)", sizeof(Sieve<uint64_t>), sizeof(Sieve<uint128_t>), sizeof(Sieve<mpz_class>)));
     table.push_back(add(std::format("Sieve (deep, {} levels)", sieve_tree_levels).c_str(), sieve_uint64_t.deep_size(), sieve_uint128_t.deep_size(), sieve_mpz_c.deep_size()));
     table.push_back(add("  According to RSS", rss_uint64_t_sieve, rss_uint128_t_sieve, rss_mpz_c_sieve));
-
+    //
     // Sieve Rate Data
+    table.push_back({"  Iterator Time", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Sieve Iterator Time (1-by-1, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].iterator.count(), duration_sieve_uint128_t[i].iterator.count(), duration_sieve_mpz_c[i].iterator.count(), "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t[i].iterator.count() - duration_sieve_uint64_t[j].iterator.count();
                 int delta_uint128_t = duration_sieve_uint128_t[i].iterator.count() - duration_sieve_uint128_t[j].iterator.count();
                 int delta_mpz_c = duration_sieve_mpz_c[i].iterator.count() - duration_sieve_mpz_c[j].iterator.count();
@@ -399,11 +481,11 @@ int main(int argc, char **argv) {
         }
     }
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Sieve Iterator Time (Bulk, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].iterator.count(), duration_sieve_uint128_t_bulk[i].iterator.count(), duration_sieve_mpz_c_bulk[i].iterator.count(), "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t_bulk[i].iterator.count() - duration_sieve_uint64_t_bulk[j].iterator.count();
                 int delta_uint128_t = duration_sieve_uint128_t_bulk[i].iterator.count() - duration_sieve_uint128_t_bulk[j].iterator.count();
                 int delta_mpz_c = duration_sieve_mpz_c_bulk[i].iterator.count() - duration_sieve_mpz_c_bulk[j].iterator.count();
@@ -412,13 +494,14 @@ int main(int argc, char **argv) {
         }
     }
     //
-    // Pool Data
+    // Pool Refill Time
+    table.push_back({"  Pool Refill Time", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refill Time (1-by-1, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].pool_refill.count() / 1000, duration_sieve_uint128_t[i].pool_refill.count() / 1000, duration_sieve_mpz_c[i].pool_refill.count() / 1000, "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = (duration_sieve_uint64_t[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t[j].pool_refill.count() / 1000);
                 int delta_uint128_t = (duration_sieve_uint128_t[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t[j].pool_refill.count() / 1000);
                 int delta_mpz_c = (duration_sieve_mpz_c[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c[j].pool_refill.count() / 1000);
@@ -427,11 +510,11 @@ int main(int argc, char **argv) {
         }
     }
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refill Time (Bulk, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000, duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000, duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000, "ms"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = (duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t_bulk[j].pool_refill.count() / 1000);
                 int delta_uint128_t = (duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t_bulk[j].pool_refill.count() / 1000);
                 int delta_mpz_c = (duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c_bulk[j].pool_refill.count() / 1000);
@@ -440,13 +523,14 @@ int main(int argc, char **argv) {
         }
     }
     //
-    // Pool Refill Data
+    // Pool Refill Count
+    table.push_back({"  Pool Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refills (1-by-1, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refills, duration_sieve_uint128_t[i].refills, duration_sieve_mpz_c[i].refills, "refills"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t[i].refills - duration_sieve_uint64_t[j].refills;
                 int delta_uint128_t = duration_sieve_uint128_t[i].refills - duration_sieve_uint128_t[j].refills;
                 int delta_mpz_c = duration_sieve_mpz_c[i].refills - duration_sieve_mpz_c[j].refills;
@@ -455,11 +539,11 @@ int main(int argc, char **argv) {
         }
     }
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refills (Bulk, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refills, duration_sieve_uint128_t_bulk[i].refills, duration_sieve_mpz_c_bulk[i].refills, "refills"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refills - duration_sieve_uint64_t_bulk[j].refills;
                 int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refills - duration_sieve_uint128_t_bulk[j].refills;
                 int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refills - duration_sieve_mpz_c_bulk[j].refills;
@@ -467,12 +551,15 @@ int main(int argc, char **argv) {
             }
         }
     }
+    //
+    // Pool Refill Loops
+    table.push_back({"  Pool Refill Loops", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refill Fill Loops (1-by-1, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refill_fill_loops, duration_sieve_uint128_t[i].refill_fill_loops, duration_sieve_mpz_c[i].refill_fill_loops, "loops"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t[i].refill_fill_loops - duration_sieve_uint64_t[j].refill_fill_loops;
                 int delta_uint128_t = duration_sieve_uint128_t[i].refill_fill_loops - duration_sieve_uint128_t[j].refill_fill_loops;
                 int delta_mpz_c = duration_sieve_mpz_c[i].refill_fill_loops - duration_sieve_mpz_c[j].refill_fill_loops;
@@ -481,11 +568,11 @@ int main(int argc, char **argv) {
         }
     }
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Refill Fill Loops (Bulk, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refill_fill_loops, duration_sieve_uint128_t_bulk[i].refill_fill_loops, duration_sieve_mpz_c_bulk[i].refill_fill_loops, "loops"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refill_fill_loops - duration_sieve_uint64_t_bulk[j].refill_fill_loops;
                 int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refill_fill_loops - duration_sieve_uint128_t_bulk[j].refill_fill_loops;
                 int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refill_fill_loops - duration_sieve_mpz_c_bulk[j].refill_fill_loops;
@@ -493,12 +580,15 @@ int main(int argc, char **argv) {
             }
         }
     }
+    //
+    // Pool Premature Refills
+    table.push_back({"  Pool Premature Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Premature Refills (1-by-1, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].premature_refills, duration_sieve_uint128_t[i].premature_refills, duration_sieve_mpz_c[i].premature_refills, "loops"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t[i].premature_refills - duration_sieve_uint64_t[j].premature_refills;
                 int delta_uint128_t = duration_sieve_uint128_t[i].premature_refills - duration_sieve_uint128_t[j].premature_refills;
                 int delta_mpz_c = duration_sieve_mpz_c[i].premature_refills - duration_sieve_mpz_c[j].premature_refills;
@@ -507,11 +597,11 @@ int main(int argc, char **argv) {
         }
     }
     for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "Pool Premature Refills (Bulk, " + std::to_string(i + 1) + " threads)";
+        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
         table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].premature_refills, duration_sieve_uint128_t_bulk[i].premature_refills, duration_sieve_mpz_c_bulk[i].premature_refills, "loops"));
         if (compare_threads) {
             for (size_t j = 0; j < i; j++) {
-                std::string comparison = "  Vs. " + std::to_string(j + 1) + " threads";
+                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
                 int delta_uint64_t = duration_sieve_uint64_t_bulk[i].premature_refills - duration_sieve_uint64_t_bulk[j].premature_refills;
                 int delta_uint128_t = duration_sieve_uint128_t_bulk[i].premature_refills - duration_sieve_uint128_t_bulk[j].premature_refills;
                 int delta_mpz_c = duration_sieve_mpz_c_bulk[i].premature_refills - duration_sieve_mpz_c_bulk[j].premature_refills;

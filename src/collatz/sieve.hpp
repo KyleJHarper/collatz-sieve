@@ -28,6 +28,7 @@ struct SieveOptions {
         .prune_hwm_nodes = true,
         .prune_parent_levels = true,
         .preserve_ancestors = true,
+        .tree_type = BinaryTreeType::MATERIALIZED
     };
 };
 
