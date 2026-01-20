@@ -26,41 +26,49 @@ The `BinaryTree` class was turned into a facade with an interface called `IBinar
 nodes in memory was renamed to `BinaryTreeMaterialized` and a new tree was added called `BinaryTreeImplicit`.  Both implementations
 use `BinaryTreeMath` and provide an equivalent represenation of the data structure for our research.
 
-The implicit tree requires approximately the same CPU time (complexity) while using a fraction of the memory.
-
 ##### CPU -- Materialized w/Pruning vs Implicit
+
+CPU time grows linearly, averaging ~10% slower for Implicit vs Materialized trees.
 
 | Tree Levels | Data Type | Materialized (ms, 1 thr) | Implicit (ms, 1 thr) |
 | ----------: | :-------- | -----------------------: | -------------------: |
 |           8 | uint64_t  |                        0 |                    0 |
 |          12 | uint64_t  |                        0 |                    0 |
-|          16 | uint64_t  |                        0 |                    0 |
-|          20 | uint64_t  |                        0 |                    0 |
+|          16 | uint64_t  |                        2 |                    2 |
+|          20 | uint64_t  |                       37 |                   40 |
+|          23 | uint64_t  |                      272 |                  295 |
 |           8 | uint128_t |                        0 |                    0 |
 |          12 | uint128_t |                        0 |                    0 |
-|          16 | uint128_t |                        0 |                    0 |
-|          20 | uint128_t |                        0 |                    0 |
+|          16 | uint128_t |                        3 |                    3 |
+|          20 | uint128_t |                       41 |                   45 |
+|          23 | uint128_t |                      300 |                  304 |
 |           8 | mpz_class |                        0 |                    0 |
 |          12 | mpz_class |                        0 |                    0 |
-|          16 | mpz_class |                        0 |                    0 |
-|          20 | mpz_class |                        0 |                    0 |
+|          16 | mpz_class |                        4 |                    5 |
+|          20 | mpz_class |                       63 |                   72 |
+|          23 | mpz_class |                      422 |                  492 |
 
 ##### RAM -- Materialized w/Pruning vs Implicit
 
+Memory is increasingly smaller (vanishing) for Implicit vs Materialized as levels grow.
+
 | Tree Levels | Data Type | Materialized (bytes) | Implicit (bytes) |
 | ----------: | :-------- | -------------------: | ---------------: |
-|           8 | uint64_t  |                    0 |                0 |
-|          12 | uint64_t  |                    0 |                0 |
-|          16 | uint64_t  |                    0 |                0 |
-|          20 | uint64_t  |                    0 |                0 |
-|           8 | uint128_t |                    0 |                0 |
-|          12 | uint128_t |                    0 |                0 |
-|          16 | uint128_t |                    0 |                0 |
-|          20 | uint128_t |                    0 |                0 |
-|           8 | mpz_class |                    0 |                0 |
-|          12 | mpz_class |                    0 |                0 |
-|          16 | mpz_class |                    0 |                0 |
-|          20 | mpz_class |                    0 |                0 |
+|           8 | uint64_t  |                 1664 |             1464 |
+|          12 | uint64_t  |                 9248 |             3224 |
+|          16 | uint64_t  |                84288 |            21112 |
+|          20 | uint64_t  |               960992 |           119640 |
+|          23 | uint64_t  |              5968008 |           775168 |
+|           8 | uint128_t |                 1896 |             2120 |
+|          12 | uint128_t |                10464 |             5480 |
+|          16 | uint128_t |                94904 |            40840 |
+|          20 | uint128_t |              1081232 |           237736 |
+|          23 | uint128_t |              6714152 |          1548672 |
+|           8 | mpz_class |                 1896 |             2120 |
+|          12 | mpz_class |                10464 |             5480 |
+|          16 | mpz_class |                94904 |            40840 |
+|          20 | mpz_class |              1081232 |           237736 |
+|          23 | mpz_class |              6714152 |          1548672 |
 
 ### 2.1.0
 Sieve works and produces values based on the survivors of a BinaryTree.  Supports batch `next()`.
