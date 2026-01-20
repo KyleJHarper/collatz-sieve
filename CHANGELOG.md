@@ -6,10 +6,7 @@ Historically, all work was done in "master".  We will use "dev" for all developm
 
 ### Tags
 
-I prefer SemVer, but given the research nature of this project, I'm not sure it makes sense.  As such, we will use 0.x.y until a
-better format avails itself.
-
-I will tag things as new features are developed and list those features in the change log below.
+SemVer, mostly.
 
 # Change Log
 
@@ -21,10 +18,26 @@ __System Build for All Tests__
 ### 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.
 
-#### Implicit Tree
+Optimizations were applied in several areas related to parallel workload, tracking, and memory management.  Special care was taken
+with OMP loops and tight loops to avoid blocking and barriers, and to spread load evenly while ensuring `thread_local` storage
+(TLS) alleviated allocation overhead.  Trees (_implicit_ trees) are now built with only a few hundred allocs().
+
+#### Math Pass
+While functional, some of the math was confusing because it started level numbering at 0 instead of 1.  This made sense from a
+programming standpoint (i.e. indexing) but created a problem: positions are 1-based but levels are 0-based.  The code was updated
+to treat levels as 1-based.
+
+#### Implicit Tree (Memory Reduction)
 The `BinaryTree` class was turned into a facade with an interface called `IBinaryTreeBackend`.  The original logic which created
 nodes in memory was renamed to `BinaryTreeMaterialized` and a new tree was added called `BinaryTreeImplicit`.  Both implementations
 use `BinaryTreeMath` and provide an equivalent represenation of the data structure for our research.
+
+In summary, the implicit tree doesn't generate `Node` objects for long-term storage.  Instead, it generates node values by level
+and position via `BinaryTreeMath<T>::st_node_value_by_position_and_level()`.  It then stores `Intervals` which represent subsets of
+the tree that have been covered by a high-water mark ancestor.  This creates a mathematical representation of the data structure
+created when we build a materialized tree.
+
+It is slightly slower, but uses drastically less memory, allowing for much deeper level building.
 
 ##### CPU -- Materialized w/Pruning vs Implicit
 
@@ -54,21 +67,31 @@ Memory is increasingly smaller (vanishing) for Implicit vs Materialized as level
 
 | Tree Levels | Data Type | Materialized (bytes) | Implicit (bytes) |
 | ----------: | :-------- | -------------------: | ---------------: |
-|           8 | uint64_t  |                 1664 |             1464 |
-|          12 | uint64_t  |                 9248 |             3224 |
-|          16 | uint64_t  |                84288 |            21112 |
-|          20 | uint64_t  |               960992 |           119640 |
-|          23 | uint64_t  |              5968008 |           775168 |
-|           8 | uint128_t |                 1896 |             2120 |
-|          12 | uint128_t |                10464 |             5480 |
-|          16 | uint128_t |                94904 |            40840 |
-|          20 | uint128_t |              1081232 |           237736 |
-|          23 | uint128_t |              6714152 |          1548672 |
-|           8 | mpz_class |                 1896 |             2120 |
-|          12 | mpz_class |                10464 |             5480 |
-|          16 | mpz_class |                94904 |            40840 |
-|          20 | mpz_class |              1081232 |           237736 |
-|          23 | mpz_class |              6714152 |          1548672 |
+|           8 | uint64_t  |                1,664 |            1,464 |
+|          12 | uint64_t  |                9,248 |            3,224 |
+|          16 | uint64_t  |               84,288 |           21,112 |
+|          20 | uint64_t  |              960,992 |          119,640 |
+|          23 | uint64_t  |            5,968,008 |          775,168 |
+|           8 | uint128_t |                1,896 |            2,120 |
+|          12 | uint128_t |               10,464 |            5,480 |
+|          16 | uint128_t |               94,904 |           40,840 |
+|          20 | uint128_t |            1,081,232 |          237,736 |
+|          23 | uint128_t |            6,714,152 |        1,548,672 |
+|           8 | mpz_class |                1,896 |            2,120 |
+|          12 | mpz_class |               10,464 |            5,480 |
+|          16 | mpz_class |               94,904 |           40,840 |
+|          20 | mpz_class |            1,081,232 |          237,736 |
+|          23 | mpz_class |            6,714,152 |        1,548,672 |
+
+#### Coverage Now Supports 128-Bit Integral
+The `coverage` program now supports `uint128_t`.  It will auto-upgrade from `uint64_t` if the requested level exceeds the max for a
+tree of that type.  The auto-upgrade to `mpz_class` works too, but at this point I've only calculated 2^109, so it's premature.
+
+#### Forward-Looking Cache (LRU Cache) on Sieve
+A basic `ForwardLookingCache` was created and is available to the sieve class, but it hasn't been implemented.  The sieve also has
+known bugs, particularly with OMP, and has hence been commented out.  The addition of an Implicit tree further changes how a sieve
+should be built, because there is no `level_map` anymore.  We will probably hide that behind a shared item in the IFace and tell
+the sieve to use it instead of talking directly to a "map".
 
 ### 2.1.0
 Sieve works and produces values based on the survivors of a BinaryTree.  Supports batch `next()`.
