@@ -18,6 +18,50 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 3.0.0
+New version to support a plethora of changes, namely the change to an implicit tree.
+
+#### Implicit Tree
+The `BinaryTree` class was turned into a facade with an interface called `IBinaryTreeBackend`.  The original logic which created
+nodes in memory was renamed to `BinaryTreeMaterialized` and a new tree was added called `BinaryTreeImplicit`.  Both implementations
+use `BinaryTreeMath` and provide an equivalent represenation of the data structure for our research.
+
+The implicit tree requires approximately the same CPU time (complexity) while using a fraction of the memory.
+
+##### CPU -- Materialized w/Pruning vs Implicit
+
+| Tree Levels | Data Type | Materialized (ms, 1 thr) | Implicit (ms, 1 thr) |
+| ----------: | :-------- | -----------------------: | -------------------: |
+|           8 | uint64_t  |                        0 |                    0 |
+|          12 | uint64_t  |                        0 |                    0 |
+|          16 | uint64_t  |                        0 |                    0 |
+|          20 | uint64_t  |                        0 |                    0 |
+|           8 | uint128_t |                        0 |                    0 |
+|          12 | uint128_t |                        0 |                    0 |
+|          16 | uint128_t |                        0 |                    0 |
+|          20 | uint128_t |                        0 |                    0 |
+|           8 | mpz_class |                        0 |                    0 |
+|          12 | mpz_class |                        0 |                    0 |
+|          16 | mpz_class |                        0 |                    0 |
+|          20 | mpz_class |                        0 |                    0 |
+
+##### RAM -- Materialized w/Pruning vs Implicit
+
+| Tree Levels | Data Type | Materialized (bytes) | Implicit (bytes) |
+| ----------: | :-------- | -------------------: | ---------------: |
+|           8 | uint64_t  |                    0 |                0 |
+|          12 | uint64_t  |                    0 |                0 |
+|          16 | uint64_t  |                    0 |                0 |
+|          20 | uint64_t  |                    0 |                0 |
+|           8 | uint128_t |                    0 |                0 |
+|          12 | uint128_t |                    0 |                0 |
+|          16 | uint128_t |                    0 |                0 |
+|          20 | uint128_t |                    0 |                0 |
+|           8 | mpz_class |                    0 |                0 |
+|          12 | mpz_class |                    0 |                0 |
+|          16 | mpz_class |                    0 |                0 |
+|          20 | mpz_class |                    0 |                0 |
+
 ### 2.1.0
 Sieve works and produces values based on the survivors of a BinaryTree.  Supports batch `next()`.
 
