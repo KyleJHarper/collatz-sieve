@@ -248,7 +248,7 @@ class PeakIVScanner {
             if constexpr(BuiltinIntegral<T>) {
                 if (has_gpu) {
                     // Find the peak via a kernel which will do all the work.
-                    find_max_iv_for_bit_gpu(gpu_runner, bit, true);
+                    find_max_iv_for_bit_gpu(gpu_runner, bit);
                     _base_initial_value = *unified_base_initial_value_ptr;
                     used_gpu = true;
                 }

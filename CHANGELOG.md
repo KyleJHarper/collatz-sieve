@@ -15,6 +15,19 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 
+### 3.1.0
+
+#### Peak By Bit (GPU)
+Following improvements were made:
+
+| Rate (per sec) | Change | Description |
+| -------------: | -----: | :-----------|
+|  2,895,000,000 |   0.0% | Baseline before changes. |
+|  2,996,000,000 |  +3.5% | Used `current_step & 1` instead of `current_step % 2` in `collatz_get_peak`. |
+|  3,447,000,000 | +19.1% | Remove `if/else` for just `if` and handled implied `x/2` inherently. |
+|  4,278,000,000 | +47.8% | Shift by `__ffs() - 1` (CTZ) instead of 1 to skip repeated `x/2` steps. |
+|  4,311,000,000 | +48.9% | Only write to `d_peaks[]` when necessary.  Otherwise, use local var. |
+
 ### 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.
 

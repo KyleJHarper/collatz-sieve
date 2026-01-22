@@ -17,4 +17,4 @@ template<typename T>
 void destroy_runner(CollatzPeakRunner<T>* runner);
 
 template<typename T>
-void find_max_iv_for_bit_gpu(CollatzPeakRunner<T>* runner, size_t bit, bool skip_after_hwm);
+void find_max_iv_for_bit_gpu(CollatzPeakRunner<T>* runner, size_t bit);
