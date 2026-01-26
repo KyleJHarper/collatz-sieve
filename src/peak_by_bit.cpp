@@ -6,6 +6,21 @@
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
+#include "collatz/peak_by_bit_gpu_interface.hpp"
+
+#ifdef HAVE_CUDA
+#include <cuda_runtime_api.h>
+bool can_use_gpu() {
+    int count = 0;
+    if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
+        return false;
+    }
+    return true;
+}
+#else
+bool can_use_gpu() { return false; }
+#endif
+
 
 
 //
@@ -86,7 +101,7 @@ class PeakIVScanner {
     // Find Max IV for Bit
     // Finds the maximum initial value for 2^bit.  Same behavior as the GPU version.
     //
-    inline void find_max_iv_for_bit(int& failing_index, int& overflow_index) {
+    inline void find_max_iv_for_bit(int& failing_index, int& overflow_index, T* progress_ptr) {
         // Loop until we get a failing index or overflow index.
         while(true) {
             // Load up the buffer.
@@ -127,6 +142,7 @@ class PeakIVScanner {
 
             // Nothing found.  Bump the base initial value and continue.
             _base_initial_value += BUFFER_SIZE;
+            *progress_ptr = _base_initial_value;
         }
     }
 
@@ -147,16 +163,44 @@ class PeakIVScanner {
         int* unified_failing_index_ptr = nullptr;
 
         // Flags.
+        bool has_gpu = can_use_gpu();
+        bool used_gpu = false;
         bool promote_test = false;
 
-        // Unify memory for the host-device connection if needed.  Mimic the GPU version.
+        // Unify memory for the host-device connection if needed.  Juggle between cuda and host alloc.
         // Base Initial Value is a private member, but we need it sync'd for Progress() to track.
+#ifdef HAVE_CUDA
+        if (has_gpu) {
+            cudaMallocManaged(&unified_base_initial_value_ptr, sizeof(T));
+            cudaMallocManaged(&unified_overflow_index_ptr, sizeof(int));
+            cudaMallocManaged(&unified_failing_index_ptr, sizeof(int));
+        } else {
+            unified_base_initial_value_ptr = (T*) std::malloc(sizeof(T));
+            unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
+            unified_overflow_index_ptr = (int*) std::malloc(sizeof(int));
+        }
+#else
         unified_base_initial_value_ptr = (T*) std::malloc(sizeof(T));
         unified_failing_index_ptr = (int*) std::malloc(sizeof(int));
         unified_overflow_index_ptr = (int*) std::malloc(sizeof(int));
+#endif
         *unified_base_initial_value_ptr = _base_initial_value;
         *unified_overflow_index_ptr = INT_MAX;
         *unified_failing_index_ptr = INT_MAX;
+
+        // Create a GPU runner, in case the GPU is leveraged.
+        CollatzPeakRunner<T>* gpu_runner = nullptr;
+        if constexpr(BuiltinIntegral<T>) {
+            if (has_gpu) {
+                gpu_runner = create_runner(
+                    _collatz_peaks.data()
+                    , BUFFER_SIZE
+                    , unified_base_initial_value_ptr
+                    , unified_overflow_index_ptr
+                    , unified_failing_index_ptr
+                );
+            }
+        }
 
         // Create the results hash for tracking.
         PeakIVScannerResults results;
@@ -166,7 +210,7 @@ class PeakIVScanner {
         logger->debug("Starting with bit {} and base initial value of {}", _start_bit, _base_initial_value);
 
         // Establish progress tracking.
-        Progress progress(std::filesystem::current_path().string() + "/peak_by_bit_gpu.progress");
+        Progress progress(std::filesystem::current_path().string() + "/peak_by_bit.progress");
         progress.monitor(unified_base_initial_value_ptr, 2);
 
         // Main loop for each bit.
@@ -200,8 +244,19 @@ class PeakIVScanner {
             *unified_overflow_index_ptr = INT_MAX;
             *unified_failing_index_ptr = INT_MAX;
 
-            // Find the first failing index.  Only have CPU.
-            find_max_iv_for_bit(*unified_failing_index_ptr, *unified_overflow_index_ptr);
+            // Find the first failing index.  Use the GPU if we can, otherwise use the CPU.
+            used_gpu = false;
+            if constexpr(BuiltinIntegral<T>) {
+                if (has_gpu) {
+                    // Find the peak via a kernel which will do all the work.
+                    find_max_iv_for_bit_gpu(gpu_runner, bit);
+                    _base_initial_value = *unified_base_initial_value_ptr;
+                    used_gpu = true;
+                }
+            }
+            if (used_gpu == false) {
+                find_max_iv_for_bit(*unified_failing_index_ptr, *unified_overflow_index_ptr, unified_base_initial_value_ptr);
+            }
 
             // Check for overflows with 64 and 128 bit integrals.
             promote_test = false;
@@ -212,7 +267,7 @@ class PeakIVScanner {
                 }
                 if (*unified_overflow_index_ptr < INT_MAX) {
                     T overflow_initial_value = _base_initial_value + *unified_overflow_index_ptr;
-                    logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
+                    logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to uint128_t.", overflow_initial_value);
                     promote_test = true;
                 }
             } else if constexpr(ExtendedIntegral<T>) {
@@ -241,9 +296,21 @@ class PeakIVScanner {
                 // Merge the results and return them.
                 results.merge(promoted_results);
                 progress.join();
+#ifdef HAVE_CUDA
+                if (has_gpu) {
+                    cudaFree(unified_base_initial_value_ptr);
+                    cudaFree(unified_failing_index_ptr);
+                    cudaFree(unified_overflow_index_ptr);
+                } else {
+                    std::free(unified_base_initial_value_ptr);
+                    std::free(unified_failing_index_ptr);
+                    std::free(unified_overflow_index_ptr);
+                }
+#else
                 std::free(unified_base_initial_value_ptr);
                 std::free(unified_failing_index_ptr);
                 std::free(unified_overflow_index_ptr);
+#endif
                 return results;
             }
 
@@ -263,9 +330,21 @@ class PeakIVScanner {
 
         // All done.  Return results.
         progress.join();
+#ifdef HAVE_CUDA
+        if (has_gpu) {
+            cudaFree(unified_base_initial_value_ptr);
+            cudaFree(unified_failing_index_ptr);
+            cudaFree(unified_overflow_index_ptr);
+        } else {
+            std::free(unified_base_initial_value_ptr);
+            std::free(unified_failing_index_ptr);
+            std::free(unified_overflow_index_ptr);
+        }
+#else
         std::free(unified_base_initial_value_ptr);
         std::free(unified_failing_index_ptr);
         std::free(unified_overflow_index_ptr);
+#endif
         return results;
     }
 
@@ -317,7 +396,11 @@ int main(int argc, char **argv) {
     }
 
     // Build the tester and run it.
-    logger->info("GPU not built into program.  Falling back to CPU processing.");
+    if (can_use_gpu()) {
+        logger->info("GPU was detected.  Will use it.");
+    } else {
+        logger->info("GPU not found.  Falling back to CPU processing.");
+    }
     PeakIVScannerResults results;
     if (force_mpz) {
         PeakIVScanner<mpz_class> test(max_bit, start_bit, uint128_to_mpz(starting_value));

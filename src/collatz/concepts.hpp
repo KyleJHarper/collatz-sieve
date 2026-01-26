@@ -15,7 +15,7 @@ typedef __int128_t int128_t;
 
 
 //
-// Make a UDL for str-to-uint128 since we can't trust the compiler to undrstand it.
+// Make a UDL for str-to-uint128 since we can't trust the compiler to understand it.
 //
 // Helper method.
 constexpr uint128_t parse_u128(std::string_view s) {
@@ -33,6 +33,23 @@ constexpr uint128_t operator""_u128(const char* str, size_t len) {
     return parse_u128(std::string_view{str, len});
 }
 
+
+
+//
+// Now make a UDL for MPZ class
+//
+inline mpz_class parse_mpz(std::string_view s) {
+    mpz_class value;
+    if (mpz_set_str(value.get_mpz_t(), s.data(), 10) != 0) {
+        throw std::runtime_error("invalid digit in _mpz literal");
+    }
+    return value;
+}
+//
+// Here's the UDL.
+inline mpz_class operator""_mpz(const char* str, size_t len) {
+    return parse_mpz(std::string_view{str, len});
+}
 
 
 //

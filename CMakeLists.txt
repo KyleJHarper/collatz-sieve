@@ -36,7 +36,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Extra compile flags
-add_compile_options(-Wall -Wextra -pthread)
+add_compile_options(-Wall -Wextra)
 
 # Include directories
 include_directories(
@@ -82,18 +82,18 @@ add_library(logging OBJECT src/logging.cpp)
 # --------------------------
 set(CPU_PROGRAMS
     ancestor_coverage
+    collatz_compression
     coverage
     high_water_mark
-    peak_by_bit
+    junk
     performance_stats
     sieve_stuff
     single_collatz
-    step_counter
 )
 
 set(GPU_PROGRAMS
-    peak_by_bit_gpu
-    step_counter_gpu
+    peak_by_bit
+    step_counter
 )
 
 # CPU-only programs

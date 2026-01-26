@@ -10,12 +10,26 @@
 #include "collatz/progress.hpp"
 #include "collatz/step_counter_gpu_interface.hpp"
 
+#ifdef HAVE_CUDA
+#include <cuda_runtime_api.h>
+bool can_use_gpu() {
+    int count = 0;
+    if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
+        return false;
+    }
+    return true;
+}
+#else
+bool can_use_gpu() { return false; }
+#endif
 
+
+constexpr size_t BUFFER_SIZE = 1ULL << 24;
 
 template<AnySupportedIntegral T>
 void process_level(T* start_value, T max_value, size_t level, StepResults *results) {
     // Do the work in batches.  Gives us the ability to parallelize better.
-    size_t loop_limit = SIZE_MAX;
+    size_t loop_limit = BUFFER_SIZE;
     size_t loops_needed = 0;
     while(*start_value <= max_value) {
         loops_needed = max_value - (*start_value) + 1;  // +1 because inclusive counting
@@ -50,12 +64,29 @@ template<AnySupportedIntegral T>
 StepResults run_it(size_t start_bit, size_t max_bit) {
     StepResults results;
     size_t bit_limit = CollatzConstants::get_max_initial_value_max_bits<T>();
+    bool has_gpu = can_use_gpu();
     T* unified_start_value_ptr = nullptr;
     T max_value = 0;
     size_t level;
 
     // Allocate the memory of the shared start value, for tracking purposes (Progress()).
-    unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+#ifdef HAVE_CUDA
+        if (has_gpu) {
+            cudaMallocManaged((void**)&unified_start_value_ptr, sizeof(T));
+        } else {
+            unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+        }
+#else
+        unified_start_value_ptr = (T*) std::malloc(sizeof(T));
+#endif
+
+    // Make the runner.
+    CollatzStepRunner<T>* gpu_runner = nullptr;
+    if constexpr(BuiltinIntegral<T>) {
+        if (has_gpu) {
+            gpu_runner = create_runner(BUFFER_SIZE, unified_start_value_ptr);
+        }
+    }
 
     // Establish progress tracking.
     Progress progress(std::filesystem::current_path().string() + "/step_counter.progress");
@@ -84,7 +115,11 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
         }
 
         // Process the level.
-        process_level(unified_start_value_ptr, max_value, level, &results);
+        if (can_use_gpu()) {
+            process_level_gpu(gpu_runner, max_value, level, &results);
+        } else {
+            process_level(unified_start_value_ptr, max_value, level, &results);
+        }
     }
 
     // Return results.
