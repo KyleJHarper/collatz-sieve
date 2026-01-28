@@ -109,17 +109,7 @@ class PeakIVScanner {
             for(size_t i = 0; i < BUFFER_SIZE; i++) {
                 T my_iv = _base_initial_value + i;
                 try {
-                    // Start with N as the peak.
-                    _collatz_peaks[i] = my_iv;
-                    // Loop throug sequence.
-                    Collatz<T>::for_each_sequence_step(my_iv, [&](const T& step) {
-                        // Promote peaks.
-                        if (step > _collatz_peaks[i]) {
-                            _collatz_peaks[i] = step;
-                        }
-                        // Skip when we hit HWM.
-                        return step < my_iv;
-                    });
+                    _collatz_peaks[i] = Collatz<T>::st_get_peak_fast(my_iv, true);
                 } catch (const CollatzSequenceOverflow& ex) {
                     overflow_index = i;
                     i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
@@ -356,11 +346,11 @@ int main(int argc, char **argv) {
     // Process options.
     size_t start_bit;
     size_t max_bit;
-    bool verbose;
+    bool verbose = false;
     bool force_mpz = false;
     bool force_i128 = false;
-    bool use_table;
-    bool array_output;
+    bool use_table = false;
+    bool array_output = false;
     std::string starting_value_s;
     uint128_t starting_value = 0;
     CLI::App options("Finds the highest initial value (IV) of a Collatz sequence which stays beneath 2^bit during the sequence.  Starts with uint64_t type and upgrades to GMP (mpz_class) automatically.");

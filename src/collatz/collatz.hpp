@@ -950,20 +950,26 @@ class Collatz {
     // Finds the peak of a sequence.  Skips the for_each_sequence_step() iterator to minimize overhead.  See
     // collatz_compression.cpp for details.
     //
-    static size_t st_get_peak_fast(const T& initial_value) {
+    // You may optionally stop at high-water mark (mainly for peak_by_bit program).
+    //
+    static inline T st_get_peak_fast(const T& initial_value, bool stop_at_hwm = false) {
         size_t right_shifts = 0;
         T peak = initial_value;
+        T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
 
         if constexpr(BuiltinIntegral<T>) {
             // Native types are fast as-is.  Affine compression doesn't help, except bit-shifting CTZ.
             T tmp = initial_value;
             // Check for overflow here, once, instead of over and over.
-            if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(std::numeric_limits<T>::digits)) {
-                throw CollatzSequenceOverflow("Overflow when building st_get_step_count_fast().");
-            }
-            while (tmp > 1) {
+            // if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(std::numeric_limits<T>::digits)) {
+            //     throw CollatzSequenceOverflow("Overflow when building st_get_step_count_fast().");
+            // }
+            while (tmp > bailout_value) {
                 // Handle odd.
                 if ((tmp & 1) == 1) {
+                    if (tmp > CollatzConstants::get_max_3xp1<T>()) {
+                        throw std::out_of_range("Cannot process initial_value " + to_string_any(initial_value) + " any further in st_get_peak_fast.");
+                    }
                     tmp = (tmp << 1) + tmp + 1;
                     if (tmp > peak) {
                         peak = tmp;
@@ -980,7 +986,7 @@ class Collatz {
             size_t trailing_ones = 0;
             constexpr size_t limit = CollatzConstants::POW3_MPZ_ELEMENT_COUNT - 1;
             // See collatz_compression.cpp tests for details on how this works and why.
-            while (tmp > 1) {
+            while (tmp > bailout_value) {
                 // Handle odd.
                 if ((tmp & 1) == 1) {
                     trailing_ones = count_trailing_ones(tmp);

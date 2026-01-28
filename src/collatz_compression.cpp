@@ -363,7 +363,7 @@ void test_9(T max_value, T report_every) {
             // Overflow Note:
             // We are usually protected from overflow because of the 3XP1[] table, but that is for applications of f and g
             // serially.  Since we're taking 3^k and multiplying by an unknown value 'n' ... it gets messy.  We need to limit it
-            // to 40 which is 3^40 < 2^64 (fits in a uint64_t), but subtract bit width of (n+1).  Yep.
+            // to 40 which is 3^40 < 2^64 (fits in a uint64_t), but subtract bit width of (n+1).  Can use 3^79 for 128+ bits.
             if ((n & 1) == 1) {
                 trailing_ones = count_trailing_ones(n);
                 steps += (2 * trailing_ones);
