@@ -952,14 +952,14 @@ class Collatz {
     //
     // You may optionally stop at high-water mark (mainly for peak_by_bit program).
     //
-    static inline T st_get_peak_fast(const T& initial_value, bool stop_at_hwm = false) {
+    static inline void st_get_peak_fast(const T& initial_value, T& out_peak, bool stop_at_hwm = false) {
         size_t right_shifts = 0;
-        T peak = initial_value;
-        T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
+        out_peak = initial_value;
 
         if constexpr(BuiltinIntegral<T>) {
             // Native types are fast as-is.  Affine compression doesn't help, except bit-shifting CTZ.
             T tmp = initial_value;
+            T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
             // Check for overflow here, once, instead of over and over.
             // if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(std::numeric_limits<T>::digits)) {
             //     throw CollatzSequenceOverflow("Overflow when building st_get_step_count_fast().");
@@ -971,8 +971,8 @@ class Collatz {
                         throw std::out_of_range("Cannot process initial_value " + to_string_any(initial_value) + " any further in st_get_peak_fast.");
                     }
                     tmp = (tmp << 1) + tmp + 1;
-                    if (tmp > peak) {
-                        peak = tmp;
+                    if (tmp > out_peak) {
+                        out_peak = tmp;
                     }
                 }
                 // Always even at this point.  Shift zeros out.  Can't affect peak.
@@ -983,24 +983,40 @@ class Collatz {
             // GMP types are significantly faster using an Affine map for CTZ and CTO, ergo it's worth the overhead.
             static thread_local T tmp;
             tmp = initial_value;
+            static thread_local T tmp_x_2;
+            static thread_local T bailout_value;
+            bailout_value = 1;
+            if (stop_at_hwm && initial_value > 1) {
+                bailout_value = initial_value;
+                mpz_sub_ui(bailout_value.get_mpz_t(), bailout_value.get_mpz_t(), 1);
+            }
             size_t trailing_ones = 0;
             constexpr size_t limit = CollatzConstants::POW3_MPZ_ELEMENT_COUNT - 1;
             // See collatz_compression.cpp tests for details on how this works and why.
             while (tmp > bailout_value) {
                 // Handle odd.
-                if ((tmp & 1) == 1) {
+                if (mpz_odd_p(tmp.get_mpz_t())) {
                     trailing_ones = count_trailing_ones(tmp);
                     while (trailing_ones > limit) {
-                        tmp = ((CollatzConstants::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
+                        // tmp = ((CollatzConstants::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
+                        mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
+                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), CollatzConstants::POW3_MPZ[limit].get_mpz_t());
+                        mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), limit);
+                        mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
                         trailing_ones -= limit;
                     }
                     if (trailing_ones > 0) {
-                        tmp = ((CollatzConstants::POW3_MPZ[trailing_ones] * (tmp + 1)) >> trailing_ones) - 1;
+                        // tmp = ((CollatzConstants::POW3_MPZ[trailing_ones] * (tmp + 1)) >> trailing_ones) - 1;
+                        mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
+                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), CollatzConstants::POW3_MPZ[trailing_ones].get_mpz_t());
+                        mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), trailing_ones);
+                        mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
                     }
                     // Now check peak.  However!  We applied an accelerated F(x):  (3x + 1) / 2
-                    // Peak was tmp * 2.
-                    if (tmp * 2 > peak) {
-                        peak = tmp * 2;
+                    // Peak was actually tmp * 2.
+                    mpz_mul_2exp(tmp_x_2.get_mpz_t(), tmp.get_mpz_t(), 1);
+                    if (mpz_cmp(tmp_x_2.get_mpz_t(), out_peak.get_mpz_t()) > 0) {
+                        out_peak = tmp_x_2;
                     }
                 }
                 // Always even at this point.  Shift zeros out.
@@ -1010,8 +1026,6 @@ class Collatz {
         } else {
             throw std::runtime_error("Cannot determine data type for st_get_step_count_fast().");
         }
-
-        return peak;
     }
 
 

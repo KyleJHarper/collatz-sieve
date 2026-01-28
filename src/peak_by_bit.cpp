@@ -105,11 +105,12 @@ class PeakIVScanner {
         // Loop until we get a failing index or overflow index.
         while(true) {
             // Load up the buffer.
+            static thread_local T my_iv;
             #pragma omp parallel for reduction(min:overflow_index) schedule(auto) default(none) shared(_collatz_peaks, _base_initial_value)
             for(size_t i = 0; i < BUFFER_SIZE; i++) {
-                T my_iv = _base_initial_value + i;
+                my_iv = _base_initial_value + i;
                 try {
-                    _collatz_peaks[i] = Collatz<T>::st_get_peak_fast(my_iv, true);
+                    Collatz<T>::st_get_peak_fast(my_iv, _collatz_peaks[i], true);
                 } catch (const CollatzSequenceOverflow& ex) {
                     overflow_index = i;
                     i = BUFFER_SIZE;  // Cannot 'break' inside OMP loops.  Set i to BUFFER_SIZE to short-circuit out.
