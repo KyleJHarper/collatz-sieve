@@ -17,8 +17,10 @@ __System Build for All Tests__
 
 ### 3.1.0
 
-#### Peak By Bit (GPU)
-Following improvements were made:
+#### Peak By Bit
+The CPU-only version was superseded by the CPU/GPU version which can use either (but not both at once).
+
+Improvements were made to the GPU version (always uint128_t):
 
 | Rate (per sec) | Change | Description |
 | -------------: | -----: | :-----------|
@@ -27,6 +29,10 @@ Following improvements were made:
 |  3,447,000,000 | +19.1% | Remove `if/else` for just `if` and handled implied `x/2` inherently. |
 |  4,278,000,000 | +47.8% | Shift by `__ffs() - 1` (CTZ) instead of 1 to skip repeated `x/2` steps. |
 |  4,311,000,000 | +48.9% | Only write to `d_peaks[]` when necessary.  Otherwise, use local var. |
+
+Improvements were made to the CPU version, and a dedicated `Collatz<T>::st_get_peak_fast()` was built.
+* For 64- and 128-bit integrals, performance went from 25,000,000/sec to approximately 400,000,000/sec.
+* For GMP, performance went from 15,000,000/sec to approximately 140,000,000/sec.  Mostly from alloc() reduction.
 
 ### 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.

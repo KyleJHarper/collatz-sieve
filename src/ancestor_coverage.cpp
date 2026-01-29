@@ -58,7 +58,7 @@ std::vector<AncestorResult<T>> run (size_t levels) {
             } else {
                 root_preamble = "Node " + root->get_value().get_str() + " (level " + std::to_string(level) + ")";
             }
-            std::string root_full_fg_pattern = Collatz<T>::st_get_fg_pattern_string(root->get_value());
+            std::string root_full_fg_pattern = Collatz<T>::st_get_fg_chain_string(root->get_value());
             // One (1) is a special case.
             if (root->get_value() == 1) {
                 root_full_fg_pattern += "G";

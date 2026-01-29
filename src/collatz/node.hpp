@@ -164,8 +164,14 @@ class Node {
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
         // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
         _fg_chain_length = get_level() - 1;
-        std::string fg_chain = Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
+        std::string fg_chain = Collatz<T>::st_get_fg_chain_string(_value, _fg_chain_length);
         _fg_chain_length = fg_chain.size();
+
+
+        //TODO
+        //We're ready to move away from any string version of F-G and move to integer tracking of affine mapping.
+        //TODO
+
 
         // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
         //   > Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
@@ -425,7 +431,7 @@ class Node {
     //
     // Get the F-G chain.  Use the Collatz static method for this.
     std::string get_fg_chain_string() const {
-        return Collatz<T>::st_get_fg_pattern_string(_value, _fg_chain_length);
+        return Collatz<T>::st_get_fg_chain_string(_value, _fg_chain_length);
     }
     //
     // Get the odd-even chain.  Use the Collatz static method for this.

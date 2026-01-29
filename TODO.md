@@ -43,6 +43,9 @@ thread-local Node object inside an OMP loop (Implicit) to build the `_level_map`
 a way to easily and simply offload building to a GPU.  For Materialized, probably not, because we have to get the objects into RAM
 anyway, but for Implicit we could reasonably ask the GPU to process a level and copy back `Intervals` cheaply.
 
+### Remove NodeMetaData
+We don't need this anymore.  It should be completely implicit.
+
 ### Sieve
 * Flesh this out so it's ironclad.
 * Fully implemented the forward-looking cache.

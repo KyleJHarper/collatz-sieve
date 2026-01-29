@@ -821,33 +821,32 @@ class Collatz {
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
 
-        thread_local T current_step;
-        current_step = initial_value;
+        thread_local T current_value;
+        current_value = initial_value;
         if constexpr(BuiltinIntegral<T>) {
             // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
-            while (current_step >= 1) {
-                bool stop = callback(current_step);
-                if (stop || current_step == 1) { return; }
-                if (current_step % 2 == 0) {
-                    current_step /= 2;
+            while (current_value != 1) {
+                bool stop = callback(current_value);
+                if (stop) { return; }
+                if ((current_value & 1) == 0) {
+                    current_value >>= 1;
                 } else {
-                    if (current_step > CollatzConstants::get_max_3xp1<T>()) {
+                    if (current_value > CollatzConstants::get_max_3xp1<T>()) {
                         throw CollatzSequenceOverflow("Overflow when building for_each_sequence_step().");
                     }
-                    current_step *= 3;
-                    current_step += 1;
+                    current_value = (current_value << 1) + current_value + 1;
                 }
             }
         } else if constexpr(GMPIntegral<T>) {
             // GMP integers will alloc() with certain arithmetic operators, but can't overflow.
-            while (current_step >= CollatzConstants::MPZ_ONE) {
-                bool stop = callback(current_step);
-                if (stop || current_step == 1) { return; }
-                if (mpz_even_p(current_step.get_mpz_t())) {
-                    mpz_tdiv_q_2exp(current_step.get_mpz_t(), current_step.get_mpz_t(), 1);  // current_step >> 1   ==>  current_step /= 2
+            while (mpz_cmp_ui(current_value.get_mpz_t(), 1) != 0) {
+                bool stop = callback(current_value);
+                if (stop) { return; }
+                if (mpz_even_p(current_value.get_mpz_t())) {
+                    mpz_tdiv_q_2exp(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);  // current_step >> 1   ==>  current_step /= 2
                 } else {
-                    mpz_mul(current_step.get_mpz_t(), current_step.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());  // current_step *= 3
-                    mpz_add(current_step.get_mpz_t(), current_step.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());    // current_step += 1
+                    mpz_mul(current_value.get_mpz_t(), current_value.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());  // current_step *= 3
+                    mpz_add(current_value.get_mpz_t(), current_value.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());    // current_step += 1
                 }
             }
         }
@@ -1031,26 +1030,50 @@ class Collatz {
 
 
     //
-    // Get FG String
+    // For-Each FG Link
+    // Generate an FG chain on-the-fly and return the link (F or G) along the way.
+    //
+    // true == F, false = G
+    template<typename Func>
+    static void for_each_fg_chain_link(const T& initial_value, Func&& callback) {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_invocable_r_v<bool, Func, bool>, "Callback must be callable as bool(bool)");
+
+        // Zero is a special case, mostly for BinaryTree building a root.
+        if (initial_value == 0) { return; }
+
+        // Call our basic Collatz iterator.
+        bool is_F = false;
+        Collatz<T>::for_each_sequence_step(initial_value, [&](const T& current_value) {
+            // When the previous step was F, skip the next step which is always the latter part of accerlated F(x).
+            if (is_F) {
+                // Reset it so we don't loop.
+                is_F = false;
+                return false;
+            } else {
+                if constexpr(BuiltinIntegral<T>) {
+                    is_F = (current_value & 1) == 1;
+                } else if constexpr(GMPIntegral<T>) {
+                    is_F = mpz_odd_p(current_value.get_mpz_t());
+                }
+                bool stop = callback(is_F);
+                return stop;
+            }
+        });
+    }
+
+
+
+    //
+    // Get FG Chain String
     // Generate the F-G string for a sequence with some initial value.
     //
-    static std::string st_get_fg_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
+    static std::string st_get_fg_chain_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
         std::string result;
         size_t count = 0;
-        bool skip = false;
-        Collatz<T>::for_each_sequence_step(initial_value, [&](const T& step) {
-            // When the previous was 'F' (odd), we need to skip the next, because F is a full Odd-Even pair.
-            if (skip) {
-                skip = false;
-            } else {
-                count++;
-                if constexpr(BuiltinIntegral<T>) {
-                    result += (step % 2 == 0 ? 'G' : 'F');
-                } else if constexpr(GMPIntegral<T>) {
-                    result += (mpz_even_p(step.get_mpz_t()) ? 'G' : 'F');
-                }
-                skip = result.back() == 'F';
-            }
+        Collatz<T>::for_each_fg_chain_link(initial_value, [&](bool is_F) {
+            result += (is_F ? 'F' : 'G');
+            count++;
             return count >= max_chars;
         });
         return result;
@@ -1058,7 +1081,7 @@ class Collatz {
     //
     // Wrapper for the instance implementation.
     std::string get_fg_pattern_string(size_t max_chars = std::numeric_limits<size_t>::max()) const {
-        return Collatz<T>::st_get_fg_pattern_string(_initial_value, max_chars);
+        return Collatz<T>::st_get_fg_chain_string(_initial_value, max_chars);
     }
 
 
@@ -1068,7 +1091,7 @@ class Collatz {
     // Generate the odd-even string for the sequence, which is just an expansion of the F-G string.
     //
     static std::string st_get_oe_pattern_string(const T& initial_value, size_t max_chars = std::numeric_limits<size_t>::max()) {
-        std::string fg_pattern = Collatz<T>::st_get_fg_pattern_string(initial_value, max_chars);
+        std::string fg_pattern = Collatz<T>::st_get_fg_chain_string(initial_value, max_chars);
         return fg_to_oe(fg_pattern, max_chars);
     }
     //
