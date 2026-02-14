@@ -10,17 +10,11 @@
 //
 template<AnySupportedIntegral T>
 void test_basic_node() {
-    Node<T> root(7, true);
+    Node<T> root(7);
 
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
-    std::cout << root.get_odd_even_chain_string() << std::endl;
     assert(root.get_odd_even_chain_string() == "OEOE");
-    assert(root.get_twos_value() > 0);
-    assert(root.get_threes_value() > 0);
-    assert(root.get_fg_total() >= 0);
-    assert(root.get_fg_n_portion() > 0);
-    assert(root.get_fg_constant() >= 0);
 }
 
 
@@ -30,33 +24,33 @@ void test_basic_node() {
 //
 template<AnySupportedIntegral T>
 void test_fg_values() {
-    Node<T> node(1, false);
+    Node<T> node(1);
     assert(node.get_fg_chain_string() == "F"); // Special case
-    node.init(2, false);
+    node.init(2);
     assert(node.get_fg_chain_string() == "G");
-    node.init(3, false);
+    node.init(3);
     assert(node.get_fg_chain_string() == "F");
-    node.init(4, false);
+    node.init(4);
     assert(node.get_fg_chain_string() == "GG");
-    node.init(5, false);
+    node.init(5);
     assert(node.get_fg_chain_string() == "FG");
-    node.init(6, false);
+    node.init(6);
     assert(node.get_fg_chain_string() == "GF");
-    node.init(7, false);
+    node.init(7);
     assert(node.get_fg_chain_string() == "FF");
-    node.init(8, false);
+    node.init(8);
     assert(node.get_fg_chain_string() == "GGG");
-    node.init(9, false);
+    node.init(9);
     assert(node.get_fg_chain_string() == "FGF");
-    node.init(10, false);
+    node.init(10);
     assert(node.get_fg_chain_string() == "GFG");
-    node.init(11, false);
+    node.init(11);
     assert(node.get_fg_chain_string() == "FFG");
-    node.init(12, false);
+    node.init(12);
     assert(node.get_fg_chain_string() == "GGF");
-    node.init(13, false);
+    node.init(13);
     assert(node.get_fg_chain_string() == "FGG");
-    node.init(14, false);
+    node.init(14);
     assert(node.get_fg_chain_string() == "GFF");
 }
 
@@ -67,24 +61,14 @@ void test_fg_values() {
 //
 template<AnySupportedIntegral T>
 void test_reuse_with_init() {
-    Node<T> root(7, true);
+    Node<T> root(7);
     assert(root.get_value() == 7);
     assert(root.get_parent() == nullptr);
     assert(root.get_odd_even_chain_string() == "OEOE");
-    assert(root.get_twos_value() > 0);
-    assert(root.get_threes_value() > 0);
-    assert(root.get_fg_total() >= 0);
-    assert(root.get_fg_n_portion() > 0);
-    assert(root.get_fg_constant() >= 0);
-    root.init(6, true);
+    root.init(6);
     assert(root.get_value() == 6);
     assert(root.get_odd_even_chain_string() == "EOE");
     assert(root.get_parent() == nullptr);
-    assert(root.get_twos_value() > 0);
-    assert(root.get_threes_value() > 0);
-    assert(root.get_fg_total() >= 0);
-    assert(root.get_fg_n_portion() > 0);
-    assert(root.get_fg_constant() >= 0);
 }
 
 
@@ -94,7 +78,7 @@ void test_reuse_with_init() {
 //
 template<AnySupportedIntegral T>
 void test_high_water_mark_behavior() {
-    Node<T> root(2, true);
+    Node<T> root(2);
     Node<T>* child = root.add_child(6);
 
     assert(child->get_parent() == &root);
@@ -109,7 +93,7 @@ void test_high_water_mark_behavior() {
 //
 template<AnySupportedIntegral T>
 void test_high_water_mark_root_case() {
-    Node<T> root(15, true);
+    Node<T> root(15);
     assert(!root.has_high_water_mark_ancestor());
     assert(root.get_hwm_ancestor() == nullptr);
     assert(!root.is_below_high_water_mark());
@@ -122,31 +106,13 @@ void test_high_water_mark_root_case() {
 //
 template<AnySupportedIntegral T>
 void test_add_child_and_deep_size() {
-    Node<T> root(7, false);
+    Node<T> root(7);
     Node<T>* c1 = root.add_child(3);
     Node<T>* c2 = root.add_child(5);
     assert(c1->get_parent() == &root);
     assert(c2->get_parent() == &root);
     assert(root.does_own_children() == true);
     assert(root.deep_size() > 0);
-}
-
-
-
-//
-//  Metadata Tracking
-//
-template<AnySupportedIntegral T>
-void test_metadata_tracking() {
-    Node<T> node(7, true);
-    assert(node.get_fg_constant() > 0);  // This should work.
-    node.init(6, false);  // This should cause an error when we get metadata.
-    try {
-        assert(node.get_fg_constant() > 0);
-        assert(false); // Should not reach here
-    } catch (const std::logic_error& e) {
-        assert(std::string(e.what()).find("disabled metadata when") != std::string::npos);
-    }
 }
 
 
@@ -174,10 +140,6 @@ void run_all() {
 
     std::cout << "test_add_child_and_deep_size() ..." << std::flush;
     test_add_child_and_deep_size<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_metadata_tracking() ..." << std::flush;
-    test_metadata_tracking<T>();
     std::cout << " passed.\n";
 
     std::cout << "test_reuse_with_init() ..." << std::flush;

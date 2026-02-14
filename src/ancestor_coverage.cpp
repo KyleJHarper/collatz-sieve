@@ -25,7 +25,6 @@ std::vector<AncestorResult<T>> run (size_t levels) {
     opts.preserve_ancestors = true;
     opts.prune_hwm_nodes = true;
     opts.prune_parent_levels = false;
-    opts.track_node_metadata = true;
     BinaryTree<T> tree(levels, opts);
 
     // Scan.
@@ -48,7 +47,7 @@ std::vector<AncestorResult<T>> run (size_t levels) {
             AncestorResult<T> result;
 
             // Make a copy of the node so we don't break the tree.
-            Node<T>* root = new Node<T>(node->get_value(), true);
+            Node<T>* root = new Node<T>(node->get_value());
             result.lineage.push_back(root);
             Node<T>* descendant;
             Node<T>* child;

@@ -22,7 +22,6 @@ class CoverageBuilder {
     CoverageBuilder(bool preserve_ancestors, BinaryTreeType tree_type) {
         BinaryTreeOptions opts;
         opts.tree_type = tree_type;
-        opts.track_node_metadata = false;
         opts.prune_hwm_nodes = true;
         opts.preserve_ancestors = preserve_ancestors;
         opts.prune_parent_levels = true;

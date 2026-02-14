@@ -13,6 +13,7 @@
 #include "concepts.hpp"
 #include "gmp_helpers.hpp"
 #include "count_trailing_helpers.hpp"
+#include "exponents.hpp"
 
 
 
@@ -307,222 +308,6 @@ namespace CollatzConstants {
         }
         throw std::logic_error("Unknown type for bit required.");
     }
-
-
-    //
-    // Lots of powers of 3.  All of them.  Nom nom nom.
-    //
-    constexpr size_t POW3_64BIT_ELEMENT_COUNT = 40;
-    constexpr uint64_t POW3_64BIT[POW3_64BIT_ELEMENT_COUNT] = {
-        1ULL
-        , 3ULL
-        , 9ULL
-        , 27ULL
-        , 81ULL
-        , 243ULL
-        , 729ULL
-        , 2187ULL
-        , 6561ULL
-        , 19683ULL
-        , 59049ULL
-        , 177147ULL
-        , 531441ULL
-        , 1594323ULL
-        , 4782969ULL
-        , 14348907ULL
-        , 43046721ULL
-        , 129140163ULL
-        , 387420489ULL
-        , 1162261467ULL
-        , 3486784401ULL
-        , 10460353203ULL
-        , 31381059609ULL
-        , 94143178827ULL
-        , 282429536481ULL
-        , 847288609443ULL
-        , 2541865828329ULL
-        , 7625597484987ULL
-        , 22876792454961ULL
-        , 68630377364883ULL
-        , 205891132094649ULL
-        , 617673396283947ULL
-        , 1853020188851841ULL
-        , 5559060566555523ULL
-        , 16677181699666569ULL
-        , 50031545098999707ULL
-        , 150094635296999121ULL
-        , 450283905890997363ULL
-        , 1350851717672992089ULL
-        , 4052555153018976267ULL
-    };
-    // 128-bit now.
-    constexpr size_t POW3_128BIT_ELEMENT_COUNT = 80;
-    constexpr __uint128_t POW3_128BIT[POW3_128BIT_ELEMENT_COUNT] = {
-        "1"_u128,
-        "3"_u128,
-        "9"_u128,
-        "27"_u128,
-        "81"_u128,
-        "243"_u128,
-        "729"_u128,
-        "2187"_u128,
-        "6561"_u128,
-        "19683"_u128,
-        "59049"_u128,
-        "177147"_u128,
-        "531441"_u128,
-        "1594323"_u128,
-        "4782969"_u128,
-        "14348907"_u128,
-        "43046721"_u128,
-        "129140163"_u128,
-        "387420489"_u128,
-        "1162261467"_u128,
-        "3486784401"_u128,
-        "10460353203"_u128,
-        "31381059609"_u128,
-        "94143178827"_u128,
-        "282429536481"_u128,
-        "847288609443"_u128,
-        "2541865828329"_u128,
-        "7625597484987"_u128,
-        "22876792454961"_u128,
-        "68630377364883"_u128,
-        "205891132094649"_u128,
-        "617673396283947"_u128,
-        "1853020188851841"_u128,
-        "5559060566555523"_u128,
-        "16677181699666569"_u128,
-        "50031545098999707"_u128,
-        "150094635296999121"_u128,
-        "450283905890997363"_u128,
-        "1350851717672992089"_u128,
-        "4052555153018976267"_u128,
-        "12157665459056928801"_u128,
-        "36472996377170786403"_u128,
-        "109418989131512359209"_u128,
-        "328256967394537077627"_u128,
-        "984770902183611232881"_u128,
-        "2954312706550833698643"_u128,
-        "8862938119652501095929"_u128,
-        "26588814358957503287787"_u128,
-        "79766443076872509863361"_u128,
-        "239299329230617529590083"_u128,
-        "717897987691852588770249"_u128,
-        "2153693963075557766310747"_u128,
-        "6461081889226673298932241"_u128,
-        "19383245667680019896796723"_u128,
-        "58149737003040059690390169"_u128,
-        "174449211009120179071170507"_u128,
-        "523347633027360537213511521"_u128,
-        "1570042899082081611640534563"_u128,
-        "4710128697246244834921603689"_u128,
-        "14130386091738734504764811067"_u128,
-        "42391158275216203514294433201"_u128,
-        "127173474825648610542883299603"_u128,
-        "381520424476945831628649898809"_u128,
-        "1144561273430837494885949696427"_u128,
-        "3433683820292512484657849089281"_u128,
-        "10301051460877537453973547267843"_u128,
-        "30903154382632612361920641803529"_u128,
-        "92709463147897837085761925410587"_u128,
-        "278128389443693511257285776231761"_u128,
-        "834385168331080533771857328695283"_u128,
-        "2503155504993241601315571986085849"_u128,
-        "7509466514979724803946715958257547"_u128,
-        "22528399544939174411840147874772641"_u128,
-        "67585198634817523235520443624317923"_u128,
-        "202755595904452569706561330872953769"_u128,
-        "608266787713357709119683992618861307"_u128,
-        "1824800363140073127359051977856583921"_u128,
-        "5474401089420219382077155933569751763"_u128,
-        "16423203268260658146231467800709255289"_u128,
-        "49269609804781974438694403402127765867"_u128
-    };
-    // MPZ now.
-    constexpr size_t POW3_MPZ_ELEMENT_COUNT = 80;
-    static mpz_class POW3_MPZ[POW3_MPZ_ELEMENT_COUNT] = {
-        "1"_mpz,
-        "3"_mpz,
-        "9"_mpz,
-        "27"_mpz,
-        "81"_mpz,
-        "243"_mpz,
-        "729"_mpz,
-        "2187"_mpz,
-        "6561"_mpz,
-        "19683"_mpz,
-        "59049"_mpz,
-        "177147"_mpz,
-        "531441"_mpz,
-        "1594323"_mpz,
-        "4782969"_mpz,
-        "14348907"_mpz,
-        "43046721"_mpz,
-        "129140163"_mpz,
-        "387420489"_mpz,
-        "1162261467"_mpz,
-        "3486784401"_mpz,
-        "10460353203"_mpz,
-        "31381059609"_mpz,
-        "94143178827"_mpz,
-        "282429536481"_mpz,
-        "847288609443"_mpz,
-        "2541865828329"_mpz,
-        "7625597484987"_mpz,
-        "22876792454961"_mpz,
-        "68630377364883"_mpz,
-        "205891132094649"_mpz,
-        "617673396283947"_mpz,
-        "1853020188851841"_mpz,
-        "5559060566555523"_mpz,
-        "16677181699666569"_mpz,
-        "50031545098999707"_mpz,
-        "150094635296999121"_mpz,
-        "450283905890997363"_mpz,
-        "1350851717672992089"_mpz,
-        "4052555153018976267"_mpz,
-        "12157665459056928801"_mpz,
-        "36472996377170786403"_mpz,
-        "109418989131512359209"_mpz,
-        "328256967394537077627"_mpz,
-        "984770902183611232881"_mpz,
-        "2954312706550833698643"_mpz,
-        "8862938119652501095929"_mpz,
-        "26588814358957503287787"_mpz,
-        "79766443076872509863361"_mpz,
-        "239299329230617529590083"_mpz,
-        "717897987691852588770249"_mpz,
-        "2153693963075557766310747"_mpz,
-        "6461081889226673298932241"_mpz,
-        "19383245667680019896796723"_mpz,
-        "58149737003040059690390169"_mpz,
-        "174449211009120179071170507"_mpz,
-        "523347633027360537213511521"_mpz,
-        "1570042899082081611640534563"_mpz,
-        "4710128697246244834921603689"_mpz,
-        "14130386091738734504764811067"_mpz,
-        "42391158275216203514294433201"_mpz,
-        "127173474825648610542883299603"_mpz,
-        "381520424476945831628649898809"_mpz,
-        "1144561273430837494885949696427"_mpz,
-        "3433683820292512484657849089281"_mpz,
-        "10301051460877537453973547267843"_mpz,
-        "30903154382632612361920641803529"_mpz,
-        "92709463147897837085761925410587"_mpz,
-        "278128389443693511257285776231761"_mpz,
-        "834385168331080533771857328695283"_mpz,
-        "2503155504993241601315571986085849"_mpz,
-        "7509466514979724803946715958257547"_mpz,
-        "22528399544939174411840147874772641"_mpz,
-        "67585198634817523235520443624317923"_mpz,
-        "202755595904452569706561330872953769"_mpz,
-        "608266787713357709119683992618861307"_mpz,
-        "1824800363140073127359051977856583921"_mpz,
-        "5474401089420219382077155933569751763"_mpz,
-        "16423203268260658146231467800709255289"_mpz,
-        "49269609804781974438694403402127765867"_mpz
-    };
 }
 
 
@@ -850,6 +635,8 @@ class Collatz {
                 }
             }
         }
+        // Since the while-loop exits prematurely at 1, we need one more callback before we end.
+        callback(current_value);
     }
     //
     // Wrapper for the instance implementation.
@@ -917,7 +704,7 @@ class Collatz {
             static thread_local T tmp;
             tmp = initial_value;
             size_t trailing_ones = 0;
-            constexpr size_t limit = CollatzConstants::POW3_MPZ_ELEMENT_COUNT - 1;
+            constexpr size_t limit = Exponents::POW3_MPZ_ELEMENT_COUNT - 1;
             // See collatz_compression.cpp tests for details on how this works and why.
             while (tmp > 1) {
                 // Handle odd.
@@ -925,11 +712,11 @@ class Collatz {
                     trailing_ones = count_trailing_ones(tmp);
                     steps += (2 * trailing_ones);
                     while (trailing_ones > limit) {
-                        tmp = ((CollatzConstants::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
+                        tmp = ((Exponents::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
                         trailing_ones -= limit;
                     }
                     if (trailing_ones > 0) {
-                        tmp = ((CollatzConstants::POW3_MPZ[trailing_ones] * (tmp + 1)) >> trailing_ones) - 1;
+                        tmp = ((Exponents::POW3_MPZ[trailing_ones] * (tmp + 1)) >> trailing_ones) - 1;
                     }
                 }
                 // Always even at this point.  Shift zeros out.
@@ -990,7 +777,7 @@ class Collatz {
                 mpz_sub_ui(bailout_value.get_mpz_t(), bailout_value.get_mpz_t(), 1);
             }
             size_t trailing_ones = 0;
-            constexpr size_t limit = CollatzConstants::POW3_MPZ_ELEMENT_COUNT - 1;
+            constexpr size_t limit = Exponents::POW3_MPZ_ELEMENT_COUNT - 1;
             // See collatz_compression.cpp tests for details on how this works and why.
             while (tmp > bailout_value) {
                 // Handle odd.
@@ -999,7 +786,7 @@ class Collatz {
                     while (trailing_ones > limit) {
                         // tmp = ((CollatzConstants::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
                         mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
-                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), CollatzConstants::POW3_MPZ[limit].get_mpz_t());
+                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), Exponents::POW3_MPZ[limit].get_mpz_t());
                         mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), limit);
                         mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
                         trailing_ones -= limit;
@@ -1007,7 +794,7 @@ class Collatz {
                     if (trailing_ones > 0) {
                         // tmp = ((CollatzConstants::POW3_MPZ[trailing_ones] * (tmp + 1)) >> trailing_ones) - 1;
                         mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
-                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), CollatzConstants::POW3_MPZ[trailing_ones].get_mpz_t());
+                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), Exponents::POW3_MPZ[trailing_ones].get_mpz_t());
                         mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), trailing_ones);
                         mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
                     }

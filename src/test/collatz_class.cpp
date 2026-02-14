@@ -3,6 +3,7 @@
 #include "../collatz/collatz.hpp"
 #include <gmpxx.h>
 #include <stdexcept>
+#include "../collatz/collatz_affine_map.hpp"
 
 
 
@@ -143,11 +144,41 @@ void test_collatz_one() {
 
 
 //
+// Affine map
+//
+template<AnySupportedIntegral T>
+void test_collatz_affine_map() {
+    Collatz<T> c(17);
+    assert(c.get_fg_pattern_string() == "FGFGGFGGGF");
+    CollatzAffineMap<T> map;
+    map.apply_F();
+    assert(map.calculate(17) == 26);
+    map.apply_G();
+    assert(map.calculate(17) == 13);
+    map.apply_F();
+    assert(map.calculate(17) == 20);
+    map.apply_G();
+    assert(map.calculate(17) == 10);
+    map.apply_G();
+    assert(map.calculate(17) == 5);
+    map.apply_F();
+    assert(map.calculate(17) == 8);
+    map.apply_G();
+    assert(map.calculate(17) == 4);
+    map.apply_G();
+    assert(map.calculate(17) == 2);
+    map.apply_G();
+    assert(map.calculate(17) == 1);
+}
+
+
+
+//
 // Run All Helper
 //
 template<typename T>
 void run_all() {
-    std::cout << "test_collatz_basic ..." << std::flush;
+    std::cout << "test_collatz_types ..." << std::flush;
     test_collatz_types<T>();
     std::cout << " passed.\n";
 
@@ -173,6 +204,10 @@ void run_all() {
 
     std::cout << "test_collatz_one() ..." << std::flush;
     test_collatz_one<T>();
+    std::cout << " passed.\n";
+
+    std::cout << "test_collatz_affine_map() ..." << std::flush;
+    test_collatz_affine_map<T>();
     std::cout << " passed.\n";
 }
 

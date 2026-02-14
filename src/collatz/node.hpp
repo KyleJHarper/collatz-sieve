@@ -7,61 +7,14 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include "gmp_helpers.hpp"
-
-
-
-// We need a forward declaration for NodeMetadata to see Node.
-template<AnySupportedIntegral T>
-class Node;
-
-
-
-//
-// Node Metadata
-//
-// Similar to CollatzMetadata, we offload stuff here and disable it by default, saving memory.
-//
-template<AnySupportedIntegral T>
-class NodeMetadata {
-    private:
-    // None, just make them public.
-
-    public:
-    Node<T> *hwm_ancestor = nullptr;
-    mpz_class fg_twos_value_mpz_c = 0;
-    mpz_class fg_threes_value_mpz_c = 0;
-    mpf_class fg_n_portion_mpf_c = 0;
-    mpf_class fg_constant_mpf_c = 0;
-    mpf_class fg_total = 0;
-    NodeMetadata() {}
-    void reset() {
-        hwm_ancestor = nullptr;
-        fg_twos_value_mpz_c = 0;
-        fg_threes_value_mpz_c = 0;
-        fg_n_portion_mpf_c = 0;
-        fg_constant_mpf_c = 0;
-        fg_total = 0;
-    }
-    size_t deep_size() const {
-        size_t total = sizeof(*this);
-        if constexpr(GMPIntegral<T>) {
-            total += gmp_deep_sizeof(fg_twos_value_mpz_c);
-            total += gmp_deep_sizeof(fg_threes_value_mpz_c);
-            total += gmp_deep_sizeof(fg_n_portion_mpf_c);
-            total += gmp_deep_sizeof(fg_constant_mpf_c);
-            total += gmp_deep_sizeof(fg_total);
-        }
-        return total;
-    }
-};
+#include "collatz_affine_map.hpp"
 
 
 
 //
 // Node
-// A node will have a fractional value based on the distribution of the Odds and Evens as we process the sequence.  These odd-even
-// chains are evenly patterned as the tree is generated, so we don't want to know the full high-water mark (from Collatz()).
+// Nodes are the objects within the BinaryTree, which allow us to track the odd-even/f-g patterns and give us the information we
+// need without a full Collatz object.
 //
 // BIG FAT NOTE!
 // By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.  If you want to delete
@@ -72,42 +25,22 @@ class Node {
     private:
     static constexpr size_t MAX_CHILDREN = 2;
     static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
-    // Make some thread-local MPZ and MPF items so they're safe for re-use with threading.
-    // We get a GCC bug sometimes with __tls_guard when it thinks multiple translation units are redefining.
-    // As such, we'll hide them behind accessors.
-    static inline mpz_class& tls_value_mpz_c() { static thread_local mpz_class v; return v; }
-    static inline mpz_class& tls_twos_value_mpz_c() { static thread_local mpz_class v; return v; }
-    static inline mpz_class& tls_threes_value_mpz_c() { static thread_local mpz_class v; return v; }
-    static inline mpf_class& tls_threes_value_mpf_c() { static thread_local mpf_class v; return v; }
-    static inline mpf_class& tls_fg_n_portion_mpf_c() { static thread_local mpf_class v; return v; }
-    static inline mpf_class& tls_fg_constant_mpf_c() { static thread_local mpf_class v; return v; }
-    static inline mpf_class& tls_fg_total_mpf_c() { static thread_local mpf_class v; return v; }
-    // static inline thread_local mpz_class tls_value_mpz_c;
-    // static inline thread_local mpz_class tls_twos_value_mpz_c;
-    // static inline thread_local mpz_class tls_threes_value_mpz_c;
-    // static inline thread_local mpf_class tls_threes_value_mpf_c;
-    // static inline thread_local mpf_class tls_fg_n_portion_mpf_c;
-    // static inline thread_local mpf_class tls_fg_constant_mpf_c;
-    // static inline thread_local mpf_class tls_fg_total_mpf_c;
     // Object members.
-    // Memory packing and alignment matter!  Keep this class LIGHT unless the caller wants metadata.
+    // Memory packing and alignment matter!  Keep this class LIGHT.
     // All data must fit within one cache line.
     //                                                       uint64_t | total | uint128_t | total | mpz_class | total
     T _value;                                            //         8 |     8 |        16 |    16 |        16 |    16
     Node *_parent = nullptr;                             //         8 |    16 |         8 |    24 |         8 |    24
     Node *_hwm_ancestor = nullptr;                       //         8 |    24 |         8 |    32 |         8 |    32
     Node *_children[MAX_CHILDREN] = {nullptr, nullptr};  //        16 |    40 |        16 |    48 |        16 |    48
-    NodeMetadata<T>* _metadata = nullptr;                //         8 |    48 |         8 |    56 |         8 |    56
-    bool _is_below_hwm : 1 = false;                      //       1:1 |    49 |       1:1 |    57 |       1:1 |    57
-    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    49 |       1:2 |    57 |       1:2 |    57
-    bool _is_initialized : 1 = false;                    //       1:3 |    49 |       1:3 |    57 |       1:3 |    57
-    bool _owns_children : 1 = true;                      //       1:4 |    49 |       1:4 |    57 |       1:4 |    57
-    bool _track_metadata : 1 = false;                    //       1:5 |    49 |       1:5 |    57 |       1:5 |    57  (3 bits padding)
-    uint8_t _child_count = 0;                            //         1 |    50 |         1 |    58 |         1 |    58
-    uint8_t _fg_chain_length = 0;                        //         1 |    51 |         1 |    59 |         1 |    59
-    // Alignment Padding                                 //         5 |    56 |         5 |    64 |         5 |    64
-    // Struct Alignment Padding (u128 only)              //         0 |    56 |         0 |    64 |         0 |    64
-    // Free Padding to Cacheline                         //         8 |    64 |         0 |    64 |         0 |    64
+    bool _is_below_hwm : 1 = false;                      //       1:1 |    41 |       1:1 |    49 |       1:1 |    49
+    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    41 |       1:2 |    49 |       1:2 |    49
+    bool _is_initialized : 1 = false;                    //       1:3 |    41 |       1:3 |    49 |       1:3 |    49
+    bool _owns_children : 1 = true;                      //       1:4 |    41 |       1:4 |    49 |       1:4 |    49  (4 bits padding)
+    uint8_t _child_count = 0;                            //         1 |    42 |         1 |    50 |         1 |    50
+    uint8_t _fg_chain_length = 0;                        //         1 |    43 |         1 |    51 |         1 |    51
+    // Alignment Padding (u128 is 16 bytes)              //         5 |    48 |        13 |    64 |         5 |    56
+    // Free Padding to Cacheline                         //        16 |    64 |         0 |    64 |         8 |    64
     // -- Cache Line --
 
 
@@ -120,8 +53,8 @@ class Node {
         _value= T{};
         _parent = nullptr;
     }
-    Node(const T& value, bool track_metadata, Node *parent = nullptr) {
-        init(value, track_metadata, parent);
+    Node(const T& value, Node *parent = nullptr) {
+        init(value, parent);
     }
 
 
@@ -131,7 +64,6 @@ class Node {
     //
     ~Node() {
         release_children();
-        release_metadata();
     }
 
 
@@ -149,66 +81,95 @@ class Node {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(const T& value, bool track_metadata, Node *parent = nullptr) {
+    void init(const T& value, Node *parent = nullptr) {
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
 
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
-        if (_metadata == nullptr && track_metadata) { _metadata = new NodeMetadata<T>(); }
-        if (_metadata != nullptr && ! track_metadata) { release_metadata(); }
         _is_initialized = true;
-        _track_metadata = track_metadata;
         _value = value;
         _parent = parent;
 
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
         // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
+        static thread_local CollatzAffineMap<T> affine_map;
+        affine_map.reset();
+        size_t count = 0;
         _fg_chain_length = get_level() - 1;
-        std::string fg_chain = Collatz<T>::st_get_fg_chain_string(_value, _fg_chain_length);
-        _fg_chain_length = fg_chain.size();
+        Collatz<T>::for_each_fg_chain_link(_value, [&](bool is_F) {
+            if (is_F) {
+                affine_map.apply_F();
+            } else {
+                affine_map.apply_G();
+            }
+            count++;
+            return count >= _fg_chain_length;
+        });
+        // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
+        _is_below_hwm = affine_map.is_below(_value);
 
 
         //TODO
         //We're ready to move away from any string version of F-G and move to integer tracking of affine mapping.
-        //TODO
+        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32 -m
+        // [2026-02-12 21:46:21] [info] Building tree with 32 levels, using mpz_class, tree type is Implicit.
+        // [2026-02-12 21:46:33] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
+
+        // real	0m11.458s
+        // user	1m37.011s
+        // sys	0m0.436s
+        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32 -i
+        // [2026-02-12 21:46:36] [info] Building tree with 32 levels, using uint128_t, tree type is Implicit.
+        // [2026-02-12 21:46:43] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
+
+        // real	0m6.958s
+        // user	1m7.750s
+        // sys	0m0.338s
+        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32
+        // [2026-02-12 21:46:49] [info] Building tree with 32 levels, using uint64_t, tree type is Implicit.
+        // [2026-02-12 21:46:55] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
+
+        // real	0m5.851s
+        // user	1m1.073s
+        // sys	0m0.208s
 
 
-        // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
-        //   > Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
-        //   > Compute the odd-even fractional N portion, the constant, and then tally them up.
-        //   > We need at least 1 float for GMP to handle this as a floating point division.
-        //   > Odd count is number of F's, and even count is just size().
-        size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
-        mpz_pow_ui(Node<T>::tls_twos_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
-        mpz_pow_ui(Node<T>::tls_threes_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
-        Node<T>::tls_threes_value_mpf_c() = Node<T>::tls_threes_value_mpz_c();
-        Node<T>::tls_fg_n_portion_mpf_c() = Node<T>::tls_threes_value_mpf_c() / Node<T>::tls_twos_value_mpz_c();
-        Node<T>::tls_fg_constant_mpf_c() = 0;
-        for (char& c : fg_chain) {
-            if (c == 'G') {
-                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
-            } else {
-                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
-                mpf_add(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
-                mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
-            }
-        }
-        if constexpr(ExtendedIntegral<T>) {
-            // Cannot perform arithmetic with uint128_t and GMP.  have to cast a value copy.
-            uint128_to_mpz(_value, Node<T>::tls_value_mpz_c());
-            Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * Node<T>::tls_value_mpz_c()) + Node<T>::tls_fg_constant_mpf_c();
-            if (Node<T>::tls_fg_total_mpf_c() < Node<T>::tls_value_mpz_c()) { _is_below_hwm = true; }
-        } else {
-            Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * _value) + Node<T>::tls_fg_constant_mpf_c();
-            if (Node<T>::tls_fg_total_mpf_c() < _value) { _is_below_hwm = true; }
-        }
-        if (_track_metadata) {
-            _metadata->fg_twos_value_mpz_c = Node<T>::tls_twos_value_mpz_c();
-            _metadata->fg_threes_value_mpz_c = Node<T>::tls_threes_value_mpf_c();
-            _metadata->fg_n_portion_mpf_c = Node<T>::tls_fg_n_portion_mpf_c();
-            _metadata->fg_constant_mpf_c = Node<T>::tls_fg_constant_mpf_c();
-            _metadata->fg_total = Node<T>::tls_fg_total_mpf_c();
-        }
+        // // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
+        // //   > Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
+        // //   > Compute the odd-even fractional N portion, the constant, and then tally them up.
+        // //   > We need at least 1 float for GMP to handle this as a floating point division.
+        // //   > Odd count is number of F's, and even count is just size().
+        // size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
+        // mpz_pow_ui(Node<T>::tls_twos_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
+        // mpz_pow_ui(Node<T>::tls_threes_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
+        // Node<T>::tls_threes_value_mpf_c() = Node<T>::tls_threes_value_mpz_c();
+        // Node<T>::tls_fg_n_portion_mpf_c() = Node<T>::tls_threes_value_mpf_c() / Node<T>::tls_twos_value_mpz_c();
+        // Node<T>::tls_fg_constant_mpf_c() = 0;
+        // for (char& c : fg_chain) {
+        //     if (c == 'G') {
+        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
+        //     } else {
+        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
+        //         mpf_add(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
+        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
+        //     }
+        // }
+        // if constexpr(ExtendedIntegral<T>) {
+        //     // Cannot perform arithmetic with uint128_t and GMP.  have to cast a value copy.
+        //     uint128_to_mpz(_value, Node<T>::tls_value_mpz_c());
+        //     Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * Node<T>::tls_value_mpz_c()) + Node<T>::tls_fg_constant_mpf_c();
+        //     if (Node<T>::tls_fg_total_mpf_c() < Node<T>::tls_value_mpz_c()) { _is_below_hwm = true; }
+        // } else {
+        //     Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * _value) + Node<T>::tls_fg_constant_mpf_c();
+        //     if (Node<T>::tls_fg_total_mpf_c() < _value) { _is_below_hwm = true; }
+        // }
+        // if (_track_metadata) {
+        //     _metadata->fg_twos_value_mpz_c = Node<T>::tls_twos_value_mpz_c();
+        //     _metadata->fg_threes_value_mpz_c = Node<T>::tls_threes_value_mpf_c();
+        //     _metadata->fg_n_portion_mpf_c = Node<T>::tls_fg_n_portion_mpf_c();
+        //     _metadata->fg_constant_mpf_c = Node<T>::tls_fg_constant_mpf_c();
+        //     _metadata->fg_total = Node<T>::tls_fg_total_mpf_c();
+        // }
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
         // reason to scan everything manually.  The parent's data is all we need.
@@ -241,21 +202,6 @@ class Node {
         _has_hwm_ancestor = false;
         _is_initialized = false;
         _owns_children = true;
-        _track_metadata = false;
-        if (_metadata != nullptr) { _metadata->reset(); }
-    }
-
-
-
-    //
-    // Release Metadata
-    // Let callers decide when they're done with metadata.
-    //
-    void release_metadata() {
-        if (_metadata == nullptr) { return; }
-        delete _metadata;
-        _metadata = nullptr;
-        _track_metadata = false;
     }
 
 
@@ -265,7 +211,7 @@ class Node {
     // Creates a child and assigns it to this parent.
     //
     Node<T>* add_child(T value) {
-        Node *child = new Node(value, _track_metadata, this);
+        Node *child = new Node(value, this);
         _children[_child_count++] = child;
         return child;
     }
@@ -349,7 +295,7 @@ class Node {
             } else if constexpr(GMPIntegral<T>) {
                 mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
             }
-            Node<T>* child = new Node<T>(child_value, node->get_track_metadata(), node);
+            Node<T>* child = new Node<T>(child_value, node);
             node->assign_child(child);
         }
     }
@@ -371,7 +317,6 @@ class Node {
     bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
     bool is_initialized() const { return _is_initialized; }
     bool does_own_children() const { return _owns_children; }
-    bool get_track_metadata() const { return _track_metadata; }
     const Node<T>* get_child(size_t index) const { return _children[index]; }
     Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
     size_t get_child_count() const { return static_cast<size_t>( _child_count); }
@@ -380,42 +325,6 @@ class Node {
     // Tree level and position come from BinaryTree, but we'll make them accessible here.
     size_t get_level() const { return BinaryTreeMath<T>::st_node_level(_value); }
     T get_position() const { return BinaryTreeMath<T>::st_node_position(_value); }
-
-
-
-    //
-    // Metadata Accessors
-    //
-    const mpz_class& get_twos_value() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->fg_twos_value_mpz_c;
-    }
-    const mpz_class& get_threes_value() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->fg_threes_value_mpz_c;
-    }
-    const mpf_class& get_fg_n_portion() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->fg_n_portion_mpf_c;
-    }
-    const mpf_class& get_fg_constant() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->fg_constant_mpf_c;
-    }
-    const mpf_class& get_fg_total() const {
-        if (! _track_metadata) {
-            throw std::logic_error(E_NO_METADATA_TRACKING);
-        }
-        return _metadata->fg_total;
-    }
 
 
 
@@ -447,9 +356,6 @@ class Node {
     //
     size_t deep_size() const {
         size_t total = sizeof(*this);
-        if (_metadata != nullptr) {
-            total += _metadata->deep_size();
-        }
         return total;
     }
 };

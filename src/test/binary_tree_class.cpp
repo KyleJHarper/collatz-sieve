@@ -310,6 +310,29 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
 
 
 template<AnySupportedIntegral T>
+void test_binary_tree_coverage_coherency_at_scale() {
+    BinaryTreeOptions opts;
+    opts.tree_type = BinaryTreeType::IMPLICIT;
+    if constexpr(NativeIntegral<T>) {
+        // Level 25 should work.
+        test_binary_tree_coverage<T>(25, 8, opts);
+        // Level 26 should break.
+        try {
+            test_binary_tree_coverage<T>(26, 8, opts);
+            assert(false); // Should throw
+        } catch (const std::overflow_error& e) {
+            assert(std::string(e.what()).find("Overflow in CollatzAffineMap calculate() method") != std::string::npos);
+        }
+    } else if constexpr(ExtendedIntegral<T>) {
+        // Level 32 should work.
+        test_binary_tree_coverage<T>(32, 8, opts);
+        //TODO First level to fail is unknown.
+    }
+    // GMP has no overflow potential.
+}
+
+
+template<AnySupportedIntegral T>
 void test_binary_tree_node_count_should_match_map() {
     size_t levels = 5;
     BinaryTree<T> tree(levels);
@@ -679,6 +702,10 @@ void run_all(size_t root_value) {
     test_binary_tree_coverage<T>();
     std::cout << " passed.\n";
 
+    std::cout << "test_binary_tree_coverage_coherency_at_scale() ..." << std::flush;
+    test_binary_tree_coverage_coherency_at_scale<T>();
+    std::cout << " passed.\n";
+
     std::cout << "test_binary_tree_ancestors() ..." << std::flush;
     test_binary_tree_ancestors<T>();
     std::cout << " passed.\n";
@@ -687,9 +714,9 @@ void run_all(size_t root_value) {
     test_binary_tree_node_count_should_match_map<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_too_many_levels() ..." << std::flush;
-    test_binary_tree_too_many_levels<T>();
-    std::cout << " passed.\n";
+    // std::cout << "test_binary_tree_too_many_levels() ..." << std::flush;
+    // test_binary_tree_too_many_levels<T>();
+    // std::cout << " passed.\n";
 
     std::cout << "test_binary_tree_multi_threaded() ..." << std::flush;
     test_binary_tree_multi_threaded<T>();

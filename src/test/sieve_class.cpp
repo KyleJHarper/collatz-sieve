@@ -64,7 +64,6 @@ template<AnySupportedIntegral T>
 void test_sieve_default_opts() {
     SieveOptions opts;
     assert(opts.pool_size == 1048576);
-    assert(opts.tree_opts.track_node_metadata == false);
     assert(opts.tree_opts.prune_hwm_nodes == true);
     assert(opts.tree_opts.prune_parent_levels == true);
     assert(opts.tree_opts.preserve_ancestors == true);

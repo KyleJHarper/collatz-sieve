@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#include <exception>
 #include <gmp.h>
 #include <gmpxx.h>
 #include <memory>
@@ -27,7 +28,6 @@ enum class BinaryTreeType {
     IMPLICIT = 2,
 };
 struct BinaryTreeOptions {
-    bool track_node_metadata = false;
     bool prune_hwm_nodes = false;
     bool prune_parent_levels = false;
     bool preserve_ancestors = false;
@@ -55,7 +55,6 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
-    bool _track_node_metadata = false;
     bool _is_pruning_hwm_nodes = false;
     bool _is_pruning_parent_levels = false;
     bool _preserve_ancestors = false;
@@ -66,7 +65,6 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
     BinaryTreeMaterialized(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
-        _track_node_metadata = opts.track_node_metadata;
         _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
         _is_pruning_parent_levels = opts.prune_parent_levels;
         _preserve_ancestors = opts.preserve_ancestors;
@@ -108,7 +106,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         _is_initialized = true;
         // Build the first level's root node, supporting both 0- and 1-based trees.
         _level_count = 1;
-        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
+        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
         _level_map[_level_count].resize(1);
         _level_map[_level_count][0] = _root_node;
         _coverage_map[_level_count].set_covered(0);
@@ -130,7 +128,6 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         _level_map.clear();
         _level_count = 0;
         _ancestors.clear();
-        _track_node_metadata = BinaryTreeOptions{}.track_node_metadata;
         _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
         _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
         _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
@@ -148,7 +145,6 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
     bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
     bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
-    bool tracking_metadata() const override { return _track_node_metadata; }
     const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const override {
         throw std::logic_error("BinaryTreeMaterialized has no coverage interval property.");
     }
@@ -241,70 +237,85 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(omp_get_max_threads());
 
         // Begin the critical section, but don't loop yet.
-        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _preserve_ancestors, _track_node_metadata, omp_local_ancestors_group)
+        std::exception_ptr eptr = nullptr;
+        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _preserve_ancestors, omp_local_ancestors_group, eptr)
         {
-            // Grab our personal ancestors vector to avoid locking.
-            auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
+            try {
+                // Grab our personal ancestors vector to avoid locking.
+                auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
 
-            // Now Loop
-            #pragma omp for schedule(guided)
-            for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
-                // Find the parent.
-                Node<T>* parent = parents[parent_idx];
+                // Now Loop
+                #pragma omp for schedule(static)
+                for(size_t parent_idx = 0; parent_idx < parent_count; parent_idx++) {
+                    // Find the parent.
+                    Node<T>* parent = parents[parent_idx];
 
-                // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
-                if constexpr(BuiltinIntegral<T>) {
-                    child_value_1 = parent->get_value() + step;
-                    child_value_2 = child_value_1 + step;
-                } else if constexpr(GMPIntegral<T>) {
-                    mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
-                    mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
-                }
+                    // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
+                    if constexpr(BuiltinIntegral<T>) {
+                        child_value_1 = parent->get_value() + step;
+                        child_value_2 = child_value_1 + step;
+                    } else if constexpr(GMPIntegral<T>) {
+                        mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
+                        mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
+                    }
 
-                // Instaniate the children.
-                Node<T>* child_1 = new Node<T>(child_value_1, _track_node_metadata, parent);
-                Node<T>* child_2 = new Node<T>(child_value_2, _track_node_metadata, parent);
+                    // Instaniate the children.
+                    Node<T>* child_1 = new Node<T>(child_value_1, parent);
+                    Node<T>* child_2 = new Node<T>(child_value_2, parent);
 
-                // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
-                // -- Child 1
-                bool assign_to_map = true;
-                if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
-                    my_ancestors.push_back(new Node<T>(child_1->get_value(), false));
-                }
-                if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
-                    covered_or_pruned += 1;
-                    if (_is_pruning_hwm_nodes) {
-                        delete child_1;
-                        child_1 = nullptr;
-                        assign_to_map = false;
+                    // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
+                    // -- Child 1
+                    bool assign_to_map = true;
+                    if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
+                        my_ancestors.push_back(new Node<T>(child_1->get_value()));
+                    }
+                    if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
+                        covered_or_pruned += 1;
+                        if (_is_pruning_hwm_nodes) {
+                            delete child_1;
+                            child_1 = nullptr;
+                            assign_to_map = false;
+                        }
+                    }
+                    if (assign_to_map) {
+                        _level_map[child_level][2 * parent_idx] = child_1;
+                        if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                            parent->assign_child(child_1);
+                        }
+                    }
+                    // -- Child 2
+                    assign_to_map = true;
+                    if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
+                        my_ancestors.push_back(new Node<T>(child_2->get_value()));
+                    }
+                    if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
+                        covered_or_pruned += 1;
+                        if (_is_pruning_hwm_nodes) {
+                            delete child_2;
+                            child_2 = nullptr;
+                            assign_to_map = false;
+                        }
+                    }
+                    if (assign_to_map) {
+                        _level_map[child_level][2 * parent_idx + 1] = child_2;
+                        if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                            parent->assign_child(child_2);
+                        }
                     }
                 }
-                if (assign_to_map) {
-                    _level_map[child_level][2 * parent_idx] = child_1;
-                    if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
-                        parent->assign_child(child_1);
-                    }
-                }
-                // -- Child 2
-                assign_to_map = true;
-                if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
-                    my_ancestors.push_back(new Node<T>(child_2->get_value(), false));
-                }
-                if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
-                    covered_or_pruned += 1;
-                    if (_is_pruning_hwm_nodes) {
-                        delete child_2;
-                        child_2 = nullptr;
-                        assign_to_map = false;
-                    }
-                }
-                if (assign_to_map) {
-                    _level_map[child_level][2 * parent_idx + 1] = child_2;
-                    if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
-                        parent->assign_child(child_2);
+            } catch (...) {
+                #pragma omp critical
+                {
+                    if(!eptr) {
+                        eptr = std::current_exception();
                     }
                 }
             }
+        }
+
+        // Rethrow errors.
+        if(eptr != nullptr) {
+            std::rethrow_exception(eptr);
         }
 
         // Merge Ancestors.
@@ -359,7 +370,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     // Generate any Node based on its level and position.  It will not be part of any tree.
     // Throws errors when you ask for invalid positions in a node.
     //
-    static Node<T>* st_generate_node_at(size_t level, T position, bool with_metadata = true) {
+    static Node<T>* st_generate_node_at(size_t level, T position) {
         // Calculate the maximum position and enforce the rules.  We will need the first node's value too.
         T max_position = BinaryTreeMath<T>::st_node_count_of_level(level);
         if(position > max_position) {
@@ -369,7 +380,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
             throw std::out_of_range("You cannot specify position 0 or lower (negative).  Positions start at 1 (leftmost).");
         }
         T node_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, level);
-        Node<T>* node = new Node<T>(node_value, with_metadata);
+        Node<T>* node = new Node<T>(node_value);
         return node;
     }
 };
@@ -379,8 +390,8 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
 
 
 //
-// A mathematically equivalent analog to the BinaryTreeMaterialized class above.  Nodes objects, metadata, and other values are
-// calculated more on-the-fly instead of being stored in RAM.
+// A mathematically equivalent analog to the BinaryTreeMaterialized class above.  Nodes objects and other values are calculated
+// more on-the-fly instead of being stored in RAM.
 //
 // Specifically, instead of a level map of all surviving nodes and a vector of pointers to ancestors, we only track the ancestors
 // and then leverage their level L and position P properties to calculate coverage, iterate over survivors, etc.
@@ -394,7 +405,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
-    bool _track_node_metadata = false;
     bool _preserve_ancestors = false;
 
     public:
@@ -403,7 +413,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
     BinaryTreeImplicit(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
-        _track_node_metadata = opts.track_node_metadata;
         _preserve_ancestors = opts.preserve_ancestors;
     }
 
@@ -433,7 +442,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _is_initialized = true;
         // Build the first level's root node, supporting both 0- and 1-based trees.
         _level_count = 1;
-        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value(), _track_node_metadata);
+        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
         _coverage_map[_level_count].set_covered(0);
         _coverage_map[_level_count].set_total(1);
         while (_level_count < levels) {
@@ -453,7 +462,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _covered_intervals.clear();
         _level_count = 0;
         _ancestors.clear();
-        _track_node_metadata = BinaryTreeOptions{}.track_node_metadata;
         _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
 
@@ -467,7 +475,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const override { return _covered_intervals; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
-    bool tracking_metadata() const override { return _track_node_metadata; }
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override {
         throw std::logic_error("Implicit trees do not have a level map");
     }
@@ -653,25 +660,40 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         std::vector<std::vector<Node<T>>> omp_local_ancestors_group(thread_count);
 
         // Begin the critical section, but don't loop yet.
-        #pragma omp parallel default(none) shared(_track_node_metadata, omp_local_ancestors_group, partitions)
+        std::exception_ptr eptr = nullptr;
+        #pragma omp parallel default(none) shared(omp_local_ancestors_group, partitions, eptr)
         {
-            // Grab our personal ancestors and parittion vectors to avoid locking.
-            size_t my_thread_id = omp_get_thread_num();
-            auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
-            auto& my_partition = partitions[my_thread_id];
+            try {
+                // Grab our personal ancestors and parittion vectors to avoid locking.
+                size_t my_thread_id = omp_get_thread_num();
+                auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
+                auto& my_partition = partitions[my_thread_id];
 
-            // Now loop without triggering OMP again, because the work is already divided by partitions.
-            Node<T> tmp_node;
-            T value = 0;
-            for(const Interval<T>& interval : my_partition) {
-                for(T position = interval.start; position <= interval.end; position++) {
-                    value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
-                    tmp_node.init(value, _track_node_metadata);
-                    if (tmp_node.is_below_high_water_mark()) {
-                        my_ancestors.push_back(tmp_node);
+                // Now loop without triggering OMP again, because the work is already divided by partitions.
+                Node<T> tmp_node;
+                T value = 0;
+                for(const Interval<T>& interval : my_partition) {
+                    for(T position = interval.start; position <= interval.end; position++) {
+                        value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
+                        tmp_node.init(value);
+                        if (tmp_node.is_below_high_water_mark()) {
+                            my_ancestors.push_back(tmp_node);
+                        }
+                    }
+                }
+            } catch (...) {
+                #pragma omp critical
+                {
+                    if (!eptr) {
+                        eptr = std::current_exception();
                     }
                 }
             }
+        }
+
+        // Rethrow errors.
+        if (eptr != nullptr) {
+            std::rethrow_exception(eptr);
         }
 
         // Convert ancestors into intervals and optionally persist them.
@@ -764,7 +786,6 @@ class BinaryTree {
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _impl->get_coverage_map(); }
     const std::vector<Node<T>*> get_ancestors() const { return _impl->get_ancestors(); }
     size_t deep_size() const { return _impl->deep_size(); }
-    bool tracking_metadata() const { return _impl->tracking_metadata(); }
     //
     // Materialized-Specific
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {

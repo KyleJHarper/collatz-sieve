@@ -24,7 +24,6 @@
 struct SieveOptions {
     size_t pool_size = size_t{1} << 20;  // 1,048,576  (~1M)
     BinaryTreeOptions tree_opts = {
-        .track_node_metadata = false,
         .prune_hwm_nodes = true,
         .prune_parent_levels = true,
         .preserve_ancestors = true,

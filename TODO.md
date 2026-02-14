@@ -24,6 +24,9 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
+### Implicit Tree Memory
+The implicit tree is eating a lot of memory when we reach level 40.  Something is wrong.
+
 ### Map Remainder of Peak by Bit
 We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
 those last 19 places...

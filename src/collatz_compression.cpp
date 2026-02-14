@@ -377,21 +377,21 @@ void test_9(T max_value, T report_every) {
                 }
                 while (trailing_ones > limit) {
                     if constexpr(NativeIntegral<T>) {
-                        n = ((CollatzConstants::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
+                        n = ((Exponents::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
                     } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((CollatzConstants::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
+                        n = ((Exponents::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
                     } else {
-                        n = ((uint128_to_mpz(CollatzConstants::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
+                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
                     }
                     trailing_ones -= limit;
                 }
                 if (trailing_ones > 0) {
                     if constexpr(NativeIntegral<T>) {
-                        n = ((CollatzConstants::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
+                        n = ((Exponents::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
                     } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((CollatzConstants::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
+                        n = ((Exponents::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
                     } else {
-                        n = ((uint128_to_mpz(CollatzConstants::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
+                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
                     }
                 }
             }
@@ -442,21 +442,21 @@ void test_10(T max_value, T report_every) {
                 }
                 while (trailing_ones > limit) {
                     if constexpr(NativeIntegral<T>) {
-                        n = ((CollatzConstants::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
+                        n = ((Exponents::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
                     } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((CollatzConstants::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
+                        n = ((Exponents::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
                     } else {
-                        n = ((uint128_to_mpz(CollatzConstants::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
+                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
                     }
                     trailing_ones -= limit;
                 }
                 if (trailing_ones > 0) {
                     if constexpr(NativeIntegral<T>) {
-                        n = ((CollatzConstants::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
+                        n = ((Exponents::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
                     } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((CollatzConstants::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
+                        n = ((Exponents::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
                     } else {
-                        n = ((uint128_to_mpz(CollatzConstants::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
+                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
                     }
                 }
             }
