@@ -195,6 +195,10 @@ class Node:
         return self._oe_chain
 
     @property
+    def fg_chain(self):
+        return self._fg_chain
+
+    @property
     def level(self):
         return self._level
 
@@ -215,7 +219,7 @@ class Node:
         self._children: List[Self] = []
         self._parent = parent
         # Level is derived from the node's value: floor(log2(N+1))
-        self._level = math.floor(math.log(self._value + 1, 2))
+        self._level = math.floor(math.log(self._value + 1, 2)) + 1
         # To get the OE chain and fraction for this node, we get the same number of places as our
         # parent had, and they should match, so we check that first.
         # Generate the Collatz here, but don't save it.  It's a waste of memory one we're out of init().
@@ -224,14 +228,29 @@ class Node:
         if self._parent is not None:
             size = len(self._parent.oe_chain)
         self._oe_chain = sequence.oe_pattern[0:size]
-        if self._parent is not None and self._oe_chain != self._parent.oe_chain:
+        if self._level > 2 and self._parent is not None and self._oe_chain != self._parent.oe_chain:
             raise ValueError(f"The parent oe-chain '{self._parent.oe_chain}' for {self._parent.value} doesn't match ours '{self._oe_chain}' for {self._value}.")
         # Now just grab either 1 place if the current chain ends in "O", otherwise two.
         if self._oe_chain == "" or self._oe_chain[-1:] == "E":
             size += 1
         else:
             size += 2
+        # Root value 1 doesn't get anything.
+        if value == 1:
+            size = 0
         self._oe_chain = sequence.oe_pattern[0:size]
+        # The FG string is an easy conversion from OE chain.
+        self._fg_chain = ""
+        skip = False
+        for char in self._oe_chain:
+            if skip:
+                skip = False
+                continue
+            if char == 'O':
+                self._fg_chain += 'F'
+                skip = True
+            else:
+                self._fg_chain += 'G'
         # The threes and twos are a simple count.
         self._threes_value = pow(3, self._oe_chain.count('O'))
         self._twos_value = pow(2, self._oe_chain.count('E'))
@@ -303,14 +322,15 @@ class BinaryTree:
         add_level() : None
             Will add another level to the tree.  Exception if over `max_levels`.
         """
-        self._level_count = level_count
         self._max_levels = max_levels
         # Build the tree here.  This is faster than using the node_at class method in a loop.
-        self._root_node = Node(value=0, parent=None)
+        # Make the first level by-hand.
+        self._root_node = Node(value=1, parent=None)
         self._levels = {
-            0: [self._root_node],
+            1: [self._root_node],
         }
-        for i in range(0, level_count):
+        self._level_count = 1
+        while self._level_count < level_count:
             self.add_level()
 
     def add_level(self):
@@ -320,12 +340,13 @@ class BinaryTree:
         parent_level = list(self.levels.keys())[-1]
         child_level = parent_level + 1
         self.levels[child_level] = []
-        step = pow(2, parent_level)
+        step = pow(2, parent_level - 1)
         for parent in self.levels[parent_level]:
             child_values = [parent.value + step, parent.value + (2 * step)]
             for child_value in child_values:
                 child_node = parent.add_child(value=child_value)
                 self._levels[child_level].append(child_node)
+        self._level_count += 1
 
     def render(
         self,
@@ -388,7 +409,8 @@ class BinaryTree:
         rect_padding = int(node_height * 0.1)
         number_font_size = int(node_width * 0.2)
         fg_font_size = int(node_width * 0.15)
-        oe_font_size = int(node_width * 0.1)
+        oe_chain_font_size = int(node_width * 0.1)
+        fg_chain_font_size = int(node_width * 0.15)
         line_stroke_width = max(int(node_width * 0.01), 1)
         rect_stroke_width = line_stroke_width + 2
 
@@ -418,23 +440,33 @@ class BinaryTree:
                 fg_n_portion_y = fg_fraction_y + fg_font_size
                 fg_constant_y = fg_n_portion_y + fg_font_size
                 fg_total_y = fg_constant_y + fg_font_size
-                oe_y = fg_total_y + fg_font_size
+                fg_chain_y = fg_total_y + fg_font_size
+                oe_chain_y = fg_chain_y + fg_font_size
                 fill = node_fill_default
+                #
+                # Background Fill When HWM
+                #
                 if node.is_below_high_water_mark or (fill_by_ancestor_hwm and node.has_high_water_mark_ancestor):
                     fill = node_fill_hwm
+                #
                 # Build the rectangle and inner bits with coords relative to the group.
+                #
                 rect = drawsvg.Rectangle(
                     x=0,
                     y=0,
                     height=node_height,
                     width=node_width,
                     fill=fill,
+                    fill_opacity=0.25,
                     stroke='black',
                     stroke_width=rect_stroke_width,
                     rx=int(node_width * node_border_radius),
                     ry=int(node_width * node_border_radius),
                 )
                 group.append(rect)
+                #
+                # Background Fill When HWM Ancestor Exists
+                #
                 if node.has_high_water_mark_ancestor:
                     fill = node_fill_hwm
                 number_rect = drawsvg.Rectangle(
@@ -443,10 +475,13 @@ class BinaryTree:
                     height=number_font_size,
                     width=node_width - rect_stroke_width,
                     fill=fill,
+                    fill_opacity=0.25,
                     stroke_width=0,
                 )
                 group.append(number_rect)
-                # Place the node number and such inside the rectangle.
+                #
+                # Node Number
+                #
                 node_number = drawsvg.Text(
                     text=str(node.value),
                     font_size=number_font_size,
@@ -457,6 +492,9 @@ class BinaryTree:
                     y=number_y,
                 )
                 group.append(node_number)
+                #
+                # FG Fractional Twos and Threes
+                #
                 node_fraction = drawsvg.Text(
                     text=f"{node.threes_value}/{node.twos_value}",
                     font_size=fg_font_size,
@@ -467,6 +505,9 @@ class BinaryTree:
                     y=fg_fraction_y,
                 )
                 group.append(node_fraction)
+                #
+                # FG Decimal Portion
+                #
                 node_fg_n_portion = drawsvg.Text(
                     text=f"{node.fg_n_portion:.7f}*N",
                     font_size=fg_font_size,
@@ -477,6 +518,9 @@ class BinaryTree:
                     y=fg_n_portion_y,
                 )
                 group.append(node_fg_n_portion)
+                #
+                # FG Constant Portion
+                #
                 node_fg_constant = drawsvg.Text(
                     text=f"+ {node.fg_constant:.7f}",
                     font_size=fg_font_size,
@@ -487,6 +531,9 @@ class BinaryTree:
                     y=fg_constant_y,
                 )
                 group.append(node_fg_constant)
+                #
+                # FG Total
+                #
                 node_fg_total = drawsvg.Text(
                     text=f"= {node.fg_total:.4f}",
                     font_size=fg_font_size,
@@ -497,19 +544,41 @@ class BinaryTree:
                     y=fg_total_y,
                 )
                 group.append(node_fg_total)
+                #
+                # FG Chain
+                #
+                lines = textwrap.wrap(
+                    text=node.fg_chain,
+                    width=int(node_width / fg_chain_font_size) + 2,
+                )
+                for index, line in enumerate(lines):
+                    node_fg_pattern = drawsvg.Text(
+                        text=line,
+                        font_size=fg_chain_font_size,
+                        font_weight='bold',
+                        text_anchor='middle',
+                        center=True,
+                        x=center_x,
+                        y=fg_chain_y + (index * fg_chain_font_size),
+                    )
+                    group.append(node_fg_pattern)
+                drawing.append(group)
+                #
+                # OE Chain
+                #
                 lines = textwrap.wrap(
                     text=node.oe_chain,
-                    width=int(node_width / oe_font_size) + 2,
+                    width=int(node_width / oe_chain_font_size) + 2,
                 )
                 for index, line in enumerate(lines):
                     node_oe_pattern = drawsvg.Text(
                         text=line,
-                        font_size=oe_font_size,
+                        font_size=oe_chain_font_size,
                         font_weight='normal',
                         text_anchor='middle',
                         center=True,
                         x=center_x,
-                        y=oe_y + (index * oe_font_size),
+                        y=oe_chain_y + (index * oe_chain_font_size),
                     )
                     group.append(node_oe_pattern)
                 drawing.append(group)

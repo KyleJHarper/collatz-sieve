@@ -4,22 +4,22 @@
 Try to model the expanding window so it's less error-prone from human math and display as text.
 Like so:
 
-L0 (+0)                                             0
+L1 (+0)                                             1
                                                     |
-L1 (+1)                      1______________________|____________________2
+L2 (+1)                      2______________________|____________________3
                              |                                           |
-L2 (+2)           3__________|__________5                     4__________|__________6
+L3 (+2)           4__________|__________6                     5__________|__________7
                   |                     |                     |                     |
-L3 (+4)      7____|_____11         9____|_____13         8____|_____12        10____|_____14
+L4 (+4)      8____|_____12        10____|_____14         9____|_____13        11____|_____15
              |          |          |          |          |          |          |          |
-L4 (+8)  15__|__23  19__|__27  17__|__25  21__|__29  16__|__24  20__|__28  18__|__26  22__|__30
+L5 (+8)  16__|__24  20__|__28  18__|__26  22__|__30  17__|__25  21__|__29  19__|__27  23__|__31
 """
 
 import argparse
 from lib.collatz import BinaryTree
 
 
-parser = argparse.ArgumentParser(description="Build an expanding window graph.")
+parser = argparse.ArgumentParser(description="Build a tree and print it into an SVG that's easy to read/visualize.")
 parser.add_argument(
     '--levels',
     type=int,
