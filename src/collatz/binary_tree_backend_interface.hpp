@@ -39,7 +39,7 @@ struct IBinaryTreeBackend {
     virtual bool is_pruning_hwm_nodes() const = 0;
     virtual bool is_pruning_parent_levels() const = 0;
     // (Implicit Only)
-    virtual const std::unordered_map<size_t, std::vector<Interval<T>>>& get_covered_intervals() const = 0;
+    virtual const std::vector<Interval<T>>& get_uncovered_intervals() const = 0;
 
 
 

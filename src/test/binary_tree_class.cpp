@@ -85,10 +85,10 @@ void test_binary_tree_basic_construction() {
     // Build an Implicit tree now.
     BinaryTreeOptions implicit_opts;
     implicit_opts.tree_type = BinaryTreeType::IMPLICIT;
-    BinaryTree<T> implicit_tree(5, implicit_opts);
-    assert(implicit_tree.get_level_count() == 5);
+    BinaryTree<T> implicit_tree(1, implicit_opts);
+    assert(implicit_tree.get_level_count() == 1);
     implicit_tree.assert_implicit("binary_tree_class");
-    const auto& covered_intervals = implicit_tree.get_covered_intervals();
+    const auto& uncovered_intervals = implicit_tree.get_uncovered_intervals();
     //
     // Implicit trees do not have a level map.  Instead, we verify their covered intervals to ensure the positions align with known
     // subtrees that "pruning" wouldn't caught in a Materialized tree.
@@ -98,83 +98,85 @@ void test_binary_tree_basic_construction() {
     if (root_value == 0) {
         //
         // Level 1: root
-        level = 1;
         assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 1);
         //
         // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 2.
-        level = 2;
-        assert(covered_intervals.at(level).size() == 1);
-        assert(covered_intervals.at(level)[0].start == 2);
-        assert(covered_intervals.at(level)[0].end == 2);
+        // This leaves positions 1-1 uncovered.
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 1);
         //
         // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 2.
-        level = 3;
-        assert(covered_intervals.at(level).size() == 2);
-        assert(covered_intervals.at(level)[0].start == 2);
-        assert(covered_intervals.at(level)[0].end == 2);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 2);
+        assert(uncovered_intervals[0].start == 2);
+        assert(uncovered_intervals[0].end == 2);
         // Now scaled intervals...
-        assert(covered_intervals.at(level)[1].start == 3);
-        assert(covered_intervals.at(level)[1].end == 4);
+        assert(uncovered_intervals[1].start == 3);
+        assert(uncovered_intervals[1].end == 4);
         //
         // Level 4: 8 children, none are covered (total remains 2).
-        level = 4;
-        assert(covered_intervals.at(level).size() == 2);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 2);
         // Now scaled intervals...
-        assert(covered_intervals.at(level)[0].start == 3);
-        assert(covered_intervals.at(level)[0].end == 4);
-        assert(covered_intervals.at(level)[1].start == 5);
-        assert(covered_intervals.at(level)[1].end == 8);
+        assert(uncovered_intervals[0].start == 3);
+        assert(uncovered_intervals[0].end == 4);
+        assert(uncovered_intervals[1].start == 5);
+        assert(uncovered_intervals[1].end == 8);
         //
         // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 3.
-        level = 5;
-        assert(covered_intervals.at(level).size() == 3);
-        assert(covered_intervals.at(level)[0].start == 3);
-        assert(covered_intervals.at(level)[0].end == 3);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 3);
+        assert(uncovered_intervals[0].start == 3);
+        assert(uncovered_intervals[0].end == 3);
         // Now scaled intervals...
-        assert(covered_intervals.at(level)[1].start == 5);
-        assert(covered_intervals.at(level)[1].end == 8);
-        assert(covered_intervals.at(level)[2].start == 9);
-        assert(covered_intervals.at(level)[2].end == 16);
+        assert(uncovered_intervals[1].start == 5);
+        assert(uncovered_intervals[1].end == 8);
+        assert(uncovered_intervals[2].start == 9);
+        assert(uncovered_intervals[2].end == 16);
     } else {
         //
         // Level 1: root
-        level = 1;
         assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
         //
         // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 1.
-        level = 2;
-        assert(covered_intervals.at(level).size() == 1);
-        assert(covered_intervals.at(level)[0].start == 1);
-        assert(covered_intervals.at(level)[0].end == 1);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 1);
         //
         // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 3.
-        level = 3;
-        assert(covered_intervals.at(level).size() == 2);
-        assert(covered_intervals.at(level)[1].start == 3);
-        assert(covered_intervals.at(level)[1].end == 3);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 2);
+        assert(uncovered_intervals[1].start == 3);
+        assert(uncovered_intervals[1].end == 3);
         // Now scaled intervals... (pay attention to indexes!)
-        assert(covered_intervals.at(level)[0].start == 1);
-        assert(covered_intervals.at(level)[0].end == 2);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 2);
         //
         // Level 4: 8 children, none are covered (total remains 2).
-        level = 4;
-        assert(covered_intervals.at(level).size() == 2);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 2);
         // Now scaled intervals... (pay attention to indexes!)
-        assert(covered_intervals.at(level)[0].start == 1);
-        assert(covered_intervals.at(level)[0].end == 4);
-        assert(covered_intervals.at(level)[1].start == 5);
-        assert(covered_intervals.at(level)[1].end == 6);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 4);
+        assert(uncovered_intervals[1].start == 5);
+        assert(uncovered_intervals[1].end == 6);
         //
         // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 13.
-        level = 5;
-        assert(covered_intervals.at(level).size() == 3);
-        assert(covered_intervals.at(level)[2].start == 13);
-        assert(covered_intervals.at(level)[2].end == 13);
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 3);
+        assert(uncovered_intervals[2].start == 13);
+        assert(uncovered_intervals[2].end == 13);
         // Now scaled intervals... (pay attention to indexes!)
-        assert(covered_intervals.at(level)[0].start == 1);
-        assert(covered_intervals.at(level)[0].end == 8);
-        assert(covered_intervals.at(level)[1].start == 9);
-        assert(covered_intervals.at(level)[1].end == 12);
+        assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 8);
+        assert(uncovered_intervals[1].start == 9);
+        assert(uncovered_intervals[1].end == 12);
     }
 }
 

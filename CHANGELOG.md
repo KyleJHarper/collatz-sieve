@@ -34,6 +34,22 @@ Improvements were made to the CPU version, and a dedicated `Collatz<T>::st_get_p
 * For 64- and 128-bit integrals, performance went from 25,000,000/sec to approximately 400,000,000/sec.
 * For GMP, performance went from 15,000,000/sec to approximately 140,000,000/sec.  Mostly from alloc() reduction.
 
+#### Affine Map
+Removed all of the `tls_fg_*` stuff from `Node` and replaced it with CollatzAffineMap.  This resulted in a 2-3x boost in speed for
+native and extended integrals, and a 20-30% boost for GMP.
+
+#### Implicit Tree RAM
+The `BinaryTreeImplicit` implementation consumed too much memory because of the `Interval` tracking, which was copied between
+levels and then duplicated several times over.
+
+I performed a test with a 38 level tree and found the following optimizations.
+
+| Technique               | Memory (GB) | Description |
+| :---------------------- | ----------: | :---------- |
+| None                    |        22.8 | Baseline before changes. |
+| Single Covered Interval |        17.3 | Only keep the latest covered interval, not one per level. |
+
+
 ### 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.
 
