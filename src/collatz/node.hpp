@@ -108,69 +108,6 @@ class Node {
         // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
         _is_below_hwm = affine_map.is_below(_value);
 
-
-        //TODO
-        //We're ready to move away from any string version of F-G and move to integer tracking of affine mapping.
-        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32 -m
-        // [2026-02-12 21:46:21] [info] Building tree with 32 levels, using mpz_class, tree type is Implicit.
-        // [2026-02-12 21:46:33] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
-
-        // real	0m11.458s
-        // user	1m37.011s
-        // sys	0m0.436s
-        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32 -i
-        // [2026-02-12 21:46:36] [info] Building tree with 32 levels, using uint128_t, tree type is Implicit.
-        // [2026-02-12 21:46:43] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
-
-        // real	0m6.958s
-        // user	1m7.750s
-        // sys	0m0.338s
-        // kyle@u2404:~/Desktop/repos/3n1 (dev)$ time bin/Release/coverage -l 32
-        // [2026-02-12 21:46:49] [info] Building tree with 32 levels, using uint64_t, tree type is Implicit.
-        // [2026-02-12 21:46:55] [info] Global Coverage: 98.8277% (4244616611/4294967295 | 50350684 uncovered)
-
-        // real	0m5.851s
-        // user	1m1.073s
-        // sys	0m0.208s
-
-
-        // // Calculating twos, threes, FG data, and is_hwm uses thread_locals.  Reset/use them wisely!
-        // //   > Get the twos and threes values.  We need a float version too.  GMP's operator=() handles this conversion.
-        // //   > Compute the odd-even fractional N portion, the constant, and then tally them up.
-        // //   > We need at least 1 float for GMP to handle this as a floating point division.
-        // //   > Odd count is number of F's, and even count is just size().
-        // size_t odd_count = std::count(fg_chain.begin(), fg_chain.end(), 'F');
-        // mpz_pow_ui(Node<T>::tls_twos_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), fg_chain.size());  // 2^even_count
-        // mpz_pow_ui(Node<T>::tls_threes_value_mpz_c().get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t(), odd_count);    // 3^odd_count
-        // Node<T>::tls_threes_value_mpf_c() = Node<T>::tls_threes_value_mpz_c();
-        // Node<T>::tls_fg_n_portion_mpf_c() = Node<T>::tls_threes_value_mpf_c() / Node<T>::tls_twos_value_mpz_c();
-        // Node<T>::tls_fg_constant_mpf_c() = 0;
-        // for (char& c : fg_chain) {
-        //     if (c == 'G') {
-        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
-        //     } else {
-        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_THREE.get_mpf_t());  // tls_fg_constant_mpf_c *= 3
-        //         mpf_add(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_ONE.get_mpf_t());    // tls_fg_constant_mpf_c += 1
-        //         mpf_mul(Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), Node<T>::tls_fg_constant_mpf_c().get_mpf_t(), CollatzConstants::MPF_HALF.get_mpf_t());   // tls_fg_constant_mpf_c /= 2
-        //     }
-        // }
-        // if constexpr(ExtendedIntegral<T>) {
-        //     // Cannot perform arithmetic with uint128_t and GMP.  have to cast a value copy.
-        //     uint128_to_mpz(_value, Node<T>::tls_value_mpz_c());
-        //     Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * Node<T>::tls_value_mpz_c()) + Node<T>::tls_fg_constant_mpf_c();
-        //     if (Node<T>::tls_fg_total_mpf_c() < Node<T>::tls_value_mpz_c()) { _is_below_hwm = true; }
-        // } else {
-        //     Node<T>::tls_fg_total_mpf_c() = (Node<T>::tls_fg_n_portion_mpf_c() * _value) + Node<T>::tls_fg_constant_mpf_c();
-        //     if (Node<T>::tls_fg_total_mpf_c() < _value) { _is_below_hwm = true; }
-        // }
-        // if (_track_metadata) {
-        //     _metadata->fg_twos_value_mpz_c = Node<T>::tls_twos_value_mpz_c();
-        //     _metadata->fg_threes_value_mpz_c = Node<T>::tls_threes_value_mpf_c();
-        //     _metadata->fg_n_portion_mpf_c = Node<T>::tls_fg_n_portion_mpf_c();
-        //     _metadata->fg_constant_mpf_c = Node<T>::tls_fg_constant_mpf_c();
-        //     _metadata->fg_total = Node<T>::tls_fg_total_mpf_c();
-        // }
-
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
         // reason to scan everything manually.  The parent's data is all we need.
         if (parent != nullptr) {

@@ -85,7 +85,7 @@ set(CPU_PROGRAMS
     # collatz_compression
     coverage
     # high_water_mark
-    # junk
+    junk
     # performance_stats
     # sieve_stuff
     # single_collatz

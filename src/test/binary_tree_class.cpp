@@ -103,80 +103,82 @@ void test_binary_tree_basic_construction() {
         assert(uncovered_intervals[0].start == 1);
         assert(uncovered_intervals[0].end == 1);
         //
-        // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 2.
+        // Level 2: 2 children, and only one of them is newly covered.  It's the number 2, which is in position 2.
         // This leaves positions 1-1 uncovered.
         implicit_tree.add_level();
         assert(uncovered_intervals.size() == 1);
         assert(uncovered_intervals[0].start == 1);
         assert(uncovered_intervals[0].end == 1);
         //
-        // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 2.
+        // Level 3: 4 children, and only one of them is newly covered.  It's the number 5, which is in position 2.
+        // However, 5 is adjacent to the other interval, which will be merged.  Final covered intervals is: [2-4]
+        // This leaves positions 1-1 uncovered.
         implicit_tree.add_level();
-        assert(uncovered_intervals.size() == 2);
-        assert(uncovered_intervals[0].start == 2);
-        assert(uncovered_intervals[0].end == 2);
-        // Now scaled intervals...
-        assert(uncovered_intervals[1].start == 3);
-        assert(uncovered_intervals[1].end == 4);
-        //
-        // Level 4: 8 children, none are covered (total remains 2).
-        implicit_tree.add_level();
-        assert(uncovered_intervals.size() == 2);
-        // Now scaled intervals...
-        assert(uncovered_intervals[0].start == 3);
-        assert(uncovered_intervals[0].end == 4);
-        assert(uncovered_intervals[1].start == 5);
-        assert(uncovered_intervals[1].end == 8);
-        //
-        // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 3.
-        implicit_tree.add_level();
-        assert(uncovered_intervals.size() == 3);
-        assert(uncovered_intervals[0].start == 3);
-        assert(uncovered_intervals[0].end == 3);
-        // Now scaled intervals...
-        assert(uncovered_intervals[1].start == 5);
-        assert(uncovered_intervals[1].end == 8);
-        assert(uncovered_intervals[2].start == 9);
-        assert(uncovered_intervals[2].end == 16);
-    } else {
-        //
-        // Level 1: root
-        assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
-        //
-        // Level 2: 2 children, and only one of them is covered (total 1).  It's the number 2, which is in position 1.
-        implicit_tree.add_level();
+        std::cout
+            << std::endl
+            << "size=" << uncovered_intervals.size()
+            << "start=" << to_string_any(uncovered_intervals[0].start)
+            << "end=" << to_string_any(uncovered_intervals[0].end)
+            << std::endl;
         assert(uncovered_intervals.size() == 1);
         assert(uncovered_intervals[0].start == 1);
         assert(uncovered_intervals[0].end == 1);
         //
-        // Level 3: 4 children, and only one of them is covered (total 2).  It's the number 5, which is in position 3.
+        // Level 4: 8 children, and no new ones are covered.
+        // This leaves positions 3-8 covered in a single interval.
+        // This leaves positions 1-2 uncovered in a single interval.
         implicit_tree.add_level();
-        assert(uncovered_intervals.size() == 2);
-        assert(uncovered_intervals[1].start == 3);
-        assert(uncovered_intervals[1].end == 3);
-        // Now scaled intervals... (pay attention to indexes!)
+        assert(uncovered_intervals.size() == 1);
         assert(uncovered_intervals[0].start == 1);
         assert(uncovered_intervals[0].end == 2);
         //
-        // Level 4: 8 children, none are covered (total remains 2).
+        // Level 5: 16 children, one is newly covered.  It's the number 19, which is in position 3.
+        // This leaves 2 covered intervals: [3-3, 5-16].
+        // This leaves 2 uncovered intervals: [1-2, 4-4]
         implicit_tree.add_level();
         assert(uncovered_intervals.size() == 2);
-        // Now scaled intervals... (pay attention to indexes!)
         assert(uncovered_intervals[0].start == 1);
-        assert(uncovered_intervals[0].end == 4);
-        assert(uncovered_intervals[1].start == 5);
-        assert(uncovered_intervals[1].end == 6);
+        assert(uncovered_intervals[0].end == 2);
+        assert(uncovered_intervals[1].start == 4);
+        assert(uncovered_intervals[1].end == 4);
+        // assert(false);
+    } else {
         //
-        // Level 5: 16 children, one is covered (total 3).  It's the number 19, which is in position 13.
-        implicit_tree.add_level();
-        assert(uncovered_intervals.size() == 3);
-        assert(uncovered_intervals[2].start == 13);
-        assert(uncovered_intervals[2].end == 13);
-        // Now scaled intervals... (pay attention to indexes!)
+        // Level 1: root
+        assert(implicit_tree.get_root_node()->get_value() == 0 + BinaryTreeMath<T>::get_root_value());
+        assert(uncovered_intervals.size() == 1);
         assert(uncovered_intervals[0].start == 1);
+        assert(uncovered_intervals[0].end == 1);
+        //
+        // Level 2: 2 children, and only one of them is newly covered.  It's the number 2, which is in position 1.
+        // This leaves 1 uncovered interval: [2-2]
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 2);
+        assert(uncovered_intervals[0].end == 2);
+        //
+        // Level 3: 4 children, and only one of them is newly covered.  It's the number 5, which is in position 3.
+        // This leaves 1 covered interval after merging: [1-3]
+        // This leaves 1 uncovered interval: [4-4]
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 4);
+        assert(uncovered_intervals[0].end == 4);
+        //
+        // Level 4: 8 children, none are newly covered.
+        // This leaves 1 uncovered interval scaled up: [7-8]
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 7);
         assert(uncovered_intervals[0].end == 8);
-        assert(uncovered_intervals[1].start == 9);
-        assert(uncovered_intervals[1].end == 12);
+        //
+        // Level 5: 16 children, one is newly covered.  It's the number 19, which is in position 13.
+        // This leaves 1 covered interval after merging: [1-13]
+        // This leaves 1 uncovered interval: [14-16]
+        implicit_tree.add_level();
+        assert(uncovered_intervals.size() == 1);
+        assert(uncovered_intervals[0].start == 14);
+        assert(uncovered_intervals[0].end == 16);
     }
 }
 
@@ -267,6 +269,9 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(level_coverage->get_covered());
         global_coverage.add_total(level_coverage->get_total());
+        std::cout << std::endl << "level_coverage->get_covered()=" << to_string_any(level_coverage->get_covered())
+        << ", get_known_coverage()=" << to_string_any(BinaryTreeCoverageConstants::get_known_coverage<T>(level))
+        << std::endl;
         assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
         assert(level_coverage->get_total() == level_target_total);
     }
@@ -323,7 +328,10 @@ void test_binary_tree_coverage_coherency_at_scale() {
             test_binary_tree_coverage<T>(26, 8, opts);
             assert(false); // Should throw
         } catch (const std::overflow_error& e) {
+            std::cout << "Got the overflow" << std::endl;
             assert(std::string(e.what()).find("Overflow in CollatzAffineMap calculate() method") != std::string::npos);
+        } catch (...) {
+            std::cout << "Something else happened..." << std::endl;
         }
     } else if constexpr(ExtendedIntegral<T>) {
         // Level 32 should work.

@@ -4,7 +4,6 @@
 // Contains both the BinaryTreeMaterialized and BinaryTreeImplicit implementations, along with the BinaryTree facade.
 //
 #include <algorithm>
-#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <exception>
@@ -639,6 +638,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _level_count++;
 
         // Scale the uncovered intervals.
+        // std::cout << std::endl << "Level " << _level_count << ":" << std::endl;
         for (Interval<T>& uncovered_interval : _uncovered_intervals) {
             // The math is simply:   start * 2 - 1    and    end * 2.
             if constexpr(BuiltinIntegral<T>) {
@@ -649,8 +649,8 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                 mpz_sub_ui(uncovered_interval.start.get_mpz_t(), uncovered_interval.start.get_mpz_t(), 1);
                 mpz_mul_2exp(uncovered_interval.end.get_mpz_t(), uncovered_interval.end.get_mpz_t(), 1);
             }
+            // std::cout << "Interval scaled.  start=" << to_string_any(uncovered_interval.start) << ", end=" << to_string_any(uncovered_interval.end) << std::endl;
         }
-        std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals after scaling." << std::endl;
 
         // Create an external tracker for new ancestors (which inherently are the new intervals) and uncovered intervals.
         size_t thread_count = omp_get_max_threads();
@@ -658,39 +658,51 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         std::vector<std::vector<Interval<T>>> omp_local_new_uncovered_intervals(thread_count);
 
         // Track the indexes we need to split.
-        std::vector<char> split_interval_indexes(_uncovered_intervals.size(), 0);
+        std::vector<uint8_t> split_interval_indexes(_uncovered_intervals.size(), 0);
 
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
-        static thread_local T value = 0;
-        #pragma omp parallel default(none) shared(omp_local_ancestors_group, eptr, _preserve_ancestors, split_interval_indexes)
+        // static thread_local T value = 0;
+        #pragma omp parallel default(none) shared(_level_count, _uncovered_intervals, omp_local_ancestors_group, omp_local_new_uncovered_intervals, eptr, _preserve_ancestors, split_interval_indexes)
         {
-            try {
-                // Grab our personal ancestors and parittion vectors to avoid locking.
-                size_t my_thread_id = omp_get_thread_num();
-                auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
-                auto& my_new_uncovered_intervals = omp_local_new_uncovered_intervals[my_thread_id];
+            // Grab our personal ancestors and parittion vectors to avoid locking.
+            size_t my_thread_id = omp_get_thread_num();
+            auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
+            auto& my_new_uncovered_intervals = omp_local_new_uncovered_intervals[my_thread_id];
 
-                // Now loop, using indexes.
-                Node<T> tmp_node;
-                std::vector<T> covered_positions;
-                #pragma omp for
-                for (size_t index = 0; index < _uncovered_intervals.size(); index++) {
-                    const Interval<T>& uncovered_interval = _uncovered_intervals[index];
-                    covered_positions.clear();
-                    for(T position = uncovered_interval.start; position <= uncovered_interval.end; position++) {
+            // Now loop, using indexes.
+            T value = 0;
+            Node<T> tmp_node;
+            std::vector<T> covered_positions;
+            #pragma omp for
+            for (size_t index = 0; index < _uncovered_intervals.size(); index++) {
+                const Interval<T>& uncovered_interval = _uncovered_intervals[index];
+                covered_positions.clear();
+                for(T position = uncovered_interval.start; position <= uncovered_interval.end; position++) {
+                    try {
                         value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
                         tmp_node.init(value);
                         if (tmp_node.is_below_high_water_mark()) {
                             // Track the position for splitting.
-                            covered_positions.push_back(value);
+                            // #pragma omp critical
+                            // {
+                            //     std::cout << "Adding position " << to_string_any(position) << " as covered." << std::endl;
+                            // }
+                            covered_positions.push_back(position);
                             // Preserve the ancestor, if requested.
                             if (_preserve_ancestors) {
                                 my_ancestors.push_back(tmp_node);
                             }
                         }
+                    } catch (...) {
+                        #pragma omp critical
+                        {
+                            if (!eptr) {
+                                eptr = std::current_exception();
+                            }
+                        }
                     }
-                    // Now split the interval if we found any covered positions.
+                    // Now split the uncovered interval if we found any covered positions.
                     if (!covered_positions.empty()) {
                         // Mark this interval for deletion.
                         split_interval_indexes[index] = 1;
@@ -698,23 +710,36 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                         Interval<T> tmp_interval;
                         tmp_interval.start = uncovered_interval.start;
                         tmp_interval.end = uncovered_interval.end;
-                        // Loop through all the covered positions so we can split up the uncovered intervals.
-                        for (const T covered_position : covered_positions) {
+                        // Loop through all the covered positions so we can split up the uncovered interval.
+                        for (const T& covered_position : covered_positions) {
                             // Drag the end back to the position right before the covered position.
                             tmp_interval.end = covered_position - 1;
                             // Add it to our local vector.
+                            // #pragma omp critical
+                            // {
+                            //     std::cout << "Adding position " << to_string_any(covered_position)
+                            //     << " with start=" << to_string_any(tmp_interval.start)
+                            //     << ", end=" << to_string_any(tmp_interval.end)
+                            //     << std::endl;
+                            // }
                             my_new_uncovered_intervals.push_back(tmp_interval);
                             // Update tmp_interval's start and end to go past the covered_position and all the way to the original end.
+                            // It'll get dragged back again if there's another covered position in this same uncovered interval.
                             tmp_interval.start = covered_position + 1;
                             tmp_interval.end = uncovered_interval.end;
                         }
-                    }
-                }
-            } catch (...) {
-                #pragma omp critical
-                {
-                    if (!eptr) {
-                        eptr = std::current_exception();
+                        // Now add the remainder left in tmp, unless it exceeds the original uncovered_interval's end.
+                        // This happens when the last covered_position was the end position.
+                        if (tmp_interval.start <= uncovered_interval.end) {
+                            // #pragma omp critical
+                            // {
+                            //     std::cout << "Adding final bits"
+                            //     << " with start=" << to_string_any(tmp_interval.start)
+                            //     << ", end=" << to_string_any(tmp_interval.end)
+                            //     << std::endl;
+                            // }
+                            my_new_uncovered_intervals.push_back(tmp_interval);
+                        }
                     }
                 }
             }
@@ -724,51 +749,83 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         if (eptr != nullptr) {
             std::rethrow_exception(eptr);
         }
+        // std::cout << "After OMP, we have the following uncovered interval splits:" << std::endl;
+        // for (std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
+        //     for (Interval<T>& uncovered_interval : uncovered_intervals) {
+        //         std::cout << "  start=" << to_string_any(uncovered_interval.start)
+        //         << ", end=" << to_string_any(uncovered_interval.end)
+        //         << std::endl;
+        //     }
+        // }
 
-        // Remove the uncovered intervals which were broken apart before we add the new ones.
-        for (size_t index = 0; index < split_interval_indexes.size(); ) {
+        // To avoid large scanning or copying of the vector, we're going to do things in a few specific steps.
+        // First, we need to flatten the new uncovered intervals into a single container, so we can access by index.
+        // Second, we remove the uncovered intervals we split by pulling from the newly uncovered intervals.
+        // Third, we transfer the remaining newly uncovered intervals .
+        // Fourth, we sort to allow merging and for sanity.
+        // Fifth, we merge to reduce memory.
+
+        // Step 1 -- Flatten the newly uncovered intervals.
+        size_t newly_uncovered_intervals_count = 0;
+        for (const std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
+            newly_uncovered_intervals_count += uncovered_intervals.size();
+        }
+        std::vector<Interval<T>> newly_uncovered_intervals(newly_uncovered_intervals_count);
+        size_t newly_uncovered_offset = 0;
+        for (std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
+            std::move(uncovered_intervals.begin(), uncovered_intervals.end(), newly_uncovered_intervals.begin() + newly_uncovered_offset);
+            newly_uncovered_offset += uncovered_intervals.size();
+        }
+
+        // Step 2 -- Remove the uncovered intervals we split.
+        newly_uncovered_offset = 0;
+        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals and " << newly_uncovered_intervals.size() << " newly_uncovered_intervals before removing splits." << std::endl;
+        for (size_t index = 0; index < split_interval_indexes.size(); index++) {
             if (split_interval_indexes[index]) {
-                // Just swap the back() item with this index, effectively deleting it.  Do the same with the index tracker.
-                _uncovered_intervals[index] = std::move(_uncovered_intervals.back());
-                _uncovered_intervals.pop_back();
-                split_interval_indexes[index] = split_interval_indexes.back();
-                split_interval_indexes.pop_back();
-            } else {
-                // Only bump the index if no swap happened.
-                index++;
+                // Swap the item from the newly uncovered intervals and bump its offset.
+                // std::cout
+                //     << "  Splitting interval at index " << index
+                //     << " with start=" << to_string_any(_uncovered_intervals[index].start)
+                //     << ", end=" << to_string_any(_uncovered_intervals[index].end)
+                //     << "  with newly_uncovered[" << newly_uncovered_offset << "] which has "
+                //     << "start=" << to_string_any(newly_uncovered_intervals[newly_uncovered_offset].start)
+                //     << ", end=" << to_string_any(newly_uncovered_intervals[newly_uncovered_offset].end)
+                //     << std::endl;
+                _uncovered_intervals[index] = std::move(newly_uncovered_intervals[newly_uncovered_offset]);
+                newly_uncovered_offset++;
             }
         }
+        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals after removing splits." << std::endl;
 
-        // Add the fragmented uncovered intervals in.
-        // Reserve size.
-        size_t offset = _uncovered_intervals.size();
-        size_t new_intervals_count = 0;
-        for (const std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
-            new_intervals_count += uncovered_intervals.size();
+        // Step 3 -- Transfer the remaining items.
+        if (newly_uncovered_offset < newly_uncovered_intervals.size()) {
+            size_t old_size = _uncovered_intervals.size();
+            _uncovered_intervals.resize(old_size + newly_uncovered_intervals.size() - newly_uncovered_offset);
+            std::move(newly_uncovered_intervals.begin() + newly_uncovered_offset, newly_uncovered_intervals.end(), _uncovered_intervals.begin() + old_size);
         }
-        _uncovered_intervals.resize(_uncovered_intervals.size() + new_intervals_count);
-        // Merge them.
-        for (std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
-            std::move(uncovered_intervals.begin(), uncovered_intervals.end(), _uncovered_intervals.begin() + offset);
-            offset += uncovered_intervals.size();
-        }
+        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals after transferring the remaining fragments:" << std::endl;
+        // for (Interval<T>& uncovered_interval : _uncovered_intervals) {
+        //     std::cout << "  start=" << to_string_any(uncovered_interval.start)
+        //     << ", end=" << to_string_any(uncovered_interval.end)
+        //     << std::endl;
+        // }
 
-        // Sort the covered intervals so merging works correctly.  Since start always equals end, it's trivial.
-        auto start = std::chrono::steady_clock::now();
-        std::cout << "Starting to sort ..." << std::flush;
+        // Step 4 -- Sort the uncovered intervals so merging works correctly.  Since start always equals end, it's trivial.
+        // auto start = std::chrono::steady_clock::now();
+        // std::cout << "Starting to sort ..." << std::flush;
         tbb::parallel_sort(
             _uncovered_intervals.begin(),
             _uncovered_intervals.end(),
             [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
         );
-        auto end = std::chrono::steady_clock::now();
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        std::cout << " done after " << ms << "ms." << std::endl;
+        // auto end = std::chrono::steady_clock::now();
+        // auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        // std::cout << " done after " << ms << "ms." << std::endl;
 
-        // Now merge neighboring intervals to reduce memory.
-        // Use a typical read-ahead/write-incremented scan with two indexes.
+        // Step 5 -- Merge neighboring intervals to reduce memory.
+        // Use a typical read-ahead/write-incremented scan with two indexes to avoid a temp vector.
         if (_merge_intervals) {
-            std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals before merging." << std::endl;
+            // std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals before merging." << std::endl;
             if (!_uncovered_intervals.empty()) {
                 size_t write_index = 0;
                 bool adjacent = false;
@@ -794,7 +851,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                 // Now resize the vector.
                 _uncovered_intervals.resize(write_index + 1);
             }
-            std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals after merging." << std::endl;
+            // std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals after merging." << std::endl;
         }
 
         // Persist the coverage to our new level.  It's just a sum of the uncovered size() values subtracted from the node total.

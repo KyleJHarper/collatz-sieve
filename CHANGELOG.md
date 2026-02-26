@@ -49,6 +49,9 @@ I performed a test with a 38 level tree and found the following optimizations.
 | None                    |        22.8 | Baseline before changes. |
 | Single Covered Interval |        17.3 | Only keep the latest covered interval, not one per level. |
 
+#### Draw Tree (Python Diagrammer)
+Updated the Python version of the BinaryTree and Node classes to be 1-based so I could fix the `draw_tree.py` script.
+
 
 ### 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.
