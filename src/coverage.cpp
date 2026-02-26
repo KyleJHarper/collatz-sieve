@@ -4,6 +4,8 @@
 #include <string>
 #include "collatz/binary_tree.hpp"
 #include <CLI.hpp>
+#include <unistd.h>
+#include "collatz/binary_tree_coverage.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"
@@ -106,6 +108,25 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeTyp
             }
         }
         logger->info("Ancestors: " + merged);
+    }
+    // Coherency test.
+    coverage_map = builder.get_tree().get_coverage_map();
+    size_t failing_level = 0;
+    for (auto& [level, coverage] : coverage_map) {
+        logger->debug("Testing level {} for coherency.", level);
+        if (level > BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL) {
+            logger->debug("Max known coverage reached for coherency testing.  Breaking out.");
+            break;
+        }
+        if (builder.get_tree().get_coverage_map().at(level).get_covered() != BinaryTreeCoverageConstants::get_known_coverage<T>(level)) {
+            failing_level = level;
+            break;
+        }
+    }
+    if (failing_level == 0) {
+        logger->info("Coherency passed.  Computed coverage matches known values.");
+    } else {
+        logger->warn("Coherency failed!  Computed coverage DOES NOT match at level {}", failing_level);
     }
 }
 

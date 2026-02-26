@@ -531,104 +531,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
 
 
     //
-    // Get Uncovered Intervals
-    // Returns the intervals which complement the _covered_intervals we've found.
-    //
-    // In other words: return the ranges of nodes still to-check for a given level.
-    //
-    // std::vector<Interval<T>> get_uncovered_intervals(size_t requested_level) const {
-    //     // Create the results variable and setup our max width and cursor to follow.
-    //     std::vector<Interval<T>> uncovered_intervals;
-    //     T max_position = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
-
-    //     // If no intervals exist, return all positions.
-    //     if (_covered_intervals.empty()) {
-    //         uncovered_intervals.push_back({1, max_position});
-    //         return uncovered_intervals;
-    //     }
-
-    //     // Build the complement.  We must have at least some coverage intervals if we're here.
-    //     T prev_end = 0;
-    //     T scale = T(1) << (requested_level - _level_count);
-    //     for (const Interval<T>& covered_interval : _covered_intervals) {
-    //         T scaled_start = (covered_interval.start - 1) * scale + 1;
-    //         T scaled_end = covered_interval.end * scale;
-    //         if (scaled_start > prev_end + 1) {
-    //             uncovered_intervals.push_back({T(prev_end + 1), T(scaled_start - 1)});
-    //         }
-    //         prev_end = scaled_end;
-    //     }
-
-    //     // Cover any gap from the last covered to the end of the level.
-    //     if (prev_end < max_position) {
-    //         uncovered_intervals.push_back({T(prev_end + 1), max_position});
-    //     }
-
-    //     return uncovered_intervals;
-    // }
-
-
-
-    //
-    // Partition Workers
-    // Takes a vector of intervals and a partition count and returns a new vector-of-vectors with intervals with their sizes
-    // balanced nearly evenly.  This will split a partition, if necessary, to avoid heavy imbalance.
-    //
-    // std::vector<std::vector<Interval<T>>> partition_intervals(const std::vector<Interval<T>>& intervals, size_t partition_count) {
-    //     std::cout << "I see " << intervals.size() << " uncovered intervals to work with objects preparing for level " << _level_count << "." << std::endl;
-    //     // Build the new vector of vectors with the correct size.
-    //     std::vector<std::vector<Interval<T>>> partitions;
-    //     partitions.resize(partition_count);
-
-    //     // Guard against zero or null sets.
-    //     if (partition_count == 0 || intervals.empty()) {
-    //         return partitions;
-    //     }
-
-    //     // Calculate the total size.
-    //     T total_size = 0;
-    //     for (const Interval<T>& interval : intervals) {
-    //         total_size += interval.size();
-    //     }
-
-    //     // Set the partition size.  Increment by 1 to cover integral truncation.
-    //     T partition_size = (total_size / partition_count) + 1;
-    //     T current_size = 0;
-    //     size_t partition_id = 0;
-
-    //     // Loop through intervals again, assigning replacements and/or breaking them apart.
-    //     for (const Interval<T>& interval : intervals) {
-    //         Interval<T> tmp;
-    //         T current_start = interval.start;
-    //         while (current_start <= interval.end) {
-    //             // Start by assuming our tmp can handle the whole space.
-    //             tmp.start = current_start;
-    //             tmp.end = interval.end;
-    //             // Determine how many places we can take.
-    //             T remaining_partition_size = partition_size - current_size;
-    //             T can_take = remaining_partition_size <= tmp.size() ? remaining_partition_size : tmp.size();
-    //             // Change tmp's start and end to match our limits.
-    //             tmp.start = current_start;
-    //             tmp.end = current_start + can_take - 1;  // -1 Because it's inclusive.
-    //             // Add it to the current partition.  Update count.  Increment ID if needed.
-    //             partitions[partition_id].push_back(tmp);
-    //             current_size += tmp.size();
-    //             if (current_size >= partition_size) {
-    //                 partition_id++;
-    //                 current_size = 0;
-    //             }
-    //             // Move the current_start forward for the next condition check.
-    //             current_start = tmp.end + 1;
-    //         }
-    //     }
-
-    //     // All done.
-    //     return partitions;
-    // }
-
-
-
-    //
     // Add Level
     // Add a level to the tree, which simply means scan the next level for new covered sections (HWM ancestors).
     //
@@ -638,7 +540,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _level_count++;
 
         // Scale the uncovered intervals.
-        // std::cout << std::endl << "Level " << _level_count << ":" << std::endl;
         for (Interval<T>& uncovered_interval : _uncovered_intervals) {
             // The math is simply:   start * 2 - 1    and    end * 2.
             if constexpr(BuiltinIntegral<T>) {
@@ -649,12 +550,11 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                 mpz_sub_ui(uncovered_interval.start.get_mpz_t(), uncovered_interval.start.get_mpz_t(), 1);
                 mpz_mul_2exp(uncovered_interval.end.get_mpz_t(), uncovered_interval.end.get_mpz_t(), 1);
             }
-            // std::cout << "Interval scaled.  start=" << to_string_any(uncovered_interval.start) << ", end=" << to_string_any(uncovered_interval.end) << std::endl;
         }
 
         // Create an external tracker for new ancestors (which inherently are the new intervals) and uncovered intervals.
         size_t thread_count = omp_get_max_threads();
-        std::vector<std::vector<Node<T>>> omp_local_ancestors_group(thread_count);
+        std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(thread_count);
         std::vector<std::vector<Interval<T>>> omp_local_new_uncovered_intervals(thread_count);
 
         // Track the indexes we need to split.
@@ -678,27 +578,16 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             for (size_t index = 0; index < _uncovered_intervals.size(); index++) {
                 const Interval<T>& uncovered_interval = _uncovered_intervals[index];
                 covered_positions.clear();
-                for(T position = uncovered_interval.start; position <= uncovered_interval.end; position++) {
-                    try {
+                try {
+                    for(T position = uncovered_interval.start; position <= uncovered_interval.end; position++) {
                         value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
                         tmp_node.init(value);
                         if (tmp_node.is_below_high_water_mark()) {
                             // Track the position for splitting.
-                            // #pragma omp critical
-                            // {
-                            //     std::cout << "Adding position " << to_string_any(position) << " as covered." << std::endl;
-                            // }
                             covered_positions.push_back(position);
                             // Preserve the ancestor, if requested.
                             if (_preserve_ancestors) {
-                                my_ancestors.push_back(tmp_node);
-                            }
-                        }
-                    } catch (...) {
-                        #pragma omp critical
-                        {
-                            if (!eptr) {
-                                eptr = std::current_exception();
+                                my_ancestors.push_back(new Node<T>(tmp_node.get_value()));
                             }
                         }
                     }
@@ -712,16 +601,14 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                         tmp_interval.end = uncovered_interval.end;
                         // Loop through all the covered positions so we can split up the uncovered interval.
                         for (const T& covered_position : covered_positions) {
+                            // Leading edge detection: if the position is on or before the start, push start forward and skip this loop.
+                            if (tmp_interval.start >= covered_position) {
+                                tmp_interval.start = covered_position + 1;
+                                continue;
+                            }
                             // Drag the end back to the position right before the covered position.
                             tmp_interval.end = covered_position - 1;
                             // Add it to our local vector.
-                            // #pragma omp critical
-                            // {
-                            //     std::cout << "Adding position " << to_string_any(covered_position)
-                            //     << " with start=" << to_string_any(tmp_interval.start)
-                            //     << ", end=" << to_string_any(tmp_interval.end)
-                            //     << std::endl;
-                            // }
                             my_new_uncovered_intervals.push_back(tmp_interval);
                             // Update tmp_interval's start and end to go past the covered_position and all the way to the original end.
                             // It'll get dragged back again if there's another covered position in this same uncovered interval.
@@ -731,14 +618,14 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                         // Now add the remainder left in tmp, unless it exceeds the original uncovered_interval's end.
                         // This happens when the last covered_position was the end position.
                         if (tmp_interval.start <= uncovered_interval.end) {
-                            // #pragma omp critical
-                            // {
-                            //     std::cout << "Adding final bits"
-                            //     << " with start=" << to_string_any(tmp_interval.start)
-                            //     << ", end=" << to_string_any(tmp_interval.end)
-                            //     << std::endl;
-                            // }
                             my_new_uncovered_intervals.push_back(tmp_interval);
+                        }
+                    }
+                } catch (...) {
+                    #pragma omp critical
+                    {
+                        if (!eptr) {
+                            eptr = std::current_exception();
                         }
                     }
                 }
@@ -749,14 +636,13 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         if (eptr != nullptr) {
             std::rethrow_exception(eptr);
         }
-        // std::cout << "After OMP, we have the following uncovered interval splits:" << std::endl;
-        // for (std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
-        //     for (Interval<T>& uncovered_interval : uncovered_intervals) {
-        //         std::cout << "  start=" << to_string_any(uncovered_interval.start)
-        //         << ", end=" << to_string_any(uncovered_interval.end)
-        //         << std::endl;
-        //     }
-        // }
+
+        // Merge Ancestors.
+        if (_preserve_ancestors) {
+            for (std::vector<Node<T>*>& omp_ancestors : omp_local_ancestors_group) {
+                _ancestors.insert(_ancestors.end(), omp_ancestors.begin(), omp_ancestors.end());
+            }
+        }
 
         // To avoid large scanning or copying of the vector, we're going to do things in a few specific steps.
         // First, we need to flatten the new uncovered intervals into a single container, so we can access by index.
@@ -779,23 +665,13 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
 
         // Step 2 -- Remove the uncovered intervals we split.
         newly_uncovered_offset = 0;
-        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals and " << newly_uncovered_intervals.size() << " newly_uncovered_intervals before removing splits." << std::endl;
         for (size_t index = 0; index < split_interval_indexes.size(); index++) {
             if (split_interval_indexes[index]) {
                 // Swap the item from the newly uncovered intervals and bump its offset.
-                // std::cout
-                //     << "  Splitting interval at index " << index
-                //     << " with start=" << to_string_any(_uncovered_intervals[index].start)
-                //     << ", end=" << to_string_any(_uncovered_intervals[index].end)
-                //     << "  with newly_uncovered[" << newly_uncovered_offset << "] which has "
-                //     << "start=" << to_string_any(newly_uncovered_intervals[newly_uncovered_offset].start)
-                //     << ", end=" << to_string_any(newly_uncovered_intervals[newly_uncovered_offset].end)
-                //     << std::endl;
                 _uncovered_intervals[index] = std::move(newly_uncovered_intervals[newly_uncovered_offset]);
                 newly_uncovered_offset++;
             }
         }
-        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals after removing splits." << std::endl;
 
         // Step 3 -- Transfer the remaining items.
         if (newly_uncovered_offset < newly_uncovered_intervals.size()) {
@@ -803,29 +679,17 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             _uncovered_intervals.resize(old_size + newly_uncovered_intervals.size() - newly_uncovered_offset);
             std::move(newly_uncovered_intervals.begin() + newly_uncovered_offset, newly_uncovered_intervals.end(), _uncovered_intervals.begin() + old_size);
         }
-        // std::cout << "There are " << _uncovered_intervals.size() << " _uncovered_intervals after transferring the remaining fragments:" << std::endl;
-        // for (Interval<T>& uncovered_interval : _uncovered_intervals) {
-        //     std::cout << "  start=" << to_string_any(uncovered_interval.start)
-        //     << ", end=" << to_string_any(uncovered_interval.end)
-        //     << std::endl;
-        // }
 
         // Step 4 -- Sort the uncovered intervals so merging works correctly.  Since start always equals end, it's trivial.
-        // auto start = std::chrono::steady_clock::now();
-        // std::cout << "Starting to sort ..." << std::flush;
         tbb::parallel_sort(
             _uncovered_intervals.begin(),
             _uncovered_intervals.end(),
             [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
         );
-        // auto end = std::chrono::steady_clock::now();
-        // auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        // std::cout << " done after " << ms << "ms." << std::endl;
 
         // Step 5 -- Merge neighboring intervals to reduce memory.
         // Use a typical read-ahead/write-incremented scan with two indexes to avoid a temp vector.
         if (_merge_intervals) {
-            // std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals before merging." << std::endl;
             if (!_uncovered_intervals.empty()) {
                 size_t write_index = 0;
                 bool adjacent = false;
@@ -851,7 +715,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                 // Now resize the vector.
                 _uncovered_intervals.resize(write_index + 1);
             }
-            // std::cout << "There are " << _uncovered_intervals.size() << " uncovered intervals after merging." << std::endl;
         }
 
         // Persist the coverage to our new level.  It's just a sum of the uncovered size() values subtracted from the node total.

@@ -114,12 +114,6 @@ void test_binary_tree_basic_construction() {
         // However, 5 is adjacent to the other interval, which will be merged.  Final covered intervals is: [2-4]
         // This leaves positions 1-1 uncovered.
         implicit_tree.add_level();
-        std::cout
-            << std::endl
-            << "size=" << uncovered_intervals.size()
-            << "start=" << to_string_any(uncovered_intervals[0].start)
-            << "end=" << to_string_any(uncovered_intervals[0].end)
-            << std::endl;
         assert(uncovered_intervals.size() == 1);
         assert(uncovered_intervals[0].start == 1);
         assert(uncovered_intervals[0].end == 1);
@@ -269,9 +263,6 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(level_coverage->get_covered());
         global_coverage.add_total(level_coverage->get_total());
-        std::cout << std::endl << "level_coverage->get_covered()=" << to_string_any(level_coverage->get_covered())
-        << ", get_known_coverage()=" << to_string_any(BinaryTreeCoverageConstants::get_known_coverage<T>(level))
-        << std::endl;
         assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
         assert(level_coverage->get_total() == level_target_total);
     }
@@ -328,10 +319,7 @@ void test_binary_tree_coverage_coherency_at_scale() {
             test_binary_tree_coverage<T>(26, 8, opts);
             assert(false); // Should throw
         } catch (const std::overflow_error& e) {
-            std::cout << "Got the overflow" << std::endl;
             assert(std::string(e.what()).find("Overflow in CollatzAffineMap calculate() method") != std::string::npos);
-        } catch (...) {
-            std::cout << "Something else happened..." << std::endl;
         }
     } else if constexpr(ExtendedIntegral<T>) {
         // Level 32 should work.

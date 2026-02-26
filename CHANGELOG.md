@@ -14,6 +14,9 @@ __System Build for All Tests__
 * Ubuntu 24.04 64-bit, Desktop Version
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
+* RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
+
+(Note: when larger memory was required and CPU speed was irrelevent, a donor system with more RAM was used)
 
 ### 3.1.0
 
@@ -44,10 +47,13 @@ levels and then duplicated several times over.
 
 I performed a test with a 38 level tree and found the following optimizations.
 
-| Technique               | Memory (GB) | Description |
-| :---------------------- | ----------: | :---------- |
-| None                    |        22.8 | Baseline before changes. |
-| Single Covered Interval |        17.3 | Only keep the latest covered interval, not one per level. |
+| Technique                 | Memory RSS (GB) | Description |
+| :------------------------ | --------------: | :---------- |
+| None                      |            22.8 | Baseline before changes. |
+| Single Covered Interval   |            17.3 | Only keep the latest covered interval, not one per level. |
+| Track Uncovered Intervals |            12.5 | Track uncovered intervals, not covered.  Smaller set. Also merge intervals. |
+
+__Note__: Bytes are RSS, not private in-use.  True bytes used spike near the table's values, but drop to ~3.7GB afterward.
 
 #### Draw Tree (Python Diagrammer)
 Updated the Python version of the BinaryTree and Node classes to be 1-based so I could fix the `draw_tree.py` script.
