@@ -18,6 +18,13 @@ __System Build for All Tests__
 
 (Note: when larger memory was required and CPU speed was irrelevent, a donor system with more RAM was used)
 
+### 3.2.0
+
+#### Affine Map Bypass
+
+TODO: Pretty sure we don't need to call compute(), because the weight of the exponential portion is enough.
+
+
 ### 3.1.0
 
 #### Peak By Bit

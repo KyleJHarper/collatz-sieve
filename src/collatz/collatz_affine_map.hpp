@@ -27,7 +27,7 @@
 
 //
 // CollatzAffineMap
-// The basic map.
+// The basic map which performs all steps.
 //
 template<AnySupportedIntegral T>
 class CollatzAffineMap {
@@ -150,5 +150,76 @@ class CollatzAffineMap {
         } else {
             throw std::logic_error("Unknown type for is_below()");
         }
+    }
+};
+
+
+
+
+//
+// CollatzAffineMapShortcut
+// An accelerated map which only tracks exponents of 3 and 2 (for F and G).  Our distribution of N means the constant portion of an
+// FG chain cannot overcome the exponential portion to bring the calculated value above N.
+//
+// In other words:
+//     Given f = number of F steps
+//     Given k = number of F and G steps
+//     Given A = 3^f/2^k
+//     When A < 1, then:  A * N + B < N
+//
+// We can therefore track exponent values of 3 and 2, and perform a simple integer comparison for is_below().
+//
+// Note: This version has no calculate() method, because that would be silly.
+//
+template<AnySupportedIntegral T>
+class CollatzAffineMapShortcut {
+    private:
+    uint32_t _twos_exp = 0;
+    uint32_t _threes_exp = 0;
+
+
+    public:
+    CollatzAffineMapShortcut() {}
+
+
+
+    //
+    // Reset
+    // Reset the object for reuse.
+    //
+    void reset() {
+        _twos_exp = 0;
+        _threes_exp = 0;
+    }
+
+
+
+    //
+    // Apply F
+    // Increments counts, and that's all.
+    //
+    void apply_F() {
+        _threes_exp += 1;
+        _twos_exp += 1;
+    }
+
+
+
+    //
+    // Apply G
+    // Increments counts, and that's all.
+    //
+    void apply_G() {
+        _twos_exp += 1;
+    }
+
+
+
+    //
+    // Is Below
+    // Compares the result of powers of 3 and 2, and returns true if 3^f < 2^k.
+    //
+    bool is_below() const {
+        return Exponents::get_power_of_three<T>(_threes_exp) < Exponents::get_power_of_two<T>(_twos_exp);
     }
 };

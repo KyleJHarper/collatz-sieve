@@ -24,39 +24,27 @@ As such, I'll leave this as a noble, albeit silly, goal.  Simply put:
 
 ## Current Work
 
-### Implicit Tree Memory
-The implicit tree is eating a lot of memory when we reach level 40.  Something is wrong.
+### Re-verify GPU on Peak by Bit
+For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from
+finding 2^109 lately.
 
 ### Map Remainder of Peak by Bit
 We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
 those last 19 places...
 
-### Refactor the FG Constant Portion to an Affine Map
-The biggest computational hotspot is `fg_constant_portion` manipulation within Node::init().  It can be represented with integers
-and shifts like an affine map/transformation because F(x) and G(x) are affine and their composition is therefore affine.  This
-eliminates a float operation (even worse, an mpf class) inside our hottest loop.
+### Bypass Affine Map's calculate()
+I believe it's mathematically impossible for an exponential portion of FG to have a 3^x/2^y < 1 where the constant portion brings
+it over 1 and to a whole number.  This would mean `is_below()` could simply check exponents as integers (lookup table) and do an
+integer comparison.
 
 ### Save & Load Tree
 Both tree types are fully deterministic.  There's no reason we can't build an export/import feature to save and load a tree.  This
 would allow precomputing very large trees and sharing them.
 
-### GPU Support Extended
-The BinaryTree's workhorse is always `add_level()` which either creates Node objects via OMP loops (Materialized) or manipulates a
-thread-local Node object inside an OMP loop (Implicit) to build the `_level_map` or `_covered_intervals`.  I'm wondering if there's
-a way to easily and simply offload building to a GPU.  For Materialized, probably not, because we have to get the objects into RAM
-anyway, but for Implicit we could reasonably ask the GPU to process a level and copy back `Intervals` cheaply.
-
-### Remove NodeMetaData
-We don't need this anymore.  It should be completely implicit.
-
 ### Sieve
 * Flesh this out so it's ironclad.
 * Fully implemented the forward-looking cache.
 * Switch to an implicit tree.
-
-### Update Tree Generator
-The draw_tree.py script works, but only for 0-based tree.  We should probably rewrite the whole thing (Tree/Node classes) to follow
-our BinaryTreeMath logic in C.
 
 ### Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?

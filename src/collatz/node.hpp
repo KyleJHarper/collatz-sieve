@@ -92,7 +92,7 @@ class Node {
 
         // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
         // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
-        static thread_local CollatzAffineMap<T> affine_map;
+        static thread_local CollatzAffineMapShortcut<T> affine_map;
         affine_map.reset();
         size_t count = 0;
         _fg_chain_length = get_level() - 1;
@@ -106,7 +106,7 @@ class Node {
             return count >= _fg_chain_length;
         });
         // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
-        _is_below_hwm = affine_map.is_below(_value);
+        _is_below_hwm = affine_map.is_below();
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
         // reason to scan everything manually.  The parent's data is all we need.

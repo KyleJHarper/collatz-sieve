@@ -311,22 +311,7 @@ template<AnySupportedIntegral T>
 void test_binary_tree_coverage_coherency_at_scale() {
     BinaryTreeOptions opts;
     opts.tree_type = BinaryTreeType::IMPLICIT;
-    if constexpr(NativeIntegral<T>) {
-        // Level 25 should work.
-        test_binary_tree_coverage<T>(25, 8, opts);
-        // Level 26 should break.
-        try {
-            test_binary_tree_coverage<T>(26, 8, opts);
-            assert(false); // Should throw
-        } catch (const std::overflow_error& e) {
-            assert(std::string(e.what()).find("Overflow in CollatzAffineMap calculate() method") != std::string::npos);
-        }
-    } else if constexpr(ExtendedIntegral<T>) {
-        // Level 32 should work.
-        test_binary_tree_coverage<T>(32, 8, opts);
-        //TODO First level to fail is unknown.
-    }
-    // GMP has no overflow potential.
+    test_binary_tree_coverage<T>(32, 8, opts);
 }
 
 
