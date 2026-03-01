@@ -550,22 +550,43 @@ void test_binary_tree_math() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_level_will_fit() {
-    // Level Will Fit
+    // Levels are now able to handle bit_width - 1 [-1 if signed].
     // 8-bit
     assert(BinaryTreeMath<uint8_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(5) == false);
+    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(7) == true);
+    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(8) == false);
+    // 8-bit (signed)
+    assert(BinaryTreeMath<int8_t>::st_level_will_fit(4) == true);
+    assert(BinaryTreeMath<int8_t>::st_level_will_fit(6) == true);
+    assert(BinaryTreeMath<int8_t>::st_level_will_fit(7) == false);
+    assert(BinaryTreeMath<int8_t>::st_level_will_fit(8) == false);
     // 16-bit
     assert(BinaryTreeMath<uint16_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(9) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(10) == false);
+    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(15) == true);
+    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(16) == false);
+    // 16-bit (signed)
+    assert(BinaryTreeMath<int16_t>::st_level_will_fit(4) == true);
+    assert(BinaryTreeMath<int16_t>::st_level_will_fit(14) == true);
+    assert(BinaryTreeMath<int16_t>::st_level_will_fit(15) == false);
+    assert(BinaryTreeMath<int16_t>::st_level_will_fit(16) == false);
     // 32-bit
     assert(BinaryTreeMath<uint32_t>::st_level_will_fit(10) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(17) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(18) == false);
+    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(31) == true);
+    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(32) == false);
+    // 32-bit (signed)
+    assert(BinaryTreeMath<int32_t>::st_level_will_fit(10) == true);
+    assert(BinaryTreeMath<int32_t>::st_level_will_fit(30) == true);
+    assert(BinaryTreeMath<int32_t>::st_level_will_fit(31) == false);
+    assert(BinaryTreeMath<int32_t>::st_level_will_fit(32) == false);
     // 64-bit
     assert(BinaryTreeMath<uint64_t>::st_level_will_fit(18) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(33) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(34) == false);
+    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(63) == true);
+    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(64) == false);
+    // 64-bit (signed)
+    assert(BinaryTreeMath<int64_t>::st_level_will_fit(18) == true);
+    assert(BinaryTreeMath<int64_t>::st_level_will_fit(62) == true);
+    assert(BinaryTreeMath<int64_t>::st_level_will_fit(63) == false);
+    assert(BinaryTreeMath<int64_t>::st_level_will_fit(64) == false);
     // MPZ Has No Ceiling
     assert(BinaryTreeMath<mpz_class>::st_level_will_fit(999) == true);
 }
