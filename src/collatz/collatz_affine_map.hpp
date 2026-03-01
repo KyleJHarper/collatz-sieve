@@ -217,9 +217,11 @@ class CollatzAffineMapShortcut {
 
     //
     // Is Below
-    // Compares the result of powers of 3 and 2, and returns true if 3^f < 2^k.
+    // Compares the result of powers of 3 and 2, and returns true if 3^f < 2^k.  These have been precomputed and stored in an array
+    // for us to lookup cheaply.
     //
     bool is_below() const {
-        return Exponents::get_power_of_three<T>(_threes_exp) < Exponents::get_power_of_two<T>(_twos_exp);
+        // If our two's exponent exceeds the precalculated two's-exponent for our power of three, we're below.
+        return _twos_exp > Exponents::MAX_POW2_UNDER_POW3[_threes_exp];
     }
 };

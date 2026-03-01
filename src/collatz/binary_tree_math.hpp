@@ -310,23 +310,31 @@ class BinaryTreeMath {
 
     //
     // Level Will Fit
-    // Determine if the level requested is going to fit within the bit-size of T.  Only applies to native integrals.
-    // Leverages the CollatzConstants to know max IV for the given bit size.  IV's higher than this will overflow the bit during
-    // sequence generation.
+    // Determine if the level requested is going to fit within the bit-size of T.
+    //
+    // This method used to be more complex because type T was limited by peak_by_bit as we scanned through a Collatz sequence to
+    // build the Node's FG chain (inside Node::init()).  This has been changed to auto-promote the key pieces to avoid overflow
+    // without affecting Node's T type.  The result is we can build levels up to bit_width(T) - 1.
     static inline bool st_level_will_fit(size_t level) {
         if constexpr(BuiltinIntegral<T>) {
-            size_t bits = sizeof(T) * 8;
-            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit<T>(bits);
-            mpz_class max_iv_allowed_mpz;
-            if constexpr(NativeIntegral<T>) {
-                max_iv_allowed_mpz = max_iv_allowed;
-            } else if constexpr(ExtendedIntegral<T>) {
-                uint128_to_mpz(max_iv_allowed, max_iv_allowed_mpz);
-            }
-            mpz_class max_iv_needed_mpz = st_max_node_value_at_level(level);
-            return (max_iv_allowed_mpz >= max_iv_needed_mpz);
+            return level <= BinaryTreeMath<T>::st_max_level_of_type();
         }
         return true;
+    }
+
+
+
+    //
+    // Max Level of Type
+    // Reads type T to determine the maximum level supported.
+    static inline size_t st_max_level_of_type() {
+        // Max level is scaled with tree size (diadic) but must respect implementation limits, ergo:
+        //   Bit width
+        //   Minus 1 because the last node on 2^bit level overflows due to counting starting at 0.
+        //   Minus 1 if the type is signed.
+        size_t bits = sizeof(T) * 8;
+        size_t max_level = bits - 1 - (std::is_signed_v<T> ? 1 : 0);
+        return max_level;
     }
 
 

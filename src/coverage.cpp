@@ -6,7 +6,6 @@
 #include <CLI.hpp>
 #include <unistd.h>
 #include "collatz/binary_tree_coverage.hpp"
-#include "collatz/collatz.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"
 
@@ -175,16 +174,14 @@ int main(int argc, char **argv) {
     }
     // Now make sure it'll actually fit without overflowing.
     if (data_type == "uint64_t") {
-        uint64_t max_initial_value = CollatzConstants::get_max_initial_value_by_bit<uint64_t>(64);
-        size_t max_level = BinaryTreeMath<uint64_t>::st_max_full_level_at_node(max_initial_value);
+        size_t max_level = BinaryTreeMath<uint64_t>::st_max_level_of_type();
         if (levels > max_level) {
             logger->info("Level (-l) is over {} and you didn't specify -i or -m.  Auto upgrading from uint64_t to uint128_t.", max_level);
             data_type = "uint128_t";
         }
     }
     if (data_type == "uint128_t") {
-        uint128_t max_initial_value = CollatzConstants::get_max_initial_value_by_bit<uint128_t>(128);
-        size_t max_level = BinaryTreeMath<uint128_t>::st_max_full_level_at_node(max_initial_value);
+        size_t max_level = BinaryTreeMath<uint128_t>::st_max_level_of_type();
         if (levels > max_level) {
             logger->info("Level (-l) is over {} and you didn't specify -m.  Auto upgrading from uint128_t to mpz_class.", max_level);
             data_type = "mpz_class";

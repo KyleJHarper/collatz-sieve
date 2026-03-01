@@ -1,10 +1,10 @@
 #pragma once
 
+#include <climits>
 #include <cstddef>
 #include <unordered_map>
 #include <vector>
 #include <string>
-#include "collatz.hpp"
 #include "concepts.hpp"
 #include "node.hpp"
 #include "binary_tree_math.hpp"
@@ -50,18 +50,11 @@ struct IBinaryTreeBackend {
     void assert_level_will_fit(size_t level) const {
         if (! BinaryTreeMath<T>::st_level_will_fit(level)) {
             size_t bits = sizeof(T) * 8;
-            T max_iv_allowed = CollatzConstants::get_max_initial_value_by_bit<T>(bits);
-            mpz_class max_iv_allowed_mpz;
-            if constexpr(NativeIntegral<T>) {
-                max_iv_allowed_mpz = max_iv_allowed;
-            } else if constexpr(ExtendedIntegral<T>) {
-                uint128_to_mpz(max_iv_allowed, max_iv_allowed_mpz);
-            }
-            size_t max_level_allowed = BinaryTreeMath<T>::st_max_full_level_at_node(max_iv_allowed);
+            size_t max_level = bits - 1 - (std::is_signed_v<T> ? 1 : 0);
             std::string msg = "Cannot build a BinaryTree with ";
             msg += to_string_any(level) + " levels and type '" + typeid(T).name() + "' with ";
             msg += to_string_any(bits) + " bits. A Collatz sequence will overflow.";
-            msg += " Max level for this type is " + to_string_any(max_level_allowed) + ".";
+            msg += " Max level for this type is " + to_string_any(max_level) + ".";
             throw std::out_of_range(msg);
         }
     }

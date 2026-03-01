@@ -20,10 +20,46 @@ __System Build for All Tests__
 
 ### 3.2.0
 
-#### Affine Map Bypass
+#### Affine Map Shortcut
 
-TODO: Pretty sure we don't need to call compute(), because the weight of the exponential portion is enough.
+The math turned out to be valid, so I added `CollatzAffineMapShortcut` and used it in `Node::init()`.  This made a minor (~5%)
+performance boost for `uint64_t`, a moderate (~15%) performance boost for `uint128_t`, and a major (~35%) performance boost for
+`mpz_class` (GMP).
 
+All tests, including coverage, passed.  No issues.
+
+### Larger Binary Tree per Bit Limit
+Previously, the `BinaryTree` had a limited number of levels for fixed-width types (e.g.: `uint64_t`) because of this process:
+* The `BinaryTree` adds levels via `add_level()`.
+* Each level adds `Node` objects.
+* The `Node` needs to compute its FG Chain, which requires stepping through Collatz sequences.
+* Steps often grow (much) larger than `Node._value`, causing overflows of the node's `T`.
+
+As a result, `Node` objects are limited to a peak-by-bit, which is the largest value in a Collatz sequence starting at N.  We have
+a program which has mapped these out to ~109 places thus far.  However, an easier solution availed itself.
+
+We now predict overflow in `Node::init()` for type `T` when processing `Collatz<T>::for_each_fg_chain_link`.  We called a helper
+method using `template<AnySupportedIntegral U>`, which allows us to decouple the node's type `T` from the FG-chain generation using
+type `U` briefly.
+
+Additionally, the `CollatzAffineMapShortcut` class was updated to use a lookup table of precalculated maximal power-of-two
+coefficients for any given power of 3 (up to 3^512).  This avoids type juggling; everything is just `size_t` now.
+
+Combined, the overflow potential has disappeared outside of `Node._value`.  This means trees can now be built up to the bit width
+of their type `T`, minus 1 because counting starts at 0, and minus 1 more if the type is signed.
+
+| Type      | Old Limit | New Limit | Reason |
+| :-------- | --------: | --------: | :----- |
+| uint64_t  |        32 |        63 | Collatz sequence overflows at level 33. |
+| uint128_t |        80 |       127 | 3^81 (`_threes_exp > 81`) overflows in affine map. |
+| mpz_class |       n/a |       n/a | No limit. |
+
+The result is the ability to use native types like `uint64_t` for much larger trees, keeping memory lower.  For example, we tested
+a level 38 tree which required `uint128_t` in our last patch.  It used ~12.5GB (peak RSS) with ~3.7GB truly active.  Building the
+same tree with `uint64_t` required half the memory: ~6.2GB (peak RSS) and ~1.9GB active.
+
+An additional benefit is speed: the `uint64_t` version takes about 80% as long as the `uint128_t`.  Which, to be fair, is a huge
+credit the compiler and hardware's ability to handle 128-bit types so well on a 64-bit system.
 
 ### 3.1.0
 

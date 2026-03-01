@@ -24,7 +24,6 @@ template <AnySupportedIntegral T>
 class Node {
     private:
     static constexpr size_t MAX_CHILDREN = 2;
-    static inline std::string E_NO_METADATA_TRACKING = "You disabled metadata when you created this object.";
     // Object members.
     // Memory packing and alignment matter!  Keep this class LIGHT.
     // All data must fit within one cache line.
@@ -90,23 +89,43 @@ class Node {
         _value = value;
         _parent = parent;
 
-        // The F-G (and O-E) chain concept is unique to the BinaryTree strategy, which ties Node to BinaryTree rather tightly, but
-        // that's okay for now.  Since the F-G chain is always consistent.  It grows by 1 each level.
-        static thread_local CollatzAffineMapShortcut<T> affine_map;
-        affine_map.reset();
-        size_t count = 0;
-        _fg_chain_length = get_level() - 1;
-        Collatz<T>::for_each_fg_chain_link(_value, [&](bool is_F) {
-            if (is_F) {
-                affine_map.apply_F();
+        // Perform FG steps by loading them into an affine map so we can determine if this node hits the HWM or not.  We leverage
+        // the shortcut version because there's no need to store the final value below _value, only the _is_below_hwm flag.
+        //
+        // We will create a unique thread-local for uint64_t, uint128_t, and mpz_class for a few reasons:
+        //   1.  It prevents a lot of realloc() with mpz_class.
+        //   2.  It lets us pick a larger type for affine testing while keeping Node's T smaller.
+        // For example, uint64_t overflows on a Node in level 33 because the Collatz<uint64_t>::for_each_fg_chain_link() overflows
+        // on one of the Collatz steps.  But after determining _is_below_hwm, we don't need the overflowed value.  By upgrading at
+        // runtime to a larger T (e.g. uint128_t) for affine testing, we can keep Node's T (e.g. uint64_t) smaller, saving RAM.
+        //
+        // There are two limiting factors.  One is the peak_by_bit, found in CollatzConstants.  The other is the power of three the
+        // affine map shortcut will evaluate when is_below() is tested.
+
+        // Use thread-locals to avoid alloc(), especially on the GMP path.
+        static thread_local CollatzAffineMapShortcut<uint64_t> affine_map_64;
+        static thread_local CollatzAffineMapShortcut<uint128_t> affine_map_128;
+        static thread_local CollatzAffineMapShortcut<mpz_class> affine_map_mpz;
+
+        // Use constexpr to branch at compile time, reducing our logic at runtime to a single branch/condition.
+        if constexpr(NativeIntegral<T>) {
+            // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
+            if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
+                init_affine_helper(affine_map_64);
             } else {
-                affine_map.apply_G();
+                init_affine_helper(affine_map_128);
             }
-            count++;
-            return count >= _fg_chain_length;
-        });
-        // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
-        _is_below_hwm = affine_map.is_below();
+        } else if constexpr(ExtendedIntegral<T>) {
+            // Dealing with 128 bits.  If it'll overflow, use mpz_class.
+            if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
+                init_affine_helper(affine_map_128);
+            } else {
+                init_affine_helper(affine_map_mpz);
+            }
+        } else {
+            // Dealing with mpz_class.  Send as-is.
+            init_affine_helper(affine_map_mpz);
+        }
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
         // reason to scan everything manually.  The parent's data is all we need.
@@ -124,6 +143,37 @@ class Node {
             }
         }
     };
+    //
+    // Quick helper to DRY up affine logic during init().
+    template<AnySupportedIntegral U>
+    inline void init_affine_helper(CollatzAffineMapShortcut<U>& affine_map) {
+        affine_map.reset();
+        size_t count = 0;
+        _fg_chain_length = get_level() - 1;
+        // We need to elevate _value to type U in case it's not the same.
+        static thread_local U u_value;
+        if constexpr(BuiltinIntegral<T> && BuiltinIntegral<U>) {
+            // Both types are builtin.  They can cast directly, even if they're the same.  Dirt cheap, so don't overthink this.
+            u_value = U(_value);
+        } else if constexpr(ExtendedIntegral<T> && GMPIntegral<U>) {
+            // Node is uint128_t but affine map is mpz_class.  Elevate.
+            uint128_to_mpz(_value, u_value);
+        } else if constexpr(GMPIntegral<T> && GMPIntegral<U>) {
+            // Both are GMP.  Just set, which is cheap.
+            mpz_set(u_value.get_mpz_t(), _value.get_mpz_t());
+        }
+        Collatz<U>::for_each_fg_chain_link(u_value, [&](bool is_F) {
+            if (is_F) {
+                affine_map.apply_F();
+            } else {
+                affine_map.apply_G();
+            }
+            count++;
+            return count >= _fg_chain_length;
+        });
+        // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
+        _is_below_hwm = affine_map.is_below();
+    }
 
 
 

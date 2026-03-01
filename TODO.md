@@ -32,11 +32,6 @@ finding 2^109 lately.
 We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
 those last 19 places...
 
-### Bypass Affine Map's calculate()
-I believe it's mathematically impossible for an exponential portion of FG to have a 3^x/2^y < 1 where the constant portion brings
-it over 1 and to a whole number.  This would mean `is_below()` could simply check exponents as integers (lookup table) and do an
-integer comparison.
-
 ### Save & Load Tree
 Both tree types are fully deterministic.  There's no reason we can't build an export/import feature to save and load a tree.  This
 would allow precomputing very large trees and sharing them.
@@ -45,6 +40,10 @@ would allow precomputing very large trees and sharing them.
 * Flesh this out so it's ironclad.
 * Fully implemented the forward-looking cache.
 * Switch to an implicit tree.
+* Leverage a GPU, if possible.
 
 ### Scan for Ancestor Resolution
-* We know that descendents end up with a sequence which solves an ancestor.  Can we find a proof for that?
+* We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
+
+### Rename the Repo
+* The name `3n1` doesn't really mean much.  We should rename it on Github and locally.
