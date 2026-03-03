@@ -16,7 +16,28 @@ __System Build for All Tests__
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 * RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
 
-(Note: when larger memory was required and CPU speed was irrelevent, a donor system with more RAM was used)
+(Note: when larger memory and/or high core count was required, a donor system with more RAM was used and is noted)
+
+### 3.3.0
+
+#### Bit Reversal Optimization on BinaryTree
+
+The bulk of all work for both tree types in `add_level()` is the `Node::init()` logic.  Deeper down, this uses
+`BinaryTreeMath::st_reverse_low_bits(bits)`.  Originally, we shifted bits around naively in a `for` loop, avoiding any intrinsics
+or blackbox functions.  This became a hotspot and bottleneck, so support was added for both, and the compiler should select the
+best version for a platform.
+
+Time To Build 38-Level Tree _(Donor system for larger RAM Requirement)_
+
+| Type      | Baseline | Blackbox | Builtin Intrinsic |
+| --------: | -------: | -------: | ----------------: |
+|  uint64_t |       44 |       33 |                32 |
+| uint128_t |       56 |       37 |                36 |
+| mpz_class |      220 | see note |          see note |
+
+Note: the intrinsic `__builtin_bitreverse64()` was only operational via `clang++` on Ubuntu 24.04.  The baseline was tested with a
+`clang++` build and found within +/-5%.  Additionally, I spent a few hours trying to find a way to perform bit reversal on a GMP
+`mpz_class` type only to end up frustrated and slower than simply testing bits and assigning them.
 
 ### 3.2.0
 

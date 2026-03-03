@@ -22,6 +22,26 @@
 //
 
 
+
+//
+// Create a 64-bit reversal to avoid GCC builtin being unavailble possibly.
+//
+static inline uint64_t bitreverse64_u64(uint64_t x) {
+    #if __has_builtin(__builtin_bitreverse64)
+    x = __builtin_bitreverse64(x);
+    #else
+    x = ((x & 0x5555555555555555ULL) << 1) | ((x >> 1) & 0x5555555555555555ULL);
+    x = ((x & 0x3333333333333333ULL) << 2) | ((x >> 2) & 0x3333333333333333ULL);
+    x = ((x & 0x0F0F0F0F0F0F0F0FULL) << 4) | ((x >> 4) & 0x0F0F0F0F0F0F0F0FULL);
+    x = ((x & 0x00FF00FF00FF00FFULL) << 8) | ((x >> 8) & 0x00FF00FF00FF00FFULL);
+    x = ((x & 0x0000FFFF0000FFFFULL) << 16) | ((x >> 16) & 0x0000FFFF0000FFFFULL);
+    x = (x << 32) | (x >> 32);
+    #endif
+    return x;
+}
+
+
+
 //
 // LevelInterval
 //
@@ -140,31 +160,69 @@ class BinaryTreeMath {
     //
     // Bit Reversal
     // The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values
-    // within the tree, largely due to the constant power-of-two increase.  In order leverage this, we need to be able to take bits
-    // from a node value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side.
-    // There are a lot of ways to do this, and some compilers have intrisics for this, but I'm going to use the loop method to keep
-    // the intention clear.  We can replace it with a black-box function later
+    // within the tree, largely due to the constant power-of-two increase.  To leverage this, we need to take bits from a node
+    // value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side.  There are a
+    // lot of ways to do this, including a basic loop, which I used originally and have removed (diff 3.2.0).  We will use compiler
+    // intrisics and more black-box-ish work to speed this up.
     //
+    // First we make a general full-reverse method.
+    static inline T st_bit_reverse_full(const T& x) {
+        if constexpr(NativeIntegral<T>) {
+            // Native types have a direct builtin.  Use it.
+            using U = std::make_unsigned_t<T>;
+            U ux = static_cast<U>(x);
+            if constexpr (sizeof(T) == 1) {
+                return static_cast<T>(__builtin_bitreverse8(ux));
+            } else if constexpr (sizeof(T) == 2) {
+                return static_cast<T>(__builtin_bitreverse16(ux));
+            } else if constexpr (sizeof(T) == 4) {
+                return static_cast<T>(__builtin_bitreverse32(ux));
+            } else if constexpr (sizeof(T) == 8) {
+                return static_cast<T>(bitreverse64_u64(ux));
+            }
+        } else if constexpr(ExtendedIntegral<T>) {
+            // Extended 128-bit integrals need a little juggling.
+            using U = make_unsigned_custom_t<T>;
+            U ux = static_cast<U>(x);
+
+            uint64_t low  = (uint64_t)ux;
+            uint64_t high = (uint64_t)(ux >> 64);
+            uint64_t rev_low  = bitreverse64_u64(high);
+            uint64_t rev_high = bitreverse64_u64(low);
+            return static_cast<T>(( (U)rev_high << 64 ) | rev_low);
+        } else if constexpr(GMPIntegral<T>) {
+            // GMP is arbitrary precision, so we need to get the current size/width and juggle limbs.
+            throw std::logic_error("Cannot fully reverse mpz_class");
+        } else {
+            static_assert(false, "Must use a supported type T");
+        }
+    }
+    //
+    //
+    // Now the reversal of the lowest bits.
     // Formula: reverse(bits)[0:size]
     static inline T st_reverse_low_bits(const T& value, size_t bits) {
+        // Init TLS storage to prevent alloc in GMP.
         static thread_local T result;
+
+        // Test for zero.
         result = 0;
         if (bits == 0) { return result; }
 
-        // No built-in and/or non-integral.  Use a loop.
-        for (size_t bit = 0; bit < bits; bit++) {
-            if constexpr(BuiltinIntegral<T>) {
-                if ((value >> bit) & 1) {
-                    result |= (T(1) << (bits - 1 - bit));
-                }
-            } else if constexpr(GMPIntegral<T>) {
+        // Reverse and shift by the correct amount.
+        if constexpr(BuiltinIntegral<T>) {
+            result = st_bit_reverse_full(value);
+            constexpr size_t WIDTH = sizeof(T) * 8;
+            result >>= (WIDTH - bits);
+        } else if constexpr(GMPIntegral<T>) {
+            for (size_t bit = 0; bit < bits; bit++) {
                 if (mpz_tstbit(value.get_mpz_t(), bit)) {
                     mpz_setbit(result.get_mpz_t(), bits - 1 - bit);
                 }
-            } else {
-                throw std::logic_error("Unknown type.");
             }
         }
+
+        // Return.
         return result;
     }
 
@@ -487,6 +545,7 @@ class BinaryTreeMath {
 
         // Lift: 2^(L-1)
         if constexpr(BuiltinIntegral<T>) {
+            lift = Exponents::get_power_of_two<T>(level - 1);
             lift = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));

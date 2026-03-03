@@ -227,3 +227,23 @@ struct first_arg_type {
     public:
     using type = typename first_arg_type<op_type>::type;
 };
+
+
+
+
+//
+// Help casting things to unsigned, mostly in bit reversal.
+template<typename T>
+struct make_unsigned128_helper {
+    using type = std::make_unsigned_t<T>;
+};
+
+// Specialization for signed __int128
+template<>
+struct make_unsigned128_helper<uint128_t> {
+    using type = unsigned __int128;
+};
+
+// Helper alias
+template<typename T>
+using make_unsigned_custom_t = typename make_unsigned128_helper<T>::type;
