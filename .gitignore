@@ -15,5 +15,5 @@ compile_commands.json
 tools/*.svg
 tools/*.png
 *.progress
-perf.data
+perf.data*
 
