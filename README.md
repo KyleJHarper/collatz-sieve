@@ -3,7 +3,7 @@
 An implementation of the data structure outlined in Kyle Harper's analysis and optimization of the Collatz Conjecture's problem
 space.  It builds a Binary Tree in a unique, deterministic manner which allows the classification of parents and children into
 __F-G Chains__.  These chains create _coverage_ of __High-Water Mark__ nodes and therefore subtrees.  The result eliminates large
-subtrees, leaving less than 1% of the problem space N after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU,
+subtrees, leaving less than 1% of the search space N after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU,
 requiring only 250MB RAM.
 
 ## An Aside
@@ -56,7 +56,7 @@ Builds with both `gcc` and `clang` work and pass all tests.
 
 ## Performance Comparisons
 
-I came to reduce space complexity, nothing more.  But comparison to others' works isn't apples-to-apples.
+I came to reduce search space, nothing more.  But comparison to others' works isn't apples-to-apples.
 
 Let's discuss...
 
@@ -68,14 +68,14 @@ In his work, Barina et al. leverages thousands of CPUs and GPUs across supercomp
 includes details of the volume of time, and it's staggering: 12,395 CPU-years and 159 GPU-years.
 
 The problem with these types of numbers is they are hardware dependant.  We could build an ASIC to test faster, but we haven't
-reduced the problem space.  Both Barina's, my, and others' techniques address both space complexity (test fewer numbers by
+reduced the search space.  Both Barina's, my, and others' techniques address both search space reduction (test fewer numbers by
 convention) and time complexity (test unskipped numbers faster).  Distinguishing between which ones provide overall performance
 gains can be tricky.  So instead, I will simply put some basic values here, and (try to) remember to link to my final research
 paper with more details later.
 
 ### Space Complexity
 
-The nature of the `BinaryTree` reduces space complexity.  It is fully deterministic and therefore a simple metric to calculate and
+The nature of the `BinaryTree` reduces search space.  It is fully deterministic and therefore a simple metric to calculate and
 emit.  The following table was built using an Intel i5-14600k (12 cores enabled) with DDR-6000.  It is a desktop PC.
 
 | Tree Levels | Coverage | Time (sec) |
