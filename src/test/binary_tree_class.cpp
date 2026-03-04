@@ -617,7 +617,7 @@ void test_binary_tree_pruned() {
     opts_implicit_without_hwm_prune_with_level_prune.prune_parent_levels = true;
     // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
     size_t max_test_level = 16;
-    size_t max_threads = 4;
+    size_t max_threads = 8;
     std::cout << "\n  Testing "<< max_test_level << " levels of multi-threaded deep tree building, coverage, and pruning combinations because THIS SHIT CANNOT FAIL!" << std::endl;
     for (size_t level = 1; level <= max_test_level; level++) {
         std::cout << "    Level " << level << "...";
