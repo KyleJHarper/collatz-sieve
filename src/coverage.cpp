@@ -70,7 +70,7 @@ class CoverageBuilder {
 
 
 template<AnySupportedIntegral T>
-void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeType tree_type) {
+void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeType tree_type, size_t sleep_seconds) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T> builder(show_ancestors, tree_type);
     builder.get_tree().assert_level_will_fit(levels);
@@ -127,6 +127,12 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeTyp
     } else {
         logger->warn("Coherency failed!  Computed coverage DOES NOT match at level {}", failing_level);
     }
+
+    if (sleep_seconds > 0) {
+        logger->info("Sleep requested for {} seconds.  Doing so.", sleep_seconds);
+        sleep(sleep_seconds);
+        logger->info("Sleep timer up.  Resuming.");
+    }
 }
 
 
@@ -141,12 +147,14 @@ int main(int argc, char **argv) {
     bool use_precomputed = false;
     bool show_ancestors = false;
     bool use_materialized_tree = false;
+    size_t sleep_seconds = 0;
     CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
     options.add_flag("-a,--ancestors", show_ancestors, "Show a list of all the high-water mark ancestors when done.");
     options.add_flag("-i,--int128", force_128bit, "Use 128-bit integer instead of native 64-bit integral type.");
     options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
     options.add_flag("-p,--precomputed", use_precomputed, "Use the precomputed table in BinaryTreeCoverage when possible.");
+    options.add_option("-s,--sleep", sleep_seconds, "Sleep at program end (for debugging, mostly).  Zero disables.")->default_val(0);
     options.add_flag("-M,--materialize", use_materialized_tree, "Build a materialized tree instead of an implicit.  Why...?");
     options.add_flag(
         "-v,--verbose"
@@ -197,13 +205,13 @@ int main(int argc, char **argv) {
         logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
     }
     if (data_type == "uint64_t") {
-        run<uint64_t>(levels, use_precomputed, show_ancestors, tree_type);
+        run<uint64_t>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds);
     }
     if (data_type == "uint128_t") {
-        run<uint128_t>(levels, use_precomputed, show_ancestors, tree_type);
+        run<uint128_t>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds);
     }
     if (data_type == "mpz_class") {
-        run<mpz_class>(levels, use_precomputed, show_ancestors, tree_type);
+        run<mpz_class>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds);
     }
 
     return 0;

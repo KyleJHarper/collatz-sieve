@@ -81,10 +81,8 @@ add_library(logging OBJECT src/logging.cpp)
 # Programs
 # --------------------------
 set(CPU_PROGRAMS
-    ancestor_coverage
     collatz_compression
     coverage
-    high_water_mark
     junk
     performance_stats
     sieve_stuff
