@@ -16,7 +16,7 @@ Yet here we are...
 ## Present State
 
 The project is semi-active.  I have no intention to add more features, but I will fix bugs, if any.  I will also consider merge
-requests, especiall in these areas:
+requests, especially in these areas:
 
 * Bug fix.
 * Non-breaking optimization.
@@ -39,7 +39,7 @@ The following progams have these statuses:
 | `junk`                | Special    | Debugging cpp for quick one-off testing.  You can ignore it. |
 | `peak_by_bit`         | Working    | Finds overflows in Collatz sequences for `2^bit` size.  GPU augment tested on an RTX-5060. |
 | `performance_stats`   | Working    | Debugging tool for analyzing speed and memory performance on a system. |
-| `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple |
+| `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
 | `sieve_stuff`         | Unfinished | Tool to measure effects of an LRU to aid in generic sieve. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 
@@ -60,9 +60,9 @@ I came to reduce space complexity, nothing more.  But comparison to others' work
 
 Let's discuss...
 
-Many others have built programs.  Some leverage CPUs, GPU, and even distributed workloads across supercomputers.  Chief among these
-is the project led by [David Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).  His paper addresses most of
-the history and performance markers leading up to his work in achieving 2^71 sequential testing.  You should read it.
+Many others have built programs.  Some leverage CPUs, GPUs, and even distributed workloads across supercomputers.  Chief among
+these is the project led by [David Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).  His paper addresses most
+of the history and performance markers leading up to his work in achieving 2^71 sequential testing.  You should read it.
 
 In his work, Barina et al. leverages thousands of CPUs and GPUs across supercomputers in a distributed workload.  He graciously
 includes details of the volume of time, and it's staggering: 12,395 CPU-years and 159 GPU-years.
