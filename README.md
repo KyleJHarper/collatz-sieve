@@ -1,3 +1,7 @@
+# The Harper Sieve
+
+__A Monotonic Binary-Tree Reduction of the Collatz Search Space__
+
 # Overview
 
 An implementation of the data structure outlined in Kyle Harper's analysis and optimization of the Collatz Conjecture's problem
@@ -91,3 +95,6 @@ emit.  The following table was built using an Intel i5-14600k (12 cores enabled)
 Time complexity involves all manner of optimizations (code) and will be available when I get the `Sieve` class finished.
 
 TODO
+
+
+
