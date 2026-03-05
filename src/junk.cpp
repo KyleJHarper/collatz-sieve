@@ -1,4 +1,3 @@
-#include <cuda_runtime_api.h>
 #include <gmp.h>
 #include <gmpxx.h>
 #include <omp.h>
