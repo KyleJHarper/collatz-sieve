@@ -12,7 +12,7 @@
 //
 namespace BinaryTreeCoverageConstants {
     // Precomputed coverage for given levels.  Level-indexed (aka element 0 means nothing).
-    constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 40;
+    constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 42;
     constexpr std::array<uint64_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE_64BIT = {
         0  // 0
         , 0  // 1
@@ -55,6 +55,8 @@ namespace BinaryTreeCoverageConstants {
         , 136471574881  // 38
         , 272943149762  // 39
         , 546144278026  // 40
+        , 1093108792776  // 41
+        , 2186217585552  // 42
     };
     constexpr std::array<uint128_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE_128BIT = {
         0  // 0
@@ -98,6 +100,8 @@ namespace BinaryTreeCoverageConstants {
         , 136471574881  // 38
         , 272943149762  // 39
         , 546144278026  // 40
+        , 1093108792776  // 41
+        , 2186217585552  // 42
     };
 
     //
