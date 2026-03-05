@@ -16,6 +16,3 @@ those last 19 places...
 
 ## Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
-
-## Rename the Repo
-* The name `3n1` doesn't really mean much.  We should rename it on Github and locally.
