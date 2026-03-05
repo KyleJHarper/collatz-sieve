@@ -11,7 +11,7 @@ function fatal {
 
 if [ -f /etc/debian_version ] ; then
     [ ${EUID} -eq 0 ] || fatal "You need to be root."
-    apt install build-essential cmake libtbb-dev libjemalloc-dev libgmp-dev
+    apt install build-essential cmake libtbb-dev libjemalloc-dev libgmp-dev nvidia-cuda-toolkit
 else
     fatal "Not programmed to handle deps on this system type."
 fi
