@@ -192,6 +192,10 @@ class Node:
 
     @property
     def oe_chain(self):
+        if self._oe_chain is None:
+            self._oe_chain = ""
+            for link in self._fg_chain:
+                self._oe_chain += "E" if link == "G" else "OE"
         return self._oe_chain
 
     @property
@@ -219,50 +223,35 @@ class Node:
         self._children: List[Self] = []
         self._parent = parent
         # Level is derived from the node's value: floor(log2(N+1))
-        self._level = math.floor(math.log(self._value + 1, 2)) + 1
-        # To get the OE chain and fraction for this node, we get the same number of places as our
-        # parent had, and they should match, so we check that first.
+        self._level = math.floor(math.log(self._value, 2)) + 1
         # Generate the Collatz here, but don't save it.  It's a waste of memory one we're out of init().
         sequence = Collatz(value)
-        size = 0
-        if self._parent is not None:
-            size = len(self._parent.oe_chain)
-        self._oe_chain = sequence.oe_pattern[0:size]
-        if self._level > 2 and self._parent is not None and self._oe_chain != self._parent.oe_chain:
-            raise ValueError(f"The parent oe-chain '{self._parent.oe_chain}' for {self._parent.value} doesn't match ours '{self._oe_chain}' for {self._value}.")
-        # Now just grab either 1 place if the current chain ends in "O", otherwise two.
-        if self._oe_chain == "" or self._oe_chain[-1:] == "E":
-            size += 1
-        else:
-            size += 2
-        # Root value 1 doesn't get anything.
-        if value == 1:
-            size = 0
-        self._oe_chain = sequence.oe_pattern[0:size]
-        # The FG string is an easy conversion from OE chain.
+        # The FG and OE chain are easy to make from our parent.  FG is more concise, and OE is a derivation of it.
+        # We always inherit a parent's FG chain.
         self._fg_chain = ""
-        skip = False
-        for char in self._oe_chain:
-            if skip:
-                skip = False
-                continue
-            if char == 'O':
-                self._fg_chain += 'F'
-                skip = True
-            else:
-                self._fg_chain += 'G'
-        # The threes and twos are a simple count.
-        self._threes_value = pow(3, self._oe_chain.count('O'))
-        self._twos_value = pow(2, self._oe_chain.count('E'))
+        if self._parent is not None:
+            self._fg_chain = self._parent.fg_chain
+        # Count the number of steps to skip forward based on the chain.
+        index = 0
+        for link in self._fg_chain:
+            index += 1 if link == "G" else 2
+        # If the next step at this position + 1 is odd or even, we encode an F or G, but only after level 1.
+        if self._level > 1:
+            self._fg_chain += "G" if sequence.sequence[index] % 2 == 0 else "F"
+        # The OE chain will be memoized, if needed.  Set it to None for that trigger.
+        self._oe_chain = None
+        # Now calculate the twos and threes values.
+        self._threes_value = pow(3, self._fg_chain.count('F'))
+        self._twos_value = pow(2, len(self._fg_chain))
         # We need the fractional portion and constant, and their total.
         # Decimal values for real precision, not a float.
         self._fg_n_portion = Decimal(self._threes_value) / Decimal(self._twos_value)
         self._fg_constant = Decimal(0)
-        for oe in self._oe_chain:
-            if oe == 'E':
+        for link in self._fg_chain:
+            if link == "G":
                 self._fg_constant /= 2
             else:
-                self._fg_constant = (3 * self._fg_constant) + 1
+                self._fg_constant = ((3 * self._fg_constant) + 1) / 2
         # Track our ancestry's HWM.
         self._has_high_water_mark_ancestor = False
         parent = self._parent

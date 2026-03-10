@@ -38,11 +38,17 @@ The following progams have these statuses:
 
 | Program               | Status     | Description |
 | :-------------------- | :--------- | :---------- |
+| `affine_shortcut.py`  | Working    | Empirically tests the worst-case scenario of our affine shortcut technique. |
+| `binary_stepper.py`   | Working    | Emits the binary representation of N-args (numbers) for comparison. |
 | `collatz_compression` | Working    | Demonstrates some of the optimizations when testing sequences. |
 | `coverage`            | Working    | Builds a tree level by level and reports info about coverage. |
+| `draw_tree.py`        | Working    | Makes an SVG or PNG of our Binary Tree structure. |
+| `integer_table.py`    | Working    | Builds a table in multiple bases, with steps, and odd-even chains. |
 | `junk`                | Special    | Debugging cpp for quick one-off testing.  You can ignore it. |
 | `peak_by_bit`         | Working    | Finds overflows in Collatz sequences for `2^bit` size.  GPU augment tested on an RTX-5060. |
 | `performance_stats`   | Working    | Debugging tool for analyzing speed and memory performance on a system. |
+| `pow2_under_pow3.py`  | Working    | Emits a copy/paste-friendly table for the `Exponent::MAX_POW2_UNDER_POW3[]` array. |
+| `s1_s2_separator.py`  | Working    | Breaks tree levels into S1 and S2 sets, showing patterns and deltas supporting tree behavior. |
 | `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
 | `sieve_stuff`         | Unfinished | Tool to measure effects of an LRU to aid in generic sieve. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |

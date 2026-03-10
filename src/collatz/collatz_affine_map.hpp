@@ -4,6 +4,7 @@
 #include "exponents.hpp"
 #include <gmp.h>
 #include <stdexcept>
+#include <string>
 
 
 
@@ -159,7 +160,7 @@ class CollatzAffineMap {
 //
 // CollatzAffineMapShortcut
 // An accelerated map which only tracks exponents of 3 and 2 (for F and G).  Our distribution of N means the constant portion of an
-// FG chain cannot overcome the exponential portion to bring the calculated value above N.
+// FG chain (B) cannot overcome a contractive exponential portion (A) to bring the calculated value above N.
 //
 // In other words:
 //     Given f = number of F steps
@@ -167,7 +168,10 @@ class CollatzAffineMap {
 //     Given A = 3^f/2^k
 //     When A < 1, then:  A * N + B < N
 //
-// We can therefore track exponent values of 3 and 2, and perform a simple integer comparison for is_below().
+// While possibly asymptotic, this has been empirically validated up to 10,000 serial F's and found to hold true.  For safety,
+// we'll add a counter to ensure this class throws an exception above our emprically tested level.
+//
+// We can therefore track exponents of 3 and 2, and perform a simple integer comparison against a precalculated map for is_below().
 //
 // Note: This version has no calculate() method, because that would be silly.
 //
@@ -179,6 +183,7 @@ class CollatzAffineMapShortcut {
 
 
     public:
+    const static size_t MAX_SERIAL_F_TESTED = 10000;
     CollatzAffineMapShortcut() {}
 
 
@@ -199,6 +204,11 @@ class CollatzAffineMapShortcut {
     // Increments counts, and that's all.
     //
     void apply_F() {
+        // Test to ensure we aren't in excess of the empirically tested limit for contractive A * N + B <= N.
+        // Only applies to F steps, because only they grow B.
+        if (_threes_exp >= MAX_SERIAL_F_TESTED) {
+            throw std::out_of_range("AffineMapShortcut cannot apply another F step because the maximum of " + std::to_string(MAX_SERIAL_F_TESTED) + " serial F steps has been reached.");
+        }
         _threes_exp += 1;
         _twos_exp += 1;
     }
@@ -222,6 +232,15 @@ class CollatzAffineMapShortcut {
     //
     bool is_below() const {
         // If our two's exponent exceeds the precalculated two's-exponent for our power of three, we're below.
+        if (_threes_exp > Exponents::MAX_POW2_UNDER_POW3_COUNT) {
+            throw std::out_of_range(
+                "Cannot lookup MAX_POW2_UNDER_POW3 with _threes_exp of "
+                + std::to_string(_threes_exp)
+                + " because the max known power of three under two is "
+                + std::to_string(Exponents::MAX_POW2_UNDER_POW3_COUNT)
+                + "."
+            );
+        }
         return _twos_exp > Exponents::MAX_POW2_UNDER_POW3[_threes_exp];
     }
 };
