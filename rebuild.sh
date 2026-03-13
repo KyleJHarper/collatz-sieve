@@ -53,6 +53,6 @@ touch build/Release/compile_commands.json
 #
 # Calls cmake to rebuild anything that needs it.
 #
-cmake --build build/Debug
-cmake --build build/Release
+cmake --build build/Debug --parallel
+cmake --build build/Release --parallel
 
