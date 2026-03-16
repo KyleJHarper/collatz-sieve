@@ -8,6 +8,9 @@ finding 2^109 lately.
 We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
 those last 19 places...
 
+## Switch to Roaring Bitmap
+The current node position strategy uses Interval<T>, which is 32-64 bytes each.  A roaring bitmap should help us.
+
 ## Sieve
 * Flesh this out so it's ironclad.
 * Fully implemented the forward-looking cache.

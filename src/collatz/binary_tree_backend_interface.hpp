@@ -2,6 +2,7 @@
 
 #include <climits>
 #include <cstddef>
+#include <stdexcept>
 #include <unordered_map>
 #include <vector>
 #include <string>
@@ -35,6 +36,9 @@ struct IBinaryTreeBackend {
     //
     // Property exposure.
     virtual bool tracking_metadata() const { return false; }
+    virtual bool is_verifying_non_hwm_nodes() const = 0;
+    virtual void disable_non_hwm_node_verification() = 0;
+    virtual void enable_non_hwm_node_verification() = 0;
     // (Materialized Only)
     virtual bool is_pruning_hwm_nodes() const = 0;
     virtual bool is_pruning_parent_levels() const = 0;
@@ -59,4 +63,21 @@ struct IBinaryTreeBackend {
         }
     }
 
+
+
+    //
+    // Assert Verification
+    // If verification is disabled (default) and the tree level exceeds the max known, fail.  It might seen annoying, but we cannot
+    // build an API that allows people to build trees beyond empirically tested boundaries unless they are willing to do verify
+    // new nodes themselves (which they can with disable_non_hwm_node_verification).
+    //
+    void assert_level_verification(size_t level, bool is_verifying_non_hwm_nodes) {
+        if (is_verifying_non_hwm_nodes == false && level == CollatzConstants::LARGEST_EPIRICALLY_TESTED_LEVEL + 1) {
+            std::string msg= "Tree has reached max level of previously verified space: "
+            + to_string_any(level)
+            + ".  You have disabled runtime verification, which means this and future levels are NOT fully verified!"
+            + "  Refusing to build level.";
+            throw std::runtime_error(msg);
+        }
+    }
 };

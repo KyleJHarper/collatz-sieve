@@ -1,8 +1,8 @@
 #pragma once
-#include "collatz.hpp"
 #include "concepts.hpp"
 #include "exponents.hpp"
 #include <gmp.h>
+#include "collatz_constants.hpp"
 #include <stdexcept>
 #include <string>
 

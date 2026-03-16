@@ -3,7 +3,8 @@
 #include <stdexcept>
 #include <cmath>
 #include "concepts.hpp"
-#include "collatz.hpp"
+#include "collatz_constants.hpp"
+#include "exponents.hpp"
 
 //
 // The BinaryTree class could maintain all of this, but we might want to seprate the math from the tree itself, even though the

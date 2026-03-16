@@ -15,8 +15,44 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 * RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
+* Intel Core i5-14600K [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html) DDR5-6000CL30
 
 (Note: when larger memory and/or high core count was required, a donor system with more RAM was used and is noted)
+
+### 3.4.0
+
+#### Verification of Non High-Water Mark Nodes
+
+When building a tree, the nodes which don't meet HWM (directly or by ancestor) need to be checked.  For example, the number `14` is
+below the HWM because of the `G` step on node `2`.  The value becomes `7`.  That node isn't a HWM node, descendant of one, nor has
+it been verified by the tree.  This leaves pockets of nodes that aren't verified, which means the overall High-Water Mark of the
+tree isn't valid.
+
+Work by [David Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0) has externally verified up to `2^71` which is
+the first node on level `72`, which further means nodes up to level `71` are verified.  As such, we'll do the following:
+* Add optional `Collatz<T>::st_verify()` calls in `add_level()` for Non-HWM nodes.
+* Leave the default `false` (aka: `BinaryTreeOptions{}.verify_non_hwm_nodes = false`)
+* Add `IBinaryTreeBackend<T>::assert_level_verification(...)` calls in `add_level()`.
+  * Throw error if level requested exceeds max (`71`) and verification is off.
+* Add `disable_non_hwm_node_verification()` and `enable_non_hwm_node_verification()` to any `BinaryTree`.
+
+The performance implication was heavy at first, nearly +300% the time to build a tree.  But by adding a local (OMP-local)
+High-Water Mark tracker inside the hot loop, the performance hit was only +75% (level 38 took 70s instead of 40).  Obviously, the
+performance remains the same if verification is disabled.
+
+#### High-Performance Verification
+
+Oddly enough, I never finished writing a high-speed static verification.  There's now `Collatz<T>::st_verify()` and helpers to
+verify a value as fast as possible and nothing more.  The `collatz_compression` needed some updating for testing, and I found GMP
+received some big benefits from affine compression of ones-steps (0b..1111) due to alloc reduction I'm guessing.
+
+It handles auto-upgrading to avoid overflows, which means the user can send any value of their given type, and we'll upgrade for
+testing if needed behind the scenes.
+
+#### CollatzConstants
+
+Moved `CollatzConstants` to its own file.  Should've always been this way.
+
 
 ### 3.3.0
 
@@ -27,7 +63,7 @@ The bulk of all work for both tree types in `add_level()` is the `Node::init()` 
 or blackbox functions.  This became a hotspot and bottleneck, so support was added for both, and the compiler should select the
 best version for a platform.
 
-Time To Build 38-Level Tree _(Donor system for larger RAM Requirement)_
+Time To Build 38-Level Tree _(Donor system for larger RAM Requirement, 12 cores)_
 
 | Type      | Baseline | Blackbox | Builtin Intrinsic |
 | --------: | -------: | -------: | ----------------: |

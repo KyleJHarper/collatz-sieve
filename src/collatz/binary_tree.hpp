@@ -14,6 +14,7 @@
 #include <string>
 #include <unordered_map>
 #include <omp.h>
+#include "collatz.hpp"
 #include "concepts.hpp"
 #include "binary_tree_backend_interface.hpp"
 #include "node.hpp"
@@ -33,6 +34,7 @@ struct BinaryTreeOptions {
     bool prune_parent_levels = false;
     bool preserve_ancestors = false;
     bool merge_intervals = true;
+    bool verify_non_hwm_nodes = false;
     BinaryTreeType tree_type = BinaryTreeType::MATERIALIZED;
 };
 
@@ -60,6 +62,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     bool _is_pruning_hwm_nodes = false;
     bool _is_pruning_parent_levels = false;
     bool _preserve_ancestors = false;
+    bool _is_verifying_non_hwm_nodes = false;
 
     public:
     //
@@ -67,6 +70,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
     BinaryTreeMaterialized(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
         _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
         _is_pruning_parent_levels = opts.prune_parent_levels;
         _preserve_ancestors = opts.preserve_ancestors;
@@ -130,6 +134,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         _level_map.clear();
         _level_count = 0;
         _ancestors.clear();
+        _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
         _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
         _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
@@ -145,6 +150,9 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override { return _level_map; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
+    bool is_verifying_non_hwm_nodes() const override { return _is_verifying_non_hwm_nodes; }
+    void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
+    void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
     bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
     bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
     const std::vector<Interval<T>>& get_uncovered_intervals() const override {
@@ -214,6 +222,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         size_t parent_level = _level_count;
         size_t child_level = _level_count + 1;
         this->assert_level_will_fit(child_level);
+        this->assert_level_verification(child_level, _is_verifying_non_hwm_nodes);
         _level_count++;
 
         // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
@@ -228,10 +237,6 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
         // Resize the vector to contain all children.  Otherwise assigning to indexes ([]) will fail.
         _level_map[child_level].resize(child_count);
 
-        // Create child value objects.  OMP is okay, because the thread_local keeps them separated.  Prevents GMP reallocs().
-        static thread_local T child_value_1;
-        static thread_local T child_value_2;
-
         // Keep a record of covered or pruned values for coverage math after the loop.
         size_t covered_or_pruned = 0;
 
@@ -240,11 +245,18 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
 
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
-        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _preserve_ancestors, omp_local_ancestors_group, eptr)
+        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _preserve_ancestors, omp_local_ancestors_group, _is_verifying_non_hwm_nodes, eptr)
         {
             try {
+                // Use local child values.
+                T child_value_1;
+                T child_value_2;
+
                 // Grab our personal ancestors vector to avoid locking.
                 auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
+
+                // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
+                T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
 
                 // Now Loop
                 #pragma omp for schedule(static)
@@ -271,6 +283,13 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
                     if (_preserve_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
                         my_ancestors.push_back(new Node<T>(child_1->get_value()));
                     }
+                    if (_is_verifying_non_hwm_nodes) {
+                        if (child_1->is_below_high_water_mark() == false && child_1->has_high_water_mark_ancestor() == false) {
+                            if (Collatz<T>::st_verify(child_value_1, my_high_water_mark) == false) {
+                                throw std::logic_error("Node value " + to_string_any(child_value_1) + " didn't verify.  How?");
+                            }
+                        }
+                    }
                     if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
                         covered_or_pruned += 1;
                         if (_is_pruning_hwm_nodes) {
@@ -289,6 +308,13 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
                     assign_to_map = true;
                     if (_preserve_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
                         my_ancestors.push_back(new Node<T>(child_2->get_value()));
+                    }
+                    if (_is_verifying_non_hwm_nodes) {
+                        if (child_2->is_below_high_water_mark() == false && child_2->has_high_water_mark_ancestor() == false) {
+                            if (Collatz<T>::st_verify(child_value_2, my_high_water_mark) == false) {
+                                throw std::logic_error("Node value " + to_string_any(child_value_2) + " didn't verify.  How?");
+                            }
+                        }
                     }
                     if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
                         covered_or_pruned += 1;
@@ -408,6 +434,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
     bool _preserve_ancestors = false;
+    bool _is_verifying_non_hwm_nodes = false;
     bool _merge_intervals = true;
 
     public:
@@ -416,6 +443,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     //
     static constexpr BinaryTreeOptions DEFAULT_OPTS{};
     BinaryTreeImplicit(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
+        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
         _preserve_ancestors = opts.preserve_ancestors;
         _merge_intervals = true;
     }
@@ -471,6 +499,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _uncovered_intervals.clear();
         _level_count = 0;
         _ancestors.clear();
+        _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
         _merge_intervals = BinaryTreeOptions{}.merge_intervals;
     }
@@ -488,6 +517,9 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override {
         throw std::logic_error("Implicit trees do not have a level map");
     }
+    bool is_verifying_non_hwm_nodes() const override { return _is_verifying_non_hwm_nodes; }
+    void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
+    void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
     bool is_pruning_hwm_nodes() const override {
         throw std::logic_error("Implicit trees do not have an is_pruning_hwm_nodes property.");
     }
@@ -535,8 +567,9 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Add a level to the tree, which simply means scan the next level for new covered sections (HWM ancestors).
     //
     void add_level() override {
-        // Confirm the new level will fit, then bump the count.
+        // Confirm the new level will fit, warn about verification, and then bump the count.
         this->assert_level_will_fit(_level_count + 1);
+        this->assert_level_verification(_level_count + 1, _is_verifying_non_hwm_nodes);
         _level_count++;
 
         // Scale the uncovered intervals.
@@ -563,12 +596,15 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
         // static thread_local T value = 0;
-        #pragma omp parallel default(none) shared(_level_count, _uncovered_intervals, omp_local_ancestors_group, omp_local_new_uncovered_intervals, eptr, _preserve_ancestors, split_interval_indexes)
+        #pragma omp parallel default(none) shared(_level_count, _uncovered_intervals, omp_local_ancestors_group, omp_local_new_uncovered_intervals, eptr, _preserve_ancestors, _is_verifying_non_hwm_nodes, split_interval_indexes)
         {
             // Grab our personal ancestors and parittion vectors to avoid locking.
             size_t my_thread_id = omp_get_thread_num();
             auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
             auto& my_new_uncovered_intervals = omp_local_new_uncovered_intervals[my_thread_id];
+
+            // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
+            T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
 
             // Now loop, using indexes.
             T value = 0;
@@ -588,6 +624,14 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
                             // Preserve the ancestor, if requested.
                             if (_preserve_ancestors) {
                                 my_ancestors.push_back(new Node<T>(tmp_node.get_value()));
+                            }
+                        }
+                        // Verify if requested.
+                        if (_is_verifying_non_hwm_nodes) {
+                            if (tmp_node.is_below_high_water_mark() == false) {
+                                if (Collatz<T>::st_verify(value, my_high_water_mark) == false) {
+                                    throw std::logic_error("Node value " + to_string_any(value) + " didn't verify.  How?");
+                                }
                             }
                         }
                     }
@@ -788,6 +832,9 @@ class BinaryTree {
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _impl->get_coverage_map(); }
     const std::vector<Node<T>*> get_ancestors() const { return _impl->get_ancestors(); }
     size_t deep_size() const { return _impl->deep_size(); }
+    bool is_verifying_non_hwm_nodes() const { return _impl->is_verifying_non_hwm_nodes(); }
+    void disable_non_hwm_node_verification() { _impl->disable_non_hwm_node_verification(); }
+    void enable_non_hwm_node_verification() { _impl->enable_non_hwm_node_verification(); }
     //
     // Materialized-Specific
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const {

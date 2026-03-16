@@ -1,6 +1,8 @@
 #include <cstdint>
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include <unistd.h>
 #include <gmpxx.h>
 #include <gmp.h>
@@ -9,6 +11,7 @@
 #include "collatz/logging.hpp"
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
+#include "collatz/collatz_affine_map.hpp"
 #include "CLI.hpp"
 
 
@@ -52,6 +55,55 @@ void test_1(T max_value, T report_every) {
             } else {
                 // Odd
                 n = (3 * n) + 1;
+            }
+        }
+        total_steps += steps;
+    }
+    std::chrono::time_point end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = end - start;
+    logger->info("Done in {}ms.  Took {} steps.", duration.count(), to_string_any(total_steps));
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_1_1(T max_value, T report_every) {
+    if constexpr(BuiltinIntegral<T>) {
+        logger->info(("Test 1.1 -- Not applicable to non-GMP types."));
+        return;
+    }
+    logger->info("Test 1.1 -- NOT CARRIED FORWARD!  Fully Nieve using GMP C API instead of class operators");
+    std::chrono::time_point start = std::chrono::high_resolution_clock::now();
+    T total_steps = 0;
+    T next_report = report_every;
+    for (T i = 1; i <= max_value; i++) {
+        if (report_every > 0 && i >= next_report) {
+            logger->info("  Progress {}/{} {}%"
+                , to_string_any(i)
+                , to_string_any(max_value)
+                , to_string_any(T(100 * i / max_value))
+            );
+            next_report += report_every;
+        }
+        T n = i;
+        T steps = 0;
+        while (n > 1) {
+            steps++;
+            if (n % 2 == 0) {
+                // Even
+                if constexpr(BuiltinIntegral<T>) {
+                    n = n / 2;
+                } else {
+                    mpz_fdiv_q_2exp(n.get_mpz_t(), n.get_mpz_t(), 1);
+                }
+            } else {
+                // Odd
+                if constexpr(BuiltinIntegral<T>) {
+                    n = (3 * n) + 1;
+                } else {
+                    mpz_mul_ui(n.get_mpz_t(), n.get_mpz_t(), 3);
+                    mpz_add_ui(n.get_mpz_t(), n.get_mpz_t(), 1);
+                }
             }
         }
         total_steps += steps;
@@ -339,6 +391,7 @@ void test_9(T max_value, T report_every) {
     T next_report = report_every;
     size_t right_shifts;
     size_t trailing_ones;
+    CollatzAffineMap<T> af_map;
     for (T i = 1; i <= max_value; i++) {
         if (report_every > 0 && i >= next_report) {
             logger->info("  Progress {}/{} {}%"
@@ -351,49 +404,16 @@ void test_9(T max_value, T report_every) {
         T n = i;
         T steps = 0;
         while (n > 1) {
-            // The number of trailing ones indicates how many times we'll do (3x+1)/2, followed by an even at the end.
-            // An affine map can express this as:
-            // n = (3^k * (n + 1) - 2^k) >> k
-            //     Where n is our value
-            //     Where k is the number of consecutive accelerated functions (3x+1)/2 applied.
-            //
-            // And can be simplified to:
-            // n = ((3^k * (n + 1)) >> k) - 1
-            //
-            // Overflow Note:
-            // We are usually protected from overflow because of the 3XP1[] table, but that is for applications of f and g
-            // serially.  Since we're taking 3^k and multiplying by an unknown value 'n' ... it gets messy.  We need to limit it
-            // to 40 which is 3^40 < 2^64 (fits in a uint64_t), but subtract bit width of (n+1).  Can use 3^79 for 128+ bits.
             if ((n & 1) == 1) {
+                af_map.reset();
+                static thread_local T tls_out;
                 trailing_ones = count_trailing_ones(n);
                 steps += (2 * trailing_ones);
-                size_t limit;
-                if constexpr(NativeIntegral<T>) {
-                    limit = 39 - std::bit_width(n);
-                } else if constexpr(ExtendedIntegral<T>) {
-                    limit = 79 - bit_width_uint128(n);
-                } else {
-                    limit = 79;
+                for (size_t i = 0; i < trailing_ones; i++) {
+                    af_map.apply_F();
                 }
-                while (trailing_ones > limit) {
-                    if constexpr(NativeIntegral<T>) {
-                        n = ((Exponents::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
-                    } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((Exponents::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
-                    } else {
-                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
-                    }
-                    trailing_ones -= limit;
-                }
-                if (trailing_ones > 0) {
-                    if constexpr(NativeIntegral<T>) {
-                        n = ((Exponents::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
-                    } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((Exponents::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
-                    } else {
-                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
-                    }
-                }
+                af_map.calculate(n, tls_out);
+                n = tls_out;
             }
             // Always Even At This Point
             right_shifts = count_trailing_zeros(n);
@@ -411,12 +431,13 @@ void test_9(T max_value, T report_every) {
 
 template<AnySupportedIntegral T>
 void test_10(T max_value, T report_every) {
-    logger->info("Test 10 -- Stop at the High-Water Mark");
+    logger->info("Test 10 -- Stop at the High-Water Mark (for comparison; doesn't go to 1)");
     std::chrono::time_point start = std::chrono::high_resolution_clock::now();
     T total_steps = 0;
     T next_report = report_every;
     size_t right_shifts;
     size_t trailing_ones;
+    CollatzAffineMap<T> af_map;
     for (T i = 1; i <= max_value; i++) {
         if (report_every > 0 && i >= next_report) {
             logger->info("  Progress {}/{} {}%"
@@ -430,35 +451,15 @@ void test_10(T max_value, T report_every) {
         T steps = 0;
         while (n > 1 && n >= i) {
             if ((n & 1) == 1) {
+                af_map.reset();
+                static thread_local T tls_out;
                 trailing_ones = count_trailing_ones(n);
                 steps += (2 * trailing_ones);
-                size_t limit;
-                if constexpr(NativeIntegral<T>) {
-                    limit = 39 - std::bit_width(n);
-                } else if constexpr(ExtendedIntegral<T>) {
-                    limit = 79 - bit_width_uint128(n);
-                } else {
-                    limit = 79;
+                for (size_t i = 0; i < trailing_ones; i++) {
+                    af_map.apply_F();
                 }
-                while (trailing_ones > limit) {
-                    if constexpr(NativeIntegral<T>) {
-                        n = ((Exponents::POW3_64BIT[limit] * (n + 1)) >> limit) - 1;
-                    } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((Exponents::POW3_128BIT[limit] * (n + 1)) >> limit) - 1;
-                    } else {
-                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[limit]) * (n + 1)) >> limit) - 1;
-                    }
-                    trailing_ones -= limit;
-                }
-                if (trailing_ones > 0) {
-                    if constexpr(NativeIntegral<T>) {
-                        n = ((Exponents::POW3_64BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
-                    } else if constexpr(ExtendedIntegral<T>) {
-                        n = ((Exponents::POW3_128BIT[trailing_ones] * (n + 1)) >> trailing_ones) - 1;
-                    } else {
-                        n = ((uint128_to_mpz(Exponents::POW3_128BIT[trailing_ones]) * (n + 1)) >> trailing_ones) - 1;
-                    }
-                }
+                af_map.calculate(n, tls_out);
+                n = tls_out;
             }
             // Always Even At This Point
             right_shifts = count_trailing_zeros(n);
@@ -475,10 +476,201 @@ void test_10(T max_value, T report_every) {
 
 
 template<AnySupportedIntegral T>
+void test_uint64_t_ideal(T max_value, T report_every) {
+    logger->info("Test uint64_t ideal -- Ideal for uint64_t");
+    if constexpr(NativeIntegral<T>) {
+        logger->info("  - Test 1 Verdict: Naive baseline.");
+        logger->info("  - Test 2 Verdict: Use n % 2 instead of n & 1.");
+        logger->info("  - Test 3 Verdict: Perform shift and add.");
+        logger->info("  - Test 4 Verdict: Right shift instead of x/2.");
+        logger->info("  - Test 5 Verdict: Do not shift automatically after 3x + 1.");
+        logger->info("  - Test 6 Verdict: Remove else-clause after odd check.");
+        logger->info("  - Test 7 Verdict: Right shift by count of trailing zeros (ctz).");
+        logger->info("  - Test 8 Verdict: Do not apply (3x + 1) / 2 by count of trailing ones (cto).");
+        logger->info("  - Test 9 Verdict: Do not use an affine map by count of trailing ones (cto).");
+        logger->info("  - Test 10 Verdict: n/a.  Only provided as reference.");
+        std::chrono::time_point start = std::chrono::high_resolution_clock::now();
+        T total_steps = 0;
+        T next_report = report_every;
+        size_t right_shifts;
+        for (T i = 1; i <= max_value; i++) {
+            if (report_every > 0 && i >= next_report) {
+                logger->info("  Progress {}/{} {}%"
+                    , to_string_any(i)
+                    , to_string_any(max_value)
+                    , to_string_any(T(100 * i / max_value))
+                );
+                next_report += report_every;
+            }
+            T n = i;
+            T steps = 0;
+            while (n > 1) {
+                if (n % 2 == 1) {
+                    // Odd
+                    n = (n << 1) + n + 1;
+                    steps++;
+                }
+                // Always Even At This Point
+                right_shifts = count_trailing_zeros(n);
+                n >>= right_shifts;
+                steps += right_shifts;
+            }
+            total_steps += steps;
+        }
+        std::chrono::time_point end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration = end - start;
+        logger->info("Done in {}ms.  Took {} steps.", duration.count(), to_string_any(total_steps));
+    } else {
+        logger->info("  Not applicable.");
+    }
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_uint128_t_ideal(T max_value, T report_every) {
+    logger->info("Test uint128_t ideal -- Ideal for uint128_t");
+    if constexpr(ExtendedIntegral<T>) {
+        logger->info("  - Test 1 Verdict: Naive baseline.");
+        logger->info("  - Test 2 Verdict: Negligible.  Use n % 2 instead of n & 1.");
+        logger->info("  - Test 3 Verdict: Negligible.  Perform shift and add.");
+        logger->info("  - Test 4 Verdict: Negligible.  Right shift instead of x/2.");
+        logger->info("  - Test 5 Verdict: Negligible.  Do not shift automatically after 3x + 1.");
+        logger->info("  - Test 6 Verdict: Negligible.  Remove else-clause after odd check.");
+        logger->info("  - Test 7 Verdict: Right shift by count of trailing zeros (ctz).");
+        logger->info("  - Test 8 Verdict: Do not apply (3x + 1) / 2 by count of trailing ones (cto).");
+        logger->info("  - Test 9 Verdict: Do not use an affine map by count of trailing ones (cto).");
+        logger->info("  - Test 10 Verdict: n/a.  Only provided as reference.");
+        std::chrono::time_point start = std::chrono::high_resolution_clock::now();
+        T total_steps = 0;
+        T next_report = report_every;
+        size_t right_shifts;
+        for (T i = 1; i <= max_value; i++) {
+            if (report_every > 0 && i >= next_report) {
+                logger->info("  Progress {}/{} {}%"
+                    , to_string_any(i)
+                    , to_string_any(max_value)
+                    , to_string_any(T(100 * i / max_value))
+                );
+                next_report += report_every;
+            }
+            T n = i;
+            T steps = 0;
+            while (n > 1) {
+                if (n % 2 == 1) {
+                    // Odd
+                    n = (n << 1) + n + 1;
+                    steps++;
+                }
+                // Always Even At This Point
+                right_shifts = count_trailing_zeros(n);
+                n >>= right_shifts;
+                steps += right_shifts;
+            }
+            total_steps += steps;
+        }
+        std::chrono::time_point end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration = end - start;
+        logger->info("Done in {}ms.  Took {} steps.", duration.count(), to_string_any(total_steps));
+    } else {
+        logger->info("  Not applicable.");
+    }
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_mpz_class_ideal(T max_value, T report_every) {
+    logger->info("Test mpz_class ideal -- Ideal for mpz_class");
+    if constexpr(GMPIntegral<T>) {
+        logger->info("  - Test 1 Verdict: Naive baseline.");
+        logger->info("  - Test 2 Verdict: Use n & 1 instead of n % 2.");
+        logger->info("  - Test 3 Verdict: Do not shift and add.");
+        logger->info("  - Test 4 Verdict: Right shift instead of x/2.");
+        logger->info("  - Test 5 Verdict: Negligible.  Do not shift automatically after 3x + 1.");
+        logger->info("  - Test 6 Verdict: Negligible.  Remove else-clause after odd check.");
+        logger->info("  - Test 7 Verdict: Right shift by count of trailing zeros (ctz).");
+        logger->info("  - Test 8 Verdict: Negligible.  Use affine map in test 9 instead.");
+        logger->info("  - Test 9 Verdict: Use an affine map by count of trailing ones (cto).");
+        logger->info("  - Test 10 Verdict: n/a.  Only provided as reference.");
+        std::chrono::time_point start = std::chrono::high_resolution_clock::now();
+        T total_steps = 0;
+        T next_report = report_every;
+        size_t right_shifts;
+        size_t trailing_ones;
+        CollatzAffineMap<T> af_map;
+        for (T i = 1; i <= max_value; i++) {
+            if (report_every > 0 && i >= next_report) {
+                logger->info("  Progress {}/{} {}%"
+                    , to_string_any(i)
+                    , to_string_any(max_value)
+                    , to_string_any(T(100 * i / max_value))
+                );
+                next_report += report_every;
+            }
+            T n = i;
+            T steps = 0;
+            while (n > 1) {
+                if ((n & 1) == 1) {
+                    // Odd
+                    af_map.reset();
+                    static thread_local T tls_out;
+                    trailing_ones = count_trailing_ones(n);
+                    steps += (2 * trailing_ones);
+                    for (size_t i = 0; i < trailing_ones; i++) {
+                        af_map.apply_F();
+                    }
+                    af_map.calculate(n, tls_out);
+                    n = tls_out;
+                }
+                // Always Even At This Point
+                right_shifts = count_trailing_zeros(n);
+                n >>= right_shifts;
+                steps += right_shifts;
+            }
+            total_steps += steps;
+        }
+        std::chrono::time_point end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration = end - start;
+        logger->info("Done in {}ms.  Took {} steps.", duration.count(), to_string_any(total_steps));
+    } else {
+        logger->info("  Not applicable.");
+    }
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_st_verify(T max_value, T report_every) {
+    logger->info("Test Collatz<T>::st_verify -- See if st_verify matches the peak performance above (slightly faster without step tracking).");
+    std::chrono::time_point start = std::chrono::high_resolution_clock::now();
+    T next_report = report_every;
+    for (T i = 1; i <= max_value; i++) {
+        if (report_every > 0 && i >= next_report) {
+            logger->info("  Progress {}/{} {}%"
+                , to_string_any(i)
+                , to_string_any(max_value)
+                , to_string_any(T(100 * i / max_value))
+            );
+            next_report += report_every;
+        }
+        if (Collatz<T>::st_verify(i) == false) {
+            throw std::logic_error("Couldn't get true from st_verify.  How?");
+        }
+    }
+    std::chrono::time_point end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> duration = end - start;
+    logger->info("Done in {}ms.  Took {} steps.", duration.count(), "n/a");
+}
+
+
+
+template<AnySupportedIntegral T>
 void run_all(size_t bits, size_t progress_every_x_percent) {
     T max_value = T(1) << bits;
     T report_every = progress_every_x_percent == 0 ? T(0) : (max_value * progress_every_x_percent) / 100;
     test_1<T>(max_value, report_every);
+    test_1_1<T>(max_value, report_every);
     test_2<T>(max_value, report_every);
     test_3<T>(max_value, report_every);
     test_4<T>(max_value, report_every);
@@ -488,6 +680,10 @@ void run_all(size_t bits, size_t progress_every_x_percent) {
     test_8<T>(max_value, report_every);
     test_9<T>(max_value, report_every);
     test_10<T>(max_value, report_every);
+    test_uint64_t_ideal<T>(max_value, report_every);
+    test_uint128_t_ideal<T>(max_value, report_every);
+    test_mpz_class_ideal<T>(max_value, report_every);
+    test_st_verify<T>(max_value, report_every);
 }
 
 
