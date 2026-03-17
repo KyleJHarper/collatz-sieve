@@ -1,7 +1,5 @@
 #pragma once
 
-#include <climits>
-#include <cstddef>
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
@@ -10,6 +8,26 @@
 #include "node.hpp"
 #include "binary_tree_math.hpp"
 #include "binary_tree_coverage.hpp"
+
+
+
+
+//
+// Options Package for BinaryTree
+//
+enum class BinaryTreeType {
+    MATERIALIZED = 1,
+    IMPLICIT = 2,
+};
+struct BinaryTreeOptions {
+    bool prune_hwm_nodes = false;
+    bool prune_parent_levels = false;
+    bool preserve_ancestors = false;
+    bool merge_intervals = true;
+    bool verify_non_hwm_nodes = false;
+    BinaryTreeType tree_type = BinaryTreeType::MATERIALIZED;
+};
+
 
 
 

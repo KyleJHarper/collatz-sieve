@@ -203,11 +203,8 @@ class BinaryTreeMath {
     // Now the reversal of the lowest bits.
     // Formula: reverse(bits)[0:size]
     static inline T st_reverse_low_bits(const T& value, size_t bits) {
-        // Init TLS storage to prevent alloc in GMP.
-        static thread_local T result;
-
         // Test for zero.
-        result = 0;
+        T result = 0;
         if (bits == 0) { return result; }
 
         // Reverse and shift by the correct amount.
@@ -225,6 +222,26 @@ class BinaryTreeMath {
 
         // Return.
         return result;
+    }
+    //
+    // Alternate version for an out param, for GMP mostly, but we'll support any type.
+    static inline void st_reverse_low_bits(const T& value, size_t bits, T& out) {
+        // Test for zero.
+        out = 0;
+        if (bits == 0) { return; }
+
+        // Reverse and shift by the correct amount.
+        if constexpr(BuiltinIntegral<T>) {
+            out = st_bit_reverse_full(value);
+            constexpr size_t WIDTH = sizeof(T) * 8;
+            out >>= (WIDTH - bits);
+        } else if constexpr(GMPIntegral<T>) {
+            for (size_t bit = 0; bit < bits; bit++) {
+                if (mpz_tstbit(value.get_mpz_t(), bit)) {
+                    mpz_setbit(out.get_mpz_t(), bits - 1 - bit);
+                }
+            }
+        }
     }
 
 
@@ -562,10 +579,69 @@ class BinaryTreeMath {
         } else {
             throw std::logic_error("Unknown type.");
         }
-        index = st_reverse_low_bits(index, (level - 1));
+
+        // Reverse the low bits.  For GMP, use an out param to avoid alloc (yes, even with TLS).
+        if constexpr(BuiltinIntegral<T>) {
+            index = st_reverse_low_bits(index, (level - 1));
+        } else {
+            static thread_local T index_copy;
+            index_copy = index;
+            st_reverse_low_bits(index_copy, (level - 1), index);
+        }
 
         // Return
-        return lift + index - _offset;
+        if constexpr(BuiltinIntegral<T>) {
+            return lift + index - _offset;
+        } else {
+            static thread_local T result;
+            mpz_set(result.get_mpz_t(), lift.get_mpz_t());
+            mpz_add(result.get_mpz_t(), result.get_mpz_t(), index.get_mpz_t());
+            mpz_sub_ui(result.get_mpz_t(), result.get_mpz_t(), _offset);
+            return result;
+        }
+    }
+    //
+    // Alternate version for GMP mostly.
+    static inline void st_node_value_by_position_and_level(const T& position, size_t level, T& out) {
+        static thread_local T lift;
+        static thread_local T index;
+
+        // Lift: 2^(L-1)
+        if constexpr(BuiltinIntegral<T>) {
+            lift = Exponents::get_power_of_two<T>(level - 1);
+            lift = T(1) << (level - 1);
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+
+        // New Position: bit_reverse_L(pos - 1)
+        if constexpr(BuiltinIntegral<T>) {
+            index = position - 1;
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_sub_ui(index.get_mpz_t(), position.get_mpz_t(), 1);
+        } else {
+            throw std::logic_error("Unknown type.");
+        }
+
+        // Reverse the low bits.  For GMP, use an out param to avoid alloc (yes, even with TLS).
+        if constexpr(BuiltinIntegral<T>) {
+            index = st_reverse_low_bits(index, (level - 1));
+        } else {
+            static thread_local T index_copy;
+            index_copy = index;
+            st_reverse_low_bits(index_copy, (level - 1), index);
+        }
+
+        // Return
+        if constexpr(BuiltinIntegral<T>) {
+            out = lift + index - _offset;
+        } else {
+            mpz_set(out.get_mpz_t(), lift.get_mpz_t());
+            mpz_add(out.get_mpz_t(), out.get_mpz_t(), index.get_mpz_t());
+            mpz_sub_ui(out.get_mpz_t(), out.get_mpz_t(), _offset);
+        }
     }
     //
     // Now here's the old, deprecated form which uses summations.

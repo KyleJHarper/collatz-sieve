@@ -19,6 +19,23 @@ __System Build for All Tests__
 
 (Note: when larger memory and/or high core count was required, a donor system with more RAM was used and is noted)
 
+### 3.4.1
+
+#### Restructure of BinaryTree Files
+
+The BinaryTree classes were a bit crammed into a single file, so these were moved around.
+
+#### Performance Regression
+
+The `mpz_class` variation of the tree slowed a lot due to changes in `BinaryTreeMath`, specifically for `st_reverse_low_bits()`
+and `st_node_value_by_position_and_level()`.  I created overloads which accept a `T& out` param.  Performance restored, however the
+allocator is still the weakest link.  Even with `jemalloc`, we're limited by memory pressure, not CPU.  I can barely keep 2 cores
+busy.
+
+I believe the majority of the overhead is in the `Interval` and the `std::vector` backing it.  These require a lot of setting and
+splitting, which beats the allocator into the dirt.  There's a new change coming in 3.5.0 that should help with this, and we'll
+re-evaluate then.
+
 ### 3.4.0
 
 #### Verification of Non High-Water Mark Nodes
