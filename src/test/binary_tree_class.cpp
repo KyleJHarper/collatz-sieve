@@ -17,13 +17,13 @@
 
 template<AnySupportedIntegral T>
 void test_binary_tree_basic_construction() {
-    BinaryTree<T> tree(5);
+    NodeBitmap<T> tree(5);
     // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
-    BinaryTree<T> tree2(2);
-    BinaryTree<T> tree3(4);
-    BinaryTree<T> tree4(5);
-    BinaryTree<T> tree5(6);
-    BinaryTree<T> tree6(7);
+    NodeBitmap<T> tree2(2);
+    NodeBitmap<T> tree3(4);
+    NodeBitmap<T> tree4(5);
+    NodeBitmap<T> tree5(6);
+    NodeBitmap<T> tree6(7);
     assert(tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
     assert(tree.get_level_count() == 5);
     tree.assert_materialized("binary_tree_class");
@@ -85,7 +85,7 @@ void test_binary_tree_basic_construction() {
     // Build an Implicit tree now.
     BinaryTreeOptions implicit_opts;
     implicit_opts.tree_type = BinaryTreeType::IMPLICIT;
-    BinaryTree<T> implicit_tree(1, implicit_opts);
+    NodeBitmap<T> implicit_tree(1, implicit_opts);
     assert(implicit_tree.get_level_count() == 1);
     implicit_tree.assert_implicit("binary_tree_class");
     const auto& uncovered_intervals = implicit_tree.get_uncovered_intervals();
@@ -181,11 +181,11 @@ template<AnySupportedIntegral T>
 void test_binary_tree_deep_size() {
     BinaryTreeOptions opts;
     opts.tree_type = BinaryTreeType::MATERIALIZED;
-    BinaryTree<T> tree(2, opts);
+    NodeBitmap<T> tree(2, opts);
     size_t size = tree.deep_size();
     assert(size > sizeof(tree)); // Make sure something was counted
     opts.tree_type = BinaryTreeType::IMPLICIT;
-    BinaryTree<T> tree_implicit(2, opts);
+    NodeBitmap<T> tree_implicit(2, opts);
     size_t size_implicit = tree_implicit.deep_size();
     assert(size_implicit > sizeof(tree_implicit)); // Make sure something was counted
 }
@@ -250,12 +250,12 @@ void test_binary_tree_generate_node_at_invalid_pos() {
 
 
 template<AnySupportedIntegral T>
-void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const BinaryTreeOptions& opts = BinaryTree<T>::DEFAULT_OPTS) {
+void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const BinaryTreeOptions& opts = NodeBitmap<T>::DEFAULT_OPTS) {
     // Set threads.
     omp_set_num_threads(threads);
     //
     // Build trees.
-    BinaryTree<T> tree(levels, opts);
+    NodeBitmap<T> tree(levels, opts);
     BinaryTreeCoverage<T> global_coverage;
     T level_target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
@@ -318,7 +318,7 @@ void test_binary_tree_coverage_coherency_at_scale() {
 template<AnySupportedIntegral T>
 void test_binary_tree_node_count_should_match_map() {
     size_t levels = 5;
-    BinaryTree<T> tree(levels);
+    NodeBitmap<T> tree(levels);
     T expected_count = (T{1} << levels) - 1;
     size_t map_count = 0;
     const auto& map = tree.get_level_map();
@@ -340,15 +340,15 @@ void test_binary_tree_too_many_levels() {
     opts.tree_type = BinaryTreeType::MATERIALIZED;
     // 8 bit can't build a 16 level tree
     try {
-        BinaryTree<uint8_t> tree(16, opts);
+        NodeBitmap<uint8_t> tree(16, opts);
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
     }
     // A 32-bit tree type can.
-    BinaryTree<uint32_t> tree(16, opts);
+    NodeBitmap<uint32_t> tree(16, opts);
     // An 8 bit can, however,  handle a 4-level tree.
-    BinaryTree<uint8_t> tree2(4, opts);
+    NodeBitmap<uint8_t> tree2(4, opts);
     // Adding another level should break.
     try {
         tree2.add_level();
@@ -361,15 +361,15 @@ void test_binary_tree_too_many_levels() {
     opts.tree_type = BinaryTreeType::IMPLICIT;
     // 8 bit can't build a 16 level tree
     try {
-        BinaryTree<uint8_t> tree_implicit(16, opts);
+        NodeBitmap<uint8_t> tree_implicit(16, opts);
         assert(false); // Should throw
     } catch (const std::out_of_range& e) {
         assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
     }
     // A 32-bit tree type can.
-    BinaryTree<uint32_t> tree_implicit(16, opts);
+    NodeBitmap<uint32_t> tree_implicit(16, opts);
     // An 8 bit can, however,  handle a 4-level tree.
-    BinaryTree<uint8_t> tree2_implicit(4, opts);
+    NodeBitmap<uint8_t> tree2_implicit(4, opts);
     // Adding another level should break.
     try {
         tree2_implicit.add_level();
@@ -382,7 +382,7 @@ void test_binary_tree_too_many_levels() {
 
 template<AnySupportedIntegral T>
 void test_binary_tree_multi_threaded() {
-    BinaryTreeOptions opts = BinaryTree<T>::DEFAULT_OPTS;
+    BinaryTreeOptions opts = NodeBitmap<T>::DEFAULT_OPTS;
     size_t max_threads = 4;
     // Materialized
     opts.tree_type = BinaryTreeType::MATERIALIZED;
@@ -637,8 +637,8 @@ void test_binary_tree_pruned() {
     // A pruned tree should always have a drastically smaller size.
     size_t levels = 16;
     float reduction_factor = 0.9;
-    BinaryTree<T> tree_raw(levels);
-    BinaryTree<T> tree_pruned(levels, opts_with_hwm_prune_without_level_prune);
+    NodeBitmap<T> tree_raw(levels);
+    NodeBitmap<T> tree_pruned(levels, opts_with_hwm_prune_without_level_prune);
     assert(tree_raw.deep_size() * reduction_factor > tree_pruned.deep_size());
 }
 
@@ -649,12 +649,12 @@ void test_binary_tree_ancestors() {
     size_t levels = 5;
     BinaryTreeOptions opts;
     opts.preserve_ancestors = false;
-    BinaryTree<T> tree(levels, opts);
+    NodeBitmap<T> tree(levels, opts);
     assert(tree.get_ancestors().size() == 0);
     //
     // Tracking them should work.
     opts.preserve_ancestors = true;
-    BinaryTree<T> tree_with_ancestors(levels, opts);
+    NodeBitmap<T> tree_with_ancestors(levels, opts);
     assert(tree_with_ancestors.get_ancestors().size() == 3);
     assert(tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
     assert(tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
@@ -664,12 +664,12 @@ void test_binary_tree_ancestors() {
     BinaryTreeOptions opts_implicit;
     opts_implicit.tree_type = BinaryTreeType::IMPLICIT;
     opts_implicit.preserve_ancestors = false;
-    BinaryTree<T> tree_implicit(levels, opts_implicit);
+    NodeBitmap<T> tree_implicit(levels, opts_implicit);
     assert(tree.get_ancestors().size() == 0);
     //
     // Tracking them should work.
     opts_implicit.preserve_ancestors = true;
-    BinaryTree<T> tree_implicit_with_ancestors(levels, opts_implicit);
+    NodeBitmap<T> tree_implicit_with_ancestors(levels, opts_implicit);
     assert(tree_implicit_with_ancestors.get_ancestors().size() == 3);
     assert(tree_implicit_with_ancestors.get_ancestors()[0]->get_value() == 2);
     assert(tree_implicit_with_ancestors.get_ancestors()[1]->get_value() == 5);

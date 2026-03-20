@@ -446,7 +446,7 @@ class Collatz {
 
     //
     // For-Each Step
-    // Run through the sequence with a callback each step.  Caller MUST return true or false to continue or stop.
+    // Run through the sequence with a callback each step.  Caller MUST return true or false to stop or continue.
     //
     template<typename Func>
     static void for_each_sequence_step(const T& initial_value, Func&& callback) {
@@ -456,10 +456,9 @@ class Collatz {
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
 
-        thread_local T current_value;
-        current_value = initial_value;
         if constexpr(BuiltinIntegral<T>) {
             // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
+            T current_value = initial_value;
             while (current_value != 1) {
                 bool stop = callback(current_value);
                 if (stop) { return; }
@@ -472,8 +471,12 @@ class Collatz {
                     current_value = (current_value << 1) + current_value + 1;
                 }
             }
+            // Since the while-loop exits prematurely at 1, we need one more callback before we end.
+            callback(current_value);
         } else if constexpr(GMPIntegral<T>) {
             // GMP integers will alloc() with certain arithmetic operators, but can't overflow.
+            thread_local T current_value;
+            current_value = initial_value;
             while (mpz_cmp_ui(current_value.get_mpz_t(), 1) != 0) {
                 bool stop = callback(current_value);
                 if (stop) { return; }
@@ -484,9 +487,9 @@ class Collatz {
                     mpz_add(current_value.get_mpz_t(), current_value.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());    // current_step += 1
                 }
             }
+            // Since the while-loop exits prematurely at 1, we need one more callback before we end.
+            callback(current_value);
         }
-        // Since the while-loop exits prematurely at 1, we need one more callback before we end.
-        callback(current_value);
     }
     //
     // Wrapper for the instance implementation.

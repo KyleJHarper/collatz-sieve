@@ -4,7 +4,7 @@
 #include "concepts.hpp"
 #include <omp.h>
 #include <tbb/parallel_sort.h>
-// #include "binary_tree_node_bitmap.hpp"
+#include "binary_tree_node_bitmap.hpp"
 
 
 
@@ -23,6 +23,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     Node<T> *_root_node = nullptr;
     size_t _level_count = 0;
     std::vector<Interval<T>> _uncovered_intervals;
+    TrieBitmap<T> _uncovered_bitmap;
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;

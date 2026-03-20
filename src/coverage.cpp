@@ -16,7 +16,7 @@
 template<AnySupportedIntegral T>
 class CoverageBuilder {
     private:
-    BinaryTree<T> _tree;
+    NodeBitmap<T> _tree;
     bool _use_precomputed = false;
     bool _is_verifying_non_hwm_nodes = false;
 
@@ -31,7 +31,7 @@ class CoverageBuilder {
         _tree.init(0, opts);
     }
 
-    const BinaryTree<T>& get_tree() const { return _tree; }
+    const NodeBitmap<T>& get_tree() const { return _tree; }
     // Add levels until we reach `levels` from caller.
     void run(size_t levels) {
         if (_use_precomputed) {

@@ -19,6 +19,33 @@ __System Build for All Tests__
 
 (Note: when larger memory and/or high core count was required, a donor system with more RAM was used and is noted)
 
+### 3.5.0
+
+#### Interval Revamp for Memory Reduction
+
+We switched to CRoaring.
+
+Peak RSS.  12 threads.
+
+| Levels | Data Type | Interval (MB) | CRoaring (MB) | Delta | Interval (sec) | CRoaring (sec) | Delta |
+| -----: | --------: | ------------: | ------------: | ----: | -------------: | -------------: | ----: |
+|      8 | uint64_t  |             9 |          todo |       |              0 |           todo |       |
+|      8 | uint128_t |             9 |          todo |       |              0 |           todo |       |
+|      8 | mpz_class |            13 |          todo |       |              0 |           todo |       |
+|     16 | uint64_t  |            10 |          todo |       |              0 |           todo |       |
+|     16 | uint128_t |            10 |          todo |       |              0 |           todo |       |
+|     16 | mpz_class |            13 |          todo |       |              0 |           todo |       |
+|     24 | uint64_t  |            16 |          todo |       |              0 |           todo |       |
+|     24 | uint128_t |            18 |          todo |       |              0 |           todo |       |
+|     24 | mpz_class |            21 |          todo |       |              1 |           todo |       |
+|     32 | uint64_t  |           204 |          todo |       |              1 |           todo |       |
+|     32 | uint128_t |           379 |          todo |       |              1 |           todo |       |
+|     32 | mpz_class |           340 |          todo |       |              5 |           todo |       |
+|     40 | uint64_t  |        18,000 |          todo |       |            174 |           todo |       |
+|     40 | uint128_t |        35,700 |          todo |       |            183 |           todo |       |
+|     40 | mpz_class |       ~52,000 |          todo |       |            820 |           todo |       |
+
+
 ### 3.4.1
 
 #### Restructure of BinaryTree Files
@@ -28,13 +55,14 @@ The BinaryTree classes were a bit crammed into a single file, so these were move
 #### Performance Regression
 
 The `mpz_class` variation of the tree slowed a lot due to changes in `BinaryTreeMath`, specifically for `st_reverse_low_bits()`
-and `st_node_value_by_position_and_level()`.  I created overloads which accept a `T& out` param.  Performance restored, however the
-allocator is still the weakest link.  Even with `jemalloc`, we're limited by memory pressure, not CPU.  I can barely keep 2 cores
-busy.
+and `st_node_value_by_position_and_level()`.  I created overloads which accept a `T& out` param.  Performance restored, however
+~~the allocator is still the weakest link.  Even with `jemalloc`, we're limited by memory pressure, not CPU.  I can barely keep 2
+cores busy.~~  This was a bad observation when using `heaptrack`.  Having it count allocs was the bottleneck.  The parallel
+performance is still good.
 
-I believe the majority of the overhead is in the `Interval` and the `std::vector` backing it.  These require a lot of setting and
+~~I believe the majority of the overhead is in the `Interval` and the `std::vector` backing it.  These require a lot of setting and
 splitting, which beats the allocator into the dirt.  There's a new change coming in 3.5.0 that should help with this, and we'll
-re-evaluate then.
+re-evaluate then.~~  Allocator thrash is still an issue, and the 3.5.0 changes should help.
 
 ### 3.4.0
 

@@ -4,6 +4,7 @@ build/
 src/include/CLI11/
 src/include/spdlog/
 src/include/abseil-cpp
+src/include/CRoaring
 massif.*
 flamegraph.svg
 .vscode/

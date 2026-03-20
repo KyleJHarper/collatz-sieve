@@ -35,6 +35,16 @@ else
   cd abseil-cpp
   git checkout 20250814.0
 fi
+#
+# CRoaring
+if [ -d "${INCLUDE_DIR}/CRoaring" ] ; then
+  echo "CRoaring already cloned.  Ignoring." >&2
+else
+  cd "${INCLUDE_DIR}"
+  git clone https://github.com/RoaringBitmap/CRoaring.git
+  cd CRoaring
+  git checkout v4.6.1
+fi
 
 
 #

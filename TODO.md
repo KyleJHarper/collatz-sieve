@@ -16,6 +16,7 @@ The current node position strategy uses Interval<T>, which is 32-64 bytes each. 
 * Fully implemented the forward-looking cache.
 * Switch to an implicit tree.
 * Leverage a GPU, if possible.
+* See if we can use a bitmap instead of an LRU cache.
 
 ## Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?

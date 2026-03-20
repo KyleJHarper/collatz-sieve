@@ -7,5 +7,5 @@
 int main() {
     BinaryTreeOptions opts;
     opts.tree_type = BinaryTreeType::IMPLICIT;
-    BinaryTree<uint64_t> tree(3, opts);
+    NodeBitmap<uint64_t> tree(3, opts);
 }

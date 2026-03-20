@@ -38,7 +38,7 @@ endif()
 # Extra compile flags
 add_compile_options(-Wall -Wextra)
 
-# Include directories
+# Include directories.  Absl and CRoaring export their own info.
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/include/spdlog/include
     ${CMAKE_SOURCE_DIR}/src/include/CLI11/include/CLI
@@ -59,6 +59,7 @@ set(PROJECT_LIBS
     TBB::tbb
     OpenMP::OpenMP_CXX
     absl::flat_hash_map
+    roaring
 )
 
 
@@ -67,6 +68,15 @@ set(PROJECT_LIBS
 # Abseil's CMake build system
 # --------------------------
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/abseil-cpp)
+
+
+
+# --------------------------
+# CRoaring's CMake build system
+# --------------------------
+set(ENABLE_ROARING_TESTS OFF CACHE BOOL "" FORCE)
+set(ROARING_BUILD_STATIC ON CACHE BOOL "" FORCE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/CRoaring)
 
 
 
