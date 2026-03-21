@@ -5,6 +5,8 @@
 #include <string_view>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <absl/hash/hash.h>
+
 
 
 // Make 128-bit types match naming pattern of others.
@@ -247,3 +249,29 @@ struct make_unsigned128_helper<uint128_t> {
 // Helper alias
 template<typename T>
 using make_unsigned_custom_t = typename make_unsigned128_helper<T>::type;
+
+
+
+//
+// Absl hashing helpers for MPZ types.
+//
+template <typename H>
+H AbslHashValue(H h, const mpz_class& value) {
+    // Get the limb count and add it to the hash.
+    const mp_limb_t* limbs = mpz_limbs_read(value.get_mpz_t());
+    size_t limb_count = mpz_size(value.get_mpz_t());
+    h = H::combine(std::move(h), limb_count);
+
+    // Now include the limbs themselves.
+    for (size_t i = 0; i < limb_count; i++) {
+        h = H::combine(std::move(h), limbs[i]);
+    }
+    return h;
+}
+//
+// An "equals" operator in a struct.
+struct MpzEq {
+    bool operator()(const mpz_class& a, const mpz_class& b) const {
+        return a == b;
+    }
+};

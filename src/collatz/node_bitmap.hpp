@@ -2,7 +2,6 @@
 
 #include "concepts.hpp"
 #include "node_bitmap_flat_hash.hpp"
-#include "node_bitmap_trie.hpp"
 
 
 
@@ -13,13 +12,7 @@
 template<AnySupportedIntegral T>
 class NodeBitmap {
     private:
-    using Impl = std::conditional_t<
-        BuiltinIntegral<T>
-        , FlatHashBitmapImpl<T>
-        , TrieBitmapImpl<T>
-    >;
-    Impl _impl;
-    static_assert(NodeBitmapBackend<Impl, T>, "Bitmap backend doesn't match the interface required.");
+    FlatHashBitmapImpl<T> _impl;
 
 
     public:
