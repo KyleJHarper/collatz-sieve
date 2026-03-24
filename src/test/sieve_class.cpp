@@ -171,7 +171,7 @@ void test_sieve_pool_filling() {
 template<AnySupportedIntegral T>
 void test_sieve_tree_source() {
     SieveOptions opts;
-    NodeBitmap<T> tree(5, opts.tree_opts);
+    BinaryTree<T> tree(5, opts.tree_opts);
     Sieve<T> sieve(tree);
     test_sieve_level_5_values(sieve);
     Sieve<T> sieve2(5);
@@ -187,7 +187,7 @@ template<AnySupportedIntegral T>
 void test_sieve_bulk_next() {
     SieveOptions opts;
     opts.pool_size = 64;
-    NodeBitmap<T> tree(5, opts.tree_opts);
+    BinaryTree<T> tree(5, opts.tree_opts);
     Sieve<T> sieve(tree, opts);
     std::vector<T> bulk;
     size_t next_count = 20;

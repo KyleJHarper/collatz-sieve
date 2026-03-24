@@ -59,6 +59,7 @@ set(PROJECT_LIBS
     TBB::tbb
     OpenMP::OpenMP_CXX
     absl::flat_hash_map
+    absl::hash
     roaring
 )
 
@@ -84,6 +85,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/CRoaring)
 # Shared objects
 # --------------------------
 add_library(logging OBJECT src/logging.cpp)
+target_link_libraries(logging PRIVATE absl::hash)
 
 
 
@@ -137,6 +139,7 @@ endif()
 set(TESTS
     collatz_class
     node_class
+    node_bitmap_class
     binary_tree_class
     forward_looking_cache_class
     sieve_class

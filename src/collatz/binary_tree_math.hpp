@@ -5,6 +5,8 @@
 #include "concepts.hpp"
 #include "collatz_constants.hpp"
 #include "exponents.hpp"
+#include "bitreverse_helpers.hpp"
+
 
 //
 // The BinaryTree class could maintain all of this, but we might want to seprate the math from the tree itself, even though the
@@ -23,23 +25,6 @@
 //
 
 
-
-//
-// Create a 64-bit reversal to avoid GCC builtin being unavailble possibly.
-//
-static inline uint64_t bitreverse64_u64(uint64_t x) {
-    #if __has_builtin(__builtin_bitreverse64)
-    x = __builtin_bitreverse64(x);
-    #else
-    x = ((x & 0x5555555555555555ULL) << 1) | ((x >> 1) & 0x5555555555555555ULL);
-    x = ((x & 0x3333333333333333ULL) << 2) | ((x >> 2) & 0x3333333333333333ULL);
-    x = ((x & 0x0F0F0F0F0F0F0F0FULL) << 4) | ((x >> 4) & 0x0F0F0F0F0F0F0F0FULL);
-    x = ((x & 0x00FF00FF00FF00FFULL) << 8) | ((x >> 8) & 0x00FF00FF00FF00FFULL);
-    x = ((x & 0x0000FFFF0000FFFFULL) << 16) | ((x >> 16) & 0x0000FFFF0000FFFFULL);
-    x = (x << 32) | (x >> 32);
-    #endif
-    return x;
-}
 
 
 
@@ -173,13 +158,13 @@ class BinaryTreeMath {
             using U = std::make_unsigned_t<T>;
             U ux = static_cast<U>(x);
             if constexpr (sizeof(T) == 1) {
-                return static_cast<T>(__builtin_bitreverse8(ux));
+                return static_cast<T>(bitreverse8(ux));
             } else if constexpr (sizeof(T) == 2) {
-                return static_cast<T>(__builtin_bitreverse16(ux));
+                return static_cast<T>(bitreverse16(ux));
             } else if constexpr (sizeof(T) == 4) {
-                return static_cast<T>(__builtin_bitreverse32(ux));
+                return static_cast<T>(bitreverse32(ux));
             } else if constexpr (sizeof(T) == 8) {
-                return static_cast<T>(bitreverse64_u64(ux));
+                return static_cast<T>(bitreverse64(ux));
             }
         } else if constexpr(ExtendedIntegral<T>) {
             // Extended 128-bit integrals need a little juggling.
@@ -188,8 +173,8 @@ class BinaryTreeMath {
 
             uint64_t low  = (uint64_t)ux;
             uint64_t high = (uint64_t)(ux >> 64);
-            uint64_t rev_low  = bitreverse64_u64(high);
-            uint64_t rev_high = bitreverse64_u64(low);
+            uint64_t rev_low  = bitreverse64(high);
+            uint64_t rev_high = bitreverse64(low);
             return static_cast<T>(( (U)rev_high << 64 ) | rev_low);
         } else if constexpr(GMPIntegral<T>) {
             // GMP is arbitrary precision, so we need to get the current size/width and juggle limbs.

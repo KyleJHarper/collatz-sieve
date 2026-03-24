@@ -116,8 +116,8 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
     bool is_verifying_non_hwm_nodes() const override { return _is_verifying_non_hwm_nodes; }
-    void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
-    void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
+    void disable_non_hwm_node_verification() override { _is_verifying_non_hwm_nodes = false; }
+    void enable_non_hwm_node_verification() override { _is_verifying_non_hwm_nodes = true; }
     bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
     bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
     const std::vector<Interval<T>>& get_uncovered_intervals() const override {

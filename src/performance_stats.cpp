@@ -106,7 +106,7 @@ std::vector<std::string> add(const char *name, int64_t u_version, int64_t u128_v
 template<AnySupportedIntegral T>
 duration<double, std::milli> tree_build_time(size_t levels, const BinaryTreeOptions& opts) {
     auto start = high_resolution_clock::now();
-    NodeBitmap tree = NodeBitmap<T>(levels, opts);
+    BinaryTree tree = BinaryTree<T>(levels, opts);
     auto end = high_resolution_clock::now();
     duration<double, std::milli> duration = end - start;
     return duration;
@@ -202,35 +202,35 @@ int main(int argc, char **argv) {
 
     // BT without pruning
     size_t rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint64_t_without_pruning = NodeBitmap<uint64_t>(levels, BTWithoutPrune);
+    BinaryTree tree_uint64_t_without_pruning = BinaryTree<uint64_t>(levels, BTWithoutPrune);
     size_t rss_uint64_t = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint128_t_without_pruning = NodeBitmap<uint128_t>(levels, BTWithoutPrune);
+    BinaryTree tree_uint128_t_without_pruning = BinaryTree<uint128_t>(levels, BTWithoutPrune);
     size_t rss_uint128_t = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_mpz_c_without_pruning = NodeBitmap<mpz_class>(levels, BTWithoutPrune);
+    BinaryTree tree_mpz_c_without_pruning = BinaryTree<mpz_class>(levels, BTWithoutPrune);
     size_t rss_mpz_c = getCurrentRSSBytes() - rss_t1;
 
     // BT with pruning
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint64_t_with_pruning = NodeBitmap<uint64_t>(levels, BTWithPrune);
+    BinaryTree tree_uint64_t_with_pruning = BinaryTree<uint64_t>(levels, BTWithPrune);
     size_t rss_uint64_t_with_pruning = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint128_t_with_pruning = NodeBitmap<uint128_t>(levels, BTWithPrune);
+    BinaryTree tree_uint128_t_with_pruning = BinaryTree<uint128_t>(levels, BTWithPrune);
     size_t rss_uint128_t_with_pruning = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_mpz_c_with_pruning = NodeBitmap<mpz_class>(levels, BTWithPrune);
+    BinaryTree tree_mpz_c_with_pruning = BinaryTree<mpz_class>(levels, BTWithPrune);
     size_t rss_mpz_c_with_pruning = getCurrentRSSBytes() - rss_t1;
 
     // BT Implicit
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint64_t_implicit = NodeBitmap<uint64_t>(levels, BTImplicit);
+    BinaryTree tree_uint64_t_implicit = BinaryTree<uint64_t>(levels, BTImplicit);
     size_t rss_uint64_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_uint128_t_implicit = NodeBitmap<uint128_t>(levels, BTImplicit);
+    BinaryTree tree_uint128_t_implicit = BinaryTree<uint128_t>(levels, BTImplicit);
     size_t rss_uint128_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    NodeBitmap tree_mpz_c_implicit = NodeBitmap<mpz_class>(levels, BTImplicit);
+    BinaryTree tree_mpz_c_implicit = BinaryTree<mpz_class>(levels, BTImplicit);
     size_t rss_mpz_c_implicit = getCurrentRSSBytes() - rss_t1;
 
     // Bytes Per Node
@@ -331,7 +331,7 @@ int main(int argc, char **argv) {
 
     // BinaryTree
     table.push_back({""});
-    table.push_back(add("BinaryTree (shallow)", sizeof(NodeBitmap<uint64_t>), sizeof(NodeBitmap<uint128_t>), sizeof(NodeBitmap<mpz_class>)));
+    table.push_back(add("BinaryTree (shallow)", sizeof(BinaryTree<uint64_t>), sizeof(BinaryTree<uint128_t>), sizeof(BinaryTree<mpz_class>)));
     table.push_back({std::format("BinaryTree (deep, {} levels)", levels).c_str(), "--", "--", "--", "--", "--", "--", "--", "--"});
     table.push_back(add("  Materialized, Without Pruning", tree_uint64_t_without_pruning.deep_size(), tree_uint128_t_without_pruning.deep_size(), tree_mpz_c_without_pruning.deep_size()));
     table.push_back(add("    As Megabytes", tree_uint64_t_without_pruning.deep_size()/1024/1024, tree_uint128_t_without_pruning.deep_size()/1024/1024, tree_mpz_c_without_pruning.deep_size()/1024/1024, "Mbytes"));

@@ -93,13 +93,13 @@ class Sieve {
     Sieve() = delete;
     //
     // User-supplied tree.
-    Sieve(NodeBitmap<T>& tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
+    Sieve(BinaryTree<T>& tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
         init(&tree, opts);
     }
     //
     // Sieve-built tree.
     Sieve(size_t tree_levels, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
-        NodeBitmap<T> tree(tree_levels, opts.tree_opts);
+        BinaryTree<T> tree(tree_levels, opts.tree_opts);
         init(&tree, opts);
     }
 
@@ -117,7 +117,7 @@ class Sieve {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(NodeBitmap<T>* tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
+    void init(BinaryTree<T>* tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
         // Get a reference to the last level.
         const std::vector<Node<T>*>& last_level = tree->get_level_map().at(tree->get_level_count());
 
