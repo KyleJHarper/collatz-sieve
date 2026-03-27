@@ -21,12 +21,18 @@ class NodeBitmap {
     public:
     NodeBitmap() = default;
 
+    const auto& get_map() const { return _impl.get_map(); }
     void add(const T& value) { _impl.add(value); }
     void add_range(const T& start, const T& end) { _impl.add_range(start, end); };
     void add_range_closed(const T& start, const T& end) { _impl.add_range_closed(start, end); };
     bool contains(const T& value) const { return _impl.contains(value); }
     void remove(const T& value) { _impl.remove(value); }
     void clear() { _impl.clear(); }
+    void clone(const FlatHashBitmapImpl<T>& src) { _impl.clone(src); }
     void optimize() { _impl.optimize(); };
     size_t shrink_to_fit() { return _impl.shrink_to_fit(); }
+    size_t deep_size() const { return _impl.deep_size(); }
+
+    template<typename Func>
+    void for_each_value(Func&& callback) { return _impl.for_each_value(callback); }
 };

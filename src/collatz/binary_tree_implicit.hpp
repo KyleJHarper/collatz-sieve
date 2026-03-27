@@ -22,14 +22,12 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     private:
     Node<T> *_root_node = nullptr;
     size_t _level_count = 0;
-    std::vector<Interval<T>> _uncovered_intervals;
-    NodeBitmap<T> _uncovered_bitmap;
+    NodeBitmap<T> _uncovered_positions;
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
     bool _preserve_ancestors = false;
     bool _is_verifying_non_hwm_nodes = false;
-    bool _merge_intervals = true;
 
     public:
     //
@@ -39,7 +37,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     BinaryTreeImplicit(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
         _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
         _preserve_ancestors = opts.preserve_ancestors;
-        _merge_intervals = true;
     }
 
 
@@ -71,12 +68,8 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
         _coverage_map[_level_count].set_covered(0);
         _coverage_map[_level_count].set_total(1);
+        _uncovered_positions.add(1);
         // Now add the other levels, if needed.
-        Interval<T> root_interval;
-        root_interval.start = T(1);
-        root_interval.end = T(1);
-        _uncovered_intervals.push_back(root_interval);
-        _uncovered_bitmap.add(1);
         while (_level_count < levels) {
             this->add_level();
         }
@@ -91,12 +84,11 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     void reset() override {
         _is_initialized = false;
         _coverage_map.clear();
-        _uncovered_intervals.clear();
+        _uncovered_positions.clear();
         _level_count = 0;
         _ancestors.clear();
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
-        _merge_intervals = BinaryTreeOptions{}.merge_intervals;
     }
 
 
@@ -106,7 +98,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     //
     size_t get_level_count() const override { return _level_count; }
     Node<T>* get_root_node() const override { return _root_node; }
-    const std::vector<Interval<T>>& get_uncovered_intervals() const override { return _uncovered_intervals; }
+    const NodeBitmap<T>& get_uncovered_positions() const override { return _uncovered_positions; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
     const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
     const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override {
@@ -140,9 +132,8 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     size_t deep_size() const override {
         size_t total = sizeof(*this);
 
-        // Account for _uncovered_intervals
-        total += sizeof(_uncovered_intervals);
-        total += _uncovered_intervals.capacity() * sizeof(Interval<T>);
+        // Account for _uncovered_positions.
+        total += _uncovered_positions.deep_size();
 
         // Account for _coverage_map
         total += sizeof(_coverage_map);
@@ -167,36 +158,42 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         this->assert_level_verification(_level_count + 1, _is_verifying_non_hwm_nodes);
         _level_count++;
 
-        // Scale the uncovered intervals.
-        for (Interval<T>& uncovered_interval : _uncovered_intervals) {
-            // The math is simply:   start * 2 - 1    and    end * 2.
+        // Scale the uncovered positions.
+        NodeBitmap<T> scaled_positions;
+        T left_child;
+        T right_child;
+        _uncovered_positions.for_each_value([&](const T& value) {
             if constexpr(BuiltinIntegral<T>) {
-                uncovered_interval.start = (uncovered_interval.start << 1) - 1;
-                uncovered_interval.end = uncovered_interval.end << 1;
-            } else if constexpr(GMPIntegral<T>) {
-                mpz_mul_2exp(uncovered_interval.start.get_mpz_t(), uncovered_interval.start.get_mpz_t(), 1);
-                mpz_sub_ui(uncovered_interval.start.get_mpz_t(), uncovered_interval.start.get_mpz_t(), 1);
-                mpz_mul_2exp(uncovered_interval.end.get_mpz_t(), uncovered_interval.end.get_mpz_t(), 1);
+                left_child = (value << 1) - 1;
+                right_child = value << 1;
+            } else {
+                mpz_mul_2exp(left_child.get_mpz_t(), value.get_mpz_t(), 1);
+                mpz_sub_ui(left_child.get_mpz_t(), left_child.get_mpz_t(), 1);
+                mpz_mul_2exp(right_child.get_mpz_t(), value.get_mpz_t(), 1);
             }
-        }
+            scaled_positions.add(left_child);
+            scaled_positions.add(right_child);
+        });
+        _uncovered_positions.clone(scaled_positions);
+        scaled_positions.clear();
 
         // Create an external tracker for new ancestors (which inherently are the new intervals) and uncovered intervals.
         size_t thread_count = omp_get_max_threads();
         std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(thread_count);
-        std::vector<std::vector<Interval<T>>> omp_local_new_uncovered_intervals(thread_count);
+        std::vector<NodeBitmap<T>> omp_local_covered_node_bitmaps(thread_count);
+        // std::vector<std::vector<Interval<T>>> omp_local_new_uncovered_intervals(thread_count);
 
-        // Track the indexes we need to split.
-        std::vector<uint8_t> split_interval_indexes(_uncovered_intervals.size(), 0);
+        // // Track the indexes we need to split.
+        // std::vector<uint8_t> split_interval_indexes(_uncovered_intervals.size(), 0);
 
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
-        // static thread_local T value = 0;
-        #pragma omp parallel default(none) shared(_level_count, _uncovered_intervals, omp_local_ancestors_group, omp_local_new_uncovered_intervals, eptr, _preserve_ancestors, _is_verifying_non_hwm_nodes, split_interval_indexes)
+        #pragma omp parallel default(none) shared(_level_count, _uncovered_positions, omp_local_ancestors_group, omp_local_covered_node_bitmaps, eptr, _preserve_ancestors, _is_verifying_non_hwm_nodes)
         {
             // Grab our personal ancestors and parittion vectors to avoid locking.
             size_t my_thread_id = omp_get_thread_num();
             auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
-            auto& my_new_uncovered_intervals = omp_local_new_uncovered_intervals[my_thread_id];
+            auto& my_covered_node_bitmap = omp_local_covered_node_bitmaps[my_thread_id];
 
             // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
             T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
@@ -206,7 +203,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             T position = 0;
             Node<T> tmp_node;
             std::vector<T> covered_positions;
-            #pragma omp for
+            #pragma omp for schedule(dynamic)
             for (size_t index = 0; index < _uncovered_intervals.size(); index++) {
                 const Interval<T>& uncovered_interval = _uncovered_intervals[index];
                 covered_positions.clear();

@@ -51,6 +51,21 @@ void test_node_bitmap_prefix_boundary() {
 
 
 
+template<AnySupportedIntegral T>
+void test_node_bitmap_for_each_value() {
+    NodeBitmap<T> bitmap;
+    T start = 42;
+    T end = 4242;
+    bitmap.add_range(start, end);
+    T current = start;
+    bitmap.for_each_value([&](const T& value){
+        assert(value == current);
+        current++;
+    });
+    assert(current == end + 1);
+}
+
+
 
 //
 // Wrapper to run all tests.

@@ -23,7 +23,6 @@ struct BinaryTreeOptions {
     bool prune_hwm_nodes = false;
     bool prune_parent_levels = false;
     bool preserve_ancestors = false;
-    bool merge_intervals = true;
     bool verify_non_hwm_nodes = false;
     BinaryTreeType tree_type = BinaryTreeType::MATERIALIZED;
 };

@@ -1,7 +1,22 @@
 #pragma once
 
 #include <concepts>
+#include <limits>
 #include "concepts.hpp"
+
+
+
+//
+// BitmapTransformerPolicy
+// Enum helper for letting callers decide between serial (sequential) and parallel operation.
+//
+enum class BitmapTransformerPolicy {
+    SERIAL = 1,
+    PARALLEL = 2,
+};
+
+
+
 
 
 
@@ -18,6 +33,7 @@ struct BitmapKeyTraits {
     static constexpr size_t SUFFIX_BITS = sizeof(suffix_t) * 8;
     static constexpr suffix_t SUFFIX_MASK = std::numeric_limits<suffix_t>::max();
     static constexpr suffix_t SUFFIX_MAX = std::numeric_limits<suffix_t>::max();
+    static constexpr uint64_t SUFFIX_MAX_U64 = uint64_t(SUFFIX_MAX);
 
     // Prefix is going to be fixed instead of a bunch of complicated logic.
     //   mpz_class -> mpz_class because only it can handle arbitrarily large numbers
@@ -32,6 +48,16 @@ struct BitmapKeyTraits {
             , uint128_t
         >
     >;
+
+
+    // Roaring has internal types for its 32- and 64-bit versions, but doesn't expose a type for it.
+    using roaring_key_t = uint16_t;
+    using roaring_value_t = uint16_t;
+    using roaring_typecode_t = uint8_t;
+    using roaring_word_t = uint64_t;
+    static constexpr size_t ROARING_KEY_BITS = 16;
+    static constexpr size_t ROARING_VALUE_BITS = 16;
+    static constexpr size_t ROARING_WORD_BITS = 64;
 
 
 
