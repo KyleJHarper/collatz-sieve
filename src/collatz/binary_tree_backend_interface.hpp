@@ -8,6 +8,7 @@
 #include "node.hpp"
 #include "binary_tree_math.hpp"
 #include "binary_tree_coverage.hpp"
+#include "node_bitmap.hpp"
 
 
 
@@ -60,7 +61,7 @@ struct IBinaryTreeBackend {
     virtual bool is_pruning_hwm_nodes() const = 0;
     virtual bool is_pruning_parent_levels() const = 0;
     // (Implicit Only)
-    virtual const std::vector<Interval<T>>& get_uncovered_intervals() const = 0;
+    virtual const NodeBitmap<T>& get_uncovered_positions() const = 0;
 
 
 

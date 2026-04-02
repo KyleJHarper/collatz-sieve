@@ -120,7 +120,7 @@ class BinaryTreeMaterialized : public IBinaryTreeBackend<T> {
     void enable_non_hwm_node_verification() override { _is_verifying_non_hwm_nodes = true; }
     bool is_pruning_hwm_nodes() const override { return _is_pruning_hwm_nodes; }
     bool is_pruning_parent_levels() const override { return _is_pruning_parent_levels; }
-    const std::vector<Interval<T>>& get_uncovered_intervals() const override {
+    const NodeBitmap<T>& get_uncovered_positions() const override {
         throw std::logic_error("BinaryTreeMaterialized has no coverage interval property.");
     }
 

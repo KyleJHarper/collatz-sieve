@@ -83,9 +83,9 @@ class BinaryTree {
     }
     //
     // Implicit-Specific
-    const std::vector<Interval<T>>& get_uncovered_intervals() const {
-        assert_implicit("get_uncovered_intervals");
-        return _impl->get_uncovered_intervals();
+    const NodeBitmap<T>& get_uncovered_positions() const {
+        assert_implicit("get_uncovered_positions");
+        return _impl->get_uncovered_positions();
     }
 
 };

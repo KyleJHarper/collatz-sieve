@@ -3,6 +3,7 @@
 #include "binary_tree_backend_interface.hpp"
 #include "concepts.hpp"
 #include <omp.h>
+#include <stdexcept>
 #include <tbb/parallel_sort.h>
 #include "node_bitmap.hpp"
 #include "node_bitmap_traits.hpp"
@@ -171,19 +172,19 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
         const T add_level_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
         // Build a few constexpr for the policy, stop flag, etc., which won't change at runtime.
-        constexpr BitmapTransformerPolicy parallel_policy = BitmapTransformerPolicy::PARALLEL;
         constexpr bool stop = false;
 
         // Now loop.
-        _uncovered_positions.for_each_transformer(parallel_policy, callback_storage, [&](const T& value, AddLevelTLS& tls) {
+        _uncovered_positions.for_each_transformer(BitmapTransformerPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
             // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
+            if (cb_position == 0) { throw std::out_of_range("Position cannot be zero.  How did this happen?"); }
             if constexpr(BuiltinIntegral<T>) {
-                tls.positions[0] = (value << 1) - 1;  // Left child.
-                tls.positions[1] = value << 1;        // Right child.
+                tls.positions[0] = (cb_position << 1) - 1;  // Left child.
+                tls.positions[1] = cb_position << 1;        // Right child.
             } else {
-                mpz_mul_2exp(tls.positions[0].get_mpz_t(), value.get_mpz_t(), 1);
+                mpz_mul_2exp(tls.positions[0].get_mpz_t(), cb_position.get_mpz_t(), 1);
                 mpz_sub_ui(tls.positions[0].get_mpz_t(), tls.positions[0].get_mpz_t(), 1);
-                mpz_mul_2exp(tls.positions[1].get_mpz_t(), value.get_mpz_t(), 1);
+                mpz_mul_2exp(tls.positions[1].get_mpz_t(), cb_position.get_mpz_t(), 1);
             }
 
             for (const T& position : tls.positions) {

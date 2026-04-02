@@ -112,7 +112,7 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeTyp
     }
     // Coherency test.
     coverage_map = builder.get_tree().get_coverage_map();
-    size_t failing_level = 0;
+    size_t failing_levels = 0;
     for (auto& [level, coverage] : coverage_map) {
         logger->debug("Testing level {} for coherency.", level);
         if (level > BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL) {
@@ -120,14 +120,14 @@ void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeTyp
             break;
         }
         if (builder.get_tree().get_coverage_map().at(level).get_covered() != BinaryTreeCoverageConstants::get_known_coverage<T>(level)) {
-            failing_level = level;
-            break;
+            logger->warn("Level {} failed.  Have {}, expected {}.", level, builder.get_tree().get_coverage_map().at(level).get_covered(), BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+            failing_levels++;
         }
     }
-    if (failing_level == 0) {
+    if (failing_levels == 0) {
         logger->info("Coherency passed.  Computed coverage matches known values.");
     } else {
-        logger->warn("Coherency failed!  Computed coverage DOES NOT match at level {}", failing_level);
+        logger->warn("Coherency failed!  {} levels failed.  See above.", failing_levels);
     }
 
     if (sleep_seconds > 0) {

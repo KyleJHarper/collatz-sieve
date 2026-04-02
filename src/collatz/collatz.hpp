@@ -451,7 +451,7 @@ class Collatz {
     template<typename Func>
     static void for_each_sequence_step(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
 
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
@@ -496,7 +496,7 @@ class Collatz {
     template<typename Func>
     void for_each_sequence_step(Func&& callback) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
 
         // Sequence exists?  Use it directly.
         if (_sequence.size() > 0) {

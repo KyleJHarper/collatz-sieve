@@ -27,9 +27,11 @@ class NodeBitmap {
     void add_range_closed(const T& start, const T& end) { _impl.add_range_closed(start, end); };
     bool contains(const T& value) const { return _impl.contains(value); }
     void remove(const T& value) { _impl.remove(value); }
-    T cardinality() const { _impl.cardinality(); }
+    T cardinality() const { return _impl.cardinality(); }
     void clear() { _impl.clear(); }
-    void clone(const FlatHashBitmapImpl<T>& src) { _impl.clone(src); }
+    void merge(const NodeBitmap<T>& src) { _impl.merge(src._impl); }
+    NodeBitmap<T>& operator|=(const NodeBitmap<T>& src) { _impl |= src._impl; return *this; }
+    void clone(const NodeBitmap<T>& src) { _impl.clone(src); }
     void optimize() { _impl.optimize(); };
     size_t shrink_to_fit() { return _impl.shrink_to_fit(); }
     size_t deep_size() const { return _impl.deep_size(); }

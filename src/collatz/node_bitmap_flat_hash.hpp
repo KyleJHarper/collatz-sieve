@@ -7,9 +7,9 @@
 #include "roaring/containers/containers.h"
 #include "roaring/roaring_types.h"
 #include <absl/container/flat_hash_map.h>
+#include <atomic>
 #include <gmp.h>
 #include <omp.h>
-#include <oneapi/tbb/parallel_sort.h>
 #include <roaring/roaring.hh>
 #include <stdexcept>
 
@@ -203,9 +203,9 @@ class FlatHashBitmapImpl {
         T total = 0;
         for (const auto& [prefix, bitmap] : _flat_map) {
             if constexpr(BuiltinIntegral<T>) {
-                total += bitmap.cardinality;
+                total += bitmap.cardinality();
             } else {
-                mpz_add_ui(total.get_mpz_t(), total.get_mpz_t(), bitmap.cardinality);
+                mpz_add_ui(total.get_mpz_t(), total.get_mpz_t(), bitmap.cardinality());
             }
         }
         return total;
@@ -242,8 +242,9 @@ class FlatHashBitmapImpl {
     }
     //
     // Mimic the operator.
-    void operator|=(const FlatHashBitmapImpl<T>& src) {
-        (*this)->merge(src);
+    FlatHashBitmapImpl<T>& operator|=(const FlatHashBitmapImpl<T>& src) {
+        merge(src);
+        return *this;
     }
 
 
@@ -253,7 +254,7 @@ class FlatHashBitmapImpl {
     // Copy source bitmap and metadata into self, making an exact copy.
     //
     void clone(const FlatHashBitmapImpl<T>& src) {
-        (*this)->clear();
+        clear();
         for (const auto& [src_prefix, src_bitmap] : src.get_map()) {
             // Add to the prefix key list.
             add_prefix_key(src_prefix);
@@ -334,7 +335,7 @@ class FlatHashBitmapImpl {
     template<typename Func>
     void for_each_value(BitmapTransformerPolicy policy, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
         std::vector<uint8_t> dummy_tls;
         for_each_transformer(policy, dummy_tls, [&](const T& value, auto&) {
             return callback(value);
@@ -360,7 +361,7 @@ class FlatHashBitmapImpl {
     template<typename Func, typename TLS_Type>
     void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
+        static_assert(std::is_invocable_r_v<void, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
 
         // Ensure the TLS has enough elements before proceeding.
         const size_t max_threads = policy == BitmapTransformerPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
@@ -369,6 +370,7 @@ class FlatHashBitmapImpl {
         }
 
         // Setup our control-stop.
+        std::atomic<bool> atomic_stop = false;
         bool stop;
 
         // Process according to policy.
@@ -385,15 +387,22 @@ class FlatHashBitmapImpl {
             size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
 
             // The TLS should only need index 0.
-            TLS_Type my_tls = tls[my_thread_id];
+            TLS_Type& my_tls = tls[my_thread_id];
 
             // Loop through prefixes in order.
             for (const prefix_t& prefix : _sorted_prefixes) {
-                // Shift the prefix once instead of deeper inside the while() loop.
-                if constexpr(BuiltinIntegral<T>) {
-                    shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
+                // Shift the prefix once instead of deeper inside the while() loop.  For smaller types, set to 0.
+                if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
+                    // T can hold the prefix.  Let it shift.
+                    if constexpr(BuiltinIntegral<T>) {
+                        shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
+                    } else {
+                        mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                    }
                 } else {
-                    mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                    // We have a T smaller than suffix_t, which means the only prefix we'll ever have is 0.
+                    // Set it manually, because small-T means we can't shift SUFFIX_BITS wide.
+                    shifted_prefix = 0;
                 }
 
                 // Find our bitmap and connect an iterator.
@@ -420,70 +429,49 @@ class FlatHashBitmapImpl {
         } else {
             // Parallel Path
             // Work is threaded, breaking sequential guarantee.  Uses prefix OR range iteration for performance.
-            //
-            // An enticing key to split work by would be the prefix keys.  Sadly, there are 2^32 nodes beneath each prefix.  This
-            // prevents ANY multithreading until we have at least >2^32 nodes (i.e.: 2+ prefixes) and we don't achieve full
-            // multithreading until we have at least one prefix per OMP thread.
-            //
-            // It gets worse.  Even with enough prefixes, the density can vary greatly amongst them, affecting runtime when threads
-            // synchronize at the end.
-            //
-            // One solution is to iterate with OMP over the containers themselves by exploiting the CRoaring internals.  While safe
-            // in theory, it's convoluted and, more importantly, OMP scheduling overhead (startup/teardown) is expensive at this
-            // scale.  (Note: we left a theoretical container-scanning approach commented below.)
-            //
-            // To resolve this, we chose a middle ground approach.  We let each thread scan a range of each prefix, determined by
-            // its thread_id.  This is made possible because roaring_uint32_iterator_move_equalorlarger() exists and is extremely
-            // cheap.
-            //
-            // We left a theoretical example of per-container processing, but honestly the
-            //
-            //
-            //   When there are more prefixes than threads available to OMP,
-            // we will distribute entire prefixes to a thread using a dynamic scheduler and iterate with an API-safe iterator.
-            //
-            // Sadly, each has prefix contains 2^32 nodes represented, which immediately limits parallelization.  Therefore, when
-            // the number of prefixes is less than the number of threads available to OMP, we will iterate over each prefix like
-            // above, but ask each thread to scan forward and process its own range.
-            //
-            //   Therefore, when the number of prefixes is less than the
-            // number of threads available to OMP, we will iterate over each prefix serailly and thread OMP over the containers.
-            //
-            // When the prefix count is higher than the number of threads availble to OMP, it's faster to split the work using a
-            // dynamic scheduler over the prefixes themselves.  Each prefix has a domain of 2^32 possible nodes beneath it.
-            //
-            // When the prefix count is lower than the number of threads available to OMP, it's faster to split the work using a
-            // dynamic scheduler over the containers within prefixes.
-
-
 
             // Loop through each prefix.  We pay threading cost per-prefix, but I believe the workload in the callback warrants it.
-            for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
-                #pragma omp parallel default(none) shared(prefix_index)
-                {
-                    // Get our thread ID.
-                    size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
+            #pragma omp parallel default(none) shared(tls, atomic_stop, callback)
+            {
+                // Get our thread ID.
+                size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
 
-                    // Pick our element from the TLS.
-                    TLS_Type my_tls = tls[my_thread_id];
+                // Pick our element from the TLS.
+                TLS_Type& my_tls = tls[my_thread_id];
+
+                // Track a local-stop.
+                bool local_stop = false;
+
+                // Hoist a few locals to avoid lots of potential alloc on GMP path.
+                T value;
+                T shifted_prefix;
+                T shifted_prefix_and_key;
+
+                // Loop through prefixes.
+                for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
+                    // Stop if needed.
+                    if (atomic_stop.load(std::memory_order_relaxed)) { continue; }
 
                     // Grab the prefix and then build a shifted_prefix so we don't recompute it.
                     const prefix_t& prefix = _sorted_prefixes[prefix_index];
-                    T shifted_prefix;
-                    if constexpr(BuiltinIntegral<T>) {
-                        shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
+                    // Shift the prefix once instead of deeper inside the while()/for() loops.  For smaller types, set to 0.
+                    if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
+                        // T can hold the prefix.  Let it shift.
+                        if constexpr(BuiltinIntegral<T>) {
+                            shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
+                        } else {
+                            mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                        }
                     } else {
-                        mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                        // We have a T smaller than suffix_t, which means the only prefix we'll ever have is 0.
+                        // Set it manually, because small-T means we can't shift SUFFIX_BITS wide.
+                        shifted_prefix = 0;
                     }
 
                     // Find our bitmap and connect to the internal storage components.
                     auto it = _flat_map.find(prefix);
                     const roaring::api::roaring_bitmap_t* roaring_bitmap = &(it->second.roaring);
                     const roaring::api::roaring_array_t* high_low_container = &(roaring_bitmap->high_low_container);
-
-                    // Hoist a few locals to avoid lots of potential alloc on GMP path.
-                    T value;
-                    T shifted_prefix_and_key;
 
                     // Build the inner loop around the keys and sub containers.  Split it up with OMP.
                     #pragma omp for schedule(dynamic)
@@ -516,8 +504,11 @@ class FlatHashBitmapImpl {
                                     } else {
                                         mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                     }
-                                    stop = callback(value, my_tls);
-                                    if (stop) { break; }
+                                    local_stop = callback(value, my_tls);
+                                    if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                        atomic_stop.store(true, std::memory_order_relaxed);
+                                        break;
+                                    }
                                 }
                                 break;
                             }
@@ -537,13 +528,16 @@ class FlatHashBitmapImpl {
                                         } else {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        stop = callback(value, my_tls);
-                                        if (stop) { break; }
+                                        local_stop = callback(value, my_tls);
+                                        if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                            atomic_stop.store(true, std::memory_order_relaxed);
+                                            break;
+                                        }
                                         // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which we just processed.
                                         word &= (word - 1);
                                     }
                                     // Leave the for() loop if we're stopping early.
-                                    if (stop) { break; }
+                                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
                                 }
                                 break;
                             }
@@ -560,22 +554,23 @@ class FlatHashBitmapImpl {
                                         } else {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        stop = callback(value, my_tls);
-                                        if (stop) { break; }
+                                        local_stop = callback(value, my_tls);
+                                        if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                            atomic_stop.store(true, std::memory_order_relaxed);
+                                            break;
+                                        }
                                     }
                                     // Break from the outer for() loop if we're stopping.
-                                    if (stop) { break; }
+                                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
                                 }
                                 break;
                             }
                         }
-                        // Break the OMP for() loop if we're stopping.  OMP doesn't support "break", so we set the index to its sentinal value.
-                        if (stop) { high_low_index = high_low_container->size; }
                     } // end omp for loop
-                } // end omp parallel region
-                // Break the prefix loop if we're stopping.
-                if (stop) { break; }
-            } // end for prefix_index
+                    // Break the prefix loop if we're stopping.
+                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
+                } // end for prefix_index
+            } // end omp parallel region
         } // end if serial/parallel
     }
 

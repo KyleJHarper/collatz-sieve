@@ -33,7 +33,6 @@ struct BitmapKeyTraits {
     static constexpr size_t SUFFIX_BITS = sizeof(suffix_t) * 8;
     static constexpr suffix_t SUFFIX_MASK = std::numeric_limits<suffix_t>::max();
     static constexpr suffix_t SUFFIX_MAX = std::numeric_limits<suffix_t>::max();
-    static constexpr uint64_t SUFFIX_MAX_U64 = uint64_t(SUFFIX_MAX);
 
     // Prefix is going to be fixed instead of a bunch of complicated logic.
     //   mpz_class -> mpz_class because only it can handle arbitrarily large numbers
