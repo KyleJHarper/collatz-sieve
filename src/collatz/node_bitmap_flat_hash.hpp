@@ -196,6 +196,24 @@ class FlatHashBitmapImpl {
 
 
     //
+    // Cardinality (count)
+    // Return the cardinality (count) of nodes on.
+    //
+    T cardinality() const {
+        T total = 0;
+        for (const auto& [prefix, bitmap] : _flat_map) {
+            if constexpr(BuiltinIntegral<T>) {
+                total += bitmap.cardinality;
+            } else {
+                mpz_add_ui(total.get_mpz_t(), total.get_mpz_t(), bitmap.cardinality);
+            }
+        }
+        return total;
+    }
+
+
+
+    //
     // Clear
     // Removes all items from all bitmaps by clearing the entire hash object.
     //
@@ -302,193 +320,10 @@ class FlatHashBitmapImpl {
 
 
     //
-    // For-Each Transformer
-    // Applies callback to all values according to TransformerPolicy (serial or parallel).  Callback must have this signature:
-    //   (const T& value, FlatHashBitmapImpl<T>& out)
-    //
-    // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
-    // The 'out' is a thread-safe bitmap your function/lambda may manipulate (transform) freely.
-    //
-    // When all values are done, the out (or outs if parallel) are merge()'d into the result& bitmap you sent.  We will NOT call
-    // clear or anything else on your result& bitmap.
-    //
-    // You may NOT modify THIS bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
-    // invalidated upon changes!
-    //
-    template<typename Func>
-    void for_each_transformer(BitmapTransformerPolicy policy, FlatHashBitmapImpl<T>& result, Func&& callback) {
-        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
-
-        if (policy == BitmapTransformerPolicy::SERIAL) {
-            // Serial Path
-            // Guarantees sequential processing.  Can efficiently use exposed iterators.
-
-            // Hoist these, just in case of temp allocs.
-            T value;
-            T shifted_prefix;
-            suffix_t suffix;
-
-            // Build a single out bitmap for the callback.
-            FlatHashBitmapImpl<T> out;
-
-            // Loop through prefixes in order.
-            for (const prefix_t& prefix : _sorted_prefixes) {
-                // Shift the prefix once instead of deeper inside the while() loop.
-                if constexpr(BuiltinIntegral<T>) {
-                    shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-                } else {
-                    // The type T is already mpz_class for GMP path.
-                    mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
-                }
-
-                // Find our bitmap and connect an iterator.
-                roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
-                roaring::api::roaring_uint32_iterator_t bitmap_iterator;
-                roaring::api::roaring_iterator_init(&roaring_obj.roaring, &bitmap_iterator);
-
-                // Loop this iterator until we're done.  Use addition instead of bitwise-OR (|) to avoid alloc on GMP path.
-                while (bitmap_iterator.has_value) {
-                    suffix = bitmap_iterator.current_value;
-                    if constexpr(BuiltinIntegral<T>) {
-                        value = shifted_prefix + suffix;
-                    } else {
-                        mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
-                    }
-                    callback(value, out);
-                    roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
-                }
-            }
-
-            // Merge the out into the result.
-            result |= out;
-        } else {
-            // Parallel Path
-            // Work is threaded, breaking sequential guarantee.  Uses prefix AND container iteration for performance.
-
-            // Setup local outs for OMP.
-            size_t thread_count = omp_get_max_threads();
-            std::vector<FlatHashBitmapImpl<T>> outs(thread_count);
-
-            // Loop through each prefix.
-            T shifted_prefix;
-            #pragma omp for schedule(dynamic) collapse(2)
-            for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
-                // Grab the prefix and then build a shifted_prefix so we don't recompute it.
-                const prefix_t& prefix = _sorted_prefixes[prefix_index];
-                if constexpr(BuiltinIntegral<T>) {
-                    shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-                } else {
-                    mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
-                }
-
-                // Find our bitmap and connect to the internal storage components.
-                auto it = _flat_map.find(prefix);
-                const roaring::api::roaring_bitmap_t* roaring_bitmap = &(it->second.roaring);
-                const roaring::api::roaring_array_t* high_low_container = &(roaring_bitmap->high_low_container);
-
-                // Link to our thread-local out.
-                size_t thread_id = omp_get_thread_num();
-                FlatHashBitmapImpl<T>& out = outs[thread_id];
-
-                // Hoist a few locals to avoid lots of alloc on GMP path.
-                T value;
-                T shifted_prefix_and_key;
-
-                // Build the inner loop around the keys and sub containers.
-                for (int high_low_index = 0; high_low_index < high_low_container->size; high_low_index++) {
-                    // Grab the roaring key, the container, and type code.
-                    roaring_key_t suffix_key = high_low_container->keys[high_low_index];
-                    const roaring::api::container_s* container = high_low_container->containers[high_low_index];
-                    roaring_typecode_t typecode = high_low_container->typecodes[high_low_index];
-
-                    // Hoist and promote+shift the key into full suffix_t space.
-                    suffix_t shifted_key = (suffix_t(suffix_key)) << Traits::ROARING_KEY_BITS;
-                    suffix_t suffix_val;
-
-                    // Build the shifted prefix and key combo so we don't repeat it below.
-                    if constexpr(BuiltinIntegral<T>) {
-                        shifted_prefix_and_key = shifted_prefix | shifted_key;
-                    } else {
-                        mpz_add_ui(shifted_prefix_and_key.get_mpz_t(), shifted_prefix.get_mpz_t(), shifted_key);
-                    }
-
-                    // Select the correct iteration method based on the typecode to retrieve and process suffixes.
-                    // Use addition instead of bitwise-OR (|) to avoid alloc on GMP path.
-                    switch (typecode) {
-                        case ARRAY_CONTAINER_TYPE: {
-                            const roaring::internal::array_container_t* array_container = (roaring::internal::array_container_t*)container;
-                            for (int array_index = 0; array_index < array_container->cardinality; array_index++) {
-                                suffix_val = array_container->array[array_index];
-                                if constexpr(BuiltinIntegral<T>) {
-                                    value = shifted_prefix_and_key + suffix_val;
-                                } else {
-                                    mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
-                                }
-                                callback(value, out);
-                            }
-                            break;
-                        }
-
-                        case BITSET_CONTAINER_TYPE: {
-                            const roaring::internal::bitset_container_t* bitset_container = (const roaring::internal::bitset_container_t*)container;
-                            for (int word_index = 0; word_index < roaring::internal::BITSET_CONTAINER_SIZE_IN_WORDS; word_index++) {
-                                roaring_word_t word = bitset_container->words[word_index];
-                                // Loop until there are no more on-bits in the word.
-                                while (word != 0) {
-                                    // Calculate the offset by counting the number of trailing zeros, giving us the next "1" position.
-                                    int offset = __builtin_ctzll(word);
-                                    // Multiply out the word index by the number of bits per word, then add the offset.  That's the next "on" node.
-                                    suffix_val = (word_index * Traits::ROARING_WORD_BITS) + offset;
-                                    if constexpr(BuiltinIntegral<T>) {
-                                        value = shifted_prefix_and_key + suffix_val;
-                                    } else {
-                                        mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
-                                    }
-                                    callback(value, out);
-                                    // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which we just processed.
-                                    word &= (word - 1);
-                                }
-                            }
-                            break;
-                        }
-
-                        case RUN_CONTAINER_TYPE: {
-                            const roaring::internal::run_container_t* run_container = (const roaring::internal::run_container_t*)container;
-                            for (int run_index = 0; run_index < run_container->n_runs; run_index++) {
-                                roaring_value_t start = run_container->runs[run_index].value;
-                                roaring_value_t length = run_container->runs[run_index].length;
-                                suffix_t end = start + length;
-                                for (suffix_val = start; suffix_val <= end; suffix_val++) {
-                                    if constexpr(BuiltinIntegral<T>) {
-                                        value = shifted_prefix_and_key + suffix_val;
-                                    } else {
-                                        mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
-                                    }
-                                    callback(value, out);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                } // end omp for loop
-            } // end omp for prefix_index
-
-            // Merge the outs.
-            for(const FlatHashBitmapImpl<T>& out : outs) {
-                result |= out;
-            }
-        } // end if serial/parallel
-    }
-
-
-
-
-
-
-    //
     // For-Each Value
-    // Applies callback to all values serially and sequentially, guaranteed.  Your callback must have this signature:
+    // This a convenience wrapper, designed when you don't need 'tls' storage.
+    //
+    // Applies callback to all values.  Your callback must have this signature:
     //   (const T& value)
     //
     // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
@@ -500,196 +335,43 @@ class FlatHashBitmapImpl {
     void for_each_value(BitmapTransformerPolicy policy, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
-        FlatHashBitmapImpl<T> dummy;
-        for_each_transformer(policy, dummy, [&](const T& value, auto&) {
-            callback(value);
+        std::vector<uint8_t> dummy_tls;
+        for_each_transformer(policy, dummy_tls, [&](const T& value, auto&) {
+            return callback(value);
         });
     }
 
-    // template<typename Func>
-    // void for_each_value(Func&& callback) {
-    //     // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-    //     static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
-
-    //     // Hoist these out so we can reuse them.
-    //     T value;
-    //     T shifted_prefix;
-    //     suffix_t suffix;
-    //     // Loop through prefixes in order.
-    //     for (const prefix_t& prefix : _sorted_prefixes) {
-    //         // Loop through each value in this prefix's assocated bitmap.
-    //         if constexpr(BuiltinIntegral<T>) {
-    //             shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-    //         } else {
-    //             // The type T is already mpz_class for GMP path.
-    //             mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
-    //         }
-    //         roaring::Roaring& bitmap = _flat_map.find(prefix)->second;
-    //         roaring::api::roaring_uint32_iterator_t bitmap_iterator;
-    //         roaring::api::roaring_iterator_init(&bitmap.roaring, &bitmap_iterator);
-    //         while (bitmap_iterator.has_value) {
-    //             suffix = bitmap_iterator.current_value;
-    //             if constexpr(BuiltinIntegral<T>) {
-    //                 value = shifted_prefix | suffix;
-    //             } else {
-    //                 // GMP will make a temp (alloc) by implicitly converting uint32_t (prefix_t) into an mpz_class.
-    //                 // Avoid this by using addition (+) instead.  In our case, it's functionally equivalent.
-    //                 mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
-    //             }
-    //             callback(value);
-    //             roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
-    //         }
-    //     }
-    // }
 
 
 
     //
-    // For-Each Value Parallel
-    // Applies callback to all values by spreading the work over threads with OMP.  Callbacks will NOT be serial or sequential.
-    // Your callback must have this signature:
-    //   (const T& value)
+    // For-Each Transformer
+    // Applies callback to all values according to BitmapTransformerPolicy (serial or parallel).  Callback must have this signature:
+    //   (const T& value, TLS_Type& tls)
     //
     // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
+    // The 'tls' is a vector YOU send and an element will be returned in callback().
+    //   - We will use the omp_get_thread_num() as your vector's element ID.
+    //   - We will call tls.resize() if omp_get_max_threads() > tls.capacity().
     //
-    // You may NOT modify this bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
-    // invalidated upon changes!
+    // You may NOT modify THIS bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
+    // invalidated upon changes!  If you need bitmap changes, include bitmaps in your tls& and .merge() them afterward.
     //
-    // template<typename Func>
-    // void for_each_value_parallel(Func&& callback) {
-    //     // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-    //     static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
-
-    //     #pragma omp parallel
-    //     {
-    //         // Hoist these.  Don't need thread-local.
-    //         T value;
-    //         T shifted_prefix;
-
-    //         #pragma omp for schedule(dynamic) collapse(2)
-    //         for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
-    //             const prefix_t& prefix = _sorted_prefixes[prefix_index];
-    //             // Build the shifted prefix once, not per-chunk.
-    //             if constexpr(BuiltinIntegral<T>) {
-    //                 shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-    //             } else {
-    //                 // The type T is already mpz_class for GMP path.
-    //                 mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
-    //             }
-    //             // Find the bitmap once.  Not per-chunk.
-    //             auto it = _flat_map.find(prefix);
-    //             roaring::Roaring& bitmap = it->second;
-
-    //             // Now operate per-chunk.  This is the secondary collapse of OMP above.  Should be good.
-    //             for (suffix_t start = 0; start < Traits::SUFFIX_MAX; start+=Traits::CHUNK_SIZE) {
-    //                 // Calculate the end.  It'll be a half-open range: [start, end).  Need a 64-bit helper.
-    //                 uint64_t end_u64 = (uint64_t)start + Traits::CHUNK_SIZE;
-    //                 suffix_t end = (end_u64 > Traits::SUFFIX_MAX_U64) ? Traits::SUFFIX_MAX : (suffix_t)end_u64;
-
-    //                 // Connect an iterator to the correct chunk by specifying the move_equalorlarger() threshold.
-    //                 roaring::api::roaring_uint32_iterator_t bitmap_iterator;
-    //                 roaring::api::roaring_iterator_init(&bitmap.roaring, &bitmap_iterator);
-    //                 roaring::api::roaring_uint32_iterator_move_equalorlarger(&bitmap_iterator, start);
-
-    //                 // Loop through the iterator until we hit the end, calculate value, apply callback, and then advance iterator.
-    //                 while (bitmap_iterator.has_value && bitmap_iterator.current_value < end) {
-    //                     suffix_t suffix = bitmap_iterator.current_value;
-    //                     if constexpr(BuiltinIntegral<T>) {
-    //                         value = shifted_prefix | suffix;
-    //                     } else {
-    //                         mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
-    //                     }
-    //                     callback(value);
-    //                     roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
-
-
-
-
-
-
-
-    //TODO
-    //
-    // For-Each Value Parallel
-    // Applies callback to all values by spreading the work over threads with OMP.  Your callback must have this signature:
-    //   (const T& value, FlatHashBitmapImpl<T>& out)
-    //
-    // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
-    // The 'out' is a thread-safe bitmap your function/lambda may manipulate freely.
-    //
-    // When OMP is done with all values, the outs are merged into the "*result_bitmap" you sent.  We will NOT call clear() or
-    // anything else on your result_bitmap; we'll simply merge the outs into it blindly.  If you do not need this merging behavior
-    // (no transformation), you may send nullptr.
-    //
-    // You may NOT modify this bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
-    // invalidated upon changes!
-    //
-    // template<typename Func>
-    // void for_each_value_parallel(FlatHashBitmapImpl<T>* result_bitmap, Func&& callback) {
-    //     // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-    //     static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
-
-    //     #pragma omp parallel
-    //     {
-    //         // Hoist these.  Don't need thread-local.
-    //         T value;
-    //         T shifted_prefix;
-
-    //         #pragma omp for schedule(dynamic) collapse(2)
-    //         for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
-    //             const prefix_t& prefix = _sorted_prefixes[prefix_index];
-    //             // Build the shifted prefix once, not per-chunk.
-    //             if constexpr(BuiltinIntegral<T>) {
-    //                 shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-    //             } else {
-    //                 // The type T is already mpz_class for GMP path.
-    //                 mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
-    //             }
-    //             // Find the bitmap once.  Not per-chunk.
-    //             auto it = _flat_map.find(prefix);
-    //             roaring::Roaring& bitmap = it->second;
-
-    //             // Now operate per-chunk.  This is the secondary collapse of OMP above.  Should be good.
-    //             for (suffix_t start = 0; start < Traits::SUFFIX_MAX; start+=Traits::CHUNK_SIZE) {
-    //                 // Calculate the end.  It'll be a half-open range: [start, end).  Need a 64-bit helper.
-    //                 uint64_t end_u64 = (uint64_t)start + Traits::CHUNK_SIZE;
-    //                 suffix_t end = (end_u64 > Traits::SUFFIX_MAX_U64) ? Traits::SUFFIX_MAX : (suffix_t)end_u64;
-
-    //                 // Connect an iterator to the correct chunk by specifying the move_equalorlarger() threshold.
-    //                 roaring::api::roaring_uint32_iterator_t bitmap_iterator;
-    //                 roaring::api::roaring_iterator_init(&bitmap.roaring, &bitmap_iterator);
-    //                 roaring::api::roaring_uint32_iterator_move_equalorlarger(&bitmap_iterator, start);
-
-    //                 // Loop through the iterator until we hit the end, calculate value, apply callback, and then advance iterator.
-    //                 while (bitmap_iterator.has_value && bitmap_iterator.current_value < end) {
-    //                     suffix_t suffix = bitmap_iterator.current_value;
-    //                     if constexpr(BuiltinIntegral<T>) {
-    //                         value = shifted_prefix | suffix;
-    //                     } else {
-    //                         mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
-    //                     }
-    //                     callback(value);
-    //                     roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
-
-    template<typename Func>
-    void for_each_transformer_v2(BitmapTransformerPolicy policy, FlatHashBitmapImpl<T>& result, Func&& callback) {
+    template<typename Func, typename TLS_Type>
+    void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_same_v<typename first_arg_type<Func>::type, const T&>, "Callback must be callable with a const T&");
 
+        // Ensure the TLS has enough elements before proceeding.
+        const size_t max_threads = policy == BitmapTransformerPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
+        if (tls.size() < max_threads) {
+            tls.resize(max_threads);
+        }
+
+        // Setup our control-stop.
+        bool stop;
+
+        // Process according to policy.
         if (policy == BitmapTransformerPolicy::SERIAL) {
             // Serial Path
             // Guarantees sequential processing.  Can efficiently use exposed iterators.
@@ -699,8 +381,11 @@ class FlatHashBitmapImpl {
             T shifted_prefix;
             suffix_t suffix;
 
-            // Build a single out bitmap for the callback.
-            FlatHashBitmapImpl<T> out;
+            // Even though we're not threaded, get our thread ID for clarity.
+            size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
+
+            // The TLS should only need index 0.
+            TLS_Type my_tls = tls[my_thread_id];
 
             // Loop through prefixes in order.
             for (const prefix_t& prefix : _sorted_prefixes) {
@@ -724,13 +409,14 @@ class FlatHashBitmapImpl {
                     } else {
                         mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
                     }
-                    callback(value, out);
+                    stop = callback(value, my_tls);
+                    if (stop) { break; }
                     roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
                 }
-            }
 
-            // Merge the out into the result.
-            result |= out;
+                // If stopping, break from the prefix for() loop too.
+                if (stop) { break; }
+            }
         } else {
             // Parallel Path
             // Work is threaded, breaking sequential guarantee.  Uses prefix OR range iteration for performance.
@@ -768,25 +454,19 @@ class FlatHashBitmapImpl {
             //
             // When the prefix count is lower than the number of threads available to OMP, it's faster to split the work using a
             // dynamic scheduler over the containers within prefixes.
-            roaring::Roaring x;
-            x.maximum();
-
-
-
-
-            // Setup local outs for OMP.
-            size_t thread_count = omp_get_max_threads();
-            std::vector<FlatHashBitmapImpl<T>> outs(thread_count);
-
-
 
 
 
             // Loop through each prefix.  We pay threading cost per-prefix, but I believe the workload in the callback warrants it.
-            // If we use OMP at this level, the
             for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
                 #pragma omp parallel default(none) shared(prefix_index)
                 {
+                    // Get our thread ID.
+                    size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
+
+                    // Pick our element from the TLS.
+                    TLS_Type my_tls = tls[my_thread_id];
+
                     // Grab the prefix and then build a shifted_prefix so we don't recompute it.
                     const prefix_t& prefix = _sorted_prefixes[prefix_index];
                     T shifted_prefix;
@@ -800,10 +480,6 @@ class FlatHashBitmapImpl {
                     auto it = _flat_map.find(prefix);
                     const roaring::api::roaring_bitmap_t* roaring_bitmap = &(it->second.roaring);
                     const roaring::api::roaring_array_t* high_low_container = &(roaring_bitmap->high_low_container);
-
-                    // Link to our thread-local out.
-                    size_t thread_id = omp_get_thread_num();
-                    FlatHashBitmapImpl<T>& out = outs[thread_id];
 
                     // Hoist a few locals to avoid lots of potential alloc on GMP path.
                     T value;
@@ -840,7 +516,8 @@ class FlatHashBitmapImpl {
                                     } else {
                                         mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                     }
-                                    callback(value, out);
+                                    stop = callback(value, my_tls);
+                                    if (stop) { break; }
                                 }
                                 break;
                             }
@@ -860,10 +537,13 @@ class FlatHashBitmapImpl {
                                         } else {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        callback(value, out);
+                                        stop = callback(value, my_tls);
+                                        if (stop) { break; }
                                         // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which we just processed.
                                         word &= (word - 1);
                                     }
+                                    // Leave the for() loop if we're stopping early.
+                                    if (stop) { break; }
                                 }
                                 break;
                             }
@@ -880,22 +560,23 @@ class FlatHashBitmapImpl {
                                         } else {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        callback(value, out);
+                                        stop = callback(value, my_tls);
+                                        if (stop) { break; }
                                     }
+                                    // Break from the outer for() loop if we're stopping.
+                                    if (stop) { break; }
                                 }
                                 break;
                             }
                         }
+                        // Break the OMP for() loop if we're stopping.  OMP doesn't support "break", so we set the index to its sentinal value.
+                        if (stop) { high_low_index = high_low_container->size; }
                     } // end omp for loop
                 } // end omp parallel region
+                // Break the prefix loop if we're stopping.
+                if (stop) { break; }
             } // end for prefix_index
-
-            // Merge the outs.
-            for(const FlatHashBitmapImpl<T>& out : outs) {
-                result |= out;
-            }
         } // end if serial/parallel
     }
-
 
 };

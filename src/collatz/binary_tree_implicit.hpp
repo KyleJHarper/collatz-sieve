@@ -5,6 +5,7 @@
 #include <omp.h>
 #include <tbb/parallel_sort.h>
 #include "node_bitmap.hpp"
+#include "node_bitmap_traits.hpp"
 
 
 
@@ -152,234 +153,82 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Add Level
     // Add a level to the tree, which simply means scan the next level for new covered sections (HWM ancestors).
     //
+    struct AddLevelTLS {
+        NodeBitmap<T> uncovered_bitmap;
+        std::vector<Node<T>*> new_ancestors;
+        T value;
+        T positions[2];
+        Node<T> node;
+    };
     void add_level() override {
         // Confirm the new level will fit, warn about verification, and then bump the count.
         this->assert_level_will_fit(_level_count + 1);
         this->assert_level_verification(_level_count + 1, _is_verifying_non_hwm_nodes);
         _level_count++;
 
-        // Scale the uncovered positions.
-        NodeBitmap<T> scaled_positions;
-        T left_child;
-        T right_child;
-        _uncovered_positions.for_each_value([&](const T& value) {
+        // Establish TLS for our callback.
+        std::vector<AddLevelTLS> callback_storage;
+        // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
+        const T add_level_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
+        // Build a few constexpr for the policy, stop flag, etc., which won't change at runtime.
+        constexpr BitmapTransformerPolicy parallel_policy = BitmapTransformerPolicy::PARALLEL;
+        constexpr bool stop = false;
+
+        // Now loop.
+        _uncovered_positions.for_each_transformer(parallel_policy, callback_storage, [&](const T& value, AddLevelTLS& tls) {
+            // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
             if constexpr(BuiltinIntegral<T>) {
-                left_child = (value << 1) - 1;
-                right_child = value << 1;
+                tls.positions[0] = (value << 1) - 1;  // Left child.
+                tls.positions[1] = value << 1;        // Right child.
             } else {
-                mpz_mul_2exp(left_child.get_mpz_t(), value.get_mpz_t(), 1);
-                mpz_sub_ui(left_child.get_mpz_t(), left_child.get_mpz_t(), 1);
-                mpz_mul_2exp(right_child.get_mpz_t(), value.get_mpz_t(), 1);
+                mpz_mul_2exp(tls.positions[0].get_mpz_t(), value.get_mpz_t(), 1);
+                mpz_sub_ui(tls.positions[0].get_mpz_t(), tls.positions[0].get_mpz_t(), 1);
+                mpz_mul_2exp(tls.positions[1].get_mpz_t(), value.get_mpz_t(), 1);
             }
-            scaled_positions.add(left_child);
-            scaled_positions.add(right_child);
+
+            for (const T& position : tls.positions) {
+                // Calculate the value from position.  Use an out param on GMP path.
+                if constexpr(BuiltinIntegral<T>) {
+                    tls.value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
+                } else {
+                    BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count, tls.value);
+                }
+
+                // Initialize the node and test HWM for ancestry.
+                tls.node.init(tls.value);
+                if (_preserve_ancestors && tls.node.is_below_high_water_mark()) {
+                    tls.new_ancestors.push_back(new Node<T>(tls.value));
+                }
+
+                // Perform verification, if requested.
+                if (_is_verifying_non_hwm_nodes) {
+                    if (tls.node.is_below_high_water_mark() == false) {
+                        if (Collatz<T>::st_verify(tls.value, add_level_high_water_mark) == false) {
+                            throw std::logic_error("Node value " + to_string_any(tls.value) + " didn't verify.  How?");
+                        }
+                    }
+                }
+
+                // Write the POSITION to the TLS bitmap if it didn't hit HWM.
+                if (tls.node.is_below_high_water_mark() == false) {
+                    tls.uncovered_bitmap.add(position);
+                }
+            }
+
+            // Return false.  We have no stopping condition.
+            return stop;
         });
-        _uncovered_positions.clone(scaled_positions);
-        scaled_positions.clear();
 
-        // Create an external tracker for new ancestors (which inherently are the new intervals) and uncovered intervals.
-        size_t thread_count = omp_get_max_threads();
-        std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(thread_count);
-        std::vector<NodeBitmap<T>> omp_local_covered_node_bitmaps(thread_count);
-        // std::vector<std::vector<Interval<T>>> omp_local_new_uncovered_intervals(thread_count);
-
-        // // Track the indexes we need to split.
-        // std::vector<uint8_t> split_interval_indexes(_uncovered_intervals.size(), 0);
-
-        // Begin the critical section, but don't loop yet.
-        std::exception_ptr eptr = nullptr;
-        #pragma omp parallel default(none) shared(_level_count, _uncovered_positions, omp_local_ancestors_group, omp_local_covered_node_bitmaps, eptr, _preserve_ancestors, _is_verifying_non_hwm_nodes)
-        {
-            // Grab our personal ancestors and parittion vectors to avoid locking.
-            size_t my_thread_id = omp_get_thread_num();
-            auto& my_ancestors = omp_local_ancestors_group[my_thread_id];
-            auto& my_covered_node_bitmap = omp_local_covered_node_bitmaps[my_thread_id];
-
-            // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
-            T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
-
-            // Now loop, using indexes.
-            T value = 0;
-            T position = 0;
-            Node<T> tmp_node;
-            std::vector<T> covered_positions;
-            #pragma omp for schedule(dynamic)
-            for (size_t index = 0; index < _uncovered_intervals.size(); index++) {
-                const Interval<T>& uncovered_interval = _uncovered_intervals[index];
-                covered_positions.clear();
-                try {
-                    // Use a while loop with manual incrementing to avoid MPZ's operator++ temp allocs.
-                    position = uncovered_interval.start;
-                    while (position <= uncovered_interval.end) {
-                        if constexpr(BuiltinIntegral<T>) {
-                            value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
-                        } else {
-                            // Use a version with an out param.
-                            BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count, value);
-                        }
-                        tmp_node.init(value);
-                        if (tmp_node.is_below_high_water_mark()) {
-                            // Track the position for splitting.
-                            covered_positions.push_back(position);
-                            // Preserve the ancestor, if requested.
-                            if (_preserve_ancestors) {
-                                my_ancestors.push_back(new Node<T>(tmp_node.get_value()));
-                            }
-                        }
-                        // Verify if requested.
-                        if (_is_verifying_non_hwm_nodes) {
-                            if (tmp_node.is_below_high_water_mark() == false) {
-                                if (Collatz<T>::st_verify(value, my_high_water_mark) == false) {
-                                    throw std::logic_error("Node value " + to_string_any(value) + " didn't verify.  How?");
-                                }
-                            }
-                        }
-                        // Manually increment.
-                        if constexpr(BuiltinIntegral<T>) {
-                            position++;
-                        } else {
-                            mpz_add_ui(position.get_mpz_t(), position.get_mpz_t(), 1);
-                        }
-                    }
-                    // Now split the uncovered interval if we found any covered positions.
-                    if (!covered_positions.empty()) {
-                        // Mark this interval for deletion.
-                        split_interval_indexes[index] = 1;
-                        // Copy the start and end from the current const interval& so we can manipulate it.
-                        Interval<T> tmp_interval;
-                        tmp_interval.start = uncovered_interval.start;
-                        tmp_interval.end = uncovered_interval.end;
-                        // Loop through all the covered positions so we can split up the uncovered interval.
-                        for (const T& covered_position : covered_positions) {
-                            // Leading edge detection: if the position is on or before the start, push start forward and skip this loop.
-                            if (tmp_interval.start >= covered_position) {
-                                tmp_interval.start = covered_position + 1;
-                                continue;
-                            }
-                            // Drag the end back to the position right before the covered position.
-                            tmp_interval.end = covered_position - 1;
-                            // Add it to our local vector.
-                            my_new_uncovered_intervals.push_back(tmp_interval);
-                            // Update tmp_interval's start and end to go past the covered_position and all the way to the original end.
-                            // It'll get dragged back again if there's another covered position in this same uncovered interval.
-                            tmp_interval.start = covered_position + 1;
-                            tmp_interval.end = uncovered_interval.end;
-                        }
-                        // Now add the remainder left in tmp, unless it exceeds the original uncovered_interval's end.
-                        // This happens when the last covered_position was the end position.
-                        if (tmp_interval.start <= uncovered_interval.end) {
-                            my_new_uncovered_intervals.push_back(tmp_interval);
-                        }
-                    }
-                } catch (...) {
-                    #pragma omp critical
-                    {
-                        if (!eptr) {
-                            eptr = std::current_exception();
-                        }
-                    }
-                }
-            }
-        }
-
-        // Rethrow errors.
-        if (eptr != nullptr) {
-            std::rethrow_exception(eptr);
-        }
-
-        // Merge Ancestors.
-        if (_preserve_ancestors) {
-            for (std::vector<Node<T>*>& omp_ancestors : omp_local_ancestors_group) {
-                _ancestors.insert(_ancestors.end(), omp_ancestors.begin(), omp_ancestors.end());
-            }
-        }
-
-        // To avoid large scanning or copying of the vector, we're going to do things in a few specific steps.
-        // First, we need to flatten the new uncovered intervals into a single container, so we can access by index.
-        // Second, we remove the uncovered intervals we split by pulling from the newly uncovered intervals.
-        // Third, we transfer the remaining newly uncovered intervals .
-        // Fourth, we sort to allow merging and for sanity.
-        // Fifth, we merge to reduce memory.
-
-        // Step 1 -- Flatten the newly uncovered intervals.
-        size_t newly_uncovered_intervals_count = 0;
-        for (const std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
-            newly_uncovered_intervals_count += uncovered_intervals.size();
-        }
-        std::vector<Interval<T>> newly_uncovered_intervals(newly_uncovered_intervals_count);
-        size_t newly_uncovered_offset = 0;
-        for (std::vector<Interval<T>>& uncovered_intervals : omp_local_new_uncovered_intervals) {
-            std::move(uncovered_intervals.begin(), uncovered_intervals.end(), newly_uncovered_intervals.begin() + newly_uncovered_offset);
-            newly_uncovered_offset += uncovered_intervals.size();
-        }
-
-        // Step 2 -- Remove the uncovered intervals we split.
-        newly_uncovered_offset = 0;
-        for (size_t index = 0; index < split_interval_indexes.size(); index++) {
-            if (split_interval_indexes[index]) {
-                // Swap the item from the newly uncovered intervals and bump its offset.
-                _uncovered_intervals[index] = std::move(newly_uncovered_intervals[newly_uncovered_offset]);
-                newly_uncovered_offset++;
-            }
-        }
-
-        // Step 3 -- Transfer the remaining items.
-        if (newly_uncovered_offset < newly_uncovered_intervals.size()) {
-            size_t old_size = _uncovered_intervals.size();
-            _uncovered_intervals.resize(old_size + newly_uncovered_intervals.size() - newly_uncovered_offset);
-            std::move(newly_uncovered_intervals.begin() + newly_uncovered_offset, newly_uncovered_intervals.end(), _uncovered_intervals.begin() + old_size);
-        }
-
-        // Step 4 -- Sort the uncovered intervals so merging works correctly.  Since start always equals end, it's trivial.
-        tbb::parallel_sort(
-            _uncovered_intervals.begin(),
-            _uncovered_intervals.end(),
-            [](const Interval<T>& a, const Interval<T>& b) { return a.start < b.start; }
-        );
-
-        // Step 5 -- Merge neighboring intervals to reduce memory.
-        // Use a typical read-ahead/write-incremented scan with two indexes to avoid a temp vector.
-        if (_merge_intervals) {
-            if (!_uncovered_intervals.empty()) {
-                size_t write_index = 0;
-                bool adjacent = false;
-                for (size_t read_index = 1; read_index < _uncovered_intervals.size(); read_index++) {
-                    // If the next interval's start is less than or equal to our end + 1, we have an adjacent pair.
-                    // We'll trap this in a variable for GMP to avoid temporaries via the "+ 1" operation.
-                    if constexpr(BuiltinIntegral<T>) {
-                        adjacent = (_uncovered_intervals[read_index].start <= _uncovered_intervals[write_index].end + 1);
-                    } else if constexpr(GMPIntegral<T>) {
-                        static thread_local T delta = 0;
-                        mpz_sub(delta.get_mpz_t(), _uncovered_intervals[read_index].start.get_mpz_t(), _uncovered_intervals[write_index].end.get_mpz_t());
-                        adjacent = (mpz_cmp_ui(delta.get_mpz_t(), 1) <= 0);
-                    }
-                    if (adjacent) {
-                        // Intervals are adjacent.  Merge them.
-                        _uncovered_intervals[write_index].end = _uncovered_intervals[read_index].end;
-                    } else {
-                        // Intervals have a gap.  Move the write index to the next position and update it with data at the read index.
-                        write_index++;
-                        _uncovered_intervals[write_index] = _uncovered_intervals[read_index];
-                    }
-                }
-                // Now resize the vector.
-                _uncovered_intervals.resize(write_index + 1);
-            }
+        // Merge TLS data into our tree's trackers.
+        _uncovered_positions.clear();
+        for (const AddLevelTLS& storage : callback_storage) {
+            _uncovered_positions |= storage.uncovered_bitmap;
+            _ancestors.insert(_ancestors.end(), storage.new_ancestors.begin(), storage.new_ancestors.end());
         }
 
         // Persist the coverage to our new level.  It's just a sum of the uncovered size() values subtracted from the node total.
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
-        T uncovered = 0;
-        for (Interval<T>& uncovered_interval : _uncovered_intervals) {
-            if constexpr(BuiltinIntegral<T>) {
-                uncovered += uncovered_interval.size();
-            } else {
-                // Modify the variable directly, because .size() makes a lot of temps.
-                mpz_add(uncovered.get_mpz_t(), uncovered.get_mpz_t(), uncovered_interval.end.get_mpz_t());
-                mpz_sub(uncovered.get_mpz_t(), uncovered.get_mpz_t(), uncovered_interval.start.get_mpz_t());
-                mpz_add_ui(uncovered.get_mpz_t(), uncovered.get_mpz_t(), 1);
-            }
-        }
+        T uncovered = _uncovered_positions.cardinality();
         _coverage_map[_level_count] = BinaryTreeCoverage<T>(total - uncovered, total);
     }
 
