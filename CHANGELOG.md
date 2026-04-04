@@ -15,36 +15,51 @@ __System Build for All Tests__
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 * RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
-* Intel Core i5-14600K [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html) DDR5-6000CL30
+* Donor System: Intel Core i5-14600K [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html) DDR5-6000CL30
 
-(Note: when larger memory and/or high core count was required, a donor system with more RAM was used and is noted)
+(Note: when larger memory and/or high core count was required, the donor system with more RAM was used and is noted.)
 
 ### 3.5.0
 
 #### Interval Revamp for Memory Reduction
 
-We switched to CRoaring.
+We replaced `Interval<T>` logic with a roaring bitmap from [CRoaring](https://github.com/RoaringBitmap/CRoaring).  Previously, each
+`Interval` would require 16 or 32 bytes for `uint64_t` and `uint128_t`, respectively.  GMP's `mpz_class` was ~32 bytes each too.
+Now, a bitmap tracks node locations in either an array of type `uint16_t` for 2 bytes, a bitmap for 1 bit, or an RLE.  While the
+performance is variable based on density and distribution, it's drastically better than `Interval`.
 
-Peak RSS.  12 threads.
+Internally, CRoaring bitmaps are limited to 32 bits, and their 64-bit version would still limit our tree depth.  Therefore, we
+extended their bitmap logic with our own additional prefix, and wrapped it in a `NodeBitmap<T>` class.
+
+```
+Roaring Bitmap (2^32)    :  key (uint16_t) + suffix (uint16_t)
+Roaring64 Bitmap (2^64)  :  key (uint64_t) + suffix (uint16_t)  # Key limited to 48 bits logically.
+NodeBitmap<T> (unlimited):  prefix (T) + Roaring (uint16_t key + uint16_t suffix)
+```
+
+We gained both speed increase and memory reduction.  The following table shows the wall-clock time for `Interval` vs `NodeBitmap`.
+We used the donor system and 12 threads for all tests.
 
 | Levels | Data Type | Interval (MB) | CRoaring (MB) | Delta | Interval (sec) | CRoaring (sec) | Delta |
 | -----: | --------: | ------------: | ------------: | ----: | -------------: | -------------: | ----: |
-|      8 | uint64_t  |             9 |          todo |       |              0 |           todo |       |
-|      8 | uint128_t |             9 |          todo |       |              0 |           todo |       |
-|      8 | mpz_class |            13 |          todo |       |              0 |           todo |       |
-|     16 | uint64_t  |            10 |          todo |       |              0 |           todo |       |
-|     16 | uint128_t |            10 |          todo |       |              0 |           todo |       |
-|     16 | mpz_class |            13 |          todo |       |              0 |           todo |       |
-|     24 | uint64_t  |            16 |          todo |       |              0 |           todo |       |
-|     24 | uint128_t |            18 |          todo |       |              0 |           todo |       |
-|     24 | mpz_class |            21 |          todo |       |              1 |           todo |       |
-|     32 | uint64_t  |           204 |          todo |       |              1 |           todo |       |
-|     32 | uint128_t |           379 |          todo |       |              1 |           todo |       |
-|     32 | mpz_class |           340 |          todo |       |              5 |           todo |       |
-|     40 | uint64_t  |        18,000 |          todo |       |            174 |           todo |       |
-|     40 | uint128_t |        35,700 |          todo |       |            183 |           todo |       |
-|     40 | mpz_class |       ~52,000 |          todo |       |            820 |           todo |       |
+|      8 | uint64_t  |             9 |             9 |    0% |              0 |              0 |    0% |
+|      8 | uint128_t |             9 |             9 |    0% |              0 |              0 |    0% |
+|      8 | mpz_class |            13 |            13 |    0% |              0 |              0 |    0% |
+|     16 | uint64_t  |            10 |            10 |    0% |              0 |              0 |    0% |
+|     16 | uint128_t |            10 |            10 |    0% |              0 |              0 |    0% |
+|     16 | mpz_class |            13 |            13 |    0% |              0 |              0 |    0% |
+|     24 | uint64_t  |            16 |            14 |  -13% |              0 |              0 |    0% |
+|     24 | uint128_t |            18 |            14 |  -22% |              0 |              0 |    0% |
+|     24 | mpz_class |            21 |            16 |  -24% |              1 |              0 |    0% |
+|     32 | uint64_t  |           204 |            37 |  -82% |              1 |              1 |    0% |
+|     32 | uint128_t |           379 |            38 |  -90% |              1 |              1 |    0% |
+|     32 | mpz_class |           340 |            38 |  -89% |              5 |              4 |  -20% |
+|     40 | uint64_t  |        18,000 |         2,900 |  -84% |            174 |            141 |  -19% |
+|     40 | uint128_t |        35,700 |         3,000 |  -92% |            183 |            158 |  -14% |
+|     40 | mpz_class |       ~52,000 |         3,000 |  -94% |            820 |            668 |  -19% |
 
+This resolves the memory explosion problem preventing us from scaling beyond level ~48.  We will push higher limits after we've
+reviewed the FG-by-level-and-position optimization in our TODO list.
 
 ### 3.4.1
 

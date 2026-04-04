@@ -86,7 +86,14 @@ class FlatHashBitmapImpl {
     // Add a value to the bitmap.
     //
     void add(const T& value) {
-        prefix_t prefix = Traits::get_prefix(value);
+        // Prefix can be mpz_class, so use TLS and out&.
+        static thread_local prefix_t prefix;
+        if constexpr(BuiltinIntegral<T>) {
+            prefix = Traits::get_prefix(value);
+        } else {
+            Traits::get_prefix(value, prefix);
+        }
+        // Suffix is just a uint32_t.
         suffix_t suffix = Traits::get_suffix(value);
 
         auto [it, inserted] = _flat_map.try_emplace(prefix);
@@ -105,10 +112,20 @@ class FlatHashBitmapImpl {
     // This is the HALF-OPEN range (max is excluded).
     //
     void add_range(const T& start, const T& end) {
-        prefix_t start_prefix = Traits::get_prefix(start);
+        // Prefix can be mpz_class, so use TLS and out&.
+        static thread_local prefix_t start_prefix;
+        static thread_local prefix_t end_prefix;
+        if constexpr(BuiltinIntegral<T>) {
+            start_prefix = Traits::get_prefix(start);
+            end_prefix = Traits::get_prefix(end);
+        } else {
+            Traits::get_prefix(start, start_prefix);
+            Traits::get_prefix(end, end_prefix);
+        }
+        // Suffix is just a uint32_t.
         suffix_t start_suffix = Traits::get_suffix(start);
-        prefix_t end_prefix = Traits::get_prefix(end);
         suffix_t end_suffix = Traits::get_suffix(end);
+
         if (start_prefix == end_prefix) {
             // They all fall into the same prefix.  Call a single addRange() and then leave.
             auto [it, inserted] = _flat_map.try_emplace(start_prefix);
@@ -160,7 +177,14 @@ class FlatHashBitmapImpl {
     // Check for a value to exist in the bitmap.
     //
     bool contains(const T& value) const {
-        prefix_t prefix = Traits::get_prefix(value);
+        // Prefix can be mpz_class, so use TLS and out&.
+        static thread_local prefix_t prefix;
+        if constexpr(BuiltinIntegral<T>) {
+            prefix = Traits::get_prefix(value);
+        } else {
+            Traits::get_prefix(value, prefix);
+        }
+        // Suffix is just a uint32_t.
         suffix_t suffix = Traits::get_suffix(value);
 
         auto it = _flat_map.find(prefix);
@@ -178,7 +202,14 @@ class FlatHashBitmapImpl {
     // Removes an item from the bitmap.
     //
     void remove(const T& value) {
-        prefix_t prefix = Traits::get_prefix(value);
+        // Prefix can be mpz_class, so use TLS and out&.
+        static thread_local prefix_t prefix;
+        if constexpr(BuiltinIntegral<T>) {
+            prefix = Traits::get_prefix(value);
+        } else {
+            Traits::get_prefix(value, prefix);
+        }
+        // Suffix is just a uint32_t.
         suffix_t suffix = Traits::get_suffix(value);
 
         auto it = _flat_map.find(prefix);
@@ -259,7 +290,6 @@ class FlatHashBitmapImpl {
             // Add to the prefix key list.
             add_prefix_key(src_prefix);
             // Build the key on our map.
-            _flat_map.try_emplace(src_prefix);
             auto [it, last_inserted] = _flat_map.try_emplace(src_prefix);
             // Clone the src to our new bitmap using the overwrite method.
             bool successful = roaring::api::roaring_bitmap_overwrite(it->second, src_bitmap);
@@ -275,8 +305,10 @@ class FlatHashBitmapImpl {
     // Optimize
     // Calls the internal runOptimize() for each roaring map, which (I think) is an RLE analysis and/or compaction task.
     //
+    // Note, we already check for empty in remove(), so dead prefixes are taken care of.
+    //
     void optimize() {
-        for (auto& [key, bitmap] : _flat_map) {
+        for (auto& [prefix, bitmap] : _flat_map) {
             bitmap.runOptimize();
         }
     }
@@ -289,8 +321,8 @@ class FlatHashBitmapImpl {
     //
     size_t shrink_to_fit() {
         size_t total = 0;
-        for (auto& [key, bucket] : _flat_map) {
-            total += bucket.shrinkToFit();
+        for (auto& [prefix, bitmap] : _flat_map) {
+            total += bitmap.shrinkToFit();
         }
         return total;
     }
@@ -361,7 +393,7 @@ class FlatHashBitmapImpl {
     template<typename Func, typename TLS_Type>
     void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_r_v<void, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
+        static_assert(std::is_invocable_r_v<bool, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
 
         // Ensure the TLS has enough elements before proceeding.
         const size_t max_threads = policy == BitmapTransformerPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
@@ -428,9 +460,14 @@ class FlatHashBitmapImpl {
             }
         } else {
             // Parallel Path
-            // Work is threaded, breaking sequential guarantee.  Uses prefix OR range iteration for performance.
+            // Work is threaded, breaking sequential guarantee.  Uses CRoaring internals for performance.
+            //
+            // While throwing _sorted_prefixes at OMP might seem ideal, it would result in only a single thread working until level
+            // 32.  This is because CRoaring uses a 32-bit map (16 bit key, 16 bit suffix) internally.
+            //
+            // As such, we will read the internal high-low containers and iterate based on their type (array, bitmap, RLE).
 
-            // Loop through each prefix.  We pay threading cost per-prefix, but I believe the workload in the callback warrants it.
+            // Open the parallel region early and establish thread-locals.
             #pragma omp parallel default(none) shared(tls, atomic_stop, callback)
             {
                 // Get our thread ID.
@@ -472,14 +509,21 @@ class FlatHashBitmapImpl {
                     auto it = _flat_map.find(prefix);
                     const roaring::api::roaring_bitmap_t* roaring_bitmap = &(it->second.roaring);
                     const roaring::api::roaring_array_t* high_low_container = &(roaring_bitmap->high_low_container);
+                    // Hoist container bits.  Probably optimized away, but meh.
+                    const auto* high_low_container__keys = high_low_container->keys;
+                    const auto* high_low_container__containers = high_low_container->containers;
+                    const auto* high_low_container__typecodes = high_low_container->typecodes;
 
                     // Build the inner loop around the keys and sub containers.  Split it up with OMP.
                     #pragma omp for schedule(dynamic)
                     for (int high_low_index = 0; high_low_index < high_low_container->size; high_low_index++) {
+                        // Check for stop again at the chunk level.
+                        if (atomic_stop.load(std::memory_order_relaxed)) { continue; }
+
                         // Grab the roaring key, the container, and type code.
-                        roaring_key_t suffix_key = high_low_container->keys[high_low_index];
-                        const roaring::api::container_s* container = high_low_container->containers[high_low_index];
-                        roaring_typecode_t typecode = high_low_container->typecodes[high_low_index];
+                        roaring_key_t suffix_key = high_low_container__keys[high_low_index];
+                        const roaring::api::container_s* container = high_low_container__containers[high_low_index];
+                        roaring_typecode_t typecode = high_low_container__typecodes[high_low_index];
 
                         // Hoist and promote+shift the key into full suffix_t space.
                         suffix_t shifted_key = (suffix_t(suffix_key)) << Traits::ROARING_KEY_BITS;
@@ -505,7 +549,7 @@ class FlatHashBitmapImpl {
                                         mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                     }
                                     local_stop = callback(value, my_tls);
-                                    if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                    if (local_stop) {
                                         atomic_stop.store(true, std::memory_order_relaxed);
                                         break;
                                     }
@@ -529,15 +573,13 @@ class FlatHashBitmapImpl {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
                                         local_stop = callback(value, my_tls);
-                                        if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                        if (local_stop) {
                                             atomic_stop.store(true, std::memory_order_relaxed);
                                             break;
                                         }
                                         // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which we just processed.
                                         word &= (word - 1);
                                     }
-                                    // Leave the for() loop if we're stopping early.
-                                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
                                 }
                                 break;
                             }
@@ -555,20 +597,16 @@ class FlatHashBitmapImpl {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
                                         local_stop = callback(value, my_tls);
-                                        if (atomic_stop.load(std::memory_order_relaxed) || local_stop) {
+                                        if (local_stop) {
                                             atomic_stop.store(true, std::memory_order_relaxed);
                                             break;
                                         }
                                     }
-                                    // Break from the outer for() loop if we're stopping.
-                                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
                                 }
                                 break;
                             }
                         }
                     } // end omp for loop
-                    // Break the prefix loop if we're stopping.
-                    if (atomic_stop.load(std::memory_order_relaxed)) { break; }
                 } // end for prefix_index
             } // end omp parallel region
         } // end if serial/parallel

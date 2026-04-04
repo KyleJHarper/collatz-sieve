@@ -86,7 +86,11 @@ class Node {
 
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
         _is_initialized = true;
-        _value = value;
+        if constexpr(BuiltinIntegral<T>) {
+            _value = value;
+        } else {
+            mpz_set(_value.get_mpz_t(), value.get_mpz_t());
+        }
         _parent = parent;
 
         // Perform FG steps by loading them into an affine map so we can determine if this node hits the HWM or not.  We leverage

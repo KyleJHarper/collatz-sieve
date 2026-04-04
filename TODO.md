@@ -8,9 +8,6 @@ finding 2^109 lately.
 We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
 those last 19 places...
 
-## Switch to Roaring Bitmap
-The current node position strategy uses Interval<T>, which is 32-64 bytes each.  A roaring bitmap should help us.
-
 ## Sieve
 * Flesh this out so it's ironclad.
 * Fully implemented the forward-looking cache.
@@ -21,17 +18,14 @@ The current node position strategy uses Interval<T>, which is 32-64 bytes each. 
 ## Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
 
+## Optimize Hotspots
+* Temporary promotion to `typename U` for uint128_t on the uint64_t path is slowing down the 64-bit path... can we avoid this?
+* Walking the FG chain and Collatz sequence dominates runtime.  Can we formally define this?  Something like:
+  * `BinaryTreeMath<T>::st_get_fg_chain_by_level_and_position()` ??
 
 
 
-Need to parallelize the interval scaling; it's single-threaded.
-
-Need to get around the vector memory copy thing; RAM heavy but also single-threaded and slowest part.
-At minimum:
-    - Get rid of the old vector ASAP (manual GC call)
-
-Seems to be a few other places where single-threaded behavior kicks in.  Maybe add logging permanently at trace level?
-
+## Logs From 384-CPU System
 
 1 thread:
 ======================================

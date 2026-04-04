@@ -157,9 +157,12 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     struct AddLevelTLS {
         NodeBitmap<T> uncovered_bitmap;
         std::vector<Node<T>*> new_ancestors;
-        T value;
-        T positions[2];
-        Node<T> node;
+        T left_value;
+        T left_position;
+        Node<T> left_node;
+        T right_value;
+        T right_position;
+        Node<T> right_node;
     };
     void add_level() override {
         // Confirm the new level will fit, warn about verification, and then bump the count.
@@ -177,43 +180,59 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         // Now loop.
         _uncovered_positions.for_each_transformer(BitmapTransformerPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
             // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
-            if (cb_position == 0) { throw std::out_of_range("Position cannot be zero.  How did this happen?"); }
             if constexpr(BuiltinIntegral<T>) {
-                tls.positions[0] = (cb_position << 1) - 1;  // Left child.
-                tls.positions[1] = cb_position << 1;        // Right child.
+                tls.left_position = (cb_position << 1) - 1;
+                tls.right_position = cb_position << 1;
             } else {
-                mpz_mul_2exp(tls.positions[0].get_mpz_t(), cb_position.get_mpz_t(), 1);
-                mpz_sub_ui(tls.positions[0].get_mpz_t(), tls.positions[0].get_mpz_t(), 1);
-                mpz_mul_2exp(tls.positions[1].get_mpz_t(), cb_position.get_mpz_t(), 1);
+                mpz_mul_2exp(tls.left_position.get_mpz_t(), cb_position.get_mpz_t(), 1);
+                mpz_sub_ui(tls.left_position.get_mpz_t(), tls.left_position.get_mpz_t(), 1);
+                mpz_mul_2exp(tls.right_position.get_mpz_t(), cb_position.get_mpz_t(), 1);
             }
 
-            for (const T& position : tls.positions) {
-                // Calculate the value from position.  Use an out param on GMP path.
-                if constexpr(BuiltinIntegral<T>) {
-                    tls.value = BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count);
-                } else {
-                    BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count, tls.value);
-                }
+            // Unroll this loop manually.
+            // for (const T& position : tls.positions) {...}
 
-                // Initialize the node and test HWM for ancestry.
-                tls.node.init(tls.value);
-                if (_preserve_ancestors && tls.node.is_below_high_water_mark()) {
-                    tls.new_ancestors.push_back(new Node<T>(tls.value));
-                }
+            // Calculate the values from positions.  Use an out param on GMP path.
+            if constexpr(BuiltinIntegral<T>) {
+                tls.left_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.left_position, _level_count);
+                tls.right_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.right_position, _level_count);
+            } else {
+                BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.left_position, _level_count, tls.left_value);
+                BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.right_position, _level_count, tls.right_value);
+            }
 
-                // Perform verification, if requested.
-                if (_is_verifying_non_hwm_nodes) {
-                    if (tls.node.is_below_high_water_mark() == false) {
-                        if (Collatz<T>::st_verify(tls.value, add_level_high_water_mark) == false) {
-                            throw std::logic_error("Node value " + to_string_any(tls.value) + " didn't verify.  How?");
-                        }
+            // Initialize the node and test HWM for ancestry.
+            tls.left_node.init(tls.left_value);
+            tls.right_node.init(tls.right_value);
+            if (_preserve_ancestors) {
+                if (tls.left_node.is_below_high_water_mark()) {
+                    tls.new_ancestors.push_back(new Node<T>(tls.left_value));
+                }
+                if (tls.right_node.is_below_high_water_mark()) {
+                    tls.new_ancestors.push_back(new Node<T>(tls.right_value));
+                }
+            }
+
+            // Perform verification, if requested.
+            if (_is_verifying_non_hwm_nodes) {
+                if (tls.left_node.is_below_high_water_mark() == false) {
+                    if (Collatz<T>::st_verify(tls.left_value, add_level_high_water_mark) == false) {
+                        throw std::logic_error("Node value " + to_string_any(tls.left_value) + " didn't verify.  How?");
                     }
                 }
-
-                // Write the POSITION to the TLS bitmap if it didn't hit HWM.
-                if (tls.node.is_below_high_water_mark() == false) {
-                    tls.uncovered_bitmap.add(position);
+                if (tls.right_node.is_below_high_water_mark() == false) {
+                    if (Collatz<T>::st_verify(tls.right_value, add_level_high_water_mark) == false) {
+                        throw std::logic_error("Node value " + to_string_any(tls.right_value) + " didn't verify.  How?");
+                    }
                 }
+            }
+
+            // Write the POSITION to the TLS bitmap if it didn't hit HWM.
+            if (tls.left_node.is_below_high_water_mark() == false) {
+                tls.uncovered_bitmap.add(tls.left_position);
+            }
+            if (tls.right_node.is_below_high_water_mark() == false) {
+                tls.uncovered_bitmap.add(tls.right_position);
             }
 
             // Return false.  We have no stopping condition.
@@ -231,6 +250,11 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T uncovered = _uncovered_positions.cardinality();
         _coverage_map[_level_count] = BinaryTreeCoverage<T>(total - uncovered, total);
+
+        // Invoke optimize above level 32.
+        if (_level_count > 32) {
+            _uncovered_positions.optimize();
+        }
     }
 
 };
