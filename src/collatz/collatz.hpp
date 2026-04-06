@@ -446,7 +446,9 @@ class Collatz {
 
     //
     // For-Each Step
-    // Run through the sequence with a callback each step.  Caller MUST return true or false to stop or continue.
+    // Run through the sequence with a callback each step, including the initial value.
+    //
+    // Caller MUST return true or false to stop or continue.
     //
     template<typename Func>
     static void for_each_sequence_step(const T& initial_value, Func&& callback) {
@@ -693,6 +695,40 @@ class Collatz {
                     is_F = mpz_odd_p(current_value.get_mpz_t());
                 }
                 bool stop = callback(is_F);
+                return stop;
+            }
+        });
+    }
+
+
+
+    //
+    // For-Each FG Step
+    // Steps through a Collatz sequence using F and G steps instead of normal ones.
+    //
+    template<typename Func>
+    static void for_each_fg_step(const T& initial_value, Func&& callback) {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+
+        // Zero is a special case, mostly for BinaryTree building a root.
+        if (initial_value == 0) { return; }
+
+        // Call our basic Collatz iterator.
+        bool was_F = false;
+        Collatz<T>::for_each_sequence_step(initial_value, [&](const T& current_value) {
+            // When the previous step was F, skip the next step which is always the latter part of accerlated F(x).
+            if (was_F) {
+                // Reset it so we don't loop.
+                was_F = false;
+                return false;
+            } else {
+                if constexpr(BuiltinIntegral<T>) {
+                    was_F = (current_value & 1) == 1;
+                } else if constexpr(GMPIntegral<T>) {
+                    was_F = mpz_odd_p(current_value.get_mpz_t());
+                }
+                bool stop = callback(current_value);
                 return stop;
             }
         });

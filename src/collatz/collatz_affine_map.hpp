@@ -14,13 +14,13 @@
 // An FG chain can be stored and repsented as an affine map with powers of two and three, and with a constant portion.  This avoids
 // any realtime tracking of fractional values (floats).
 //
-// Additionally, by happenstance, we're safe regarding data type.  Here's the breakdown.
+// Note, there are overflow concerns:
 // The constant_portion grows the most when the chain is all F.  This worst case leaves constant_portion == ~3^k.  We need about
 // 1.6 bits to represent this in binary, so we get the following:
 //    64 bits ==> 40
 //   128 bits ==> 80
-// By chance, BinaryTree already ensures a level will fit when add_level() is called, based on the known (precalculated) inital
-// values whose sequences will fit within a bit size.  For uint64_t, this is 33.  For uint128_t, it is <<<TODO>>> (still calculating.)
+//
+// To resolve this, Node uses an upgraded T when nessary.  Anyone else using this needs to provide the same protection.
 //
 
 
@@ -175,7 +175,6 @@ class CollatzAffineMap {
 //
 // Note: This version has no calculate() method, because that would be silly.
 //
-template<AnySupportedIntegral T>
 class CollatzAffineMapShortcut {
     private:
     uint32_t _twos_exp = 0;

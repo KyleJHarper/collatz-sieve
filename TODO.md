@@ -19,9 +19,10 @@ those last 19 places...
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
 
 ## Optimize Hotspots
-* Temporary promotion to `typename U` for uint128_t on the uint64_t path is slowing down the 64-bit path... can we avoid this?
 * Walking the FG chain and Collatz sequence dominates runtime.  Can we formally define this?  Something like:
   * `BinaryTreeMath<T>::st_get_fg_chain_by_level_and_position()` ??
+  * Or, simply build a striding map?
+  * Does CollatAffineMapShortcut need `T`?  It never accepts or uses it... can't we ignore it?  We just need `u_value` for the sequence work.
 
 
 

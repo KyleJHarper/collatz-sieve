@@ -8,6 +8,7 @@
 #include <limits>
 #include <stdexcept>
 #include "collatz_affine_map.hpp"
+#include "collatz_affine_stride.hpp"
 
 
 
@@ -106,29 +107,24 @@ class Node {
         // There are two limiting factors.  One is the peak_by_bit, found in CollatzConstants.  The other is the power of three the
         // affine map shortcut will evaluate when is_below() is tested.
 
-        // Use thread-locals to avoid alloc(), especially on the GMP path.
-        static thread_local CollatzAffineMapShortcut<uint64_t> affine_map_64;
-        static thread_local CollatzAffineMapShortcut<uint128_t> affine_map_128;
-        static thread_local CollatzAffineMapShortcut<mpz_class> affine_map_mpz;
-
         // Use constexpr to branch at compile time, reducing our logic at runtime to a single branch/condition.
         if constexpr(NativeIntegral<T>) {
             // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
             if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
-                init_affine_helper(affine_map_64);
+                init_affine_helper<uint64_t>();
             } else {
-                init_affine_helper(affine_map_128);
+                init_affine_helper<uint128_t>();
             }
         } else if constexpr(ExtendedIntegral<T>) {
             // Dealing with 128 bits.  If it'll overflow, use mpz_class.
             if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
-                init_affine_helper(affine_map_128);
+                init_affine_helper<uint128_t>();
             } else {
-                init_affine_helper(affine_map_mpz);
+                init_affine_helper<mpz_class>();
             }
         } else {
             // Dealing with mpz_class.  Send as-is.
-            init_affine_helper(affine_map_mpz);
+            init_affine_helper<mpz_class>();
         }
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
@@ -150,33 +146,56 @@ class Node {
     //
     // Quick helper to DRY up affine logic during init().
     template<AnySupportedIntegral U>
-    inline void init_affine_helper(CollatzAffineMapShortcut<U>& affine_map) {
-        affine_map.reset();
+    inline void init_affine_helper() {
+        CollatzAffineMapShortcut affine_map;
         size_t count = 0;
         _fg_chain_length = get_level() - 1;
         // We need to elevate _value to type U in case it's not the same.
         static thread_local U u_value;
+        static thread_local U u_current_value;
         if constexpr(BuiltinIntegral<T> && BuiltinIntegral<U>) {
             // Both types are builtin.  They can cast directly, even if they're the same.  Dirt cheap, so don't overthink this.
             u_value = U(_value);
+            u_current_value = u_value;
         } else if constexpr(ExtendedIntegral<T> && GMPIntegral<U>) {
-            // Node is uint128_t but affine map is mpz_class.  Elevate.
+            // Node is uint128_t but required U is mpz_class.  Elevate.
             uint128_to_mpz(_value, u_value);
+            u_current_value = u_value;
         } else if constexpr(GMPIntegral<T> && GMPIntegral<U>) {
             // Both are GMP.  Just set, which is cheap.
             mpz_set(u_value.get_mpz_t(), _value.get_mpz_t());
+            mpz_set(u_current_value.get_mpz_t(), u_value.get_mpz_t());
         }
-        Collatz<U>::for_each_fg_chain_link(u_value, [&](bool is_F) {
-            if (is_F) {
-                affine_map.apply_F();
+        const size_t loops = _fg_chain_length / AffineStride::STRIDE_SIZE;
+        for(size_t i = 0; i < loops; i++) {
+            if constexpr(BuiltinIntegral<U>) {
+                // Basic arithemtic and masking is fine on this path.
+                const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u_current_value & AffineStride::STRIDE_MASK];
+                u_current_value = ((u_current_value * stride.multiply) + stride.add) >> stride.shift;
             } else {
-                affine_map.apply_G();
+                // GMP needs the UI extracted and cleaner calls to avoid temps.
+                uint64_t u64_value = u_current_value.get_ui();
+                const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u64_value & AffineStride::STRIDE_MASK];
+                mpz_mul_ui(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.multiply);
+                mpz_add_ui(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.add);
+                mpz_fdiv_q_2exp(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.shift);
             }
+            count += AffineStride::STRIDE_SIZE;
+        }
+        // Mop up leftovers after striding.  Drag count back by 1 because for_each() methods always consider initial_value as a step for callback().
+        count--;
+        Collatz<U>::for_each_fg_step(u_current_value, [&](const U& current_value) {
             count++;
-            return count >= _fg_chain_length;
+            if (count >= _fg_chain_length) {
+                // std::cout << "u_current_value=" << to_string_any(u_current_value) << ", current_value=" << to_string_any(current_value) << std::endl;
+                u_current_value = current_value;
+                return true;
+            }
+            return false;
         });
-        // Now decide if we hit HWM using is_below.  Callee handles GMP type to avoid alloc() for us.
-        _is_below_hwm = affine_map.is_below();
+
+        // Now compare the current value to our original value.
+        _is_below_hwm = u_current_value < u_value;
     }
 
 
