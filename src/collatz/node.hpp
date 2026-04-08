@@ -2,13 +2,14 @@
 
 #include "collatz.hpp"
 #include "binary_tree_math.hpp"
+#include "collatz_constants.hpp"
 #include "concepts.hpp"
 #include <gmp.h>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include "collatz_affine_map.hpp"
 #include "collatz_affine_stride.hpp"
+#include "count_trailing_helpers.hpp"
 
 
 
@@ -94,37 +95,25 @@ class Node {
         }
         _parent = parent;
 
-        // Perform FG steps by loading them into an affine map so we can determine if this node hits the HWM or not.  We leverage
-        // the shortcut version because there's no need to store the final value below _value, only the _is_below_hwm flag.
-        //
-        // We will create a unique thread-local for uint64_t, uint128_t, and mpz_class for a few reasons:
-        //   1.  It prevents a lot of realloc() with mpz_class.
-        //   2.  It lets us pick a larger type for affine testing while keeping Node's T smaller.
-        // For example, uint64_t overflows on a Node in level 33 because the Collatz<uint64_t>::for_each_fg_chain_link() overflows
-        // on one of the Collatz steps.  But after determining _is_below_hwm, we don't need the overflowed value.  By upgrading at
-        // runtime to a larger T (e.g. uint128_t) for affine testing, we can keep Node's T (e.g. uint64_t) smaller, saving RAM.
-        //
-        // There are two limiting factors.  One is the peak_by_bit, found in CollatzConstants.  The other is the power of three the
-        // affine map shortcut will evaluate when is_below() is tested.
-
-        // Use constexpr to branch at compile time, reducing our logic at runtime to a single branch/condition.
+        // Call a helper with a promoted type to process the sequence and build our FG/HWM info.  Doing this allows trees to build
+        // up to 2^<bit-1>.
         if constexpr(NativeIntegral<T>) {
             // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
             if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
-                init_affine_helper<uint64_t>();
+                init_sequence_helper<uint64_t>();
             } else {
-                init_affine_helper<uint128_t>();
+                init_sequence_helper<uint128_t>();
             }
         } else if constexpr(ExtendedIntegral<T>) {
             // Dealing with 128 bits.  If it'll overflow, use mpz_class.
             if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
-                init_affine_helper<uint128_t>();
+                init_sequence_helper<uint128_t>();
             } else {
-                init_affine_helper<mpz_class>();
+                init_sequence_helper<mpz_class>();
             }
         } else {
             // Dealing with mpz_class.  Send as-is.
-            init_affine_helper<mpz_class>();
+            init_sequence_helper<mpz_class>();
         }
 
         // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
@@ -146,10 +135,9 @@ class Node {
     //
     // Quick helper to DRY up affine logic during init().
     template<AnySupportedIntegral U>
-    inline void init_affine_helper() {
-        CollatzAffineMapShortcut affine_map;
-        size_t count = 0;
+    inline void init_sequence_helper() {
         _fg_chain_length = get_level() - 1;
+
         // We need to elevate _value to type U in case it's not the same.
         static thread_local U u_value;
         static thread_local U u_current_value;
@@ -166,33 +154,40 @@ class Node {
             mpz_set(u_value.get_mpz_t(), _value.get_mpz_t());
             mpz_set(u_current_value.get_mpz_t(), u_value.get_mpz_t());
         }
-        const size_t loops = _fg_chain_length / AffineStride::STRIDE_SIZE;
-        for(size_t i = 0; i < loops; i++) {
-            if constexpr(BuiltinIntegral<U>) {
-                // Basic arithemtic and masking is fine on this path.
-                const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u_current_value & AffineStride::STRIDE_MASK];
-                u_current_value = ((u_current_value * stride.multiply) + stride.add) >> stride.shift;
-            } else {
-                // GMP needs the UI extracted and cleaner calls to avoid temps.
-                uint64_t u64_value = u_current_value.get_ui();
-                const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u64_value & AffineStride::STRIDE_MASK];
-                mpz_mul_ui(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.multiply);
-                mpz_add_ui(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.add);
-                mpz_fdiv_q_2exp(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), stride.shift);
-            }
-            count += AffineStride::STRIDE_SIZE;
+
+        // Now loop and stride.
+        size_t strides = _fg_chain_length / AffineStride::STRIDE_SIZE;
+        size_t steps_taken = strides * AffineStride::STRIDE_SIZE;
+        while (strides > 0) {
+            AffineStride::apply_stride(u_current_value);
+            strides -= 1;
         }
-        // Mop up leftovers after striding.  Drag count back by 1 because for_each() methods always consider initial_value as a step for callback().
-        count--;
-        Collatz<U>::for_each_fg_step(u_current_value, [&](const U& current_value) {
-            count++;
-            if (count >= _fg_chain_length) {
-                // std::cout << "u_current_value=" << to_string_any(u_current_value) << ", current_value=" << to_string_any(current_value) << std::endl;
-                u_current_value = current_value;
-                return true;
+
+        // Mop up leftovers after striding.
+        while (steps_taken < _fg_chain_length) {
+            // We're going to shift no matter what, so all we're checking for is odd.
+            if constexpr(BuiltinIntegral<T>) {
+                // If it's odd, F step.
+                if (u_current_value % 2 == 1) {
+                    u_current_value = (u_current_value << 1) + u_current_value + 1;
+                }
+            } else {
+                // If it's odd, F step.
+                if (mpz_odd_p(u_current_value.get_mpz_t())) {
+                    mpz_mul(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());
+                    mpz_add(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());
+                }
             }
-            return false;
-        });
+            // Always even at this point.  Shift by CTZ, clamped by FG chain length.
+            // This technique isn't faster for 64/128-bit types, but it's faster for GMP, so we'll do it.
+            size_t zeros_count = std::min(static_cast<size_t>(count_trailing_zeros(u_current_value)), _fg_chain_length - steps_taken);
+            if constexpr(BuiltinIntegral<T>) {
+                u_current_value >>= zeros_count;
+            } else {
+                mpz_tdiv_q_2exp(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), zeros_count);
+            }
+            steps_taken += zeros_count;
+        }
 
         // Now compare the current value to our original value.
         _is_below_hwm = u_current_value < u_value;

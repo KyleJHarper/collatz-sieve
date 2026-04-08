@@ -1,5 +1,6 @@
 #pragma once
 #include <concepts>
+#include "concepts.hpp"
 #include <stdint.h>
 #include <stddef.h>
 #include <array>
@@ -74,4 +75,46 @@ namespace AffineStride {
     static constexpr size_t STRIDE_SIZE = 8;
     static constexpr uint64_t STRIDE_MASK = (1ULL << STRIDE_SIZE) - 1;
     static constexpr auto STRIDE_TABLE = build_stride_table<Stride, STRIDE_SIZE>();
+
+    // Helpers to apply a stride, or several.
+    template<AnySupportedIntegral T>
+    static inline void apply_stride(T& value) {
+        if constexpr(BuiltinIntegral<T>) {
+            // Basic arithemtic and masking is fine on this path.
+            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[value & AffineStride::STRIDE_MASK];
+            value = ((value * stride.multiply) + stride.add) >> stride.shift;
+        } else {
+            // GMP needs the UI extracted and cleaner calls to avoid temps.
+            uint64_t u64_value = value.get_ui();
+            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u64_value & AffineStride::STRIDE_MASK];
+            mpz_mul_ui(value.get_mpz_t(), value.get_mpz_t(), stride.multiply);
+            mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), stride.add);
+            mpz_fdiv_q_2exp(value.get_mpz_t(), value.get_mpz_t(), stride.shift);
+        }
+    }
+    //
+    //
+    // Unroll 2 strides
+    template<AnySupportedIntegral T>
+    static inline void apply_stride_2x(T& value) {
+        apply_stride(value);
+        apply_stride(value);
+    }
+    //
+    //
+    // Unroll 4 strides
+    template<AnySupportedIntegral T>
+    static inline void apply_stride_4x(T& value) {
+        apply_stride_2x(value);
+        apply_stride_2x(value);
+    }
+    //
+    //
+    // Unroll 8 strides
+    template<AnySupportedIntegral T>
+    static inline void apply_stride_8x(T& value) {
+        apply_stride_4x(value);
+        apply_stride_4x(value);
+    }
+
 }

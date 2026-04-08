@@ -1,47 +1,97 @@
-# The Harper Sieve
+# Harper's Sieve of Collatz
 
 __A Monotonic Binary-Tree Reduction of the Collatz Search Space__
 
 # Overview
 
-An implementation of the data structure outlined in Kyle Harper's analysis and optimization of the Collatz Conjecture's problem
-space.  It builds a Binary Tree in a unique, deterministic manner which allows the classification of parents and children into
-__F-G Chains__.  These chains create _coverage_ of __High-Water Mark__ nodes and therefore subtrees.  The result eliminates large
-subtrees, leaving less than 1% of the search space N after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU,
-requiring only 250MB RAM.
+An implementation of the data structure and sieve outlined in Kyle Harper's analysis and optimization of the
+[Collatz Conjecture's](https://en.wikipedia.org/wiki/Collatz_conjecture) problem space.
 
-## An Aside
+The code builds a binary tree in a unique, deterministic manner which allows the classification of parents and children into
+__F-G Chains__.  These chains create _coverage_ via __High-Water Mark__ nodes.  The result eliminates large subtrees, leaving less
+than 1% of the search space ℕ after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU, requiring only ~40MB of
+memory.  Larger trees are possible, using more resources, and growing closer to 100% coverage (though never 100%).  The following
+table shows coverage using `uint64_t` on a desktop PC (i5-14600, DDR5).
 
-This project started as a curiosity years ago.  I never intended to take the programming portion as far as I did, nor write an API
-for building the data structure supporting my hypothesis.
+| Tree Levels | Coverage | Time (sec) |
+| ----------: | -------: | ---------: |
+|          10 |   92.58% |         <1 |
+|          20 |   97.14% |         <1 |
+|          30 |   98.81% |         <1 |
+|          35 |   99.12% |          2 |
+|          40 |   99.34% |         50 |
 
-Yet here we are...
+This implementation is written in C++ and supports fixed-widths of 64 and 128 bits, as well as arbitrary precision via
+[GMP](https://gmplib.org/).
 
-## Present State
+Starting with version 3.x, we attempt to follow [SemVer](https://semver.org/).
 
-The project is semi-active.  I have no intention to add more features, but I will fix bugs, if any.  I will also consider merge
-requests, especially in these areas:
+### An Aside from Kyle
 
-* Bug fix.
-* Non-breaking optimization.
-* Save/load features.
+This was an R&D project, focused on education and delving into insights I garnered after many, many hours with a pen and paper.
+Building a stable API happened as a natural consequence during development.  Take it for what it is and don't overthink it. If you
+hate C++, port it.  If you hate _my_ C++, fork it.  If you need a feature, make a pull request.
+
+I __highly__ recommend you read [the paper (PENDING)]() on this before you start playing with the code.
+
+
+# Present State
+
+This project is semi-active.  No new features are planned, but bugs will be fixed, if any.  Merge requests are welcome, especially
+in the following areas:
+
+* Bug fixes for legtimate correctness issues.
+* Non-breaking optimizations.
 * Build and portability updates, especially for non-linux.
+* Improvements to test tooling.
 
-The following features should work:
+# API and Programs
 
-* The `BinaryTree` interface, including both `BinaryTreeMaterialized` and `BinaryTreeImplicit`.
-* The `Collatz` class and its features.
-* The `Node` class and its features.
-* The `BinaryTreeMath` and logic it provides, tied to the data structure of Harper's technique.
+### Quick Start
 
-The following progams have these statuses:
+Literally this:
+
+```
+#include "collatz/binary_tree.hpp"
+
+BinaryTree<uint64_t> tree(3);
+```
+
+### Limits
+
+The API accepts any native, fixed-width type up to 128 bits, such as `uint8_t`, `uint16_t`, etc.  GCC/Clang's 128-bit type has been
+typedef'd to `uint128_t` for convenience.  The API expects an unsigned type.
+
+The API supports >128 bits with GMP's `mpz_class`.  It has been highly optimized, but is still 2-5x slower than native types for
+the same bit size.
+
+### Classes & Facades
+
+`BinaryTree` A facade which builds a tree of type `BinaryTreeMaterialized` or `BinaryTreeImplicit`, removing nodes and subtrees
+meeting High-Water Mark.  You may build an implicit or materialized tree directly, but you probably shouldn't.  Once built, the
+uncovered positions are provided in a vector of `Node` objects (Materialized) or a `NodeBitmap` bitmap (Implicit).
+
+`Collatz` A class which can build a sequence and give you warm-fuzzy OOP feels, but its real value is in the static members for
+efficiently processing steps, finding metadata, and so forth.
+
+`BinaryTreeMath` A static-only class which contains the math supporting the data structure and the algorithms.
+
+`NodeBitmap` A facade in front of the `FlatHashBitmapImpl` (only implementation thus far) which extends a
+[CRoaring Bitmap](https://github.com/RoaringBitmap/CRoaring) to support >64 bits.  This class is extremely useful for compact
+representation of on/off or true/false flags for node positions in a tree.
+
+Other helpful tools exist in namespaces, such as `CollatzConstants`, `Exponents`, `AffineStride`, etc.
+
+### Programs
+
+Several programs are emitted (or are written in Python).
 
 | Program               | Status     | Description |
 | :-------------------- | :--------- | :---------- |
 | `affine_shortcut.py`  | Working    | Empirically tests the worst-case scenario of our affine shortcut technique. |
 | `binary_stepper.py`   | Working    | Emits the binary representation of N-args (numbers) for comparison. |
 | `collatz_compression` | Working    | Demonstrates some of the optimizations when testing sequences. |
-| `coverage`            | Working    | Builds a tree level by level and reports info about coverage. |
+| `coverage`            | Working    | Builds a tree level-by-level and reports info about coverage. |
 | `draw_tree.py`        | Working    | Makes an SVG or PNG of our Binary Tree structure. |
 | `integer_table.py`    | Working    | Builds a table in multiple bases, with steps, and odd-even chains. |
 | `junk`                | Special    | Debugging cpp for quick one-off testing.  You can ignore it. |
@@ -52,55 +102,21 @@ The following progams have these statuses:
 | `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
 | `sieve_stuff`         | Unfinished | Tool to measure effects of an LRU to aid in generic sieve. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
-
-## Building
-
-The build system is CMake and should be semi-easy to use.  The `rebuild.sh` script helps clone repos, link things, and execute
-`cmake` to build and link programs.
-
-If you're a build expert and want to make an MR to make this smoother for others, please do.  Thanks.
-
-Once built, you can execute `tests.sh` to run all the unit test programs.  These serve as regression testing programs too.
-
-Builds with both `gcc` and `clang` work and pass all tests.
-
-## Performance Comparisons
-
-I came to reduce search space, nothing more.  But comparison to others' works isn't apples-to-apples.
-
-Let's discuss...
-
-Many others have built programs.  Some leverage CPUs, GPUs, and even distributed workloads across supercomputers.  Chief among
-these is the project led by [David Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).  His paper addresses most
-of the history and performance markers leading up to his work in achieving 2^71 sequential testing.  You should read it.
-
-In his work, Barina et al. leverages thousands of CPUs and GPUs across supercomputers in a distributed workload.  He graciously
-includes details of the volume of time, and it's staggering: 12,395 CPU-years and 159 GPU-years.
-
-The problem with these types of numbers is they are hardware dependant.  We could build an ASIC to test faster, but we haven't
-reduced the search space.  Both Barina's, my, and others' techniques address both search space reduction (test fewer numbers by
-convention) and time complexity (test unskipped numbers faster).  Distinguishing between which ones provide overall performance
-gains can be tricky.  So instead, I will simply put some basic values here, and (try to) remember to link to my final research
-paper with more details later.
-
-### Space Complexity
-
-The nature of the `BinaryTree` reduces search space.  It is fully deterministic and therefore a simple metric to calculate and
-emit.  The following table was built using an Intel i5-14600k (12 cores enabled) with DDR-6000.  It is a desktop PC.
-
-| Tree Levels | Coverage | Time (sec) |
-| ----------: | -------: | ---------: |
-|          10 |   92.58% |         <1 |
-|          20 |   97.14% |         <1 |
-|          30 |   98.81% |         <1 |
-|          35 |   99.12% |          2 |
-|          40 |   99.34% |        120 |
-
-### Time Complexity
-
-Time complexity involves all manner of optimizations (code) and will be available when I get the `Sieve` class finished.
-
-TODO
+| `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
 
 
+# Build, Requirements, and Environment
 
+While other compilers, platforms, and standards might work, we have only built and tested using:
+
+* GCC and Clang compilers.
+* Linux (specifically, Ubuntu 24.04)
+* C++20
+* jemalloc via LD_PRELOAD (recommended, not required)
+* Libraries as defined in CMakeLists (OMP, GMP, etc)
+* Libraries cloned via `rebuild.sh`
+
+The build system is CMake and should be (semi) easy-to-use.  The `rebuild.sh` script helps clone repos, link things, and execute
+`cmake` to build and link programs.  If you're a build expert and want to make an MR to make this smoother for others, please do.
+
+Once built, you can execute `tests.sh` to run all the unit/regression/whatever test programs.  This too could use polish.

@@ -1,27 +1,26 @@
 # Overview
 
-### Branching
-
-Historically, all work was done in "master".  We will use "dev" for all development now.  We can feature branch if needed later.
-
-### Tags
-
-SemVer, mostly.
-
-# Change Log
-
 __System Build for All Tests__
+
 * Ubuntu 24.04 64-bit, Desktop Version
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
 * RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
 * Donor System: Intel Core i5-14600K [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html) DDR5-6000CL30
 
-(Note: when larger memory and/or high core count was required, the donor system with more RAM was used and is noted.)
+Note: when larger memory and/or high core count was required, the donor system with more RAM was used and is noted.
 
-### 3.5.0
+# Version History
 
-#### Interval Revamp for Memory Reduction
+
+## 3.6.0
+
+### Affine Strides
+
+
+## 3.5.0
+
+### Interval Revamp for Memory Reduction
 
 We replaced `Interval<T>` logic with a roaring bitmap from [CRoaring](https://github.com/RoaringBitmap/CRoaring).  Previously, each
 `Interval` would require 16 or 32 bytes for `uint64_t` and `uint128_t`, respectively.  GMP's `mpz_class` was ~32 bytes each too.
@@ -50,7 +49,7 @@ We used the donor system and 12 threads for all tests.
 |     16 | mpz_class |            13 |            13 |    0% |              0 |              0 |    0% |
 |     24 | uint64_t  |            16 |            14 |  -13% |              0 |              0 |    0% |
 |     24 | uint128_t |            18 |            14 |  -22% |              0 |              0 |    0% |
-|     24 | mpz_class |            21 |            16 |  -24% |              1 |              0 |    0% |
+|     24 | mpz_class |            21 |            16 |  -24% |              1 |              1 |    0% |
 |     32 | uint64_t  |           204 |            37 |  -82% |              1 |              1 |    0% |
 |     32 | uint128_t |           379 |            38 |  -90% |              1 |              1 |    0% |
 |     32 | mpz_class |           340 |            38 |  -89% |              5 |              4 |  -20% |
@@ -61,13 +60,13 @@ We used the donor system and 12 threads for all tests.
 This resolves the memory explosion problem preventing us from scaling beyond level ~48.  We will push higher limits after we've
 reviewed the FG-by-level-and-position optimization in our TODO list.
 
-### 3.4.1
+## 3.4.1
 
-#### Restructure of BinaryTree Files
+### Restructure of BinaryTree Files
 
 The BinaryTree classes were a bit crammed into a single file, so these were moved around.
 
-#### Performance Regression
+### Performance Regression
 
 The `mpz_class` variation of the tree slowed a lot due to changes in `BinaryTreeMath`, specifically for `st_reverse_low_bits()`
 and `st_node_value_by_position_and_level()`.  I created overloads which accept a `T& out` param.  Performance restored, however
@@ -79,9 +78,9 @@ performance is still good.
 splitting, which beats the allocator into the dirt.  There's a new change coming in 3.5.0 that should help with this, and we'll
 re-evaluate then.~~  Allocator thrash is still an issue, and the 3.5.0 changes should help.
 
-### 3.4.0
+## 3.4.0
 
-#### Verification of Non High-Water Mark Nodes
+### Verification of Non High-Water Mark Nodes
 
 When building a tree, the nodes which don't meet HWM (directly or by ancestor) need to be checked.  For example, the number `14` is
 below the HWM because of the `G` step on node `2`.  The value becomes `7`.  That node isn't a HWM node, descendant of one, nor has
@@ -100,7 +99,7 @@ The performance implication was heavy at first, nearly +300% the time to build a
 High-Water Mark tracker inside the hot loop, the performance hit was only +75% (level 38 took 70s instead of 40).  Obviously, the
 performance remains the same if verification is disabled.
 
-#### High-Performance Verification
+### High-Performance Verification
 
 Oddly enough, I never finished writing a high-speed static verification.  There's now `Collatz<T>::st_verify()` and helpers to
 verify a value as fast as possible and nothing more.  The `collatz_compression` needed some updating for testing, and I found GMP
@@ -109,14 +108,14 @@ received some big benefits from affine compression of ones-steps (0b..1111) due 
 It handles auto-upgrading to avoid overflows, which means the user can send any value of their given type, and we'll upgrade for
 testing if needed behind the scenes.
 
-#### CollatzConstants
+### CollatzConstants
 
 Moved `CollatzConstants` to its own file.  Should've always been this way.
 
 
-### 3.3.0
+## 3.3.0
 
-#### Bit Reversal Optimization on BinaryTree
+### Bit Reversal Optimization on BinaryTree
 
 The bulk of all work for both tree types in `add_level()` is the `Node::init()` logic.  Deeper down, this uses
 `BinaryTreeMath::st_reverse_low_bits(bits)`.  Originally, we shifted bits around naively in a `for` loop, avoiding any intrinsics
@@ -135,9 +134,9 @@ Note: the intrinsic `__builtin_bitreverse64()` was only operational via `clang++
 `clang++` build and found within +/-5%.  Additionally, I spent a few hours trying to find a way to perform bit reversal on a GMP
 `mpz_class` type only to end up frustrated and slower than simply testing bits and assigning them.
 
-### 3.2.0
+## 3.2.0
 
-#### Affine Map Shortcut
+### Affine Map Shortcut
 
 The math turned out to be valid, so I added `CollatzAffineMapShortcut` and used it in `Node::init()`.  This made a minor (~5%)
 performance boost for `uint64_t`, a moderate (~15%) performance boost for `uint128_t`, and a major (~35%) performance boost for
@@ -178,9 +177,9 @@ same tree with `uint64_t` required half the memory: ~6.2GB (peak RSS) and ~1.9GB
 An additional benefit is speed: the `uint64_t` version takes about 80% as long as the `uint128_t`.  Which, to be fair, is a huge
 credit the compiler and hardware's ability to handle 128-bit types so well on a 64-bit system.
 
-### 3.1.0
+## 3.1.0
 
-#### Peak By Bit
+### Peak By Bit
 The CPU-only version was superseded by the CPU/GPU version which can use either (but not both at once).
 
 Improvements were made to the GPU version (always uint128_t):
@@ -197,11 +196,11 @@ Improvements were made to the CPU version, and a dedicated `Collatz<T>::st_get_p
 * For 64- and 128-bit integrals, performance went from 25,000,000/sec to approximately 400,000,000/sec.
 * For GMP, performance went from 15,000,000/sec to approximately 140,000,000/sec.  Mostly from alloc() reduction.
 
-#### Affine Map
-Removed all of the `tls_fg_*` stuff from `Node` and replaced it with CollatzAffineMap.  This resulted in a 2-3x boost in speed for
-native and extended integrals, and a 20-30% boost for GMP.
+### Affine Map
+Removed all of the `tls_fg_*` stuff from `Node` and replaced it with `CollatzAffineMap`.  This resulted in a 2-3x boost in speed
+for native and extended integrals, and a 20-30% boost for GMP.
 
-#### Implicit Tree RAM
+### Implicit Tree RAM
 The `BinaryTreeImplicit` implementation consumed too much memory because of the `Interval` tracking, which was copied between
 levels and then duplicated several times over.
 
@@ -215,23 +214,23 @@ I performed a test with a 38 level tree and found the following optimizations.
 
 __Note__: Bytes are RSS, not private in-use.  True bytes used spike near the table's values, but drop to ~3.7GB afterward.
 
-#### Draw Tree (Python Diagrammer)
+### Draw Tree (Python Diagrammer)
 Updated the Python version of the BinaryTree and Node classes to be 1-based so I could fix the `draw_tree.py` script.
 
 
-### 3.0.0
+## 3.0.0
 New version to support a plethora of changes, namely the change to an implicit tree.
 
 Optimizations were applied in several areas related to parallel workload, tracking, and memory management.  Special care was taken
 with OMP loops and tight loops to avoid blocking and barriers, and to spread load evenly while ensuring `thread_local` storage
 (TLS) alleviated allocation overhead.  Trees (_implicit_ trees) are now built with only a few hundred allocs().
 
-#### Math Pass
+### Math Pass
 While functional, some of the math was confusing because it started level numbering at 0 instead of 1.  This made sense from a
 programming standpoint (i.e. indexing) but created a problem: positions are 1-based but levels are 0-based.  The code was updated
 to treat levels as 1-based.
 
-#### Implicit Tree (Memory Reduction)
+### Implicit Tree (Memory Reduction)
 The `BinaryTree` class was turned into a facade with an interface called `IBinaryTreeBackend`.  The original logic which created
 nodes in memory was renamed to `BinaryTreeMaterialized` and a new tree was added called `BinaryTreeImplicit`.  Both implementations
 use `BinaryTreeMath` and provide an equivalent represenation of the data structure for our research.
@@ -243,7 +242,7 @@ created when we build a materialized tree.
 
 It is slightly slower, but uses drastically less memory, allowing for much deeper level building.
 
-##### CPU -- Materialized w/Pruning vs Implicit
+#### CPU -- Materialized w/Pruning vs Implicit
 
 CPU time grows linearly, averaging ~10% slower for Implicit vs Materialized trees.
 
@@ -265,7 +264,7 @@ CPU time grows linearly, averaging ~10% slower for Implicit vs Materialized tree
 |          20 | mpz_class |                       63 |                   72 |
 |          23 | mpz_class |                      422 |                  492 |
 
-##### RAM -- Materialized w/Pruning vs Implicit
+#### RAM -- Materialized w/Pruning vs Implicit
 
 Memory is increasingly smaller (vanishing) for Implicit vs Materialized as levels grow.
 
@@ -287,27 +286,27 @@ Memory is increasingly smaller (vanishing) for Implicit vs Materialized as level
 |          20 | mpz_class |            1,081,232 |          237,736 |
 |          23 | mpz_class |            6,714,152 |        1,548,672 |
 
-#### Coverage Now Supports 128-Bit Integral
+### Coverage Now Supports 128-Bit Integral
 The `coverage` program now supports `uint128_t`.  It will auto-upgrade from `uint64_t` if the requested level exceeds the max for a
 tree of that type.  The auto-upgrade to `mpz_class` works too, but at this point I've only calculated 2^109, so it's premature.
 
-#### Forward-Looking Cache (LRU Cache) on Sieve
+### Forward-Looking Cache (LRU Cache) on Sieve
 A basic `ForwardLookingCache` was created and is available to the sieve class, but it hasn't been implemented.  The sieve also has
 known bugs, particularly with OMP, and has hence been commented out.  The addition of an Implicit tree further changes how a sieve
 should be built, because there is no `level_map` anymore.  We will probably hide that behind a shared item in the IFace and tell
 the sieve to use it instead of talking directly to a "map".
 
-### 2.1.0
+## 2.1.0
 Sieve works and produces values based on the survivors of a BinaryTree.  Supports batch `next()`.
 
-### 2.0.0
+## 2.0.0
 BinaryTreeMath is now rooted at 1 by default.  This is a major breaking change, hence the version bump.
 
 All the python tools are going to need to be adjusted, or retired if not needed anymore.
 
 The major fix will be to the tools which create, walk, or diagram trees (e.g.: tools/draw_tree.py).
 
-### 1.4.0
+## 1.4.0
 The BinaryTree and its associated BinaryTreeMath now support building a 1-based (root node == 1) tree.  This wasn't necessary for
 my purposes, but it aligns with how people often view perfect binary trees.  It has zero effect on my coverage or testing, so I
 will likely switch to it as the default in an upcoming version.
@@ -321,7 +320,7 @@ all nodes start at level 1 (from the 0-based original approach).
 * The ancestor searching provides the same results: coverage of an ancestor happens at the same descendant regardless of 0-based or
 1-based tree structure, which was expected but nice to see.
 
-### 1.3.0
+## 1.3.0
 Moved all the math for the BinaryTree into BinaryTreeMath.  This helped decouple Node from BinaryTree, and provides a cleaner way
 to handle the math across all programs and classes.
 
@@ -360,12 +359,12 @@ Confirmed that none of these changes affected the `performance_stats` output.  W
 
 Started on an update for the Ancestor tracking, but I'm still in flux on what this will do.  Need to output a more meaninful table.
 
-### 1.2.0
+## 1.2.0
 The high-water mark ancestors are now trackable in the BinaryTree.  It added about 1% overhead.
 
 Fixed a value in the 1.1.0 table below.  I did a timing test on the wrong machine.  Fixed the CPU time.
 
-### 1.1.0
+## 1.1.0
 When `prune` is enabled, the BinaryTree will also remove parent nodes at the end of `add_level()`.  This cuts the tree in half
 (RAM) without affecting the `_coverage_map` data.
 
@@ -378,7 +377,7 @@ When `prune` is enabled, the BinaryTree will also remove parent nodes at the end
 | 1.0.0   | mpz_class |     363,000 |     393,216 |               8 |
 | 1.1.0   | mpz_class |     153,912 |     393,216 |               8 |
 
-### 1.0.0
+## 1.0.0
 The first full implementation of my algorithm!
 
 BinaryTree now supports a `prune` option, which will remove nodes that hit the high-water mark.
@@ -468,7 +467,7 @@ kyle@green-machine:~/Desktop/repos/3n1 (dev)$ bin/coverage -l 32 -v
 [2025-08-12 19:18:26] [info] Global Coverage: 98.9325% (8498236424/8589934590)
 ```
 
-### 0.8.1
+## 0.8.1
 Final allocation changes are made.  We reduced the GMP copying and reallocations.  Here are the results:
 
 | Version | Data Type | RAM (bytes) | RSS (bytes) | CPU (ms, 1 thr) |
@@ -483,6 +482,7 @@ Final allocation changes are made.  We reduced the GMP copying and reallocations
 | 0.8.1   | mpz_class |   9,438,816 |  10,747,904 |             187 |
 
 And here's the final allocation data:
+
 | Version | Data Type        | Allocations | For GMP   | Temp      |
 | :------ | :--------------- | ----------: | --------: | --------: |
 | 0.5.1   | Node<uint64_t>*  |   1,462,735 |   786,477 |   131,122 |
@@ -494,10 +494,12 @@ And here's the final allocation data:
 | 0.8.0   | Node<mpz_class>* |     665,703 |   655,636 |   131,138 |
 | 0.8.1   | Node<mpz_class>* |     131,422 |   131,355 |        68 |
 
-### 0.8.0
+## 0.8.0
+
 Major rework on the memory layout and usage in Collatz and Node.
 
-#### Memory Usage Improved
+### Memory Usage Improved
+
 * Metadata is stored separately, and is per-instance, up to the caller if they want it.
 * Memory fits in a single cache line for Collatz (both) and Node<uint64_t>.  Only Node<mpz_class> remains.
 * All temporary variables were removed:
@@ -506,7 +508,8 @@ Major rework on the memory layout and usage in Collatz and Node.
   * Passing by reference (const T& x), helps.  This is now enforced in for_each() methods with callbacks.
 * A bug in coverage was found and fixed (we passed by value, not reference).
 
-#### Tree Building Performance
+### Tree Building Performance
+
 The tree builds much faster now, as shown in this table
 
 | Version | Data Type | RAM (bytes) | RSS (bytes) | CPU (ms, 1 thr) |
@@ -519,7 +522,8 @@ The tree builds much faster now, as shown in this table
 | 0.8.0   | mpz_class |  15,730,216 |  18,087,936 |             241 |
 
 
-#### Allocation Performance Improved
+### Allocation Performance Improved
+
 Here is an updated table running `bin/coverage 16`:
 
 | Version | Data Type        | Allocations | For GMP   | Temp      |
@@ -534,7 +538,8 @@ Here is an updated table running `bin/coverage 16`:
 Note: further reduction is possible if we can get Node and Collatz to store T `_value` and `_initial_value`
 as references without ending up with dangling pointers/invalid references.
 
-### 0.7.0
+## 0.7.0
+
 Refactored the Makefile to be a little better.  We can parallel build now.
 
 Started profiling and we're doing okay with padding, alignment, and so forth, but there's a lot
@@ -547,18 +552,21 @@ Added a global logger from spdlog.
 At this piont I'm not sure better speed is a goal.  Our problems are now in memory, both with size and
 allocation.  Resolving these gives more speed and space to work.
 
-### 0.6.1
+## 0.6.1
+
 Reverted to to `std::vector<size_t, std::vector<Node<T>*>>` and threw the SlabAllocator away.
 
-### 0.6.0
-Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many allocations when building the BinaryTree.
+## 0.6.0
 
-#### Goals
+Switched from `std::vector<size_t, std::vector<Node<T>*>>` to `std::vector<size_t, std::vector<Node<T>>>` to avoid so many
+allocations when building the BinaryTree.
+
+### Goals
 
 * Improve locality by calling `.reserve()` and `.resize()` with `child_count` since it's a deterministic value.
 * Reduce allocations by storing Node objects as values instead of pointers to heap.
 
-#### Results
+### Results
 * Allocations increased, probably because `Node<T>` has allocations inside it anyway.  Namely, `mpz_class` and `mpf_class`.
 * OMP stopped threading the work, probably because it doesn't believe that assignment to the vector is thread safe.
   * I'm an idiot and had the `#pragma omp parallel...` part commented out.  Performance is fine.
@@ -573,33 +581,40 @@ I executed `bin/coverage 16` to obtain the following:
 | 0.5.1   | Node<mpz_class>* |   7,566,388 | 6,759,076 |
 | 0.6.0   | Node<mpz_class>  |   8,393,170 | 7,545,501 |
 
-#### Conclusion
+### Conclusion
+
 The loss of parallel construction is unacceptable.  We should either switch back to `Node<T>*` or build a slab allocator.
 
-### 0.5.1
+## 0.5.1
+
 This is the last build before switching to value-based Node storage in BinaryTree.  This is mostly so we can compare performance
 changes, namely those related to allocations and tree-building time.
 
-### 0.5.0
+## 0.5.0
+
 Added detection inside of the Collatz class to handle overflow detection.  Runtime performance hit was minimal.
 
-### 0.4.0
+## 0.4.0
+
 Switching away from `std::string` to `std::vector<bool>` for storing the `_oe_pattern`.  Note, the latter is a c++ specialized
 template, which makes it act like a bitset (packed bits).
 
 The performance gain was significant.  Memory usage was much lower.  We should probably use a real bitset, but I'm not sure how,
 because bitsets generally require compile-time values ... but our sizes are dynamic.
 
-### 0.3.0
+## 0.3.0
+
 BinaryTree now supports parallel construction.  Using OMP offered linear results with CPUs available, so I'm not going to worry
 about a custom threader/worker system.  Note, we didn't get linear performance gains building the tree, just steady-state usage of
 the CPUs (possible spin-waiting).  However, the gains are on par with parallel technology in general: you rarely get pure linear
 performance.
 
-### 0.2.0
+## 0.2.0
+
 First real version of the system in C++.  Using wayyy too much memory for what it's doing.  Python version used roughly 1-2GB, but
 this one uses nearly 20GB somehow.  Much of it was tied to mpz_class (GMP), but also bad design decisions when prototyping.  We
 need a performance stats program so we can track changes over time.
 
-### 0.1.0
+## 0.1.0
+
 Beginning work on the conversion from Python programs in the tools/ directory to C/C++ in src/.

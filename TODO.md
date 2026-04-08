@@ -24,7 +24,8 @@ those last 19 places...
   * Or, simply build a striding map?
   * Does CollatAffineMapShortcut need `T`?  It never accepts or uses it... can't we ignore it?  We just need `u_value` for the sequence work.
 
-
+# Make Implicit the Default
+* There's no reason to have Materialized be the default anymore.  It's just slower and worse, although great for inspecting true Node.
 
 ## Logs From 384-CPU System
 
