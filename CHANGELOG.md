@@ -17,6 +17,25 @@ Note: when larger memory and/or high core count was required, the donor system w
 
 ### Affine Strides
 
+Profiling showed the hotspot to be in `Node::init()`, which makes sense.  Deeper down, the core bottleneck resided in processing
+sequences to get the F-G chains.  Several optimizations were made and tested.  Chief among them was affine strides using lookup
+tables.
+
+Micro-testing showed ~8 steps per stride to be ideal, generally keeping things close to L1 cache and registers.  Such a table fits
+within 256 entries (2^8) and each entry is of type `AffineStride::Stride`, which is 8 bytes, which is a standard WORD on modern
+64-bit systems.  The `mpz_class` type might benefit from much larger strides since it's heap-allocated and such, but testing never
+revealed such behavior.
+
+Here are the results of a level-40 build again, compared to version 3.5.0.  Using donor system, 12 threads.
+
+| Data Type | Time (3.5.0) | Time w/Strides |   Delta | Speed |
+| :-------- | -----------: | -------------: | ------: | ----: |
+| uint64_t  |        172 s |           47 s |  -125 s | ~3.7x |
+| uint128_t |        183 s |           71 s |  -112 s | ~2.6x |
+| mpz_class |        820 s |          601 s |  -219 s | ~1.4x |
+
+The hotspot has now moved to the NodeBitmap, specifically the CRoaring bitmap operations itself.  Optimizations might still exist,
+but we will move on to testing parallel performance to ensure scaling to 100s of CPUs is still efficient.
 
 ## 3.5.0
 

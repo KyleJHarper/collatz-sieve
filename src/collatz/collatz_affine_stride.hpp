@@ -71,12 +71,15 @@ namespace AffineStride {
         return stride_table;
     }
 
-    // Make a stride table to see how it performs.
+    // Set stride size and build a mask and table using it.
+    // Micro-testing shows 8 (256 permutations) is ideal.  Larger seems to spill out of cache (L1 I'd guess).  Smaller is worse.
+    // These are constexpr, which explodes the compiler at a given limit, usually ~16. FYI.
     static constexpr size_t STRIDE_SIZE = 8;
     static constexpr uint64_t STRIDE_MASK = (1ULL << STRIDE_SIZE) - 1;
     static constexpr auto STRIDE_TABLE = build_stride_table<Stride, STRIDE_SIZE>();
 
-    // Helpers to apply a stride, or several.
+    // Helpers to apply a stride, or multiple via unrolling (assuming inline applies correctly).
+    // Note: the unrolling never helped in practice, even with true manual unrolling.
     template<AnySupportedIntegral T>
     static inline void apply_stride(T& value) {
         if constexpr(BuiltinIntegral<T>) {

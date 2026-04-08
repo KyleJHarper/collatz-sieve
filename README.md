@@ -28,9 +28,9 @@ Starting with version 3.x, we attempt to follow [SemVer](https://semver.org/).
 
 ### An Aside from Kyle
 
-This was an R&D project, focused on education and delving into insights I garnered after many, many hours with a pen and paper.
-Building a stable API happened as a natural consequence during development.  Take it for what it is and don't overthink it. If you
-hate C++, port it.  If you hate _my_ C++, fork it.  If you need a feature, make a pull request.
+This was an R&D project, focused on education and delving into insights I garnered after many, many hours with a pen and paper. The
+choice of language and building a stable API happened as a natural consequence during development.  Take it for what it is and
+don't overthink it. If you hate C++, port it.  If you hate _my_ C++, fork it.  If you need a feature, make a pull request.
 
 I __highly__ recommend you read [the paper (PENDING)]() on this before you start playing with the code.
 
