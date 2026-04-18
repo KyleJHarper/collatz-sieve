@@ -13,17 +13,16 @@
 //
 // Dump a simple class here for ease-of-use to report and not muck up the BinaryTree class.
 //
-template<AnySupportedIntegral T>
+template<AnySupportedIntegral T, typename TreeType>
 class CoverageBuilder {
     private:
-    BinaryTree<T> _tree;
+    BinaryTree<T, TreeType> _tree;
     bool _use_precomputed = false;
     bool _is_verifying_non_hwm_nodes = false;
 
     public:
-    CoverageBuilder(bool preserve_ancestors, BinaryTreeType tree_type, bool verify_non_hwm_nodes) {
+    CoverageBuilder(bool preserve_ancestors, bool verify_non_hwm_nodes) {
         BinaryTreeOptions opts;
-        opts.tree_type = tree_type;
         opts.prune_hwm_nodes = true;
         opts.preserve_ancestors = preserve_ancestors;
         opts.prune_parent_levels = true;
@@ -31,7 +30,7 @@ class CoverageBuilder {
         _tree.init(0, opts);
     }
 
-    const BinaryTree<T>& get_tree() const { return _tree; }
+    const BinaryTree<T, TreeType>& get_tree() const { return _tree; }
     // Add levels until we reach `levels` from caller.
     void run(size_t levels) {
         if (_use_precomputed) {
@@ -71,10 +70,10 @@ class CoverageBuilder {
 };
 
 
-template<AnySupportedIntegral T>
-void run(size_t levels, bool use_precomputed, bool show_ancestors, BinaryTreeType tree_type, size_t sleep_seconds, bool verify_non_hwm_nodes) {
+template<AnySupportedIntegral T, typename TreeType>
+void run(size_t levels, bool use_precomputed, bool show_ancestors, size_t sleep_seconds, bool verify_non_hwm_nodes) {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
-    CoverageBuilder<T> builder(show_ancestors, tree_type, verify_non_hwm_nodes);
+    CoverageBuilder<T, TreeType> builder(show_ancestors, verify_non_hwm_nodes);
     builder.get_tree().assert_level_will_fit(levels);
     builder.use_precomputed(use_precomputed);
     builder.run(levels);
@@ -200,7 +199,7 @@ int main(int argc, char **argv) {
             data_type = "mpz_class";
         }
     }
-    BinaryTreeType tree_type = use_materialized_tree ? BinaryTreeType::MATERIALIZED : BinaryTreeType::IMPLICIT;
+    // BinaryTreeType tree_type = use_materialized_tree ? BinaryTreeType::MATERIALIZED : BinaryTreeType::IMPLICIT;
     logger->info("Building tree with {} levels, using {}, tree type is {}, verifying non-HWM nodes is: {}."
         , levels
         , data_type
@@ -211,13 +210,25 @@ int main(int argc, char **argv) {
         logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
     }
     if (data_type == "uint64_t") {
-        run<uint64_t>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds, verify_non_hwm_nodes);
+        if (use_materialized_tree) {
+            run<uint64_t, BinaryTreeMaterializedImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        } else {
+            run<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        }
     }
     if (data_type == "uint128_t") {
-        run<uint128_t>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds, verify_non_hwm_nodes);
+        if (use_materialized_tree) {
+            run<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        } else {
+            run<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        }
     }
     if (data_type == "mpz_class") {
-        run<mpz_class>(levels, use_precomputed, show_ancestors, tree_type, sleep_seconds, verify_non_hwm_nodes);
+        if (use_materialized_tree) {
+            run<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        } else {
+            run<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+        }
     }
 
     return 0;

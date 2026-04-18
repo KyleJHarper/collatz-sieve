@@ -8,8 +8,11 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <string>
 #include "collatz_affine_stride.hpp"
 #include "count_trailing_helpers.hpp"
+#include "stream_helpers.hpp"
+#include "equality_helper.hpp"
 
 
 
@@ -233,6 +236,26 @@ class Node {
 
 
     //
+    // Assign Parent
+    // Assign a parent.  No safety checks.
+    //
+    void assign_parent(Node<T>* parent) {
+        _parent = parent;
+    }
+
+
+
+    //
+    // Assign HWM Ancestor
+    // Assign a HWM ancestor.  No safety checks.
+    //
+    void assign_hwm_ancestor(Node<T>* hwm_ancestor) {
+        _hwm_ancestor = hwm_ancestor;
+    }
+
+
+
+    //
     // Own Children
     // Gain or relinquish ownership of children, mostly for destruction cascading purposes later.
     //
@@ -363,4 +386,250 @@ class Node {
         size_t total = sizeof(*this);
         return total;
     }
+
+
+
+    //
+    // Equal
+    // Compares this node to "other".  Returns true if equal.
+    //
+    // Returns true if they are equal in representation.  False otherwise.
+    // Will explain what failed to *err if sent.
+    //
+    static bool st_equal (const Node<T>* first, const Node<T>* second, std::string* err = nullptr) {
+        EqualityHelper eq(err);
+
+        // They should both be real objects or nullptr.
+        // When they disagree because one is real and one is a nullptr, fail.
+        if (! eq.pointers_null_agree(first, second)) {
+            return eq.fail("Node objects don't agree on null state");
+        }
+
+        // If they're null, we're done.
+        if (first == nullptr) {
+            return true;
+        }
+
+        // If they both have the same value, they're either both nullptr or pointing to the same node, which is fine.
+        if (first == second) {
+            return true;
+        }
+
+        // At this point, we have two objects that null-agree but are different, so they must be real objects.  We have to assume
+        // they might be coming from different collections or trees, so we have to compare values, not pointers.
+
+        // Values
+        if (eq.unequal(first->get_value(), second->get_value())) {
+            return eq.fail("Node values mismatch");
+        }
+
+        // Parents
+        if (! eq.pointers_null_agree(first->get_parent(), second->get_parent())) {
+            return eq.fail("Parent nodes' pointers don't agree on null state");
+        }
+        if (first->get_parent() != nullptr) {
+            if (eq.unequal(first->get_parent()->get_value(), second->get_parent()->get_value())) {
+                return eq.fail("Nodes' parents' values mismatch");
+            }
+        }
+
+        // HWM Ancestor
+        if (eq.unequal(first->has_high_water_mark_ancestor(), second->has_high_water_mark_ancestor())) {
+            return eq.fail("Has HWM ancestor mismatch");
+        }
+        if (! eq.pointers_null_agree(first->get_hwm_ancestor(), second->get_hwm_ancestor())) {
+            return eq.fail("HWM ancestors don't agree on null state");
+        }
+        if (first->get_hwm_ancestor() != nullptr) {
+            if (eq.unequal(first->get_hwm_ancestor()->get_value(), second->get_hwm_ancestor()->get_value())) {
+                return eq.fail("HWM ancestor's value mismatch");
+            }
+        }
+
+        // Children
+        if (eq.unequal(first->get_child_count(), second->get_child_count())) {
+            return eq.fail("Node child counts mismatch");
+        }
+        if (eq.unequal(first->does_own_children(), second->does_own_children())) {
+            return eq.fail("Nodes' down_own_children mismatch");
+        }
+        for (size_t child_id = 0; child_id < first->get_child_count(); child_id++) {
+            if (! eq.pointers_null_agree(first->get_child(child_id), second->get_child(child_id))) {
+                return eq.fail("Child ID " + to_string_any(child_id) + " mismatch on null state");
+            }
+            if (first->get_child(child_id) != nullptr) {
+                if (eq.unequal(first->get_child(child_id)->get_value(), second->get_child(child_id)->get_value())) {
+                    return eq.fail("Child ID " + to_string_any(child_id) + " values mismatch");
+                }
+                // Ensure each child knows we are the parent.
+                if (! eq.same_address(first->get_child(child_id)->get_parent(), first)) {
+                    return eq.fail("First's node with Child ID " + to_string_any(child_id) + " doesn't have link back to parent");
+                }
+                if (! eq.same_address(second->get_child(child_id)->get_parent(), second)) {
+                    return eq.fail("Second's node with Child ID " + to_string_any(child_id) + " doesn't have link back to parent");
+                }
+            }
+        }
+
+        // Remaining flags.
+        if (eq.unequal(first->is_below_high_water_mark(), second->is_below_high_water_mark())) {
+            return eq.fail("Nodes' is_below_high_water_mark mismatch");
+        }
+        if (eq.unequal(first->is_initialized(), second->is_initialized())) {
+            return eq.fail("Nodes' is_initialize mismatch");
+        }
+
+        // FG Chain Bits
+        if (eq.unequal(first->get_fg_chain_length(), second->get_fg_chain_length())) {
+            return eq.fail("Nodes' FG chain length mismatch");
+        }
+        if (eq.unequal(first->get_fg_chain_string(), second->get_fg_chain_string())) {
+            return eq.fail("Nodes' FG chain string mismatch");
+        }
+
+        // Guess we made it here.  All good.
+        return true;
+    }
+    //
+    // Member helper.
+    bool equal(const Node<T>* second, std::string* err = nullptr) const {
+        return Node<T>::st_equal(this, second, err);
+    }
+
+
+
+    //
+    // Serialize
+    // Serialize the node with its value, flags, and child values.  Since children are pointers, we will emit just their values.
+    // During deserialization, this is handled to re-establish pointers.
+    //
+    [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
+        StreamHelper sh(nullptr, &out, err);
+        sh.set_category("Node");
+
+        // Value
+        if (! sh.serialize_integral(_value)) {
+            return sh.fail(" _value==" + to_string_any(_value));
+        }
+
+        // Parent
+        if (_parent == nullptr) {
+            if (! sh.serialize_integral(T(0))) {
+                return sh.fail("no parent (aka: T(0))");
+            }
+        } else {
+            if (! sh.serialize_integral(_parent->get_value())) {
+                return sh.fail("_parent->get_value()==" + to_string_any(_parent->get_value()));
+            }
+        }
+
+        // HWM Ancestor
+        if (_hwm_ancestor == nullptr) {
+            if (! sh.serialize_integral(T(0))) {
+                return sh.fail("no hwm_ancestor (aka: T(0))");
+            }
+        } else {
+            if (! sh.serialize_integral(_hwm_ancestor->get_value())) {
+                return sh.fail("_hwm_ancestor->get_value()==" + to_string_any(_hwm_ancestor->get_value()));
+            }
+        }
+
+        // Children
+        // We don't actually need these.  We rebuild (deserialize) from the parents down to the children, therefore reconstruction
+        // is merely adding a node, linking to the parent value (which we wrote above), and then telling that parent to own "this".
+
+        // Flags
+        bool b_is_below_hwm = _is_below_hwm;
+        bool b_has_hwm_ancestor = _has_hwm_ancestor;
+        bool b_is_initialized = _is_initialized;
+        bool b_owns_children = _owns_children;
+        if (! sh.serialize_bool(b_is_below_hwm)) {
+            return sh.fail("_is_below_hwm==" + std::to_string(b_is_below_hwm));
+        }
+        if (! sh.serialize_bool(b_has_hwm_ancestor)) {
+            return sh.fail("_has_hwm_ancestor==" + std::to_string(b_has_hwm_ancestor));
+        }
+        if (! sh.serialize_bool(b_is_initialized)) {
+            return sh.fail("_is_initialized==" + std::to_string(b_is_initialized));
+        }
+        if (! sh.serialize_bool(b_owns_children)) {
+            return sh.fail("_owns_children==" + std::to_string(b_owns_children));
+        }
+
+        // Child Count
+        if (! sh.serialize_integral(_child_count)) {
+            return sh.fail("_child_count==" + to_string_any(_child_count));
+        }
+
+        // FG Chain Length
+        if (! sh.serialize_integral(_fg_chain_length)) {
+            return sh.fail("_fg_chain_length==" + to_string_any(_fg_chain_length));
+        }
+
+        // All Good
+        return true;
+    }
+
+
+
+    //
+    // Deserialize
+    // Converts data from "in" to this object.  Returns the parent and hwm_ancestor values for later linking.
+    //
+    [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& hwm_ancestor_v, std::string* err = nullptr) {
+        StreamHelper sh(&in, nullptr, err);
+        sh.set_category("Node");
+
+        // Reset
+        reset();
+
+        // Value
+        if (! sh.deserialize_integral(_value)) {
+            return sh.fail("couldn't read _value");
+        }
+
+        // Parent
+        if (! sh.deserialize_integral(parent_v)) {
+            return sh.fail("couldn't read _parent's value");
+        }
+
+        // HWM Ancestor
+        if (! sh.deserialize_integral(hwm_ancestor_v)) {
+            return sh.fail("couldn't read hwm ancestor's value");
+        }
+
+        // Flags
+        // We use bit fields, which cannot bind to bool&.  So we need a tmp.
+        bool b_tmp;
+        if (! sh.deserialize_bool(b_tmp)) {
+            return sh.fail("couldn't read _is_below_hwm");
+        }
+        _is_below_hwm = b_tmp;
+        if (! sh.deserialize_bool(b_tmp)) {
+            return sh.fail("couldn't read _has_hwm_ancestor");
+        }
+        _has_hwm_ancestor = b_tmp;
+        if (! sh.deserialize_bool(b_tmp)) {
+            return sh.fail("couldn't read _is_initialized");
+        }
+        _is_initialized = b_tmp;
+        if (! sh.deserialize_bool(b_tmp)) {
+            return sh.fail("couldn't read _owns_children");
+        }
+        _is_initialized = b_tmp;
+
+        // Child count
+        if (! sh.deserialize_integral(_child_count)) {
+            return sh.fail("couldn't read child_count");
+        }
+
+        // FG chain length
+        if (! sh.deserialize_integral(_fg_chain_length)) {
+            return sh.fail("couldn't read _fg_chain_length");
+        }
+
+        // All good
+        return true;
+    }
+
 };

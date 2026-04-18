@@ -12,29 +12,34 @@
 //
 // NOTE!  We will follow the CRoaring techniques, such as HALF-OPEN vs CLOSED variants and such.  Pay attention!
 //
-template<AnySupportedIntegral T>
+template<AnySupportedIntegral T, typename BackendType = FlatHashBitmapImpl<T>>
 class NodeBitmap {
     private:
-    FlatHashBitmapImpl<T> _impl;
+    BackendType _impl;
 
 
     public:
     NodeBitmap() = default;
 
+    const BackendType& get_impl() const { return _impl; }
     const auto& get_map() const { return _impl.get_map(); }
     void add(const T& value) { _impl.add(value); }
-    void add_range(const T& start, const T& end) { _impl.add_range(start, end); };
-    void add_range_closed(const T& start, const T& end) { _impl.add_range_closed(start, end); };
+    void add_range(const T& start, const T& end) { _impl.add_range(start, end); }
+    void add_range_closed(const T& start, const T& end) { _impl.add_range_closed(start, end); }
     bool contains(const T& value) const { return _impl.contains(value); }
     void remove(const T& value) { _impl.remove(value); }
     T cardinality() const { return _impl.cardinality(); }
     void clear() { _impl.clear(); }
-    void merge(const NodeBitmap<T>& src) { _impl.merge(src._impl); }
-    NodeBitmap<T>& operator|=(const NodeBitmap<T>& src) { _impl |= src._impl; return *this; }
-    void clone(const NodeBitmap<T>& src) { _impl.clone(src); }
-    void optimize() { _impl.optimize(); };
+    void merge(const NodeBitmap<T, BackendType>& src) { _impl.merge(src._impl); }
+    NodeBitmap<T, BackendType>& operator|=(const NodeBitmap<T, BackendType>& src) { _impl |= src._impl; return *this; }
+    void clone(const NodeBitmap<T, BackendType>& src) { _impl.clone(src); }
+    void optimize() { _impl.optimize(); }
     size_t shrink_to_fit() { return _impl.shrink_to_fit(); }
     size_t deep_size() const { return _impl.deep_size(); }
+    static bool st_equal(const NodeBitmap<T, BackendType>& first, const NodeBitmap<T, BackendType>& second, std::string* err = nullptr) { return BackendType::st_equal(first.get_impl(), second.get_impl(), err); }
+    bool equal(const NodeBitmap<T, BackendType>& second, std::string* err = nullptr) const { return BackendType::st_equal(_impl, second.get_impl(), err); }
+    [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const { return _impl.serialize(out, err); }
+    [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) { return _impl.deserialize(in, err); }
 
     template<typename Func, typename TLS_Type>
     void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) { _impl.for_each_transformer(policy, tls, callback); }

@@ -12,6 +12,10 @@
 #include <omp.h>
 #include <roaring/roaring.hh>
 #include <stdexcept>
+#include <string>
+#include "stream_helpers.hpp"
+#include "equality_helper.hpp"
+
 
 
 
@@ -78,6 +82,14 @@ class FlatHashBitmapImpl {
     // If you're using this directly, it should probably be an encapsulated method or you should use a for_each_*().
     //
     const map_t& get_map() const { return _flat_map; }
+
+
+
+    //
+    // Get Prefixes
+    // Return the underlying sorted prefixes vector.  Read-only.
+    //
+    const std::vector<prefix_t>& get_sorted_prefixes() const { return _sorted_prefixes; }
 
 
 
@@ -348,6 +360,129 @@ class FlatHashBitmapImpl {
         }
 
         return total;
+    }
+
+
+
+    //
+    // Equal
+    // Compare all of the members and (meta) data.
+    //
+    // Returns true if they are equal in representation.  False otherwise.
+    // Will explain what failed to *err if sent.
+    //
+    static bool st_equal(const FlatHashBitmapImpl<T>& first, const FlatHashBitmapImpl<T>& second, std::string* err = nullptr) {
+        EqualityHelper eq(err);
+        // Grab the flat hash maps and prefixes.
+        const map_t& f_flat_map = first.get_map();
+        const map_t& s_flat_map = second.get_map();
+        const std::vector<prefix_t>& f_prefixes = first.get_sorted_prefixes();
+        const std::vector<prefix_t>& s_prefixes = second.get_sorted_prefixes();
+        // Check size.
+        if (eq.unequal(f_prefixes.size(), s_prefixes.size())) {
+            return eq.fail("Flat hash impl sorted_prefxies size mistmatch");
+        }
+        // Prefixes should match and are already sorted.  Test each prefix, and then the CRoaring bitmap beneath it.
+        for (size_t i = 0; i < f_prefixes.size(); i++) {
+            if (eq.unequal(f_prefixes.at(i), s_prefixes.at(i))) {
+                return eq.fail("Flat hash prefix at ID " + to_string_any(i) + " mismatch");
+            }
+            const roaring::Roaring& f_roaring = f_flat_map.at(f_prefixes.at(i));
+            const roaring::Roaring& s_roaring = s_flat_map.at(s_prefixes.at(i));
+            if (! roaring::api::roaring_bitmap_equals(&(f_roaring.roaring), &(s_roaring.roaring))) {
+                return eq.fail("Bitmaps do not match for prefix " + to_string_any(f_prefixes.at(i)) + ".");
+            }
+        }
+
+        // Guess they're equal.
+        return true;
+    }
+    //
+    // Member helper.
+    bool equal(const FlatHashBitmapImpl<T>& second, std::string* err = nullptr) const {
+        return st_equal(*this, second, err);
+    }
+
+
+
+    //
+    // Serialize
+    // Serialize all the prefixes and bitmaps, leaning on CRoaring's output heavily.
+    //
+    [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
+        StreamHelper sh(nullptr, &out, err);
+        sh.set_category("FlatHashBitmapImpl");
+
+        // Write out the number of prefixes/bitmaps.
+        uint64_t u64_prefix_count = static_cast<uint64_t>(_sorted_prefixes.size());
+        if (! sh.serialize_integral(u64_prefix_count)) {
+            return sh.fail("prefix_count==" + to_string_any(u64_prefix_count));
+        }
+
+        // Now loop through each key-value pair.
+        for (const auto& [prefix, bitmap] : _flat_map) {
+            // Write the prefix.
+            if (! sh.serialize_integral(prefix)) {
+                return sh.fail("prefix==" + to_string_any(prefix));
+            }
+            // Write how much space the bitmap will take.
+            uint64_t u64_bitmap_size = static_cast<uint64_t>(bitmap.getSizeInBytes(true));
+            if (! sh.serialize_integral(u64_bitmap_size)) {
+                return sh.fail("bitmap_size==" + to_string_any(u64_bitmap_size));
+            }
+            // Build the buffer and flush it.
+            std::vector<char> buffer(u64_bitmap_size);
+            bitmap.write(buffer.data(), true);
+            if (! sh.write_bytes(buffer.data(), u64_bitmap_size)) {
+                return sh.fail("roaring bitmap data");
+            }
+        }
+
+        // All good.
+        return true;
+    }
+
+
+
+    //
+    // Deserialize
+    // Read all the data from "in" to reconstruct this object.  Uses CRoaring's internals heavily.
+    //
+    [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) {
+        StreamHelper sh(&in, nullptr, err);
+        sh.set_category("FlatHashBitmapImpl");
+
+        // Clear it out (reset).
+        clear();
+
+        // Prefixes
+        uint64_t u64_prefix_count = 0;
+        if (! sh.deserialize_integral(u64_prefix_count)) {
+            return sh.fail("couldn't read prefix count");
+        }
+        for (uint64_t i = 0; i < u64_prefix_count; i++) {
+            prefix_t prefix;
+            if (! sh.deserialize_integral(prefix)) {
+                return sh.fail("couldn't read prefix value for index i==" + to_string_any(i));
+            }
+            uint64_t u64_bitmap_size = 0;
+            if (! sh.deserialize_integral(u64_bitmap_size)) {
+                return sh.fail("couldn't read bitmap size for prefix==" + to_string_any(prefix));
+            }
+            std::vector<char> buffer(u64_bitmap_size);
+            if (! sh.read_bytes(buffer.data(), static_cast<size_t>(u64_bitmap_size))) {
+                return sh.fail("couldn't read bitmap data for prefix==" + to_string_any(prefix));
+            }
+            // Try to place the prefix, which will build out bitmap too.
+            auto [it, inserted] = _flat_map.try_emplace(prefix);
+            if (inserted) {
+                add_prefix_key(prefix);
+            }
+            it->second.read(buffer.data(), true);
+        }
+
+        // All good
+        return true;
     }
 
 

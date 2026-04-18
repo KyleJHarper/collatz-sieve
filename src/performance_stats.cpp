@@ -103,10 +103,10 @@ std::vector<std::string> add(const char *name, int64_t u_version, int64_t u128_v
 //
 // Tree Build Time
 //
-template<AnySupportedIntegral T>
+template<AnySupportedIntegral T, typename TreeType>
 duration<double, std::milli> tree_build_time(size_t levels, const BinaryTreeOptions& opts) {
     auto start = high_resolution_clock::now();
-    BinaryTree tree = BinaryTree<T>(levels, opts);
+    BinaryTree tree = BinaryTree<T, TreeType>(levels, opts);
     auto end = high_resolution_clock::now();
     duration<double, std::milli> duration = end - start;
     return duration;
@@ -198,7 +198,7 @@ int main(int argc, char **argv) {
     // Binrary Tree Option Sets
     BinaryTreeOptions BTWithoutPrune = {.prune_hwm_nodes = false };
     BinaryTreeOptions BTWithPrune = {.prune_hwm_nodes = true, .prune_parent_levels = true};
-    BinaryTreeOptions BTImplicit = {.tree_type = BinaryTreeType::IMPLICIT};
+    BinaryTreeOptions DEFAULT_OPTS;
 
     // BT without pruning
     size_t rss_t1 = getCurrentRSSBytes();
@@ -224,13 +224,13 @@ int main(int argc, char **argv) {
 
     // BT Implicit
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t_implicit = BinaryTree<uint64_t>(levels, BTImplicit);
+    BinaryTree tree_uint64_t_implicit = BinaryTree<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels);
     size_t rss_uint64_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint128_t_implicit = BinaryTree<uint128_t>(levels, BTImplicit);
+    BinaryTree tree_uint128_t_implicit = BinaryTree<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels);
     size_t rss_uint128_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c_implicit = BinaryTree<mpz_class>(levels, BTImplicit);
+    BinaryTree tree_mpz_c_implicit = BinaryTree<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels);
     size_t rss_mpz_c_implicit = getCurrentRSSBytes() - rss_t1;
 
     // Bytes Per Node
@@ -280,15 +280,15 @@ int main(int argc, char **argv) {
     std::cout << "Benchmarking tree building..." << std::flush;
     for (size_t i = 0; i < max_threads; i++) {
         omp_set_num_threads(i + 1);
-        duration_uint64_t_without_pruning[i] = tree_build_time<uint64_t>(levels, BTWithoutPrune);
-        duration_uint128_t_without_pruning[i] = tree_build_time<uint128_t>(levels, BTWithoutPrune);
-        duration_mpz_class_without_pruning[i] = tree_build_time<mpz_class>(levels, BTWithoutPrune);
-        duration_uint64_t_with_pruning[i] = tree_build_time<uint64_t>(levels, BTWithPrune);
-        duration_uint128_t_with_pruning[i] = tree_build_time<uint128_t>(levels, BTWithPrune);
-        duration_mpz_class_with_pruning[i] = tree_build_time<mpz_class>(levels, BTWithPrune);
-        duration_uint64_t_implicit[i] = tree_build_time<uint64_t>(levels, BTImplicit);
-        duration_uint128_t_implicit[i] = tree_build_time<uint128_t>(levels, BTImplicit);
-        duration_mpz_class_implicit[i] = tree_build_time<mpz_class>(levels, BTImplicit);
+        duration_uint64_t_without_pruning[i] = tree_build_time<uint64_t, BinaryTreeMaterializedImpl<uint64_t>>(levels, BTWithoutPrune);
+        duration_uint128_t_without_pruning[i] = tree_build_time<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, BTWithoutPrune);
+        duration_mpz_class_without_pruning[i] = tree_build_time<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, BTWithoutPrune);
+        duration_uint64_t_with_pruning[i] = tree_build_time<uint64_t, BinaryTreeMaterializedImpl<uint64_t>>(levels, BTWithPrune);
+        duration_uint128_t_with_pruning[i] = tree_build_time<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, BTWithPrune);
+        duration_mpz_class_with_pruning[i] = tree_build_time<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, BTWithPrune);
+        duration_uint64_t_implicit[i] = tree_build_time<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels, DEFAULT_OPTS);
+        duration_uint128_t_implicit[i] = tree_build_time<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, DEFAULT_OPTS);
+        duration_mpz_class_implicit[i] = tree_build_time<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, DEFAULT_OPTS);
     }
     std::cout << " done." << std::endl;
 

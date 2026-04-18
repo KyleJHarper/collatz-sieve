@@ -1,13 +1,17 @@
 #pragma once
 
-#include "binary_tree_backend_interface.hpp"
 #include "concepts.hpp"
-#include <omp.h>
+#include "node.hpp"
 #include <stdexcept>
-#include <tbb/parallel_sort.h>
+#include "binary_tree_math.hpp"
+#include "binary_tree_coverage.hpp"
+#include "binary_tree_options.hpp"
+#include "binary_tree_types.hpp"
 #include "node_bitmap.hpp"
 #include "node_bitmap_traits.hpp"
-
+#include "equality_helper.hpp"
+#include "stream_helpers.hpp"
+#include <tbb/parallel_sort.h>
 
 
 
@@ -20,7 +24,7 @@
 // and then leverage their level L and position P properties to calculate coverage, iterate over survivors, etc.
 //
 template<AnySupportedIntegral T>
-class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
+class BinaryTreeImplicitImpl {
     private:
     Node<T> *_root_node = nullptr;
     size_t _level_count = 0;
@@ -28,25 +32,25 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
     std::vector<Node<T>*> _ancestors;
     bool _is_initialized = false;
-    bool _preserve_ancestors = false;
-    bool _is_verifying_non_hwm_nodes = false;
+    bool _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
+    bool _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
+    const TreeTypeEnum _tree_type = TreeTypeEnum::IMPLICIT;
+    static constexpr BinaryTreeOptions DEFAULT_OPTS{};
+
+
 
     public:
     //
     // Constructors
     //
-    static constexpr BinaryTreeOptions DEFAULT_OPTS{};
-    BinaryTreeImplicit(const BinaryTreeOptions& opts = DEFAULT_OPTS) {
-        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
-        _preserve_ancestors = opts.preserve_ancestors;
-    }
+    BinaryTreeImplicitImpl() = default;
 
 
 
     //
     // Destructor
     //
-    ~BinaryTreeImplicit() {
+    ~BinaryTreeImplicitImpl() {
         for (Node<T>* node : _ancestors) {
             delete node;
         }
@@ -59,12 +63,13 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(size_t levels) override {
-        // Sanity check.  T must support requested tree size.
-        this->assert_level_will_fit(levels);
+    void init(size_t levels, const BinaryTreeOptions opts = DEFAULT_OPTS) {
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
         _is_initialized = true;
+        // Set options.
+         _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
+        _is_preserving_ancestors = opts.preserve_ancestors;
         // Build the first level's root node, supporting both 0- and 1-based trees.
         _level_count = 1;
         _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
@@ -83,14 +88,14 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Reset Object
     // Reset members to make this act like a new() object.
     //
-    void reset() override {
+    void reset() {
         _is_initialized = false;
         _coverage_map.clear();
         _uncovered_positions.clear();
         _level_count = 0;
         _ancestors.clear();
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
-        _preserve_ancestors = BinaryTreeOptions{}.preserve_ancestors;
+        _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
 
 
@@ -98,32 +103,27 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     //
     // Getters and Accessors
     //
-    size_t get_level_count() const override { return _level_count; }
-    Node<T>* get_root_node() const override { return _root_node; }
-    const NodeBitmap<T>& get_uncovered_positions() const override { return _uncovered_positions; }
-    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const override { return _coverage_map; }
-    const std::vector<Node<T>*> get_ancestors() const override { return _ancestors; }
-    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const override {
-        throw std::logic_error("Implicit trees do not have a level map");
-    }
-    bool is_verifying_non_hwm_nodes() const override { return _is_verifying_non_hwm_nodes; }
+    // Common properties.
+    TreeTypeEnum get_tree_type() const { return _tree_type; }
+    size_t get_level_count() const { return _level_count; }
+    void set_level_count(size_t level_count) { _level_count = level_count; }
+    Node<T>* get_root_node() const { return _root_node; }
+    Node<T>* get_root_node_rw() { return _root_node; }
+    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
+    std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map_rw() { return _coverage_map; }
+    const std::vector<Node<T>*>& get_ancestors() const { return _ancestors; }
+    std::vector<Node<T>*>& get_ancestors_rw() { return _ancestors; }
+    bool is_preserving_ancestors() const { return _is_preserving_ancestors; }
+    void set_is_preserving_ancestors(bool value) { _is_preserving_ancestors = value; }
+    bool is_verifying_non_hwm_nodes() const { return _is_verifying_non_hwm_nodes; }
     void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
     void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
-    bool is_pruning_hwm_nodes() const override {
-        throw std::logic_error("Implicit trees do not have an is_pruning_hwm_nodes property.");
-    }
-    bool is_pruning_parent_levels() const override {
-        throw std::logic_error("Implicit trees do not have an is_pruning_parent_levels property.");
-    }
-
-
+    bool is_initialized() const { return _is_initialized; }
+    void set_is_initialized(bool value) { _is_initialized = value; }
     //
-    // Node Count
-    // Returns the mathematically correct number of nodes as if they existed in RAM.
-    //
-    T node_count() const override {
-        return BinaryTreeMath<T>::st_node_count_of_tree(_level_count);
-    }
+    // Implicit-Specific
+    bool is_implicit() const { return true; }
+    const NodeBitmap<T>& get_uncovered_positions() const { return _uncovered_positions; }
 
 
 
@@ -131,7 +131,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
     // Object Size
     // Deeply scan the object and report its size.  Since it's implicit, this is simpler.
     //
-    size_t deep_size() const override {
+    size_t deep_size() const {
         size_t total = sizeof(*this);
 
         // Account for _uncovered_positions.
@@ -151,6 +151,75 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
 
 
     //
+    // Equal
+    // Compare all of the members and (meta) data.
+    //
+    // Returns true if they are equal in representation.  False otherwise.
+    // Will explain what failed to *err if sent.
+    //
+    // Only implementation-specific checks go here.  Facade handles common.
+    static bool st_equal(const BinaryTreeImplicitImpl<T>& first, const BinaryTreeImplicitImpl<T>& second, std::string* err = nullptr) {
+        EqualityHelper eq(err);
+
+        // Uncovered Positions NodeBitmap
+        if (! NodeBitmap<T>::st_equal(first.get_uncovered_positions(), second.get_uncovered_positions(), err)) {
+            return false;
+        }
+
+        // Guess we made it here.  All good.
+        return true;
+    }
+    //
+    // Member helper.
+    bool equal(const BinaryTreeImplicitImpl<T>& second, std::string* err = nullptr) const {
+        return BinaryTreeImplicitImpl<T>::st_equal(*this, second, err);
+    }
+
+
+
+    //
+    // Serialize
+    // Serializes the implementation-specific details.  Facade handles common.
+    //
+    [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
+        StreamHelper sh(nullptr, &out, err);
+        sh.set_category("BinaryTreeImplicitImpl");
+
+        // No unique properties.
+
+        // Uncovered Positions NodeBitmap
+        if (! _uncovered_positions.serialize(out, err)) {
+            return sh.fail("_uncovered_positions error");
+        }
+
+        // All good.
+        return true;
+    }
+
+
+
+    //
+    // Deserialize
+    // Read data from "in" and reconstruct this object.
+    //
+    [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) {
+        StreamHelper sh(&in, nullptr, err);
+        sh.set_category("BinaryTreeImplicitImpl");
+
+        // No unique properties.
+
+        // Uncovered positions NodeBitmap.
+        if (! _uncovered_positions.deserialize(in, err)) {
+            return sh.fail("unable to deserialize the uncovered positions");
+        }
+
+        // All good.
+        return true;
+    }
+
+
+
+    //
     // Add Level
     // Add a level to the tree, which simply means scan the next level for new covered sections (HWM ancestors).
     //
@@ -164,10 +233,8 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
         T right_position;
         Node<T> right_node;
     };
-    void add_level() override {
-        // Confirm the new level will fit, warn about verification, and then bump the count.
-        this->assert_level_will_fit(_level_count + 1);
-        this->assert_level_verification(_level_count + 1, _is_verifying_non_hwm_nodes);
+    void add_level() {
+        // Bump level count.
         _level_count++;
 
         // Establish TLS for our callback.
@@ -204,7 +271,7 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             // Initialize the node and test HWM for ancestry.
             tls.left_node.init(tls.left_value);
             tls.right_node.init(tls.right_value);
-            if (_preserve_ancestors) {
+            if (_is_preserving_ancestors) {
                 if (tls.left_node.is_below_high_water_mark()) {
                     tls.new_ancestors.push_back(new Node<T>(tls.left_value));
                 }
@@ -246,6 +313,18 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             _ancestors.insert(_ancestors.end(), storage.new_ancestors.begin(), storage.new_ancestors.end());
         }
 
+        // Always sort ancestors.
+        if (_is_preserving_ancestors) {
+            tbb::parallel_sort(_ancestors.begin(), _ancestors.end(), [](const Node<T>* a, const Node<T>* b) {
+                if constexpr(BuiltinIntegral<T>) {
+                    return a->get_value() < b->get_value();
+                } else {
+                    return mpz_cmp(a->get_value().get_mpz_t(), b->get_value().get_mpz_t()) < 0;
+                }
+            });
+        }
+
+
         // Persist the coverage to our new level.  It's just a sum of the uncovered size() values subtracted from the node total.
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T uncovered = _uncovered_positions.cardinality();
@@ -256,5 +335,6 @@ class BinaryTreeImplicit : public IBinaryTreeBackend<T> {
             _uncovered_positions.optimize();
         }
     }
+
 
 };

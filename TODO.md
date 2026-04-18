@@ -16,16 +16,25 @@ those last 19 places...
 * See if we can use a bitmap instead of an LRU cache.
 
 ## Scan for Ancestor Resolution
-* We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
+We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
 
-## Optimize Hotspots
-* Walking the FG chain and Collatz sequence dominates runtime.  Can we formally define this?  Something like:
-  * `BinaryTreeMath<T>::st_get_fg_chain_by_level_and_position()` ??
-  * Or, simply build a striding map?
-  * Does CollatAffineMapShortcut need `T`?  It never accepts or uses it... can't we ignore it?  We just need `u_value` for the sequence work.
-
-# Make Implicit the Default
+## Make Implicit the Default
 * There's no reason to have Materialized be the default anymore.  It's just slower and worse, although great for inspecting true Node.
+
+## Refactor BinaryTree Code
+* Get rid of the dynamic/virtual stuff.  It's not needed.
+
+## Level Containment
+* Start considering coverage implications since a single F or G can only change 1 level and covers the rest.
+* All even nodes map to the previous level perfectly.
+* Some of the odd nodes become larger odds on the same level.
+* etc.
+
+## Clean up concepts.hpp
+* It's sharing a few functions instead of just providing concepts.  Clean it up.
+
+## Get rid of size_t
+* Stop using a non-guaranteed width for levels, at a minimum.
 
 ## Logs From 384-CPU System
 

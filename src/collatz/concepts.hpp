@@ -5,7 +5,10 @@
 #include <string_view>
 #include <gmp.h>
 #include <gmpxx.h>
-
+#include <vector>
+#include <map>
+#include <unordered_map>
+#include <set>
 
 
 // Make 128-bit types match naming pattern of others.
@@ -103,6 +106,63 @@ template<typename T>
 inline constexpr bool is_any_supported_integral_v = is_any_supported_integral<T>::value;
 template<typename T>
 concept AnySupportedIntegral = is_any_supported_integral_v<T>;
+
+
+
+//
+// Build a concept for guaranteed-width types.  This is used when we absolutely need type width to be consistent across platforms.
+// For example, size_t fails this check.
+//
+template<typename T>
+concept GuaranteedWidthIntegral = (
+    std::is_same_v<T, int8_t> || std::is_same_v<T, uint8_t> ||
+    std::is_same_v<T, int16_t> || std::is_same_v<T, uint16_t> ||
+    std::is_same_v<T, int32_t> || std::is_same_v<T, uint32_t> ||
+    std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t> ||
+    std::is_same_v<T, int128_t> || std::is_same_v<T, uint128_t>
+);
+
+
+//
+// Create some convenient same_as style concepts for checking.
+//
+// Vector
+template<typename T>
+struct is_vector : std::false_type {};
+template<typename T, typename Alloc>
+struct is_vector<std::vector<T, Alloc>> : std::true_type {};
+template<typename T>
+inline constexpr bool is_vector_v = is_vector<T>::value;
+template<typename T>
+concept IsVector = is_vector_v<T>;
+// Map
+template<typename T>
+struct is_map : std::false_type {};
+template<typename K, typename V, typename Comp, typename Alloc>
+struct is_map<std::map<K, V, Comp, Alloc>> : std::true_type {};
+template<typename T>
+inline constexpr bool is_map_v = is_map<T>::value;
+template<typename T>
+concept IsMap = is_map_v<T>;
+// Unordered Map
+template<typename T>
+struct is_unordered_map : std::false_type {};
+template<typename K, typename V, typename Hash, typename Eq, typename Alloc>
+struct is_unordered_map<std::unordered_map<K, V, Hash, Eq, Alloc>> : std::true_type {};
+template<typename T>
+inline constexpr bool is_unordered_map_v = is_unordered_map<T>::value;
+template<typename T>
+concept IsUnorderedMap = is_unordered_map_v<T>;
+// Set
+template<typename T>
+struct is_set : std::false_type {};
+template<typename K, typename Comp, typename Alloc>
+struct is_set<std::set<K, Comp, Alloc>> : std::true_type {};
+template<typename T>
+inline constexpr bool is_set_v = is_set<T>::value;
+template<typename T>
+concept IsSet = is_set_v<T>;
+
 
 
 
@@ -236,3 +296,15 @@ struct MpzEq {
         return a == b;
     }
 };
+
+
+
+//
+// Endianness Check
+//
+constexpr bool is_little_endian() {
+    return std::endian::native == std::endian::little;
+}
+constexpr bool is_big_endian() {
+    return std::endian::native == std::endian::big;
+}

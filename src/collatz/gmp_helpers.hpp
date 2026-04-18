@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <gmpxx.h>
 
+
+
+
 template<typename T>
 inline size_t gmp_deep_sizeof(const T& obj) {
     return sizeof(obj);

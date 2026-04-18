@@ -5,6 +5,9 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <array>
+#include <string>
+#include "stream_helpers.hpp"
+
 
 
 //
@@ -231,4 +234,45 @@ class BinaryTreeCoverage {
         return ratio;
     }
 
+
+
+    //
+    // Serialize
+    //
+    [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
+        StreamHelper sh(nullptr, &out, err);
+        sh.set_category("BinaryTreeCoverage");
+
+        if (! sh.serialize_integral(_covered)) {
+            return sh.fail("_covered==" + to_string_any(_covered));
+        }
+        if (! sh.serialize_integral(_total)) {
+            return sh.fail("_total==" + to_string_any(_total));
+        }
+
+        // All Good
+        return true;
+    }
+
+
+
+    //
+    // Deserialize
+    //
+    [[nodiscard]] bool deserialize(std::istream& in, std::string* err) {
+        StreamHelper sh(&in, nullptr, err);
+        sh.set_category("BinaryTreeCoverage");
+
+        if (! sh.deserialize_integral(_covered)) {
+            return sh.fail("couldn't read _covered");
+        }
+        if (! sh.deserialize_integral(_total)) {
+            return sh.fail("couldn't read _total");
+        }
+
+        // All good
+        return true;
+    }
+
 };
+

@@ -5,12 +5,36 @@ __System Build for All Tests__
 * Ubuntu 24.04 64-bit, Desktop Version
 * Intel Core i3-4160 CPU (2 Core, [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/77488/intel-core-i34160-processor-3m-cache-3-60-ghz/specifications.html))
 * 16GB RAM DDR-3 [Kingston Spec Sheet](https://www.kingston.com/dataSheets/HX316C10FBK2_8.pdf)
-* RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/) | [Amazon Link](https://www.amazon.com/dp/B0F8PR9L3X)
+* RTX 5060 GPU [ASUS Spec Sheet](https://www.asus.com/us/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/)
 * Donor System: Intel Core i5-14600K [Intel Spec Sheet](https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html) DDR5-6000CL30
 
 Note: when larger memory and/or high core count was required, the donor system with more RAM was used and is noted.
 
 # Version History
+
+
+## 4.0.0
+
+### BinaryTree Composition Changes
+
+The `BinaryTree` class is now a static facade in front of the `BinaryTreeImplicitImpl` and `BinaryTreeMaterializedImpl` classes.
+Runtime polymorphism was never needed, so the whole dynamic pattern was useless.  As a result, the `IBinaryTreeBackend` interface
+was deleted entirely.
+
+`ImplicitBinaryTree<T>` and `MaterializedBinaryTree<T>` were made as aliases for convenience.
+
+### Implict Tree Default
+
+The `BinaryTree` class now defaults to using `BinaryTreeImplicitImpl`, hence the 4.x version bump.  Unless you're planning to view
+nodes in memory or something like that, there's no reason to make a materialized tree anymore.
+
+### Tree Promotion
+
+TODO
+
+### Save/Load
+
+TODO
 
 
 ## 3.6.0

@@ -1,4 +1,5 @@
 #pragma once
+#include "binary_tree_materialized.hpp"
 #include "concepts.hpp"
 #include "binary_tree.hpp"
 #include "gmp_helpers.hpp"
@@ -27,7 +28,6 @@ struct SieveOptions {
         .prune_hwm_nodes = true,
         .prune_parent_levels = true,
         .preserve_ancestors = true,
-        .tree_type = BinaryTreeType::MATERIALIZED
     };
 };
 
@@ -93,13 +93,13 @@ class Sieve {
     Sieve() = delete;
     //
     // User-supplied tree.
-    Sieve(BinaryTree<T>& tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
+    Sieve(BinaryTree<T, BinaryTreeMaterializedImpl<T>>& tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
         init(&tree, opts);
     }
     //
     // Sieve-built tree.
     Sieve(size_t tree_levels, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
-        BinaryTree<T> tree(tree_levels, opts.tree_opts);
+        BinaryTree<T, BinaryTreeMaterializedImpl<T>> tree(tree_levels, opts.tree_opts);
         init(&tree, opts);
     }
 
@@ -117,7 +117,7 @@ class Sieve {
     // Initialize
     // Builds the object, reusing it if necessary.
     //
-    void init(BinaryTree<T>* tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
+    void init(BinaryTree<T, BinaryTreeMaterializedImpl<T>>* tree, SieveOptions opts = Sieve<T>::DEFAULT_OPTS) {
         // Get a reference to the last level.
         const std::vector<Node<T>*>& last_level = tree->get_level_map().at(tree->get_level_count());
 
