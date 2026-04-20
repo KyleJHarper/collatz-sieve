@@ -40,9 +40,9 @@ add_compile_options(-Wall -Wextra)
 
 # Include directories.  Absl and CRoaring export their own info.
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src/include/spdlog/include
-    ${CMAKE_SOURCE_DIR}/src/include/CLI11/include/CLI
-    ${CMAKE_SOURCE_DIR}/src/include/zstd
+    ${CMAKE_SOURCE_DIR}/include/spdlog/include
+    ${CMAKE_SOURCE_DIR}/include/CLI11/include/CLI
+    ${CMAKE_SOURCE_DIR}/include/zstd
 )
 
 # Packages
@@ -70,7 +70,7 @@ set(PROJECT_LIBS
 # --------------------------
 # Abseil's CMake build system
 # --------------------------
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/abseil-cpp)
+add_subdirectory(${CMAKE_SOURCE_DIR}/include/abseil-cpp)
 
 
 
@@ -79,7 +79,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/abseil-cpp)
 # --------------------------
 set(ENABLE_ROARING_TESTS OFF CACHE BOOL "" FORCE)
 set(ROARING_BUILD_STATIC ON CACHE BOOL "" FORCE)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/CRoaring)
+add_subdirectory(${CMAKE_SOURCE_DIR}/include/CRoaring)
 
 
 
@@ -89,7 +89,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/CRoaring)
 set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
 set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/zstd/build/cmake)
+add_subdirectory(${CMAKE_SOURCE_DIR}/include/zstd/build/cmake)
 
 
 

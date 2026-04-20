@@ -1,7 +1,10 @@
 #!/bin/bash
 
 BASE_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-INCLUDE_DIR="${BASE_DIR}/src/include"
+INCLUDE_DIR="${BASE_DIR}/include"
+
+# Make sure the include dir exists.
+[ -d "${INCLUDE_DIR}" ] || mkdir "${INCLUDE_DIR}"
 
 #
 # External Repos
