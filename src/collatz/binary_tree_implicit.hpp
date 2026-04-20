@@ -10,7 +10,7 @@
 #include "node_bitmap.hpp"
 #include "node_bitmap_traits.hpp"
 #include "equality_helper.hpp"
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 #include <tbb/parallel_sort.h>
 
 
@@ -68,14 +68,8 @@ class BinaryTreeImplicitImpl {
         if(_is_initialized) { reset(); }
         _is_initialized = true;
         // Set options.
-         _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
+        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
         _is_preserving_ancestors = opts.preserve_ancestors;
-        // Build the first level's root node, supporting both 0- and 1-based trees.
-        _level_count = 1;
-        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
-        _coverage_map[_level_count].set_covered(0);
-        _coverage_map[_level_count].set_total(1);
-        _uncovered_positions.add(1);
         // Now add the other levels, if needed.
         while (_level_count < levels) {
             this->add_level();
@@ -94,6 +88,7 @@ class BinaryTreeImplicitImpl {
         _uncovered_positions.clear();
         _level_count = 0;
         _ancestors.clear();
+        _root_node = nullptr;
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
@@ -108,7 +103,7 @@ class BinaryTreeImplicitImpl {
     size_t get_level_count() const { return _level_count; }
     void set_level_count(size_t level_count) { _level_count = level_count; }
     Node<T>* get_root_node() const { return _root_node; }
-    Node<T>* get_root_node_rw() { return _root_node; }
+    Node<T>*& get_root_node_rw() { return _root_node; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
     std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map_rw() { return _coverage_map; }
     const std::vector<Node<T>*>& get_ancestors() const { return _ancestors; }
@@ -160,10 +155,11 @@ class BinaryTreeImplicitImpl {
     // Only implementation-specific checks go here.  Facade handles common.
     static bool st_equal(const BinaryTreeImplicitImpl<T>& first, const BinaryTreeImplicitImpl<T>& second, std::string* err = nullptr) {
         EqualityHelper eq(err);
+        eq.set_category("BinaryTreeImplicitImpl");
 
         // Uncovered Positions NodeBitmap
         if (! NodeBitmap<T>::st_equal(first.get_uncovered_positions(), second.get_uncovered_positions(), err)) {
-            return false;
+            return eq.fail("Node bitmap issues");
         }
 
         // Guess we made it here.  All good.
@@ -234,13 +230,27 @@ class BinaryTreeImplicitImpl {
         Node<T> right_node;
     };
     void add_level() {
+        // When we have no levels, we'll simply craft a 0- or 1-based root node and manually set level map and coverage.
+        if (_level_count == 0) {
+            _level_count = 1;
+            _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
+            _coverage_map[_level_count].set_covered(0);
+            _coverage_map[_level_count].set_total(1);
+            _uncovered_positions.add(1);
+            return;
+        }
+
         // Bump level count.
         _level_count++;
 
         // Establish TLS for our callback.
         std::vector<AddLevelTLS> callback_storage;
         // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
-        const T add_level_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
+        T add_level_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
+        if (add_level_high_water_mark < 1) {
+            add_level_high_water_mark = 1;
+        }
+
         // Build a few constexpr for the policy, stop flag, etc., which won't change at runtime.
         constexpr bool stop = false;
 

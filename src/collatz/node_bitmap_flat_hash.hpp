@@ -13,7 +13,7 @@
 #include <roaring/roaring.hh>
 #include <stdexcept>
 #include <string>
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 #include "equality_helper.hpp"
 
 
@@ -363,6 +363,14 @@ class FlatHashBitmapImpl {
     }
 
 
+static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
+    std::cout << name << " (cardinality=" << bm.cardinality() << "): ";
+    for (auto it = bm.begin(); it != bm.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << "\n";
+}
+
 
     //
     // Equal
@@ -373,6 +381,8 @@ class FlatHashBitmapImpl {
     //
     static bool st_equal(const FlatHashBitmapImpl<T>& first, const FlatHashBitmapImpl<T>& second, std::string* err = nullptr) {
         EqualityHelper eq(err);
+        eq.set_category("FlatHashBitmapImpl");
+
         // Grab the flat hash maps and prefixes.
         const map_t& f_flat_map = first.get_map();
         const map_t& s_flat_map = second.get_map();
@@ -390,7 +400,13 @@ class FlatHashBitmapImpl {
             const roaring::Roaring& f_roaring = f_flat_map.at(f_prefixes.at(i));
             const roaring::Roaring& s_roaring = s_flat_map.at(s_prefixes.at(i));
             if (! roaring::api::roaring_bitmap_equals(&(f_roaring.roaring), &(s_roaring.roaring))) {
-                return eq.fail("Bitmaps do not match for prefix " + to_string_any(f_prefixes.at(i)) + ".");
+                roaring::Roaring f_minus_s = f_roaring - s_roaring;
+                roaring::Roaring s_minus_f = s_roaring - f_roaring;
+                print_bitmap(f_minus_s, "First - Second");
+                print_bitmap(s_minus_f, "Second - First");
+                print_bitmap(f_roaring, "First full map");
+                print_bitmap(s_roaring, "Second full bitmap");
+                return eq.fail("Bitmaps do not match for prefix " + to_string_any(f_prefixes.at(i)));
             }
         }
 
@@ -432,7 +448,10 @@ class FlatHashBitmapImpl {
             }
             // Build the buffer and flush it.
             std::vector<char> buffer(u64_bitmap_size);
-            bitmap.write(buffer.data(), true);
+            size_t actual_bytes = bitmap.write(buffer.data(), true);
+            if (actual_bytes != u64_bitmap_size) {
+                return sh.fail("Number of bytes to write expected by getSizeInBytes doesn't match actual bytes returned");
+            }
             if (! sh.write_bytes(buffer.data(), u64_bitmap_size)) {
                 return sh.fail("roaring bitmap data");
             }
@@ -478,7 +497,7 @@ class FlatHashBitmapImpl {
             if (inserted) {
                 add_prefix_key(prefix);
             }
-            it->second.read(buffer.data(), true);
+            it->second = roaring::Roaring::read(buffer.data(), true);
         }
 
         // All good

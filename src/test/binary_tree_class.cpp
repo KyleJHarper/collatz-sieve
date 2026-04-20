@@ -665,22 +665,22 @@ void sle_assert_trees_equal(const BinaryTree<T, TreeType>& first, const BinaryTr
     std::string err;
     // Test that first->first is true.
     if (! first.equal(first, &err)) {
-        std::cout << "Tree equality to itself (first->first) failed using member helper.  Error chain is: " + err;
+        std::cout << "Tree equality to itself (first->first) failed using member helper.  Error chain is: " << err << std::endl;
         assert(false);
     }
     // Test first->second
     if (! first.equal(second, &err)) {
-        std::cout << "Tree equality (first->second) failed using member helper.  Error chain is: " + err;
+        std::cout << "Tree equality (first->second) failed using member helper.  Error chain is: " << err << std::endl;
         assert(false);
     }
     // Test bidirectionally second->first
     if (! second.equal(first, &err)) {
-        std::cout << "Tree equality (second->first) failed using member helper.  Error chain is: " + err;
+        std::cout << "Tree equality (second->first) failed using member helper.  Error chain is: " << err << std::endl;
         assert(false);
     }
     // Test static method direct invocation
     if (! BinaryTree<T, TreeType>::st_equal(first, second, &err)) {
-        std::cout << "Tree equality failed using static method.  Error chain is: " + err;
+        std::cout << "Tree equality failed using static method.  Error chain is: " << err << std::endl;
         assert(false);
     }
 }
@@ -688,12 +688,16 @@ template<AnySupportedIntegral T, typename TreeType>
 void sle_assert_trees_unequal(const BinaryTree<T, TreeType>& first, const BinaryTree<T, TreeType>& second, std::string& known_err) {
     std::string err;
     if (first.equal(second, &err)) {
-        std::cout << "Tree equality succeeded when it should fail, using member helper.  Error chain is: " + err;
+        std::cout << "Tree equality succeeded when it should fail, using member helper.  Error chain is: " << err << std::endl;
+        assert(false);
+    }
+    if (err.find(known_err) == std::string::npos) {
+        std::cout << "Expected to find this in err: " << known_err << "  ---- Got this in err instead, which didn't match: " << err << std::endl;
         assert(false);
     }
     assert(err.find(known_err) != std::string::npos);
     if (BinaryTree<T, TreeType>::st_equal(first, second, &err)) {
-        std::cout << "Tree equality succeeded when it should fail, using static method.  Error chain is: " + err;
+        std::cout << "Tree equality succeeded when it should fail, using static method.  Error chain is: " << err << std::endl;
         assert(false);
     }
 }
@@ -783,7 +787,12 @@ void sle_helper(
     if (fs::exists(tree_different_path)) { fs::remove(tree_different_path); }
 }
 template<AnySupportedIntegral T>
-void test_binary_tree_save_load_equal(size_t levels = 16) {
+void test_binary_tree_save_load_equal() {
+    namespace fs = std::filesystem;
+
+    // Start with smaller trees
+    size_t levels = 16;
+
     // Level count differs.
     size_t different_levels = levels + 1;
     BinaryTreeOptions opts;
@@ -801,7 +810,7 @@ void test_binary_tree_save_load_equal(size_t levels = 16) {
     sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
     sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
 
-    // Verifying HWM nodes idffers.
+    // Verifying HWM nodes differs.
     different_levels = levels;
     opts.reset();
     different_opts.reset();
@@ -810,23 +819,29 @@ void test_binary_tree_save_load_equal(size_t levels = 16) {
     sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
     sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
 
-    // Pruning HWM Nodes differs.
-    different_levels = levels;
+    // Pruning node should always throw a logic error, because deserializing it is a nightmare I'm not interested in.
     opts.reset();
-    different_opts.reset();
-    different_opts.prune_hwm_nodes = true;
-    known_err = "Is pruning hwm nodes mismatch";
-    // Materialized only.  sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
-    sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
-
-    // Pruning Parent Levels differs.
-    different_levels = levels;
+    opts.prune_hwm_nodes = true;
+    const std::string tree_path = "__tree.bin";
+    if (fs::exists(tree_path)) { fs::remove(tree_path); }
+    try {
+        MaterializedBinaryTree<T> tree(levels, opts);
+        tree.save(tree_path);
+        assert(false);
+    } catch(const std::logic_error& e) {
+        assert(std::string(e.what()).find("You've activated my trap card!") != std::string::npos);
+    }
+    if (fs::exists(tree_path)) { fs::remove(tree_path); }
     opts.reset();
-    different_opts.reset();
-    different_opts.prune_parent_levels = true;
-    known_err = "Is pruning parent levels mismatch";
-    // Materialized only.  sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
-    sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
+    opts.prune_parent_levels = true;
+    try {
+        MaterializedBinaryTree<T> tree(levels, opts);
+        tree.save(tree_path);
+        assert(false);
+    } catch(const std::logic_error& e) {
+        assert(std::string(e.what()).find("You've activated my trap card!") != std::string::npos);
+    }
+    if (fs::exists(tree_path)) { fs::remove(tree_path); }
 }
 
 
@@ -837,6 +852,10 @@ void test_binary_tree_save_load_equal(size_t levels = 16) {
 template<AnySupportedIntegral T>
 void run_all(size_t root_value) {
     BinaryTreeMath<T>::set_root_value(root_value);
+
+    std::cout << "test_binary_tree_save_load_equal() ..." << std::flush;
+    test_binary_tree_save_load_equal<T>();
+    std::cout << " passed.\n";
 
     std::cout << "test_binary_tree_basic_construction() ..." << std::flush;
     test_binary_tree_basic_construction<T>();

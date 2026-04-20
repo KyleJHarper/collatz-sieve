@@ -42,6 +42,7 @@ add_compile_options(-Wall -Wextra)
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/include/spdlog/include
     ${CMAKE_SOURCE_DIR}/src/include/CLI11/include/CLI
+    ${CMAKE_SOURCE_DIR}/src/include/zstd
 )
 
 # Packages
@@ -58,6 +59,7 @@ set(PROJECT_LIBS
     ${GMPXX_LIB}
     TBB::tbb
     OpenMP::OpenMP_CXX
+    libzstd_static
     absl::flat_hash_map
     absl::hash
     roaring
@@ -78,6 +80,16 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/abseil-cpp)
 set(ENABLE_ROARING_TESTS OFF CACHE BOOL "" FORCE)
 set(ROARING_BUILD_STATIC ON CACHE BOOL "" FORCE)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/CRoaring)
+
+
+
+# --------------------------
+# Zstd's CMake build system
+# --------------------------
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/include/zstd/build/cmake)
 
 
 

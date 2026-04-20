@@ -6,7 +6,7 @@
 #include "concepts.hpp"
 #include <stdexcept>
 #include <type_traits>
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 #include <fstream>
 #include "equality_helper.hpp"
 #include <tbb/parallel_sort.h>
@@ -195,6 +195,7 @@ class BinaryTree {
     static bool st_equal(const BinaryTree<T, TreeType>& first, const BinaryTree<T, TreeType>& second, std::string* err = nullptr) {
         // Common to all trees.
         EqualityHelper eq(err);
+        eq.set_category("BinaryTree");
 
         // Root node
         if (! Node<T>::st_equal(first.get_root_node(), second.get_root_node(), err)) {
@@ -311,8 +312,14 @@ class BinaryTree {
         // The is_initialized must be true, so we ignore it.
 
         // Root node
-        if (! get_root_node()->serialize(out, err)) {
-            return sh.fail("root node");
+        bool b_has_root_node = get_root_node() != nullptr;
+        if (! sh.serialize_bool(b_has_root_node)) {
+            return sh.fail("b_has_root_node");
+        }
+        if (b_has_root_node) {
+            if (! get_root_node()->serialize(out, err)) {
+                return sh.fail("root node");
+            }
         }
 
         // Coverage
@@ -441,17 +448,35 @@ class BinaryTree {
         _impl.set_is_initialized(true);
 
         // Root node
-        Node<T>* root_node = _impl.get_root_node_rw();
-        T root_parent_v;
-        T root_hwm_ancestor_v;
-        if (! root_node->deserialize(in, root_parent_v, root_hwm_ancestor_v, err)) {
-            return sh.fail("root node");
+        bool source_has_root_node;
+        if (! sh.deserialize_bool(source_has_root_node)) {
+            return sh.fail("has_root_node");
         }
-        if (root_parent_v != 0) {
-            return sh.fail("Root node's parent value must be 0 (absent), but it's: " + to_string_any(root_parent_v));
-        }
-        if (root_hwm_ancestor_v != 0) {
-            return sh.fail("Root node's hwm ancestor value must be 0 (absent), but it's: " + to_string_any(root_hwm_ancestor_v));
+        if (source_has_root_node) {
+            Node<T>*& root_node = _impl.get_root_node_rw();
+            // Root node can be null on *this* object, so make one for it to use.
+            if (root_node == nullptr) {
+                root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
+            }
+            T root_parent_v;
+            T root_hwm_ancestor_v;
+            uint8_t child_count;
+            if (! root_node->deserialize(in, root_parent_v, root_hwm_ancestor_v, child_count, err)) {
+                return sh.fail("root node");
+            }
+            if (root_parent_v != 0) {
+                return sh.fail("Root node's parent value must be 0 (absent), but it's: " + to_string_any(root_parent_v));
+            }
+            if (root_hwm_ancestor_v != 0) {
+                return sh.fail("Root node's hwm ancestor value must be 0 (absent), but it's: " + to_string_any(root_hwm_ancestor_v));
+            }
+        } else {
+            // The backed up file didn't have a root node... which means it was a 0-level tree :/
+            if (_impl.get_root_node() != nullptr) {
+                Node<T>*& root_node = _impl.get_root_node_rw();
+                delete root_node;
+                root_node = nullptr;
+            }
         }
 
         // Coverage
@@ -475,20 +500,22 @@ class BinaryTree {
         }
 
         // Ancestors
-        // These are new-placement (no children).  Only their value was emitted.  Slam them into the vector.
+        // These are new-placement (no children).  Slam them into the vector.
         uint64_t u64_size = 0;
-        std::vector<Node<T>*>& ancestors = _impl.get_ancestors_rw();
+        std::vector<Node<T>*>& ancestors_rw = _impl.get_ancestors_rw();
         if (! sh.deserialize_integral(u64_size)) {
             return sh.fail("couldn't read ancestors.size() count");
         }
-        ancestors.reserve(static_cast<size_t>(u64_size));
-        T new_node_value;
+        ancestors_rw.reserve(static_cast<size_t>(u64_size));
+        T parent_v;
+        T hwm_ancestor_v;
+        uint8_t child_count;
         for (uint64_t i = 0; i < u64_size; i++) {
-            if (! sh.deserialize_integral(new_node_value)) {
-                return sh.fail("couldn't read node value on index i==" + to_string_any(i));
+            Node<T>* new_node = new Node<T>(T(1));
+            if (! new_node->deserialize(in, parent_v, hwm_ancestor_v, child_count, err)) {
+                return sh.fail("couldn't deserialize ancestor at index i==" + to_string_any(i));
             }
-            Node<T>* new_node = new Node<T>(new_node_value);
-            ancestors.push_back(new_node);
+            ancestors_rw.push_back(new_node);
         }
 
         // Implementation-specific hook

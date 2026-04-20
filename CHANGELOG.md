@@ -28,13 +28,48 @@ was deleted entirely.
 The `BinaryTree` class now defaults to using `BinaryTreeImplicitImpl`, hence the 4.x version bump.  Unless you're planning to view
 nodes in memory or something like that, there's no reason to make a materialized tree anymore.
 
-### Tree Promotion
+### Save/Load/Equal (Serialization/Deserialization)
 
-TODO
+_You can now save and load!_
 
-### Save/Load
+Several classes were given `serialize()` and `deserialize()` methods, and the `BinaryTree` facade was given a `save()` and `load()`
+method too.  A lot nuance is involved in this, so read the following sections carefully before using it.
 
-TODO
+#### Portable
+
+The file emitted is a rudimentary, binary format.  It mostly serializes integrals and booleans, and the `CRoaring` bitmap objects
+as needed.  A `StreamHelper` class ensures endianness remains little, however I don't have access to one to test it.  As for the
+`CRoaring` object, we invoke the portable version of their export.
+
+All-in-all, trees exported on different systems *should* work equally on any platform.
+
+#### Size and Compression
+
+dsfsfa f
+
+Table of Sizes
+
+#### Materialized Saving is a Bad Idea
+
+Saving and loading materialized trees is supported **but not encouraged**.  It's almost always faster to rebuild a tree than load
+an existing one.  However, the whole point of the `MaterializedBinaryTreeImpl` is to give a real, node-instantiated binary tree for
+review.  Therefore, we support it with one caveat: you can **NOT** have any pruning enabled.  While technically possible, the logic
+required to make this work is annoying as @#$% and I don't feel like doing it, especially when you can rebuild it in seconds.
+Furthermore, be aware the size output is huge.  A simple 28-level tree with `zstd -19` compression requires 285MB (7.6GB raw).
+
+#### Equality
+
+To aid with save/load testing, an `equal()` method was added to all classes which have `serialize()` and `deserialize()`.
+
+
+### Root Node Instantiation Moved
+
+The `BinaryTree*Impl` classes built the `_root_node` in the `init()` method.  This was never a good idea, because it meant that a
+default-constructed node would have no root node even after `add_level()` was called.  It also meant the root node wouldn't be
+added back in necessarily if `reset()` was called.
+
+To resolve this, `add_level()` is now the authority to build the root node if needed, and juggle the coverage, level_map, and
+uncovered positions as needed.
 
 
 ## 3.6.0

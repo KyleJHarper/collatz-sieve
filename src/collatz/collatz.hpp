@@ -327,6 +327,12 @@ class Collatz {
     //
     // Main verify method.
     static inline bool st_verify(const T& initial_value, const T& sentinel_value = 1) {
+        // Quick sanity check.  Sentinel value should be within the Collatz space (>=1) or we'll loop forever.
+        // However, there are cases, such as a tree rooted at 0, where this might get tripped up.
+        if (sentinel_value < 1) {
+            throw std::out_of_range("You cannot send a sentinel value for st_verify below 1.  You sent: " + to_string_any(sentinel_value));
+        }
+
         // Select the correct type to upgrade to, if needed for overflow.
         if constexpr(NativeIntegral<T>) {
             // If the type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.

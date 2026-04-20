@@ -11,7 +11,7 @@
 #include <string>
 #include "collatz_affine_stride.hpp"
 #include "count_trailing_helpers.hpp"
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 #include "equality_helper.hpp"
 
 
@@ -202,7 +202,6 @@ class Node {
     // Reset to make this act like a new() object.
     //
     void reset() {
-        // The _collatz object has its own resetting logic in its init().  Nothing to do here.
         release_children();
         _parent = nullptr;
         _hwm_ancestor = nullptr;
@@ -347,7 +346,7 @@ class Node {
     bool does_own_children() const { return _owns_children; }
     const Node<T>* get_child(size_t index) const { return _children[index]; }
     Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
-    size_t get_child_count() const { return static_cast<size_t>( _child_count); }
+    uint8_t get_child_count() const { return _child_count; }
     size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
     //
     // Tree level and position come from BinaryTree, but we'll make them accessible here.
@@ -398,6 +397,7 @@ class Node {
     //
     static bool st_equal (const Node<T>* first, const Node<T>* second, std::string* err = nullptr) {
         EqualityHelper eq(err);
+        eq.set_category("Node");
 
         // They should both be real objects or nullptr.
         // When they disagree because one is real and one is a nullptr, fail.
@@ -576,7 +576,7 @@ class Node {
     // Deserialize
     // Converts data from "in" to this object.  Returns the parent and hwm_ancestor values for later linking.
     //
-    [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& hwm_ancestor_v, std::string* err = nullptr) {
+    [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& hwm_ancestor_v, uint8_t& child_count, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("Node");
 
@@ -616,12 +616,13 @@ class Node {
         if (! sh.deserialize_bool(b_tmp)) {
             return sh.fail("couldn't read _owns_children");
         }
-        _is_initialized = b_tmp;
+        _owns_children = b_tmp;
 
-        // Child count
-        if (! sh.deserialize_integral(_child_count)) {
+        // Child count is returned, because deserializing a node doesn't actually make the kids.
+        if (! sh.deserialize_integral(child_count)) {
             return sh.fail("couldn't read child_count");
         }
+        _child_count = 0;
 
         // FG chain length
         if (! sh.deserialize_integral(_fg_chain_length)) {

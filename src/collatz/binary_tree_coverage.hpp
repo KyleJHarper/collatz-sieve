@@ -6,7 +6,7 @@
 #include <gmpxx.h>
 #include <array>
 #include <string>
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 
 
 

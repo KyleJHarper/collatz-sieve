@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include <stdexcept>
 #include <unordered_map>
 #include "concepts.hpp"
 #include "equality_helper.hpp"
@@ -9,7 +10,7 @@
 #include "binary_tree_coverage.hpp"
 #include "binary_tree_options.hpp"
 #include "binary_tree_types.hpp"
-#include "stream_helpers.hpp"
+#include "stream_helper.hpp"
 #include <omp.h>
 #include <tbb/parallel_sort.h>
 
@@ -87,13 +88,6 @@ class BinaryTreeMaterializedImpl {
         _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
         _is_pruning_parent_levels = opts.prune_parent_levels;
         _is_preserving_ancestors = opts.preserve_ancestors;
-        // Build the first level's root node, supporting both 0- and 1-based trees.
-        _level_count = 1;
-        _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
-        _level_map[_level_count].resize(1);
-        _level_map[_level_count][0] = _root_node;
-        _coverage_map[_level_count].set_covered(0);
-        _coverage_map[_level_count].set_total(1);
         while (_level_count < levels) {
             this->add_level();
         }
@@ -111,6 +105,7 @@ class BinaryTreeMaterializedImpl {
         _level_map.clear();
         _level_count = 0;
         _ancestors.clear();
+        _root_node = nullptr;
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
         _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
@@ -127,7 +122,7 @@ class BinaryTreeMaterializedImpl {
     size_t get_level_count() const { return _level_count; }
     void set_level_count(size_t level_count) { _level_count = level_count; }
     Node<T>* get_root_node() const { return _root_node; }
-    Node<T>* get_root_node_rw() { return _root_node; }
+    Node<T>*& get_root_node_rw() { return _root_node; }
     const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
     std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map_rw() { return _coverage_map; }
     const std::vector<Node<T>*>& get_ancestors() const { return _ancestors; }
@@ -202,6 +197,7 @@ class BinaryTreeMaterializedImpl {
     // Only implementation-specific checks go here.  Facade handles common.
     static bool st_equal(const BinaryTreeMaterializedImpl<T>& first, const BinaryTreeMaterializedImpl<T>& second, std::string* err = nullptr) {
         EqualityHelper eq(err);
+        eq.set_category("BinaryTreeMaterializedImpl");
 
         // Flags
         if (eq.unequal(first.is_pruning_hwm_nodes(), second.is_pruning_hwm_nodes())) {
@@ -246,6 +242,16 @@ class BinaryTreeMaterializedImpl {
     // Serializes the implementation-specific details.  Facade handles common.
     //
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
+        // !!! BIG FAT ANNOYING ERROR !!!
+        if (_is_pruning_hwm_nodes || _is_pruning_parent_levels) {
+            std::string msg = "You've activated my trap card!";
+                msg+= "  Serializing and deserializing a materialized tree is already a bad idea.";
+                msg+= "  Doing it with any form of node pruning enabled is NOT supported NOR a good idea.";
+                msg+= "  Oh, and rebuilding a materialized tree is almost always faster than trying to import one.";
+                msg+= "  Be well.";
+            throw std::logic_error(msg);
+        }
+
         StreamHelper sh(nullptr, &out, err);
         sh.set_category("BinaryTreeMaterializedImpl");
 
@@ -326,9 +332,11 @@ class BinaryTreeMaterializedImpl {
         uint64_t u64_level_map_count = 0;
         T parent_v;
         T hwm_ancestor_v;
+        uint8_t child_count;
         if (! sh.deserialize_integral(u64_level_map_count)) {
             return sh.fail("couldn't read level_map_count");
         }
+        // If there was even 1 level beyond the first exported, assume level
         for (uint64_t i = 0; i < u64_level_map_count; i++) {
             uint64_t parent_index = 0;
             uint64_t u64_level = 0;
@@ -345,7 +353,7 @@ class BinaryTreeMaterializedImpl {
             for (uint64_t j = 0; j < u64_node_size; j++) {
                 // Make a new heap-allocated node to deserialize into.
                 Node<T>* new_node = new Node<T>();
-                if (! new_node->deserialize(in, parent_v, hwm_ancestor_v, err)) {
+                if (! new_node->deserialize(in, parent_v, hwm_ancestor_v, child_count, err)) {
                     return sh.fail("couldn't get node on level==" + to_string_any(level) + " and position j==" + to_string_any(j));
                 }
                 // Add it to the map.
@@ -367,28 +375,50 @@ class BinaryTreeMaterializedImpl {
                 // Link up parents and children.
                 new_node->assign_parent(parent);
                 parent->assign_child(new_node);
-                // If there's an ancestor, link it.  These are value-ordered in add_level(), so we can binary search.
-                if (hwm_ancestor_v != 0) {
-                    auto it = std::lower_bound(
-                        _ancestors.begin(),
-                        _ancestors.end(),
-                        hwm_ancestor_v,
-                        [](const Node<T>* ancestor, const T& val) {
-                            return ancestor->get_value() < val;
-                        }
-                    );
-                    if (it != _ancestors.end()) {
-                        Node<T>* candidate = *it;
-                        if (candidate->get_value() == hwm_ancestor_v) {
-                            new_node->assign_hwm_ancestor(candidate);
-                        }
-                    }
-                    if (new_node->get_hwm_ancestor() == nullptr) {
-                        return sh.fail("couldn't find hwm ancestor for new node with value==" + to_string_any(new_node->get_value()));
-                    }
+                // Follow the same ancestor tracking logic from Node: inherit parent's, and if still null, see if parent is one.
+                new_node->assign_hwm_ancestor(parent->get_hwm_ancestor());
+                if (new_node->get_hwm_ancestor() == nullptr && parent->is_below_high_water_mark()) {
+                    new_node->assign_hwm_ancestor(parent);
                 }
+                // // Now for general ancestor tracking (separate pool of new-placement nodes).
+                // if (_is_preserving_ancestors) {
+                //     // If new node below the HWM, insert it to the ancestors.
+                //     if (new_node->is_below_high_water_mark()) {
+                //         auto it = std::lower_bound(
+                //             _ancestors.begin(),
+                //             _ancestors.end(),
+                //             new_node,
+                //             [](const Node<T>* a, const Node<T>* b) {
+                //                 return a->get_value() < b->get_value();
+                //             }
+                //         );
+                //         _ancestors.insert(it, new_node);
+                //     }
+                //     // // If there's an ancestor for this node, link it.  These are value-ordered in add_level(), so we can binary search.
+                //     // if (hwm_ancestor_v != 0) {
+                //     //     auto it = std::lower_bound(
+                //     //         _ancestors.begin(),
+                //     //         _ancestors.end(),
+                //     //         hwm_ancestor_v,
+                //     //         [](const Node<T>* ancestor, const T& val) {
+                //     //             return ancestor->get_value() < val;
+                //     //         }
+                //     //     );
+                //     //     if (it != _ancestors.end()) {
+                //     //         Node<T>* candidate = *it;
+                //     //         if (candidate->get_value() == hwm_ancestor_v) {
+                //     //             new_node->assign_hwm_ancestor(candidate);
+                //     //         }
+                //     //     }
+                //     //     if (new_node->get_hwm_ancestor() == nullptr) {
+                //     //         return sh.fail("couldn't find hwm ancestor with value==" + to_string_any(hwm_ancestor_v) + " for new node with value==" + to_string_any(new_node->get_value()));
+                //     //     }
+                //     // }
+                // }
             }
         }
+
+        // Now, if we aren't tracking ancestors permanently, purge the vector (not the nodes).
 
         // All good
         return true;
@@ -405,6 +435,17 @@ class BinaryTreeMaterializedImpl {
     // We assume the parent generation was already pruned, and we'll test children after we make them.
     //
     void add_level() {
+        // When we have no levels, we'll simply craft a 0- or 1-based root node and manually set level map and coverage.
+        if (_level_count == 0) {
+            _level_count = 1;
+            _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
+            _level_map[_level_count].resize(1);
+            _level_map[_level_count][0] = _root_node;
+            _coverage_map[_level_count].set_covered(0);
+            _coverage_map[_level_count].set_total(1);
+            return;
+        }
+
         // Get the parent and child levels.  Then confirm the new one will fit.  Then bump count.
         size_t parent_level = _level_count;
         size_t child_level = _level_count + 1;
@@ -442,6 +483,9 @@ class BinaryTreeMaterializedImpl {
 
                 // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
                 T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
+                if (my_high_water_mark < 1) {
+                    my_high_water_mark = 1;
+                }
 
                 // Now Loop
                 #pragma omp for schedule(static)

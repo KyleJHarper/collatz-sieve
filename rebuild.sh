@@ -45,6 +45,16 @@ else
   cd CRoaring
   git checkout v4.6.1
 fi
+#
+# Zstd
+if [ -d "${INCLUDE_DIR}/zstd" ] ; then
+  echo "Zstd already cloned.  Ignoring." >&2
+else
+  cd "${INCLUDE_DIR}"
+  git clone https://github.com/facebook/zstd.git
+  cd zstd
+  git checkout v1.5.7
+fi
 
 
 #
@@ -63,7 +73,7 @@ touch build/Release/compile_commands.json
 #
 # Calls cmake to rebuild anything that needs it.
 #
-cmake --build build/Debug || exit 1
-#cmake --build build/Debug --parallel || exit 1
+#cmake --build build/Debug || exit 1
+cmake --build build/Debug --parallel || exit 1
 cmake --build build/Release --parallel
 
