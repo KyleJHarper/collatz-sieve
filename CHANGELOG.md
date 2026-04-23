@@ -38,16 +38,57 @@ method too.  A lot nuance is involved in this, so read the following sections ca
 #### Portable
 
 The file emitted is a rudimentary, binary format.  It mostly serializes integrals and booleans, and the `CRoaring` bitmap objects
-as needed.  A `StreamHelper` class ensures endianness remains little, however I don't have access to one to test it.  As for the
-`CRoaring` object, we invoke the portable version of their export.
+as needed.  A `StreamHelper` class ensures endianness remains little, however I don't have access to a big-endian system to test
+this. As for the `CRoaring` object, we invoke the portable version of their export.
 
 All-in-all, trees exported on different systems *should* work equally on any platform.
 
-#### Size and Compression
+#### Output and Compression
 
-dsfsfa f
+The `tree.save(...)` method accepts a `path`, which it expects to map to a file or file-like object (`std::ofstream` internally).
+Following the design of many GNU programs, you may specify a single hyphen to write to stdout: `tree.save("-")`.  Note, this will
+map output to `&std:cout`.  We also perform a simple `isatty()` to prevent writing binary data to terminal.
 
-Table of Sizes
+The `tree.save(...)` method will compress your tree with [ZStandard](https://github.com/facebook/zstd) by default, using the
+maximum compression, equivalent to CLI: `zstd --ultra -22`.  To improve multithreading performance, we start with the end directive
+`ZSTD_e_continue` and swtich to `ZSTD_e_flush` when `compression_level > 19`, because the window size simply gets too big to engage
+more threads at higher compression.
+
+If you dislike any of the compression choices, you can always write to stdout and pipe it into `zstd` CLI yourself, using whatever
+parameters you prefer.  The `save()` and `load()` methods create and read *any* correctly formatted ZStandard file.
+
+Finally, if you don't want compression for whatever reason, you can specify zero: `tree.save(path, 0)`.  This will bypass ZStandard
+entirely and write in raw format to disk.
+
+Both Materialized and Implicit trees compress well.  Above level ~32, compression tends toward ~2-3% (97-98% reduction).  So yeah,
+we REALLY REALLY recommend you use compression.
+
+Compression Results Table (Implicit Tree, Level 40, 1GB Raw)
+
+| Zstd Level | Raw Size (MB) | Comp Size (MB) | Ratio  |
+| ---------: | ------------: | -------------: | -----: |
+|          1 |          1030 |            234 | 22.23% |
+|          2 |          1030 |            235 | 22.37% |
+|          3 |          1030 |            214 | 20.35% |
+|          4 |          1030 |            213 | 20.24% |
+|          5 |          1030 |            188 | 17.91% |
+|          6 |          1030 |            183 | 17.43% |
+|          7 |          1030 |            170 | 16.16% |
+|          7 |          1030 |            166 | 15.78% |
+|          9 |          1030 |            155 | 14.79% |
+|         10 |          1030 |            142 | 13.52% |
+|         11 |          1030 |            131 | 12.47% |
+|         12 |          1030 |            131 | 12.45% |
+|         13 |          1030 |            133 | 12.68% |
+|         14 |          1030 |            119 | 11.33% |
+|         15 |          1030 |            109 | 10.34% |
+|         16 |          1030 |            104 |  9.91% |
+|         17 |          1030 |             84 |  8.03% |
+|         18 |          1030 |             82 |  7.77% |
+|         19 |          1030 |             77 |  7.36% |
+|         20 |          1030 |             43 |  4.11% |
+|         21 |          1030 |             30 |  2.86% |
+|         21 |          1030 |             21 |  1.97% |
 
 #### Materialized Saving is a Bad Idea
 

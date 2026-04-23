@@ -11,6 +11,10 @@
 #include "equality_helper.hpp"
 #include <tbb/parallel_sort.h>
 #include "abi_helpers.hpp"
+#include "zstd_compress.hpp"
+#include "zstd_decompress.hpp"
+#include <cstdio>
+#include <unistd.h>
 
 
 
@@ -533,19 +537,63 @@ class BinaryTree {
     // Save
     // Writes the serialize() data to the path specified.  Returns true if successful.
     //
-    bool save(const std::string& path) {
-        std::ofstream f_out(path, std::ios::binary);
-        if (!f_out) {
-            throw std::runtime_error("Failed to open file for writing");
+    // If the path is "-", will write to stdout as long as stdout isn't a terminal.
+    //
+    // Compresses by default.  Set compression_level = 0 to emit raw format.
+    //
+    bool save(const std::string& path, int compression_level = 22) {
+        // Sanity checks.
+        if (compression_level > 22) {
+            throw std::out_of_range("Zstd compression cannot exceed 22.  You sent " + to_string_any(compression_level) + " to BinaryTree.save()");
+        }
+        if (compression_level < 0) {
+            throw std::out_of_range("While Zstd supports negative compression levels, we do not.  You sent " + to_string_any(compression_level) + " to BinaryTree.save()");
         }
 
+        // Setup some pointers to the file output and a potential zstd out.
+        std::ofstream file_out;
+        std::ostream* final_out = nullptr;
+        std::unique_ptr<zstd_ostream> zstd_out;
+
+        // Open the file stream.
+        const bool use_compression = compression_level > 0;
+        if (path == "-") {
+            // Write to stdout.  Ensure it's not a terminal.
+            if (isatty(fileno(stdout))) {
+                throw std::runtime_error("Refusing to write binary data to a terminal.  Redirect to a file, pipe, etc.");
+            }
+            final_out = &std::cout;
+        } else {
+            // Write to a normal file.
+            file_out.open(path, std::ios::binary);
+            if (!file_out) {
+                throw std::runtime_error("Failed to open file for writing");
+            }
+            final_out = &file_out;
+        }
+
+        // If compression is enabled, thread it into our zstd_ostream helper.
+        if (use_compression) {
+            zstd_out = std::make_unique<zstd_ostream>(*final_out, compression_level);
+            final_out = zstd_out.get();
+        }
+
+        // Perform the serialization and see if it worked.
         std::string err;
-        if (! serialize(f_out, &err)) {
+        bool ok = serialize(*final_out, &err);
+
+        // If compression is used, zstd requires finialization logic to finish a frame.
+        if (use_compression) {
+            zstd_out->finalize();
+        } else {
+            // We'll flush a raw file here just for good practice.
+            final_out->flush();
+        }
+        if (! ok) {
             throw std::runtime_error("Failed to serialize data.  Error chain is:  " + err);
         }
-        f_out.flush();
 
-        return f_out.good();
+        return ok && final_out->good();
     }
 
 
@@ -555,17 +603,43 @@ class BinaryTree {
     // Reads the deserialize() data from the path specified.  Returns true if successful.
     //
     bool load(const std::string& path) {
+        // Open the file stream.
         std::ifstream f_in(path, std::ios::binary);
         if (!f_in) {
             throw std::runtime_error("Failed to open file for reading");
         }
 
+        // Link an istream to the file input to start.
+        std::istream* final_in = &f_in;
+        std::unique_ptr<zstd_istream> zstd_in;
+
+        // Check for Zstd compression.  Then rewind our cursor.
         std::string err;
-        if (! deserialize(f_in, &err)) {
-            throw std::runtime_error("Failed to deserialize data.  Error chain is:  " + err);
+        uint32_t four_byte_magic;
+        {
+            StreamHelper sh(final_in, nullptr, &err);
+            std::streampos pos = f_in.tellg();
+            if (! sh.deserialize_integral(four_byte_magic)) {
+                throw std::runtime_error("Failed to deserialize first four bytes to detect Zstd compression.  Error chain is: " + err);
+            }
+            f_in.clear();
+            f_in.seekg(pos);
         }
 
-        return f_in.good();
+        // If we have Zstd compression, we need to link the file to our decompressor and pass on a different istream.
+        const bool is_zstd = four_byte_magic == ZSTD_MAGICNUMBER;
+        if (is_zstd) {
+            zstd_in = std::make_unique<zstd_istream>(f_in);
+            final_in = zstd_in.get();
+        }
+
+        // Now we can deserialize and it'll only receive the raw data.
+        err.clear();
+        if (! deserialize(*final_in, &err)) {
+            throw std::runtime_error("Failed to deserialize data (zstd compressed=" + to_string_any(is_zstd) + ").  Error chain is:  " + err);
+        }
+
+        return true;
     }
 
 

@@ -1,12 +1,9 @@
 # Current Work
 
-## Re-verify GPU on Peak by Bit
-For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from
-finding 2^109 lately.
-
-## Map Remainder of Peak by Bit
-We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get
-those last 19 places...
+## Peak-By-Bit
+* Re-verify GPU on Peak by Bit.  For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from finding 2^109 lately.
+* We are currently testing every number until it hits HWM, but if we used a forward-looking cache we could probably speed the program up.  Problem is I have no idea how to do that with CUDA...  Maybe there's a CRoaring that compiles on CUDA...?
+* Map Remainder of Peak by Bit.  We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get those last 19 places...
 
 ## Sieve
 * Flesh this out so it's ironclad.
@@ -24,109 +21,8 @@ those last 19 places...
 * Some of the odd nodes become larger odds on the same level.
 * etc.
 
-## Clean up concepts.hpp
-* It's sharing a few functions instead of just providing concepts.  Clean it up.
-
-## Get rid of _fg_chain_length
-* It's just level_count - 1, which is easy to compute from math.
-
-## Add Compression
-* Either compress the serialized data automatically for the user, or at least document how much space it saves to do so.
-
-for i in {1..22} ; do echo std -${i} -o implicit_40.bin.zstd_${i} --ultra implicit_40.bin ; zstd -${i} -o implicit_40.bin.zstd_${i} --ultra implicit_40.bin ; done
-zstd -1 -o implicit_40.bin.zstd_1 --ultra implicit_40.bin
-implicit_40.bin      : 22.23%   (  1.03 GiB =>    234 MiB, implicit_40.bin.zstd_1)
-zstd -2 -o implicit_40.bin.zstd_2 --ultra implicit_40.bin
-implicit_40.bin      : 22.37%   (  1.03 GiB =>    235 MiB, implicit_40.bin.zstd_2)
-zstd -3 -o implicit_40.bin.zstd_3 --ultra implicit_40.bin
-implicit_40.bin      : 20.35%   (  1.03 GiB =>    214 MiB, implicit_40.bin.zstd_3)
-zstd -4 -o implicit_40.bin.zstd_4 --ultra implicit_40.bin
-implicit_40.bin      : 20.24%   (  1.03 GiB =>    213 MiB, implicit_40.bin.zstd_4)
-zstd -5 -o implicit_40.bin.zstd_5 --ultra implicit_40.bin
-implicit_40.bin      : 17.91%   (  1.03 GiB =>    188 MiB, implicit_40.bin.zstd_5)
-zstd -6 -o implicit_40.bin.zstd_6 --ultra implicit_40.bin
-implicit_40.bin      : 17.43%   (  1.03 GiB =>    183 MiB, implicit_40.bin.zstd_6)
-zstd -7 -o implicit_40.bin.zstd_7 --ultra implicit_40.bin
-implicit_40.bin      : 16.16%   (  1.03 GiB =>    170 MiB, implicit_40.bin.zstd_7)
-zstd -8 -o implicit_40.bin.zstd_8 --ultra implicit_40.bin
-implicit_40.bin      : 15.78%   (  1.03 GiB =>    166 MiB, implicit_40.bin.zstd_8)
-zstd -9 -o implicit_40.bin.zstd_9 --ultra implicit_40.bin
-implicit_40.bin      : 14.79%   (  1.03 GiB =>    155 MiB, implicit_40.bin.zstd_9)
-zstd -10 -o implicit_40.bin.zstd_10 --ultra implicit_40.bin
-implicit_40.bin      : 13.52%   (  1.03 GiB =>    142 MiB, implicit_40.bin.zstd_10)
-zstd -11 -o implicit_40.bin.zstd_11 --ultra implicit_40.bin
-implicit_40.bin      : 12.47%   (  1.03 GiB =>    131 MiB, implicit_40.bin.zstd_11)
-zstd -12 -o implicit_40.bin.zstd_12 --ultra implicit_40.bin
-implicit_40.bin      : 12.45%   (  1.03 GiB =>    131 MiB, implicit_40.bin.zstd_12)
-zstd -13 -o implicit_40.bin.zstd_13 --ultra implicit_40.bin
-implicit_40.bin      : 12.68%   (  1.03 GiB =>    133 MiB, implicit_40.bin.zstd_13)
-zstd -14 -o implicit_40.bin.zstd_14 --ultra implicit_40.bin
-implicit_40.bin      : 11.33%   (  1.03 GiB =>    119 MiB, implicit_40.bin.zstd_14)
-zstd -15 -o implicit_40.bin.zstd_15 --ultra implicit_40.bin
-implicit_40.bin      : 10.34%   (  1.03 GiB =>    109 MiB, implicit_40.bin.zstd_15)
-zstd -16 -o implicit_40.bin.zstd_16 --ultra implicit_40.bin
-implicit_40.bin      :  9.91%   (  1.03 GiB =>    104 MiB, implicit_40.bin.zstd_16)
-zstd -17 -o implicit_40.bin.zstd_17 --ultra implicit_40.bin
-implicit_40.bin      :  8.03%   (  1.03 GiB =>   84.3 MiB, implicit_40.bin.zstd_17)
-zstd -18 -o implicit_40.bin.zstd_18 --ultra implicit_40.bin
-implicit_40.bin      :  7.77%   (  1.03 GiB =>   81.6 MiB, implicit_40.bin.zstd_18)
-zstd -19 -o implicit_40.bin.zstd_19 --ultra implicit_40.bin
-implicit_40.bin      :  7.36%   (  1.03 GiB =>   77.3 MiB, implicit_40.bin.zstd_19)
-zstd -20 -o implicit_40.bin.zstd_20 --ultra implicit_40.bin
-implicit_40.bin      :  4.11%   (  1.03 GiB =>   43.2 MiB, implicit_40.bin.zstd_20)
-zstd -21 -o implicit_40.bin.zstd_21 --ultra implicit_40.bin
-implicit_40.bin      :  2.86%   (  1.03 GiB =>   30.1 MiB, implicit_40.bin.zstd_21)
-zstd -22 -o implicit_40.bin.zstd_22 --ultra implicit_40.bin
-implicit_40.bin      :  1.97%   (  1.03 GiB =>   20.7 MiB, implicit_40.bin.zstd_22)
-
-
-for i in {1..22} ; do echo zstd -${i} -o implicit_40.bin.zstd_${i} --ultra -T0 implicit_40.bin ; zstd -${i} -o implicit_40.bin.zstd_${i} --ultra -T0 implicit_40.bin ; done
-zstd -1 -o implicit_40.bin.zstd_1 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 22.23%   (  1.03 GiB =>    234 MiB, implicit_40.bin.zstd_1)
-zstd -2 -o implicit_40.bin.zstd_2 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 22.37%   (  1.03 GiB =>    235 MiB, implicit_40.bin.zstd_2)
-zstd -3 -o implicit_40.bin.zstd_3 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 20.35%   (  1.03 GiB =>    214 MiB, implicit_40.bin.zstd_3)
-zstd -4 -o implicit_40.bin.zstd_4 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 20.24%   (  1.03 GiB =>    213 MiB, implicit_40.bin.zstd_4)
-zstd -5 -o implicit_40.bin.zstd_5 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 17.91%   (  1.03 GiB =>    188 MiB, implicit_40.bin.zstd_5)
-zstd -6 -o implicit_40.bin.zstd_6 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 17.43%   (  1.03 GiB =>    183 MiB, implicit_40.bin.zstd_6)
-zstd -7 -o implicit_40.bin.zstd_7 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 16.16%   (  1.03 GiB =>    170 MiB, implicit_40.bin.zstd_7)
-zstd -8 -o implicit_40.bin.zstd_8 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 15.78%   (  1.03 GiB =>    166 MiB, implicit_40.bin.zstd_8)
-zstd -9 -o implicit_40.bin.zstd_9 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 14.79%   (  1.03 GiB =>    155 MiB, implicit_40.bin.zstd_9)
-zstd -10 -o implicit_40.bin.zstd_10 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 13.52%   (  1.03 GiB =>    142 MiB, implicit_40.bin.zstd_10)
-zstd -11 -o implicit_40.bin.zstd_11 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 12.47%   (  1.03 GiB =>    131 MiB, implicit_40.bin.zstd_11)
-zstd -12 -o implicit_40.bin.zstd_12 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 12.45%   (  1.03 GiB =>    131 MiB, implicit_40.bin.zstd_12)
-zstd -13 -o implicit_40.bin.zstd_13 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 12.68%   (  1.03 GiB =>    133 MiB, implicit_40.bin.zstd_13)
-zstd -14 -o implicit_40.bin.zstd_14 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 11.33%   (  1.03 GiB =>    119 MiB, implicit_40.bin.zstd_14)
-zstd -15 -o implicit_40.bin.zstd_15 --ultra -T0 implicit_40.bin
-implicit_40.bin      : 10.34%   (  1.03 GiB =>    109 MiB, implicit_40.bin.zstd_15)
-zstd -16 -o implicit_40.bin.zstd_16 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  9.91%   (  1.03 GiB =>    104 MiB, implicit_40.bin.zstd_16)
-zstd -17 -o implicit_40.bin.zstd_17 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  8.03%   (  1.03 GiB =>   84.3 MiB, implicit_40.bin.zstd_17)
-zstd -18 -o implicit_40.bin.zstd_18 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  7.77%   (  1.03 GiB =>   81.6 MiB, implicit_40.bin.zstd_18)
-zstd -19 -o implicit_40.bin.zstd_19 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  7.36%   (  1.03 GiB =>   77.3 MiB, implicit_40.bin.zstd_19)
-zstd -20 -o implicit_40.bin.zstd_20 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  4.11%   (  1.03 GiB =>   43.2 MiB, implicit_40.bin.zstd_20)
-zstd -21 -o implicit_40.bin.zstd_21 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  2.86%   (  1.03 GiB =>   30.1 MiB, implicit_40.bin.zstd_21)
-zstd -22 -o implicit_40.bin.zstd_22 --ultra -T0 implicit_40.bin
-implicit_40.bin      :  1.97%   (  1.03 GiB =>   20.7 MiB, implicit_40.bin.zstd_22)
-
-
+## Documentation
+* Modify the comments to be auto-documenting.
 
 ## Affine F-Stride Table
 * Make a table of just consecutive F-steps into strides.

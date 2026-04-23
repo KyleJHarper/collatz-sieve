@@ -21,8 +21,8 @@ table shows coverage using `uint64_t` on a desktop PC (i5-14600, DDR5).
 |          35 |   99.12% |          2 |
 |          40 |   99.34% |         50 |
 
-This implementation is written in C++ and supports fixed-widths of 64 and 128 bits, as well as arbitrary precision via
-[GMP](https://gmplib.org/).
+This implementation is written in C++ and supports fixed-widths up to 128 bits, (if your compiler has it), as well as arbitrary
+precision via [GMP](https://gmplib.org/).  It assumes, to an extent, you're on a 64-bit platform, but might run on 32-bit.
 
 Starting with version 3.x, we attempt to follow [SemVer](https://semver.org/).
 
@@ -67,9 +67,10 @@ the same bit size.
 
 ### Classes & Facades
 
-`BinaryTree` A facade which builds a tree of type `BinaryTreeMaterialized` or `BinaryTreeImplicit`, removing nodes and subtrees
-meeting High-Water Mark.  You may build an implicit or materialized tree directly, but you probably shouldn't.  Once built, the
-uncovered positions are provided in a vector of `Node` objects (Materialized) or a `NodeBitmap` bitmap (Implicit).
+`BinaryTree` A facade which builds a tree of type `BinaryTreeMaterializedImpl` or `BinaryTreeImplicitImpl`, removing nodes and
+subtrees meeting High-Water Mark.  You may build an implicit or materialized tree directly, but you probably shouldn't.  Once
+built, the uncovered positions are provided in a vector of `Node` objects (Materialized) or a `NodeBitmap` bitmap (Implicit). As of
+version 4.0.0, the Implicit tree is the default, and you should use it.
 
 `Collatz` A class which can build a sequence and give you warm-fuzzy OOP feels, but its real value is in the static members for
 efficiently processing steps, finding metadata, and so forth.

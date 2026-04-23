@@ -42,8 +42,7 @@ class Node {
     bool _is_initialized : 1 = false;                    //       1:3 |    41 |       1:3 |    49 |       1:3 |    49
     bool _owns_children : 1 = true;                      //       1:4 |    41 |       1:4 |    49 |       1:4 |    49  (4 bits padding)
     uint8_t _child_count = 0;                            //         1 |    42 |         1 |    50 |         1 |    50
-    uint8_t _fg_chain_length = 0;                        //         1 |    43 |         1 |    51 |         1 |    51
-    // Alignment Padding (u128 is 16 bytes)              //         5 |    48 |        13 |    64 |         5 |    56
+    // Alignment Padding (u128 is 16 bytes)              //         6 |    48 |        14 |    64 |         6 |    56
     // Free Padding to Cacheline                         //        16 |    64 |         0 |    64 |         8 |    64
     // -- Cache Line --
 
@@ -139,7 +138,8 @@ class Node {
     // Quick helper to DRY up affine logic during init().
     template<AnySupportedIntegral U>
     inline void init_sequence_helper() {
-        _fg_chain_length = get_level() - 1;
+        // Cache the FG chain length.
+        const size_t fg_chain_length = get_fg_chain_length();
 
         // We need to elevate _value to type U in case it's not the same.
         static thread_local U u_value;
@@ -159,7 +159,7 @@ class Node {
         }
 
         // Now loop and stride.
-        size_t strides = _fg_chain_length / AffineStride::STRIDE_SIZE;
+        size_t strides = fg_chain_length / AffineStride::STRIDE_SIZE;
         size_t steps_taken = strides * AffineStride::STRIDE_SIZE;
         while (strides > 0) {
             AffineStride::apply_stride(u_current_value);
@@ -167,7 +167,7 @@ class Node {
         }
 
         // Mop up leftovers after striding.
-        while (steps_taken < _fg_chain_length) {
+        while (steps_taken < fg_chain_length) {
             // We're going to shift no matter what, so all we're checking for is odd.
             if constexpr(BuiltinIntegral<T>) {
                 // If it's odd, F step.
@@ -183,7 +183,7 @@ class Node {
             }
             // Always even at this point.  Shift by CTZ, clamped by FG chain length.
             // This technique isn't faster for 64/128-bit types, but it's faster for GMP, so we'll do it.
-            size_t zeros_count = std::min(static_cast<size_t>(count_trailing_zeros(u_current_value)), _fg_chain_length - steps_taken);
+            size_t zeros_count = std::min(static_cast<size_t>(count_trailing_zeros(u_current_value)), fg_chain_length - steps_taken);
             if constexpr(BuiltinIntegral<T>) {
                 u_current_value >>= zeros_count;
             } else {
@@ -347,7 +347,7 @@ class Node {
     const Node<T>* get_child(size_t index) const { return _children[index]; }
     Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
     uint8_t get_child_count() const { return _child_count; }
-    size_t get_fg_chain_length() const { return static_cast<size_t>( _fg_chain_length); }
+    size_t get_fg_chain_length() const { return BinaryTreeMath<T>::st_fg_chain_length(get_level()); }
     //
     // Tree level and position come from BinaryTree, but we'll make them accessible here.
     size_t get_level() const { return BinaryTreeMath<T>::st_node_level(_value); }
@@ -367,7 +367,7 @@ class Node {
     //
     // Get the F-G chain.  Use the Collatz static method for this.
     std::string get_fg_chain_string() const {
-        return Collatz<T>::st_get_fg_chain_string(_value, _fg_chain_length);
+        return Collatz<T>::st_get_fg_chain_string(_value, get_fg_chain_length());
     }
     //
     // Get the odd-even chain.  Use the Collatz static method for this.
@@ -561,11 +561,6 @@ class Node {
             return sh.fail("_child_count==" + to_string_any(_child_count));
         }
 
-        // FG Chain Length
-        if (! sh.serialize_integral(_fg_chain_length)) {
-            return sh.fail("_fg_chain_length==" + to_string_any(_fg_chain_length));
-        }
-
         // All Good
         return true;
     }
@@ -623,11 +618,6 @@ class Node {
             return sh.fail("couldn't read child_count");
         }
         _child_count = 0;
-
-        // FG chain length
-        if (! sh.deserialize_integral(_fg_chain_length)) {
-            return sh.fail("couldn't read _fg_chain_length");
-        }
 
         // All good
         return true;

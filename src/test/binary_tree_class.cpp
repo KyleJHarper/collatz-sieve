@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <iostream>
 #include <gmpxx.h>
+#include <omp.h>
 #include <stdexcept>
 #include "../collatz/binary_tree.hpp"
 
@@ -733,34 +734,60 @@ void sle_helper(
     // Save and On-Disk Equality
     //
     // Use common file paths for all tests.
-    const std::string tree_path = "__tree.bin";
-    const std::string tree_duplicate_path = "__tree_duplicate.bin";
-    const std::string tree_different_path = "__tree_different.bin";
+    const std::string tree_path = "__tree.btree";
+    const std::string tree_duplicate_path = "__tree_duplicate.btree";
+    const std::string tree_different_path = "__tree_different.btree";
+    const std::string ctree_path = "__tree.btree.zst";
+    const std::string ctree_duplicate_path = "__tree_duplicate.btree.zst";
+    const std::string ctree_different_path = "__tree_different.btree.zst";
     // Delete existing files if they weren't cleaned up properly last time.
     if (fs::exists(tree_path)) { fs::remove(tree_path); }
     if (fs::exists(tree_duplicate_path)) { fs::remove(tree_duplicate_path); }
     if (fs::exists(tree_different_path)) { fs::remove(tree_different_path); }
+    if (fs::exists(ctree_path)) { fs::remove(ctree_path); }
+    if (fs::exists(ctree_duplicate_path)) { fs::remove(ctree_duplicate_path); }
+    if (fs::exists(ctree_different_path)) { fs::remove(ctree_different_path); }
     // Save function should return true/successful.
-    assert(tree.save(tree_path));
-    assert(tree_duplicate.save(tree_duplicate_path));
-    assert(tree_different.save(tree_different_path));
+    assert(tree.save(tree_path, 0));
+    assert(tree_duplicate.save(tree_duplicate_path, 0));
+    assert(tree_different.save(tree_different_path, 0));
+    assert(tree.save(ctree_path, 22));
+    assert(tree_duplicate.save(ctree_duplicate_path, 22));
+    assert(tree_different.save(ctree_different_path, 22));
+    // Compressed versions should be smaller than raw versions.
+    assert(fs::file_size(tree_path) > fs::file_size(ctree_path));
+    assert(fs::file_size(tree_duplicate_path) > fs::file_size(ctree_duplicate_path));
+    assert(fs::file_size(tree_different_path) > fs::file_size(ctree_different_path));
     // Open file handles to each file.
     std::ifstream fh_tree(tree_path, std::ios::binary);
     std::ifstream fh_tree_duplicate(tree_duplicate_path, std::ios::binary);
     std::ifstream fh_tree_different(tree_different_path, std::ios::binary);
+    std::ifstream fh_ctree(ctree_path, std::ios::binary);
+    std::ifstream fh_ctree_duplicate(ctree_duplicate_path, std::ios::binary);
+    std::ifstream fh_ctree_different(ctree_different_path, std::ios::binary);
     // Ensure they're actually open.
     assert(fh_tree.is_open());
     assert(fh_tree_duplicate.is_open());
     assert(fh_tree_different.is_open());
+    assert(fh_ctree.is_open());
+    assert(fh_ctree_duplicate.is_open());
+    assert(fh_ctree_different.is_open());
     // The two equal trees should create equal files on-disk.  The different one should be different, of course.
     assert(std::equal(std::istreambuf_iterator<char>(fh_tree), std::istreambuf_iterator<char>(), std::istreambuf_iterator<char>(fh_tree_duplicate)));
+    assert(std::equal(std::istreambuf_iterator<char>(fh_ctree), std::istreambuf_iterator<char>(), std::istreambuf_iterator<char>(fh_ctree_duplicate)));
     fh_tree.clear();
+    fh_ctree.clear();
     fh_tree.seekg(0, std::ios::beg);
+    fh_ctree.seekg(0, std::ios::beg);
     assert(! std::equal(std::istreambuf_iterator<char>(fh_tree), std::istreambuf_iterator<char>(), std::istreambuf_iterator<char>(fh_tree_different)));
+    assert(! std::equal(std::istreambuf_iterator<char>(fh_ctree), std::istreambuf_iterator<char>(), std::istreambuf_iterator<char>(fh_ctree_different)));
     // Close the file handles.
     fh_tree.close();
     fh_tree_duplicate.close();
     fh_tree_different.close();
+    fh_ctree.close();
+    fh_ctree_duplicate.close();
+    fh_ctree_different.close();
 
     //
     // Load and Test In-Memory Equality Again
@@ -769,14 +796,23 @@ void sle_helper(
     BinaryTree<T, TreeType> l_tree;
     BinaryTree<T, TreeType> l_tree_duplicate;
     BinaryTree<T, TreeType> l_tree_different;
+    BinaryTree<T, TreeType> l_ctree;
+    BinaryTree<T, TreeType> l_ctree_duplicate;
+    BinaryTree<T, TreeType> l_ctree_different;
     // Load the trees from file data.
     assert(l_tree.load(tree_path));
     assert(l_tree_duplicate.load(tree_duplicate_path));
     assert(l_tree_different.load(tree_different_path));
+    assert(l_ctree.load(ctree_path));
+    assert(l_ctree_duplicate.load(ctree_duplicate_path));
+    assert(l_ctree_different.load(ctree_different_path));
     // Loaded trees should match the in-memory versions before we saved.
     sle_assert_trees_equal(l_tree, tree);
     sle_assert_trees_equal(l_tree_duplicate, tree_duplicate);
     sle_assert_trees_equal(l_tree_different, tree_different);
+    sle_assert_trees_equal(l_ctree, tree);
+    sle_assert_trees_equal(l_ctree_duplicate, tree_duplicate);
+    sle_assert_trees_equal(l_ctree_different, tree_different);
 
     //
     // Clean-up
@@ -785,13 +821,26 @@ void sle_helper(
     if (fs::exists(tree_path)) { fs::remove(tree_path); }
     if (fs::exists(tree_duplicate_path)) { fs::remove(tree_duplicate_path); }
     if (fs::exists(tree_different_path)) { fs::remove(tree_different_path); }
+    if (fs::exists(ctree_path)) { fs::remove(ctree_path); }
+    if (fs::exists(ctree_duplicate_path)) { fs::remove(ctree_duplicate_path); }
+    if (fs::exists(ctree_different_path)) { fs::remove(ctree_different_path); }
 }
 template<AnySupportedIntegral T>
 void test_binary_tree_save_load_equal() {
     namespace fs = std::filesystem;
 
+    // Saving to a console via stdout ("-") should fail.
+    try {
+        ImplicitBinaryTree<T> tree_bad_stdout_save(8);
+        tree_bad_stdout_save.save("-");
+        assert(false);
+    } catch(const std::runtime_error& e) {
+        assert(std::string(e.what()).find("Refusing to write binary data to a terminal") != std::string::npos);
+    }
+
     // Start with smaller trees
-    size_t levels = 16;
+    const size_t INITIAL_LEVELS = 16;
+    size_t levels = INITIAL_LEVELS;
 
     // Level count differs.
     size_t different_levels = levels + 1;
@@ -822,7 +871,7 @@ void test_binary_tree_save_load_equal() {
     // Pruning node should always throw a logic error, because deserializing it is a nightmare I'm not interested in.
     opts.reset();
     opts.prune_hwm_nodes = true;
-    const std::string tree_path = "__tree.bin";
+    const std::string tree_path = "__tree.btree.zst";
     if (fs::exists(tree_path)) { fs::remove(tree_path); }
     try {
         MaterializedBinaryTree<T> tree(levels, opts);
@@ -852,10 +901,6 @@ void test_binary_tree_save_load_equal() {
 template<AnySupportedIntegral T>
 void run_all(size_t root_value) {
     BinaryTreeMath<T>::set_root_value(root_value);
-
-    std::cout << "test_binary_tree_save_load_equal() ..." << std::flush;
-    test_binary_tree_save_load_equal<T>();
-    std::cout << " passed.\n";
 
     std::cout << "test_binary_tree_basic_construction() ..." << std::flush;
     test_binary_tree_basic_construction<T>();

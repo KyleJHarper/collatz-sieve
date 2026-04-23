@@ -11,6 +11,15 @@
 #include <set>
 
 
+
+//
+// This file is a bit of a catch-all "internal.h"-style header.  We will define concepts, typedef things for convenience, and make
+// a handful of helpers for things like UDLs, uint128_t/mpz_class parsing, and string-ifying things.
+//
+
+
+
+
 // Make 128-bit types match naming pattern of others.
 typedef __uint128_t uint128_t;
 typedef __int128_t int128_t;
@@ -54,6 +63,7 @@ inline mpz_class parse_mpz(std::string_view s) {
 inline mpz_class operator""_mpz(const char* str, size_t len) {
     return parse_mpz(std::string_view{str, len});
 }
+
 
 
 //

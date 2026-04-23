@@ -14,5 +14,5 @@ tools/*.svg
 tools/*.png
 *.progress
 perf.data*
-*.bin
+*.btree
 

@@ -144,6 +144,16 @@ class BinaryTreeMath {
 
 
     //
+    // FG Chain Length
+    // This used to be more complicated, but now it's proven to just be level - 1.
+    //
+    static inline size_t st_fg_chain_length(size_t level) {
+        return level - 1;
+    }
+
+
+
+    //
     // Bit Reversal
     // The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values
     // within the tree, largely due to the constant power-of-two increase.  To leverage this, we need to take bits from a node

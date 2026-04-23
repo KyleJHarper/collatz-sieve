@@ -400,12 +400,12 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             const roaring::Roaring& f_roaring = f_flat_map.at(f_prefixes.at(i));
             const roaring::Roaring& s_roaring = s_flat_map.at(s_prefixes.at(i));
             if (! roaring::api::roaring_bitmap_equals(&(f_roaring.roaring), &(s_roaring.roaring))) {
-                roaring::Roaring f_minus_s = f_roaring - s_roaring;
-                roaring::Roaring s_minus_f = s_roaring - f_roaring;
-                print_bitmap(f_minus_s, "First - Second");
-                print_bitmap(s_minus_f, "Second - First");
-                print_bitmap(f_roaring, "First full map");
-                print_bitmap(s_roaring, "Second full bitmap");
+                // roaring::Roaring f_minus_s = f_roaring - s_roaring;
+                // roaring::Roaring s_minus_f = s_roaring - f_roaring;
+                // print_bitmap(f_minus_s, "First - Second");
+                // print_bitmap(s_minus_f, "Second - First");
+                // print_bitmap(f_roaring, "First full map");
+                // print_bitmap(s_roaring, "Second full bitmap");
                 return eq.fail("Bitmaps do not match for prefix " + to_string_any(f_prefixes.at(i)));
             }
         }
@@ -435,12 +435,18 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             return sh.fail("prefix_count==" + to_string_any(u64_prefix_count));
         }
 
-        // Now loop through each key-value pair.
-        for (const auto& [prefix, bitmap] : _flat_map) {
+        // Now loop through each key-value pair.  Make sure to do them in order so exported files remain deterministic.
+        for (const prefix_t& prefix : _sorted_prefixes) {
             // Write the prefix.
             if (! sh.serialize_integral(prefix)) {
                 return sh.fail("prefix==" + to_string_any(prefix));
             }
+            // Find the bitmap.
+            auto it = _flat_map.find(prefix);
+            if (it == _flat_map.end()) {
+                return sh.fail("couldn't find bitmap for prefix==" + to_string_any(prefix));
+            }
+            const roaring::Roaring& bitmap = it->second;
             // Write how much space the bitmap will take.
             uint64_t u64_bitmap_size = static_cast<uint64_t>(bitmap.getSizeInBytes(true));
             if (! sh.serialize_integral(u64_bitmap_size)) {
