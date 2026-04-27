@@ -1,0 +1,28 @@
+\doxysection{Guaranteed\+Width\+Integral Concept Reference}
+\hypertarget{conceptGuaranteedWidthIntegral}{}\label{conceptGuaranteedWidthIntegral}\index{GuaranteedWidthIntegral@{GuaranteedWidthIntegral}}
+
+
+Concept applicable to any fixed, guaranteed-\/width type. Mostly for serializing/deserializing.  
+
+
+
+
+{\ttfamily \#include $<$concepts.\+hpp$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptGuaranteedWidthIntegral}{GuaranteedWidthIntegral}}\ =\ \ (}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<T,\ int8\_t>\ ||\ std::is\_same\_v<T,\ uint8\_t>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<T,\ int16\_t>\ ||\ std::is\_same\_v<T,\ uint16\_t>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<T,\ int32\_t>\ ||\ std::is\_same\_v<T,\ uint32\_t>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<T,\ int64\_t>\ ||\ std::is\_same\_v<T,\ uint64\_t>\ ||}
+\DoxyCodeLine{\ \ \ \ std::is\_same\_v<T,\ int128\_t>\ ||\ std::is\_same\_v<T,\ uint128\_t>}
+\DoxyCodeLine{)}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Concept applicable to any fixed, guaranteed-\/width type. Mostly for serializing/deserializing. 

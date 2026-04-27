@@ -1,0 +1,222 @@
+\doxysection{Binary\+Tree\+Coverage\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classBinaryTreeCoverage}{}\label{classBinaryTreeCoverage}\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+
+
+Container to track the number of nodes covered (eliminated) on a level in a {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}}.  
+
+
+
+
+{\ttfamily \#include $<$binary\+\_\+tree\+\_\+coverage.\+hpp$>$}
+
+
+
+Collaboration diagram for Binary\+Tree\+Coverage\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classBinaryTreeCoverage__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \mbox{\hyperlink{classBinaryTreeCoverage_ad8279e71a5f559f216a974050926642e}{get\+\_\+ratio}} (\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{as\+\_\+percent}}=\mbox{\hyperlink{classNode}{false}})
+\begin{DoxyCompactList}\small\item\em Get ratio of covered / total. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeCoverage_aebef9b87cb82ba252a92dac0dd1c095b}{merge}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}} \&\mbox{\hyperlink{classNode}{other\+\_\+coverage}})
+\begin{DoxyCompactList}\small\item\em Merge results from another coverage into this one. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Serialize this object for export. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}})
+\begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeCoverage_a6ace14fac5768ba75462477e7a9b60b4}\label{classBinaryTreeCoverage_a6ace14fac5768ba75462477e7a9b60b4} 
+{\bfseries Binary\+Tree\+Coverage} ()=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classBinaryTreeCoverage_aaa57a613018a293d3be3ac842e61a4e4}{Binary\+Tree\+Coverage}} (T \mbox{\hyperlink{classNode}{covered}}, T \mbox{\hyperlink{classNode}{total}})
+\begin{DoxyCompactList}\small\item\em Constructor which sets covered and total initially. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_a5e9d10dc7f44db5ed8f251d76681eb6d}\label{classBinaryTreeCoverage_a5e9d10dc7f44db5ed8f251d76681eb6d} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Binary\+Tree\+Coverage} ()=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Default destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeCoverage_a938b09c249930b9176079ddefbd35702}\label{classBinaryTreeCoverage_a938b09c249930b9176079ddefbd35702} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries set\+\_\+covered} (T \mbox{\hyperlink{classNode}{covered}})
+\begin{DoxyCompactList}\small\item\em Set the number of covered directly. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_acfe0fb19b8956c98828fd7decf4c40aa}\label{classBinaryTreeCoverage_acfe0fb19b8956c98828fd7decf4c40aa} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries set\+\_\+total} (T \mbox{\hyperlink{classNode}{total}})
+\begin{DoxyCompactList}\small\item\em Set the total directly. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_ac9c921ce843dff7be0df31cf14fa094d}\label{classBinaryTreeCoverage_ac9c921ce843dff7be0df31cf14fa094d} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+covered} (T \mbox{\hyperlink{classNode}{count}}=1)
+\begin{DoxyCompactList}\small\item\em Add {\ttfamily count} to the covered. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_ae87d7843a259c57de6180c6dc98c153f}\label{classBinaryTreeCoverage_ae87d7843a259c57de6180c6dc98c153f} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+total} (T \mbox{\hyperlink{classNode}{count}}=1)
+\begin{DoxyCompactList}\small\item\em Add {\ttfamily count} to the total. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_a15d2753cace5a9796621ec7683132ca5}\label{classBinaryTreeCoverage_a15d2753cace5a9796621ec7683132ca5} 
+\mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+covered} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get covered tally. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_adb9d943b2f6559cf6fe8c1a93e1dfb49}\label{classBinaryTreeCoverage_adb9d943b2f6559cf6fe8c1a93e1dfb49} 
+\mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+total} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get total tally. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classBinaryTreeCoverage_a7bbf93ef0d63c3b9d46fb7300ffc78df}{get\+\_\+uncovered}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get uncovered tally, which is {\ttfamily \+\_\+total -\/ \+\_\+covered}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeCoverage_a04d7dd9a7bf28addbfbd08a990f3df2b}\label{classBinaryTreeCoverage_a04d7dd9a7bf28addbfbd08a990f3df2b} 
+T {\bfseries \+\_\+covered} = 0
+\begin{DoxyCompactList}\small\item\em The number of nodes covered. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeCoverage_a887c7d716c4bbd55fa4f8bdaacaa9472}\label{classBinaryTreeCoverage_a887c7d716c4bbd55fa4f8bdaacaa9472} 
+T {\bfseries \+\_\+total} = 0
+\begin{DoxyCompactList}\small\item\em The number of total nodes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+class Binary\+Tree\+Coverage$<$ T $>$}
+Container to track the number of nodes covered (eliminated) on a level in a {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classBinaryTreeCoverage_aaa57a613018a293d3be3ac842e61a4e4}\label{classBinaryTreeCoverage_aaa57a613018a293d3be3ac842e61a4e4} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!BinaryTreeCoverage@{BinaryTreeCoverage}}
+\index{BinaryTreeCoverage@{BinaryTreeCoverage}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{BinaryTreeCoverage()}{BinaryTreeCoverage()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\mbox{\hyperlink{classBinaryTreeCoverage}{\+::\+Binary\+Tree\+Coverage}} (\begin{DoxyParamCaption}\item[{T}]{covered,  }\item[{T}]{total }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor which sets covered and total initially. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em covered} & The number of covered to set. \\
+\hline
+{\em total} & The number of total to set. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac}\label{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!deserialize@{deserialize}}
+\index{deserialize@{deserialize}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize()}}. 
+
+Deserialization happens in the same order as serialization, obviously.
+
+\begin{DoxyNote}{Note}
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em in} & The stream to read data from. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeCoverage_ad8279e71a5f559f216a974050926642e}\label{classBinaryTreeCoverage_ad8279e71a5f559f216a974050926642e} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!get\_ratio@{get\_ratio}}
+\index{get\_ratio@{get\_ratio}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_ratio()}{get\_ratio()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::get\+\_\+ratio (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{bool}}}]{as\+\_\+percent = {\ttfamily \mbox{\hyperlink{classNode}{false}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get ratio of covered / total. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em as\+\_\+percent} & Multiplies the result by 100 such that 0.\+972 becomes 97.\+2. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The ratio as an {\ttfamily mpf\+\_\+class}. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeCoverage_a7bbf93ef0d63c3b9d46fb7300ffc78df}\label{classBinaryTreeCoverage_a7bbf93ef0d63c3b9d46fb7300ffc78df} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!get\_uncovered@{get\_uncovered}}
+\index{get\_uncovered@{get\_uncovered}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_uncovered()}{get\_uncovered()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+T \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::get\+\_\+uncovered (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get uncovered tally, which is {\ttfamily \+\_\+total -\/ \+\_\+covered}. 
+
+\begin{DoxyNote}{Note}
+The subtraction and return cause an instantiation. For {\ttfamily mpz\+\_\+class}, that\textquotesingle{}s an alloc. 
+\end{DoxyNote}
+\Hypertarget{classBinaryTreeCoverage_aebef9b87cb82ba252a92dac0dd1c095b}\label{classBinaryTreeCoverage_aebef9b87cb82ba252a92dac0dd1c095b} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!merge@{merge}}
+\index{merge@{merge}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{merge()}{merge()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::merge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&}]{other\+\_\+coverage }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Merge results from another coverage into this one. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other\+\_\+coverage} & Another instance of {\ttfamily \doxylink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}} to merge into {\ttfamily this}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}\label{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!serialize@{serialize}}
+\index{serialize@{serialize}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Serialize this object for export. 
+
+Serialization happens in this order\+:
+\begin{DoxyEnumerate}
+\item Covered (integral)
+\item Total (integral)
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em out} & The stream to write data to. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/binary\+\_\+tree\+\_\+coverage.\+hpp\end{DoxyCompactItemize}

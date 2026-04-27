@@ -18,20 +18,15 @@
 
 
 
-//
-// Custom Exceptions
-//
+
+/**
+* @exception CollatzSequenceOverflow
+* @brief Custom overflow exception for Collatz sequences.
+*/
 class CollatzSequenceOverflow : public std::runtime_error {
     public:
     explicit CollatzSequenceOverflow(const std::string& msg) : std::runtime_error(msg) {}
 };
-
-
-
-//
-// Sequences are not size_t in length.  Use a common type that's smaller.
-//
-typedef uint32_t seq_size_t;
 
 
 

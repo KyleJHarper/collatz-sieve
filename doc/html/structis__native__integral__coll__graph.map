@@ -1,0 +1,5 @@
+<map id="is_native_integral&lt; T &gt;" name="is_native_integral&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Container for true if T is a &quot;native&quot; integral to the CPU (&lt;= 64 bits)." alt="" coords="228,35,404,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,180,89"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,45,228,45,228,50,194,50"/>
+</map>

@@ -1,0 +1,74 @@
+\doxysection{step\+\_\+counter\+\_\+gpu\+\_\+interface.\+hpp}
+\hypertarget{step__counter__gpu__interface_8hpp_source}{}\label{step__counter__gpu__interface_8hpp_source}\index{src/collatz/step\_counter\_gpu\_interface.hpp@{src/collatz/step\_counter\_gpu\_interface.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ "{}concepts\_for\_cuda.hpp"{}}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{typedef}\ uint128\_t\ \mbox{\hyperlink{classNode}{tally\_t}};}
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classStepResults}{StepResults}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00010\ \ \ \ \ std::map<size\_t,\ tally\_t>\ \_by\_level\_sum;}
+\DoxyCodeLine{00011\ \ \ \ \ std::map<size\_t,\ tally\_t>\ \_by\_level\_count;}
+\DoxyCodeLine{00012\ \ \ \ \ std::map<size\_t,\ tally\_t>\ \_by\_steps\_count;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{classStepResults}{StepResults}}()\ \{\}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,\ tally\_t>\&\ get\_by\_level\_sum()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_by\_level\_sum;\ \}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,\ tally\_t>\&\ get\_by\_level\_count()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_by\_level\_count;\ \}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{const}\ std::map<size\_t,\ tally\_t>\&\ get\_by\_steps\_count()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_by\_steps\_count;\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ add(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{level}},\ tally\_t\ step\_count)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \_by\_level\_sum[\mbox{\hyperlink{classNode}{level}}]\ +=\ step\_count;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \_by\_level\_count[\mbox{\hyperlink{classNode}{level}}]\ +=\ 1;}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \_by\_steps\_count[step\_count]\ +=\ 1;}
+\DoxyCodeLine{00025\ \ \ \ \ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ add\_aggregate(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{level}},\ tally\_t\ \mbox{\hyperlink{classNode}{step}},\ tally\_t\ \mbox{\hyperlink{classNode}{count}})\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \_by\_level\_sum[\mbox{\hyperlink{classNode}{level}}]\ +=\ (\mbox{\hyperlink{classNode}{step}}\ *\ \mbox{\hyperlink{classNode}{count}});}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \_by\_level\_count[\mbox{\hyperlink{classNode}{level}}]\ +=\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \_by\_steps\_count[\mbox{\hyperlink{classNode}{step}}]\ +=\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00031\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ merge(\mbox{\hyperlink{classStepResults}{StepResults}}\&\ \mbox{\hyperlink{classNode}{other}})\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{level}},\ \mbox{\hyperlink{classNode}{sum}}]\ :\ \mbox{\hyperlink{classNode}{other}}.get\_by\_level\_sum())\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_by\_level\_sum.find(\mbox{\hyperlink{classNode}{level}})\ ==\ \_by\_level\_sum.end())\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_level\_sum[\mbox{\hyperlink{classNode}{level}}]\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_level\_sum[\mbox{\hyperlink{classNode}{level}}]\ +=\ \mbox{\hyperlink{classNode}{sum}};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{level}},\ \mbox{\hyperlink{classNode}{count}}]\ :\ \mbox{\hyperlink{classNode}{other}}.get\_by\_level\_count())\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_by\_level\_count.find(\mbox{\hyperlink{classNode}{level}})\ ==\ \_by\_level\_count.end())\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_level\_count[\mbox{\hyperlink{classNode}{level}}]\ =\ 0;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_level\_count[\mbox{\hyperlink{classNode}{level}}]\ +=\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{steps}},\ \mbox{\hyperlink{classNode}{count}}]\ :\ \mbox{\hyperlink{classNode}{other}}.get\_by\_steps\_count())\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_by\_steps\_count.find(\mbox{\hyperlink{classNode}{steps}})\ ==\ \_by\_steps\_count.end())\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_steps\_count[\mbox{\hyperlink{classNode}{steps}}]\ =\ 0;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \_by\_steps\_count[\mbox{\hyperlink{classNode}{steps}}]\ +=\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ Interface\ for\ the\ GPU\ functions.}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00059\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzStepRunner}{CollatzStepRunner}};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00062\ \mbox{\hyperlink{classNode}{CollatzStepRunner<T>}}*\ create\_runner(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{buffer\_size}},\ T*\ \mbox{\hyperlink{classNode}{unified\_start\_value\_ptr}});}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ destroy\_runner(\mbox{\hyperlink{classNode}{CollatzStepRunner<T>}}*\ \mbox{\hyperlink{classNode}{runner}});}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00068\ \textcolor{keywordtype}{void}\ process\_level\_gpu(\mbox{\hyperlink{classNode}{CollatzStepRunner<T>}}*\ \mbox{\hyperlink{classNode}{runner}},\ T\ \mbox{\hyperlink{classNode}{max\_value}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{level}},\ \mbox{\hyperlink{classStepResults}{StepResults}}\ *\mbox{\hyperlink{classNode}{global\_results}});}
+
+\end{DoxyCode}

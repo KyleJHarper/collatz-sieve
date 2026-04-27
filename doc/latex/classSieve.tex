@@ -1,0 +1,157 @@
+\doxysection{Sieve\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classSieve}{}\label{classSieve}\index{Sieve$<$ T $>$@{Sieve$<$ T $>$}}
+
+
+Collaboration diagram for Sieve\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{classSieve__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSieve_a671f5476793aa76e0a10be3b33d471d9}\label{classSieve_a671f5476793aa76e0a10be3b33d471d9} 
+{\bfseries Sieve} (\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ $>$ \&\mbox{\hyperlink{classNode}{tree}}, \mbox{\hyperlink{structSieveOptions}{Sieve\+Options}} \mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{classSieve}{Sieve}}$<$ T $>$\+::\+DEFAULT\+\_\+\+OPTS)
+\item 
+\Hypertarget{classSieve_a69951c45fcc736f5bbe2dc8eda673882}\label{classSieve_a69951c45fcc736f5bbe2dc8eda673882} 
+{\bfseries Sieve} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{tree\+\_\+levels}}, \mbox{\hyperlink{structSieveOptions}{Sieve\+Options}} \mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{classSieve}{Sieve}}$<$ T $>$\+::\+DEFAULT\+\_\+\+OPTS)
+\item 
+\Hypertarget{classSieve_a03a59340ffb5244d5edfd396234ae215}\label{classSieve_a03a59340ffb5244d5edfd396234ae215} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries init} (\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{tree}}, \mbox{\hyperlink{structSieveOptions}{Sieve\+Options}} \mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{classSieve}{Sieve}}$<$ T $>$\+::\+DEFAULT\+\_\+\+OPTS)
+\item 
+\Hypertarget{classSieve_a8b536357a9d1933cfc2419a350ce535a}\label{classSieve_a8b536357a9d1933cfc2419a350ce535a} 
+\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ \mbox{\hyperlink{classNode}{uint64\+\_\+t}} $>$ \& {\bfseries get\+\_\+survivors} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_af21db89ed564397a1ab5faeb9b15b1f1}\label{classSieve_af21db89ed564397a1ab5faeb9b15b1f1} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+survivor\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_aa74e090e9c6d94fe1aca4c978612b6ad}\label{classSieve_aa74e090e9c6d94fe1aca4c978612b6ad} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+survivor\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_af87c8708ea9d452b9c8de09786c361bb}\label{classSieve_af87c8708ea9d452b9c8de09786c361bb} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries get\+\_\+step} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a2f3198e16fab1718120733b3fb400bea}\label{classSieve_a2f3198e16fab1718120733b3fb400bea} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries get\+\_\+multiplier} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a703b8c4c8354463998f42f9ba1a9a0b1}\label{classSieve_a703b8c4c8354463998f42f9ba1a9a0b1} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries get\+\_\+max\+\_\+multiplier} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a8c2598bebde5ea2efab2e62145362a07}\label{classSieve_a8c2598bebde5ea2efab2e62145362a07} 
+\mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+incrementer} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a760be0f5b629e298b05cdc55db7b7d01}\label{classSieve_a760be0f5b629e298b05cdc55db7b7d01} 
+\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ T $>$ \& {\bfseries get\+\_\+pool} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_ac42395973652e670a1b80d449a3dcda5}\label{classSieve_ac42395973652e670a1b80d449a3dcda5} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_ad4e0e656a4a180a010c54a3b7e5dca5b}\label{classSieve_ad4e0e656a4a180a010c54a3b7e5dca5b} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a595fef81dd5aef0c18429588c7de9fe0}\label{classSieve_a595fef81dd5aef0c18429588c7de9fe0} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+generated\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a65dc237d3613e0661569a58d55db2aa8}\label{classSieve_a65dc237d3613e0661569a58d55db2aa8} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+refills} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a2205d1c4649b08a16ba6d1306313590a}\label{classSieve_a2205d1c4649b08a16ba6d1306313590a} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+premature\+\_\+refills} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a2a8f9b373817b22c79b08f7c2340a410}\label{classSieve_a2a8f9b373817b22c79b08f7c2340a410} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+pool\+\_\+refill\+\_\+fill\+\_\+loops} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a811d44fd9e0bbe6bed9c2a2b5953cb0f}\label{classSieve_a811d44fd9e0bbe6bed9c2a2b5953cb0f} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+tree\+\_\+level\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a3590d3c6b3da5e04cce4538310aa84f0}\label{classSieve_a3590d3c6b3da5e04cce4538310aa84f0} 
+std\+::chrono\+::duration$<$ \mbox{\hyperlink{classNode}{double}}, std\+::micro $>$ {\bfseries get\+\_\+pool\+\_\+refill\+\_\+time\+\_\+us} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classSieve_a83b4dd7adc7b47b8ed50f9b0eb634560}\label{classSieve_a83b4dd7adc7b47b8ed50f9b0eb634560} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries unsafe\+\_\+coerce\+\_\+step} (\mbox{\hyperlink{classNode}{uint64\+\_\+t}} value)
+\item 
+\Hypertarget{classSieve_af2cfa0f4e4c6f548cc062c84b643b35e}\label{classSieve_af2cfa0f4e4c6f548cc062c84b643b35e} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries unsafe\+\_\+coerce\+\_\+multiplier} (\mbox{\hyperlink{classNode}{uint64\+\_\+t}} value)
+\item 
+\Hypertarget{classSieve_ad69536d142ca7472f13b88f376ec0ed9}\label{classSieve_ad69536d142ca7472f13b88f376ec0ed9} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries refill\+\_\+pool} (std\+::vector$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{partial\+\_\+buffer\+\_\+ptr}}=\mbox{\hyperlink{classNode}{nullptr}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{partial\+\_\+buffer\+\_\+fill\+\_\+index\+\_\+ptr}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classSieve_ae594313e58809a0f35e75582fc9249fb}\label{classSieve_ae594313e58809a0f35e75582fc9249fb} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries recalculate\+\_\+incrementer} ()
+\item 
+\Hypertarget{classSieve_a81b410283f0636c0a1c2446fd19e5ca0}\label{classSieve_a81b410283f0636c0a1c2446fd19e5ca0} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries bump\+\_\+survivor\+\_\+index} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{amount}}=1)
+\item 
+\Hypertarget{classSieve_ae91846c9f6deb5b8b0632411c6219708}\label{classSieve_ae91846c9f6deb5b8b0632411c6219708} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries next} (T \&\mbox{\hyperlink{classNode}{out}})
+\item 
+\Hypertarget{classSieve_a464d6f4f8500fc947ba0de8adcf45c84}\label{classSieve_a464d6f4f8500fc947ba0de8adcf45c84} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries next} (std\+::vector$<$ T $>$ \&\mbox{\hyperlink{classNode}{buffer}})
+\item 
+\Hypertarget{classSieve_a53973cd973ed58e14930b1fd0dc9e4cc}\label{classSieve_a53973cd973ed58e14930b1fd0dc9e4cc} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSieve_a6e8c68a0e74c51da312eef262d2a8be0}\label{classSieve_a6e8c68a0e74c51da312eef262d2a8be0} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{structSieveOptions}{Sieve\+Options}} {\bfseries DEFAULT\+\_\+\+OPTS} \{\}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSieve_a3e1f8516177c8601e83d684907d0df85}\label{classSieve_a3e1f8516177c8601e83d684907d0df85} 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{uint64\+\_\+t}} $>$ {\bfseries \+\_\+survivors}
+\item 
+\Hypertarget{classSieve_ad375c28bb4c8da2e9c245c7984a9adab}\label{classSieve_ad375c28bb4c8da2e9c245c7984a9adab} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+survivor\+\_\+index}
+\item 
+\Hypertarget{classSieve_aa46bce76c7c4da5de33ba51e5745b21d}\label{classSieve_aa46bce76c7c4da5de33ba51e5745b21d} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+survivor\+\_\+count}
+\item 
+\Hypertarget{classSieve_a37429271b014bc69e06c2a36efd0b882}\label{classSieve_a37429271b014bc69e06c2a36efd0b882} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries \+\_\+step}
+\item 
+\Hypertarget{classSieve_ad42b290e5af024b7a0ecf541b9e1b6ac}\label{classSieve_ad42b290e5af024b7a0ecf541b9e1b6ac} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries \+\_\+multiplier}
+\item 
+\Hypertarget{classSieve_ada85d48d014f6910e0e25f678546edbf}\label{classSieve_ada85d48d014f6910e0e25f678546edbf} 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries \+\_\+max\+\_\+multiplier}
+\item 
+\Hypertarget{classSieve_af823435f5d72a4c7a7dae424a06dc1e2}\label{classSieve_af823435f5d72a4c7a7dae424a06dc1e2} 
+T {\bfseries \+\_\+incrementer}
+\item 
+\Hypertarget{classSieve_a87a1aae723f490ef87456522d480db93}\label{classSieve_a87a1aae723f490ef87456522d480db93} 
+std\+::vector$<$ T $>$ {\bfseries \+\_\+pool}
+\item 
+\Hypertarget{classSieve_add34e682b5639ca20c28ff23483ccabf}\label{classSieve_add34e682b5639ca20c28ff23483ccabf} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+size}
+\item 
+\Hypertarget{classSieve_a7c1444a96a766ce70d30770b7df5fcce}\label{classSieve_a7c1444a96a766ce70d30770b7df5fcce} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+index}
+\item 
+\Hypertarget{classSieve_a0821237f0dedcfe15adfb87570a6d617}\label{classSieve_a0821237f0dedcfe15adfb87570a6d617} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+generated\+\_\+count}
+\item 
+\Hypertarget{classSieve_aff2a67de2b5de91021fd0bf94259299c}\label{classSieve_aff2a67de2b5de91021fd0bf94259299c} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+refills}
+\item 
+\Hypertarget{classSieve_afc05480a7c271ce49165ed60b28ea849}\label{classSieve_afc05480a7c271ce49165ed60b28ea849} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+premature\+\_\+refills}
+\item 
+\Hypertarget{classSieve_a2e84a221e99def8b32ab186e37da544d}\label{classSieve_a2e84a221e99def8b32ab186e37da544d} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+pool\+\_\+refill\+\_\+fill\+\_\+loops}
+\item 
+\Hypertarget{classSieve_a1d6a09c0beaa7e201c466dd7bd9aa988}\label{classSieve_a1d6a09c0beaa7e201c466dd7bd9aa988} 
+std\+::chrono\+::duration$<$ \mbox{\hyperlink{classNode}{double}}, std\+::micro $>$ {\bfseries \+\_\+pool\+\_\+refill\+\_\+time\+\_\+us}
+\item 
+\Hypertarget{classSieve_a6288b019b25710584fa2223f6284ec8d}\label{classSieve_a6288b019b25710584fa2223f6284ec8d} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+tree\+\_\+level\+\_\+count}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/sieve.\+hpp\end{DoxyCompactItemize}

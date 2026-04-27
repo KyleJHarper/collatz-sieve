@@ -1,0 +1,30 @@
+\doxysection{abi\+\_\+helpers.\+hpp}
+\hypertarget{abi__helpers_8hpp_source}{}\label{abi__helpers_8hpp_source}\index{src/collatz/abi\_helpers.hpp@{src/collatz/abi\_helpers.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cxxabi.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceABIHelpers}{ABIHelpers}}\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABIHelpers_a81f114c118f1475748b7604187d614cb}{demangle}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ status\ =\ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ demangled\ =\ abi::\_\_cxa\_demangle(name,\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ \&status);}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ std::string\ result\ =\ (status\ ==\ 0\ \&\&\ demangled)\ ?\ demangled\ :\ name;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ free(demangled);}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00027\ \ \ \ \ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABIHelpers_a81f114c118f1475748b7604187d614cb}{demangle}}()\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceABIHelpers_a81f114c118f1475748b7604187d614cb}{demangle}}(\textcolor{keyword}{typeid}(T).name());}
+\DoxyCodeLine{00042\ \ \ \ \ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \}}
+
+\end{DoxyCode}

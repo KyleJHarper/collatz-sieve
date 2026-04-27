@@ -350,7 +350,7 @@ class Node {
     size_t get_fg_chain_length() const { return BinaryTreeMath<T>::st_fg_chain_length(get_level()); }
     //
     // Tree level and position come from BinaryTree, but we'll make them accessible here.
-    size_t get_level() const { return BinaryTreeMath<T>::st_node_level(_value); }
+    size_t get_level() const { return BinaryTreeMath<T>::st_get_node_level_by_value(_value); }
     T get_position() const { return BinaryTreeMath<T>::st_node_position(_value); }
 
 

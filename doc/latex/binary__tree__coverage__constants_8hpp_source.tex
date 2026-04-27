@@ -1,0 +1,121 @@
+\doxysection{binary\+\_\+tree\+\_\+coverage\+\_\+constants.\+hpp}
+\hypertarget{binary__tree__coverage__constants_8hpp_source}{}\label{binary__tree__coverage__constants_8hpp_source}\index{src/collatz/binary\_tree\_coverage\_constants.hpp@{src/collatz/binary\_tree\_coverage\_constants.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi\_helpers.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}binary\_tree\_math.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants}{BinaryTreeCoverageConstants}}\ \{}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\_KNOWN\_COVERAGE\_LEVEL}}\ =\ 45;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{constexpr}\ std::array<uint128\_t,\ MAX\_KNOWN\_COVERAGE\_LEVEL+1>\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}\ =\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ 0\ \ \textcolor{comment}{//\ 0}}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ ,\ 0\ \ \textcolor{comment}{//\ 1}}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ ,\ 1\ \ \textcolor{comment}{//\ 2}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ ,\ 3\ \ \textcolor{comment}{//\ 3}}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ ,\ 6\ \ \textcolor{comment}{//\ 4}}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ ,\ 13\ \ \textcolor{comment}{//\ 5}}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ ,\ 28\ \ \textcolor{comment}{//\ 6}}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ ,\ 56\ \ \textcolor{comment}{//\ 7}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ ,\ 115\ \ \textcolor{comment}{//\ 8}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ ,\ 237\ \ \textcolor{comment}{//\ 9}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ ,\ 474\ \ \textcolor{comment}{//\ 10}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ ,\ 960\ \ \textcolor{comment}{//\ 11}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ ,\ 1920\ \ \textcolor{comment}{//\ 12}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ ,\ 3870\ \ \textcolor{comment}{//\ 13}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ ,\ 7825\ \ \textcolor{comment}{//\ 14}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ ,\ 15650\ \ \textcolor{comment}{//\ 15}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ ,\ 31473\ \ \textcolor{comment}{//\ 16}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ ,\ 63422\ \ \textcolor{comment}{//\ 17}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ ,\ 126844\ \textcolor{comment}{//\ 18}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ ,\ 254649\ \ \textcolor{comment}{//19}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ ,\ 509298\ \ \textcolor{comment}{//\ 20}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ ,\ 1021248\ \ \textcolor{comment}{//\ 21}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ ,\ 2050541\ \ \textcolor{comment}{//\ 22}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ ,\ 4101082\ \ \textcolor{comment}{//\ 23}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ ,\ 8219801\ \ \textcolor{comment}{//\ 24}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ ,\ 16490635\ \ \textcolor{comment}{//\ 25}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ ,\ 32981270\ \ \textcolor{comment}{//\ 26}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ ,\ 66071490\ \ \textcolor{comment}{//\ 27}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ ,\ 132455435\ \ \textcolor{comment}{//\ 28}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ ,\ 264910870\ \ \textcolor{comment}{//\ 29}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ ,\ 530485275\ \ \textcolor{comment}{//\ 30}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ ,\ 1060970550\ \ \textcolor{comment}{//\ 31}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ ,\ 2123841570\ \ \textcolor{comment}{//\ 32}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ ,\ 4253619813\ \ \textcolor{comment}{//\ 33}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ ,\ 8507239626\ \ \textcolor{comment}{//\ 34}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ ,\ 17027951548\ \ \textcolor{comment}{//\ 35}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ ,\ 34095896991\ \ \textcolor{comment}{//\ 36}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ ,\ 68191793982\ \ \textcolor{comment}{//\ 37}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ ,\ 136471574881\ \ \textcolor{comment}{//\ 38}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ ,\ 272943149762\ \ \textcolor{comment}{//\ 39}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ ,\ 546144278026\ \ \textcolor{comment}{//\ 40}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ ,\ 1093108792776\ \ \textcolor{comment}{//\ 41}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ ,\ 2186217585552\ \ \textcolor{comment}{//\ 42}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ ,\ 4374334645782\ \ \textcolor{comment}{//\ 43}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ ,\ 8754392322150\ \ \textcolor{comment}{//\ 44}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ ,\ 17508784644300\ \textcolor{comment}{//\ 45}}
+\DoxyCodeLine{00070\ \ \ \ \ \};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a07b60eb7c7a649f566827a7adf485955}{get\_known\_coverage}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sanity\ checks.}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ >\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\_KNOWN\_COVERAGE\_LEVEL}})\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Level\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{level}})\ +\ \textcolor{stringliteral}{"{}\ not\ found\ in\ KNOWN\_COVERAGE"{}});}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ right\ type,\ and\ convert\ as-\/needed.}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{sizeof}(T)\ *\ 8\ >\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Level\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{level}})\ +\ \textcolor{stringliteral}{"{}\ is\ outside\ the\ max\ range\ for\ your\ type\ T:\ "{}}\ +\ ABIHelpers::demangle<T>());}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}];}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ uint128\_to\_mpz(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Should\ never\ reach\ this.}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type\ get\_known\_coverage()"{}});}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a289f5c2c769944793e05392b9a366d20}{get\_known\_coverage\_sum\_to\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}})\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}}\ =\ 0;\ \mbox{\hyperlink{classNode}{level}}\ <=\ \mbox{\hyperlink{classNode}{max\_level}};\ \mbox{\hyperlink{classNode}{level}}++)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{get\_known\_coverage<T>}}(\mbox{\hyperlink{classNode}{level}});}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_ab48c55474857d3346fe513bb5288294a}{get\_total}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024}{BinaryTreeMath<T>::st\_node\_count\_of\_level}}(\mbox{\hyperlink{classNode}{level}});}
+\DoxyCodeLine{00140\ \ \ \ \ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a147cfd35d4a0fa73c334dab843eaa1b2}{get\_total\_sum\_of\_levels}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{min\_level}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}})\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_a21222c83db75eae2c7d93d9d338a6ecb}{BinaryTreeMath<T>::st\_node\_count\_of\_levels}}(\mbox{\hyperlink{classNode}{min\_level}},\ \mbox{\hyperlink{classNode}{max\_level}});}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \}}
+
+\end{DoxyCode}

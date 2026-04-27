@@ -1,0 +1,126 @@
+\doxysection{collatz\+\_\+affine\+\_\+stride.\+hpp}
+\hypertarget{collatz__affine__stride_8hpp_source}{}\label{collatz__affine__stride_8hpp_source}\index{src/collatz/collatz\_affine\_stride.hpp@{src/collatz/collatz\_affine\_stride.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <concepts>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceAffineStride}{AffineStride}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{namespaceAffineStride_a204bfdf108dca7309f209f5dea043f5f}{MAX\_STRIDE}}\ =\ 20;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{structAffineStride_1_1Stride_ab08d60def9e2ca8cc792d3f68ad81386}{multiply}}\ =\ 1;\ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint16\_t}}\ \mbox{\hyperlink{structAffineStride_1_1Stride_a86ae2b814b6d1f62186a545b85b7fae3}{add}}\ =\ 0;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{structAffineStride_1_1Stride_a91cb776618aceb5e235397ae18992693}{f\_steps}}\ =\ 0;\ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{structAffineStride_1_1Stride_a446ecb275e4e0f4d7f108b13d706c4e2}{shift}}\ =\ 0;\ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}})\ ==\ 8);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{namespaceAffineStride_ac30c6d06cb14406044f7dd12c8e8d8d4}{MAX\_LONG\_STRIDE}}\ =\ 40;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAffineStride_1_1LongStride}{LongStride}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{structAffineStride_1_1LongStride_acc29b42d638bc1e73373d1a60c97c8cd}{multiply}}\ =\ 1;\ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{structAffineStride_1_1LongStride_add61f22e2b40a39e3ed5d09024d60e00}{add}}\ =\ 0;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{structAffineStride_1_1LongStride_a8d3da374323e49360a70cb45133f3d1f}{f\_steps}}\ =\ 0;\ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{structAffineStride_1_1LongStride_a7fdbb9657bc46aaa1fea89c6ce1a663f}{shift}}\ =\ 0;\ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Str\textcolor{keywordtype}{id}eType,\ \textcolor{keywordtype}{size\_t}\ bits>}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{constexpr}\ std::array<StrideType,\ 1ULL\ <<\ bits>\ \mbox{\hyperlink{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f}{build\_stride\_table}}()\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::same\_as<StrideType,\ Stride>)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{classNode}{bits}}\ <=\ \mbox{\hyperlink{namespaceAffineStride_a204bfdf108dca7309f209f5dea043f5f}{MAX\_STRIDE}},\ \textcolor{stringliteral}{"{}Stride\ bits\ exceed\ MAX\_STRIDE"{}});}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::same\_as<StrideType,\ LongStride>)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{classNode}{bits}}\ <=\ \mbox{\hyperlink{namespaceAffineStride_ac30c6d06cb14406044f7dd12c8e8d8d4}{MAX\_LONG\_STRIDE}},\ \textcolor{stringliteral}{"{}Stride\ bits\ exceed\ MAX\_LONG\_STRIDE"{}});}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ table.}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{table\_size}}\ =\ \mbox{\hyperlink{classNode}{uint64\_t}}(1)\ <<\ \mbox{\hyperlink{classNode}{bits}};}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ std::array<StrideType,\ 1ULL\ <<\ bits>\ \mbox{\hyperlink{classNode}{stride\_table}}\{\};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ With\ our\ table\ preallocated,\ we\ can\ use\ index-\/based\ iteration.\ \ Since\ we're\ looking\ at\ LSBs,\ we\ naturally\ get\ our\ order}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ and\ can\ simply\ loop\ through\ them\ sequentially.}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{table\_size}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{n}}\ =\ \mbox{\hyperlink{classNode}{i}};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{StrideType}}\ \mbox{\hyperlink{classNode}{stride}};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ step\_count\ =\ 0;\ step\_count\ <\ \mbox{\hyperlink{classNode}{bits}};\ step\_count++)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{n}}\ \&\ 1)\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.add\ =\ ((\mbox{\hyperlink{classNode}{stride}}.add\ <<\ 1)\ +\ \mbox{\hyperlink{classNode}{stride}}.add)\ +\ (\mbox{\hyperlink{classNode}{uint64\_t}}(1)\ <<\ \mbox{\hyperlink{classNode}{stride}}.shift);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.multiply\ *=\ 3;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.shift++;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.f\_steps++;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mimic\ the\ effects\ on\ n\ now.}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{n}}\ =\ (3\ *\ \mbox{\hyperlink{classNode}{n}}\ +\ 1)\ >>\ 1;}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.shift++;}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mimic\ the\ effects\ on\ n\ now.}}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{n}}\ >>=\ 1;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride\_table}}[\mbox{\hyperlink{classNode}{i}}]\ =\ \mbox{\hyperlink{classNode}{stride}};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{stride\_table}};}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ Set\ stride\ size\ and\ build\ a\ mask\ and\ table\ using\ it.}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ Micro-\/testing\ shows\ 8\ (256\ permutations)\ is\ ideal.\ \ Larger\ seems\ to\ spill\ out\ of\ cache\ (L1\ I'd\ guess).\ \ Smaller\ is\ worse.}}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{comment}{//\ These\ are\ constexpr,\ which\ explodes\ the\ compiler\ at\ a\ given\ limit,\ usually\ \string~16.\ FYI.}}
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\_SIZE}}\ =\ 8;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}{STRIDE\_MASK}}\ =\ (1ULL\ <<\ \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\_SIZE}})\ -\/\ 1;}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{STRIDE\_TABLE}}\ =\ \mbox{\hyperlink{classNode}{build\_stride\_table<Stride,\ STRIDE\_SIZE>}}();}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}{apply\_stride}}(T\&\ value)\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Basic\ arithemtic\ and\ masking\ is\ fine\ on\ this\ path.}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ \mbox{\hyperlink{classNode}{stride}}\ =\ \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{AffineStride::STRIDE\_TABLE}}[value\ \&\ \mbox{\hyperlink{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}{AffineStride::STRIDE\_MASK}}];}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ ((value\ *\ \mbox{\hyperlink{classNode}{stride}}.multiply)\ +\ \mbox{\hyperlink{classNode}{stride}}.add)\ >>\ \mbox{\hyperlink{classNode}{stride}}.shift;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ needs\ the\ UI\ extracted\ and\ cleaner\ calls\ to\ avoid\ temps.}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_value}}\ =\ value.get\_ui();}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ \mbox{\hyperlink{classNode}{stride}}\ =\ \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{AffineStride::STRIDE\_TABLE}}[\mbox{\hyperlink{classNode}{u64\_value}}\ \&\ \mbox{\hyperlink{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}{AffineStride::STRIDE\_MASK}}];}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul\_ui}}(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{stride}}.multiply);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{stride}}.add);}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{stride}}.shift);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51}{apply\_stride\_2x}}(T\&\ value)\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}{apply\_stride}}(value);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}{apply\_stride}}(value);}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb}{apply\_stride\_4x}}(T\&\ value)\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51}{apply\_stride\_2x}}(value);}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51}{apply\_stride\_2x}}(value);}
+\DoxyCodeLine{00152\ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceAffineStride_ae3fee91d30d86b467b7e9a4cdd01bd7e}{apply\_stride\_8x}}(T\&\ value)\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb}{apply\_stride\_4x}}(value);}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb}{apply\_stride\_4x}}(value);}
+\DoxyCodeLine{00166\ \ \ \ \ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00169\ \}}
+
+\end{DoxyCode}

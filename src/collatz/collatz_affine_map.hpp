@@ -30,35 +30,55 @@
 // CollatzAffineMap
 // The basic map which performs all steps.
 //
+/**
+* @class CollatzAffineMap
+* @brief An explicit map which tracks 2's and 3's exponents (`A`) and the constant portion (`B`) for affine transformation.
+*
+* An FG chain can be stored and represented as an affine map with powers of two and three, and with a constant portion.  This
+* avoids any realtime tracking of fractional values (floats).
+*
+* There are overflow concerns, which are most extreme when the chain is all `F` steps.  This worst case leaves `constant_portion`
+* equal to `~3^k`.  Each power of three needs ~1.6 bits to represent this in binary, so we have the following limits:
+*   * 64-bits) 40
+*   * 128-bits) 80
+*
+* Therefore, when using large maps, callers must be aware of overflow risks.  These 40 and 80 limits are available via the
+* `Exponents::POW3_64BIT_ELEMENT_COUNT` and `Exponents::POW3_128BIT_ELEMENT_COUNT`.
+*
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<AnySupportedIntegral T>
 class CollatzAffineMap {
     private:
+    /// @brief The power of two accumulated.  Increases by 1 on both `F` and `G` steps.
     uint32_t _twos_exp = 0;
+    /// @brief The power of three accumulated.  Increases by 1 on `F` steps.
     uint32_t _threes_exp = 0;
+    /// @brief The constant portion (B) accumulated.  It's affected by `F` and `G` steps.
     T _constant_portion = 0;
 
 
     public:
+    /// @name Lifecycle Management
+    /// @{
+
+    /// @brief Default constructor.
     CollatzAffineMap() {}
 
 
 
-    //
-    // Reset
-    // Reset the object for reuse.
-    //
+    /// @brief Resets the object, treating it like it's new.
     void reset() {
         _twos_exp = 0;
         _threes_exp = 0;
         _constant_portion = 0;
     }
 
+    /// @}
 
 
-    //
-    // Apply F
-    // Increments counts and bumps the constant_portion according to the accelerated F(x) ==> (3x + 1) / 2
-    //
+
+    /// @brief Applies the accelerated `F` step by incrementing exponent counts and transforming `constant_portion` too.
     void apply_F() {
         // Adjust the constant portion before we modify any exponents.
         if constexpr(BuiltinIntegral<T>) {
@@ -77,20 +97,18 @@ class CollatzAffineMap {
 
 
 
-    //
-    // Apply G
-    // Applies the accelerated G(x) ==> x/2.  This is just a bump on the twos_exp.
-    //
+    /// @brief Applies the accelerated `G` step by incrementing the two's exponent.
     void apply_G() {
         _twos_exp += 1;
     }
 
 
 
-    //
-    // Calculate
-    // Applies the the map to the value specified and returns the result.
-    //
+    /**
+    * @brief Applies the affine transformation on the value provided and returns the result.
+    * @param value The value to treat as `x` in the affine formula: `Ax + b`.
+    * @returns A copy of the result, which is an alloc on the GMP path.
+    */
     T calculate(const T& value) const {
         T result = Exponents::get_power_of_three<T>(_threes_exp);
         if constexpr(BuiltinIntegral<T>) {
@@ -112,8 +130,14 @@ class CollatzAffineMap {
         }
         return result;
     }
-    //
-    // Alternate version with an out param to let caller control allocations.
+
+
+
+    /**
+    * @brief Applies the affine transformation on the value provided and stores the result in `out`.
+    * @param value The value to treat as `x` in the affine formula: `Ax + b`.
+    * @param out The resut stored in callers memory, which avoids alloc on the GMP path.
+    */
     void calculate(const T& value, T& out) const {
         if constexpr(BuiltinIntegral<T>) {
             out = Exponents::get_power_of_three<T>(_threes_exp);
@@ -136,12 +160,12 @@ class CollatzAffineMap {
     }
 
 
-    //
-    // Is Below
-    // Applies the affine map to the value passed in to determine if will be below (true) or above (false) the initial value.
-    //
+    /**
+    * @brief Helper which simply applies `calculate()` and returns if it's below (true) or above (false) the original `value`.
+    * @param value The value to calculate and compare to.
+    * @returns True if the affine transoformation is overall contractive, false otherwise.
+    */
     bool is_below(const T& value) const {
-        // We will use lookup tables to save time.  We will hide an mpz_class to avoid alloc()s for callers quietly.
         static thread_local T tmp;
         if constexpr(BuiltinIntegral<T>) {
             return calculate(value) < value;
@@ -157,51 +181,61 @@ class CollatzAffineMap {
 
 
 
-//
-// CollatzAffineMapShortcut
-// An accelerated map which only tracks exponents of 3 and 2 (for F and G).  Our distribution of N means the constant portion of an
-// FG chain (B) cannot overcome a contractive exponential portion (A) to bring the calculated value above N.
-//
-// In other words:
-//     Given f = number of F steps
-//     Given k = number of F and G steps
-//     Given A = 3^f/2^k
-//     When A < 1, then:  A * N + B < N
-//
-// While possibly asymptotic, this has been empirically validated up to 10,000 serial F's and found to hold true.  For safety,
-// we'll add a counter to ensure this class throws an exception above our emprically tested level.
-//
-// We can therefore track exponents of 3 and 2, and perform a simple integer comparison against a precalculated map for is_below().
-//
-// Note: This version has no calculate() method, because that would be silly.
-//
+/**
+* @class CollatzAffineMapShortcut
+* @brief An accelerated map which only tracks the `A` portion of: `Ax + b`.
+*
+* The distribution of ℕ over Harper's tree, along with the application and limitation of `F` and `G` steps, create constant
+* portions (B) which cannot overcome an associated contractive exponential portion (A) to bring the calculated value above itself.
+*
+* In other words:
+*     * Given f = number of F steps
+*     * Given k = number of F and G steps
+*     * Given A = 3^f/2^k
+*     * When A < 1, then:  A * N + B < N
+*
+* While possibly asymptotic, this has been empirically validated up to 10,000 serial `F` steps.  For safety, a counter has been
+* added to ensure this class throws an exception above that level.
+*
+* The ability to discard the B-portion means only the contractive nature of `A` matters.  These have been precomputed and stored in
+* `Exponents::MAX_POW2_UNDER_POW3`.
+*
+* @note This class has no calculate method, because the B-portion isn't tracked.
+* @note Due to the nature of this class, no type `T` is necessary or possible.
+*/
 class CollatzAffineMapShortcut {
     private:
+    /// @brief The power of two accumulated.  Increases by 1 on both `F` and `G` steps.
     uint32_t _twos_exp = 0;
+    /// @brief The power of three accumulated.  Increases by 1 on `F` steps.
     uint32_t _threes_exp = 0;
 
 
     public:
+    /// @brief The highest level of serial `F` steps empirically tested.  Used for validation in `apply_F()`.
     const static size_t MAX_SERIAL_F_TESTED = 10000;
+
+
+
+    /// @name Lifecycle Management
+    /// @{
+
+    /// @brief Default constructor.
     CollatzAffineMapShortcut() {}
 
 
 
-    //
-    // Reset
-    // Reset the object for reuse.
-    //
+    /// @brief Resets the object, treating it like it's new.
     void reset() {
         _twos_exp = 0;
         _threes_exp = 0;
     }
 
+    /// @}
 
 
-    //
-    // Apply F
-    // Increments counts, and that's all.
-    //
+
+    /// @brief Increments counts, and that's all.
     void apply_F() {
         // Test to ensure we aren't in excess of the empirically tested limit for contractive A * N + B <= N.
         // Only applies to F steps, because only they grow B.
@@ -214,21 +248,20 @@ class CollatzAffineMapShortcut {
 
 
 
-    //
-    // Apply G
-    // Increments counts, and that's all.
-    //
+    /// @brief Increments counts, and that's all.
     void apply_G() {
         _twos_exp += 1;
     }
 
 
 
-    //
-    // Is Below
-    // Compares the result of powers of 3 and 2, and returns true if 3^f < 2^k.  These have been precomputed and stored in an array
-    // for us to lookup cheaply.
-    //
+    /**
+    * @brief Compares the result of powers of 3 and 2, and returns true if `3^f < 2^k`.
+    *
+    * These are precomputed and stored in an array within the `Exponents` namespace.
+    *
+    * @return True if `3^f < 2^k`, otherwise false.
+    */
     bool is_below() const {
         // If our two's exponent exceeds the precalculated two's-exponent for our power of three, we're below.
         if (_threes_exp > Exponents::MAX_POW2_UNDER_POW3_COUNT) {

@@ -17,49 +17,72 @@
 
 
 
-//
-// A perfect binary tree mapped to powers of two.  This creates a uniform distribution of nodes in the N/Z+ space (positive
-// integers), which Collatz is concerned.
-//
-// This is the materialized version, which creates real Node objects and persists them.  When pruning is enabled, we will remove
-// any nodes hitting "hwm", leaving only nodes that still need to be tested.
-//
-// Note: this is okay for small things or detailed inspection of the tree, but RAM explodes quickly.  Attempts were made to prune
-// covered nodes and even parent levels, but it's a losing battle.  Consider the BinaryTreeImplicit implementation instead.
-//
+/**
+* @class BinaryTreeMaterializedImpl
+* @brief An implementation of the `BinaryTree` which creates and persists `Node` objects in memory.
+*
+* This is the materialized version, which creates real Node objects and persists them.  When pruning is enabled, nodes which hit
+* the High-Water Mark (HWM) are removed, leaving only nodes which still need to be tested.
+*
+* @note This was a first-principles implementation when starting out.  It's great for in-memory inspection of true `Node` objects,
+* or when you want to walk an actual tree, but RAM explodes quickly.  If you need to work with larger trees, consider using the
+* `BinaryTreeImplicitImpl` instead.
+*
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<AnySupportedIntegral T>
 class BinaryTreeMaterializedImpl {
     private:
+    /// @brief The root of a tree.  Navigable in this tree type.
     Node<T>* _root_node = nullptr;
-    size_t _level_count = 0;
-    std::unordered_map<size_t, std::vector<Node<T>*>> _level_map;
-    std::unordered_map<size_t, BinaryTreeCoverage<T>> _coverage_map;
+    /// @brief Number of levels in the tree.
+    level_t _level_count = 0;
+    /// @brief The main storage for `Node` objects, placed in a map keyed by level.
+    std::unordered_map<level_t, std::vector<Node<T>*>> _level_map;
+    /// @brief Map of levels and their associated coverage.
+    std::unordered_map<level_t, BinaryTreeCoverage<T>> _coverage_map;
+    /// @brief Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree.
     std::vector<Node<T>*> _ancestors;
+    /// @brief Flag to determine if this tree is initialized, meaning it's had at least one level added.
     bool _is_initialized = false;
+    /// @brief Flag to determine if the tree should prune HWM nodes, carving out subtress, turning this into a DAG.
     bool _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
+    /// @brief Flag to determine if the tree should prune parent levels.  AKA, only keep the last level (leaf nodes).
     bool _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
+    /// @brief Flag to determine if HWM ancestors should be added to our vector or simply discarded.
     bool _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
+    /// @brief Flag to determine if verification of non-HWM nodes should happen.  See `BinaryTree` or CHANGELOG 3.4.0 for details.
     bool _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
+    /// @brief Track the type of this tree for external comparison later.
     const TreeTypeEnum _tree_type = TreeTypeEnum::MATERIALIZED;
-    static constexpr BinaryTreeOptions DEFAULT_OPTS{};
 
 
 
     public:
-    //
-    // Constructors
-    //
+    /// @name Lifecycle Management
+    /// @{
+
+    /**
+    * @brief Default constructor.
+    */
     BinaryTreeMaterializedImpl() = default;
 
 
 
-    //
-    // Destructor
-    //
+    /**
+    * @brief Destructor will remove any ancestors and clear the level map.
+    */
     ~BinaryTreeMaterializedImpl() {
+        // Clean up ancestors.  These are new-placement, so they aren't linked to the same memory as _level_map.
+        for (Node<T>* node : _ancestors) {
+            delete node;
+        }
+        _ancestors.clear();
+
+        // Now clear out the level_map.  If pruning, handle it carefully.
         if (_is_pruning_hwm_nodes) {
-            // We need to scan all levels manually and call delete explicitly.
-            for (size_t level = 0; level <= _level_count; level++) {
+            // Scan all levels manually and call delete explicitly.
+            for (level_t level = 0; level <= _level_count; level++) {
                 for (Node<T>* node : _level_map[level]) {
                     if (node != nullptr) {
                         node->own_children(false);
@@ -75,30 +98,9 @@ class BinaryTreeMaterializedImpl {
 
 
 
-    //
-    // Initialize
-    // Builds the object, reusing it if necessary.
-    //
-    void init(size_t levels, const BinaryTreeOptions opts = DEFAULT_OPTS) {
-        // Reset object if necessary.
-        if(_is_initialized) { reset(); }
-        _is_initialized = true;
-        // Set options.
-        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
-        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
-        _is_pruning_parent_levels = opts.prune_parent_levels;
-        _is_preserving_ancestors = opts.preserve_ancestors;
-        while (_level_count < levels) {
-            this->add_level();
-        }
-    }
-
-
-
-    //
-    // Reset Object
-    // Reset members to make this act like a new() object.
-    //
+    /**
+    * @brief Reset members to make this act like a new object.  Mostly for `init()`.
+    */
     void reset() {
         _is_initialized = false;
         _coverage_map.clear();
@@ -114,49 +116,119 @@ class BinaryTreeMaterializedImpl {
 
 
 
-    //
-    // Getters and Accessors
-    //
+    /**
+    * @brief Initializes the object, calling `reset()` if already initialized.
+    * @param levels Number of levels to build this tree, inclusive.
+    * @param opts Options to control tree-buiding behavior.  Note that not all apply to implicit trees, such as pruning.
+    */
+    void init(level_t levels, const BinaryTreeOptions opts = BinaryTreeOptions{}) {
+        // Reset object if necessary.
+        if(_is_initialized) { reset(); }
+        _is_initialized = true;
+        // Set options.
+        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
+        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
+        _is_pruning_parent_levels = opts.prune_parent_levels;
+        _is_preserving_ancestors = opts.preserve_ancestors;
+        while (_level_count < levels) {
+            this->add_level();
+        }
+    }
+
+    /// @}
+
+
+
+    /// @name Accessors Common to All Trees
+    /// @{
+
     // Common properties.
+    /// @brief Get the tree type of this instance.
     TreeTypeEnum get_tree_type() const { return _tree_type; }
-    size_t get_level_count() const { return _level_count; }
-    void set_level_count(size_t level_count) { _level_count = level_count; }
+
+    /// @brief Get the level count.
+    level_t get_level_count() const { return _level_count; }
+    /// @brief Set the level count explicitly.
+    /// @warning This is intended for serialization/deserilization only.
+    /// @param level_count The level count to set.
+    void set_level_count(level_t level_count) { _level_count = level_count; }
+
+    /// @brief Get a readonly pointer to the root node.
     Node<T>* get_root_node() const { return _root_node; }
+    /// @brief Get a read-write reference to the pointer to the root node.
+    /// @note You get a ref to a pointer to allow manipulation of this member directly.
+    /// @warning This is intended for serialization/deserilization only.
     Node<T>*& get_root_node_rw() { return _root_node; }
-    const std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
-    std::unordered_map<size_t, BinaryTreeCoverage<T>>& get_coverage_map_rw() { return _coverage_map; }
+
+    /// @brief Get a readonly reference to the coverage map.
+    const std::unordered_map<level_t, BinaryTreeCoverage<T>>& get_coverage_map() const { return _coverage_map; }
+    /// @brief Get a read-write reference to the coverage map.
+    /// @warning This is intended for serialization/deserilization only.
+    std::unordered_map<level_t, BinaryTreeCoverage<T>>& get_coverage_map_rw() { return _coverage_map; }
+
+    /// @brief Get a readonly reference to the ancestors.
     const std::vector<Node<T>*>& get_ancestors() const { return _ancestors; }
+    /// @brief Get a read-write reference to the ancestors.
+    /// @warning This is intended for serialization/deserilization only.
     std::vector<Node<T>*>& get_ancestors_rw() { return _ancestors; }
+
+    /// @brief Get a flag whether this tree is preserving ancestors.
     bool is_preserving_ancestors() const { return _is_preserving_ancestors; }
+    /// @brief Change the flag for whether this tree is preserving ancestors.
+    /// @warning This is intended for serialization/deserilization only.
+    /// @param value The true or false value to set.
     void set_is_preserving_ancestors(const bool value) { _is_preserving_ancestors = value; }
+
+    /// @brief Get a flag whether this tree is verifying non-HWM nodes.
     bool is_verifying_non_hwm_nodes() const { return _is_verifying_non_hwm_nodes; }
+    /// @brief Explicitly disable non-HWM node verification.
     void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
+    /// @brief Explicitly enable non-HWM node verification.
     void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
+
+    /// @brief Get a flag whether this tree is initialized.
     bool is_initialized() const { return _is_initialized; }
+    /// @brief Change the flag for whether this tree is initialized.
+    /// @warning This is intended for serialization/deserilization only.
+    /// @param value The true or false value to set.
     void set_is_initialized(const bool value) { _is_initialized = value; }
-    //
-    // Materialized-Specific
+
+    /// @}
+
+
+
+    /// @name Materialized-Only Accessors
+    /// @{
+
+    /// @brief Responds true to `is_materialized()`, mostly for the `BinaryTree` facade.
     bool is_materialized() const { return true; }
-    const std::unordered_map<size_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
+
+    /// @brief Get a reference to the level map, which contains all of the `Node` objects.
+    /// @note Nodes are left-to-right by position, not node value.
+    const std::unordered_map<level_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
+
+    /// @brief Get a flag whether this tree is pruning High-Water Mark nodes.
     bool is_pruning_hwm_nodes() const { return _is_pruning_hwm_nodes; }
+
+    /// @brief Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes).
     bool is_pruning_parent_levels() const { return _is_pruning_parent_levels; }
-    // Real Node Count
-    // Returns the REAL node count in the _level_map.  Includes level 0 if tree is 1-based (no dead root).
+
+    /// @brief Returns the REAL node count in the _level_map.
     T real_node_count() const {
         T total = 0;
-        for (size_t level = 1; level <= _level_count; level++) {
+        for (level_t level = 1; level <= _level_count; level++) {
             total += _level_map.at(level).size();
         }
         return total;
     }
 
+    /// @}
 
 
-    //
-    // Object Size
-    // Deeply scan the object, all nodes, and so forth, tallying up the expect bytes used.  This won't match RSS because we can't
-    // track alignment and such without massive headaches.
-    //
+
+    /**
+    * @brief Deeply scan the object and report its size.
+    */
     size_t deep_size() const {
         size_t total = sizeof(*this);
 
@@ -187,14 +259,22 @@ class BinaryTreeMaterializedImpl {
 
 
 
-    //
-    // Equal
-    // Compare all of the members and (meta) data.
-    //
-    // Returns true if they are equal in representation.  False otherwise.
-    // Will explain what failed to *err if sent.
-    //
-    // Only implementation-specific checks go here.  Facade handles common.
+    /**
+    * @brief Compare two materialized trees' specific internals and return true if identical.
+    *
+    * This method only tests materialized tree specifics.  Most equality happens via the `BinaryTree` facade since they share
+    * common members between implementations (e.g.: level count).
+    *
+    * This function checks:
+    *   1. The is_pruning_hwm_nodes flag.
+    *   2. The is_pruning_parent_levels flag.
+    *   3. Level map (`Node` objects, which invoke their own `Node::st_equal()`).
+    *
+    * @param first The first tree to compare.
+    * @param second The second tree to compare.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     static bool st_equal(const BinaryTreeMaterializedImpl<T>& first, const BinaryTreeMaterializedImpl<T>& second, std::string* err = nullptr) {
         EqualityHelper eq(err);
         eq.set_category("BinaryTreeMaterializedImpl");
@@ -226,21 +306,42 @@ class BinaryTreeMaterializedImpl {
             }
         }
 
-        // Guess we made it here.  All good.
+        // All good.
         return true;
     }
-    //
-    // Member helper.
+
+
+
+    /**
+    * @brief Compare another materialized tree to this one.
+    *
+    * This is a member helper which simply forwards to `BinaryTreeMaterializedImpl::st_equal()`.
+    *
+    * @param second The second tree to compare against this.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     bool equal(const BinaryTreeMaterializedImpl<T>& second, std::string* err = nullptr) const {
         return BinaryTreeMaterializedImpl<T>::st_equal(*this, second, err);
     }
 
 
 
-    //
-    // Serialize
-    // Serializes the implementation-specific details.  Facade handles common.
-    //
+    /**
+    * @brief Serialize the materialized tree specifics of this object for export.
+    *
+    * Serialization happens in this order:
+    *   1. The is_pruning_hwm_nodes flag.
+    *   2. The is_pruning_parent_levels flag.
+    *   3. The level map, which emits level numbers and node counts, and then uses `Node::serialize()` on each node.
+    *
+    * @note The `BinaryTree` facade handles serialization of common items between implementations.
+    * @note This method does not throw.
+    * @warning Serialization of pruned trees is not supported.
+    * @param out The stream to write data to.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
         // !!! BIG FAT ANNOYING ERROR !!!
         if (_is_pruning_hwm_nodes || _is_pruning_parent_levels) {
@@ -266,25 +367,24 @@ class BinaryTreeMaterializedImpl {
         // Level Map
         // Write how many levels we need to loop through later.
         //
-        // Note: we do NOT serialize level 1, because it's only the root node, which is a common item.  We link it deserialize().
+        // Note: do NOT serialize level 1, because it's only the root node, which is a common item.  It is linked in deserialize().
         uint64_t u64_level_map_count = get_level_map().size() - 1;
         if (! sh.serialize_integral(u64_level_map_count)) {
             return sh.fail("level_map_count==" + to_string_any(u64_level_map_count));
         }
         // Get the level numbers in order for guaranteed write order.
-        std::vector<size_t> level_map_levels;
+        std::vector<level_t> level_map_levels;
         level_map_levels.reserve(_level_map.size());
         for (const auto& [level, _] : _level_map) {
             if (level == 1) { continue; }
             level_map_levels.push_back(level);
         }
         std::sort(level_map_levels.begin(), level_map_levels.end());
-        // Loop through each level we found.
-        for (size_t level : level_map_levels) {
+        // Loop through each level found.
+        for (level_t level : level_map_levels) {
             const std::vector<Node<T>*>& nodes = _level_map.at(level);
             // Write the level number and then the number of nodes on it.
-            uint64_t u64_level = static_cast<uint64_t>(level);
-            if (! sh.serialize_integral(u64_level)) {
+            if (! sh.serialize_integral(level)) {
                 return sh.fail("level map's level==" + to_string_any(level));
             }
             uint64_t u64_node_size = static_cast<uint64_t>(nodes.size());
@@ -305,10 +405,17 @@ class BinaryTreeMaterializedImpl {
 
 
 
-    //
-    // Deserialize
-    // Convert the "in" to our implementation-specific values and members.
-    //
+    /**
+    * @brief Deserialize this object for import following a previous `serialize()`.
+    *
+    * Deserialization happens in the same order as serialization, obviously.
+    *
+    * @note The `BinaryTree` facade handles deserialization of common items between implementations.
+    * @note This method does not throw.
+    * @param in The stream to read data from.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("BinaryTreeMaterializedImpl");
@@ -325,7 +432,7 @@ class BinaryTreeMaterializedImpl {
         _is_pruning_parent_levels = b_tmp;
 
         // Level map
-        // Start by assigning the root node to level 1, because we don't export that in serialize().
+        // Start by assigning the root node to level 1, because it's not exported in serialize().
         _level_map[1].resize(1);
         _level_map[1][0] = _root_node;
         // Now get the remaining levels, if any.
@@ -336,14 +443,12 @@ class BinaryTreeMaterializedImpl {
         if (! sh.deserialize_integral(u64_level_map_count)) {
             return sh.fail("couldn't read level_map_count");
         }
-        // If there was even 1 level beyond the first exported, assume level
         for (uint64_t i = 0; i < u64_level_map_count; i++) {
             uint64_t parent_index = 0;
-            uint64_t u64_level = 0;
-            if (! sh.deserialize_integral(u64_level)) {
+            level_t level = 0;
+            if (! sh.deserialize_integral(level)) {
                 return sh.fail("couldn't read level for index i==" + to_string_any(i));
             }
-            size_t level = static_cast<size_t>(u64_level);
             uint64_t u64_node_size = 0;
             if (! sh.deserialize_integral(u64_node_size)) {
                 return sh.fail("couldn't read node size for level==" + to_string_any(level));
@@ -380,45 +485,8 @@ class BinaryTreeMaterializedImpl {
                 if (new_node->get_hwm_ancestor() == nullptr && parent->is_below_high_water_mark()) {
                     new_node->assign_hwm_ancestor(parent);
                 }
-                // // Now for general ancestor tracking (separate pool of new-placement nodes).
-                // if (_is_preserving_ancestors) {
-                //     // If new node below the HWM, insert it to the ancestors.
-                //     if (new_node->is_below_high_water_mark()) {
-                //         auto it = std::lower_bound(
-                //             _ancestors.begin(),
-                //             _ancestors.end(),
-                //             new_node,
-                //             [](const Node<T>* a, const Node<T>* b) {
-                //                 return a->get_value() < b->get_value();
-                //             }
-                //         );
-                //         _ancestors.insert(it, new_node);
-                //     }
-                //     // // If there's an ancestor for this node, link it.  These are value-ordered in add_level(), so we can binary search.
-                //     // if (hwm_ancestor_v != 0) {
-                //     //     auto it = std::lower_bound(
-                //     //         _ancestors.begin(),
-                //     //         _ancestors.end(),
-                //     //         hwm_ancestor_v,
-                //     //         [](const Node<T>* ancestor, const T& val) {
-                //     //             return ancestor->get_value() < val;
-                //     //         }
-                //     //     );
-                //     //     if (it != _ancestors.end()) {
-                //     //         Node<T>* candidate = *it;
-                //     //         if (candidate->get_value() == hwm_ancestor_v) {
-                //     //             new_node->assign_hwm_ancestor(candidate);
-                //     //         }
-                //     //     }
-                //     //     if (new_node->get_hwm_ancestor() == nullptr) {
-                //     //         return sh.fail("couldn't find hwm ancestor with value==" + to_string_any(hwm_ancestor_v) + " for new node with value==" + to_string_any(new_node->get_value()));
-                //     //     }
-                //     // }
-                // }
             }
         }
-
-        // Now, if we aren't tracking ancestors permanently, purge the vector (not the nodes).
 
         // All good
         return true;
@@ -426,16 +494,20 @@ class BinaryTreeMaterializedImpl {
 
 
 
-    //
-    // Add Level
-    // Add a level to the tree.  We simply take the parent nodes and add two children with a steady step value.  We also calculate
-    // the coverage for this level.
-    //
-    // When WHM pruning is enabled we trim all grandparents who meet HWM.  We need the parents to build the child level currently.
-    // We assume the parent generation was already pruned, and we'll test children after we make them.
-    //
+    /**
+    * @brief Add a level to the tree.
+    *
+    * Materialized tree building happens by taking the nodes from the last level in `_level_map` and treating them as parents.  The
+    * children created have known values according to Harper's algorithm.  The children are checked for High-Water Mark, and stored
+    * in the next level of the map.
+    *
+    * When HWM pruning is anbled, all grandparents who meet HWM are trimmed, which prevents entire subtrees of nodes from taking up
+    * memory.
+    *
+    * When parent level pruning is enabled, all parents are trimmed, which keeps only the last level of nodes in memory.
+    */
     void add_level() {
-        // When we have no levels, we'll simply craft a 0- or 1-based root node and manually set level map and coverage.
+        // When we have no levels, this simply crafts a 0- or 1-based root node and manually sets level map and coverage.
         if (_level_count == 0) {
             _level_count = 1;
             _root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
@@ -447,15 +519,15 @@ class BinaryTreeMaterializedImpl {
         }
 
         // Get the parent and child levels.  Then confirm the new one will fit.  Then bump count.
-        size_t parent_level = _level_count;
-        size_t child_level = _level_count + 1;
+        level_t parent_level = _level_count;
+        level_t child_level = _level_count + 1;
         _level_count++;
 
         // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
         T step = BinaryTreeMath<T>::st_step(parent_level);
 
         // Calculate parent and child counts for looping and indexing.
-        // Note: size_t is safe, because no one can fit 2^64 nodes in RAM.  Vectors require size_t for indexes.
+        // Note: size_t is safe, because no one can fit 2^64 nodes in RAM.
         auto& parents = _level_map[parent_level];
         size_t parent_count = parents.size();
         size_t child_count = parent_count * 2;
@@ -463,8 +535,8 @@ class BinaryTreeMaterializedImpl {
         // Resize the vector to contain all children.  Otherwise assigning to indexes ([]) will fail.
         _level_map[child_level].resize(child_count);
 
-        // Keep a record of covered or pruned values for coverage math after the loop.
-        size_t covered_or_pruned = 0;
+        // Keep a record of covered or pruned values for coverage math after the loop.  Use guaranteed-width integral.
+        uint64_t covered_or_pruned = 0;
 
         // Create an external tracker for ancestors for OMP local threads to utilize by-ref.
         std::vector<std::vector<Node<T>*>> omp_local_ancestors_group(omp_get_max_threads());
@@ -478,11 +550,11 @@ class BinaryTreeMaterializedImpl {
                 T child_value_1;
                 T child_value_2;
 
-                // Grab our personal ancestors vector to avoid locking.
+                // Grab this thread's personal ancestors vector to avoid locking.
                 auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
 
-                // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
-                T my_high_water_mark = BinaryTreeMath<T>::st_first_node_of_level(_level_count) - 1;
+                // Track this thread's local High-Water Mark.  Since nodes are not sequentially ordered, it can only set this to first node - 1.
+                T my_high_water_mark = BinaryTreeMath<T>::st_first_node_value_of_level(_level_count) - 1;
                 if (my_high_water_mark < 1) {
                     my_high_water_mark = 1;
                 }
@@ -600,10 +672,10 @@ class BinaryTreeMaterializedImpl {
             children.shrink_to_fit();
         }
 
-        // When pruning parent levels, we need to sweep them out.
-        // Nodes default-own children.  We try to avoid this above, but call own_children(false) for safety.
+        // When pruning parent levels, sweep them out.
+        // Nodes default-own children.  Call own_children(false) for safety.
         if (_is_pruning_parent_levels) {
-            // When it's level 1, we need to clear up _root too so it doesn't double-free later.
+            // When it's level 1, clear up _root too so it doesn't double-free later.
             if (parent_level == 1) {
                 _root_node = nullptr;
             }
@@ -618,8 +690,8 @@ class BinaryTreeMaterializedImpl {
         }
 
         // Coverage is tallied above.  If pruning, logic is different because ancestors were purged already, which means their
-        // descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, we can rely on
-        // .size() to tell us how many are *not* covered, which means covered = total - .size().
+        // descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, this method can rely
+        // on .size() to report how many are *not* covered, which means covered = total - .size().
         T total = step * 2;
         T covered = covered_or_pruned;
         if (_is_pruning_hwm_nodes) {

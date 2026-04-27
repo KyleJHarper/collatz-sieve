@@ -63,7 +63,7 @@ void process_level(T* start_value, T max_value, size_t level, StepResults *resul
 template<AnySupportedIntegral T>
 StepResults run_it(size_t start_bit, size_t max_bit) {
     StepResults results;
-    size_t bit_limit = CollatzConstants::get_max_initial_value_max_bits<T>();
+    size_t bit_limit = CollatzConstants::get_max_bits_for_max_initial_value_by_type<T>();
     bool has_gpu = can_use_gpu();
     T* unified_start_value_ptr = nullptr;
     T max_value = 0;
@@ -109,8 +109,8 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
         // Setup
         *unified_start_value_ptr = T(1) << bit;
         max_value = (T(1) << (bit + 1)) - 1;
-        level = BinaryTreeMath<T>::st_node_level(*unified_start_value_ptr);
-        if (level != BinaryTreeMath<T>::st_node_level(max_value)) {
+        level = BinaryTreeMath<T>::st_get_node_level_by_value(*unified_start_value_ptr);
+        if (level != BinaryTreeMath<T>::st_get_node_level_by_value(max_value)) {
             throw std::logic_error("Level for start_value and max_value didn't line up.  This is wrong.");
         }
 

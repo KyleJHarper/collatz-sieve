@@ -1,0 +1,40 @@
+\doxysection{Object\+Pool\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classObjectPool}{}\label{classObjectPool}\index{ObjectPool$<$ T $>$@{ObjectPool$<$ T $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObjectPool_a4579652fab35928ce45df881ab0020c4}\label{classObjectPool_a4579652fab35928ce45df881ab0020c4} 
+{\bfseries Object\+Pool} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{block\+\_\+size}}=4096)
+\item 
+\Hypertarget{classObjectPool_a1d5e23e88c20485c04c8498dd4b5a447}\label{classObjectPool_a1d5e23e88c20485c04c8498dd4b5a447} 
+{\footnotesize template$<$typename... Args$>$ }\\T \texorpdfstring{$\ast$}{*} {\bfseries create} (\mbox{\hyperlink{classNode}{Args}} \&\&... \mbox{\hyperlink{classNode}{args}})
+\item 
+\Hypertarget{classObjectPool_aec7b011032cf9923e60abffe2b24fd85}\label{classObjectPool_aec7b011032cf9923e60abffe2b24fd85} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries destroy} (T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{obj}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObjectPool_affe9685735a2206a974e1678d420eafd}\label{classObjectPool_affe9685735a2206a974e1678d420eafd} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries \+\_\+allocate\+\_\+block} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classObjectPool_a9398dcdcc67e446f969a9aeef0aaaa79}\label{classObjectPool_a9398dcdcc67e446f969a9aeef0aaaa79} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+block\+\_\+size}
+\item 
+\Hypertarget{classObjectPool_ab73beb7cf90477a1617926aa832044f7}\label{classObjectPool_ab73beb7cf90477a1617926aa832044f7} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+current\+\_\+index}
+\item 
+\Hypertarget{classObjectPool_a248d54738e81917d2b0f50acb1a01dc9}\label{classObjectPool_a248d54738e81917d2b0f50acb1a01dc9} 
+std\+::vector$<$ T \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+blocks}
+\item 
+\Hypertarget{classObjectPool_acfcfb5006751b96a3e085277c54b65c3}\label{classObjectPool_acfcfb5006751b96a3e085277c54b65c3} 
+std\+::stack$<$ T \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+free\+\_\+list}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/pool.\+hpp\end{DoxyCompactItemize}

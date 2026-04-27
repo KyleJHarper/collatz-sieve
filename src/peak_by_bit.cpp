@@ -79,7 +79,7 @@ class PeakIVScanner {
         _max_bit = max_bit;
         _start_bit = start_bit;
         size_t selected_initial_bit = _start_bit;
-        size_t max_known_bit = CollatzConstants::get_max_initial_value_max_bits<T>();
+        size_t max_known_bit = CollatzConstants::get_max_bits_for_max_initial_value_by_type<T>();
         if (start_bit > max_known_bit) {
             logger->warn("You started a new PeakIVScanner with a start bit ({}) that doesn't have a known base initial value.  It will attempt to start start at max known bit: {}", start_bit, max_known_bit);
             selected_initial_bit = max_known_bit;
@@ -208,7 +208,7 @@ class PeakIVScanner {
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
             // If we're using the precomputed table, send it.
             if constexpr(is_builtin_integral_v<T>) {
-                if (use_table && bit < CollatzConstants::get_max_initial_value_max_bits<T>()) {
+                if (use_table && bit < CollatzConstants::get_max_bits_for_max_initial_value_by_type<T>()) {
                     T max_iv = CollatzConstants::get_max_initial_value_by_bit<T>(bit);
                     logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
                     if constexpr(ExtendedIntegral<T>) {
@@ -408,7 +408,7 @@ int main(int argc, char **argv) {
     mpz_class twos_power;
     for (auto& [bit, max_iv] : results.get_results()) {
         mpz_ui_pow_ui(twos_power.get_mpz_t(), 2, bit);
-        logger->info("2^{} ({}) has max IV: {:'} (max full level: {})", bit, twos_power, max_iv, BinaryTreeMath<mpz_class>::st_max_full_level_at_node(max_iv));
+        logger->info("2^{} ({}) has max IV: {:'} (max full level: {})", bit, twos_power, max_iv, BinaryTreeMath<mpz_class>::st_max_full_level_at_node_value(max_iv));
     }
 
     // Array output/

@@ -1,0 +1,438 @@
+\doxysection{Binary\+Tree\+Implicit\+Impl\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classBinaryTreeImplicitImpl}{}\label{classBinaryTreeImplicitImpl}\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+
+
+A mathematically equivalent implimentation of a materialized {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}}.  
+
+
+
+
+{\ttfamily \#include $<$binary\+\_\+tree\+\_\+implicit.\+hpp$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{Add\+Level\+TLS}}
+\begin{DoxyCompactList}\small\item\em A thread-\/local cache structure for {\ttfamily \doxylink{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c}{add\+\_\+level()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a6d48d4be86838c6cf48b8101719a2a36}\label{classBinaryTreeImplicitImpl_a6d48d4be86838c6cf48b8101719a2a36} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Deeply scan the object and report its size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a4b43e38cb59875f019179ae608703840}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Compare another implicit tree to this one. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_ad791365d3f228ad6dfd00367bc6adb68}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Serialize the implicit tree specifics of this object for export. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeImplicitImpl_ad791365d3f228ad6dfd00367bc6adb68}{serialize()}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c}{add\+\_\+level}} ()
+\begin{DoxyCompactList}\small\item\em Add a level to the tree. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeImplicitImpl_aa6d9b93bba379bc42747e64663c78a64}\label{classBinaryTreeImplicitImpl_aa6d9b93bba379bc42747e64663c78a64} 
+{\bfseries Binary\+Tree\+Implicit\+Impl} ()=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_ac578179b09ab55fe4ca57b74f205e8e7}\label{classBinaryTreeImplicitImpl_ac578179b09ab55fe4ca57b74f205e8e7} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Binary\+Tree\+Implicit\+Impl} ()
+\begin{DoxyCompactList}\small\item\em Destructor will remove any ancestors accumulated, and that\textquotesingle{}s all. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_af80c190065b8b07d9f6f00d8cb156a9b}\label{classBinaryTreeImplicitImpl_af80c190065b8b07d9f6f00d8cb156a9b} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Reset members to make this act like a new object. Mostly for {\ttfamily \doxylink{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e}{init()}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e}{init}} (level\+\_\+t \mbox{\hyperlink{classNode}{levels}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}} \mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\})
+\begin{DoxyCompactList}\small\item\em Initializes the object, calling {\ttfamily \doxylink{classBinaryTreeImplicitImpl_af80c190065b8b07d9f6f00d8cb156a9b}{reset()}} if already initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors Common to All Trees}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a463e1ca16e1960b9eba30d7a0410a4d8}\label{classBinaryTreeImplicitImpl_a463e1ca16e1960b9eba30d7a0410a4d8} 
+Tree\+Type\+Enum {\bfseries get\+\_\+tree\+\_\+type} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get the tree type of this instance. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a8387926066cbb07350c1c63573bf5f7b}\label{classBinaryTreeImplicitImpl_a8387926066cbb07350c1c63573bf5f7b} 
+level\+\_\+t {\bfseries get\+\_\+level\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get the level count. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a976a6c57b96683edbeecad9644899cd8}{set\+\_\+level\+\_\+count}} (level\+\_\+t \mbox{\hyperlink{classNode}{level\+\_\+count}})
+\begin{DoxyCompactList}\small\item\em Set the level count explicitly. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a2ea80f8ecdbbc81bb26f5b65581fdff0}\label{classBinaryTreeImplicitImpl_a2ea80f8ecdbbc81bb26f5b65581fdff0} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+root\+\_\+node} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a readonly pointer to the root node. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\& \mbox{\hyperlink{classBinaryTreeImplicitImpl_a30522b39f0c2b001515f3f681518c7d4}{get\+\_\+root\+\_\+node\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the pointer to the root node. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_aa7e07c3c9e0583fc2362d4067a4e3af4}\label{classBinaryTreeImplicitImpl_aa7e07c3c9e0583fc2362d4067a4e3af4} 
+\mbox{\hyperlink{classNode}{const}} std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& {\bfseries get\+\_\+coverage\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a readonly reference to the coverage map. \end{DoxyCompactList}\item 
+std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_a92c4d67add8d3c1f2b14d878ca92d010}{get\+\_\+coverage\+\_\+map\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the coverage map. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a8922ab3a3e5823a2f011e4fd41eaafc5}\label{classBinaryTreeImplicitImpl_a8922ab3a3e5823a2f011e4fd41eaafc5} 
+\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+ancestors} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a readonly reference to the ancestors. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_aea9f47077e99165160ff9421c21e8035}{get\+\_\+ancestors\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the ancestors. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a731956e4e72bebbce1593c9cf3f95554}\label{classBinaryTreeImplicitImpl_a731956e4e72bebbce1593c9cf3f95554} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+preserving\+\_\+ancestors} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a3d94ca995839420d8c875328f58fe3e7}{set\+\_\+is\+\_\+preserving\+\_\+ancestors}} (\mbox{\hyperlink{classNode}{bool}} value)
+\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a71412ef41cf3e053549b3d234370dd45}\label{classBinaryTreeImplicitImpl_a71412ef41cf3e053549b3d234370dd45} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+HWM nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a2e00b915f66c9ec26ee4e9a82ecf791b}\label{classBinaryTreeImplicitImpl_a2e00b915f66c9ec26ee4e9a82ecf791b} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_ad984431e1a470b0a098f7729632f57ef}\label{classBinaryTreeImplicitImpl_ad984431e1a470b0a098f7729632f57ef} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_aa43f0b6e858543a08816a2f81098f803}\label{classBinaryTreeImplicitImpl_aa43f0b6e858543a08816a2f81098f803} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0acc4}{set\+\_\+is\+\_\+initialized}} (\mbox{\hyperlink{classNode}{bool}} value)
+\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Implicit-\/\+Only Accessors}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBinaryTreeImplicitImpl_aad468411bcfef28b6df20d7bc1a16ed6}\label{classBinaryTreeImplicitImpl_aad468411bcfef28b6df20d7bc1a16ed6} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+implicit} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Responds true to {\ttfamily \doxylink{classBinaryTreeImplicitImpl_aad468411bcfef28b6df20d7bc1a16ed6}{is\+\_\+implicit()}}, mostly for the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_a2b72c8f71ff0c72a64bae86c09a2dc28}{get\+\_\+uncovered\+\_\+positions}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a682821373331c1ef728007b04230a256}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Compare two implicit trees\textquotesingle{} specific internals and return true if identical. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a018f9b9d25ae3946fd2a14778450ac33}{\+\_\+root\+\_\+node}} = \mbox{\hyperlink{classNode}{nullptr}}
+\begin{DoxyCompactList}\small\item\em The root of a tree. Not navigable in an implicit tree. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf}\label{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf} 
+level\+\_\+t {\bfseries \+\_\+level\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em Number of levels in the tree. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}\label{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ {\bfseries \+\_\+uncovered\+\_\+positions}
+\begin{DoxyCompactList}\small\item\em Bitmap containing a list of all positions still not covered. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a06db515ccdd03d2e4bfc49d80948ea3c}\label{classBinaryTreeImplicitImpl_a06db515ccdd03d2e4bfc49d80948ea3c} 
+std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ {\bfseries \+\_\+coverage\+\_\+map}
+\begin{DoxyCompactList}\small\item\em Map of levels and their associated coverage. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}\label{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619} 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+ancestors}
+\begin{DoxyCompactList}\small\item\em Collection of ancestors, which are High-\/\+Water Mark nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}\label{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+initialized} = \mbox{\hyperlink{classNode}{false}}
+\begin{DoxyCompactList}\small\item\em Flag to determine if this tree is initialized, meaning it\textquotesingle{}s had at least one level added. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}\label{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+preserving\+\_\+ancestors} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.preserve\+\_\+ancestors
+\begin{DoxyCompactList}\small\item\em Flag to determine if HWM ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}\label{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+hwm\+\_\+nodes
+\begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+HWM nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a3954af07c4eceae610841b384f3368fd}\label{classBinaryTreeImplicitImpl_a3954af07c4eceae610841b384f3368fd} 
+\mbox{\hyperlink{classNode}{const}} Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+IMPLICIT
+\begin{DoxyCompactList}\small\item\em Track the type of this tree for external comparison later. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+class Binary\+Tree\+Implicit\+Impl$<$ T $>$}
+A mathematically equivalent implimentation of a materialized {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}}. 
+
+A mathematically equivalent analog to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} approach. Nodes objects and other values are calculated on-\/the-\/fly instead of being stored in RAM.
+
+Specifically, instead of a level map of all surviving nodes and a vector of pointers to them for each level, this implementation computes the values, detect coverage (HWM), and update a roaring bitmap. Tracking and iteration become implicit, hence this implementation\textquotesingle{}s namesake.
+
+This implementation is vastly superior in almost every metric, and is the default as of version 4.\+0.\+0.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c}\label{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!add\_level@{add\_level}}
+\index{add\_level@{add\_level}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{add\_level()}{add\_level()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::add\+\_\+level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add a level to the tree. 
+
+Implicit tree building happens by tracking the left-\/to-\/right positions (not values) of nodes which haven\textquotesingle{}t been removed by a HWM node or ancestor. This is representatively identical to a materialized tree\textquotesingle{}s last level of nodes\+: anything remaining in the {\ttfamily \+\_\+uncovered\+\_\+positions} are the parent nodes from the previous level whose children must be processed.
+
+To achieve any sort of threading performance, each thread will get thread-\/local storage (TLS) from an {\ttfamily \doxylink{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{Add\+Level\+TLS}} struct, which includes its own {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} and vector of ancestors (if tracking them). When all threading is finished, the results are merged into {\ttfamily \+\_\+uncovered\+\_\+positions}, coverage is calculated via simple arithmetic, and this function ends.
+
+Threading itself is handed off to {\ttfamily Node\+Bitmap\+::for\+\_\+each\+\_\+transformer()}, along with the aforementioned callback (TLS) storage. This is in contrast to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} which handles OMP directly inside the its own add level method. \Hypertarget{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}\label{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!deserialize@{deserialize}}
+\index{deserialize@{deserialize}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeImplicitImpl_ad791365d3f228ad6dfd00367bc6adb68}{serialize()}}. 
+
+Deserialization happens in the same order as serialization, obviously.
+
+\begin{DoxyNote}{Note}
+The {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade handles deserialization of common items between implementations. 
+
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em in} & The stream to read data from. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeImplicitImpl_a4b43e38cb59875f019179ae608703840}\label{classBinaryTreeImplicitImpl_a4b43e38cb59875f019179ae608703840} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!equal@{equal}}
+\index{equal@{equal}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{equal()}{equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compare another implicit tree to this one. 
+
+This is a member helper which simply forwards to {\ttfamily \doxylink{classBinaryTreeImplicitImpl_a682821373331c1ef728007b04230a256}{Binary\+Tree\+Implicit\+Impl\+::st\+\_\+equal()}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em second} & The second tree to compare against this. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeImplicitImpl_aea9f47077e99165160ff9421c21e8035}\label{classBinaryTreeImplicitImpl_aea9f47077e99165160ff9421c21e8035} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!get\_ancestors\_rw@{get\_ancestors\_rw}}
+\index{get\_ancestors\_rw@{get\_ancestors\_rw}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_ancestors\_rw()}{get\_ancestors\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::get\+\_\+ancestors\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the ancestors. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+\Hypertarget{classBinaryTreeImplicitImpl_a92c4d67add8d3c1f2b14d878ca92d010}\label{classBinaryTreeImplicitImpl_a92c4d67add8d3c1f2b14d878ca92d010} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!get\_coverage\_map\_rw@{get\_coverage\_map\_rw}}
+\index{get\_coverage\_map\_rw@{get\_coverage\_map\_rw}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_coverage\_map\_rw()}{get\_coverage\_map\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::get\+\_\+coverage\+\_\+map\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the coverage map. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+\Hypertarget{classBinaryTreeImplicitImpl_a30522b39f0c2b001515f3f681518c7d4}\label{classBinaryTreeImplicitImpl_a30522b39f0c2b001515f3f681518c7d4} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!get\_root\_node\_rw@{get\_root\_node\_rw}}
+\index{get\_root\_node\_rw@{get\_root\_node\_rw}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_root\_node\_rw()}{get\_root\_node\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\& \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::get\+\_\+root\+\_\+node\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the pointer to the root node. 
+
+\begin{DoxyNote}{Note}
+You get a ref to a pointer to allow manipulation of this member directly. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+\Hypertarget{classBinaryTreeImplicitImpl_a2b72c8f71ff0c72a64bae86c09a2dc28}\label{classBinaryTreeImplicitImpl_a2b72c8f71ff0c72a64bae86c09a2dc28} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!get\_uncovered\_positions@{get\_uncovered\_positions}}
+\index{get\_uncovered\_positions@{get\_uncovered\_positions}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_uncovered\_positions()}{get\_uncovered\_positions()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::get\+\_\+uncovered\+\_\+positions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. 
+
+\begin{DoxyNote}{Note}
+These are left-\/to-\/right positions, not node values. 
+\end{DoxyNote}
+\Hypertarget{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e}\label{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!init@{init}}
+\index{init@{init}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{levels,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}}]{opts = {\ttfamily \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initializes the object, calling {\ttfamily \doxylink{classBinaryTreeImplicitImpl_af80c190065b8b07d9f6f00d8cb156a9b}{reset()}} if already initialized. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em levels} & Number of levels to build this tree, inclusive. \\
+\hline
+{\em opts} & Options to control tree-\/buiding behavior. Note that not all apply to implicit trees, such as pruning. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBinaryTreeImplicitImpl_ad791365d3f228ad6dfd00367bc6adb68}\label{classBinaryTreeImplicitImpl_ad791365d3f228ad6dfd00367bc6adb68} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!serialize@{serialize}}
+\index{serialize@{serialize}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Serialize the implicit tree specifics of this object for export. 
+
+Serialization happens in this order\+:
+\begin{DoxyEnumerate}
+\item Uncovered positions ({\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}})
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+The {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade handles serialization of common items between implementations. 
+
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em out} & The stream to write data to. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0acc4}\label{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0acc4} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!set\_is\_initialized@{set\_is\_initialized}}
+\index{set\_is\_initialized@{set\_is\_initialized}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_is\_initialized()}{set\_is\_initialized()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+initialized (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{bool}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Change the flag for whether this tree is initialized. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The true or false value to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBinaryTreeImplicitImpl_a3d94ca995839420d8c875328f58fe3e7}\label{classBinaryTreeImplicitImpl_a3d94ca995839420d8c875328f58fe3e7} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!set\_is\_preserving\_ancestors@{set\_is\_preserving\_ancestors}}
+\index{set\_is\_preserving\_ancestors@{set\_is\_preserving\_ancestors}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_is\_preserving\_ancestors()}{set\_is\_preserving\_ancestors()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+preserving\+\_\+ancestors (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{bool}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Change the flag for whether this tree is preserving ancestors. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The true or false value to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBinaryTreeImplicitImpl_a976a6c57b96683edbeecad9644899cd8}\label{classBinaryTreeImplicitImpl_a976a6c57b96683edbeecad9644899cd8} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!set\_level\_count@{set\_level\_count}}
+\index{set\_level\_count@{set\_level\_count}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_level\_count()}{set\_level\_count()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::set\+\_\+level\+\_\+count (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level\+\_\+count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set the level count explicitly. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em level\+\_\+count} & The level count to set. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBinaryTreeImplicitImpl_a682821373331c1ef728007b04230a256}\label{classBinaryTreeImplicitImpl_a682821373331c1ef728007b04230a256} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!st\_equal@{st\_equal}}
+\index{st\_equal@{st\_equal}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Compare two implicit trees\textquotesingle{} specific internals and return true if identical. 
+
+This method only tests implicit tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (e.\+g.\+: level count).
+
+This function checks\+:
+\begin{DoxyEnumerate}
+\item The uncovered positions ({\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}}) are equal.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em first} & The first tree to compare. \\
+\hline
+{\em second} & The second tree to compare. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classBinaryTreeImplicitImpl_a018f9b9d25ae3946fd2a14778450ac33}\label{classBinaryTreeImplicitImpl_a018f9b9d25ae3946fd2a14778450ac33} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!\_root\_node@{\_root\_node}}
+\index{\_root\_node@{\_root\_node}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{\_root\_node}{\_root\_node}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{Node}}$<$T$>$\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::\+\_\+root\+\_\+node = \mbox{\hyperlink{classNode}{nullptr}}\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The root of a tree. Not navigable in an implicit tree. 
+
+\begin{DoxyNote}{Note}
+The main purpose of this node nowadays is knowing whether the tree was rooted at 0 or 1. 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/binary\+\_\+tree\+\_\+implicit.\+hpp\end{DoxyCompactItemize}

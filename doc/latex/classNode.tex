@@ -1,0 +1,169 @@
+\doxysection{Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classNode}{}\label{classNode}\index{Node$<$ T $>$@{Node$<$ T $>$}}
+
+
+Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=320pt]{classNode__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNode_ad26a980b1363a1c2a05fb84e7c19a36a}\label{classNode_ad26a980b1363a1c2a05fb84e7c19a36a} 
+{\bfseries Node} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classNode_a9094a9dcdb0d8d02db467549cda22da2}\label{classNode_a9094a9dcdb0d8d02db467549cda22da2} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries init} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classNode_a4fde89f0ec750262d4f326276007a5f4}\label{classNode_a4fde89f0ec750262d4f326276007a5f4} 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries init\+\_\+sequence\+\_\+helper} ()
+\item 
+\Hypertarget{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}\label{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+\item 
+\Hypertarget{classNode_ab6aa77b6b6203cdb6ebb2f8d211d2856}\label{classNode_ab6aa77b6b6203cdb6ebb2f8d211d2856} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries add\+\_\+child} (T value)
+\item 
+\Hypertarget{classNode_a5fbfcf7a86d8ebf2118e45999dee3790}\label{classNode_a5fbfcf7a86d8ebf2118e45999dee3790} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{child}})
+\item 
+\Hypertarget{classNode_ad2e48781de0681e7147bf71ed20263b0}\label{classNode_ad2e48781de0681e7147bf71ed20263b0} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+parent} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}})
+\item 
+\Hypertarget{classNode_a0a921a007d49f266256900adc55aab60}\label{classNode_a0a921a007d49f266256900adc55aab60} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+hwm\+\_\+ancestor} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{hwm\+\_\+ancestor}})
+\item 
+\Hypertarget{classNode_a991abe2497838e42015d6c08092d1fa8}\label{classNode_a991abe2497838e42015d6c08092d1fa8} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries own\+\_\+children} (\mbox{\hyperlink{classNode}{bool}} value)
+\item 
+\Hypertarget{classNode_a2784e42ef79815d508aeea0b2312f605}\label{classNode_a2784e42ef79815d508aeea0b2312f605} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries release\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{child}})
+\item 
+\Hypertarget{classNode_a492a8099e26177947545b885999f8e2f}\label{classNode_a492a8099e26177947545b885999f8e2f} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries release\+\_\+children} ()
+\item 
+\Hypertarget{classNode_a9289ecf82c1142f00ba3f4ce5eff2dba}\label{classNode_a9289ecf82c1142f00ba3f4ce5eff2dba} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries spawn\+\_\+children} ()
+\item 
+\Hypertarget{classNode_acd9ce8e35f9f5840779592383ea6b344}\label{classNode_acd9ce8e35f9f5840779592383ea6b344} 
+\mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+value} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_ab43844ce28030e8b583d1de732ab43f7}\label{classNode_ab43844ce28030e8b583d1de732ab43f7} 
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+parent} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_af2e96fdecdae4f193996072165f02ff5}\label{classNode_af2e96fdecdae4f193996072165f02ff5} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+hwm\+\_\+ancestor} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a384e4c5c02c237f1dad0aba304872cfc}\label{classNode_a384e4c5c02c237f1dad0aba304872cfc} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+below\+\_\+high\+\_\+water\+\_\+mark} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_ad177ff820a4b9416d8a3ee46cabfe774}\label{classNode_ad177ff820a4b9416d8a3ee46cabfe774} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries has\+\_\+high\+\_\+water\+\_\+mark\+\_\+ancestor} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a1e26152bd714bdbcb997fd946731a650}\label{classNode_a1e26152bd714bdbcb997fd946731a650} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_ae856e60ec35925b79b122e029ecdfa36}\label{classNode_ae856e60ec35925b79b122e029ecdfa36} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries does\+\_\+own\+\_\+children} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_afb1da29ab629cdffd61c6c005e558c21}\label{classNode_afb1da29ab629cdffd61c6c005e558c21} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{index}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_adf7bf836a891fce518ab08ea88f8f85e}\label{classNode_adf7bf836a891fce518ab08ea88f8f85e} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child\+\_\+unsafe} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{index}})
+\item 
+\Hypertarget{classNode_a799dc03140055b044e22341ba3c494fc}\label{classNode_a799dc03140055b044e22341ba3c494fc} 
+\mbox{\hyperlink{classNode}{uint8\+\_\+t}} {\bfseries get\+\_\+child\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a4e5697c3b197c698f3d05bc8964fae23}\label{classNode_a4e5697c3b197c698f3d05bc8964fae23} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+fg\+\_\+chain\+\_\+length} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a0face88734db988d8d9d79d794802585}\label{classNode_a0face88734db988d8d9d79d794802585} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+level} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a5d885c2048c44187abd83b6027337046}\label{classNode_a5d885c2048c44187abd83b6027337046} 
+T {\bfseries get\+\_\+position} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a7509b89f386c5d148ebd4c2749147664}\label{classNode_a7509b89f386c5d148ebd4c2749147664} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+hwm\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a92652255576a27ebe2cd42d66b38e10d}\label{classNode_a92652255576a27ebe2cd42d66b38e10d} 
+std\+::string {\bfseries get\+\_\+fg\+\_\+chain\+\_\+string} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_ae8b9c415bbc9ca5615d93d5aa07bfd0f}\label{classNode_ae8b9c415bbc9ca5615d93d5aa07bfd0f} 
+std\+::string {\bfseries get\+\_\+odd\+\_\+even\+\_\+chain\+\_\+string} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_ac3b0a7152287753c0707502e263c5e9d}\label{classNode_ac3b0a7152287753c0707502e263c5e9d} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a8f924ff57fe20bb204b41407298555cb}\label{classNode_a8f924ff57fe20bb204b41407298555cb} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a9517228032e6f0ce674e69bbbca02501}\label{classNode_a9517228032e6f0ce674e69bbbca02501} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNode_a1abc023e5f1316182c73be4420e8eecc}\label{classNode_a1abc023e5f1316182c73be4420e8eecc} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, T \&\mbox{\hyperlink{classNode}{parent\+\_\+v}}, T \&\mbox{\hyperlink{classNode}{hwm\+\_\+ancestor\+\_\+v}}, \mbox{\hyperlink{classNode}{uint8\+\_\+t}} \&\mbox{\hyperlink{classNode}{child\+\_\+count}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNode_afa27d526fd2a45b7c5ab3d199c128e89}\label{classNode_afa27d526fd2a45b7c5ab3d199c128e89} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries st\+\_\+spawn\+\_\+children} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{node}})
+\item 
+\Hypertarget{classNode_a02a1b0866f8842c9d5d35e53e0c4ca87}\label{classNode_a02a1b0866f8842c9d5d35e53e0c4ca87} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries st\+\_\+get\+\_\+hwm\+\_\+index} (T value)
+\item 
+\Hypertarget{classNode_a3c91214103510f81a707a8257301a209}\label{classNode_a3c91214103510f81a707a8257301a209} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNode_af6bb4ddd5efe6c69085081cc229ab8f6}\label{classNode_af6bb4ddd5efe6c69085081cc229ab8f6} 
+T {\bfseries \+\_\+value}
+\item 
+\Hypertarget{classNode_aca6aed9c76de85f62c3f8f2020b341eb}\label{classNode_aca6aed9c76de85f62c3f8f2020b341eb} 
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+parent} = \mbox{\hyperlink{classNode}{nullptr}}
+\item 
+\Hypertarget{classNode_abd13687c9b16b43a273ad93d7260cd2b}\label{classNode_abd13687c9b16b43a273ad93d7260cd2b} 
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+hwm\+\_\+ancestor} = \mbox{\hyperlink{classNode}{nullptr}}
+\item 
+\Hypertarget{classNode_aaa05167b39499499f550d7527faf0436}\label{classNode_aaa05167b39499499f550d7527faf0436} 
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+children} \mbox{[}MAX\+\_\+\+CHILDREN\mbox{]} = \{\mbox{\hyperlink{classNode}{nullptr}}, \mbox{\hyperlink{classNode}{nullptr}}\}
+\item 
+\Hypertarget{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2}\label{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+below\+\_\+hwm}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+\item 
+\Hypertarget{classNode_a8c5b5758227cb43b466cc653f3a2ffc9}\label{classNode_a8c5b5758227cb43b466cc653f3a2ffc9} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+has\+\_\+hwm\+\_\+ancestor}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+\item 
+\Hypertarget{classNode_a358c408d443ce2e821f9843896d5823a}\label{classNode_a358c408d443ce2e821f9843896d5823a} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+initialized}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+\item 
+\Hypertarget{classNode_a1e806af5e9fd75d20fa7cf78de0ac7db}\label{classNode_a1e806af5e9fd75d20fa7cf78de0ac7db} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+owns\+\_\+children}\+: 1 = \mbox{\hyperlink{classNode}{true}}
+\item 
+\Hypertarget{classNode_acc82ae9cf937b3885cee4caf26a05fb0}\label{classNode_acc82ae9cf937b3885cee4caf26a05fb0} 
+\mbox{\hyperlink{classNode}{uint8\+\_\+t}} {\bfseries \+\_\+child\+\_\+count} = 0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}\label{classNode_ab204ebe45f832d60ecc0a69bc07dc39f} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+CHILDREN} = 2
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNode_ae944c1a7004ae58f280a1a5dc429f8cb}\label{classNode_ae944c1a7004ae58f280a1a5dc429f8cb} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&\mbox{\hyperlink{classNode}{os}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{m}})
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/node.\+hpp\end{DoxyCompactItemize}

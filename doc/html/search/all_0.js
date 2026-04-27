@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['_5fancestors_0',['_ancestors',['../classBinaryTreeMaterializedImpl.html#a23bb1d9e457d94421b667b6fea65012f',1,'BinaryTreeMaterializedImpl::_ancestors'],['../classBinaryTreeImplicitImpl.html#a7a6deb8a3dc91317b3955629c571b619',1,'BinaryTreeImplicitImpl::_ancestors']]],
+  ['_5fcategory_1',['_category',['../classEqualityHelper.html#ae25fb0d3123c33444a667c880945bf27',1,'EqualityHelper']]],
+  ['_5fconstant_5fportion_2',['_constant_portion',['../classCollatzAffineMap.html#a7df2d3971a61cc4558808a1c651651d2',1,'CollatzAffineMap']]],
+  ['_5fcoverage_5fmap_3',['_coverage_map',['../classBinaryTreeImplicitImpl.html#a06db515ccdd03d2e4bfc49d80948ea3c',1,'BinaryTreeImplicitImpl::_coverage_map'],['../classBinaryTreeMaterializedImpl.html#af01e19ef8fab1bb27868bbdc5c1eb351',1,'BinaryTreeMaterializedImpl::_coverage_map']]],
+  ['_5fcovered_4',['_covered',['../classBinaryTreeCoverage.html#a04d7dd9a7bf28addbfbd08a990f3df2b',1,'BinaryTreeCoverage']]],
+  ['_5ferr_5fptr_5',['_err_ptr',['../classEqualityHelper.html#a7cec008ddd3c1572115e987056a7ba1a',1,'EqualityHelper']]],
+  ['_5fimpl_6',['_impl',['../classBinaryTree.html#aae2bc13bd0b81106609deef6e8440617',1,'BinaryTree']]],
+  ['_5fis_5finitialized_7',['_is_initialized',['../classBinaryTreeImplicitImpl.html#a226ce1d64987d0e5aff60be859c36968',1,'BinaryTreeImplicitImpl::_is_initialized'],['../classBinaryTreeMaterializedImpl.html#a6a57a9411ff1d314a3f50517328afe13',1,'BinaryTreeMaterializedImpl::_is_initialized']]],
+  ['_5fis_5fpreserving_5fancestors_8',['_is_preserving_ancestors',['../classBinaryTreeImplicitImpl.html#a47f6ff0f412c2c5d6d7b97649a7fa0ba',1,'BinaryTreeImplicitImpl::_is_preserving_ancestors'],['../classBinaryTreeMaterializedImpl.html#ad4887a4f457f633a03f1f0ab4eee9a75',1,'BinaryTreeMaterializedImpl::_is_preserving_ancestors']]],
+  ['_5fis_5fpruning_5fhwm_5fnodes_9',['_is_pruning_hwm_nodes',['../classBinaryTreeMaterializedImpl.html#a01e489a91c4a593d905aedc1d2fc3228',1,'BinaryTreeMaterializedImpl']]],
+  ['_5fis_5fpruning_5fparent_5flevels_10',['_is_pruning_parent_levels',['../classBinaryTreeMaterializedImpl.html#a1ed797dee4e9eed15efc8702483bc650',1,'BinaryTreeMaterializedImpl']]],
+  ['_5fis_5fverifying_5fnon_5fhwm_5fnodes_11',['_is_verifying_non_hwm_nodes',['../classBinaryTreeImplicitImpl.html#afe5f167744806dc96dcbe113871ed6d5',1,'BinaryTreeImplicitImpl::_is_verifying_non_hwm_nodes'],['../classBinaryTreeMaterializedImpl.html#a3b47fb7da377f83c19e503a32ad47ac5',1,'BinaryTreeMaterializedImpl::_is_verifying_non_hwm_nodes']]],
+  ['_5flevel_5fcount_12',['_level_count',['../classBinaryTreeImplicitImpl.html#ac0ad88f2ae3a12baefc4df018f356caf',1,'BinaryTreeImplicitImpl::_level_count'],['../classBinaryTreeMaterializedImpl.html#a11a07b54a884519188cd92138022c067',1,'BinaryTreeMaterializedImpl::_level_count']]],
+  ['_5flevel_5fmap_13',['_level_map',['../classBinaryTreeMaterializedImpl.html#aca7323d693d332da9c10c26dee2da58e',1,'BinaryTreeMaterializedImpl']]],
+  ['_5fmpz_5ftwo_14',['_MPZ_TWO',['../classBinaryTreeMath.html#a6166e08850f860b2d2a13970fc597f66',1,'BinaryTreeMath']]],
+  ['_5foffset_15',['_offset',['../classBinaryTreeMath.html#ac86b5b08a2aba7c55777e7b16d502f56',1,'BinaryTreeMath']]],
+  ['_5froot_5fnode_16',['_root_node',['../classBinaryTreeImplicitImpl.html#a018f9b9d25ae3946fd2a14778450ac33',1,'BinaryTreeImplicitImpl::_root_node'],['../classBinaryTreeMaterializedImpl.html#a993b02b95481388c87b5135099b9feb9',1,'BinaryTreeMaterializedImpl::_root_node']]],
+  ['_5froot_5fvalue_17',['_root_value',['../classBinaryTreeMath.html#a76e8b8131d4ac2c676a6838f98010432',1,'BinaryTreeMath']]],
+  ['_5froot_5fvalue_5fdefault_18',['_ROOT_VALUE_DEFAULT',['../classBinaryTreeMath.html#a5bffc775222f5fa29522c4a100b515b0',1,'BinaryTreeMath']]],
+  ['_5fthrees_5fexp_19',['_threes_exp',['../classCollatzAffineMap.html#a653ee8fd97cc92631d835bb5b30fa722',1,'CollatzAffineMap::_threes_exp'],['../classCollatzAffineMapShortcut.html#a752d0d20f0e400f7e455a2c2be354e44',1,'CollatzAffineMapShortcut::_threes_exp']]],
+  ['_5ftotal_20',['_total',['../classBinaryTreeCoverage.html#a887c7d716c4bbd55fa4f8bdaacaa9472',1,'BinaryTreeCoverage']]],
+  ['_5ftree_5ftype_21',['_tree_type',['../classBinaryTreeImplicitImpl.html#a3954af07c4eceae610841b384f3368fd',1,'BinaryTreeImplicitImpl::_tree_type'],['../classBinaryTreeMaterializedImpl.html#a50c4bfac68b930b7a332383913f4c139',1,'BinaryTreeMaterializedImpl::_tree_type']]],
+  ['_5ftwos_5fexp_22',['_twos_exp',['../classCollatzAffineMap.html#a2c3193e40728783386edb19e22a1e7ea',1,'CollatzAffineMap::_twos_exp'],['../classCollatzAffineMapShortcut.html#adc8181afe6d19abf493428d069fd4ae4',1,'CollatzAffineMapShortcut::_twos_exp']]],
+  ['_5funcovered_5fpositions_23',['_uncovered_positions',['../classBinaryTreeImplicitImpl.html#a64ca94e4e9cf5dbec2c35b22329728aa',1,'BinaryTreeImplicitImpl']]]
+];

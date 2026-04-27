@@ -1,0 +1,26 @@
+\doxysection{peak\+\_\+by\+\_\+bit\+\_\+gpu\+\_\+interface.\+hpp}
+\hypertarget{peak__by__bit__gpu__interface_8hpp_source}{}\label{peak__by__bit__gpu__interface_8hpp_source}\index{src/collatz/peak\_by\_bit\_gpu\_interface.hpp@{src/collatz/peak\_by\_bit\_gpu\_interface.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifdef\ HAVE\_CUDA}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzPeakRunner}{CollatzPeakRunner}};}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00014\ \mbox{\hyperlink{classNode}{CollatzPeakRunner<T>}}*\ create\_runner(T*\ \mbox{\hyperlink{classNode}{host\_buffer}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{buffer\_size}},\ T*\ \mbox{\hyperlink{classNode}{unified\_base\_initial\_value}},\ \textcolor{keywordtype}{int}*\ \mbox{\hyperlink{classNode}{unified\_overflow\_index}},\ \textcolor{keywordtype}{int}*\ \mbox{\hyperlink{classNode}{unified\_failing\_index}});}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ destroy\_runner(\mbox{\hyperlink{classNode}{CollatzPeakRunner<T>}}*\ \mbox{\hyperlink{classNode}{runner}});}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{void}\ find\_max\_iv\_for\_bit\_gpu(\mbox{\hyperlink{classNode}{CollatzPeakRunner<T>}}*\ \mbox{\hyperlink{classNode}{runner}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit}});}
+
+\end{DoxyCode}

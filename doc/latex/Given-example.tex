@@ -1,0 +1,20 @@
+\doxysection{Given}
+\hypertarget{Given-example}{}\label{Given-example}Precomputed maximum initial values for {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}bit}. Values over this can overflow during their sequence.
+
+Precomputed maximum initial values for {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}bit}. Values over this can overflow during their sequence.\+Each array index represents the bit size of a given data type. For example, uint32\+\_\+t == 32 bits, so the maximum initial value that can be used without overflowing during a sequence would be {\ttfamily MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT\mbox{[}32\mbox{]}}.
+
+Consequently, each of these values can be increased by 1 to find the first overflow point, fyi.
+
+\`{}uint8\+\_\+t\`{} is 8 bits, the largest value it can hold is 255 (2\texorpdfstring{$^\wedge$}{\string^}8 -\/ 1). The max initial value shown in the table is 26. No value (step) at or below this point (1-\/26) will cause an overflow when its \doxylink{classCollatz}{Collatz} sequence is processed. The next value (27) will\+:
+\begin{DoxyItemize}
+\item 27, 82, 41, 124, 62, 31, 94, 47, 142, 71, 214, 107, 322 (overflow)
+\end{DoxyItemize}
+
+\begin{DoxyWarning}{Warning}
+These values have been tested up to 2\texorpdfstring{$^\wedge$}{\string^}109. That point is used for 2\texorpdfstring{$^\wedge$}{\string^}110 -\/ 2\texorpdfstring{$^\wedge$}{\string^}128 as a safety precaution until the remaining values can be found.
+\end{DoxyWarning}
+
+\begin{DoxyCodeInclude}{0}
+
+\end{DoxyCodeInclude}
+ 

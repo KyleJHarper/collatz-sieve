@@ -24,105 +24,169 @@
 typedef __uint128_t uint128_t;
 typedef __int128_t int128_t;
 
+// Level type should be guaranteed across platforms, not size_t.
+typedef uint32_t level_t;
+
+// Sequences are not size_t in length.  Use a common type that's smaller.
+typedef uint32_t seq_size_t;
 
 
 
-//
-// Make a UDL for str-to-uint128 since we can't trust the compiler to understand it.
-//
-// Helper method.
-constexpr uint128_t parse_u128(std::string_view s) {
+/**
+* @brief Convert a string view to a `uint128_t`.
+* @param view The string view to parse.
+* @return The uint128_t representation of the string digits sent, if valid.
+*/
+constexpr uint128_t parse_u128(std::string_view view) {
     uint128_t value = 0;
-    for (char c : s) {
+    for (char c : view) {
         if (c < '0' || c > '9')
             throw "invalid digit in _u128 literal";
         value = value * 10 + (c - '0');
     }
     return value;
 }
-//
-// Here's the UDL.
+
+
+
+/**
+* @brief A custom UDL to convert any string into a `uint128_t`, including at compile time.
+* @param str The string containing digits.
+* @param len The length of the string, which is automatic if done at compile time.
+*/
 constexpr uint128_t operator""_u128(const char* str, size_t len) {
     return parse_u128(std::string_view{str, len});
 }
 
 
 
-//
-// Now make a UDL for MPZ class
-//
-inline mpz_class parse_mpz(std::string_view s) {
+/**
+* @brief Convert a string view to an `mpz_class`.  Uses GMP's `mpz_set_string()` internally.
+* @param view The string view to parse.
+* @return The mpz_class representation of the string digits sent, if valid.
+*/
+inline mpz_class parse_mpz(std::string_view view) {
     mpz_class value;
-    if (mpz_set_str(value.get_mpz_t(), s.data(), 10) != 0) {
+    if (mpz_set_str(value.get_mpz_t(), view.data(), 10) != 0) {
         throw std::runtime_error("invalid digit in _mpz literal");
     }
     return value;
 }
-//
-// Here's the UDL.
+
+
+
+/**
+* @brief A custom UDL to convert any string into a `mpz_class`.
+* @param str The string containing digits.
+* @param len The length of the string, which is automatic if done at compile time.
+*/
 inline mpz_class operator""_mpz(const char* str, size_t len) {
     return parse_mpz(std::string_view{str, len});
 }
 
 
 
-//
-// We will use concepts to unify our template so it can support native integrals and GMP.
-//
-//
-// Native Integrals
-// These cover everything up to 64 bits, and are the fastest possible option.
+/**
+* @struct is_native_integral
+* @brief Container for true if `T` is a "native" integral to the CPU (<= 64 bits).
+*/
 template<typename T>
 struct is_native_integral : std::bool_constant<std::integral<T> && ! (std::same_as<T, uint128_t> || std::same_as<T, int128_t>)> {};
+
+/// @brief Constexpr for any `T` for a native integral via `is_native_integral` struct.
 template<typename T>
 inline constexpr bool is_native_integral_v = is_native_integral<T>::value;
+
+/// @brief Concept applicable to `T` when it's a native integral.
 template<typename T>
 concept NativeIntegral = is_native_integral_v<T>;
-//
-// Extended Integrals
-// These give 128-bit support without GMP overhead.
+
+
+
+/**
+* @struct is_extended_integral
+* @brief Container for true if `T` is an "extended" integral of the compiler (i.e.: 128-bit).
+*/
 template<typename T>
 struct is_extended_integral : std::bool_constant<std::same_as<T, uint128_t> || std::same_as<T, int128_t>> {};
+
+/// @brief Constexpr for any `T` for an extended integral via `is_extended_integral` struct.
 template<typename T>
 inline constexpr bool is_extended_integral_v = is_extended_integral<T>::value;
+
+/// @brief Concept applicable to `T` when it's an extended integral.
 template<typename T>
 concept ExtendedIntegral = is_extended_integral_v<T>;
-//
-// Built-In (Native + Extended)
+
+
+
+/**
+* @struct is_builtin_integral
+* @brief Container for true if `T` is a "builtin" integral of the CPU or compiler (<= 128 bits).
+*/
 template<typename T>
 struct is_builtin_integral : std::bool_constant<std::integral<T> || std::same_as<T, uint128_t> || std::same_as<T, int128_t>> {};
+
+/// @brief Constexpr for any `T` for a builtin integral via `is_builtin_integral` struct.
 template<typename T>
 inline constexpr bool is_builtin_integral_v = is_builtin_integral<T>::value;
+
+/// @brief Concept applicable to `T` when it's a builtin integral.
 template<typename T>
 concept BuiltinIntegral = is_builtin_integral_v<T>;
-//
-// GMP
-// Adds infinite bitsize at the cost of heap allocation.
+
+
+
+/**
+* @struct is_mpz_class
+* @brief Container for true if `T` is an `mpz_class` from GMP.
+*/
 template<typename T> struct is_mpz_class : std::false_type {};
 template<> struct is_mpz_class<mpz_class> : std::true_type {};
+
+/// @brief Constexpr for any `T` for an mpz_class via `is_mpz_class` struct.
 template<typename T>
 inline constexpr bool is_mpz_class_v = is_mpz_class<T>::value;
+
+
+
+/**
+* @struct is_gmp_integral
+* @brief Container for true if `T` is an `mpz_class` from GMP.
+*/
 template<typename T>
 struct is_gmp_integral : is_mpz_class<T> {};
+
+/// @brief Constexpr for any `T` for a GMP integral via `is_gmp_integral` struct.
 template<typename T>
 inline constexpr bool is_gmp_integral_v = is_gmp_integral<T>::value;
+
+/// @brief Concept applicable to `T` when it's a GMP integral.
 template<typename T>
 concept GMPIntegral = is_gmp_integral_v<T>;
-//
-// Any Type
+
+
+
+/**
+* @struct is_any_supported_integral
+* @brief Container for true if `T` matches any of the supported types for this API.
+*/
 template<typename T>
 struct is_any_supported_integral : std::bool_constant<is_native_integral_v<T> || is_extended_integral_v<T> || is_gmp_integral_v<T>> {};
+
+/// @brief Constexpr for any `T` for any supported integral via `is_any_supported_integral` struct.
 template<typename T>
 inline constexpr bool is_any_supported_integral_v = is_any_supported_integral<T>::value;
+
+/// @brief Concept applicable to `T` when it's any supported integral.
 template<typename T>
 concept AnySupportedIntegral = is_any_supported_integral_v<T>;
 
 
 
-//
-// Build a concept for guaranteed-width types.  This is used when we absolutely need type width to be consistent across platforms.
-// For example, size_t fails this check.
-//
+/**
+* @brief Concept applicable to any fixed, guaranteed-width type.  Mostly for serializing/deserializing.
+*/
 template<typename T>
 concept GuaranteedWidthIntegral = (
     std::is_same_v<T, int8_t> || std::is_same_v<T, uint8_t> ||
@@ -131,6 +195,7 @@ concept GuaranteedWidthIntegral = (
     std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t> ||
     std::is_same_v<T, int128_t> || std::is_same_v<T, uint128_t>
 );
+
 
 
 //
@@ -142,44 +207,44 @@ struct is_vector : std::false_type {};
 template<typename T, typename Alloc>
 struct is_vector<std::vector<T, Alloc>> : std::true_type {};
 template<typename T>
-inline constexpr bool is_vector_v = is_vector<T>::value;
-template<typename T>
-concept IsVector = is_vector_v<T>;
+concept Vector = is_vector<std::remove_cvref_t<T>>::value;
+
+
 // Map
 template<typename T>
 struct is_map : std::false_type {};
 template<typename K, typename V, typename Comp, typename Alloc>
 struct is_map<std::map<K, V, Comp, Alloc>> : std::true_type {};
 template<typename T>
-inline constexpr bool is_map_v = is_map<T>::value;
-template<typename T>
-concept IsMap = is_map_v<T>;
+concept Map = is_map<std::remove_cvref_t<T>>::value;
+
+
+
+
 // Unordered Map
 template<typename T>
 struct is_unordered_map : std::false_type {};
 template<typename K, typename V, typename Hash, typename Eq, typename Alloc>
 struct is_unordered_map<std::unordered_map<K, V, Hash, Eq, Alloc>> : std::true_type {};
 template<typename T>
-inline constexpr bool is_unordered_map_v = is_unordered_map<T>::value;
-template<typename T>
-concept IsUnorderedMap = is_unordered_map_v<T>;
+concept UnorderedMap = is_unordered_map<std::remove_cvref_t<T>>::value;
+
+
 // Set
 template<typename T>
 struct is_set : std::false_type {};
 template<typename K, typename Comp, typename Alloc>
 struct is_set<std::set<K, Comp, Alloc>> : std::true_type {};
 template<typename T>
-inline constexpr bool is_set_v = is_set<T>::value;
-template<typename T>
-concept IsSet = is_set_v<T>;
+concept Set = is_set<std::remove_cvref_t<T>>::value;
 
 
 
-
-
-//
-//  Helpers to convert uint128_t to GMP types.
-//
+/**
+* @brief Convert a `uint128_t` type to an `mpz_class`, storing it in caller's memory.
+* @param v Value to convert.
+* @param dest Reference to the `mpz_class` object to write to.
+*/
 inline void uint128_to_mpz(uint128_t v, mpz_class& dest) {
     uint64_t parts[2] = {
         static_cast<uint64_t>(v),       // low 64
@@ -187,29 +252,39 @@ inline void uint128_to_mpz(uint128_t v, mpz_class& dest) {
     };
     mpz_import(dest.get_mpz_t(), 2, -1, sizeof(parts[0]), 0, 0, parts);
 }
-//
-// Overload to send a copy instead.
+
+
+
+/**
+* @brief Convert a `uint128_t` to an `mpz_class`, returning new memory.
+* @param v Value to convert.
+* @return The same value in an `mpz_class` object.
+*/
 inline mpz_class uint128_to_mpz(uint128_t v) {
     mpz_class result;
     uint128_to_mpz(v, result);
     return result;
 }
-//
-// Overload to modify an mpz_class directly to avoid alloc.
-//
-// Get an MPF instead.
+
+
+
+/**
+* @brief Convert a `uint128_t` to an `mpf_class`, returning new memory.
+* @param v Value to convert.
+* @return The same value in an `mpf_class` object.
+*/
 inline mpf_class uint128_to_mpf(uint128_t v) {
     return mpf_class(uint128_to_mpz(v));
 }
 
 
 
-
-//
-// String Helper
-//
-// Generic to_string that works with uint128_t, GMP, and native integrals
-inline std::string int128_to_string(__int128_t value) {
+/**
+* @brief Convert a signed `int128_t` value to string.
+* @param value Value to string-ify.
+* @return New string with the digits represented by the value, including a negative sign "-".
+*/
+inline std::string int128_to_string(int128_t value) {
     if (value == 0) return "0";
 
     bool negative = value < 0;
@@ -225,6 +300,14 @@ inline std::string int128_to_string(__int128_t value) {
     std::reverse(result.begin(), result.end());
     return result;
 }
+
+
+
+/**
+* @brief Convert an unsigned `uint128_t` value to string.
+* @param value Value to string-ify.
+* @return New string with the digits represented by the value.
+*/
 inline std::string uint128_to_string(uint128_t value) {
     if (value == 0) return "0";
     std::string s;
@@ -236,6 +319,14 @@ inline std::string uint128_to_string(uint128_t value) {
     std::reverse(s.begin(), s.end());
     return s;
 }
+
+
+
+/**
+* @brief Convert a string to a `uint128_t`.
+* @param s The string to convert.
+* @return A `uint128_t` representing the digits converted to an integral.
+*/
 inline uint128_t str_to_uint128(const std::string& s) {
     if (s.empty()) {
         throw std::invalid_argument("Empty string for uint128_t");
@@ -250,6 +341,15 @@ inline uint128_t str_to_uint128(const std::string& s) {
     }
     return result;
 }
+
+
+
+/**
+* @brief Convert any supported integral `T` to a string.
+* @param val The value to string-ify.
+* @return A new string with the digits represented by the value.
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<AnySupportedIntegral T>
 inline std::string to_string_any(const T& val) {
     if constexpr(NativeIntegral<T>) {
@@ -286,6 +386,11 @@ using make_unsigned_custom_t = typename make_unsigned128_helper<T>::type;
 //
 // Absl hashing helpers for MPZ types.
 //
+/**
+* @brief Add capability to has `mpz_class` types with Abseil-CPP.
+* @tparam H Used internally by Absl.
+* @param value The value to hash, which happens by combining the limb count and data to `h`.
+*/
 template <typename H>
 H AbslHashValue(H h, const mpz_class& value) {
     // Get the limb count and add it to the hash.
@@ -299,8 +404,13 @@ H AbslHashValue(H h, const mpz_class& value) {
     }
     return h;
 }
-//
-// An "equals" operator in a struct.
+
+
+
+/**
+* @struct MpzEq
+* @brief An equality operator wrapped in a struct for Abseil-CPP to compare hash values with.
+*/
 struct MpzEq {
     bool operator()(const mpz_class& a, const mpz_class& b) const {
         return a == b;
@@ -309,12 +419,14 @@ struct MpzEq {
 
 
 
-//
-// Endianness Check
-//
+/// @brief Helper to tell if the system is using little endian.
 constexpr bool is_little_endian() {
     return std::endian::native == std::endian::little;
 }
+
+
+
+/// @brief Helper to tell if the system is using big endian.
 constexpr bool is_big_endian() {
     return std::endian::native == std::endian::big;
 }

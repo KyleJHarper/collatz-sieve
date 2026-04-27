@@ -1,0 +1,124 @@
+\doxysection{Flat\+Hash\+Bitmap\+Impl\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classFlatHashBitmapImpl}{}\label{classFlatHashBitmapImpl}\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be}\label{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be} 
+\mbox{\hyperlink{classNode}{const}} map\+\_\+t \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933}\label{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933} 
+\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ prefix\+\_\+t $>$ \& {\bfseries get\+\_\+sorted\+\_\+prefixes} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}\label{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}\label{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}\label{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range\+\_\+closed} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}\label{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries contains} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}\label{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}\label{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0} 
+T {\bfseries cardinality} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}\label{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}\label{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries merge} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}\label{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9} 
+\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& {\bfseries operator\texorpdfstring{$\vert$}{|}=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de}\label{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clone} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d}\label{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries optimize} ()
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96}\label{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries shrink\+\_\+to\+\_\+fit} ()
+\item 
+\Hypertarget{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff}\label{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db}\label{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}\label{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}\label{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1}\label{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+value} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}\label{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+transformer} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ad0485d264687915390816f4ac9647049}\label{classFlatHashBitmapImpl_ad0485d264687915390816f4ac9647049} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries print\+\_\+bitmap} (\mbox{\hyperlink{classNode}{const}} roaring\+::\+Roaring \&\mbox{\hyperlink{classNode}{bm}}, \mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{name}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}\label{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a60172530dd984c365624dcc11fe9373d}\label{classFlatHashBitmapImpl_a60172530dd984c365624dcc11fe9373d} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries Traits} = \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}\label{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries prefix\+\_\+t} = Traits\+::prefix\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}\label{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries suffix\+\_\+t} = Traits\+::suffix\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}\label{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+key\+\_\+t} = Traits\+::roaring\+\_\+key\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}\label{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+value\+\_\+t} = Traits\+::roaring\+\_\+value\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}\label{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+typecode\+\_\+t} = Traits\+::roaring\+\_\+typecode\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}\label{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+word\+\_\+t} = Traits\+::roaring\+\_\+word\+\_\+t
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193}\label{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193} 
+\mbox{\hyperlink{classNode}{using}} {\bfseries map\+\_\+t} = std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}}$<$ T $>$, absl\+::flat\+\_\+hash\+\_\+map$<$ prefix\+\_\+t, roaring\+::\+Roaring $>$, absl\+::flat\+\_\+hash\+\_\+map$<$ prefix\+\_\+t, roaring\+::\+Roaring, absl\+::\+Hash$<$ prefix\+\_\+t $>$, \mbox{\hyperlink{structMpzEq}{Mpz\+Eq}} $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}\label{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} prefix\+\_\+t \&\mbox{\hyperlink{classNode}{prefix}})
+\item 
+\Hypertarget{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}\label{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries remove\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} prefix\+\_\+t \&\mbox{\hyperlink{classNode}{prefix}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}\label{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9} 
+map\+\_\+t {\bfseries \+\_\+flat\+\_\+map}
+\item 
+\Hypertarget{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}\label{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41} 
+std\+::vector$<$ prefix\+\_\+t $>$ {\bfseries \+\_\+sorted\+\_\+prefixes}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/node\+\_\+bitmap\+\_\+flat\+\_\+hash.\+hpp\end{DoxyCompactItemize}

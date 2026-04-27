@@ -1,0 +1,55 @@
+\doxysection{Peak\+IVScanner\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classPeakIVScanner}{}\label{classPeakIVScanner}\index{PeakIVScanner$<$ T $>$@{PeakIVScanner$<$ T $>$}}
+
+
+Collaboration diagram for Peak\+IVScanner\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=242pt]{classPeakIVScanner__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPeakIVScanner_a7e1788c9b0037d5f237cebb2d4a94fcc}\label{classPeakIVScanner_a7e1788c9b0037d5f237cebb2d4a94fcc} 
+{\bfseries Peak\+IVScanner} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+bit}})
+\item 
+\Hypertarget{classPeakIVScanner_aeea546df91699f379cb736b4992c627f}\label{classPeakIVScanner_aeea546df91699f379cb736b4992c627f} 
+{\bfseries Peak\+IVScanner} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+bit}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{start\+\_\+bit}}, T \mbox{\hyperlink{classNode}{base\+\_\+initial\+\_\+value}}=0)
+\item 
+\Hypertarget{classPeakIVScanner_a8c1ac6b55e545666ff52c02cdd6f5b68}\label{classPeakIVScanner_a8c1ac6b55e545666ff52c02cdd6f5b68} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries find\+\_\+max\+\_\+iv\+\_\+for\+\_\+bit} (\mbox{\hyperlink{classNode}{int}} \&\mbox{\hyperlink{classNode}{failing\+\_\+index}}, \mbox{\hyperlink{classNode}{int}} \&\mbox{\hyperlink{classNode}{overflow\+\_\+index}}, T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{progress\+\_\+ptr}})
+\item 
+\Hypertarget{classPeakIVScanner_a5605ec19016f767b204e659476c404f6}\label{classPeakIVScanner_a5605ec19016f767b204e659476c404f6} 
+\mbox{\hyperlink{classPeakIVScannerResults}{Peak\+IVScanner\+Results}} {\bfseries run} (\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{use\+\_\+table}}=\mbox{\hyperlink{classNode}{false}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPeakIVScanner_a1cae830d18b26e0610f8d988dcb728fd}\label{classPeakIVScanner_a1cae830d18b26e0610f8d988dcb728fd} 
+T {\bfseries \+\_\+base\+\_\+initial\+\_\+value} = 1
+\item 
+\Hypertarget{classPeakIVScanner_afee7c80e4e96cc57dc9e5ae695a77a1d}\label{classPeakIVScanner_afee7c80e4e96cc57dc9e5ae695a77a1d} 
+T {\bfseries \+\_\+max\+\_\+allowed\+\_\+value} = 0
+\item 
+\Hypertarget{classPeakIVScanner_a7fd329b33486f917f74e79e23d944391}\label{classPeakIVScanner_a7fd329b33486f917f74e79e23d944391} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+start\+\_\+bit} = 0
+\item 
+\Hypertarget{classPeakIVScanner_afd923f388295514bec3d9cab4930af75}\label{classPeakIVScanner_afd923f388295514bec3d9cab4930af75} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+max\+\_\+bit} = 8
+\item 
+\Hypertarget{classPeakIVScanner_ae7d9a8404c00dc041233ab6ab96abc9a}\label{classPeakIVScanner_ae7d9a8404c00dc041233ab6ab96abc9a} 
+std\+::vector$<$ T $>$ {\bfseries \+\_\+collatz\+\_\+peaks}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPeakIVScanner_a8bd28e10c1c2fb039ceab1fefee7ad9b}\label{classPeakIVScanner_a8bd28e10c1c2fb039ceab1fefee7ad9b} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries BUFFER\+\_\+\+SIZE} = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 24
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/peak\+\_\+by\+\_\+bit.\+cpp\end{DoxyCompactItemize}

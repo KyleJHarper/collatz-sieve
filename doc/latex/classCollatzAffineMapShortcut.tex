@@ -1,0 +1,94 @@
+\doxysection{Collatz\+Affine\+Map\+Shortcut Class Reference}
+\hypertarget{classCollatzAffineMapShortcut}{}\label{classCollatzAffineMapShortcut}\index{CollatzAffineMapShortcut@{CollatzAffineMapShortcut}}
+
+
+An accelerated map which only tracks the {\ttfamily A} portion of\+: {\ttfamily Ax + b}.  
+
+
+
+
+{\ttfamily \#include $<$collatz\+\_\+affine\+\_\+map.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMapShortcut_ac9257a3b5535d7cf9129f74dfc247282}\label{classCollatzAffineMapShortcut_ac9257a3b5535d7cf9129f74dfc247282} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries apply\+\_\+F} ()
+\begin{DoxyCompactList}\small\item\em Increments counts, and that\textquotesingle{}s all. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMapShortcut_a271acb3e0999a24608ec10dfd9eb9aca}\label{classCollatzAffineMapShortcut_a271acb3e0999a24608ec10dfd9eb9aca} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries apply\+\_\+G} ()
+\begin{DoxyCompactList}\small\item\em Increments counts, and that\textquotesingle{}s all. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatzAffineMapShortcut_a9060f7f774374ee830a1e316be1dcdc4}{is\+\_\+below}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Compares the result of powers of 3 and 2, and returns true if {\ttfamily 3\texorpdfstring{$^\wedge$}{\string^}f \texorpdfstring{$<$}{<} 2\texorpdfstring{$^\wedge$}{\string^}k}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMapShortcut_a9cda8da3db98d87737d5b3ef4162521c}\label{classCollatzAffineMapShortcut_a9cda8da3db98d87737d5b3ef4162521c} 
+{\bfseries Collatz\+Affine\+Map\+Shortcut} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMapShortcut_a1c114e434a058db30a539966d9be283e}\label{classCollatzAffineMapShortcut_a1c114e434a058db30a539966d9be283e} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Resets the object, treating it like it\textquotesingle{}s new. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMapShortcut_a51afd30227ff944dde8dfd9b4ebe02b8}\label{classCollatzAffineMapShortcut_a51afd30227ff944dde8dfd9b4ebe02b8} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+SERIAL\+\_\+\+F\+\_\+\+TESTED} = 10000
+\begin{DoxyCompactList}\small\item\em The highest level of serial {\ttfamily F} steps empirically tested. Used for validation in {\ttfamily \doxylink{classCollatzAffineMapShortcut_ac9257a3b5535d7cf9129f74dfc247282}{apply\+\_\+\+F()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}\label{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4} 
+\mbox{\hyperlink{classNode}{uint32\+\_\+t}} {\bfseries \+\_\+twos\+\_\+exp} = 0
+\begin{DoxyCompactList}\small\item\em The power of two accumulated. Increases by 1 on both {\ttfamily F} and {\ttfamily G} steps. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}\label{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44} 
+\mbox{\hyperlink{classNode}{uint32\+\_\+t}} {\bfseries \+\_\+threes\+\_\+exp} = 0
+\begin{DoxyCompactList}\small\item\em The power of three accumulated. Increases by 1 on {\ttfamily F} steps. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An accelerated map which only tracks the {\ttfamily A} portion of\+: {\ttfamily Ax + b}. 
+
+The distribution of ℕ over Harper\textquotesingle{}s tree, along with the application and limitation of {\ttfamily F} and {\ttfamily G} steps, create constant portions (B) which cannot overcome an associated contractive exponential portion (A) to bring the calculated value above itself.
+
+In other words\+:
+\begin{DoxyItemize}
+\item Given f = number of F steps
+\item Given k = number of F and G steps
+\item Given A = 3\texorpdfstring{$^\wedge$}{\string^}f/2\texorpdfstring{$^\wedge$}{\string^}k
+\item When A \texorpdfstring{$<$}{<} 1, then\+: A \texorpdfstring{$\ast$}{*} N + B \texorpdfstring{$<$}{<} N
+\end{DoxyItemize}
+
+While possibly asymptotic, this has been empirically validated up to 10,000 serial {\ttfamily F} steps. For safety, a counter has been added to ensure this class throws an exception above that level.
+
+The ability to discard the B-\/portion means only the contractive nature of {\ttfamily A} matters. These have been precomputed and stored in {\ttfamily Exponents\+::\+MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3}.
+
+\begin{DoxyNote}{Note}
+This class has no calculate method, because the B-\/portion isn\textquotesingle{}t tracked. 
+
+Due to the nature of this class, no type {\ttfamily T} is necessary or possible. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCollatzAffineMapShortcut_a9060f7f774374ee830a1e316be1dcdc4}\label{classCollatzAffineMapShortcut_a9060f7f774374ee830a1e316be1dcdc4} 
+\index{CollatzAffineMapShortcut@{CollatzAffineMapShortcut}!is\_below@{is\_below}}
+\index{is\_below@{is\_below}!CollatzAffineMapShortcut@{CollatzAffineMapShortcut}}
+\doxysubsubsection{\texorpdfstring{is\_below()}{is\_below()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Collatz\+Affine\+Map\+Shortcut\+::is\+\_\+below (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compares the result of powers of 3 and 2, and returns true if {\ttfamily 3\texorpdfstring{$^\wedge$}{\string^}f \texorpdfstring{$<$}{<} 2\texorpdfstring{$^\wedge$}{\string^}k}. 
+
+These are precomputed and stored in an array within the {\ttfamily Exponents} namespace.
+
+\begin{DoxyReturn}{Returns}
+True if {\ttfamily 3\texorpdfstring{$^\wedge$}{\string^}f \texorpdfstring{$<$}{<} 2\texorpdfstring{$^\wedge$}{\string^}k}, otherwise false. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/collatz\+\_\+affine\+\_\+map.\+hpp\end{DoxyCompactItemize}

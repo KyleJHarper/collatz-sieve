@@ -1,0 +1,46 @@
+\doxysection{Progress Class Reference}
+\hypertarget{classProgress}{}\label{classProgress}\index{Progress@{Progress}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a}\label{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a} 
+{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{file\+\_\+path}})
+\item 
+\Hypertarget{classProgress_a11fb7247afea0ef534ade36e1bc0a664}\label{classProgress_a11fb7247afea0ef534ade36e1bc0a664} 
+{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\item 
+\Hypertarget{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69}\label{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69} 
+\mbox{\hyperlink{classProgress}{Progress}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\item 
+\Hypertarget{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8}\label{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries writeline} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}})
+\item 
+\Hypertarget{classProgress_a026edf64122af98c19be8a3715dfc908}\label{classProgress_a026edf64122af98c19be8a3715dfc908} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries monitor} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}}=5)
+\item 
+\Hypertarget{classProgress_ac31348e3ea575becbb547d3c107cc964}\label{classProgress_ac31348e3ea575becbb547d3c107cc964} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries monitor\+\_\+subtask} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}})
+\item 
+\Hypertarget{classProgress_a403ac17bf9336d034b2891ac7f16d199}\label{classProgress_a403ac17bf9336d034b2891ac7f16d199} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries join} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgress_a67b8f98ca27a222965ccd51a8b43799f}\label{classProgress_a67b8f98ca27a222965ccd51a8b43799f} 
+std\+::string {\bfseries \+\_\+file\+\_\+path}
+\item 
+\Hypertarget{classProgress_a940bb6a7698e40d9c93c13a4a099ea99}\label{classProgress_a940bb6a7698e40d9c93c13a4a099ea99} 
+std\+::thread {\bfseries \+\_\+monitor\+\_\+thread}
+\item 
+\Hypertarget{classProgress_ab2c4e92db8b10d2b94d851e0c28a2ee5}\label{classProgress_ab2c4e92db8b10d2b94d851e0c28a2ee5} 
+std\+::atomic$<$ \mbox{\hyperlink{classNode}{bool}} $>$ {\bfseries \+\_\+stop} \{\mbox{\hyperlink{classNode}{false}}\}
+\item 
+\Hypertarget{classProgress_a0f133870b4b81fadf89c929bb728cdc7}\label{classProgress_a0f133870b4b81fadf89c929bb728cdc7} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+sleep\+\_\+duration\+\_\+ms} = 100
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/progress.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,22 @@
+\doxysection{Is\+Materialized\+Tree Concept Reference}
+\hypertarget{conceptIsMaterializedTree}{}\label{conceptIsMaterializedTree}\index{IsMaterializedTree@{IsMaterializedTree}}
+
+
+A truthful concept when the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} is selected in the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade.  
+
+
+
+
+{\ttfamily \#include $<$binary\+\_\+tree.\+hpp$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ TreeType>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptIsMaterializedTree}{IsMaterializedTree}}\ =\ \ \textcolor{keyword}{requires}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{TreeType}}\&\ \mbox{\hyperlink{classNode}{tree\_type}})\ \{\ \mbox{\hyperlink{classNode}{tree\_type}}.is\_materialized();\ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+A truthful concept when the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} is selected in the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade. 

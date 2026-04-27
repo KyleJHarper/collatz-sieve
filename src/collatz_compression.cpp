@@ -728,7 +728,7 @@ int main(int argc, char **argv) {
     // -- Upgrade If Needed.
     if (data_type == "uint64_t") {
         uint64_t max_initial_value = CollatzConstants::get_max_initial_value_by_bit<uint64_t>(64);
-        size_t max_bits = BinaryTreeMath<uint64_t>::st_max_full_level_at_node(max_initial_value);
+        size_t max_bits = BinaryTreeMath<uint64_t>::st_max_full_level_at_node_value(max_initial_value);
         if (bits > max_bits) {
             logger->info("Bits (-b) is over {} and you didn't specify -i or -m.  Auto upgrading from uint64_t to uint128_t.", max_bits);
             data_type = "uint128_t";
@@ -736,7 +736,7 @@ int main(int argc, char **argv) {
     }
     if (data_type == "uint128_t" && bits > 127) {
         uint128_t max_initial_value = CollatzConstants::get_max_initial_value_by_bit<uint128_t>(128);
-        size_t max_bits = BinaryTreeMath<uint128_t>::st_max_full_level_at_node(max_initial_value);
+        size_t max_bits = BinaryTreeMath<uint128_t>::st_max_full_level_at_node_value(max_initial_value);
         if (bits > max_bits) {
             logger->info("Bits (-b) is over {} and you didn't specify -m.  Auto upgrading from uint128_t to mpz_class.", max_bits);
             data_type = "mpz_class";

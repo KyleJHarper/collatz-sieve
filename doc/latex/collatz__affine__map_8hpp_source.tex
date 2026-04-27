@@ -1,0 +1,203 @@
+\doxysection{collatz\+\_\+affine\+\_\+map.\+hpp}
+\hypertarget{collatz__affine__map_8hpp_source}{}\label{collatz__affine__map_8hpp_source}\index{src/collatz/collatz\_affine\_map.hpp@{src/collatz/collatz\_affine\_map.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}exponents.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <gmp.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}collatz\_constants.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ Collatz\ Affine\ Maps}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ An\ FG\ chain\ can\ be\ stored\ and\ repsented\ as\ an\ affine\ map\ with\ powers\ of\ two\ and\ three,\ and\ with\ a\ constant\ portion.\ \ This\ avoids}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ any\ realtime\ tracking\ of\ fractional\ values\ (floats).}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ Note,\ there\ are\ overflow\ concerns:}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ The\ constant\_portion\ grows\ the\ most\ when\ the\ chain\ is\ all\ F.\ \ This\ worst\ case\ leaves\ constant\_portion\ ==\ \string~3\string^k.\ \ We\ need\ about}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ 1.6\ bits\ to\ represent\ this\ in\ binary,\ so\ we\ get\ the\ following:}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ \ \ \ 64\ bits\ ==>\ 40}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ \ \ 128\ bits\ ==>\ 80}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ To\ resolve\ this,\ Node\ uses\ an\ upgraded\ T\ when\ nessary.\ \ Anyone\ else\ using\ this\ needs\ to\ provide\ the\ same\ protection.}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{//}}
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ CollatzAffineMap}}
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ The\ basic\ map\ which\ performs\ all\ steps.}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00051\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzAffineMap}{CollatzAffineMap}}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}}\ =\ 0;}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}}\ =\ 0;}
+\DoxyCodeLine{00058\ \ \ \ \ T\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}\ =\ 0;}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a5d492e65b0ec78a2038f38b3352c680d}{CollatzAffineMap}}()\ \{\}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMap_a0164068132fd2fccb5b105d44ad2b58d}{reset}}()\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}}\ =\ 0;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}}\ =\ 0;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}\ =\ 0;}
+\DoxyCodeLine{00075\ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMap_a0438b2fe0f64a9ff7023e163a7de8a3f}{apply\_F}}()\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adjust\ the\ constant\ portion\ before\ we\ modify\ any\ exponents.}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Built-\/in\ types\ can\ bit\ shift\ cheaper\ than\ looking\ up\ a\ table.\ \ Do\ that\ instead.}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}\ =\ ((\mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}\ <<\ 1)\ +\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}})\ +\ (T(1)\ <<\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}});}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ MPZ\ Class\ can\ do\ an\ mpz\_add\ from\ a\ precaulated\ item\ in\ a\ table\ faster\ than\ an\ initialization\ +\ shift\ operator.}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5077c6a9e79cbd44ba9645648d4d705f}{CollatzConstants::MPZ\_THREE}}.get\_mpz\_t());}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t(),\ Exponents::get\_power\_of\_two<T>(\mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}}).get\_mpz\_t());}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ bump\ the\ exponents.}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMap_a7b0a82c8ab244dce97b612cde154fc56}{apply\_G}}()\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00103\ \ \ \ \ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00112\ \ \ \ \ T\ \mbox{\hyperlink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{result}}\ =\ Exponents::get\_power\_of\_three<T>(\mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}});}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{\_\_builtin\_mul\_overflow}}(\mbox{\hyperlink{classNode}{result}},\ value,\ \&\mbox{\hyperlink{classNode}{result}})\ ||\ \mbox{\hyperlink{classNode}{\_\_builtin\_add\_overflow}}(\mbox{\hyperlink{classNode}{result}},\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}},\ \&\mbox{\hyperlink{classNode}{result}}))\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::overflow\_error(}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Overflow\ in\ CollatzAffineMap\ calculate()\ method.\ \ Value\ is\ "{}}\ +\ to\_string\_any(value)}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ \ Threes\ exponent\ is\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}})}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ \ Constant\ portion\ is\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}})}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}."{}}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ >>=\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}};}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ value.get\_mpz\_t());}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t());}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}});}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ data\ type\ for\ calculate()."{}});}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMap_a020aa847fd591925b4540d338c9ee1d1}{calculate}}(\textcolor{keyword}{const}\ T\&\ value,\ T\&\ \mbox{\hyperlink{classNode}{out}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ Exponents::get\_power\_of\_three<T>(\mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}});}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{\_\_builtin\_mul\_overflow}}(\mbox{\hyperlink{classNode}{out}},\ value,\ \&\mbox{\hyperlink{classNode}{out}})\ ||\ \mbox{\hyperlink{classNode}{\_\_builtin\_add\_overflow}}(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}},\ \&\mbox{\hyperlink{classNode}{out}}))\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::overflow\_error(}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Overflow\ in\ CollatzAffineMap\ calculate()\ method.\ \ Value\ is\ "{}}\ +\ to\_string\_any(value)}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ \ Threes\ exponent\ is\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}})}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ \ Constant\ portion\ is\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}})}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}."{}}}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ >>=\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}};}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ Exponents::get\_power\_of\_three<T>(\mbox{\hyperlink{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}{\_threes\_exp}}).get\_mpz\_t(),\ value.get\_mpz\_t());}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}{\_constant\_portion}}.get\_mpz\_t());}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}{\_twos\_exp}});}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ data\ type\ for\ calculate()."{}});}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatzAffineMap_acbd278053c30c294bc628bdc5a951142}{is\_below}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{tmp}};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate}}(value)\ <\ value;}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate}}(value,\ \mbox{\hyperlink{classNode}{tmp}});}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{tmp}}\ <\ value;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type\ for\ is\_below()"{}});}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \};}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00206\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzAffineMapShortcut}{CollatzAffineMapShortcut}}\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00209\ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ =\ 0;}
+\DoxyCodeLine{00211\ \ \ \ \ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ =\ 0;}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a51afd30227ff944dde8dfd9b4ebe02b8}{MAX\_SERIAL\_F\_TESTED}}\ =\ 10000;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00224\ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_a9cda8da3db98d87737d5b3ef4162521c}{CollatzAffineMapShortcut}}()\ \{\}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a1c114e434a058db30a539966d9be283e}{reset}}()\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ =\ 0;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ =\ 0;}
+\DoxyCodeLine{00232\ \ \ \ \ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_ac9257a3b5535d7cf9129f74dfc247282}{apply\_F}}()\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ to\ ensure\ we\ aren't\ in\ excess\ of\ the\ empirically\ tested\ limit\ for\ contractive\ A\ *\ N\ +\ B\ <=\ N.}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Only\ applies\ to\ F\ steps,\ because\ only\ they\ grow\ B.}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ >=\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a51afd30227ff944dde8dfd9b4ebe02b8}{MAX\_SERIAL\_F\_TESTED}})\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}AffineMapShortcut\ cannot\ apply\ another\ F\ step\ because\ the\ maximum\ of\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classCollatzAffineMapShortcut_a51afd30227ff944dde8dfd9b4ebe02b8}{MAX\_SERIAL\_F\_TESTED}})\ +\ \textcolor{stringliteral}{"{}\ serial\ F\ steps\ has\ been\ reached."{}});}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00247\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a271acb3e0999a24608ec10dfd9eb9aca}{apply\_G}}()\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ +=\ 1;}
+\DoxyCodeLine{00254\ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a9060f7f774374ee830a1e316be1dcdc4}{is\_below}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ our\ two's\ exponent\ exceeds\ the\ precalculated\ two's-\/exponent\ for\ our\ power\ of\ three,\ we're\ below.}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ >\ Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT)\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Cannot\ lookup\ MAX\_POW2\_UNDER\_POW3\ with\ \_threes\_exp\ of\ "{}}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ std::to\_string(\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}})}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ because\ the\ max\ known\ power\ of\ three\ under\ two\ is\ "{}}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ std::to\_string(Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT)}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}."{}}}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ >\ Exponents::MAX\_POW2\_UNDER\_POW3[\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}];}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ \};}
+
+\end{DoxyCode}

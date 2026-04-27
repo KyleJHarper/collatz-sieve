@@ -1,0 +1,54 @@
+\doxysection{node\+\_\+bitmap.\+hpp}
+\hypertarget{node__bitmap_8hpp_source}{}\label{node__bitmap_8hpp_source}\index{src/collatz/node\_bitmap.hpp@{src/collatz/node\_bitmap.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}node\_bitmap\_flat\_hash.hpp"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ The\ NodeBitmap\ facade.\ \ It\ uses\ prefixes\ and\ suffixes\ (implementation-\/specific)\ to\ store\ values\ in\ a\ CRoaring\ bitmap.\ \ The\ only}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ implementation\ currently\ is\ a\ flat\ hash\ map\ for\ prefixes\ with\ a\ 32-\/bit\ suffix\ for\ the\ CRoaring\ bitmap.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ NOTE!\ \ We\ will\ follow\ the\ CRoaring\ techniques,\ such\ as\ HALF-\/OPEN\ vs\ CLOSED\ variants\ and\ such.\ \ Pay\ attention!}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}<AnySupportedIntegral\ T,\ \textcolor{keyword}{typename}\ BackendType\ =\ FlatHashBitmapImpl<T>>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classNode}{BackendType}}\ \_impl;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{BackendType}}\&\ get\_impl()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl;\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ get\_map()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl.get\_map();\ \}}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ add(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \_impl.add(value);\ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ add\_range(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \_impl.add\_range(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ add\_range\_closed(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \_impl.add\_range\_closed(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl.contains(value);\ \}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ remove(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \_impl.remove(value);\ \}}
+\DoxyCodeLine{00031\ \ \ \ \ T\ cardinality()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl.cardinality();\ \}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ clear()\ \{\ \_impl.clear();\ \}}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ merge(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \_impl.merge(\mbox{\hyperlink{classNode}{src}}.\_impl);\ \}}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ operator|=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \_impl\ |=\ \mbox{\hyperlink{classNode}{src}}.\_impl;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ clone(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \_impl.clone(\mbox{\hyperlink{classNode}{src}});\ \}}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ optimize()\ \{\ \_impl.optimize();\ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ shrink\_to\_fit()\ \{\ \textcolor{keywordflow}{return}\ \_impl.shrink\_to\_fit();\ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ deep\_size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl.deep\_size();\ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ st\_equal(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{first}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ BackendType::st\_equal(\mbox{\hyperlink{classNode}{first}}.get\_impl(),\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ equal(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ BackendType::st\_equal(\_impl,\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00041\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ serialize(std::ostream\&\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_impl.serialize(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00042\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ deserialize(std::istream\&\ \mbox{\hyperlink{classNode}{in}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ \_impl.deserialize(\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func,\ \textcolor{keyword}{typename}\ TLS\_Type>}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ for\_each\_transformer(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ std::vector<TLS\_Type>\&\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{\ \_impl.for\_each\_transformer(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{callback}});\ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ for\_each\_value(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{\ \_impl.for\_each\_value(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{callback}});\ \}}
+\DoxyCodeLine{00048\ \};}
+
+\end{DoxyCode}

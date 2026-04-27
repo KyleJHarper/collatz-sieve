@@ -1,0 +1,9 @@
+<map id="Sieve&lt; T &gt;" name="Sieve&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="37,181,133,207"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,44,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="23,132,28,156,40,169,55,179,52,183,36,173,24,159,18,133"/>
+<area shape="rect" id="Node000003" href="$structSieveOptions.html" title=" " alt="" coords="92,93,200,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,133,119,159,99,183,95,179,115,156,131,130"/>
+<area shape="rect" id="Node000004" href="$structBinaryTreeOptions.html" title="An options package for building BinaryTree objects." alt="" coords="75,5,217,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="149,45,149,93,143,93,143,45"/>
+</map>

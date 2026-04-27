@@ -1,0 +1,82 @@
+\doxysection{zstd\+\_\+ostreambuf Class Reference}
+\hypertarget{classzstd__ostreambuf}{}\label{classzstd__ostreambuf}\index{zstd\_ostreambuf@{zstd\_ostreambuf}}
+
+
+Inheritance diagram for zstd\+\_\+ostreambuf\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classzstd__ostreambuf__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for zstd\+\_\+ostreambuf\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=178pt]{classzstd__ostreambuf__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostreambuf_a0b6ffb53b6e82c233e7670d56cd4f88f}\label{classzstd__ostreambuf_a0b6ffb53b6e82c233e7670d56cd4f88f} 
+{\bfseries zstd\+\_\+ostreambuf} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\item 
+\Hypertarget{classzstd__ostreambuf_a5513d7474ca84e20260a43ca88eab640}\label{classzstd__ostreambuf_a5513d7474ca84e20260a43ca88eab640} 
+\mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\item 
+\Hypertarget{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96}\label{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96} 
+{\bfseries zstd\+\_\+ostreambuf} (std\+::streambuf \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{dest}}, \mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{level}}=\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+CLEVEL\+\_\+\+DEFAULT}})
+\item 
+\Hypertarget{classzstd__ostreambuf_a759d55e82ba4c2e019333687da921740}\label{classzstd__ostreambuf_a759d55e82ba4c2e019333687da921740} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries finalize} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6}\label{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6} 
+\mbox{\hyperlink{classNode}{int}} {\bfseries overflow} (\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{ch}}) \mbox{\hyperlink{classNode}{override}}
+\item 
+\Hypertarget{classzstd__ostreambuf_a82e5c5f4afbf485787f85e2e5e0cd011}\label{classzstd__ostreambuf_a82e5c5f4afbf485787f85e2e5e0cd011} 
+\mbox{\hyperlink{classNode}{int}} {\bfseries sync} () \mbox{\hyperlink{classNode}{override}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}\label{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222} 
+\mbox{\hyperlink{classNode}{int}} {\bfseries flush\+\_\+input} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}\label{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries check} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{code}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}\label{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf} 
+std\+::streambuf \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+dest}
+\item 
+\Hypertarget{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}\label{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae} 
+\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+CStream}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+zstd\+\_\+cstream}
+\item 
+\Hypertarget{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}\label{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6} 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+input\+\_\+buffer}
+\item 
+\Hypertarget{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}\label{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3} 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+output\+\_\+buffer}
+\item 
+\Hypertarget{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}\label{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+finalized} = \mbox{\hyperlink{classNode}{false}}
+\item 
+\Hypertarget{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}\label{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef} 
+\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+End\+Directive}} {\bfseries \+\_\+zstd\+\_\+end\+\_\+directive} = \mbox{\hyperlink{classNode}{ZSTD\+\_\+e\+\_\+continue}}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/zstd\+\_\+compress.\+hpp\end{DoxyCompactItemize}

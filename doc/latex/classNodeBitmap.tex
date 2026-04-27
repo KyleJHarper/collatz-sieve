@@ -1,0 +1,82 @@
+\doxysection{Node\+Bitmap\texorpdfstring{$<$}{<} T, Backend\+Type \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classNodeBitmap}{}\label{classNodeBitmap}\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8}\label{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Backend\+Type}} \& {\bfseries get\+\_\+impl} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}\label{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{auto}} \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26}\label{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\item 
+\Hypertarget{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}\label{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\item 
+\Hypertarget{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}\label{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range\+\_\+closed} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\item 
+\Hypertarget{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}\label{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries contains} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e}\label{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\item 
+\Hypertarget{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}\label{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f} 
+T {\bfseries cardinality} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}\label{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
+\item 
+\Hypertarget{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}\label{classNodeBitmap_a826307acc0967711fffd951ba9022b5b} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries merge} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}\label{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \& {\bfseries operator\texorpdfstring{$\vert$}{|}=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a}\label{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clone} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\item 
+\Hypertarget{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d}\label{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries optimize} ()
+\item 
+\Hypertarget{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}\label{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries shrink\+\_\+to\+\_\+fit} ()
+\item 
+\Hypertarget{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}\label{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}\label{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}\label{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\item 
+\Hypertarget{classNodeBitmap_a666266bba700198551be03287f47ecd2}\label{classNodeBitmap_a666266bba700198551be03287f47ecd2} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}\label{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+transformer} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\item 
+\Hypertarget{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e}\label{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+value} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}\label{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}\label{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d} 
+\mbox{\hyperlink{classNode}{Backend\+Type}} {\bfseries \+\_\+impl}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/node\+\_\+bitmap.\+hpp\end{DoxyCompactItemize}

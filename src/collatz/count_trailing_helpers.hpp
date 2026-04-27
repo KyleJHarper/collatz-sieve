@@ -3,7 +3,12 @@
 
 
 
-// Helper to count trailing zeros.
+/**
+* @brief Find the number of trailing zeros for any type `T`.
+* @param n Reference to the value to apply CTZ on.
+* @tparam T Any supported integral (see concepts.hpp).
+* @return An integer telling how many were found.  This follows `__builtin_ctzll()` behavior.
+*/
 template<AnySupportedIntegral T>
 inline int count_trailing_zeros(const T& n) {
     if (n == 0) {
@@ -34,7 +39,12 @@ inline int count_trailing_zeros(const T& n) {
 
 
 
-// Helper to count trailing ones.
+/**
+* @brief Find the number of trailing ones for any type `T`.
+* @param n Reference to the value to apply CTO on.
+* @tparam T Any supported integral (see concepts.hpp).
+* @return An integer telling how many were found.  This follows `__builtin_ctzll()` behavior.
+*/
 template<AnySupportedIntegral T>
 inline int count_trailing_ones(const T& n) {
     if (n == 0) {

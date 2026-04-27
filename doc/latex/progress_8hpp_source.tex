@@ -1,0 +1,86 @@
+\doxysection{progress.\+hpp}
+\hypertarget{progress_8hpp_source}{}\label{progress_8hpp_source}\index{src/collatz/progress.hpp@{src/collatz/progress.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{comment}{//}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ Just\ a\ simple\ helper\ to\ write\ progress\ to\ a\ file\ so\ I\ can\ resuem\ workloads.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classProgress}{Progress}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00017\ \ \ \ \ std::string\ \_file\_path;}
+\DoxyCodeLine{00018\ \ \ \ \ std::thread\ \_monitor\_thread;}
+\DoxyCodeLine{00019\ \ \ \ \ std::atomic<bool>\ \_stop\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_sleep\_duration\_ms\ =\ 100;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{classProgress}{Progress}}()\ \{\}}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{classProgress}{Progress}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{file\_path}})\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \_file\_path\ =\ \mbox{\hyperlink{classNode}{file\_path}};}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classProgress}{\string~Progress}}()\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ join();}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classProgress}{Progress}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classProgress}{Progress}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classProgress}{Progress}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classProgress}{Progress}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ AnyPr\textcolor{keywordtype}{int}able>}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ writeline(\textcolor{keyword}{const}\ \ \mbox{\hyperlink{classNode}{AnyPrintable}}\&\ \mbox{\hyperlink{classNode}{x}})\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ std::ofstream\ \mbox{\hyperlink{classNode}{fh}}(\_file\_path,\ std::ios::app);}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{now}}\ =\ std::chrono::system\_clock::now();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ std::time\_t\ \mbox{\hyperlink{classNode}{t}}\ =\ std::chrono::system\_clock::to\_time\_t(\mbox{\hyperlink{classNode}{now}});}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ std::tm\ \mbox{\hyperlink{classNode}{local\_tm}}\ =\ *std::localtime(\&\mbox{\hyperlink{classNode}{t}});}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classNode}{fh}})\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Could\ not\ open\ file:\ "{}}\ +\ \_file\_path);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::is\_pointer\_v<AnyPrintable>)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{fh}}\ <<\ \textcolor{stringliteral}{"{}["{}}\ <<\ std::put\_time(\&\mbox{\hyperlink{classNode}{local\_tm}},\ \textcolor{stringliteral}{"{}\%Y-\/\%m-\/\%d\ \%H:\%M:\%S"{}})\ <<\ \textcolor{stringliteral}{"{}]\ \ "{}}\ <<\ to\_string\_any(*\mbox{\hyperlink{classNode}{x}})\ <<\ std::endl;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{fh}}\ <<\ \textcolor{stringliteral}{"{}["{}}\ <<\ std::put\_time(\&\mbox{\hyperlink{classNode}{local\_tm}},\ \textcolor{stringliteral}{"{}\%Y-\/\%m-\/\%d\ \%H:\%M:\%S"{}})\ <<\ \textcolor{stringliteral}{"{}]\ \ "{}}\ <<\ to\_string\_any(\mbox{\hyperlink{classNode}{x}})\ <<\ std::endl;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ AnyPr\textcolor{keywordtype}{int}able>}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ monitor(\mbox{\hyperlink{classNode}{AnyPrintable}}\&\ \mbox{\hyperlink{classNode}{x}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{delay\_seconds}}\ =\ 5)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \_stop\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \_monitor\_thread\ =\ std::thread(}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \&Progress::monitor\_subtask<AnyPrintable>}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \textcolor{keyword}{this}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ std::ref(\mbox{\hyperlink{classNode}{x}})}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode}{delay\_seconds}}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ AnyPr\textcolor{keywordtype}{int}able>}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ monitor\_subtask(\mbox{\hyperlink{classNode}{AnyPrintable}}\&\ \mbox{\hyperlink{classNode}{x}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{delay\_seconds}})\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classNode}{waited}}\ =\ \mbox{\hyperlink{classNode}{delay\_seconds}}\ +\ 1;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!\_stop)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{waited}}\ >=\ (\mbox{\hyperlink{classNode}{delay\_seconds}}\ *\ 1000))\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ writeline(\mbox{\hyperlink{classNode}{x}});}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{waited}}\ =\ 0;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ std::this\_thread::sleep\_for(std::chrono::milliseconds(\_sleep\_duration\_ms));}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{waited}}\ +=\ \_sleep\_duration\_ms;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00072\ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ join()\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \_stop\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_monitor\_thread.joinable())\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \_monitor\_thread.join();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \};}
+
+\end{DoxyCode}

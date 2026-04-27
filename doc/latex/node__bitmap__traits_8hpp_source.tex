@@ -1,0 +1,114 @@
+\doxysection{node\+\_\+bitmap\+\_\+traits.\+hpp}
+\hypertarget{node__bitmap__traits_8hpp_source}{}\label{node__bitmap__traits_8hpp_source}\index{src/collatz/node\_bitmap\_traits.hpp@{src/collatz/node\_bitmap\_traits.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <concepts>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ BitmapTransformerPolicy}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ Enum\ helper\ for\ letting\ callers\ decide\ between\ serial\ (sequential)\ and\ parallel\ operation.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{enum\ class}\ BitmapTransformerPolicy\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ SERIAL\ =\ 1,}
+\DoxyCodeLine{00015\ \ \ \ \ PARALLEL\ =\ 2,}
+\DoxyCodeLine{00016\ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ BitmapKeyTraits}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ Helpers\ to\ handle\ prefix\ and\ suffix\ keys\ for\ the\ hash\ map.}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structBitmapKeyTraits}{BitmapKeyTraits}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ Suffix\ can\ be\ anything,\ I\ suppose,\ but\ CRoaring\ recommends\ 32\ bits.\ \ We'll\ hard\ code\ that.}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }suffix\_t\ =\ \mbox{\hyperlink{classNode}{uint32\_t}};}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(suffix\_t)\ <=\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}),\ \textcolor{stringliteral}{"{}Suffix\ size\ (suffix\_t)\ must\ not\ exceed\ mpz\_t.get\_ui(),\ which\ is\ unsigned\ long."{}});}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ SUFFIX\_BYTES\ =\ \textcolor{keyword}{sizeof}(suffix\_t);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ SUFFIX\_BITS\ =\ \textcolor{keyword}{sizeof}(suffix\_t)\ *\ 8;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ suffix\_t\ SUFFIX\_MASK\ =\ std::numeric\_limits<suffix\_t>::max();}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ suffix\_t\ SUFFIX\_MAX\ =\ std::numeric\_limits<suffix\_t>::max();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ Prefix\ is\ going\ to\ be\ fixed\ instead\ of\ a\ bunch\ of\ complicated\ logic.}}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{comment}{//\ \ \ mpz\_class\ -\/>\ mpz\_class\ because\ only\ it\ can\ handle\ arbitrarily\ large\ numbers}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ \ \ uint64\_t\ or\ lower\ -\/>\ uint32\_t\ because\ SUFFIX\ is\ hard-\/coded\ to\ 32\ bits}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ \ \ uint128\_t\ -\/>\ uint128\_t\ because\ we\ only\ need\ 96\ bits\ but\ there's\ no\ uint96\_t}}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using\ }prefix\_t\ =\ std::conditional\_t<}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ std::same\_as<mpz\_class,\ T>}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode}{mpz\_class}}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ ,\ std::conditional\_t<}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keyword}{sizeof}(T)\ <=\ 8)}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode}{uint32\_t}}}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode}{uint128\_t}}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ >}
+\DoxyCodeLine{00049\ \ \ \ \ >;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ Roaring\ has\ internal\ types\ for\ its\ 32-\/\ and\ 64-\/bit\ versions,\ but\ doesn't\ expose\ a\ type\ for\ it.}}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{roaring\_key\_t}}\ =\ \mbox{\hyperlink{classNode}{uint16\_t}};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{roaring\_value\_t}}\ =\ \mbox{\hyperlink{classNode}{uint16\_t}};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{roaring\_typecode\_t}}\ =\ \mbox{\hyperlink{classNode}{uint8\_t}};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{roaring\_word\_t}}\ =\ \mbox{\hyperlink{classNode}{uint64\_t}};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ ROARING\_KEY\_BITS\ =\ 16;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ ROARING\_VALUE\_BITS\ =\ 16;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ ROARING\_WORD\_BITS\ =\ 64;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ Get\ Prefix}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ prefix\ for\ any\ type\ T.\ \ When\ mpz\_class,\ TLS.\ \ See\ selection\ for\ prefix\_t\ above.}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{static}\ prefix\_t\ get\_prefix(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ <=\ SUFFIX\_BYTES)\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}prefix\_t\textcolor{keyword}{>}(value\ >>\ SUFFIX\_BITS);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{tmp}};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ value.get\_mpz\_t(),\ SUFFIX\_BITS);}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{tmp}};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{comment}{//\ And\ an\ out\ version.}}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ get\_prefix(\textcolor{keyword}{const}\ T\&\ value,\ prefix\_t\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ <=\ SUFFIX\_BYTES)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ 0;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \textcolor{keyword}{static\_cast<}prefix\_t\textcolor{keyword}{>}(value\ >>\ SUFFIX\_BITS);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ value.get\_mpz\_t(),\ SUFFIX\_BITS);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{comment}{//\ Get\ Suffix}}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{//\ Return\ the\ suffix\ for\ any\ type\ T.\ \ Always\ suffix\_t.}}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{static}\ suffix\_t\ get\_suffix(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}suffix\_t\textcolor{keyword}{>}(value\ \&\ SUFFIX\_MASK);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}suffix\_t\textcolor{keyword}{>}(value.get\_ui());}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \};}
+
+\end{DoxyCode}

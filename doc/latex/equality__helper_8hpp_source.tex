@@ -1,0 +1,130 @@
+\doxysection{equality\+\_\+helper.\+hpp}
+\hypertarget{equality__helper_8hpp_source}{}\label{equality__helper_8hpp_source}\index{src/collatz/equality\_helper.hpp@{src/collatz/equality\_helper.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi\_helpers.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <typeinfo>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classEqualityHelper}{EqualityHelper}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ std::string*\ \mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00023\ \ \ \ \ std::string\ \mbox{\hyperlink{classEqualityHelper_ae25fb0d3123c33444a667c880945bf27}{\_category}}\ =\ \textcolor{stringliteral}{"{}Uncategorized"{}};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classEqualityHelper_a909d5ed9fcabe5905343671ea8d6aa84}{EqualityHelper}}(std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}}\ =\ \mbox{\hyperlink{classNode}{err}};}
+\DoxyCodeLine{00034\ \ \ \ \ \}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classEqualityHelper_ace9842161b1ea58a96623ddf4a965b4a}{set\_category}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{category}})\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEqualityHelper_ae25fb0d3123c33444a667c880945bf27}{\_category}}\ =\ \mbox{\hyperlink{classNode}{category}};}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00055\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{msg}})\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}})\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}}-\/>empty())\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}}\ +=\ \textcolor{stringliteral}{"{}\ -\/>\ "{}};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ *\mbox{\hyperlink{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}{\_err\_ptr}}\ +=\ \textcolor{stringliteral}{"{}["{}}\ +\ \mbox{\hyperlink{classEqualityHelper_ae25fb0d3123c33444a667c880945bf27}{\_category}}\ +\ \textcolor{stringliteral}{"{}]\ "{}}\ +\ \mbox{\hyperlink{classNode}{msg}};}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00063\ \ \ \ \ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00075\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\_null\_agree}}(\textcolor{keyword}{const}\ T*\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ T*\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ ==\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classNode}{b}}\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Pointer\ null\ agreement:\ a==nullptr,\ b!=nullptr"{}});}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ !=\ \textcolor{keyword}{nullptr}\ \&\&\ \mbox{\hyperlink{classNode}{b}}\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Pointer\ null\ agreement:\ a!=nullptr,\ b==nullptr"{}});}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00083\ \ \ \ \ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00095\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_adcc98704b3d3a491b1b0878037f11db6}{integrals\_equal}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ !=\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Integral\ mismatch:\ \ a=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{a}})\ +\ \textcolor{stringliteral}{"{},\ b=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{b}}));}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mpz\_cmp}}(\mbox{\hyperlink{classNode}{a}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{b}}.get\_mpz\_t())\ !=\ 0)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Integral\ mismatch:\ \ a=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{a}})\ +\ \textcolor{stringliteral}{"{},\ b=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{b}}));}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00116\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_ab054df866a778a5a6b2344ec436cf6dd}{booleans\_equal}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ !=\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Boolean\ parity\ mismatch:\ a=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{a}})\ +\ \textcolor{stringliteral}{"{},\ b=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{b}}));}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00121\ \ \ \ \ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00131\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_a011440cc5d056668b5ae741f28f5c61e}{strings\_equal}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ !=\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}String\ mismatch:\ \ a=="{}}\ +\ \mbox{\hyperlink{classNode}{a}}\ +\ \textcolor{stringliteral}{"{},\ b=="{}}\ +\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00136\ \ \ \ \ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00148\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_ab7f7e02d5dbda05bf8f01db09a3a370a}{same\_address}}(\textcolor{keyword}{const}\ T*\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ T*\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{a}}\ !=\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Pointer\ mismatch:\ pointers\ don't\ have\ the\ same\ address."{}});}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00153\ \ \ \ \ \}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00166\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::same\_as<std::string,\ T>)\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a011440cc5d056668b5ae741f28f5c61e}{strings\_equal}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::same\_as<bool,\ T>)\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_ab054df866a778a5a6b2344ec436cf6dd}{booleans\_equal}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptAnySupportedIntegral}{AnySupportedIntegral<T>}})\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_adcc98704b3d3a491b1b0878037f11db6}{integrals\_equal}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::is\_pointer\_v<T>)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\_null\_agree}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}}))\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_ab7f7e02d5dbda05bf8f01db09a3a370a}{same\_address}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}No\ known\ equality\ operator\ is\ available\ for\ type:\ "{}}\ +\ \mbox{\hyperlink{namespaceABIHelpers_a81f114c118f1475748b7604187d614cb}{ABIHelpers::demangle}}(\textcolor{keyword}{typeid}(T).\mbox{\hyperlink{classNode}{name}}()));}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00185\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEqualityHelper_ad7f32a8a25497a9a0ac90998ad8d0375}{unequal}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(\mbox{\hyperlink{classNode}{a}},\ \mbox{\hyperlink{classNode}{b}});}
+\DoxyCodeLine{00187\ \ \ \ \ \}}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \};}
+
+\end{DoxyCode}

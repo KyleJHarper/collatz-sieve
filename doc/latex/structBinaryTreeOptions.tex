@@ -1,0 +1,67 @@
+\doxysection{Binary\+Tree\+Options Struct Reference}
+\hypertarget{structBinaryTreeOptions}{}\label{structBinaryTreeOptions}\index{BinaryTreeOptions@{BinaryTreeOptions}}
+
+
+An options package for building {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} objects.  
+
+
+
+
+{\ttfamily \#include $<$binary\+\_\+tree\+\_\+options.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structBinaryTreeOptions_a854d96148b635f3197d948e78b6d0ddb}\label{structBinaryTreeOptions_a854d96148b635f3197d948e78b6d0ddb} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Resets this options package to default values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{structBinaryTreeOptions_a789f1f3f23d7e1e6f485bb34af274e4a}{prune\+\_\+hwm\+\_\+nodes}} = \mbox{\hyperlink{classNode}{false}}
+\begin{DoxyCompactList}\small\item\em Controls pruning of High-\/\+Water Mark nodes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{structBinaryTreeOptions_a1db90c92f907dbd30709fd7ed5a1af7d}{prune\+\_\+parent\+\_\+levels}} = \mbox{\hyperlink{classNode}{false}}
+\begin{DoxyCompactList}\small\item\em Controls pruning of parent levels, leaving only leaf nodes. \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeOptions_a53939add5e3c45a449a4123fc0ee3b7c}\label{structBinaryTreeOptions_a53939add5e3c45a449a4123fc0ee3b7c} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries preserve\+\_\+ancestors} = \mbox{\hyperlink{classNode}{false}}
+\begin{DoxyCompactList}\small\item\em Controls the collection of High-\/\+Water Mark node roots (ancestors). These are stored in a dedicated vector. \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeOptions_a5ea57db72aee4d2e55f9fe1672a584bf}\label{structBinaryTreeOptions_a5ea57db72aee4d2e55f9fe1672a584bf} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries verify\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{classNode}{false}}
+\begin{DoxyCompactList}\small\item\em Controls whether verification of non-\/\+HWM nodes occurs during tree building. Required above {\ttfamily Collatz\+Constants\+::\+LARGEST\+\_\+\+EPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An options package for building {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} objects. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structBinaryTreeOptions_a789f1f3f23d7e1e6f485bb34af274e4a}\label{structBinaryTreeOptions_a789f1f3f23d7e1e6f485bb34af274e4a} 
+\index{BinaryTreeOptions@{BinaryTreeOptions}!prune\_hwm\_nodes@{prune\_hwm\_nodes}}
+\index{prune\_hwm\_nodes@{prune\_hwm\_nodes}!BinaryTreeOptions@{BinaryTreeOptions}}
+\doxysubsubsection{\texorpdfstring{prune\_hwm\_nodes}{prune\_hwm\_nodes}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Binary\+Tree\+Options\+::prune\+\_\+hwm\+\_\+nodes = \mbox{\hyperlink{classNode}{false}}}
+
+
+
+Controls pruning of High-\/\+Water Mark nodes. 
+
+\begin{DoxyNote}{Note}
+Only applies to Materialized trees. 
+\end{DoxyNote}
+\Hypertarget{structBinaryTreeOptions_a1db90c92f907dbd30709fd7ed5a1af7d}\label{structBinaryTreeOptions_a1db90c92f907dbd30709fd7ed5a1af7d} 
+\index{BinaryTreeOptions@{BinaryTreeOptions}!prune\_parent\_levels@{prune\_parent\_levels}}
+\index{prune\_parent\_levels@{prune\_parent\_levels}!BinaryTreeOptions@{BinaryTreeOptions}}
+\doxysubsubsection{\texorpdfstring{prune\_parent\_levels}{prune\_parent\_levels}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Binary\+Tree\+Options\+::prune\+\_\+parent\+\_\+levels = \mbox{\hyperlink{classNode}{false}}}
+
+
+
+Controls pruning of parent levels, leaving only leaf nodes. 
+
+\begin{DoxyNote}{Note}
+Only applies to Materialized trees. 
+\end{DoxyNote}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/binary\+\_\+tree\+\_\+options.\+hpp\end{DoxyCompactItemize}

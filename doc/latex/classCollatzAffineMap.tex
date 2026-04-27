@@ -1,0 +1,143 @@
+\doxysection{Collatz\+Affine\+Map\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classCollatzAffineMap}{}\label{classCollatzAffineMap}\index{CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}}
+
+
+An explicit map which tracks 2\textquotesingle{}s and 3\textquotesingle{}s exponents ({\ttfamily A}) and the constant portion ({\ttfamily B}) for affine transformation.  
+
+
+
+
+{\ttfamily \#include $<$collatz\+\_\+affine\+\_\+map.\+hpp$>$}
+
+
+
+Collaboration diagram for Collatz\+Affine\+Map\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classCollatzAffineMap__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMap_a0438b2fe0f64a9ff7023e163a7de8a3f}\label{classCollatzAffineMap_a0438b2fe0f64a9ff7023e163a7de8a3f} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries apply\+\_\+F} ()
+\begin{DoxyCompactList}\small\item\em Applies the accelerated {\ttfamily F} step by incrementing exponent counts and transforming {\ttfamily constant\+\_\+portion} too. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMap_a7b0a82c8ab244dce97b612cde154fc56}\label{classCollatzAffineMap_a7b0a82c8ab244dce97b612cde154fc56} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries apply\+\_\+G} ()
+\begin{DoxyCompactList}\small\item\em Applies the accelerated {\ttfamily G} step by incrementing the two\textquotesingle{}s exponent. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate}} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Applies the affine transformation on the value provided and returns the result. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatzAffineMap_a020aa847fd591925b4540d338c9ee1d1}{calculate}} (\mbox{\hyperlink{classNode}{const}} T \&value, T \&\mbox{\hyperlink{classNode}{out}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Applies the affine transformation on the value provided and stores the result in {\ttfamily out}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatzAffineMap_acbd278053c30c294bc628bdc5a951142}{is\+\_\+below}} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Helper which simply applies {\ttfamily \doxylink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate()}} and returns if it\textquotesingle{}s below (true) or above (false) the original {\ttfamily value}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMap_a5d492e65b0ec78a2038f38b3352c680d}\label{classCollatzAffineMap_a5d492e65b0ec78a2038f38b3352c680d} 
+{\bfseries Collatz\+Affine\+Map} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMap_a0164068132fd2fccb5b105d44ad2b58d}\label{classCollatzAffineMap_a0164068132fd2fccb5b105d44ad2b58d} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Resets the object, treating it like it\textquotesingle{}s new. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea}\label{classCollatzAffineMap_a2c3193e40728783386edb19e22a1e7ea} 
+\mbox{\hyperlink{classNode}{uint32\+\_\+t}} {\bfseries \+\_\+twos\+\_\+exp} = 0
+\begin{DoxyCompactList}\small\item\em The power of two accumulated. Increases by 1 on both {\ttfamily F} and {\ttfamily G} steps. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722}\label{classCollatzAffineMap_a653ee8fd97cc92631d835bb5b30fa722} 
+\mbox{\hyperlink{classNode}{uint32\+\_\+t}} {\bfseries \+\_\+threes\+\_\+exp} = 0
+\begin{DoxyCompactList}\small\item\em The power of three accumulated. Increases by 1 on {\ttfamily F} steps. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2}\label{classCollatzAffineMap_a7df2d3971a61cc4558808a1c651651d2} 
+T {\bfseries \+\_\+constant\+\_\+portion} = 0
+\begin{DoxyCompactList}\small\item\em The constant portion (B) accumulated. It\textquotesingle{}s affected by {\ttfamily F} and {\ttfamily G} steps. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+class Collatz\+Affine\+Map$<$ T $>$}
+An explicit map which tracks 2\textquotesingle{}s and 3\textquotesingle{}s exponents ({\ttfamily A}) and the constant portion ({\ttfamily B}) for affine transformation. 
+
+An FG chain can be stored and represented as an affine map with powers of two and three, and with a constant portion. This avoids any realtime tracking of fractional values (floats).
+
+There are overflow concerns, which are most extreme when the chain is all {\ttfamily F} steps. This worst case leaves {\ttfamily constant\+\_\+portion} equal to {\ttfamily \texorpdfstring{$\sim$}{\string~}3\texorpdfstring{$^\wedge$}{\string^}k}. Each power of three needs \texorpdfstring{$\sim$}{\string~}1.6 bits to represent this in binary, so we have the following limits\+:
+\begin{DoxyItemize}
+\item 64-\/bits) 40
+\item 128-\/bits) 80
+\end{DoxyItemize}
+
+Therefore, when using large maps, callers must be aware of overflow risks. These 40 and 80 limits are available via the {\ttfamily Exponents\+::\+POW3\+\_\+64\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT} and {\ttfamily Exponents\+::\+POW3\+\_\+128\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT}.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}\label{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a} 
+\index{CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}!calculate@{calculate}}
+\index{calculate@{calculate}!CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{calculate()}{calculate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+T \mbox{\hyperlink{classCollatzAffineMap}{Collatz\+Affine\+Map}}$<$ T $>$\+::calculate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Applies the affine transformation on the value provided and returns the result. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to treat as {\ttfamily x} in the affine formula\+: {\ttfamily Ax + b}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A copy of the result, which is an alloc on the GMP path. 
+\end{DoxyReturn}
+\Hypertarget{classCollatzAffineMap_a020aa847fd591925b4540d338c9ee1d1}\label{classCollatzAffineMap_a020aa847fd591925b4540d338c9ee1d1} 
+\index{CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}!calculate@{calculate}}
+\index{calculate@{calculate}!CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{calculate()}{calculate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatzAffineMap}{Collatz\+Affine\+Map}}$<$ T $>$\+::calculate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{T \&}]{out }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Applies the affine transformation on the value provided and stores the result in {\ttfamily out}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to treat as {\ttfamily x} in the affine formula\+: {\ttfamily Ax + b}. \\
+\hline
+{\em out} & The resut stored in callers memory, which avoids alloc on the GMP path. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatzAffineMap_acbd278053c30c294bc628bdc5a951142}\label{classCollatzAffineMap_acbd278053c30c294bc628bdc5a951142} 
+\index{CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}!is\_below@{is\_below}}
+\index{is\_below@{is\_below}!CollatzAffineMap$<$ T $>$@{CollatzAffineMap$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{is\_below()}{is\_below()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatzAffineMap}{Collatz\+Affine\+Map}}$<$ T $>$\+::is\+\_\+below (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Helper which simply applies {\ttfamily \doxylink{classCollatzAffineMap_ac737364955ef326c9559cbe25e85d90a}{calculate()}} and returns if it\textquotesingle{}s below (true) or above (false) the original {\ttfamily value}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to calculate and compare to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the affine transoformation is overall contractive, false otherwise. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/collatz\+\_\+affine\+\_\+map.\+hpp\end{DoxyCompactItemize}

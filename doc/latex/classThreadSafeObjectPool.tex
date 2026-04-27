@@ -1,0 +1,25 @@
+\doxysection{Thread\+Safe\+Object\+Pool\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classThreadSafeObjectPool}{}\label{classThreadSafeObjectPool}\index{ThreadSafeObjectPool$<$ T $>$@{ThreadSafeObjectPool$<$ T $>$}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classThreadSafeObjectPool_adc15aa03d92c32aaf6c0b8ee413222dc}\label{classThreadSafeObjectPool_adc15aa03d92c32aaf6c0b8ee413222dc} 
+{\bfseries Thread\+Safe\+Object\+Pool} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{block\+\_\+size}}=4096)
+\item 
+\Hypertarget{classThreadSafeObjectPool_a297ba7eb688009691a01879bbd16336d}\label{classThreadSafeObjectPool_a297ba7eb688009691a01879bbd16336d} 
+{\footnotesize template$<$typename... Args$>$ }\\T \texorpdfstring{$\ast$}{*} {\bfseries create} (\mbox{\hyperlink{classNode}{Args}} \&\&... \mbox{\hyperlink{classNode}{args}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classThreadSafeObjectPool_af7e562473109b63404a8a1c4c31c27a6}\label{classThreadSafeObjectPool_af7e562473109b63404a8a1c4c31c27a6} 
+\mbox{\hyperlink{classObjectPool}{Object\+Pool}}$<$ T $>$ {\bfseries \+\_\+factory}
+\item 
+\Hypertarget{classThreadSafeObjectPool_afa0e52a1cdd12f47c53e630585580ee0}\label{classThreadSafeObjectPool_afa0e52a1cdd12f47c53e630585580ee0} 
+std\+::mutex {\bfseries \+\_\+mutex}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/pool.\+hpp\end{DoxyCompactItemize}

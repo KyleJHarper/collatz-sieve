@@ -9,37 +9,46 @@
 //
 // Constants and helpers for our sequences.
 //
+/**
+* @namespace CollatzConstants
+* @brief Constants and helpers for Collatz sequence processing.
+*/
 namespace CollatzConstants {
-    // Highest known empircally tested level.  Barina: https://link.springer.com/article/10.1007/s11227-025-07337-0
-    static const uint64_t LARGEST_EPIRICALLY_TESTED_LEVEL = 72;  // 2^71
-
+    /// @brief Highest known empircally tested level.  See [Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).
+    static const uint64_t LARGEST_EMPIRICALLY_TESTED_LEVEL = 72;
 
     // GMP will sometimes alloc() if you operate on a non-GMP (e.g.: ui) value.
-    static const mpz_class MPZ_ONE = 1;
-    static const mpz_class MPZ_TWO = 2;
-    static const mpz_class MPZ_THREE = 3;
+    static const mpz_class MPZ_ONE = 1;    ///< Constant `mpz_class(1)` to prevent allocs in some cases.
+    static const mpz_class MPZ_TWO = 2;    ///< Constant `mpz_class(2)` to prevent allocs in some cases.
+    static const mpz_class MPZ_THREE = 3;  ///< Constant `mpz_class(3)` to prevent allocs in some cases.
 
     // GMP float-style values used in a lot of calculations.
-    static const mpf_class MPF_ONE = 1;
-    static const mpf_class MPF_TWO = 2;
-    static const mpf_class MPF_THREE = 3;
-    static const mpf_class MPF_HALF = 0.5;
+    static const mpf_class MPF_HALF = 0.5;  ///< Constant `mpf_class(0.5)` to prevent allocs in some cases.
+    static const mpf_class MPF_ONE = 1;     ///< Constant `mpf_class(1)` to prevent allocs in some cases.
+    static const mpf_class MPF_TWO = 2;     ///< Constant `mpf_class(2)` to prevent allocs in some cases.
+    static const mpf_class MPF_THREE = 3;   ///< Constant `mpf_class(3)` to prevent allocs in some cases.
 
-    // Let's lock in what "odd" and "even" mean.
-    constexpr bool ODD = true;
-    constexpr bool EVEN = false;
 
-    // Trying to perform 3X+1 on any value higher than this would overflow a 64-bit unsigned integer.
+
+    /**
+    * @brief Stores the highest integer which can take 3x + 1 without overflowing a given bit width.
+    * @note This only supports 8, 16, 32, 64, and 128 bit widths.
+    * @note This only supports unsigned types.
+    */
     constexpr std::array<uint128_t, 5> MAX_3XP1 = {
         ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
         ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
         ((uint128_t(1) << 32) - 1 - 1) / 3,   // 32 bit
         ((uint128_t(1) << 64) - 1 - 1) / 3,   // 64 bit
         ((uint128_t(1) << 127) + ((uint128_t(1) << 127) - 1) - 1) / 3  // 128 bit
-        // Requires a little juggling to avoid overflow.  Yay PEMDAS!
     };
-    //
-    // Now a helper for it.
+
+
+
+    /**
+    * @brief Helper to return the correct `MAX_3XP1` for the type `T`.
+    * @tparam T Any supported integral (see concepts.hpp).
+    */
     template<BuiltinIntegral T>
     inline constexpr uint128_t get_max_3xp1() {
         switch (sizeof(T) * 8) {
@@ -52,75 +61,28 @@ namespace CollatzConstants {
         }
     }
 
-    // Precomputed maximum initial values for a given bit size.  The next value would overflow during its sequence.
-    constexpr std::array<uint64_t, 65> MAX_INITIAL_VALUE_BY_64BIT = {
-        0,  // 0
-        1,  // 1
-        2,  // 2
-        2,  // 3
-        2,  // 4
-        6,  // 5
-        14,  // 6
-        14,  // 7
-        26,  // 8
-        26,  // 9
-        26,  // 10
-        26,  // 11
-        26,  // 12
-        26,  // 13
-        446,  // 14
-        446,  // 15
-        702,  // 16
-        702,  // 17
-        1818,  // 18
-        1818,  // 19
-        1818,  // 20
-        4254,  // 21
-        4254,  // 22
-        9662,  // 23
-        9662,  // 24
-        20894,  // 25
-        26622,  // 26
-        60974,  // 27
-        60974,  // 28
-        60974,  // 29
-        77670,  // 30
-        113382,  // 31
-        159486,  // 32
-        159486,  // 33
-        159486,  // 34
-        665214,  // 35
-        1042430,  // 36
-        1212414,  // 37
-        2684646,  // 38
-        3041126,  // 39
-        4637978,  // 40
-        5656190,  // 41
-        6416622,  // 42
-        6631674,  // 43
-        6631674,  // 44
-        6631674,  // 45
-        19638398,  // 46
-        19638398,  // 47
-        19638398,  // 48
-        80049390,  // 49
-        80049390,  // 50
-        120080894,  // 51
-        210964382,  // 52
-        319804830,  // 53
-        319804830,  // 54
-        319804830,  // 55
-        319804830,  // 56
-        319804830,  // 57
-        319804830,  // 58
-        319804830,  // 59
-        319804830,  // 60
-        1410123942,  // 61
-        1410123942,  // 62
-        8528817510,  // 63
-        12327829502,  // 64
-    };
-    constexpr std::array<uint128_t, 129> MAX_INITIAL_VALUE_BY_128BIT = {
+
+
+    /**
+    * @brief Precomputed maximum initial values for `2^bit`.  Values over this can overflow during their sequence.
+    *
+    * Each array index represents the bit size of a given data type.  For example, uint32_t == 32 bits, so the maximum initial
+    * value that can be used without overflowing during a sequence would be `MAX_INITIAL_VALUE_BY_BIT[32]`.
+    *
+    * Consequently, each of these values can be increased by 1 to find the first overflow point, fyi.
+    *
+    * \par Example
+    * Given `uint8_t` is 8 bits, the largest value it can hold is 255 (2^8 - 1).  The max initial value shown in the table is 26.
+    * No value (step) created by an initial value at or below this point (1-26) will cause an overflow when its Collatz sequence is
+    * processed.  The next value (27) will:
+    *   * 27, 82, 41, 124, 62, 31, 94, 47, 142, 71, 214, 107, 322 (overflow)
+    *
+    * @warning These values have been tested up to 2^109.  That point is used for 2^110 - 2^128 as a safety precaution until the
+    * remaining values can be found.
+    *
+    * \showinitializer
+    */
+    constexpr std::array<uint128_t, 129> MAX_INITIAL_VALUE_BY_BIT = {
         0,  // 0
         1,  // 1
         2,  // 2
@@ -231,8 +193,8 @@ namespace CollatzConstants {
         "10709980568908646"_u128,  // 107
         "10709980568908646"_u128,  // 108
 
-        // The following are placeholders until I can compute them.
-        // This is the highest value I've computed without hitting the next 2^k max IV.
+        // The following are placeholders until they can be computed.
+        // This is the highest value computed without hitting the next 2^k max IV.
         "26453686357881703"_u128,  // 109
         "26453686357881703"_u128,  // 110
         "26453686357881703"_u128,  // 111
@@ -255,33 +217,60 @@ namespace CollatzConstants {
         "26453686357881703"_u128,  // 128
     };
 
-    //
-    // Max Check
+
+
+    /**
+    * @brief Get the maximum number of bits that type `T` can look up in the `MAX_INITIAL_VALUE_BY_BIT`.
+    *
+    * Normally, a simple `sizeof(T) * 8` works, but there's a check for `mpz_class`.  Wrapping it all in a constexpr helper lets
+    * callers avoid the headache of juggling it directly, and frees this namespace to change implementation details later.
+    *
+    * @tparam T Any supported integral (see concepts.hpp).
+    */
     template<AnySupportedIntegral T>
-    inline constexpr size_t get_max_initial_value_max_bits() {
+    inline constexpr size_t get_max_bits_for_max_initial_value_by_type() {
         if constexpr(NativeIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_64BIT.size() - 1;
+            // 64 bits or less, which is fully discovered.
+            return sizeof(T) * 8;
         } else if constexpr(ExtendedIntegral<T> || GMPIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_128BIT.size() - 1;
+            return MAX_INITIAL_VALUE_BY_BIT.size() - 1;
         }
     }
-    //
-    // Lookup
+
+
+
+    /**
+    * @brief Return the max initial value from the precomputed table for a given bit size.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @param bit_size The number of bits in question to look up in the `MAX_INITIAL_VALUE_BY_BIT` table.
+    */
     template<AnySupportedIntegral T>
     inline constexpr T get_max_initial_value_by_bit(size_t bit_size) {
         // Safety Check
-        if (bit_size > get_max_initial_value_max_bits<T>()) {
+        if (bit_size > get_max_bits_for_max_initial_value_by_type<T>()) {
             throw std::out_of_range("Max initial value for bit size " + std::to_string(bit_size) + " not found.");
         }
 
-        // Pick the right type.
         if constexpr(NativeIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_64BIT[bit_size];
+            // 64 bits or less, which is fully discovered.
+            return static_cast<T>(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
         } else if constexpr(ExtendedIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_128BIT[bit_size];
+            return MAX_INITIAL_VALUE_BY_BIT[bit_size];
         } else if constexpr(GMPIntegral<T>) {
-            return uint128_to_mpz(MAX_INITIAL_VALUE_BY_128BIT[bit_size]);
+            return uint128_to_mpz(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
         }
         throw std::logic_error("Unknown type for bit required.");
+    }
+
+
+
+    /**
+    * @brief Return the max initial value from the precomputed table for the type `T` given.
+    * @tparam T Any supported integral (see concepts.hpp).
+    */
+    template<AnySupportedIntegral T>
+    inline constexpr T get_max_initial_value_by_type() {
+        constexpr size_t max_bits = is_gmp_integral_v<T>() ? 128 : sizeof(T) * 8;
+        return get_max_initial_value_by_bit<T>(max_bits);
     }
 }

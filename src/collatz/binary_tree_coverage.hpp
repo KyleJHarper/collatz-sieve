@@ -1,184 +1,45 @@
 #pragma once
 
 #include "concepts.hpp"
-#include "binary_tree_math.hpp"
 #include <gmp.h>
 #include <gmpxx.h>
-#include <array>
 #include <string>
 #include "stream_helper.hpp"
 
 
 
-//
-// Keep a record of known coverages.
-//
-namespace BinaryTreeCoverageConstants {
-    // Precomputed coverage for given levels.  Level-indexed (aka element 0 means nothing).
-    constexpr size_t MAX_KNOWN_COVERAGE_LEVEL = 45;
-    constexpr std::array<uint64_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE_64BIT = {
-        0  // 0
-        , 0  // 1
-        , 1  // 2
-        , 3  // 3
-        , 6  // 4
-        , 13  // 5
-        , 28  // 6
-        , 56  // 7
-        , 115  // 8
-        , 237  // 9
-        , 474  // 10
-        , 960  // 11
-        , 1920  // 12
-        , 3870  // 13
-        , 7825  // 14
-        , 15650  // 15
-        , 31473  // 16
-        , 63422  // 17
-        , 126844 // 18
-        , 254649  //19
-        , 509298  // 20
-        , 1021248  // 21
-        , 2050541  // 22
-        , 4101082  // 23
-        , 8219801  // 24
-        , 16490635  // 25
-        , 32981270  // 26
-        , 66071490  // 27
-        , 132455435  // 28
-        , 264910870  // 29
-        , 530485275  // 30
-        , 1060970550  // 31
-        , 2123841570  // 32
-        , 4253619813  // 33
-        , 8507239626  // 34
-        , 17027951548  // 35
-        , 34095896991  // 36
-        , 68191793982  // 37
-        , 136471574881  // 38
-        , 272943149762  // 39
-        , 546144278026  // 40
-        , 1093108792776  // 41
-        , 2186217585552  // 42
-        , 4374334645782  // 43
-        , 8754392322150  // 44
-        , 17508784644300 // 45
-    };
-    constexpr std::array<uint128_t, MAX_KNOWN_COVERAGE_LEVEL+1> KNOWN_COVERAGE_128BIT = {
-        0  // 0
-        , 0  // 1
-        , 1  // 2
-        , 3  // 3
-        , 6  // 4
-        , 13  // 5
-        , 28  // 6
-        , 56  // 7
-        , 115  // 8
-        , 237  // 9
-        , 474  // 10
-        , 960  // 11
-        , 1920  // 12
-        , 3870  // 13
-        , 7825  // 14
-        , 15650  // 15
-        , 31473  // 16
-        , 63422  // 17
-        , 126844 // 18
-        , 254649  //19
-        , 509298  // 20
-        , 1021248  // 21
-        , 2050541  // 22
-        , 4101082  // 23
-        , 8219801  // 24
-        , 16490635  // 25
-        , 32981270  // 26
-        , 66071490  // 27
-        , 132455435  // 28
-        , 264910870  // 29
-        , 530485275  // 30
-        , 1060970550  // 31
-        , 2123841570  // 32
-        , 4253619813  // 33
-        , 8507239626  // 34
-        , 17027951548  // 35
-        , 34095896991  // 36
-        , 68191793982  // 37
-        , 136471574881  // 38
-        , 272943149762  // 39
-        , 546144278026  // 40
-        , 1093108792776  // 41
-        , 2186217585552  // 42
-        , 4374334645782  // 43
-        , 8754392322150  // 44
-        , 17508784644300 // 45
-    };
 
-    //
-    // Get Known Coverage
-    // Returns the precomputed coverage from previous testing.
-    template<AnySupportedIntegral T>
-    inline T get_known_coverage(size_t level) {
-        if (level > MAX_KNOWN_COVERAGE_LEVEL) {
-            throw std::out_of_range("Level " + std::to_string(level) + " not found in KNOWN_COVERAGE");
-        }
-        if constexpr(NativeIntegral<T>) {
-            return KNOWN_COVERAGE_64BIT[level];
-        } else if constexpr(ExtendedIntegral<T>) {
-            return KNOWN_COVERAGE_128BIT[level];
-        } else if constexpr(GMPIntegral<T>) {
-            return uint128_to_mpz(KNOWN_COVERAGE_128BIT[level]);
-        }
-        throw std::logic_error("Unknown type get_known_coverage()");
-    }
-
-    //
-    // Get Known Coverage (Sum To Level)
-    // Returns the sum of all coverages from level 1 to max_level specified.
-    template<AnySupportedIntegral T>
-    inline T get_known_coverage_sum_to_level(size_t max_level) {
-        T total = 0;
-        for (size_t level = 0; level <= max_level; level++) {
-            total += get_known_coverage<T>(level);
-        }
-        return total;
-    }
-
-    //
-    // Get Total
-    // Returns the total number of nodes for a level.  Uses BinaryTreeMath under the hood.
-    template<AnySupportedIntegral T>
-    inline T get_total(size_t level) {
-        return BinaryTreeMath<T>::st_node_count_of_level(level);
-    }
-
-    //
-    // Get Total (Sum of Levels)
-    // Returns the number of nodes between min_level and max_level, inclusive.  Uses BinaryTreeMath under the hood.
-    template<AnySupportedIntegral T>
-    inline T get_total_sum_of_levels(size_t min_level, size_t max_level) {
-        return BinaryTreeMath<T>::st_node_count_of_levels(min_level, max_level);
-    }
-}
-
-
-//
-// Tree Coverage Class
-//
+/**
+* @class BinaryTreeCoverage
+* @brief Container to track the number of nodes covered (eliminated) on a level in a `BinaryTree`.
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<AnySupportedIntegral T>
 class BinaryTreeCoverage {
     private:
+    /// @brief The number of nodes covered.
     T _covered = 0;
+    /// @brief The number of total nodes.
     T _total = 0;
 
 
+
     public:
-    //
-    // Constructors
-    //
-    BinaryTreeCoverage() {
-        _covered = 0;
-        _total = 0;
-    }
+    /// @name Lifecycle Management
+    /// @{
+
+    /**
+    * @brief Default constructor.
+    */
+    BinaryTreeCoverage() = default;
+
+
+
+    /**
+    * @brief Constructor which sets covered and total initially.
+    * @param covered The number of covered to set.
+    * @param total The number of total to set.
+    */
     BinaryTreeCoverage(T covered, T total) {
         _covered = covered;
         _total = total;
@@ -186,35 +47,44 @@ class BinaryTreeCoverage {
 
 
 
-    //
-    // Merge
-    // Merge results from another coverage into ours.
-    //
-    void merge(const BinaryTreeCoverage& other_coverage) {
-        _covered += other_coverage.get_covered();
-        _total += other_coverage.get_total();
-    }
+    /**
+    * @brief Default destructor.
+    */
+    ~BinaryTreeCoverage() = default;
+
+    /// @}
 
 
 
-    //
-    // Setters
-    //
+    /// @name Accessors
+    /// @{
+
+    /// @brief Set the number of covered directly.
     void set_covered(T covered) { _covered = covered; }
+    /// @brief Set the total directly.
     void set_total(T total) { _total = total; }
+    /// @brief Add `count` to the covered.
     void add_covered(T count=1) { _covered += count; }
+    /// @brief Add `count` to the total.
     void add_total(T count=1) { _total += count; }
 
-
-
-    //
-    // Getters
-    //
+    /// @brief Get covered tally.
     const T& get_covered() const { return _covered; }
+    /// @brief Get total tally.
     const T& get_total() const { return _total; }
+    /// @brief Get uncovered tally, which is `_total - _covered`.
+    /// @note The subtraction and return cause an instantiation.  For `mpz_class`, that's an alloc.
     T get_uncovered() const { return _total - _covered; }
-    //
-    // Get the ratio.  If total is 0 or negative, we will throw an error.
+
+    /// @}
+
+
+
+    /**
+    * @brief Get ratio of covered / total.
+    * @param as_percent Multiplies the result by 100 such that 0.972 becomes 97.2.
+    * @return The ratio as an `mpf_class`.
+    */
     const mpf_class get_ratio(bool as_percent = false) {
         if (_total < 1) {
             throw std::runtime_error("You cannot call get_ratio() when 'total' is 0 or less.");
@@ -236,9 +106,29 @@ class BinaryTreeCoverage {
 
 
 
-    //
-    // Serialize
-    //
+    /**
+    * @brief Merge results from another coverage into this one.
+    * @param other_coverage Another instance of `BinaryTreeCoverage` to merge into `this`.
+    */
+    void merge(const BinaryTreeCoverage& other_coverage) {
+        _covered += other_coverage.get_covered();
+        _total += other_coverage.get_total();
+    }
+
+
+
+    /**
+    * @brief Serialize this object for export.
+    *
+    * Serialization happens in this order:
+    *   1. Covered (integral)
+    *   2. Total (integral)
+    *
+    * @note This method does not throw.
+    * @param out The stream to write data to.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
         StreamHelper sh(nullptr, &out, err);
         sh.set_category("BinaryTreeCoverage");
@@ -256,9 +146,16 @@ class BinaryTreeCoverage {
 
 
 
-    //
-    // Deserialize
-    //
+    /**
+    * @brief Deserialize this object for import following a previous `serialize()`.
+    *
+    * Deserialization happens in the same order as serialization, obviously.
+    *
+    * @note This method does not throw.
+    * @param in The stream to read data from.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool deserialize(std::istream& in, std::string* err) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("BinaryTreeCoverage");
@@ -275,4 +172,3 @@ class BinaryTreeCoverage {
     }
 
 };
-

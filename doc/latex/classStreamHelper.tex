@@ -1,0 +1,73 @@
+\doxysection{Stream\+Helper Class Reference}
+\hypertarget{classStreamHelper}{}\label{classStreamHelper}\index{StreamHelper@{StreamHelper}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4}\label{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4} 
+{\bfseries Stream\+Helper} (std\+::istream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{in}}, std\+::ostream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\item 
+\Hypertarget{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a}\label{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries set\+\_\+category} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{category}})
+\item 
+\Hypertarget{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}\label{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries fail} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{msg}})
+\item 
+\Hypertarget{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd}\label{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries write\+\_\+bytes} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{data}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classNode}{size}})
+\item 
+\Hypertarget{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0}\label{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries read\+\_\+bytes} (\mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{data}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classNode}{size}})
+\item 
+\Hypertarget{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}\label{classStreamHelper_abfc9679f40161822a20dd8734af8ba20} 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize\+\_\+integral} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\item 
+\Hypertarget{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}\label{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc} 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize\+\_\+integral} (T \&\mbox{\hyperlink{classNode}{rv}})
+\item 
+\Hypertarget{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}\label{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize\+\_\+bool} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} \&value)
+\item 
+\Hypertarget{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}\label{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize\+\_\+bool} (\mbox{\hyperlink{classNode}{bool}} \&\mbox{\hyperlink{classNode}{rv}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStreamHelper_ae6259069c86c627593531f98e4db00cd}\label{classStreamHelper_ae6259069c86c627593531f98e4db00cd} 
+{\footnotesize template$<$\mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} T {\bfseries byteswap} (T value)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStreamHelper_a4473a145f59564bb91491e6d02e16bde}\label{classStreamHelper_a4473a145f59564bb91491e6d02e16bde} 
+std\+::ostream \& {\bfseries get\+\_\+out} ()
+\item 
+\Hypertarget{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f}\label{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f} 
+std\+::istream \& {\bfseries get\+\_\+in} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStreamHelper_a7134f614d391b81d5f34282d38449680}\label{classStreamHelper_a7134f614d391b81d5f34282d38449680} 
+std\+::istream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+in\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+\item 
+\Hypertarget{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}\label{classStreamHelper_ac5640e8fb652b80991275c237ab5e268} 
+std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+out\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+\item 
+\Hypertarget{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}\label{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e} 
+std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+\item 
+\Hypertarget{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}\label{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41} 
+std\+::string {\bfseries \+\_\+category} = "{}Uncategorized"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStreamHelper_a886dd96f247144f22906496e0fb8723a}\label{classStreamHelper_a886dd96f247144f22906496e0fb8723a} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries \+\_\+\+READ\+\_\+\+WRITE\+\_\+\+LIMIT} = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/stream\+\_\+helper.\+hpp\end{DoxyCompactItemize}

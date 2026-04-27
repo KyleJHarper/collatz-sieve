@@ -9,18 +9,14 @@
 //
 
 
-//
-// In case the __has_builtin is gone.
-//
+/// @brief Define `__has_builtin` in case it's missing.
 #ifndef __has_builtin
   #define __has_builtin(x) 0
 #endif
 
 
 
-//
-// 8-bit
-//
+/// @brief Bit reversal for 8-bit unsigned type.  Uses `__builtin_bitreverse8()` if available, otherwise blackbox shifting.
 static inline constexpr uint8_t bitreverse8(uint8_t x) {
     #if __has_builtin(__builtin_bitreverse8)
     x = __builtin_bitreverse8(x);
@@ -34,9 +30,7 @@ static inline constexpr uint8_t bitreverse8(uint8_t x) {
 
 
 
-//
-// 16-bit
-//
+/// @brief Bit reversal for 16-bit unsigned type.  Uses `__builtin_bitreverse16()` if available, otherwise blackbox shifting.
 static inline constexpr uint16_t bitreverse16(uint16_t x) {
     #if __has_builtin(__builtin_bitreverse16)
     x = __builtin_bitreverse16(x);
@@ -51,9 +45,7 @@ static inline constexpr uint16_t bitreverse16(uint16_t x) {
 
 
 
-//
-// 32-bit
-//
+/// @brief Bit reversal for 32-bit unsigned type.  Uses `__builtin_bitreverse32()` if available, otherwise blackbox shifting.
 static inline constexpr uint32_t bitreverse32(uint32_t x) {
     #if __has_builtin(__builtin_bitreverse32)
     x = __builtin_bitreverse32(x);
@@ -69,9 +61,7 @@ static inline constexpr uint32_t bitreverse32(uint32_t x) {
 
 
 
-//
-// 64-bit
-//
+/// @brief Bit reversal for 64-bit unsigned type.  Uses `__builtin_bitreverse64()` if available, otherwise blackbox shifting.
 static inline constexpr uint64_t bitreverse64(uint64_t x) {
     #if __has_builtin(__builtin_bitreverse64)
     x = __builtin_bitreverse64(x);

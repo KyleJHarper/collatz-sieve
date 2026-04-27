@@ -1,0 +1,316 @@
+\doxysection{Collatz\+Constants Namespace Reference}
+\hypertarget{namespaceCollatzConstants}{}\label{namespaceCollatzConstants}\index{CollatzConstants@{CollatzConstants}}
+
+
+Constants and helpers for \doxylink{classCollatz}{Collatz} sequence processing.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} \mbox{\hyperlink{namespaceCollatzConstants_a82106944a580665c6694c96cd51f42df}{get\+\_\+max\+\_\+3xp1}} ()
+\begin{DoxyCompactList}\small\item\em Helper to return the correct {\ttfamily MAX\+\_\+3\+XP1} for the type {\ttfamily T}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceCollatzConstants_af9b0a2e52566d443c0e4157913c082cb}{get\+\_\+max\+\_\+bits\+\_\+for\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+type}} ()
+\begin{DoxyCompactList}\small\item\em Get the maximum number of bits that type {\ttfamily T} can look up in the {\ttfamily MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{constexpr}} T \mbox{\hyperlink{namespaceCollatzConstants_a2b92d28402e35ce06283c48a6a0edbd4}{get\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+bit}} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{bit\+\_\+size}})
+\begin{DoxyCompactList}\small\item\em Return the max initial value from the precomputed table for a given bit size. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{constexpr}} T \mbox{\hyperlink{namespaceCollatzConstants_a487c3bd2711a3eaae07c30f674c22a58}{get\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+type}} ()
+\begin{DoxyCompactList}\small\item\em Return the max initial value from the precomputed table for the type {\ttfamily T} given. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceCollatzConstants_ab4329241ca5fc331afc866655cc91bb2}\label{namespaceCollatzConstants_ab4329241ca5fc331afc866655cc91bb2} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries LARGEST\+\_\+\+EMPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL} = 72
+\begin{DoxyCompactList}\small\item\em Highest known empircally tested level. See \href{https://link.springer.com/article/10.1007/s11227-025-07337-0}{\texttt{ Barina}}. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_a5cbdd281ee8db74e5565c417f537a72f}\label{namespaceCollatzConstants_a5cbdd281ee8db74e5565c417f537a72f} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} {\bfseries MPZ\+\_\+\+ONE} = 1
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpz\+\_\+class(1)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}\label{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} {\bfseries MPZ\+\_\+\+TWO} = 2
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpz\+\_\+class(2)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_a5077c6a9e79cbd44ba9645648d4d705f}\label{namespaceCollatzConstants_a5077c6a9e79cbd44ba9645648d4d705f} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} {\bfseries MPZ\+\_\+\+THREE} = 3
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpz\+\_\+class(3)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_a566fb8aeba1b31baf99adf97df84d63c}\label{namespaceCollatzConstants_a566fb8aeba1b31baf99adf97df84d63c} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} {\bfseries MPF\+\_\+\+HALF} = 0.\+5
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpf\+\_\+class(0.\+5)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_ac14e461da19846c6933b1d128278645b}\label{namespaceCollatzConstants_ac14e461da19846c6933b1d128278645b} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} {\bfseries MPF\+\_\+\+ONE} = 1
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpf\+\_\+class(1)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_a9c1bbce94fca6865e6ed920d2725eccb}\label{namespaceCollatzConstants_a9c1bbce94fca6865e6ed920d2725eccb} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} {\bfseries MPF\+\_\+\+TWO} = 2
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpf\+\_\+class(2)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceCollatzConstants_ac09ff047f60ce086a8154f88ada4fd9b}\label{namespaceCollatzConstants_ac09ff047f60ce086a8154f88ada4fd9b} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} {\bfseries MPF\+\_\+\+THREE} = 3
+\begin{DoxyCompactList}\small\item\em Constant {\ttfamily mpf\+\_\+class(3)} to prevent allocs in some cases. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$ \mbox{\hyperlink{classNode}{uint128\+\_\+t}}, 5 $>$ \mbox{\hyperlink{namespaceCollatzConstants_afa7c008a6d843de3c9b5363785151192}{MAX\+\_\+3\+XP1}}
+\begin{DoxyCompactList}\small\item\em Stores the highest integer which can take 3x + 1 without overflowing a given bit width. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$ \mbox{\hyperlink{classNode}{uint128\+\_\+t}}, 129 $>$ \mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT}}
+\begin{DoxyCompactList}\small\item\em Precomputed maximum initial values for {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}bit}. Values over this can overflow during their sequence. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Constants and helpers for \doxylink{classCollatz}{Collatz} sequence processing. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceCollatzConstants_a82106944a580665c6694c96cd51f42df}\label{namespaceCollatzConstants_a82106944a580665c6694c96cd51f42df} 
+\index{CollatzConstants@{CollatzConstants}!get\_max\_3xp1@{get\_max\_3xp1}}
+\index{get\_max\_3xp1@{get\_max\_3xp1}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{get\_max\_3xp1()}{get\_max\_3xp1()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} Collatz\+Constants\+::get\+\_\+max\+\_\+3xp1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Helper to return the correct {\ttfamily MAX\+\_\+3\+XP1} for the type {\ttfamily T}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{namespaceCollatzConstants_af9b0a2e52566d443c0e4157913c082cb}\label{namespaceCollatzConstants_af9b0a2e52566d443c0e4157913c082cb} 
+\index{CollatzConstants@{CollatzConstants}!get\_max\_bits\_for\_max\_initial\_value\_by\_type@{get\_max\_bits\_for\_max\_initial\_value\_by\_type}}
+\index{get\_max\_bits\_for\_max\_initial\_value\_by\_type@{get\_max\_bits\_for\_max\_initial\_value\_by\_type}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{get\_max\_bits\_for\_max\_initial\_value\_by\_type()}{get\_max\_bits\_for\_max\_initial\_value\_by\_type()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} Collatz\+Constants\+::get\+\_\+max\+\_\+bits\+\_\+for\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Get the maximum number of bits that type {\ttfamily T} can look up in the {\ttfamily MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT}. 
+
+Normally, a simple {\ttfamily sizeof(\+T) \texorpdfstring{$\ast$}{*} 8} works, but there\textquotesingle{}s a check for {\ttfamily mpz\+\_\+class}. Wrapping it all in a constexpr helper lets callers avoid the headache of juggling it directly, and frees this namespace to change implementation details later.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{namespaceCollatzConstants_a2b92d28402e35ce06283c48a6a0edbd4}\label{namespaceCollatzConstants_a2b92d28402e35ce06283c48a6a0edbd4} 
+\index{CollatzConstants@{CollatzConstants}!get\_max\_initial\_value\_by\_bit@{get\_max\_initial\_value\_by\_bit}}
+\index{get\_max\_initial\_value\_by\_bit@{get\_max\_initial\_value\_by\_bit}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{get\_max\_initial\_value\_by\_bit()}{get\_max\_initial\_value\_by\_bit()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{constexpr}} T Collatz\+Constants\+::get\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+bit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{bit\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Return the max initial value from the precomputed table for a given bit size. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em bit\+\_\+size} & The number of bits in question to look up in the {\ttfamily MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT} table. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespaceCollatzConstants_a487c3bd2711a3eaae07c30f674c22a58}\label{namespaceCollatzConstants_a487c3bd2711a3eaae07c30f674c22a58} 
+\index{CollatzConstants@{CollatzConstants}!get\_max\_initial\_value\_by\_type@{get\_max\_initial\_value\_by\_type}}
+\index{get\_max\_initial\_value\_by\_type@{get\_max\_initial\_value\_by\_type}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{get\_max\_initial\_value\_by\_type()}{get\_max\_initial\_value\_by\_type()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{constexpr}} T Collatz\+Constants\+::get\+\_\+max\+\_\+initial\+\_\+value\+\_\+by\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Return the max initial value from the precomputed table for the type {\ttfamily T} given. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see concepts.\+hpp). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespaceCollatzConstants_afa7c008a6d843de3c9b5363785151192}\label{namespaceCollatzConstants_afa7c008a6d843de3c9b5363785151192} 
+\index{CollatzConstants@{CollatzConstants}!MAX\_3XP1@{MAX\_3XP1}}
+\index{MAX\_3XP1@{MAX\_3XP1}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{MAX\_3XP1}{MAX\_3XP1}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$\mbox{\hyperlink{classNode}{uint128\+\_\+t}}, 5$>$ Collatz\+Constants\+::\+MAX\+\_\+3\+XP1\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ((uint128\_t(1)\ <<\ \ 8)\ -\/\ 1\ -\/\ 1)\ /\ 3,\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ((uint128\_t(1)\ <<\ 16)\ -\/\ 1\ -\/\ 1)\ /\ 3,\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ((uint128\_t(1)\ <<\ 32)\ -\/\ 1\ -\/\ 1)\ /\ 3,\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ((uint128\_t(1)\ <<\ 64)\ -\/\ 1\ -\/\ 1)\ /\ 3,\ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ((uint128\_t(1)\ <<\ 127)\ +\ ((uint128\_t(1)\ <<\ 127)\ -\/\ 1)\ -\/\ 1)\ /\ 3\ \ }
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Stores the highest integer which can take 3x + 1 without overflowing a given bit width. 
+
+\begin{DoxyNote}{Note}
+This only supports 8, 16, 32, 64, and 128 bit widths. 
+
+This only supports unsigned types. 
+\end{DoxyNote}
+\Hypertarget{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}\label{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe} 
+\index{CollatzConstants@{CollatzConstants}!MAX\_INITIAL\_VALUE\_BY\_BIT@{MAX\_INITIAL\_VALUE\_BY\_BIT}}
+\index{MAX\_INITIAL\_VALUE\_BY\_BIT@{MAX\_INITIAL\_VALUE\_BY\_BIT}!CollatzConstants@{CollatzConstants}}
+\doxysubsubsection{\texorpdfstring{MAX\_INITIAL\_VALUE\_BY\_BIT}{MAX\_INITIAL\_VALUE\_BY\_BIT}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$\mbox{\hyperlink{classNode}{uint128\+\_\+t}}, 129$>$ Collatz\+Constants\+::\+MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 0,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 2,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 2,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 2,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 6,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 14,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 14,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 446,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 446,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 702,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 702,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1818,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1818,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1818,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 4254,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 4254,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 9662,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 9662,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 20894,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 26622,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 60974,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 60974,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 60974,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 77670,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 113382,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 159486,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 159486,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 159486,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 665214,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1042430,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1212414,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 2684646,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 3041126,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 4637978,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 5656190,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 6416622,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 6631674,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 6631674,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 6631674,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 19638398,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 19638398,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 19638398,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 80049390,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 80049390,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 120080894,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 210964382,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 319804830,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1410123942,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 1410123942,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 8528817510,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 12327829502,\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}23035537406"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}45871962270"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}59152641054"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}70141259774"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}77566362558"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}110243094270"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}272025660542"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}272025660542"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}272025660542"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}272025660542"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}446559217278"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}567839862630"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}871673828442"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}871673828442"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}2674309547646"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}3716509988198"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}64848224337146"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}64848224337146"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}64848224337146"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}116050121715710"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}201321227677934"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}394491988532894"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}406738920960666"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}613450176662510"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}1254251874774374"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}8562235014026654"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}8562235014026654"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}8562235014026654"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}10709980568908646"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}10709980568908646"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}10709980568908646"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}10709980568908646"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}26453686357881703"{}}\mbox{\hyperlink{classNode}{\_u128}},\ \ }
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Precomputed maximum initial values for {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}bit}. Values over this can overflow during their sequence. 
+
+Each array index represents the bit size of a given data type. For example, uint32\+\_\+t == 32 bits, so the maximum initial value that can be used without overflowing during a sequence would be {\ttfamily MAX\+\_\+\+INITIAL\+\_\+\+VALUE\+\_\+\+BY\+\_\+\+BIT\mbox{[}32\mbox{]}}.
+
+Consequently, each of these values can be increased by 1 to find the first overflow point, fyi.
+
+\begin{DoxyParagraph}{Example}
+Given {\ttfamily uint8\+\_\+t} is 8 bits, the largest value it can hold is 255 (2\texorpdfstring{$^\wedge$}{\string^}8 -\/ 1). The max initial value shown in the table is 26. No value (step) created by an initial value at or below this point (1-\/26) will cause an overflow when its \doxylink{classCollatz}{Collatz} sequence is processed. The next value (27) will\+:
+\begin{DoxyItemize}
+\item 27, 82, 41, 124, 62, 31, 94, 47, 142, 71, 214, 107, 322 (overflow)
+\end{DoxyItemize}
+\end{DoxyParagraph}
+\begin{DoxyWarning}{Warning}
+These values have been tested up to 2\texorpdfstring{$^\wedge$}{\string^}109. That point is used for 2\texorpdfstring{$^\wedge$}{\string^}110 -\/ 2\texorpdfstring{$^\wedge$}{\string^}128 as a safety precaution until the remaining values can be found. 
+\end{DoxyWarning}

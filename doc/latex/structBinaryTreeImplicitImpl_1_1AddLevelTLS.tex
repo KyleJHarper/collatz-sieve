@@ -1,0 +1,64 @@
+\doxysection{Binary\+Tree\+Implicit\+Impl\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Add\+Level\+TLS Struct Reference}
+\hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS}\index{BinaryTreeImplicitImpl$<$ T $>$::AddLevelTLS@{BinaryTreeImplicitImpl$<$ T $>$::AddLevelTLS}}
+
+
+A thread-\/local cache structure for {\ttfamily \doxylink{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c}{add\+\_\+level()}}.  
+
+
+
+
+{\ttfamily \#include $<$binary\+\_\+tree\+\_\+implicit.\+hpp$>$}
+
+
+
+Collaboration diagram for Binary\+Tree\+Implicit\+Impl\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Add\+Level\+TLS\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{structBinaryTreeImplicitImpl_1_1AddLevelTLS__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a4fe358c673bb7eba372a297849e561da}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a4fe358c673bb7eba372a297849e561da} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ {\bfseries uncovered\+\_\+bitmap}
+\begin{DoxyCompactList}\small\item\em Dedicated {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} for the thread to use without guards. Is merged later. \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a7f528f44681da439c411ad13b46db56e}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a7f528f44681da439c411ad13b46db56e} 
+std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries new\+\_\+ancestors}
+\begin{DoxyCompactList}\small\item\em Dedicated pool of newly-\/found ancestors (HWM nodes). \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de} 
+T {\bfseries left\+\_\+value}
+\begin{DoxyCompactList}\small\item\em Left child\textquotesingle{}s value (scratch space). \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a489c30d3b72ab35e664ec8b48a751117}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a489c30d3b72ab35e664ec8b48a751117} 
+T {\bfseries left\+\_\+position}
+\begin{DoxyCompactList}\small\item\em Left child\textquotesingle{}s position (scratch space). \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ {\bfseries left\+\_\+node}
+\begin{DoxyCompactList}\small\item\em Left child {\ttfamily \doxylink{classNode}{Node}} object (scratch space). Reused via {\ttfamily Node\+::init()}. \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226} 
+T {\bfseries right\+\_\+value}
+\begin{DoxyCompactList}\small\item\em Right child\textquotesingle{}s value (scratch space). \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a031c148523387fb150285959af8df772}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a031c148523387fb150285959af8df772} 
+T {\bfseries right\+\_\+position}
+\begin{DoxyCompactList}\small\item\em Right child\textquotesingle{}s position (scratch space). \end{DoxyCompactList}\item 
+\Hypertarget{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}\label{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ {\bfseries right\+\_\+node}
+\begin{DoxyCompactList}\small\item\em Right child {\ttfamily \doxylink{classNode}{Node}} object (scratch space). Reused via {\ttfamily Node\+::init()}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+struct Binary\+Tree\+Implicit\+Impl$<$ T $>$\+::\+Add\+Level\+TLS}
+A thread-\/local cache structure for {\ttfamily \doxylink{classBinaryTreeImplicitImpl_af93247b2efa3579ee7a92a0529aae36c}{add\+\_\+level()}}. 
+
+The {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} has a multithreading (OMP) for-\/each iterator which we leverage to engage multiple CPUs when adding nodes to a level. This struct creates safety and scratch space for that.
+
+\begin{DoxyWarning}{Warning}
+This is not meant to be used anywhere else. 
+\end{DoxyWarning}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/binary\+\_\+tree\+\_\+implicit.\+hpp\end{DoxyCompactItemize}
