@@ -84,64 +84,230 @@ $(function() {
   <div class="headertitle"><div class="title">BitmapKeyTraits&lt; T &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Helpers to handle prefix and suffix keys for the hash map.  
+ <a href="structBitmapKeyTraits.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="node__bitmap__traits_8hpp_source.html">node_bitmap_traits.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ae9de767304b495420f30027f3fc78dd9" id="r_ae9de767304b495420f30027f3fc78dd9"><td class="memItemLeft" align="right" valign="top"><a id="ae9de767304b495420f30027f3fc78dd9" name="ae9de767304b495420f30027f3fc78dd9"></a>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>suffix_t</b> = <a class="el" href="classNode.html">uint32_t</a></td></tr>
+<tr class="memdesc:ae9de767304b495420f30027f3fc78dd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suffix can be anything, potentially, but CRoaring recommends 32 bits. Hard code that. <br /></td></tr>
 <tr class="separator:ae9de767304b495420f30027f3fc78dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a5e7e1fb6c24a2b0a61d6644f5c5b6e" id="r_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"><td class="memItemLeft" align="right" valign="top"><a id="a2a5e7e1fb6c24a2b0a61d6644f5c5b6e" name="a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"></a>
-<a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>prefix_t</b> = std::conditional_t&lt; std::same_as&lt; <a class="el" href="classNode.html">mpz_class</a>, T &gt;, <a class="el" href="classNode.html">mpz_class</a>, std::conditional_t&lt;(<a class="el" href="classNode.html">sizeof</a>(T)&lt;=8), <a class="el" href="classNode.html">uint32_t</a>, <a class="el" href="classNode.html">uint128_t</a> &gt; &gt;</td></tr>
+<tr class="memitem:a2a5e7e1fb6c24a2b0a61d6644f5c5b6e" id="r_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBitmapKeyTraits.html#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">prefix_t</a> = std::conditional_t&lt; std::same_as&lt; <a class="el" href="classNode.html">mpz_class</a>, T &gt;, <a class="el" href="classNode.html">mpz_class</a>, std::conditional_t&lt;(<a class="el" href="classNode.html">sizeof</a>(T)&lt;=8), <a class="el" href="classNode.html">uint32_t</a>, <a class="el" href="classNode.html">uint128_t</a> &gt; &gt;</td></tr>
+<tr class="memdesc:a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prefix for a <code><a class="el" href="classFlatHashBitmapImpl.html" title="An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap.">FlatHashBitmapImpl</a></code>.  <br /></td></tr>
 <tr class="separator:a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24ed0ea22179b5ee2f846108591ef5de" id="r_a24ed0ea22179b5ee2f846108591ef5de"><td class="memItemLeft" align="right" valign="top"><a id="a24ed0ea22179b5ee2f846108591ef5de" name="a24ed0ea22179b5ee2f846108591ef5de"></a>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>roaring_key_t</b> = <a class="el" href="classNode.html">uint16_t</a></td></tr>
+<tr class="memdesc:a24ed0ea22179b5ee2f846108591ef5de"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's key type size is 16 bits. <br /></td></tr>
 <tr class="separator:a24ed0ea22179b5ee2f846108591ef5de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5cdfa11ee6ab20dcf940b8813229ba4" id="r_ae5cdfa11ee6ab20dcf940b8813229ba4"><td class="memItemLeft" align="right" valign="top"><a id="ae5cdfa11ee6ab20dcf940b8813229ba4" name="ae5cdfa11ee6ab20dcf940b8813229ba4"></a>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>roaring_value_t</b> = <a class="el" href="classNode.html">uint16_t</a></td></tr>
+<tr class="memdesc:ae5cdfa11ee6ab20dcf940b8813229ba4"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's value type size is 16 bits. <br /></td></tr>
 <tr class="separator:ae5cdfa11ee6ab20dcf940b8813229ba4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a423e043154d5cd52b2be40bc63830469" id="r_a423e043154d5cd52b2be40bc63830469"><td class="memItemLeft" align="right" valign="top"><a id="a423e043154d5cd52b2be40bc63830469" name="a423e043154d5cd52b2be40bc63830469"></a>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>roaring_typecode_t</b> = <a class="el" href="classNode.html">uint8_t</a></td></tr>
+<tr class="memdesc:a423e043154d5cd52b2be40bc63830469"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's typecode type size is 16 bits. <br /></td></tr>
 <tr class="separator:a423e043154d5cd52b2be40bc63830469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb4854df15b4e1325a4bac7e28e70876" id="r_adb4854df15b4e1325a4bac7e28e70876"><td class="memItemLeft" align="right" valign="top"><a id="adb4854df15b4e1325a4bac7e28e70876" name="adb4854df15b4e1325a4bac7e28e70876"></a>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>roaring_word_t</b> = <a class="el" href="classNode.html">uint64_t</a></td></tr>
+<tr class="memdesc:adb4854df15b4e1325a4bac7e28e70876"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's word type size is 64 bits. <br /></td></tr>
 <tr class="separator:adb4854df15b4e1325a4bac7e28e70876"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2ab5ac93ce33c8011f76fc8cab231893" id="r_a2ab5ac93ce33c8011f76fc8cab231893"><td class="memItemLeft" align="right" valign="top"><a id="a2ab5ac93ce33c8011f76fc8cab231893" name="a2ab5ac93ce33c8011f76fc8cab231893"></a>
-<a class="el" href="classNode.html">static</a> prefix_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_prefix</b> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memitem:a2ab5ac93ce33c8011f76fc8cab231893" id="r_a2ab5ac93ce33c8011f76fc8cab231893"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="structBitmapKeyTraits.html#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">prefix_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBitmapKeyTraits.html#a2ab5ac93ce33c8011f76fc8cab231893">get_prefix</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memdesc:a2ab5ac93ce33c8011f76fc8cab231893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the prefix for any type T. When mpz_class, TLS. See selection for prefix_t above.  <br /></td></tr>
 <tr class="separator:a2ab5ac93ce33c8011f76fc8cab231893"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c7e17a23d2e41f2838d527e24edbd43" id="r_a8c7e17a23d2e41f2838d527e24edbd43"><td class="memItemLeft" align="right" valign="top"><a id="a8c7e17a23d2e41f2838d527e24edbd43" name="a8c7e17a23d2e41f2838d527e24edbd43"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_prefix</b> (<a class="el" href="classNode.html">const</a> T &amp;value, prefix_t &amp;<a class="el" href="classNode.html">out</a>)</td></tr>
+<tr class="memitem:a8c7e17a23d2e41f2838d527e24edbd43" id="r_a8c7e17a23d2e41f2838d527e24edbd43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBitmapKeyTraits.html#a8c7e17a23d2e41f2838d527e24edbd43">get_prefix</a> (<a class="el" href="classNode.html">const</a> T &amp;value, <a class="el" href="structBitmapKeyTraits.html#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">prefix_t</a> &amp;<a class="el" href="classNode.html">out</a>)</td></tr>
+<tr class="memdesc:a8c7e17a23d2e41f2838d527e24edbd43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the prefix for any type T. When mpz_class, TLS. See selection for prefix_t above.  <br /></td></tr>
 <tr class="separator:a8c7e17a23d2e41f2838d527e24edbd43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e15a1b65daf2ac4fa63e0d3deaf3a9b" id="r_a0e15a1b65daf2ac4fa63e0d3deaf3a9b"><td class="memItemLeft" align="right" valign="top"><a id="a0e15a1b65daf2ac4fa63e0d3deaf3a9b" name="a0e15a1b65daf2ac4fa63e0d3deaf3a9b"></a>
-<a class="el" href="classNode.html">static</a> suffix_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_suffix</b> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memitem:a0e15a1b65daf2ac4fa63e0d3deaf3a9b" id="r_a0e15a1b65daf2ac4fa63e0d3deaf3a9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBitmapKeyTraits.html#a0e15a1b65daf2ac4fa63e0d3deaf3a9b">get_suffix</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memdesc:a0e15a1b65daf2ac4fa63e0d3deaf3a9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the suffix for any type <code>T</code>.  <br /></td></tr>
 <tr class="separator:a0e15a1b65daf2ac4fa63e0d3deaf3a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a6520ffa13b6aeb1fb7ca2f1c0c1ea142" id="r_a6520ffa13b6aeb1fb7ca2f1c0c1ea142"><td class="memItemLeft" align="right" valign="top"><a id="a6520ffa13b6aeb1fb7ca2f1c0c1ea142" name="a6520ffa13b6aeb1fb7ca2f1c0c1ea142"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_BYTES</b> = <a class="el" href="classNode.html">sizeof</a>(suffix_t)</td></tr>
+<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_BYTES</b> = <a class="el" href="classNode.html">sizeof</a>(<a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>)</td></tr>
+<tr class="memdesc:a6520ffa13b6aeb1fb7ca2f1c0c1ea142"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of bytes in <code>suffix_t</code>. <br /></td></tr>
 <tr class="separator:a6520ffa13b6aeb1fb7ca2f1c0c1ea142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a319eba2d881b3133e3621f3ce1a0218a" id="r_a319eba2d881b3133e3621f3ce1a0218a"><td class="memItemLeft" align="right" valign="top"><a id="a319eba2d881b3133e3621f3ce1a0218a" name="a319eba2d881b3133e3621f3ce1a0218a"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_BITS</b> = <a class="el" href="classNode.html">sizeof</a>(suffix_t) * 8</td></tr>
+<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_BITS</b> = <a class="el" href="classNode.html">sizeof</a>(<a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>) * 8</td></tr>
+<tr class="memdesc:a319eba2d881b3133e3621f3ce1a0218a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of bits in <code>suffix_t</code>. <br /></td></tr>
 <tr class="separator:a319eba2d881b3133e3621f3ce1a0218a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6280e805a4eb7fe52a680bb87074a7c" id="r_af6280e805a4eb7fe52a680bb87074a7c"><td class="memItemLeft" align="right" valign="top"><a id="af6280e805a4eb7fe52a680bb87074a7c" name="af6280e805a4eb7fe52a680bb87074a7c"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> suffix_t&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_MASK</b> = std::numeric_limits&lt;suffix_t&gt;<a class="el" href="classNode.html">::max</a>()</td></tr>
+<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_MASK</b> = std::numeric_limits&lt;<a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>&gt;<a class="el" href="classNode.html">::max</a>()</td></tr>
+<tr class="memdesc:af6280e805a4eb7fe52a680bb87074a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bitmask for <code>suffix_t</code>. <br /></td></tr>
 <tr class="separator:af6280e805a4eb7fe52a680bb87074a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8f3482cb20cfcd2444ac2772b9cfcb2" id="r_af8f3482cb20cfcd2444ac2772b9cfcb2"><td class="memItemLeft" align="right" valign="top"><a id="af8f3482cb20cfcd2444ac2772b9cfcb2" name="af8f3482cb20cfcd2444ac2772b9cfcb2"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> suffix_t&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_MAX</b> = std::numeric_limits&lt;suffix_t&gt;<a class="el" href="classNode.html">::max</a>()</td></tr>
+<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SUFFIX_MAX</b> = std::numeric_limits&lt;<a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a>&gt;<a class="el" href="classNode.html">::max</a>()</td></tr>
+<tr class="memdesc:af8f3482cb20cfcd2444ac2772b9cfcb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum value for <code>suffix_t</code>. <br /></td></tr>
 <tr class="separator:af8f3482cb20cfcd2444ac2772b9cfcb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a6c2a92f61a8054e6646e12b9d46d3" id="r_ae6a6c2a92f61a8054e6646e12b9d46d3"><td class="memItemLeft" align="right" valign="top"><a id="ae6a6c2a92f61a8054e6646e12b9d46d3" name="ae6a6c2a92f61a8054e6646e12b9d46d3"></a>
 <a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ROARING_KEY_BITS</b> = 16</td></tr>
+<tr class="memdesc:ae6a6c2a92f61a8054e6646e12b9d46d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's bit size for keys (32-bit version). <br /></td></tr>
 <tr class="separator:ae6a6c2a92f61a8054e6646e12b9d46d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd7ac7a0a09f35d6e7d6ef33a8fa17de" id="r_abd7ac7a0a09f35d6e7d6ef33a8fa17de"><td class="memItemLeft" align="right" valign="top"><a id="abd7ac7a0a09f35d6e7d6ef33a8fa17de" name="abd7ac7a0a09f35d6e7d6ef33a8fa17de"></a>
 <a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ROARING_VALUE_BITS</b> = 16</td></tr>
+<tr class="memdesc:abd7ac7a0a09f35d6e7d6ef33a8fa17de"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's bit size for values (32-bit version). <br /></td></tr>
 <tr class="separator:abd7ac7a0a09f35d6e7d6ef33a8fa17de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d6c0f043dfdd6dfaa57ee8b7ed5c471" id="r_a1d6c0f043dfdd6dfaa57ee8b7ed5c471"><td class="memItemLeft" align="right" valign="top"><a id="a1d6c0f043dfdd6dfaa57ee8b7ed5c471" name="a1d6c0f043dfdd6dfaa57ee8b7ed5c471"></a>
 <a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ROARING_WORD_BITS</b> = 64</td></tr>
+<tr class="memdesc:a1d6c0f043dfdd6dfaa57ee8b7ed5c471"><td class="mdescLeft">&#160;</td><td class="mdescRight">CRoaring's bit size for words. <br /></td></tr>
 <tr class="separator:a1d6c0f043dfdd6dfaa57ee8b7ed5c471"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
+struct BitmapKeyTraits&lt; T &gt;</div><p>Helpers to handle prefix and suffix keys for the hash map. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a2a5e7e1fb6c24a2b0a61d6644f5c5b6e" name="a2a5e7e1fb6c24a2b0a61d6644f5c5b6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">&#9670;&#160;</a></span>prefix_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">using</a> <a class="el" href="structBitmapKeyTraits.html">BitmapKeyTraits</a>&lt; T &gt;::prefix_t =  std::conditional_t&lt; std::same_as&lt;<a class="el" href="classNode.html">mpz_class</a>, T&gt; , <a class="el" href="classNode.html">mpz_class</a> , std::conditional_t&lt; (<a class="el" href="classNode.html">sizeof</a>(T) &lt;= 8) , <a class="el" href="classNode.html">uint32_t</a> , <a class="el" href="classNode.html">uint128_t</a> &gt; &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Prefix for a <code><a class="el" href="classFlatHashBitmapImpl.html" title="An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap.">FlatHashBitmapImpl</a></code>. </p>
+<p>Prefixes fall into these categories:</p><ol type="1">
+<li>When <code>T</code> is an <code>mpz_class</code>, prefix will be <code>mpz_class</code>.</li>
+<li>When <code>T</code> is less than or equal to 64 bits, prefix will be <code>uint32_t</code>.</li>
+<li>All others, prefix will be <code>uint128_t</code>. </li>
+</ol>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2ab5ac93ce33c8011f76fc8cab231893" name="a2ab5ac93ce33c8011f76fc8cab231893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ab5ac93ce33c8011f76fc8cab231893">&#9670;&#160;</a></span>get_prefix() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="structBitmapKeyTraits.html#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">prefix_t</a> <a class="el" href="structBitmapKeyTraits.html">BitmapKeyTraits</a>&lt; T &gt;::get_prefix </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the prefix for any type T. When mpz_class, TLS. See selection for prefix_t above. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to shift to derive a prefix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The prefix for <code>value</code>, as a <code>prefix_t</code> type. </dd></dl>
+
+</div>
+</div>
+<a id="a8c7e17a23d2e41f2838d527e24edbd43" name="a8c7e17a23d2e41f2838d527e24edbd43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7e17a23d2e41f2838d527e24edbd43">&#9670;&#160;</a></span>get_prefix() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="structBitmapKeyTraits.html">BitmapKeyTraits</a>&lt; T &gt;::get_prefix </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBitmapKeyTraits.html#a2a5e7e1fb6c24a2b0a61d6644f5c5b6e">prefix_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the prefix for any type T. When mpz_class, TLS. See selection for prefix_t above. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to shift to derive a prefix. </td></tr>
+    <tr><td class="paramname">out</td><td>Reference to a <code>prefix_t</code> where the prefix will be saved. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0e15a1b65daf2ac4fa63e0d3deaf3a9b" name="a0e15a1b65daf2ac4fa63e0d3deaf3a9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e15a1b65daf2ac4fa63e0d3deaf3a9b">&#9670;&#160;</a></span>get_suffix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="structBitmapKeyTraits.html#ae9de767304b495420f30027f3fc78dd9">suffix_t</a> <a class="el" href="structBitmapKeyTraits.html">BitmapKeyTraits</a>&lt; T &gt;::get_suffix </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the suffix for any type <code>T</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to mask to derive a suffix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The suffix for <code>value</code>, as a <code>suffix_t</code> type. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="node__bitmap__traits_8hpp_source.html">node_bitmap_traits.hpp</a></li>
 </ul>

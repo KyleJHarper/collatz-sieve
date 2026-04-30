@@ -154,7 +154,6 @@ set(TESTS
     node_bitmap_class
     binary_tree_class
     forward_looking_cache_class
-    sieve_class
 )
 
 enable_testing()

@@ -9,33 +9,37 @@
 
 
 
-//
-// Stream Helper
-// Assist with serializing data, deserializing data, and providing feedback when failures occur without throwing.
-//
-// BIG FAT NOTE!
-// We *only* write and read in little-endian.  The end.
-//
+/**
+* @class StreamHelper
+* @brief Assists with serializing data, deserializing data, and providing feedback when failures occur without throwing.
+* @note This class only writes in little-endian (it'll `bwsap` for you), and expects data from sources in little-endian.
+*/
 class StreamHelper {
     private:
+    /// @brief Pointer to the input stream from reading data.
     std::istream* _in_ptr = nullptr;
+    /// @brief Pointer to the output stream when writing data.
     std::ostream* _out_ptr = nullptr;
+    /// @brief Pointer to an error string, where problems can be stored if found.
     std::string* _err_ptr = nullptr;
+    /// @brief A category to append to each message sent to `_err_ptr`.
     std::string _category = "Uncategorized";
-    static constexpr uint64_t _READ_WRITE_LIMIT = 1ULL << 30;  // ~1GB
+    /// *@brief A cap on data reading to prevent misuse or bugs eating RAM.  ~1GB.
+    static constexpr uint64_t _READ_WRITE_LIMIT = 1ULL << 30;
 
 
 
-    //
-    // Get Out
-    // Private helper to use out and apply a null check
-    //
+    /// @brief Private helper to use '_out_ptr` and apply a null check
     std::ostream& get_out() {
         if (_out_ptr == nullptr) {
             throw std::logic_error("Out stream is not defined (nullptr).  Cannot write to it.");
         }
         return *_out_ptr;
     }
+
+
+
+    /// @brief Private helper to use `_in_ptr` and apply a null check.
     //
     // Same for in.
     std::istream& get_in() {
@@ -48,44 +52,57 @@ class StreamHelper {
 
 
     public:
+    /// @name Lifecycle Management
+    /// @{
+
+    /**
+    * @brief Basic constructor.
+    * @param in Pointer to an input stream for read operations.  Send `nullptr` if not needed.
+    * @param out Pointer to an output stream for read operations.  Send `nullptr` if not needed.
+    * @param err Pointer to a string where errors can be written.  If `nullptr`, ignored.
+    */
     StreamHelper(std::istream* in, std::ostream* out, std::string* err = nullptr) {
         _in_ptr = in;
         _out_ptr = out;
         _err_ptr = err;
     }
 
+    /// @}
 
 
-    //
-    // Set Category
-    // Specify a category name to help disinguish where you're calling from.
-    //
+
+    /// @brief Specify a category name to help disinguish where you're calling from.
     void set_category(const std::string& category) {
         _category = category;
     }
 
 
 
-    //
-    // Early-exit helper.  Emits a message and returns false for caller's flow-control.
-    //
+    /**
+    * @brief Early-exit helper.  Emits a message and returns false for caller's flow-control.
+    * @note This method does not throw.  Do not discard.
+    * @param msg Details about the problem.  Will be prepended by the `_category`.  Ignored if `_err_ptr = nullptr`.
+    * @return False, always.
+    */
     [[nodiscard]] bool fail(const std::string& msg) {
         if (_err_ptr) {
             if (! _err_ptr->empty()) {
                 *_err_ptr += " -> ";
             }
             *_err_ptr += "[" + _category + "] " + msg;
-
         }
         return false;
     };
 
 
 
-    //
-    // Write Bytes
-    // Generic helper to write bytes from any pointer location up to `size` bytes.
-    //
+    /**
+    * @brief Generic helper to write bytes from any pointer location up to `size` bytes.
+    * @note This method does not throw.  Do not discard.
+    * @param data Any contiguous data writable by `reinterpret_cast<const char*>`.
+    * @param size The number of bytes to write.
+    * @return True if successful, false otherwise.
+    */
     [[nodiscard]] bool write_bytes(const void* data, const uint64_t size) {
         if (size > _READ_WRITE_LIMIT) {
             return fail("Unable to write more than " + std::to_string(_READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
@@ -100,10 +117,13 @@ class StreamHelper {
 
 
 
-    //
-    // Read Bytes
-    // Generic helper to read bytes from any pointer location up to `size` bytes.
-    //
+    /**
+    * @brief Generic helper to read bytes from any pointer location up to `size` bytes.
+    * @note This method does not throw.  Do not discard.
+    * @param data Any contiguous data readable by `reinterpret_cast<const char*>`.
+    * @param size The number of bytes to write.
+    * @return True if successful, false otherwise.
+    */
     [[nodiscard]] bool read_bytes(void* data, const uint64_t size) {
         if (size > _READ_WRITE_LIMIT) {
             return fail("Unable to read more than " + std::to_string(_READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
@@ -118,14 +138,19 @@ class StreamHelper {
 
 
 
-    //
-    // Serialize Integral
-    // Will serialize any integral of type T.  When type is fixed-width, the caller is expected to deserialize using the same type
-    // to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream.  When the type is
-    // variable length (mpz_class), we will emit sign and (if non-zero) chunk count and then limb data.
-    //
-    // Note, you must use a GuaranteedWidthIntegral.  Things like size_t and int/uint are not portable.
-    //
+    /**
+    * @brief Serialize any supported integral of type `T`.
+    *
+    * Will serialize any integral of type `T`.  When type is fixed-width, the caller is expected to deserialize using the same type
+    * to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream.  When the type is
+    * variable length (mpz_class), this will emit sign and (if non-zero) chunk count and then limb data.
+    *
+    * @note This method does not throw.  Do not discard.
+    * @note When using fixed-width, caller must use a `GuaranteedWidthIntegral`.  Things like size_t and int/uint are not portable.
+    * @param value The value to serialize.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @return True if successful, false otherwise.
+    */
     template<AnySupportedIntegral T>
     [[nodiscard]] bool serialize_integral(const T& value) {
         std::ostream& out = get_out();
@@ -147,7 +172,7 @@ class StreamHelper {
                 return fail("MPZ sign serialize failed");
             }
 
-            // When zero, we can just skip anything else.
+            // When zero, just skip anything else.
             if (sign == 0) {
                 return true;
             }
@@ -157,9 +182,9 @@ class StreamHelper {
             std::vector<uint8_t> buffer(mpz_sizeinbase(value.get_mpz_t(), 2) / 8 + 1);
             mpz_export(
                 buffer.data(),
-                &size,           // Track the count for writing later.
+                &size,            // Track the count for writing later.
                 -1,               // Least significant word first.
-                sizeof(uint8_t),  // We're using 1-byte at a time.
+                sizeof(uint8_t),  // Using 1-byte at a time.
                 -1,               // Least significant byte first
                 0,
                 value.get_mpz_t()
@@ -182,16 +207,19 @@ class StreamHelper {
 
 
 
-    //
-    // Deserialize Integral
-    // Will deserialize any integral of type T from "in".  When the type of T is fixed-width, this function uses the sizeof(T) to
-    // determine how many bytes to read.  When T is variable length (mpz_class), it will expect a 8 bytes (unit64_t) to indicate
-    // how many bytes of limb data should be read next.
-    //
-    // We will write the result to a return value (rv) to avoid allocs on the GMP path.
-    //
-    // Note, you must use a GuaranteedWidthIntegral.  Things like size_t and int/uint are not portable.
-    //
+    /**
+    * @brief Deserialize any supported integral of type `T`.
+    *
+    * Will deserialize any integral of type `T`.  When type is fixed-width, the caller is expected to deserialize using the same
+    * type to ensure the correct number of bytes are read, and therefore no size data is expected in the istream.  When the type is
+    * variable length (mpz_class), this will expect a sign and (if non-zero) chunk count and then limb data.
+    *
+    * @note This method does not throw.  Do not discard.
+    * @note When using fixed-width, caller must use a `GuaranteedWidthIntegral`.  Things like size_t and int/uint are not portable.
+    * @param rv Reference to the caller's memory to deserialize into.  Avoids GMP alloc().
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @return True if successful, false otherwise.
+    */
     template<AnySupportedIntegral T>
     [[nodiscard]] bool deserialize_integral(T& rv) {
         std::istream& in = get_in();
@@ -252,11 +280,16 @@ class StreamHelper {
 
 
 
-    //
-    // Serialize Bool
-    // AFAIK, bool types are not guaranteed to be 1 byte.  When serializing/deserializing them, enforce it by casting to uint8_t.
-    // Lean on integral version for endian logic.
-    //
+    /**
+    * @brief Serialize boolean values.
+    *
+    * Serializes a boolean value, making sure to convert it to a `uint8_t` since bool types are not guaranteed to be a whole byte,
+    * especially when bit-packing is involved.
+    *
+    * @note This method does not throw.  Do not discard.
+    * @param value The value to serialize.
+    * @return True if successful, false otherwise.
+    */
     [[nodiscard]] bool serialize_bool(const bool& value) {
         uint8_t u8_value = value ? 1 : 0;
         if (! serialize_integral(u8_value)) {
@@ -267,12 +300,16 @@ class StreamHelper {
 
 
 
-    //
-    // Deserialize Bool
-    // AFAIK, bool types are not guaranteed to be 1 byte.  When serializing/deserializing them, enforce it by casting to uint8_t.
-    // We'll use a return value (rv) to match others.
-    // Lean on integral version for endian logic.
-    //
+    /**
+    * @brief Deserialize boolean values.
+    *
+    * Deserializes a boolean value, making sure to convert it from a `uint8_t` since bool types are not guaranteed to be a whole
+    * byte, especially when bit-packing is involved.
+    *
+    * @note This method does not throw.  Do not discard.
+    * @param rv Reference to caller's memory to update.
+    * @return True if successful, false otherwise.
+    */
     [[nodiscard]] bool deserialize_bool(bool& rv) {
         uint8_t u8_rv;
         if (! deserialize_integral(u8_rv)) {
@@ -284,12 +321,14 @@ class StreamHelper {
 
 
 
-    //
-    // ByteSwap
-    // Perform a standard bswap on any builtin type.  Requires __builtin_bswapXX().
-    //
+    /**
+    * @brief Simple `bswap` helper.  Handles 8, 16, 32, 64, and 128 bit.
+    * @param value Reference value to operate on.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @return The bswap'd version, typed to matching `T`.
+    */
     template<BuiltinIntegral T>
-    static T byteswap(T value) {
+    static T byteswap(T& value) {
         if constexpr (sizeof(T) == 1) {
             return value;
         } else if constexpr (sizeof(T) == 2) {

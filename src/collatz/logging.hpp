@@ -10,90 +10,47 @@
 #include <algorithm>
 
 
-//
-// Basic wrapper to get spdlog and make formatting consistent.
-//
+/// @brief Basic wrapper to get spdlog and make formatting consistent.
 extern std::shared_ptr<spdlog::logger> logger;
 
-// Function to initialize it
+/// @brief Forward declare an initializer.
 void init_logger();
 
-//
-// BIG FAT NOTE!
-// The following two methods are simple, basic functions for printing GMP (mpz_class/mpf_class) items with spdlog, which is using
-// fmt under the hood.  It's solid and works.
-//
-// The remaining functions are AI slop!
-// To get better formatting support (thousands separator, etc) I asked AI to slop out something, and after much wailing and
-// gnashing of teeth, it gave something close-ish, and I got it to work.  I have zero faith in it to be complete, bug-free, and
-// performant.  But since it's just logging crap, I don't care.  If it's ever a problem, just delete it and revert to the two solid
-// methods below.
-//
-
-
-// //
-// // Custom formatter for mpz_class
-// //
-// template <>
-// struct fmt::formatter<mpz_class> : fmt::formatter<std::string> {
-//     constexpr auto parse(fmt::format_parse_context& ctx) {
-//         return ctx.begin();
-//     }
-
-//     template <typename FormatContext>
-//     auto format(const mpz_class& value, FormatContext& ctx) const {
-//         // Convert mpz_class to string using get_str()
-//         return fmt::format_to(ctx.out(), "{}", value.get_str());
-//     }
-// };
-// //
-// // And for mpf
-// //
-// template <>
-// struct fmt::formatter<mpf_class> : fmt::formatter<std::string> {
-//     constexpr auto parse(fmt::format_parse_context& ctx) {
-//         return ctx.begin();
-//     }
-
-//     template <typename FormatContext>
-//     auto format(const mpf_class& value, FormatContext& ctx) const {
-//         // Use long type for base and precision
-//         mp_exp_t exp = 10;
-//         std::string str = value.get_str(exp);
-//         return fmt::format_to(ctx.out(), "{}", str);
-//     }
-// };
 
 
 
 
-
-//
-// Int 128 Support
-//
-// Signed
+/**
+* @struct fmt::formatter<int128_t>
+* @brief Converts `int128_t` types to string for logging.
+*/
 template <>
-struct fmt::formatter<__int128_t> : fmt::formatter<std::string> {
-    auto format(const __int128_t& value, format_context& ctx) const {
+struct fmt::formatter<int128_t> : fmt::formatter<std::string> {
+    auto format(const int128_t& value, format_context& ctx) const {
         return fmt::formatter<std::string>::format(int128_to_string(value), ctx);
     }
 };
-//
-// Unsigned
+
+
+
+/**
+* @struct fmt::formatter<uint128_t>
+* @brief Converts `uint128_t` types to string for logging.
+*/
 template <>
-struct fmt::formatter<unsigned __int128> : fmt::formatter<std::string> {
-    auto format(const unsigned __int128& value, format_context& ctx) const {
+struct fmt::formatter<uint128_t> : fmt::formatter<std::string> {
+    auto format(const uint128_t& value, format_context& ctx) const {
         return fmt::formatter<std::string>::format(uint128_to_string(value), ctx);
     }
 };
 
 
 
-
-
-//
-// mpz_class formatter – handles grouping (apostrophe), width, alignment and the common integer bases.
-//
+/**
+* @struct fmt::formatter<mpz_class>
+* @brief Converts `mpz_class` types to string for logging.
+* @warning This is AI garbage as a stop-gap.  It's fragile and needs refactoring.
+*/
 template <>
 struct fmt::formatter<mpz_class> {
     // store the raw spec (the characters between ':' and '}')
@@ -208,10 +165,13 @@ struct fmt::formatter<mpz_class> {
     }
 };
 
-//
-// mpf_class formatter — full float-style support (precision + f/e/g + grouping + width/align)
-// (This is a minimal but practical implementation; it mirrors the logic we used earlier but avoids delegating parsing to a string formatter.)
-//
+
+
+/**
+* @struct fmt::formatter<mpf_class>
+* @brief Converts `mpf_class` types to string for logging.
+* @warning This is AI garbage as a stop-gap.  It's fragile and needs refactoring.
+*/
 template <>
 struct fmt::formatter<mpf_class> {
     std::string_view spec_;

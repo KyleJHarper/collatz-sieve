@@ -2,6 +2,15 @@
 \hypertarget{classzstd__ostream}{}\label{classzstd__ostream}\index{zstd\_ostream@{zstd\_ostream}}
 
 
+Creates an ostream subclass and connects it to a {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} so it may be passed around like a normal ostream.  
+
+
+
+
+{\ttfamily \#include $<$zstd\+\_\+compress.\+hpp$>$}
+
+
+
 Inheritance diagram for zstd\+\_\+ostream\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -21,24 +30,55 @@ Collaboration diagram for zstd\+\_\+ostream\+:\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classzstd__ostream_ae6f6cf96594a22e916d18c5f1c9c3a4b}\label{classzstd__ostream_ae6f6cf96594a22e916d18c5f1c9c3a4b} 
-{\bfseries zstd\+\_\+ostream} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
-\Hypertarget{classzstd__ostream_a68db1916ccd749a8c5dc5f823c537049}\label{classzstd__ostream_a68db1916ccd749a8c5dc5f823c537049} 
-\mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
-\Hypertarget{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392}\label{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392} 
-{\bfseries zstd\+\_\+ostream} (std\+::ostream \&\mbox{\hyperlink{classNode}{underlying}}, \mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{level}})
-\item 
 \Hypertarget{classzstd__ostream_ad23c25fdb6947fec87fbb59f6cebdc27}\label{classzstd__ostream_ad23c25fdb6947fec87fbb59f6cebdc27} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries finalize} ()
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Expose finalize for the streambuf. Nothing more. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classzstd__ostream_ae6f6cf96594a22e916d18c5f1c9c3a4b}\label{classzstd__ostream_ae6f6cf96594a22e916d18c5f1c9c3a4b} 
+{\bfseries zstd\+\_\+ostream} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
+\Hypertarget{classzstd__ostream_a68db1916ccd749a8c5dc5f823c537049}\label{classzstd__ostream_a68db1916ccd749a8c5dc5f823c537049} 
+\mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostream}{zstd\+\_\+ostream}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392}{zstd\+\_\+ostream}} (std\+::ostream \&\mbox{\hyperlink{classNode}{underlying}}, \mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{level}})
+\begin{DoxyCompactList}\small\item\em Constructor takes an underlying ostream to connect with a {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c}\label{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c} 
 \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} {\bfseries \+\_\+buffer}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The actual streambuf to send data in/out of, connected to this objects {\ttfamily rdbuf}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creates an ostream subclass and connects it to a {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} so it may be passed around like a normal ostream. 
+
+This class largely just wraps the {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} to make writing ZSTD data easier. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392}\label{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392} 
+\index{zstd\_ostream@{zstd\_ostream}!zstd\_ostream@{zstd\_ostream}}
+\index{zstd\_ostream@{zstd\_ostream}!zstd\_ostream@{zstd\_ostream}}
+\doxysubsubsection{\texorpdfstring{zstd\_ostream()}{zstd\_ostream()}}
+{\footnotesize\ttfamily zstd\+\_\+ostream\+::zstd\+\_\+ostream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{underlying,  }\item[{\mbox{\hyperlink{classNode}{int}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor takes an underlying ostream to connect with a {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}}. 
+
+\begin{DoxyNote}{Note}
+Details about compression level and behavior are in the {\ttfamily \doxylink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} documentation. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em underlying} & The destination ostream where ZSTD should send compressed data. \\
+\hline
+{\em level} & The compression level to use. \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

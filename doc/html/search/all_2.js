@@ -12,5 +12,6 @@ var searchData=
   ['bitmapkeytraits_9',['BitmapKeyTraits',['../structBitmapKeyTraits.html',1,'']]],
   ['booleans_5fequal_10',['booleans_equal',['../classEqualityHelper.html#ab054df866a778a5a6b2344ec436cf6dd',1,'EqualityHelper']]],
   ['build_5fstride_5ftable_11',['build_stride_table',['../namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f',1,'AffineStride']]],
-  ['builtinintegral_12',['BuiltinIntegral',['../conceptBuiltinIntegral.html',1,'']]]
+  ['builtinintegral_12',['BuiltinIntegral',['../conceptBuiltinIntegral.html',1,'']]],
+  ['byteswap_13',['byteswap',['../classStreamHelper.html#a861d9f8099cebfdb63a8984500d80427',1,'StreamHelper']]]
 ];

@@ -194,7 +194,7 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b
 <tr class="memdesc:a50dadcccf0fa007fc9d89fbee2ecd9d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches <code><a class="el" href="classBinaryTree.html#a50dadcccf0fa007fc9d89fbee2ecd9d7" title="Attaches is_materialized() if using the BinaryTreeMaterializedImpl.">is_materialized()</a></code> if using the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code>. <br /></td></tr>
 <tr class="separator:a50dadcccf0fa007fc9d89fbee2ecd9d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db608de5a943ddb8724cdd625994684" id="r_a0db608de5a943ddb8724cdd625994684"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">const</a> std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a0db608de5a943ddb8724cdd625994684">get_level_map</a> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:a0db608de5a943ddb8724cdd625994684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html">Node</a></code> objects.  <br /></td></tr>
+<tr class="memdesc:a0db608de5a943ddb8724cdd625994684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects.  <br /></td></tr>
 <tr class="separator:a0db608de5a943ddb8724cdd625994684"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a028f3dc27a7db896d94c5ced6f5b59f6" id="r_a028f3dc27a7db896d94c5ced6f5b59f6"><td class="memItemLeft" align="right" valign="top"><a id="a028f3dc27a7db896d94c5ced6f5b59f6" name="a028f3dc27a7db896d94c5ced6f5b59f6"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_hwm_nodes</b> () <a class="el" href="classNode.html">const</a></td></tr>
@@ -223,7 +223,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:acc70aa25a1642c7872409fa138b25881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two trees of any type and return true if identical.  <br /></td></tr>
 <tr class="separator:acc70aa25a1642c7872409fa138b25881"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9d121074abd5cd4af76e49a651cb226" id="r_ab9d121074abd5cd4af76e49a651cb226"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#ab9d121074abd5cd4af76e49a651cb226">st_generate_node_at</a> (level_t <a class="el" href="classNode.html">level</a>, T <a class="el" href="classNode.html">position</a>)</td></tr>
-<tr class="memdesc:ab9d121074abd5cd4af76e49a651cb226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a <code><a class="el" href="classNode.html">Node</a></code> at the level and position specified. It will not be part of any tree.  <br /></td></tr>
+<tr class="memdesc:ab9d121074abd5cd4af76e49a651cb226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> at the level and position specified. It will not be part of any tree.  <br /></td></tr>
 <tr class="separator:ab9d121074abd5cd4af76e49a651cb226"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -239,10 +239,10 @@ class BinaryTree&lt; T, TreeType &gt;</div><p>The <a class="el" href="classBinar
 <p>This static facade will build a binary tree using the child values (labels) defined in Harper's research, which will find and remove any nodes whose FG-chain reaches the High-Water Mark, eliminating subtrees.</p>
 <p>Users may choose the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> or the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code>.</p>
 <p>The <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> is a true, memory-backed tree with nodes connected via edges (pointers). It is extremely heavy in RAM, but its saving grace is that it's a true binary tree which users can walk and analyze. If pruning is enabled, nodes are removed according to the pruning policy, leaving what is technically a directed acyclic graph (DAG).</p>
-<p>The <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> is a mathematically equivalent tree, and is the default as of version 4.0.0. It uses significantly less memory by foregoing nodes in favor of a <code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code> which tracks the uncovered positions: the leaf node positions of the tree which haven't been pruned by a High-Water Mark ancestor yet.</p>
+<p>The <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> is a mathematically equivalent tree, and is the default as of version 4.0.0. It uses significantly less memory by foregoing nodes in favor of a <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> which tracks the uncovered positions: the leaf node positions of the tree which haven't been pruned by a High-Water Mark ancestor yet.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see concepts.hpp). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
     <tr><td class="paramname">TreeType</td><td>The implementation type (with type T nested) to use for the <code>_impl</code> member. </td></tr>
   </table>
   </dd>
@@ -372,7 +372,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">level</td><td>The level being added. </td></tr>
-    <tr><td class="paramname">is_verifying_hwm_nodes</td><td>Flag indicating if verification is enabled or not. </td></tr>
+    <tr><td class="paramname">is_verifying_non_hwm_nodes</td><td>Flag indicating if verification is enabled or not. </td></tr>
   </table>
   </dd>
 </dl>
@@ -491,7 +491,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html">Node</a></code> objects. </p>
+<p>Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects. </p>
 <dl class="section note"><dt>Note</dt><dd>Nodes are left-to-right by position, not node value. </dd></dl>
 
 </div>
@@ -684,7 +684,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
     <tr><td class="paramname">path</td><td>The string path to write to. When path is "-", will write to stdout. Throws error if stdout is a terminal. </td></tr>
     <tr><td class="paramname">compression_level</td><td>The Zstd compression level to apply. Options are:<ul>
 <li>0) No compression. A raw file.</li>
-<li>1-19) Zstd compression with normal range and end-directives (see Zstd internal.h).</li>
+<li>1-19) Zstd compression with normal range and end-directives (see Zstd <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">internal.h</a>).</li>
 <li>20-22) Zstd compression with long distance matching enabled and end-directive set to "flush" for better threading. </li>
 </ul>
 </td></tr>
@@ -805,7 +805,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <li>The is_initialized flag.</li>
 <li>Coverage map.</li>
 <li>Ancestors (if enabled).</li>
-<li>Implementation-specific checks from <code>TreeType::st_equal()</code>.</li>
+<li>Implementation-specific checks from <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">TreeType::st_equal()</a></code>.</li>
 </ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -855,7 +855,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Generate a <code><a class="el" href="classNode.html">Node</a></code> at the level and position specified. It will not be part of any tree. </p>
+<p>Generate a <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> at the level and position specified. It will not be part of any tree. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">level</td><td>The level of the node. </td></tr>
@@ -863,7 +863,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to a <code><a class="el" href="classNode.html">Node</a></code> object, not associated with any tree. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to a <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> object, not associated with any tree. </dd></dl>
 
 </div>
 </div>

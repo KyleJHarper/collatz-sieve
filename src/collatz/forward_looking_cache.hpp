@@ -29,13 +29,18 @@
 
 
 
-//
-// LRU Tracker
-// Tracks values in an LRU-style eviction.
-//
+/**
+* @class LRUTracker
+* @brief Tracks values in an LRU-style eviction.
+* @tparam Key A struct-like key used for caching...
+* @deprecated This whole HPP is cruft.
+*/
 template <typename Key>
 class LRUTracker {
     private:
+    /**
+    * @brief TODO...
+    */
     struct Node {
         size_t prev = SIZE_MAX;
         size_t next = SIZE_MAX;

@@ -83,49 +83,215 @@ $(function() {
   <div class="headertitle"><div class="title">Progress Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Writes data from a pointer location to a file on a regular schedule, keeping a progress.  
+ <a href="classProgress.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="progress_8hpp_source.html">progress.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7afceceb1d8cee8bcd9dd8a62aa239a" id="r_ab7afceceb1d8cee8bcd9dd8a62aa239a"><td class="memItemLeft" align="right" valign="top"><a id="ab7afceceb1d8cee8bcd9dd8a62aa239a" name="ab7afceceb1d8cee8bcd9dd8a62aa239a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Progress</b> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">file_path</a>)</td></tr>
-<tr class="separator:ab7afceceb1d8cee8bcd9dd8a62aa239a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11fb7247afea0ef534ade36e1bc0a664" id="r_a11fb7247afea0ef534ade36e1bc0a664"><td class="memItemLeft" align="right" valign="top"><a id="a11fb7247afea0ef534ade36e1bc0a664" name="a11fb7247afea0ef534ade36e1bc0a664"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Progress</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classProgress.html">Progress</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
-<tr class="separator:a11fb7247afea0ef534ade36e1bc0a664"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3db6fa941d753aa50f1c1a92d9c50f69" id="r_a3db6fa941d753aa50f1c1a92d9c50f69"><td class="memItemLeft" align="right" valign="top"><a id="a3db6fa941d753aa50f1c1a92d9c50f69" name="a3db6fa941d753aa50f1c1a92d9c50f69"></a>
-<a class="el" href="classProgress.html">Progress</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classProgress.html">Progress</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
-<tr class="separator:a3db6fa941d753aa50f1c1a92d9c50f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c51de1eae2fb7ebfc140cdec691d6d8" id="r_a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="memTemplParams" colspan="2"><a id="a9c51de1eae2fb7ebfc140cdec691d6d8" name="a9c51de1eae2fb7ebfc140cdec691d6d8"></a>
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
-<tr class="memitem:a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>writeline</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>)</td></tr>
+<tr class="memitem:a9c51de1eae2fb7ebfc140cdec691d6d8" id="r_a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
+<tr class="memitem:a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classProgress.html#a9c51de1eae2fb7ebfc140cdec691d6d8">writeline</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>)</td></tr>
+<tr class="memdesc:a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a line containing a timestamp prefix and the callers value in <code>x</code>.  <br /></td></tr>
 <tr class="separator:a9c51de1eae2fb7ebfc140cdec691d6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a026edf64122af98c19be8a3715dfc908" id="r_a026edf64122af98c19be8a3715dfc908"><td class="memTemplParams" colspan="2"><a id="a026edf64122af98c19be8a3715dfc908" name="a026edf64122af98c19be8a3715dfc908"></a>
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
-<tr class="memitem:a026edf64122af98c19be8a3715dfc908"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>monitor</b> (<a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>, <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">delay_seconds</a>=5)</td></tr>
+<tr class="memitem:a026edf64122af98c19be8a3715dfc908" id="r_a026edf64122af98c19be8a3715dfc908"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
+<tr class="memitem:a026edf64122af98c19be8a3715dfc908"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classProgress.html#a026edf64122af98c19be8a3715dfc908">monitor</a> (<a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>, <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">delay_seconds</a>=5)</td></tr>
+<tr class="memdesc:a026edf64122af98c19be8a3715dfc908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins monitoring the data referenced by <code>x</code> in a new thread.  <br /></td></tr>
 <tr class="separator:a026edf64122af98c19be8a3715dfc908"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac31348e3ea575becbb547d3c107cc964" id="r_ac31348e3ea575becbb547d3c107cc964"><td class="memTemplParams" colspan="2"><a id="ac31348e3ea575becbb547d3c107cc964" name="ac31348e3ea575becbb547d3c107cc964"></a>
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
-<tr class="memitem:ac31348e3ea575becbb547d3c107cc964"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>monitor_subtask</b> (<a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>, <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">delay_seconds</a>)</td></tr>
+<tr class="memitem:ac31348e3ea575becbb547d3c107cc964" id="r_ac31348e3ea575becbb547d3c107cc964"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </td></tr>
+<tr class="memitem:ac31348e3ea575becbb547d3c107cc964"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classProgress.html#ac31348e3ea575becbb547d3c107cc964">monitor_subtask</a> (<a class="el" href="classNode.html">AnyPrintable</a> &amp;<a class="el" href="classNode.html">x</a>, <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">delay_seconds</a>)</td></tr>
+<tr class="memdesc:ac31348e3ea575becbb547d3c107cc964"><td class="mdescLeft">&#160;</td><td class="mdescRight">The subtask running inside <code>_monitor_thread</code> after <code><a class="el" href="classProgress.html#a026edf64122af98c19be8a3715dfc908" title="Begins monitoring the data referenced by x in a new thread.">monitor()</a></code> is called. Should probably be private.  <br /></td></tr>
 <tr class="separator:ac31348e3ea575becbb547d3c107cc964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403ac17bf9336d034b2891ac7f16d199" id="r_a403ac17bf9336d034b2891ac7f16d199"><td class="memItemLeft" align="right" valign="top"><a id="a403ac17bf9336d034b2891ac7f16d199" name="a403ac17bf9336d034b2891ac7f16d199"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>join</b> ()</td></tr>
+<tr class="memdesc:a403ac17bf9336d034b2891ac7f16d199"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the monitoring thread by flagging it and calling join, if possible. <br /></td></tr>
 <tr class="separator:a403ac17bf9336d034b2891ac7f16d199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
+<tr class="memitem:a01d83f02dc49939dd5d14057932a8a8d" id="r_a01d83f02dc49939dd5d14057932a8a8d"><td class="memItemLeft" align="right" valign="top"><a id="a01d83f02dc49939dd5d14057932a8a8d" name="a01d83f02dc49939dd5d14057932a8a8d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Progress</b> ()</td></tr>
+<tr class="memdesc:a01d83f02dc49939dd5d14057932a8a8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:a01d83f02dc49939dd5d14057932a8a8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7afceceb1d8cee8bcd9dd8a62aa239a" id="r_ab7afceceb1d8cee8bcd9dd8a62aa239a"><td class="memItemLeft" align="right" valign="top"><a id="ab7afceceb1d8cee8bcd9dd8a62aa239a" name="ab7afceceb1d8cee8bcd9dd8a62aa239a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Progress</b> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">file_path</a>)</td></tr>
+<tr class="memdesc:ab7afceceb1d8cee8bcd9dd8a62aa239a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor taking a file path to write to. <br /></td></tr>
+<tr class="separator:ab7afceceb1d8cee8bcd9dd8a62aa239a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfa443f16958768636a59a560b625317" id="r_abfa443f16958768636a59a560b625317"><td class="memItemLeft" align="right" valign="top"><a id="abfa443f16958768636a59a560b625317" name="abfa443f16958768636a59a560b625317"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~Progress</b> ()</td></tr>
+<tr class="memdesc:abfa443f16958768636a59a560b625317"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor joins the monitoring thread and closes out handles. <br /></td></tr>
+<tr class="separator:abfa443f16958768636a59a560b625317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11fb7247afea0ef534ade36e1bc0a664" id="r_a11fb7247afea0ef534ade36e1bc0a664"><td class="memItemLeft" align="right" valign="top"><a id="a11fb7247afea0ef534ade36e1bc0a664" name="a11fb7247afea0ef534ade36e1bc0a664"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Progress</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classProgress.html">Progress</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a11fb7247afea0ef534ade36e1bc0a664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable copy and move operations. <br /></td></tr>
+<tr class="separator:a11fb7247afea0ef534ade36e1bc0a664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db6fa941d753aa50f1c1a92d9c50f69" id="r_a3db6fa941d753aa50f1c1a92d9c50f69"><td class="memItemLeft" align="right" valign="top"><a id="a3db6fa941d753aa50f1c1a92d9c50f69" name="a3db6fa941d753aa50f1c1a92d9c50f69"></a>
+<a class="el" href="classProgress.html">Progress</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classProgress.html">Progress</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a3db6fa941d753aa50f1c1a92d9c50f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable copy and move operations. <br /></td></tr>
+<tr class="separator:a3db6fa941d753aa50f1c1a92d9c50f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a67b8f98ca27a222965ccd51a8b43799f" id="r_a67b8f98ca27a222965ccd51a8b43799f"><td class="memItemLeft" align="right" valign="top"><a id="a67b8f98ca27a222965ccd51a8b43799f" name="a67b8f98ca27a222965ccd51a8b43799f"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_file_path</b></td></tr>
+<tr class="memdesc:a67b8f98ca27a222965ccd51a8b43799f"><td class="mdescLeft">&#160;</td><td class="mdescRight">String path written to. <br /></td></tr>
 <tr class="separator:a67b8f98ca27a222965ccd51a8b43799f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a940bb6a7698e40d9c93c13a4a099ea99" id="r_a940bb6a7698e40d9c93c13a4a099ea99"><td class="memItemLeft" align="right" valign="top"><a id="a940bb6a7698e40d9c93c13a4a099ea99" name="a940bb6a7698e40d9c93c13a4a099ea99"></a>
 std::thread&#160;</td><td class="memItemRight" valign="bottom"><b>_monitor_thread</b></td></tr>
+<tr class="memdesc:a940bb6a7698e40d9c93c13a4a099ea99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Background thread which sleeps and writes. <br /></td></tr>
 <tr class="separator:a940bb6a7698e40d9c93c13a4a099ea99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2c4e92db8b10d2b94d851e0c28a2ee5" id="r_ab2c4e92db8b10d2b94d851e0c28a2ee5"><td class="memItemLeft" align="right" valign="top"><a id="ab2c4e92db8b10d2b94d851e0c28a2ee5" name="ab2c4e92db8b10d2b94d851e0c28a2ee5"></a>
 std::atomic&lt; <a class="el" href="classNode.html">bool</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_stop</b> {<a class="el" href="classNode.html">false</a>}</td></tr>
+<tr class="memdesc:ab2c4e92db8b10d2b94d851e0c28a2ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stopping flag. <br /></td></tr>
 <tr class="separator:ab2c4e92db8b10d2b94d851e0c28a2ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f133870b4b81fadf89c929bb728cdc7" id="r_a0f133870b4b81fadf89c929bb728cdc7"><td class="memItemLeft" align="right" valign="top"><a id="a0f133870b4b81fadf89c929bb728cdc7" name="a0f133870b4b81fadf89c929bb728cdc7"></a>
 <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_sleep_duration_ms</b> = 100</td></tr>
+<tr class="memdesc:a0f133870b4b81fadf89c929bb728cdc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleep duration before emitting another progress report. <br /></td></tr>
 <tr class="separator:a0f133870b4b81fadf89c929bb728cdc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Writes data from a pointer location to a file on a regular schedule, keeping a progress. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a026edf64122af98c19be8a3715dfc908" name="a026edf64122af98c19be8a3715dfc908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a026edf64122af98c19be8a3715dfc908">&#9670;&#160;</a></span>monitor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> Progress::monitor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">AnyPrintable</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramname"><em>delay_seconds</em> = <code>5</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Begins monitoring the data referenced by <code>x</code> in a new thread. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">AnyPrintable</td><td>Any data type that is printable via a standard <code>&lt;&lt;</code> operator. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The reference to connect with the new monitoring thread. </td></tr>
+    <tr><td class="paramname">delay_seconds</td><td>How often to tell the monitoring thread to read <code>x</code> and write it out. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac31348e3ea575becbb547d3c107cc964" name="ac31348e3ea575becbb547d3c107cc964"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31348e3ea575becbb547d3c107cc964">&#9670;&#160;</a></span>monitor_subtask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> Progress::monitor_subtask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">AnyPrintable</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramname"><em>delay_seconds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The subtask running inside <code>_monitor_thread</code> after <code><a class="el" href="classProgress.html#a026edf64122af98c19be8a3715dfc908" title="Begins monitoring the data referenced by x in a new thread.">monitor()</a></code> is called. Should probably be private. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">AnyPrintable</td><td>Any data type that is printable via a standard <code>&lt;&lt;</code> operator. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9c51de1eae2fb7ebfc140cdec691d6d8" name="a9c51de1eae2fb7ebfc140cdec691d6d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c51de1eae2fb7ebfc140cdec691d6d8">&#9670;&#160;</a></span>writeline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">AnyPrintable</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> Progress::writeline </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">AnyPrintable</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes a line containing a timestamp prefix and the callers value in <code>x</code>. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">AnyPrintable</td><td>Any data type that is printable via a standard <code>&lt;&lt;</code> operator. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Reference to the data to write. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="progress_8hpp_source.html">progress.hpp</a></li>
 </ul>

@@ -98,9 +98,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8ec8104568aa78bb7757ef9c4b88348c" id="r_a8ec8104568aa78bb7757ef9c4b88348c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a8ec8104568aa78bb7757ef9c4b88348c">st_fg_chain_length</a> (<a class="el" href="classNode.html">level_t</a> <a class="el" href="classNode.html">level</a>)</td></tr>
-<tr class="memdesc:a8ec8104568aa78bb7757ef9c4b88348c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the FG chain length of a node on any level.  <br /></td></tr>
-<tr class="separator:a8ec8104568aa78bb7757ef9c4b88348c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8139f556292fce4501e9010174bddef" id="r_ac8139f556292fce4501e9010174bddef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac8139f556292fce4501e9010174bddef">st_fg_chain_length</a> (<a class="el" href="classNode.html">level_t</a> <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memdesc:ac8139f556292fce4501e9010174bddef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the FG chain length of a node on any level.  <br /></td></tr>
+<tr class="separator:ac8139f556292fce4501e9010174bddef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a745226452a9595b04aa58aac6564563c" id="r_a745226452a9595b04aa58aac6564563c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a745226452a9595b04aa58aac6564563c">st_bit_reverse_full</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">x</a>)</td></tr>
 <tr class="memdesc:a745226452a9595b04aa58aac6564563c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse the bits of any type <code>T</code> requested. Used largely for partial reversing later.  <br /></td></tr>
 <tr class="separator:a745226452a9595b04aa58aac6564563c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,7 +217,7 @@ class BinaryTreeMath&lt; T &gt;</div><p>The core algorithms supporting tree buil
 <p>The math for building a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> supports both 0- and 1-based trees. In the original research, trees rooted at zero were fine because manual research was still underway into patterns. Patterns aligned more cleanly with a tree rooted at one, and it also meant the tree contained the space of <a class="el" href="classCollatz.html">Collatz</a> Conjecture correctly (no zero). Therefore, 1-based trees became the defaul as of version 2.0.0. That said, 0-based trees are still possible by changing <code>BinaryTreeMath::set_root_value(0)</code>, however their performance and behavior is provided on a best-effort basis and might be removed later.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see concepts.hpp). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -292,8 +292,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a8ec8104568aa78bb7757ef9c4b88348c" name="a8ec8104568aa78bb7757ef9c4b88348c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ec8104568aa78bb7757ef9c4b88348c">&#9670;&#160;</a></span>st_fg_chain_length()</h2>
+<a id="ac8139f556292fce4501e9010174bddef" name="ac8139f556292fce4501e9010174bddef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8139f556292fce4501e9010174bddef">&#9670;&#160;</a></span>st_fg_chain_length()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,7 +304,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_fg_chain_length </td>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_fg_chain_length </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classNode.html">level_t</a>&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>

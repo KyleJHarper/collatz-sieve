@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['objectpool_0',['ObjectPool',['../classObjectPool.html',1,'']]]
+  ['peakivscanner_0',['PeakIVScanner',['../classPeakIVScanner.html',1,'']]],
+  ['peakivscannerresults_1',['PeakIVScannerResults',['../classPeakIVScannerResults.html',1,'']]],
+  ['progress_2',['Progress',['../classProgress.html',1,'']]]
 ];

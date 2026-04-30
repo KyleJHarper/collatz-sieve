@@ -1,5 +1,5 @@
 <map id="zstd_istreambuf" name="zstd_istreambuf">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,132,104"/>
+<area shape="rect" id="Node000001" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to decompress a stream." alt="" coords="5,79,132,104"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="10,5,127,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,44,71,79,66,79,66,44"/>
 </map>

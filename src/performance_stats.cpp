@@ -13,7 +13,6 @@
 #include <fstream>
 #include <unistd.h>
 #include "CLI.hpp"
-#include "collatz/sieve.hpp"
 using namespace std::chrono;
 
 //
@@ -114,51 +113,51 @@ duration<double, std::milli> tree_build_time(size_t levels, const BinaryTreeOpti
 
 
 
-//
-// Sieve Iteration Time
-//
-struct sieve_timings {
-    duration<double, std::milli> iterator;
-    duration<double, std::micro> pool_refill;
-    size_t refills;
-    size_t refill_fill_loops;
-    size_t premature_refills;
-};
-template<AnySupportedIntegral T>
-sieve_timings sieve_iteration_time(
-    size_t levels
-    , const SieveOptions& opts
-    , size_t iterations
-    , size_t batch_size
-) {
-    Sieve<T> sieve(levels, opts);
-    T result;
-    T dumb_work = 0;
-    std::vector<T> bulk(batch_size);
-    auto start = high_resolution_clock::now();
-    if (batch_size == 1) {
-        for (size_t i = 0; i < iterations; i += batch_size) {
-            sieve.next(result);
-            if(result > 0) { dumb_work += 1; }
-        }
-    } else {
-        for (size_t i = 0; i < iterations; i += batch_size) {
-            sieve.next(bulk);
-            for (size_t j = 0; j < batch_size; j++) {
-                if (bulk.at(j) > 0) { dumb_work += 1; }
-            }
-        }
-    }
-    auto end = high_resolution_clock::now();
-    duration<double, std::milli> duration = end - start;
-    sieve_timings st{};
-    st.iterator = duration;
-    st.pool_refill = sieve.get_pool_refill_time_us();
-    st.refills = sieve.get_pool_refills();
-    st.refill_fill_loops = sieve.get_pool_refill_fill_loops();
-    st.premature_refills = sieve.get_pool_premature_refills();
-    return st;
-}
+// //
+// // Sieve Iteration Time
+// //
+// struct sieve_timings {
+//     duration<double, std::milli> iterator;
+//     duration<double, std::micro> pool_refill;
+//     size_t refills;
+//     size_t refill_fill_loops;
+//     size_t premature_refills;
+// };
+// template<AnySupportedIntegral T>
+// sieve_timings sieve_iteration_time(
+//     size_t levels
+//     , const SieveOptions& opts
+//     , size_t iterations
+//     , size_t batch_size
+// ) {
+//     Sieve<T> sieve(levels, opts);
+//     T result;
+//     T dumb_work = 0;
+//     std::vector<T> bulk(batch_size);
+//     auto start = high_resolution_clock::now();
+//     if (batch_size == 1) {
+//         for (size_t i = 0; i < iterations; i += batch_size) {
+//             sieve.next(result);
+//             if(result > 0) { dumb_work += 1; }
+//         }
+//     } else {
+//         for (size_t i = 0; i < iterations; i += batch_size) {
+//             sieve.next(bulk);
+//             for (size_t j = 0; j < batch_size; j++) {
+//                 if (bulk.at(j) > 0) { dumb_work += 1; }
+//             }
+//         }
+//     }
+//     auto end = high_resolution_clock::now();
+//     duration<double, std::milli> duration = end - start;
+//     sieve_timings st{};
+//     st.iterator = duration;
+//     st.pool_refill = sieve.get_pool_refill_time_us();
+//     st.refills = sieve.get_pool_refills();
+//     st.refill_fill_loops = sieve.get_pool_refill_fill_loops();
+//     st.premature_refills = sieve.get_pool_premature_refills();
+//     return st;
+// }
 
 
 
@@ -245,15 +244,15 @@ int main(int argc, char **argv) {
     size_t bytes_per_node_mpz_c_implicit = tree_mpz_c_implicit.deep_size() / tree_mpz_c_implicit.node_count().get_ui();
 
     // Sieves
-    rss_t1 = getCurrentRSSBytes();
-    Sieve sieve_uint64_t = Sieve<uint64_t>(sieve_tree_levels);
-    size_t rss_uint64_t_sieve = getCurrentRSSBytes() - rss_t1;
-    rss_t1 = getCurrentRSSBytes();
-    Sieve sieve_uint128_t = Sieve<uint128_t>(sieve_tree_levels);
-    size_t rss_uint128_t_sieve = getCurrentRSSBytes() - rss_t1;
-    rss_t1 = getCurrentRSSBytes();
-    Sieve sieve_mpz_c = Sieve<mpz_class>(sieve_tree_levels);
-    size_t rss_mpz_c_sieve = getCurrentRSSBytes() - rss_t1;
+    // rss_t1 = getCurrentRSSBytes();
+    // Sieve sieve_uint64_t = Sieve<uint64_t>(sieve_tree_levels);
+    // size_t rss_uint64_t_sieve = getCurrentRSSBytes() - rss_t1;
+    // rss_t1 = getCurrentRSSBytes();
+    // Sieve sieve_uint128_t = Sieve<uint128_t>(sieve_tree_levels);
+    // size_t rss_uint128_t_sieve = getCurrentRSSBytes() - rss_t1;
+    // rss_t1 = getCurrentRSSBytes();
+    // Sieve sieve_mpz_c = Sieve<mpz_class>(sieve_tree_levels);
+    // size_t rss_mpz_c_sieve = getCurrentRSSBytes() - rss_t1;
 
     // RSS
     size_t rss_bytes_per_node_uint64_t_without_pruning = rss_uint64_t / tree_uint64_t_without_pruning.node_count();
@@ -292,24 +291,24 @@ int main(int argc, char **argv) {
     }
     std::cout << " done." << std::endl;
 
-    // Sieve Iterator Data
-    std::vector<sieve_timings> duration_sieve_uint64_t(max_threads);
-    std::vector<sieve_timings> duration_sieve_uint128_t(max_threads);
-    std::vector<sieve_timings> duration_sieve_mpz_c(max_threads);
-    std::vector<sieve_timings> duration_sieve_uint64_t_bulk(max_threads);
-    std::vector<sieve_timings> duration_sieve_uint128_t_bulk(max_threads);
-    std::vector<sieve_timings> duration_sieve_mpz_c_bulk(max_threads);
-    std::cout << "Benchmarking sieve iteration..." << std::flush;
-    for (size_t i = 0; i < max_threads; i++) {
-        omp_set_num_threads(i + 1);
-        duration_sieve_uint64_t[i] = sieve_iteration_time<uint64_t>(sieve_tree_levels, SieveOptions{}, iterations, 1);
-        duration_sieve_uint128_t[i] = sieve_iteration_time<uint128_t>(sieve_tree_levels, SieveOptions{}, iterations, 1);
-        duration_sieve_mpz_c[i] = sieve_iteration_time<mpz_class>(sieve_tree_levels, SieveOptions{}, iterations, 1);
-        duration_sieve_uint64_t_bulk[i] = sieve_iteration_time<uint64_t>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
-        duration_sieve_uint128_t_bulk[i] = sieve_iteration_time<uint128_t>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
-        duration_sieve_mpz_c_bulk[i] = sieve_iteration_time<mpz_class>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
-    }
-    std::cout << " done." << std::endl << std::endl;
+    // // Sieve Iterator Data
+    // std::vector<sieve_timings> duration_sieve_uint64_t(max_threads);
+    // std::vector<sieve_timings> duration_sieve_uint128_t(max_threads);
+    // std::vector<sieve_timings> duration_sieve_mpz_c(max_threads);
+    // std::vector<sieve_timings> duration_sieve_uint64_t_bulk(max_threads);
+    // std::vector<sieve_timings> duration_sieve_uint128_t_bulk(max_threads);
+    // std::vector<sieve_timings> duration_sieve_mpz_c_bulk(max_threads);
+    // std::cout << "Benchmarking sieve iteration..." << std::flush;
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     omp_set_num_threads(i + 1);
+    //     duration_sieve_uint64_t[i] = sieve_iteration_time<uint64_t>(sieve_tree_levels, SieveOptions{}, iterations, 1);
+    //     duration_sieve_uint128_t[i] = sieve_iteration_time<uint128_t>(sieve_tree_levels, SieveOptions{}, iterations, 1);
+    //     duration_sieve_mpz_c[i] = sieve_iteration_time<mpz_class>(sieve_tree_levels, SieveOptions{}, iterations, 1);
+    //     duration_sieve_uint64_t_bulk[i] = sieve_iteration_time<uint64_t>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
+    //     duration_sieve_uint128_t_bulk[i] = sieve_iteration_time<uint128_t>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
+    //     duration_sieve_mpz_c_bulk[i] = sieve_iteration_time<mpz_class>(sieve_tree_levels, SieveOptions{}, iterations, batch_size);
+    // }
+    // std::cout << " done." << std::endl << std::endl;
 
     // Print Table
     std::vector<std::vector<std::string>> table;
@@ -420,156 +419,156 @@ int main(int argc, char **argv) {
 
 
 
-    // Sieve Stuff
-    table.push_back({""});
-    table.push_back(add("Sieve (shallow)", sizeof(Sieve<uint64_t>), sizeof(Sieve<uint128_t>), sizeof(Sieve<mpz_class>)));
-    table.push_back(add(std::format("Sieve (deep, {} levels)", sieve_tree_levels).c_str(), sieve_uint64_t.deep_size(), sieve_uint128_t.deep_size(), sieve_mpz_c.deep_size()));
-    table.push_back(add("  According to RSS", rss_uint64_t_sieve, rss_uint128_t_sieve, rss_mpz_c_sieve));
-    //
-    // Sieve Rate Data
-    table.push_back({"  Iterator Time", "--", "--", "--", "--", "--", "--", "--", "--"});
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].iterator.count(), duration_sieve_uint128_t[i].iterator.count(), duration_sieve_mpz_c[i].iterator.count(), "ms"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t[i].iterator.count() - duration_sieve_uint64_t[j].iterator.count();
-                int delta_uint128_t = duration_sieve_uint128_t[i].iterator.count() - duration_sieve_uint128_t[j].iterator.count();
-                int delta_mpz_c = duration_sieve_mpz_c[i].iterator.count() - duration_sieve_mpz_c[j].iterator.count();
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
-            }
-        }
-    }
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].iterator.count(), duration_sieve_uint128_t_bulk[i].iterator.count(), duration_sieve_mpz_c_bulk[i].iterator.count(), "ms"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t_bulk[i].iterator.count() - duration_sieve_uint64_t_bulk[j].iterator.count();
-                int delta_uint128_t = duration_sieve_uint128_t_bulk[i].iterator.count() - duration_sieve_uint128_t_bulk[j].iterator.count();
-                int delta_mpz_c = duration_sieve_mpz_c_bulk[i].iterator.count() - duration_sieve_mpz_c_bulk[j].iterator.count();
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
-            }
-        }
-    }
-    //
-    // Pool Refill Time
-    table.push_back({"  Pool Refill Time", "--", "--", "--", "--", "--", "--", "--", "--"});
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].pool_refill.count() / 1000, duration_sieve_uint128_t[i].pool_refill.count() / 1000, duration_sieve_mpz_c[i].pool_refill.count() / 1000, "ms"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = (duration_sieve_uint64_t[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t[j].pool_refill.count() / 1000);
-                int delta_uint128_t = (duration_sieve_uint128_t[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t[j].pool_refill.count() / 1000);
-                int delta_mpz_c = (duration_sieve_mpz_c[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c[j].pool_refill.count() / 1000);
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
-            }
-        }
-    }
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000, duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000, duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000, "ms"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = (duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t_bulk[j].pool_refill.count() / 1000);
-                int delta_uint128_t = (duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t_bulk[j].pool_refill.count() / 1000);
-                int delta_mpz_c = (duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c_bulk[j].pool_refill.count() / 1000);
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
-            }
-        }
-    }
-    //
-    // Pool Refill Count
-    table.push_back({"  Pool Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refills, duration_sieve_uint128_t[i].refills, duration_sieve_mpz_c[i].refills, "refills"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t[i].refills - duration_sieve_uint64_t[j].refills;
-                int delta_uint128_t = duration_sieve_uint128_t[i].refills - duration_sieve_uint128_t[j].refills;
-                int delta_mpz_c = duration_sieve_mpz_c[i].refills - duration_sieve_mpz_c[j].refills;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "refills", "--", "--", "--", "--"});
-            }
-        }
-    }
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refills, duration_sieve_uint128_t_bulk[i].refills, duration_sieve_mpz_c_bulk[i].refills, "refills"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refills - duration_sieve_uint64_t_bulk[j].refills;
-                int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refills - duration_sieve_uint128_t_bulk[j].refills;
-                int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refills - duration_sieve_mpz_c_bulk[j].refills;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "refills", "--", "--", "--", "--"});
-            }
-        }
-    }
-    //
-    // Pool Refill Loops
-    table.push_back({"  Pool Refill Loops", "--", "--", "--", "--", "--", "--", "--", "--"});
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refill_fill_loops, duration_sieve_uint128_t[i].refill_fill_loops, duration_sieve_mpz_c[i].refill_fill_loops, "loops"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t[i].refill_fill_loops - duration_sieve_uint64_t[j].refill_fill_loops;
-                int delta_uint128_t = duration_sieve_uint128_t[i].refill_fill_loops - duration_sieve_uint128_t[j].refill_fill_loops;
-                int delta_mpz_c = duration_sieve_mpz_c[i].refill_fill_loops - duration_sieve_mpz_c[j].refill_fill_loops;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
-            }
-        }
-    }
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refill_fill_loops, duration_sieve_uint128_t_bulk[i].refill_fill_loops, duration_sieve_mpz_c_bulk[i].refill_fill_loops, "loops"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refill_fill_loops - duration_sieve_uint64_t_bulk[j].refill_fill_loops;
-                int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refill_fill_loops - duration_sieve_uint128_t_bulk[j].refill_fill_loops;
-                int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refill_fill_loops - duration_sieve_mpz_c_bulk[j].refill_fill_loops;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
-            }
-        }
-    }
-    //
-    // Pool Premature Refills
-    table.push_back({"  Pool Premature Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].premature_refills, duration_sieve_uint128_t[i].premature_refills, duration_sieve_mpz_c[i].premature_refills, "loops"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t[i].premature_refills - duration_sieve_uint64_t[j].premature_refills;
-                int delta_uint128_t = duration_sieve_uint128_t[i].premature_refills - duration_sieve_uint128_t[j].premature_refills;
-                int delta_mpz_c = duration_sieve_mpz_c[i].premature_refills - duration_sieve_mpz_c[j].premature_refills;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
-            }
-        }
-    }
-    for (size_t i = 0; i < max_threads; i++) {
-        std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
-        table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].premature_refills, duration_sieve_uint128_t_bulk[i].premature_refills, duration_sieve_mpz_c_bulk[i].premature_refills, "loops"));
-        if (compare_threads) {
-            for (size_t j = 0; j < i; j++) {
-                std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
-                int delta_uint64_t = duration_sieve_uint64_t_bulk[i].premature_refills - duration_sieve_uint64_t_bulk[j].premature_refills;
-                int delta_uint128_t = duration_sieve_uint128_t_bulk[i].premature_refills - duration_sieve_uint128_t_bulk[j].premature_refills;
-                int delta_mpz_c = duration_sieve_mpz_c_bulk[i].premature_refills - duration_sieve_mpz_c_bulk[j].premature_refills;
-                table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
-            }
-        }
-    }
+    // // Sieve Stuff
+    // table.push_back({""});
+    // table.push_back(add("Sieve (shallow)", sizeof(Sieve<uint64_t>), sizeof(Sieve<uint128_t>), sizeof(Sieve<mpz_class>)));
+    // table.push_back(add(std::format("Sieve (deep, {} levels)", sieve_tree_levels).c_str(), sieve_uint64_t.deep_size(), sieve_uint128_t.deep_size(), sieve_mpz_c.deep_size()));
+    // table.push_back(add("  According to RSS", rss_uint64_t_sieve, rss_uint128_t_sieve, rss_mpz_c_sieve));
+    // //
+    // // Sieve Rate Data
+    // table.push_back({"  Iterator Time", "--", "--", "--", "--", "--", "--", "--", "--"});
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].iterator.count(), duration_sieve_uint128_t[i].iterator.count(), duration_sieve_mpz_c[i].iterator.count(), "ms"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t[i].iterator.count() - duration_sieve_uint64_t[j].iterator.count();
+    //             int delta_uint128_t = duration_sieve_uint128_t[i].iterator.count() - duration_sieve_uint128_t[j].iterator.count();
+    //             int delta_mpz_c = duration_sieve_mpz_c[i].iterator.count() - duration_sieve_mpz_c[j].iterator.count();
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].iterator.count(), duration_sieve_uint128_t_bulk[i].iterator.count(), duration_sieve_mpz_c_bulk[i].iterator.count(), "ms"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t_bulk[i].iterator.count() - duration_sieve_uint64_t_bulk[j].iterator.count();
+    //             int delta_uint128_t = duration_sieve_uint128_t_bulk[i].iterator.count() - duration_sieve_uint128_t_bulk[j].iterator.count();
+    //             int delta_mpz_c = duration_sieve_mpz_c_bulk[i].iterator.count() - duration_sieve_mpz_c_bulk[j].iterator.count();
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // //
+    // // Pool Refill Time
+    // table.push_back({"  Pool Refill Time", "--", "--", "--", "--", "--", "--", "--", "--"});
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].pool_refill.count() / 1000, duration_sieve_uint128_t[i].pool_refill.count() / 1000, duration_sieve_mpz_c[i].pool_refill.count() / 1000, "ms"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = (duration_sieve_uint64_t[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t[j].pool_refill.count() / 1000);
+    //             int delta_uint128_t = (duration_sieve_uint128_t[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t[j].pool_refill.count() / 1000);
+    //             int delta_mpz_c = (duration_sieve_mpz_c[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c[j].pool_refill.count() / 1000);
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000, duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000, duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000, "ms"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = (duration_sieve_uint64_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint64_t_bulk[j].pool_refill.count() / 1000);
+    //             int delta_uint128_t = (duration_sieve_uint128_t_bulk[i].pool_refill.count() / 1000) - (duration_sieve_uint128_t_bulk[j].pool_refill.count() / 1000);
+    //             int delta_mpz_c = (duration_sieve_mpz_c_bulk[i].pool_refill.count() / 1000) - (duration_sieve_mpz_c_bulk[j].pool_refill.count() / 1000);
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "ms", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // //
+    // // Pool Refill Count
+    // table.push_back({"  Pool Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refills, duration_sieve_uint128_t[i].refills, duration_sieve_mpz_c[i].refills, "refills"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t[i].refills - duration_sieve_uint64_t[j].refills;
+    //             int delta_uint128_t = duration_sieve_uint128_t[i].refills - duration_sieve_uint128_t[j].refills;
+    //             int delta_mpz_c = duration_sieve_mpz_c[i].refills - duration_sieve_mpz_c[j].refills;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "refills", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refills, duration_sieve_uint128_t_bulk[i].refills, duration_sieve_mpz_c_bulk[i].refills, "refills"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refills - duration_sieve_uint64_t_bulk[j].refills;
+    //             int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refills - duration_sieve_uint128_t_bulk[j].refills;
+    //             int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refills - duration_sieve_mpz_c_bulk[j].refills;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "refills", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // //
+    // // Pool Refill Loops
+    // table.push_back({"  Pool Refill Loops", "--", "--", "--", "--", "--", "--", "--", "--"});
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].refill_fill_loops, duration_sieve_uint128_t[i].refill_fill_loops, duration_sieve_mpz_c[i].refill_fill_loops, "loops"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t[i].refill_fill_loops - duration_sieve_uint64_t[j].refill_fill_loops;
+    //             int delta_uint128_t = duration_sieve_uint128_t[i].refill_fill_loops - duration_sieve_uint128_t[j].refill_fill_loops;
+    //             int delta_mpz_c = duration_sieve_mpz_c[i].refill_fill_loops - duration_sieve_mpz_c[j].refill_fill_loops;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].refill_fill_loops, duration_sieve_uint128_t_bulk[i].refill_fill_loops, duration_sieve_mpz_c_bulk[i].refill_fill_loops, "loops"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t_bulk[i].refill_fill_loops - duration_sieve_uint64_t_bulk[j].refill_fill_loops;
+    //             int delta_uint128_t = duration_sieve_uint128_t_bulk[i].refill_fill_loops - duration_sieve_uint128_t_bulk[j].refill_fill_loops;
+    //             int delta_mpz_c = duration_sieve_mpz_c_bulk[i].refill_fill_loops - duration_sieve_mpz_c_bulk[j].refill_fill_loops;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // //
+    // // Pool Premature Refills
+    // table.push_back({"  Pool Premature Refills", "--", "--", "--", "--", "--", "--", "--", "--"});
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    1-By-1, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t[i].premature_refills, duration_sieve_uint128_t[i].premature_refills, duration_sieve_mpz_c[i].premature_refills, "loops"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t[i].premature_refills - duration_sieve_uint64_t[j].premature_refills;
+    //             int delta_uint128_t = duration_sieve_uint128_t[i].premature_refills - duration_sieve_uint128_t[j].premature_refills;
+    //             int delta_mpz_c = duration_sieve_mpz_c[i].premature_refills - duration_sieve_mpz_c[j].premature_refills;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
+    // for (size_t i = 0; i < max_threads; i++) {
+    //     std::string name = "    Bulk, " + std::to_string(i + 1) + " Threads";
+    //     table.push_back(add(name.c_str(), duration_sieve_uint64_t_bulk[i].premature_refills, duration_sieve_uint128_t_bulk[i].premature_refills, duration_sieve_mpz_c_bulk[i].premature_refills, "loops"));
+    //     if (compare_threads) {
+    //         for (size_t j = 0; j < i; j++) {
+    //             std::string comparison = "      Vs. " + std::to_string(j + 1) + " threads";
+    //             int delta_uint64_t = duration_sieve_uint64_t_bulk[i].premature_refills - duration_sieve_uint64_t_bulk[j].premature_refills;
+    //             int delta_uint128_t = duration_sieve_uint128_t_bulk[i].premature_refills - duration_sieve_uint128_t_bulk[j].premature_refills;
+    //             int delta_mpz_c = duration_sieve_mpz_c_bulk[i].premature_refills - duration_sieve_mpz_c_bulk[j].premature_refills;
+    //             table.push_back({comparison.c_str(), std::to_string(delta_uint64_t), std::to_string(delta_uint128_t), std::to_string(delta_mpz_c), "loops", "--", "--", "--", "--"});
+    //         }
+    //     }
+    // }
 
     // Print it.
     printTable(table);

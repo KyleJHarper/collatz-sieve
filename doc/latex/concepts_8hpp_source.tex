@@ -301,11 +301,11 @@
 \DoxyCodeLine{00396\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ limb\ count\ and\ add\ it\ to\ the\ hash.}}
 \DoxyCodeLine{00397\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mp\_limb\_t}}*\ \mbox{\hyperlink{classNode}{limbs}}\ =\ \mbox{\hyperlink{classNode}{mpz\_limbs\_read}}(value.get\_mpz\_t());}
 \DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limb\_count}}\ =\ \mbox{\hyperlink{classNode}{mpz\_size}}(value.get\_mpz\_t());}
-\DoxyCodeLine{00399\ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ H::combine(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limb\_count}});}
+\DoxyCodeLine{00399\ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limb\_count}});}
 \DoxyCodeLine{00400\ }
 \DoxyCodeLine{00401\ \ \ \ \ \textcolor{comment}{//\ Now\ include\ the\ limbs\ themselves.}}
 \DoxyCodeLine{00402\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{limb\_count}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ H::combine(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limbs}}[\mbox{\hyperlink{classNode}{i}}]);}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limbs}}[\mbox{\hyperlink{classNode}{i}}]);}
 \DoxyCodeLine{00404\ \ \ \ \ \}}
 \DoxyCodeLine{00405\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{h}};}
 \DoxyCodeLine{00406\ \}}

@@ -85,7 +85,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>An implementation of the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> which creates and persists <code><a class="el" href="classNode.html">Node</a></code> objects in memory.  
+<p>An implementation of the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> which creates and persists <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects in memory.  
  <a href="classBinaryTreeMaterializedImpl.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="binary__tree__materialized_8hpp_source.html">binary_tree_materialized.hpp</a>&gt;</code></p>
@@ -189,7 +189,7 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b
 <tr class="memdesc:a9be81844a8872159277d9ff2dac05f8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Responds true to <code><a class="el" href="classBinaryTreeMaterializedImpl.html#a9be81844a8872159277d9ff2dac05f8c" title="Responds true to is_materialized(), mostly for the BinaryTree facade.">is_materialized()</a></code>, mostly for the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade. <br /></td></tr>
 <tr class="separator:a9be81844a8872159277d9ff2dac05f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adde8aa871f0c8b733935a47e725acd35" id="r_adde8aa871f0c8b733935a47e725acd35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">const</a> std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#adde8aa871f0c8b733935a47e725acd35">get_level_map</a> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:adde8aa871f0c8b733935a47e725acd35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html">Node</a></code> objects.  <br /></td></tr>
+<tr class="memdesc:adde8aa871f0c8b733935a47e725acd35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects.  <br /></td></tr>
 <tr class="separator:adde8aa871f0c8b733935a47e725acd35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7e90237d4579290c94581a474d8f0be" id="r_ae7e90237d4579290c94581a474d8f0be"><td class="memItemLeft" align="right" valign="top"><a id="ae7e90237d4579290c94581a474d8f0be" name="ae7e90237d4579290c94581a474d8f0be"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_hwm_nodes</b> () <a class="el" href="classNode.html">const</a></td></tr>
@@ -222,7 +222,7 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>_level_count</b> =
 <tr class="separator:a11a07b54a884519188cd92138022c067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca7323d693d332da9c10c26dee2da58e" id="r_aca7323d693d332da9c10c26dee2da58e"><td class="memItemLeft" align="right" valign="top"><a id="aca7323d693d332da9c10c26dee2da58e" name="aca7323d693d332da9c10c26dee2da58e"></a>
 std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_level_map</b></td></tr>
-<tr class="memdesc:aca7323d693d332da9c10c26dee2da58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main storage for <code><a class="el" href="classNode.html">Node</a></code> objects, placed in a map keyed by level. <br /></td></tr>
+<tr class="memdesc:aca7323d693d332da9c10c26dee2da58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main storage for <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects, placed in a map keyed by level. <br /></td></tr>
 <tr class="separator:aca7323d693d332da9c10c26dee2da58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af01e19ef8fab1bb27868bbdc5c1eb351" id="r_af01e19ef8fab1bb27868bbdc5c1eb351"><td class="memItemLeft" align="right" valign="top"><a id="af01e19ef8fab1bb27868bbdc5c1eb351" name="af01e19ef8fab1bb27868bbdc5c1eb351"></a>
 std::unordered_map&lt; level_t, <a class="el" href="classBinaryTreeCoverage.html">BinaryTreeCoverage</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_coverage_map</b></td></tr>
@@ -259,12 +259,12 @@ std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt;&#
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
-class BinaryTreeMaterializedImpl&lt; T &gt;</div><p>An implementation of the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> which creates and persists <code><a class="el" href="classNode.html">Node</a></code> objects in memory. </p>
-<p>This is the materialized version, which creates real <a class="el" href="classNode.html">Node</a> objects and persists them. When pruning is enabled, nodes which hit the High-Water Mark (HWM) are removed, leaving only nodes which still need to be tested.</p>
-<dl class="section note"><dt>Note</dt><dd>This was a first-principles implementation when starting out. It's great for in-memory inspection of true <code><a class="el" href="classNode.html">Node</a></code> objects, or when you want to walk an actual tree, but RAM explodes quickly. If you need to work with larger trees, consider using the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> instead.</dd></dl>
+class BinaryTreeMaterializedImpl&lt; T &gt;</div><p>An implementation of the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> which creates and persists <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects in memory. </p>
+<p>This is the materialized version, which creates real <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> objects and persists them. When pruning is enabled, nodes which hit the High-Water Mark (HWM) are removed, leaving only nodes which still need to be tested.</p>
+<dl class="section note"><dt>Note</dt><dd>This was a first-principles implementation when starting out. It's great for in-memory inspection of true <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects, or when you want to walk an actual tree, but RAM explodes quickly. If you need to work with larger trees, consider using the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> instead.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see concepts.hpp). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -487,7 +487,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html">Node</a></code> objects. </p>
+<p>Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects. </p>
 <dl class="section note"><dt>Note</dt><dd>Nodes are left-to-right by position, not node value. </dd></dl>
 
 </div>
@@ -610,7 +610,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <p>Serialization happens in this order:</p><ol type="1">
 <li>The is_pruning_hwm_nodes flag.</li>
 <li>The is_pruning_parent_levels flag.</li>
-<li>The level map, which emits level numbers and node counts, and then uses <code>Node::serialize()</code> on each node.</li>
+<li>The level map, which emits level numbers and node counts, and then uses <code><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501" title="Serialize the node specifics of this object for export.">Node::serialize()</a></code> on each node.</li>
 </ol>
 <dl class="section note"><dt>Note</dt><dd>The <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade handles serialization of common items between implementations. </dd>
 <dd>
@@ -781,11 +781,11 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare two materialized trees' specific internals and return true if identical. </p>
-<p>This method only tests materialized tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (e.g.: level count).</p>
+<p>This method only tests materialized tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (<a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">e.g</a>.: level count).</p>
 <p>This function checks:</p><ol type="1">
 <li>The is_pruning_hwm_nodes flag.</li>
 <li>The is_pruning_parent_levels flag.</li>
-<li>Level map (<code><a class="el" href="classNode.html">Node</a></code> objects, which invoke their own <code>Node::st_equal()</code>).</li>
+<li>Level map (<code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects, which invoke their own <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">Node::st_equal()</a></code>).</li>
 </ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

@@ -116,7 +116,7 @@
 \DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ \textcolor{keyword}{sizeof}(*this);}
 \DoxyCodeLine{00193\ }
 \DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Account\ for\ \_uncovered\_positions.}}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.deep\_size();}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.\mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\_size}}();}
 \DoxyCodeLine{00196\ }
 \DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Account\ for\ \_coverage\_map}}
 \DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classBinaryTreeImplicitImpl_a06db515ccdd03d2e4bfc49d80948ea3c}{\_coverage\_map}});}
@@ -159,7 +159,7 @@
 \DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ unique\ properties.}}
 \DoxyCodeLine{00271\ }
 \DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Uncovered\ Positions\ NodeBitmap}}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.serialize(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}}))\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.\mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}}(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}}))\ \{}
 \DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}\_uncovered\_positions\ error"{}});}
 \DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00276\ }
@@ -176,7 +176,7 @@
 \DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ unique\ properties.}}
 \DoxyCodeLine{00299\ }
 \DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Uncovered\ positions\ NodeBitmap.}}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.deserialize(\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classNode}{err}}))\ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}{\_uncovered\_positions}}.\mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}}(\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classNode}{err}}))\ \{}
 \DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}unable\ to\ deserialize\ the\ uncovered\ positions"{}});}
 \DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00304\ }
@@ -246,25 +246,25 @@
 \DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00400\ }
 \DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initialize\ the\ node\ and\ test\ HWM\ for\ ancestry.}}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.left\_node.init(\mbox{\hyperlink{classNode}{tls}}.left\_value);}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.right\_node.init(\mbox{\hyperlink{classNode}{tls}}.right\_value);}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.left\_node.\mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}}(\mbox{\hyperlink{classNode}{tls}}.left\_value);}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.right\_node.\mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}}(\mbox{\hyperlink{classNode}{tls}}.right\_value);}
 \DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}})\ \{}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.is\_below\_high\_water\_mark())\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}())\ \{}
 \DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.new\_ancestors.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classNode}{Node<T>}}(\mbox{\hyperlink{classNode}{tls}}.left\_value));}
 \DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.is\_below\_high\_water\_mark())\ \{}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}())\ \{}
 \DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.new\_ancestors.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classNode}{Node<T>}}(\mbox{\hyperlink{classNode}{tls}}.right\_value));}
 \DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00412\ }
 \DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Perform\ verification,\ if\ requested.}}
 \DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}})\ \{}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(\mbox{\hyperlink{classNode}{tls}}.left\_value,\ \mbox{\hyperlink{classNode}{add\_level\_high\_water\_mark}})\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Node\ value\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{tls}}.left\_value)\ +\ \textcolor{stringliteral}{"{}\ didn't\ verify.\ \ How?"{}});}
 \DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(\mbox{\hyperlink{classNode}{tls}}.right\_value,\ \mbox{\hyperlink{classNode}{add\_level\_high\_water\_mark}})\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Node\ value\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{tls}}.right\_value)\ +\ \textcolor{stringliteral}{"{}\ didn't\ verify.\ \ How?"{}});}
 \DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
@@ -272,10 +272,10 @@
 \DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00426\ }
 \DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ POSITION\ to\ the\ TLS\ bitmap\ if\ it\ didn't\ hit\ HWM.}}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.left\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.uncovered\_bitmap.add(\mbox{\hyperlink{classNode}{tls}}.left\_position);}
 \DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.right\_node.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.uncovered\_bitmap.add(\mbox{\hyperlink{classNode}{tls}}.right\_position);}
 \DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00434\ }
@@ -292,7 +292,7 @@
 \DoxyCodeLine{00445\ }
 \DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ sort\ ancestors.}}
 \DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}})\ \{}
-\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ tbb::parallel\_sort(\mbox{\hyperlink{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}{\_ancestors}}.begin(),\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}{\_ancestors}}.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode}{b}})\ \{}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tbb::parallel\_sort}}(\mbox{\hyperlink{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}{\_ancestors}}.begin(),\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}{\_ancestors}}.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode}{b}})\ \{}
 \DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ constexpr(BuiltinIntegral<T>)\ \{}
 \DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ a-\/>get\_value()\ <\ b-\/>get\_value();}
 \DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}

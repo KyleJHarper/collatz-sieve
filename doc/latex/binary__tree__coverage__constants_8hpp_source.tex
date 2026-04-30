@@ -77,7 +77,7 @@
 \DoxyCodeLine{00089\ }
 \DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ right\ type,\ and\ convert\ as-\/needed.}}
 \DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{sizeof}(T)\ *\ 8\ >\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ >\ \textcolor{keyword}{sizeof}(T)\ *\ 8)\ \{}
 \DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Level\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{level}})\ +\ \textcolor{stringliteral}{"{}\ is\ outside\ the\ max\ range\ for\ your\ type\ T:\ "{}}\ +\ ABIHelpers::demangle<T>());}
 \DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}

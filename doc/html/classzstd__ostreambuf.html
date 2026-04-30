@@ -86,12 +86,17 @@ $(function() {
   <div class="headertitle"><div class="title">zstd_ostreambuf Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <code>streambuf</code> subclass which wraps the C-style ZSTD bits to create a compressed stream.  
+ <a href="classzstd__ostreambuf.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="zstd__compress_8hpp_source.html">zstd_compress.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for zstd_ostreambuf:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__ostreambuf__inherit__graph.png" border="0" usemap="#azstd__ostreambuf_inherit__map" alt="Inheritance graph"/></div>
 <map name="azstd__ostreambuf_inherit__map" id="azstd__ostreambuf_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,79,136,104"/>
+<area shape="rect" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to create a compressed stream." alt="" coords="5,79,136,104"/>
 <area shape="rect" title=" " alt="" coords="12,5,129,31"/>
 <area shape="poly" title=" " alt="" coords="73,44,73,79,68,79,68,44"/>
 </map>
@@ -101,7 +106,7 @@ Collaboration diagram for zstd_ostreambuf:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__ostreambuf__coll__graph.png" border="0" usemap="#azstd__ostreambuf_coll__map" alt="Collaboration graph"/></div>
 <map name="azstd__ostreambuf_coll__map" id="azstd__ostreambuf_coll__map">
-<area shape="rect" title=" " alt="" coords="5,79,136,104"/>
+<area shape="rect" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to create a compressed stream." alt="" coords="5,79,136,104"/>
 <area shape="rect" title=" " alt="" coords="12,5,129,31"/>
 <area shape="poly" title=" " alt="" coords="73,44,73,79,68,79,68,44"/>
 </map>
@@ -109,61 +114,278 @@ Collaboration diagram for zstd_ostreambuf:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a759d55e82ba4c2e019333687da921740" id="r_a759d55e82ba4c2e019333687da921740"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#a759d55e82ba4c2e019333687da921740">finalize</a> ()</td></tr>
+<tr class="memdesc:a759d55e82ba4c2e019333687da921740"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flush all remaining buffers and wait for ZSTD to say its finished.  <br /></td></tr>
+<tr class="separator:a759d55e82ba4c2e019333687da921740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a0b6ffb53b6e82c233e7670d56cd4f88f" id="r_a0b6ffb53b6e82c233e7670d56cd4f88f"><td class="memItemLeft" align="right" valign="top"><a id="a0b6ffb53b6e82c233e7670d56cd4f88f" name="a0b6ffb53b6e82c233e7670d56cd4f88f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>zstd_ostreambuf</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__ostreambuf.html">zstd_ostreambuf</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a0b6ffb53b6e82c233e7670d56cd4f88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:a0b6ffb53b6e82c233e7670d56cd4f88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5513d7474ca84e20260a43ca88eab640" id="r_a5513d7474ca84e20260a43ca88eab640"><td class="memItemLeft" align="right" valign="top"><a id="a5513d7474ca84e20260a43ca88eab640" name="a5513d7474ca84e20260a43ca88eab640"></a>
 <a class="el" href="classzstd__ostreambuf.html">zstd_ostreambuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__ostreambuf.html">zstd_ostreambuf</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a5513d7474ca84e20260a43ca88eab640"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:a5513d7474ca84e20260a43ca88eab640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a1ba303dc0998247b8dfce9aaba7b96" id="r_a7a1ba303dc0998247b8dfce9aaba7b96"><td class="memItemLeft" align="right" valign="top"><a id="a7a1ba303dc0998247b8dfce9aaba7b96" name="a7a1ba303dc0998247b8dfce9aaba7b96"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>zstd_ostreambuf</b> (std::streambuf *<a class="el" href="classNode.html">dest</a>, <a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">level</a>=<a class="el" href="classNode.html">ZSTD_CLEVEL_DEFAULT</a>)</td></tr>
+<tr class="memitem:a7a1ba303dc0998247b8dfce9aaba7b96" id="r_a7a1ba303dc0998247b8dfce9aaba7b96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#a7a1ba303dc0998247b8dfce9aaba7b96">zstd_ostreambuf</a> (std::streambuf *<a class="el" href="classNode.html">dest</a>, <a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">level</a>=<a class="el" href="classNode.html">ZSTD_CLEVEL_DEFAULT</a>)</td></tr>
+<tr class="memdesc:a7a1ba303dc0998247b8dfce9aaba7b96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor which requires a destination stream.  <br /></td></tr>
 <tr class="separator:a7a1ba303dc0998247b8dfce9aaba7b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a759d55e82ba4c2e019333687da921740" id="r_a759d55e82ba4c2e019333687da921740"><td class="memItemLeft" align="right" valign="top"><a id="a759d55e82ba4c2e019333687da921740" name="a759d55e82ba4c2e019333687da921740"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>finalize</b> ()</td></tr>
-<tr class="separator:a759d55e82ba4c2e019333687da921740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5947bd4969df6fb4f186adcad1c9a6d" id="r_ae5947bd4969df6fb4f186adcad1c9a6d"><td class="memItemLeft" align="right" valign="top"><a id="ae5947bd4969df6fb4f186adcad1c9a6d" name="ae5947bd4969df6fb4f186adcad1c9a6d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~zstd_ostreambuf</b> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memdesc:ae5947bd4969df6fb4f186adcad1c9a6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor just needs to free() the Zstd memory bits. <br /></td></tr>
+<tr class="separator:ae5947bd4969df6fb4f186adcad1c9a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ac3f7ec05795402ea7e8521a567fbc3b6" id="r_ac3f7ec05795402ea7e8521a567fbc3b6"><td class="memItemLeft" align="right" valign="top"><a id="ac3f7ec05795402ea7e8521a567fbc3b6" name="ac3f7ec05795402ea7e8521a567fbc3b6"></a>
-<a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><b>overflow</b> (<a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">ch</a>) <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memitem:ac3f7ec05795402ea7e8521a567fbc3b6" id="r_ac3f7ec05795402ea7e8521a567fbc3b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#ac3f7ec05795402ea7e8521a567fbc3b6">overflow</a> (<a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">ch</a>) <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memdesc:ac3f7ec05795402ea7e8521a567fbc3b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flushes the buffer when full and inserts the incoming character if provided.  <br /></td></tr>
 <tr class="separator:ac3f7ec05795402ea7e8521a567fbc3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82e5c5f4afbf485787f85e2e5e0cd011" id="r_a82e5c5f4afbf485787f85e2e5e0cd011"><td class="memItemLeft" align="right" valign="top"><a id="a82e5c5f4afbf485787f85e2e5e0cd011" name="a82e5c5f4afbf485787f85e2e5e0cd011"></a>
-<a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sync</b> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memitem:a82e5c5f4afbf485787f85e2e5e0cd011" id="r_a82e5c5f4afbf485787f85e2e5e0cd011"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#a82e5c5f4afbf485787f85e2e5e0cd011">sync</a> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memdesc:a82e5c5f4afbf485787f85e2e5e0cd011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the sync method, which in this case is just <a class="el" href="classzstd__ostreambuf.html#a569abaf134f3f5e95e38c4c555991222" title="Reads all pending input and asks Zstd to compress it to the CStream.">flush_input()</a>.  <br /></td></tr>
 <tr class="separator:a82e5c5f4afbf485787f85e2e5e0cd011"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a569abaf134f3f5e95e38c4c555991222" id="r_a569abaf134f3f5e95e38c4c555991222"><td class="memItemLeft" align="right" valign="top"><a id="a569abaf134f3f5e95e38c4c555991222" name="a569abaf134f3f5e95e38c4c555991222"></a>
-<a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><b>flush_input</b> ()</td></tr>
+<tr class="memitem:a569abaf134f3f5e95e38c4c555991222" id="r_a569abaf134f3f5e95e38c4c555991222"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#a569abaf134f3f5e95e38c4c555991222">flush_input</a> ()</td></tr>
+<tr class="memdesc:a569abaf134f3f5e95e38c4c555991222"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads all pending input and asks Zstd to compress it to the CStream.  <br /></td></tr>
 <tr class="separator:a569abaf134f3f5e95e38c4c555991222"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a90dfa115cacce1a0ad12adee5c6cab03" id="r_a90dfa115cacce1a0ad12adee5c6cab03"><td class="memItemLeft" align="right" valign="top"><a id="a90dfa115cacce1a0ad12adee5c6cab03" name="a90dfa115cacce1a0ad12adee5c6cab03"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">code</a>)</td></tr>
+<tr class="memitem:a90dfa115cacce1a0ad12adee5c6cab03" id="r_a90dfa115cacce1a0ad12adee5c6cab03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostreambuf.html#a90dfa115cacce1a0ad12adee5c6cab03">check</a> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">code</a>)</td></tr>
+<tr class="memdesc:a90dfa115cacce1a0ad12adee5c6cab03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for ZSTD_isError(), which checks an error code and throws the error name if found.  <br /></td></tr>
 <tr class="separator:a90dfa115cacce1a0ad12adee5c6cab03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a04b160292b01b5c01b4bfe2df19703cf" id="r_a04b160292b01b5c01b4bfe2df19703cf"><td class="memItemLeft" align="right" valign="top"><a id="a04b160292b01b5c01b4bfe2df19703cf" name="a04b160292b01b5c01b4bfe2df19703cf"></a>
 std::streambuf *&#160;</td><td class="memItemRight" valign="bottom"><b>_dest</b></td></tr>
+<tr class="memdesc:a04b160292b01b5c01b4bfe2df19703cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destination streambuf for compressed data from the <code>ZSTD_CStream</code>. <br /></td></tr>
 <tr class="separator:a04b160292b01b5c01b4bfe2df19703cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeba09e776fddbe59b92a06a887ba49ae" id="r_aeba09e776fddbe59b92a06a887ba49ae"><td class="memItemLeft" align="right" valign="top"><a id="aeba09e776fddbe59b92a06a887ba49ae" name="aeba09e776fddbe59b92a06a887ba49ae"></a>
 <a class="el" href="classNode.html">ZSTD_CStream</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_zstd_cstream</b></td></tr>
+<tr class="memdesc:aeba09e776fddbe59b92a06a887ba49ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ZSTD compressor stream to send input to. <br /></td></tr>
 <tr class="separator:aeba09e776fddbe59b92a06a887ba49ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1295deee9b67192ffa8d4779cd9dfdc6" id="r_a1295deee9b67192ffa8d4779cd9dfdc6"><td class="memItemLeft" align="right" valign="top"><a id="a1295deee9b67192ffa8d4779cd9dfdc6" name="a1295deee9b67192ffa8d4779cd9dfdc6"></a>
 std::vector&lt; <a class="el" href="classNode.html">char</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_input_buffer</b></td></tr>
+<tr class="memdesc:a1295deee9b67192ffa8d4779cd9dfdc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic input buffer to feed to ZSTD. <br /></td></tr>
 <tr class="separator:a1295deee9b67192ffa8d4779cd9dfdc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1554163eba3763849a18c2ab7d31bd3" id="r_aa1554163eba3763849a18c2ab7d31bd3"><td class="memItemLeft" align="right" valign="top"><a id="aa1554163eba3763849a18c2ab7d31bd3" name="aa1554163eba3763849a18c2ab7d31bd3"></a>
 std::vector&lt; <a class="el" href="classNode.html">char</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_output_buffer</b></td></tr>
+<tr class="memdesc:aa1554163eba3763849a18c2ab7d31bd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic output buffer for ZSTD. <br /></td></tr>
 <tr class="separator:aa1554163eba3763849a18c2ab7d31bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7fa2f6b493fa8c5402111774a29bd45" id="r_ac7fa2f6b493fa8c5402111774a29bd45"><td class="memItemLeft" align="right" valign="top"><a id="ac7fa2f6b493fa8c5402111774a29bd45" name="ac7fa2f6b493fa8c5402111774a29bd45"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_finalized</b> = <a class="el" href="classNode.html">false</a></td></tr>
+<tr class="memdesc:ac7fa2f6b493fa8c5402111774a29bd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal flag for proper shutdown/destruction. <br /></td></tr>
 <tr class="separator:ac7fa2f6b493fa8c5402111774a29bd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d72f72891c6a36da62e8c1aaf3f52ef" id="r_a5d72f72891c6a36da62e8c1aaf3f52ef"><td class="memItemLeft" align="right" valign="top"><a id="a5d72f72891c6a36da62e8c1aaf3f52ef" name="a5d72f72891c6a36da62e8c1aaf3f52ef"></a>
 <a class="el" href="classNode.html">ZSTD_EndDirective</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_zstd_end_directive</b> = <a class="el" href="classNode.html">ZSTD_e_continue</a></td></tr>
+<tr class="memdesc:a5d72f72891c6a36da62e8c1aaf3f52ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Customizable end-directive to use for <code>ZSTD_compressStream2</code> calls. <br /></td></tr>
 <tr class="separator:a5d72f72891c6a36da62e8c1aaf3f52ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <code>streambuf</code> subclass which wraps the C-style ZSTD bits to create a compressed stream. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7a1ba303dc0998247b8dfce9aaba7b96" name="a7a1ba303dc0998247b8dfce9aaba7b96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a1ba303dc0998247b8dfce9aaba7b96">&#9670;&#160;</a></span>zstd_ostreambuf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zstd_ostreambuf::zstd_ostreambuf </td>
+          <td>(</td>
+          <td class="paramtype">std::streambuf *&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">int</a>&#160;</td>
+          <td class="paramname"><em>level</em> = <code><a class="el" href="classNode.html">ZSTD_CLEVEL_DEFAULT</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor which requires a destination stream. </p>
+<p>This implementation uses the <code>ZSTD_createCCtx</code> and takes a few liberties.</p>
+<p>First, it will attempt to use the number of threads as indicated by <code>std::hardware_concurrency()</code>. If 0 or negative is returned, it is set to 1. If greater than 16 is returned, it is clamped to 16.</p>
+<p>Next, when compression level is over 19, long-distance matching is enabled. This drastically improves the compression ratio at the expensive of CPU-time (it's slower).</p>
+<p>Finally, when compression level is over 19, it also switches to the <code>ZSTD_e_flush</code> end-directive. Normally, ZSTD waits for a full window of data before waking up its compressor threads. The flush directive forces compression immediately. This class uses an input buffer size of 16MB to help optimize compressor work. The whole reason for switching to flush is to help ZSTD engage more worker threads. Without this, compression was observed to get choked down to a single thread and process very slowly.</p>
+<dl class="section user"><dt>Compliance</dt><dd></dd></dl>
+<p>The data emitted by this class should be a fully compliant ZSTD file. Meaning, if written to disk, any other ZSTD compliant program can read it, including the <code>zstd</code> CLI.</p>
+<dl class="section warning"><dt>Warning</dt><dd>Caller must issue <code><a class="el" href="classzstd__ostreambuf.html#a759d55e82ba4c2e019333687da921740" title="Flush all remaining buffers and wait for ZSTD to say its finished.">finalize()</a></code> before destruction to ensure all buffers are flushed. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dest</td><td>Any valid streambuf to write data to. </td></tr>
+    <tr><td class="paramname">level</td><td>The desired compression level. It defaults to <code>ZSTD_CLEVEL_DEFAULT</code>. Any valid ZSTD level is permitted by this class. When level exceeds 19, long-distance matching will be enabled: <code>ZSTD_c_enableLongDistanceMatching</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a90dfa115cacce1a0ad12adee5c6cab03" name="a90dfa115cacce1a0ad12adee5c6cab03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90dfa115cacce1a0ad12adee5c6cab03">&#9670;&#160;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> zstd_ostreambuf::check </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramname"><em>code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wrapper for ZSTD_isError(), which checks an error code and throws the error name if found. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code</td><td>The code to check with <code>ZSTD_getErrorName</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a759d55e82ba4c2e019333687da921740" name="a759d55e82ba4c2e019333687da921740"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a759d55e82ba4c2e019333687da921740">&#9670;&#160;</a></span>finalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> zstd_ostreambuf::finalize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Flush all remaining buffers and wait for ZSTD to say its finished. </p>
+<p>ZSTD needs all input flushed to it (obviously), but it also requires the caller to check <code>ZSTD_e_end</code> when in multi-threaded mode until it reports 0. There's some ZSTD frame bits (checksums maybe?) that isn't fully understood, but this cycling is mandatory before calling any destruction, implicit or otherwise.</p>
+<dl class="section warning"><dt>Warning</dt><dd>Caller must issue <code><a class="el" href="classzstd__ostreambuf.html#a759d55e82ba4c2e019333687da921740" title="Flush all remaining buffers and wait for ZSTD to say its finished.">finalize()</a></code> before destruction to ensure all buffers are flushed. </dd></dl>
+
+</div>
+</div>
+<a id="a569abaf134f3f5e95e38c4c555991222" name="a569abaf134f3f5e95e38c4c555991222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a569abaf134f3f5e95e38c4c555991222">&#9670;&#160;</a></span>flush_input()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">int</a> zstd_ostreambuf::flush_input </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads all pending input and asks Zstd to compress it to the CStream. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 on success, -1 if writing to the destination streambuf fails. </dd></dl>
+
+</div>
+</div>
+<a id="ac3f7ec05795402ea7e8521a567fbc3b6" name="ac3f7ec05795402ea7e8521a567fbc3b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3f7ec05795402ea7e8521a567fbc3b6">&#9670;&#160;</a></span>overflow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">int</a> zstd_ostreambuf::overflow </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">int</a>&#160;</td>
+          <td class="paramname"><em>ch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Flushes the buffer when full and inserts the incoming character if provided. </p>
+<dl class="section return"><dt>Returns</dt><dd>Integer indicating overflow/EOF status. </dd></dl>
+
+</div>
+</div>
+<a id="a82e5c5f4afbf485787f85e2e5e0cd011" name="a82e5c5f4afbf485787f85e2e5e0cd011"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82e5c5f4afbf485787f85e2e5e0cd011">&#9670;&#160;</a></span>sync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">int</a> zstd_ostreambuf::sync </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Overrides the sync method, which in this case is just <a class="el" href="classzstd__ostreambuf.html#a569abaf134f3f5e95e38c4c555991222" title="Reads all pending input and asks Zstd to compress it to the CStream.">flush_input()</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>Integer indicating status. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="zstd__compress_8hpp_source.html">zstd_compress.hpp</a></li>
 </ul>

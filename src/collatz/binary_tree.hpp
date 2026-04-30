@@ -40,8 +40,11 @@ concept IsImplicitTree = requires(const TreeType& tree_type) { tree_type.is_impl
 * @brief A set of const values for exported trees (saved to disk/stream).  Namely a magic value and version number.
 */
 struct BinaryTreeFileHeader {
+    /// @brief The size of the magic bytes.
     static const uint32_t MAGIC_SIZE = 10;
+    /// @brief Magic bytes.
     const char magic[MAGIC_SIZE] = {'H', 'a', 'r', 'p', 'e', 'r', 'T', 'r', 'e', 'e'}; // "HarperTree"
+    /// @brief Version number.  Must change whenever serialization/deserialization changes happen.
     const uint32_t version = 1;
 };
 
@@ -77,12 +80,8 @@ class BinaryTree {
 
 
     public:
-    //
-    // Constructors
-    //
     /// @name Lifecycle Management
     /// @{
-
 
     /**
     * @brief Default constructor.  No levels added.
@@ -268,7 +267,7 @@ class BinaryTree {
     *
     * @warning This is an assertion, not a boolean.  It will throw if verification is disabled and level count grows beyond limits.
     * @param level The level being added.
-    * @param is_verifying_hwm_nodes Flag indicating if verification is enabled or not.
+    * @param is_verifying_non_hwm_nodes Flag indicating if verification is enabled or not.
     */
     void assert_level_verification(level_t level, bool is_verifying_non_hwm_nodes) {
         if (is_verifying_non_hwm_nodes == false && level >= CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1) {

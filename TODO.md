@@ -1,5 +1,8 @@
 # Current Work
 
+## Exponents Pass
+* Rework the exponents to be less derpy.
+
 ## Update README for 64-bit
 * We lock in 64-bit as the basis for the platform pretty hard with concepts.hpp.  Note that.
 
@@ -14,6 +17,9 @@
 * Switch to an implicit tree.
 * Leverage a GPU, if possible.
 * See if we can use a bitmap instead of an LRU cache.
+
+### FLC
+* What are we even doing with the forward-looking-cache class?
 
 ## Scan for Ancestor Resolution
 * We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
@@ -48,6 +54,7 @@
 * Keep GMP the way it is, other than maybe rename it.
 * The string-ify helpers could use some TLC.  128-bit version should handle signed/unsigned.
 * Reorganize the code.  Move GMP and int128 stuff to custom files.  Absl too.
+* Should we throw in Absl's fixed-width types for support?  If they work but just have a higher cost model, why not?
 
 ## Logs From 384-CPU System
 

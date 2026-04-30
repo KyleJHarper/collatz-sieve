@@ -2,6 +2,15 @@
 \hypertarget{classzstd__istream}{}\label{classzstd__istream}\index{zstd\_istream@{zstd\_istream}}
 
 
+Creates an istream subclass and connects it to a {\ttfamily \doxylink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} so it may be passed around like a normal istream.  
+
+
+
+
+{\ttfamily \#include $<$zstd\+\_\+decompress.\+hpp$>$}
+
+
+
 Inheritance diagram for zstd\+\_\+istream\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -19,23 +28,47 @@ Collaboration diagram for zstd\+\_\+istream\+:\nopagebreak
 \end{center}
 \end{figure}
 \doxysubsubsection*{Public Member Functions}
+\begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classzstd__istream_aa2c1f8f4bc817d0d00fcf8853d709948}\label{classzstd__istream_aa2c1f8f4bc817d0d00fcf8853d709948} 
 {\bfseries zstd\+\_\+istream} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__istream}{zstd\+\_\+istream}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
+\begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istream_afce38ae72ab6454978207ae5fa28e74a}\label{classzstd__istream_afce38ae72ab6454978207ae5fa28e74a} 
 \mbox{\hyperlink{classzstd__istream}{zstd\+\_\+istream}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__istream}{zstd\+\_\+istream}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
-\Hypertarget{classzstd__istream_aa7e604deaacf88449170b8debcefa47c}\label{classzstd__istream_aa7e604deaacf88449170b8debcefa47c} 
-{\bfseries zstd\+\_\+istream} (std\+::istream \&\mbox{\hyperlink{classNode}{underlying}})
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classzstd__istream_aa7e604deaacf88449170b8debcefa47c}{zstd\+\_\+istream}} (std\+::istream \&\mbox{\hyperlink{classNode}{underlying}})
+\begin{DoxyCompactList}\small\item\em Constructor takes an underlying istream to connect with a {\ttfamily \doxylink{classzstd__istreambuf}{zstd\+\_\+istreambuf}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classzstd__istream_a4977ac67440651e199dafe75381699db}\label{classzstd__istream_a4977ac67440651e199dafe75381699db} 
 \mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} {\bfseries \+\_\+buffer}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The actual streambuf to send data in/out of, connected to this objects {\ttfamily rdbuf}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Creates an istream subclass and connects it to a {\ttfamily \doxylink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} so it may be passed around like a normal istream. 
+
+This class largely just wraps the {\ttfamily \doxylink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} to make reading ZSTD data easier. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classzstd__istream_aa7e604deaacf88449170b8debcefa47c}\label{classzstd__istream_aa7e604deaacf88449170b8debcefa47c} 
+\index{zstd\_istream@{zstd\_istream}!zstd\_istream@{zstd\_istream}}
+\index{zstd\_istream@{zstd\_istream}!zstd\_istream@{zstd\_istream}}
+\doxysubsubsection{\texorpdfstring{zstd\_istream()}{zstd\_istream()}}
+{\footnotesize\ttfamily zstd\+\_\+istream\+::zstd\+\_\+istream (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{underlying }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor takes an underlying istream to connect with a {\ttfamily \doxylink{classzstd__istreambuf}{zstd\+\_\+istreambuf}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying} & The source istream where ZSTD should read compressed data from. \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

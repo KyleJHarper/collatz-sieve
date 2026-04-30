@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['real_5fnode_5fcount_0',['real_node_count',['../classBinaryTree.html#ace42ad7bb28c34b123b811be8447d72c',1,'BinaryTree::real_node_count()'],['../classBinaryTreeMaterializedImpl.html#ae69d739f99aeaf1c526a50779304501f',1,'BinaryTreeMaterializedImpl::real_node_count()']]],
-  ['reset_1',['reset',['../classBinaryTree.html#a8fe542ae42e1dad87cf65a61f41d0102',1,'BinaryTree::reset()'],['../classBinaryTreeImplicitImpl.html#af80c190065b8b07d9f6f00d8cb156a9b',1,'BinaryTreeImplicitImpl::reset()'],['../classBinaryTreeMaterializedImpl.html#ab1174d6fc3a05e2a16197e6d6ebaea1e',1,'BinaryTreeMaterializedImpl::reset()'],['../structBinaryTreeOptions.html#a854d96148b635f3197d948e78b6d0ddb',1,'BinaryTreeOptions::reset()'],['../classCollatzAffineMap.html#a0164068132fd2fccb5b105d44ad2b58d',1,'CollatzAffineMap::reset()'],['../classCollatzAffineMapShortcut.html#a1c114e434a058db30a539966d9be283e',1,'CollatzAffineMapShortcut::reset()']]],
-  ['reset_5froot_5fvalue_2',['reset_root_value',['../classBinaryTreeMath.html#a371bd4f79a5e10a5a9284ab8e1a43963',1,'BinaryTreeMath']]],
-  ['right_5fnode_3',['right_node',['../structBinaryTreeImplicitImpl_1_1AddLevelTLS.html#a99a026f3e1b20b1977cbc5a8e21774c7',1,'BinaryTreeImplicitImpl::AddLevelTLS']]],
-  ['right_5fposition_4',['right_position',['../structBinaryTreeImplicitImpl_1_1AddLevelTLS.html#a031c148523387fb150285959af8df772',1,'BinaryTreeImplicitImpl::AddLevelTLS']]],
-  ['right_5fvalue_5',['right_value',['../structBinaryTreeImplicitImpl_1_1AddLevelTLS.html#aa40f5152ef07d64d4dd7a12950717226',1,'BinaryTreeImplicitImpl::AddLevelTLS']]]
+  ['operator_3c_3c_0',['operator&lt;&lt;',['../classNode.html#ae944c1a7004ae58f280a1a5dc429f8cb',1,'Node']]],
+  ['operator_3d_1',['operator=',['../classProgress.html#a3db6fa941d753aa50f1c1a92d9c50f69',1,'Progress::operator=()'],['../classzstd__ostreambuf.html#a5513d7474ca84e20260a43ca88eab640',1,'zstd_ostreambuf::operator=()'],['../classzstd__ostream.html#a68db1916ccd749a8c5dc5f823c537049',1,'zstd_ostream::operator=()'],['../classzstd__istreambuf.html#ac4f1773f021c453576ec08f9c9799479',1,'zstd_istreambuf::operator=()'],['../classzstd__istream.html#afce38ae72ab6454978207ae5fa28e74a',1,'zstd_istream::operator=()']]],
+  ['operator_7c_3d_2',['operator|=',['../classNodeBitmap.html#a0690a73bae6c6ac6dd7f53b01dd122a5',1,'NodeBitmap::operator|=()'],['../classFlatHashBitmapImpl.html#a6d17b722dad3ff9425d385864b0f6ea9',1,'FlatHashBitmapImpl::operator|=()']]],
+  ['optimize_3',['optimize',['../classNodeBitmap.html#ac426cbc043c0fd9aec3c12a6e9e0be6d',1,'NodeBitmap::optimize()'],['../classFlatHashBitmapImpl.html#aaab501acf3cc8a5e4abf2c1986a8ab5d',1,'FlatHashBitmapImpl::optimize()']]],
+  ['overflow_4',['overflow',['../classzstd__ostreambuf.html#ac3f7ec05795402ea7e8521a567fbc3b6',1,'zstd_ostreambuf']]],
+  ['own_5fchildren_5',['own_children',['../classNode.html#a991abe2497838e42015d6c08092d1fa8',1,'Node']]]
 ];

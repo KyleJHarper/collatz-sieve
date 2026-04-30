@@ -21,32 +21,45 @@
 
 //
 // FlatHashBitmap
-// An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap for O(1) performance.
 //
+//
+/**
+* @class FlatHashBitmapImpl
+* @brief An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap.
+* @note This class uses CRoaring under the hood, and does its best to match function names to be reasonably similar in nature.
+* @note This class is an Impl, and not meant to be used directly.  Use the `NodeBitmap` facade.
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<AnySupportedIntegral T>
 class FlatHashBitmapImpl {
     private:
-    using Traits = BitmapKeyTraits<T>;
-    using prefix_t = Traits::prefix_t;
-    using suffix_t = Traits::suffix_t;
-    using roaring_key_t = Traits::roaring_key_t;
-    using roaring_value_t = Traits::roaring_value_t;
-    using roaring_typecode_t = Traits::roaring_typecode_t;
-    using roaring_word_t = Traits::roaring_word_t;
+    using Traits = BitmapKeyTraits<T>;                       ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using prefix_t = Traits::prefix_t;                       ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using suffix_t = Traits::suffix_t;                       ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using roaring_key_t = Traits::roaring_key_t;             ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using roaring_value_t = Traits::roaring_value_t;         ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using roaring_typecode_t = Traits::roaring_typecode_t;   ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    using roaring_word_t = Traits::roaring_word_t;           ///< Taken from `BitmapKeyTraits`.  See node_bitmap_traits.hpp.
+    /**
+    * @brief Defines a map type to help cover all necessary components of an `absl::flat_hash_map`.
+    *
+    * The following categories apply:
+    *   1. When `T` is a fixed-width integral, Absl can hash it directly, so nothing special is required.
+    *   2. When `T` is anything else, it's assumed to be `mpz_class`, and both `absl::Hash<prefix_t>` and `MpzEq` are needed.
+    */
     using map_t = std::conditional_t<
         BuiltinIntegral<T>
         , absl::flat_hash_map<prefix_t, roaring::Roaring>
         , absl::flat_hash_map<prefix_t, roaring::Roaring, absl::Hash<prefix_t>, MpzEq>
     >;
+    /// @brief The `absl::flat_hash_map` typed to `prefix_t` and a `roaring::Roaring` bitmap.
     map_t _flat_map;
+    /// @brief A synchronized list of prefixes.
     std::vector<prefix_t> _sorted_prefixes;
 
 
 
-    //
-    // Add Prefix Key
-    // Adds a prefix key to the private vector and sorts it.
-    //
+    /// @brief Adds a prefix key to the private vector and sorts it.
     void add_prefix_key(const prefix_t& prefix) {
         auto it = std::lower_bound(_sorted_prefixes.begin(), _sorted_prefixes.end(), prefix);
         // Check for duplicates and only insert if there are none.
@@ -57,10 +70,7 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Remove Prefix Key
-    // Removes a prefix key when the associated bitmap is empty after a remove() call.
-    //
+    /// @brief Removes a prefix key when the associated bitmap is empty after a remove() call.
     void remove_prefix_key(const prefix_t& prefix) {
         auto it = std::lower_bound(_sorted_prefixes.begin(), _sorted_prefixes.end(), prefix);
         if (it != _sorted_prefixes.end() && *it == prefix) {
@@ -71,32 +81,40 @@ class FlatHashBitmapImpl {
 
 
     public:
+    /// @name Lifecycle Management
+    /// @{
+
+    /// @brief Default constructor
     FlatHashBitmapImpl() = default;
 
 
 
-    //
-    // Get Map
-    // Return the underlying map for caller to access.  Read-only.
-    //
-    // If you're using this directly, it should probably be an encapsulated method or you should use a for_each_*().
-    //
+    /// @brief Removes all items from all bitmaps by clearing the entire hash object.
+    void clear() {
+        _flat_map.clear();
+        _sorted_prefixes.clear();
+    }
+
+    /// @}
+
+
+
+    /// @name Accessors
+    /// @{
+
+    /// @brief Get a readonly reference to the internal flat map (the Abseil object).
     const map_t& get_map() const { return _flat_map; }
 
 
 
-    //
-    // Get Prefixes
-    // Return the underlying sorted prefixes vector.  Read-only.
-    //
+    /// @brief Return the underlying sorted prefixes vector.  Read-only.
     const std::vector<prefix_t>& get_sorted_prefixes() const { return _sorted_prefixes; }
 
+    /// @}
 
 
-    //
-    // Add
-    // Add a value to the bitmap.
-    //
+
+    /// @brief Add a value to the bitmap.
     void add(const T& value) {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
@@ -117,12 +135,10 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Add Range
-    // Add a contiguous range of values using the most optimized approach.  Only works well when the prefixes match.
-    //
-    // This is the HALF-OPEN range (max is excluded).
-    //
+    /**
+    * @brief Add a contiguous range of values using the most optimized approach.
+    * @note This is the Half-Open range [star, end).  Meaning, start is included but end isn't.
+    */
     void add_range(const T& start, const T& end) {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t start_prefix;
@@ -173,9 +189,13 @@ class FlatHashBitmapImpl {
             last_it->second.addRange(0, end_suffix);
         }
     }
-    //
-    // Now we add the CLOSED range (max is included).
-    //
+
+
+
+    /**
+    * @brief Add a closed, contiguous range of values using the most optimized approach.
+    * @note This is the Closed range [star, end].  Meaning, start and end are both included.
+    */
     void add_range_closed(const T& start, const T& end) {
         // Just call the add_range() and throw the end on after-the-fact.
         add_range(start, end);
@@ -184,10 +204,11 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Contains
-    // Check for a value to exist in the bitmap.
-    //
+    /**
+    * @brief Check for a value to exist (be "on") in the bitmap.
+    * @param value The value to search for.
+    * @return True if present ("on"), false otherwise.
+    */
     bool contains(const T& value) const {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
@@ -209,10 +230,7 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Remove
-    // Removes an item from the bitmap.
-    //
+    /// @brief Removes an item from the bitmap.
     void remove(const T& value) {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
@@ -238,10 +256,10 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Cardinality (count)
-    // Return the cardinality (count) of nodes on.
-    //
+    /**
+    * @brief Calculate the cardinality (count) of nodes turned "on".
+    * @return The count of "on" nodes, typed to caller's `T`.
+    */
     T cardinality() const {
         T total = 0;
         for (const auto& [prefix, bitmap] : _flat_map) {
@@ -256,21 +274,10 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Clear
-    // Removes all items from all bitmaps by clearing the entire hash object.
-    //
-    void clear() {
-        _flat_map.clear();
-        _sorted_prefixes.clear();
-    }
-
-
-
-    //
-    // Merge
-    // Merge (bitwise OR) all source bitmaps into self.
-    //
+    /**
+    * @brief Merge (bitwise OR) another `FlatHashBitmapImpl` into this one.
+    * @param src Another `FlatHashBitmapImpl` of the exact same `T`.
+    */
     void merge(const FlatHashBitmapImpl<T>& src) {
         for (const auto& [src_prefix, src_bitmap] : src.get_map()) {
             // Get an iterator to our keypair.
@@ -283,8 +290,14 @@ class FlatHashBitmapImpl {
             it->second |= src_bitmap;
         }
     }
-    //
-    // Mimic the operator.
+
+
+
+    /**
+    * @brief An opertor which calls `merge()`.  This is a convenience to do: `my_bitmap |= another_bitmap`.
+    * @note Unlike `merge()`, caller receives `*this` returned, not void.
+    * @return This object, as required by `operator|=`.
+    */
     FlatHashBitmapImpl<T>& operator|=(const FlatHashBitmapImpl<T>& src) {
         merge(src);
         return *this;
@@ -292,10 +305,7 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Clone
-    // Copy source bitmap and metadata into self, making an exact copy.
-    //
+    /// @brief Copy source bitmap and metadata into self, making an exact copy.
     void clone(const FlatHashBitmapImpl<T>& src) {
         clear();
         for (const auto& [src_prefix, src_bitmap] : src.get_map()) {
@@ -313,12 +323,10 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Optimize
-    // Calls the internal runOptimize() for each roaring map, which (I think) is an RLE analysis and/or compaction task.
-    //
-    // Note, we already check for empty in remove(), so dead prefixes are taken care of.
-    //
+    /**
+    * @brief Calls the internal runOptimize() for each roaring map, which is an RLE analysis and/or compaction task.
+    * @note Empty sets are already checked for in `remove()`, so no dead prefixes exist in `_sorted_prefixes`.
+    */
     void optimize() {
         for (auto& [prefix, bitmap] : _flat_map) {
             bitmap.runOptimize();
@@ -327,10 +335,10 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Shrink To Fit
-    // Calls the shrinkToFit() method for each bitmap.  Sums the savings and returns it, since the API does too.
-    //
+    /**
+    * @brief Calls the shrinkToFit() method for each bitmap and sums them.
+    * @returns The amount of space reclaimed, because that's what CRoaring's API does too.
+    */
     size_t shrink_to_fit() {
         size_t total = 0;
         for (auto& [prefix, bitmap] : _flat_map) {
@@ -341,12 +349,11 @@ class FlatHashBitmapImpl {
 
 
 
-    //
-    // Deep Size
-    // Calculate the size of this data structure as closely as possible.
-    //
-    // This is NOT cheap.  It requires iteration of the entire structure.
-    //
+    /**
+    * @brief Calculate the size of this data structure as closely as possible.
+    * @note This is not always cheap.  It requires iteration of all structures.
+    * @return The size in bytes of the object.
+    */
     size_t deep_size() const {
         size_t total = 0;
         total += sizeof(*this);
@@ -363,22 +370,22 @@ class FlatHashBitmapImpl {
     }
 
 
-static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
-    std::cout << name << " (cardinality=" << bm.cardinality() << "): ";
-    for (auto it = bm.begin(); it != bm.end(); ++it) {
-        std::cout << *it << " ";
-    }
-    std::cout << "\n";
-}
 
-
-    //
-    // Equal
-    // Compare all of the members and (meta) data.
-    //
-    // Returns true if they are equal in representation.  False otherwise.
-    // Will explain what failed to *err if sent.
-    //
+    /**
+    * @brief Compare two flat hash bitmaps' specific internals and return true if identical.
+    *
+    * This method currently does everything, because it's the only implementation behind the facade, so there's nohting to
+    * generalize.
+    *
+    * This function checks:
+    *   1. Prefixes count.
+    *   2. Prefixes one-by-one, and the CRoaring bitmap associated withh each.
+    *
+    * @param first The first bitmap to compare.
+    * @param second The second bitmap to compare.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     static bool st_equal(const FlatHashBitmapImpl<T>& first, const FlatHashBitmapImpl<T>& second, std::string* err = nullptr) {
         EqualityHelper eq(err);
         eq.set_category("FlatHashBitmapImpl");
@@ -400,12 +407,6 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             const roaring::Roaring& f_roaring = f_flat_map.at(f_prefixes.at(i));
             const roaring::Roaring& s_roaring = s_flat_map.at(s_prefixes.at(i));
             if (! roaring::api::roaring_bitmap_equals(&(f_roaring.roaring), &(s_roaring.roaring))) {
-                // roaring::Roaring f_minus_s = f_roaring - s_roaring;
-                // roaring::Roaring s_minus_f = s_roaring - f_roaring;
-                // print_bitmap(f_minus_s, "First - Second");
-                // print_bitmap(s_minus_f, "Second - First");
-                // print_bitmap(f_roaring, "First full map");
-                // print_bitmap(s_roaring, "Second full bitmap");
                 return eq.fail("Bitmaps do not match for prefix " + to_string_any(f_prefixes.at(i)));
             }
         }
@@ -413,18 +414,37 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
         // Guess they're equal.
         return true;
     }
-    //
-    // Member helper.
+
+
+
+    /**
+    * @brief Compare another bitmap to this one.
+    *
+    * This is a member helper which simply forwards to `FlatHashBitmapImpl::st_equal()`.
+    *
+    * @param second The second bitmap to compare against this.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     bool equal(const FlatHashBitmapImpl<T>& second, std::string* err = nullptr) const {
         return st_equal(*this, second, err);
     }
 
 
 
-    //
-    // Serialize
-    // Serialize all the prefixes and bitmaps, leaning on CRoaring's output heavily.
-    //
+    /**
+    * @brief Serialize the bitmap specifics of this object for export.
+    *
+    * Serialization happens in this order:
+    *   1. Count of prefixes.
+    *   2. Prefixes one-by-one, and then the associated CRoaring bitmap data.
+    *
+    * @note Since this is the only implementation, all data is dumped from here.
+    * @note This method does not throw.
+    * @param out The stream to write data to.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
         StreamHelper sh(nullptr, &out, err);
         sh.set_category("FlatHashBitmapImpl");
@@ -469,10 +489,16 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
 
 
 
-    //
-    // Deserialize
-    // Read all the data from "in" to reconstruct this object.  Uses CRoaring's internals heavily.
-    //
+    /**
+    * @brief Deserialize this object for import following a previous `serialize()`.
+    *
+    * Deserialization happens in the same order as serialization, obviously.
+    *
+    * @note This method does not throw.
+    * @param in The stream to read data from.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("FlatHashBitmapImpl");
@@ -512,18 +538,23 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
 
 
 
-    //
-    // For-Each Value
-    // This a convenience wrapper, designed when you don't need 'tls' storage.
-    //
-    // Applies callback to all values.  Your callback must have this signature:
-    //   (const T& value)
-    //
-    // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
-    //
-    // You may NOT modify this bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
-    // invalidated upon changes!
-    //
+    /**
+    * @brief A for-each wrapper returning each value in the bitmap to `callback`.
+    *
+    * This method uses `for_each_transformer` when TLS storage isn't needed.  It applies `callback` to all values.
+    *
+    * Callback must have this signature: `(const T& value)`
+    *
+    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
+    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    *
+    * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
+    * are invalidated upon changes.
+    *
+    * @tparam Func A function signature defined to match `callback`.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param callback Method to invoke on each value.
+    */
     template<typename Func>
     void for_each_value(BitmapTransformerPolicy policy, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
@@ -536,20 +567,28 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
 
 
 
-
-    //
-    // For-Each Transformer
-    // Applies callback to all values according to BitmapTransformerPolicy (serial or parallel).  Callback must have this signature:
-    //   (const T& value, TLS_Type& tls)
-    //
-    // The 'value' is the reconstructed value from the bitmap and must be const to avoid GMP alloc() temps.
-    // The 'tls' is a vector YOU send and an element will be returned in callback().
-    //   - We will use the omp_get_thread_num() as your vector's element ID.
-    //   - We will call tls.resize() if omp_get_max_threads() > tls.capacity().
-    //
-    // You may NOT modify THIS bitmap while operating!  We rely on CRoaring's iterators and internal structures which are
-    // invalidated upon changes!  If you need bitmap changes, include bitmaps in your tls& and .merge() them afterward.
-    //
+    /**
+    * @brief A for-each transformer allowing callbacks with thread-local storage for transformation.
+    *
+    * Applies `callback` to all values according to the BitmapTransformerPolicy (serial or parallel) requested.  When serial, order
+    * is guaranteed.
+    *
+    * Callback must have this signature: `(const T& value, TLS_Type& tls)`
+    *
+    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
+    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    *
+    * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
+    * are invalidated upon changes.
+    *
+    * @tparam Func A function signature defined to match `callback`.
+    * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
+    * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
+    * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
+    * @param callback Method to invoke on each value.
+    */
     template<typename Func, typename TLS_Type>
     void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
@@ -561,7 +600,7 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             tls.resize(max_threads);
         }
 
-        // Setup our control-stop.
+        // Setup a control-stop.
         std::atomic<bool> atomic_stop = false;
         bool stop;
 
@@ -575,7 +614,7 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             T shifted_prefix;
             suffix_t suffix;
 
-            // Even though we're not threaded, get our thread ID for clarity.
+            // Even though this path is not threaded, get a thread ID for clarity.
             size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
 
             // The TLS should only need index 0.
@@ -592,17 +631,17 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
                         mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
                     }
                 } else {
-                    // We have a T smaller than suffix_t, which means the only prefix we'll ever have is 0.
-                    // Set it manually, because small-T means we can't shift SUFFIX_BITS wide.
+                    // T is smaller than suffix_t, which means the only prefix it'll ever have is 0.
+                    // Set it manually, because small-T means it can't shift SUFFIX_BITS wide.
                     shifted_prefix = 0;
                 }
 
-                // Find our bitmap and connect an iterator.
+                // Find the bitmap and connect an iterator.
                 roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
                 roaring::api::roaring_uint32_iterator_t bitmap_iterator;
                 roaring::api::roaring_iterator_init(&roaring_obj.roaring, &bitmap_iterator);
 
-                // Loop this iterator until we're done.  Use addition instead of bitwise-OR (|) to avoid alloc on GMP path.
+                // Loop this iterator until done.  Use addition instead of bitwise-OR (|) to avoid alloc on GMP path.
                 while (bitmap_iterator.has_value) {
                     suffix = bitmap_iterator.current_value;
                     if constexpr(BuiltinIntegral<T>) {
@@ -625,15 +664,15 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
             // While throwing _sorted_prefixes at OMP might seem ideal, it would result in only a single thread working until level
             // 32.  This is because CRoaring uses a 32-bit map (16 bit key, 16 bit suffix) internally.
             //
-            // As such, we will read the internal high-low containers and iterate based on their type (array, bitmap, RLE).
+            // As such, this will read the internal high-low containers and iterate based on their type (array, bitmap, RLE).
 
             // Open the parallel region early and establish thread-locals.
             #pragma omp parallel default(none) shared(tls, atomic_stop, callback)
             {
-                // Get our thread ID.
+                // Get a thread ID.
                 size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
 
-                // Pick our element from the TLS.
+                // Pick an element from the TLS.
                 TLS_Type& my_tls = tls[my_thread_id];
 
                 // Track a local-stop.
@@ -649,7 +688,7 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
                     // Stop if needed.
                     if (atomic_stop.load(std::memory_order_relaxed)) { continue; }
 
-                    // Grab the prefix and then build a shifted_prefix so we don't recompute it.
+                    // Grab the prefix and then build a shifted_prefix so it isn't recomputed.
                     const prefix_t& prefix = _sorted_prefixes[prefix_index];
                     // Shift the prefix once instead of deeper inside the while()/for() loops.  For smaller types, set to 0.
                     if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
@@ -660,8 +699,8 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
                             mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
                         }
                     } else {
-                        // We have a T smaller than suffix_t, which means the only prefix we'll ever have is 0.
-                        // Set it manually, because small-T means we can't shift SUFFIX_BITS wide.
+                        // T is smaller than suffix_t, which means the only prefix it'll ever have is 0.
+                        // Set it manually, because small-T means it can't shift SUFFIX_BITS wide.
                         shifted_prefix = 0;
                     }
 
@@ -689,7 +728,7 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
                         suffix_t shifted_key = (suffix_t(suffix_key)) << Traits::ROARING_KEY_BITS;
                         suffix_t suffix_val;
 
-                        // Build the shifted prefix and key combo so we don't repeat it below.
+                        // Build the shifted prefix and key combo so it isn't repeated below.
                         if constexpr(BuiltinIntegral<T>) {
                             shifted_prefix_and_key = shifted_prefix + shifted_key;
                         } else {
@@ -737,7 +776,7 @@ static void print_bitmap(const roaring::Roaring& bm, const std::string& name) {
                                             atomic_stop.store(true, std::memory_order_relaxed);
                                             break;
                                         }
-                                        // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which we just processed.
+                                        // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which was just processed.
                                         word &= (word - 1);
                                     }
                                 }

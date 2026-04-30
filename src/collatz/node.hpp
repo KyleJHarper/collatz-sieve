@@ -4,10 +4,10 @@
 #include "binary_tree_math.hpp"
 #include "collatz_constants.hpp"
 #include "concepts.hpp"
+#include <cstdint>
 #include <gmp.h>
 #include <cmath>
 #include <limits>
-#include <stdexcept>
 #include <string>
 #include "collatz_affine_stride.hpp"
 #include "count_trailing_helpers.hpp"
@@ -16,18 +16,19 @@
 
 
 
-//
-// Node
-// Nodes are the objects within the BinaryTree, which allow us to track the odd-even/f-g patterns and give us the information we
-// need without a full Collatz object.
-//
-// BIG FAT NOTE!
-// By default, we OWN the children.  If you delete a node, it will delete the children, which will cascade.  If you want to delete
-// a node without affecting its children, call own_children(false).
-//
+/**
+* @class Node
+* @brief The value and metadata for a node inside of a `BinaryTree`.
+*
+* Nodes are the objects within a `BinaryTreeMaterializedImpl` or the workhorses used when building a `BinaryTreeImplicitImpl` via
+* the `BinaryTree` facade.
+*
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template <AnySupportedIntegral T>
 class Node {
     private:
+    /// @brief Maximum amount of children a node is allowed to have.
     static constexpr size_t MAX_CHILDREN = 2;
     // Object members.
     // Memory packing and alignment matter!  Keep this class LIGHT.
@@ -49,41 +50,43 @@ class Node {
 
 
     public:
-    //
-    // Constructors
-    //
+    /// @name Lifecycle Management
+    /// @{
+
+    /// @brief Default constructor.
     Node() {
         _value= T{};
         _parent = nullptr;
     }
+
+
+
+    /// @brief Construct which allows value specified and parent optionally set when initialized.
     Node(const T& value, Node *parent = nullptr) {
         init(value, parent);
     }
 
 
 
-    //
-    // Destructor
-    //
+    /// @brief Destructor, which simply needs to call `release_children()` in case it owns any which need freed.
     ~Node() {
         release_children();
     }
 
 
 
-    //
-    // Cout and string-ified methods.
-    //
-    friend std::ostream& operator<<(std::ostream &os, const Node<T>& m) {
-        return os << m._value;
-    }
-
-
-
-    //
-    // Initialize
-    // Builds the object, reusing it if necessary.
-    //
+    /**
+    * @brief Initializes a node object with `value` and an optional parent, treating it like it's new.
+    *
+    * This method is by far one of the hottest paths when building any tree type.  It handles type-specific optimizations for you,
+    * and even handles overflow detection as well.  It can be called reliably for any value.
+    *
+    * This method leans on `init_sequence_helper()` for the overflow detection and affine stride optimization.
+    *
+    * @param value Reference to the value for this node.
+    * @param parent A pointer to a parent, if one exists.  This only establishes a one-way connection: it does not asked `parent`
+    * to taken ownership of this (child) object.  Caller must handle this.
+    */
     void init(const T& value, Node *parent = nullptr) {
         // Reset object if necessary.
         if(_is_initialized) { reset(); }
@@ -101,14 +104,14 @@ class Node {
         // up to 2^<bit-1>.
         if constexpr(NativeIntegral<T>) {
             // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
-            if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
+            if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint64_t>(64)) {
                 init_sequence_helper<uint64_t>();
             } else {
                 init_sequence_helper<uint128_t>();
             }
         } else if constexpr(ExtendedIntegral<T>) {
             // Dealing with 128 bits.  If it'll overflow, use mpz_class.
-            if (_value <= CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
+            if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint128_t>(128)) {
                 init_sequence_helper<uint128_t>();
             } else {
                 init_sequence_helper<mpz_class>();
@@ -134,8 +137,13 @@ class Node {
             }
         }
     };
-    //
-    // Quick helper to DRY up affine logic during init().
+
+
+
+    /**
+    * @brief Helper used exclusively by `init()` for type comparison when processing sequence for FG chain/HWM analysis.
+    * @tparam U Any supported integral (see concepts.hpp).
+    */
     template<AnySupportedIntegral U>
     inline void init_sequence_helper() {
         // Cache the FG chain length.
@@ -198,9 +206,7 @@ class Node {
 
 
 
-    //
-    // Reset to make this act like a new() object.
-    //
+    /// @brief Reset to make this act like a new() object.
     void reset() {
         release_children();
         _parent = nullptr;
@@ -211,12 +217,25 @@ class Node {
         _owns_children = true;
     }
 
+    /// @}
 
 
-    //
-    // Add Child
-    // Creates a child and assigns it to this parent.
-    //
+
+    /// @brief Cout and string-ified methods.
+    friend std::ostream& operator<<(std::ostream &os, const Node<T>& m) {
+        return os << m._value;
+    }
+
+
+
+    /// @name Child-Related Accessors
+    /// @{
+
+    /**
+    * @brief Create a node object with `value` and assign it to this member's `_children` list.
+    * @param value Value of the child.
+    * @return Pointer to the child.
+    */
     Node<T>* add_child(T value) {
         Node *child = new Node(value, this);
         _children[_child_count++] = child;
@@ -225,49 +244,21 @@ class Node {
 
 
 
-    //
-    // Assign Child
-    // Assign a child.  No safety checks.  Increment counter.
+    /// @brief Assign a child to this `_children` list, with no safety checks.
     void assign_child(Node<T>* child) {
         _children[_child_count++] = child;
     }
 
 
 
-    //
-    // Assign Parent
-    // Assign a parent.  No safety checks.
-    //
-    void assign_parent(Node<T>* parent) {
-        _parent = parent;
-    }
-
-
-
-    //
-    // Assign HWM Ancestor
-    // Assign a HWM ancestor.  No safety checks.
-    //
-    void assign_hwm_ancestor(Node<T>* hwm_ancestor) {
-        _hwm_ancestor = hwm_ancestor;
-    }
-
-
-
-    //
-    // Own Children
-    // Gain or relinquish ownership of children, mostly for destruction cascading purposes later.
-    //
+    /// @brief Gain or relinquish ownership of children, mostly for destruction cascading purposes later.
     void own_children(bool value) {
         _owns_children = value;
     }
 
 
 
-    //
-    // Release Child
-    // Release (delete) a single child if _owns_children is true, based on the object passed in. Compares pointer value to memory.
-    //
+    /// @brief Release (delete) a single child if `_owns_children` is true.
     void release_child(Node<T>* child) {
         for (size_t i = 0; i < MAX_CHILDREN; i++) {
             // Find the Child
@@ -291,10 +282,7 @@ class Node {
 
 
 
-    //
-    // Release Children
-    // Releases (delete) all children if _owns_children is true.
-    //
+    /// @brief Releases (delete) all children if `_owns_children` is true.
     void release_children() {
         for (size_t i = 0; i < MAX_CHILDREN; i++) {
             if (_owns_children) {
@@ -307,80 +295,135 @@ class Node {
 
 
 
-    // Children are usually generated by a BinaryTree, but in free-form mode, allow a node to generate its own children.
-    static void st_spawn_children(Node<T>* node) {
-        if (node->get_child_count() > 0) {
-            throw std::logic_error("You can't spawn children on a node that already has children.");
-        }
-        T step = BinaryTreeMath<T>::st_step(node->get_level());
-
-        T child_value = node->get_value();
-        for (uint8_t i = 0; i < MAX_CHILDREN; i++) {
-            // Step forward.  Avoid alloc() with GMP in the += operator.
-            if constexpr(BuiltinIntegral<T>) {
-                child_value += step;
-            } else if constexpr(GMPIntegral<T>) {
-                mpz_add(child_value.get_mpz_t(), child_value.get_mpz_t(), step.get_mpz_t());
-            }
-            Node<T>* child = new Node<T>(child_value, node);
-            node->assign_child(child);
-        }
-    }
-    //
-    // Instance helper.
-    void spawn_children() {
-        st_spawn_children(this);
-    }
-
-
-
-    //
-    // Accessors and properties.
-    //
-    const T& get_value() const { return _value; }
-    Node* get_parent() const { return _parent; }
-    Node<T>* get_hwm_ancestor() const { return _hwm_ancestor; }
-    bool is_below_high_water_mark() const { return _is_below_hwm; }
-    bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
-    bool is_initialized() const { return _is_initialized; }
+    /// @brief Returns true if this object "owns" children (for destruction purposes), false otherwise.
     bool does_own_children() const { return _owns_children; }
+
+
+
+    /// @brief Return a readonly pointer to a child.
     const Node<T>* get_child(size_t index) const { return _children[index]; }
+
+
+
+    /// @brief Return a read-write pointer to a child.
     Node<T>* get_child_unsafe(size_t index) { return _children[index]; }
+
+
+
+    /// @brief Return the number of children assigned to this node.
     uint8_t get_child_count() const { return _child_count; }
-    size_t get_fg_chain_length() const { return BinaryTreeMath<T>::st_fg_chain_length(get_level()); }
-    //
-    // Tree level and position come from BinaryTree, but we'll make them accessible here.
-    size_t get_level() const { return BinaryTreeMath<T>::st_get_node_level_by_value(_value); }
+
+    /// @}
+
+
+
+    /// @name Parent- and Ancestor-Related Accessors
+    /// @{
+
+    /// @brief Assign the `parent` to this `_parent`, with no safety checks.
+    void assign_parent(Node<T>* parent) {
+        _parent = parent;
+    }
+
+
+
+    /// @brief Return a readonly pointer to the parent.
+    Node* get_parent() const { return _parent; }
+
+
+
+    /// @brief Assign the `hwm_ancestor` to this `_hwm_ancestor`, with no safety checks.
+    void assign_hwm_ancestor(Node<T>* hwm_ancestor) {
+        _hwm_ancestor = hwm_ancestor;
+    }
+
+
+
+    /// @brief Return a readonly pointer to the HWM ancestor.
+    Node<T>* get_hwm_ancestor() const { return _hwm_ancestor; }
+
+
+
+    /**
+    * @brief Return the sequence index for the HWM of a given value.
+    * @note HWM data is available in the Collatz object.
+    * @param value The value to process a sequence for.
+    * @return The index where High-Water Mark is reached.
+    */
+    static seq_size_t st_get_hwm_index(T value) {
+        Collatz<T> collatz(value, true, true);
+        return collatz.get_hwm_index();
+    }
+
+
+
+    /// @brief Member helper to get this node's High-Water Mark index.  See `st_get_hwm_index()`.
+    seq_size_t get_hwm_index() const {
+        return st_get_hwm_index(_value);
+    }
+
+    /// @}
+
+
+
+    /// @name Accessors
+    /// @{
+
+    /// @brief Return this node's value.
+    const T& get_value() const { return _value; }
+
+
+
+    /// @brief Flag to determine if this node is below the High-Water Mark.
+    bool is_below_high_water_mark() const { return _is_below_hwm; }
+
+
+
+    /// @brief Flag to determine if this node has a HWM ancestor.
+    bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
+
+
+
+    /// @brief Flag to determine if this node has been initialized with a value.
+    bool is_initialized() const { return _is_initialized; }
+
+
+
+    /// @brief Return the size of the FG chain for this node.  Uses `BinaryTreeMath::st_fg_chain_length()` under the hood.
+    seq_size_t get_fg_chain_length() const { return BinaryTreeMath<T>::st_fg_chain_length(get_level()); }
+
+
+
+    /// @brief Return this node's level.  It's calculated from `BinaryTreeMath::st_get_level_by_node_value()`.
+    level_t get_level() const { return BinaryTreeMath<T>::st_get_level_by_node_value(_value); }
+
+
+
+    /// @brief Return the position of this node.  Uses `BinaryTreeMath::st_node_position()` under the hood.
     T get_position() const { return BinaryTreeMath<T>::st_node_position(_value); }
 
 
 
-    //
-    // HWM data is available in the Collatz object.
-    static size_t st_get_hwm_index(T value) {
-        Collatz<T> collatz(value, true, true);
-        return collatz.get_hwm_index();
-    }
-    size_t get_hwm_index() const {
-        return st_get_hwm_index(_value);
-    }
-    //
-    // Get the F-G chain.  Use the Collatz static method for this.
+    /// @brief Get the F-G chain for this node.  Uses `Collatz::st_get_fg_chain_string()`.
     std::string get_fg_chain_string() const {
         return Collatz<T>::st_get_fg_chain_string(_value, get_fg_chain_length());
     }
-    //
-    // Get the odd-even chain.  Use the Collatz static method for this.
+
+
+
+    /// @brief Get the odd-even (OE) chain for this node.  Uses `Collatz::fg_to_oe()`.
     std::string get_odd_even_chain_string() const {
         return Collatz<T>::fg_to_oe(get_fg_chain_string(), std::numeric_limits<size_t>::max(), false);
     }
 
+    /// @}
 
 
-    //
-    // Object Size
-    // Deeply scan the object.
-    //
+
+    /**
+    * @brief Calculate the size of this data structure as closely as possible.
+    * @return The size in bytes of the object.
+    */
     size_t deep_size() const {
         size_t total = sizeof(*this);
         return total;
@@ -395,6 +438,24 @@ class Node {
     // Returns true if they are equal in representation.  False otherwise.
     // Will explain what failed to *err if sent.
     //
+    /**
+    * @brief Compare two Nodes' specific internals and return true if identical.
+    *
+    * This function checks:
+    *   1. Pointers null agree.
+    *   2. Node values match.
+    *   3. Parent's null agree.  If they exist, their values match.
+    *   4. HWM Ancestor's flags and pointers null agree.  If they exist, their values match.
+    *   5. Children have matching counts, null agreement, and equal values.
+    *   6. Flags for _is_below_hwm match.
+    *   7. Flags for _is_initialized match.
+    *   8. FG chain lengths and strings match.
+    *
+    * @param first The first Node to compare.
+    * @param second The second Node to compare.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     static bool st_equal (const Node<T>* first, const Node<T>* second, std::string* err = nullptr) {
         EqualityHelper eq(err);
         eq.set_category("Node");
@@ -490,19 +551,40 @@ class Node {
         // Guess we made it here.  All good.
         return true;
     }
-    //
-    // Member helper.
+
+
+
+    /**
+    * @brief Compare another node to this one.
+    *
+    * This is a member helper which simply forwards to `Node::st_equal()`.
+    *
+    * @param second The second Node to compare against this.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
     bool equal(const Node<T>* second, std::string* err = nullptr) const {
         return Node<T>::st_equal(this, second, err);
     }
 
 
 
-    //
-    // Serialize
-    // Serialize the node with its value, flags, and child values.  Since children are pointers, we will emit just their values.
-    // During deserialization, this is handled to re-establish pointers.
-    //
+    /**
+    * @brief Serialize the node specifics of this object for export.
+    *
+    * Serialization happens in this order:
+    *   1. Value.
+    *   2. Parent.
+    *   3. HWM Ancestor.
+    *   4. Flags.
+    *   5. Child count.
+    *
+    * @note Children are not exported.  They are linked during deserialization.
+    * @note This method does not throw.
+    * @param out The stream to write data to.
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
         StreamHelper sh(nullptr, &out, err);
         sh.set_category("Node");
@@ -567,10 +649,19 @@ class Node {
 
 
 
-    //
-    // Deserialize
-    // Converts data from "in" to this object.  Returns the parent and hwm_ancestor values for later linking.
-    //
+    /**
+    * @brief Deserialize this object for import following a previous `serialize()`.
+    *
+    * Deserialization happens in the same order as serialization, obviously.
+    *
+    * @note This method does not throw.
+    * @param in The stream to read data from.
+    * @param parent_v A reference to return parent value to (for linking/validation).  Zero == null when serialized.
+    * @param hwm_ancestor_v A reference to return HWM ancestor value to (for linking/validation).  Zero == null when serialized.
+    * @param child_count A reference to return child count to (for linking/validation).
+    * @param err Pointer to a string where errors, if any, are written.
+    * @return A boolean indicating success or failure.  Do not discard.
+    */
     [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& hwm_ancestor_v, uint8_t& child_count, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("Node");

@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classProgress.html" title=" " alt="" coords="5,5,84,31"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,80,147,105"/>
+<area shape="rect" id="Node000001" href="$structis__any__supported__integral.html" title="Container for true if T matches any of the supported types for this API." alt="" coords="195,5,425,31"/>
+<area shape="poly" id="edge3_Node000000_Node000001" title=" " alt="" coords="114,71,194,39,237,28,238,33,196,45,116,76"/>
+<area shape="rect" id="Node000002" href="$structis__builtin__integral.html" title="Container for true if T is a &quot;builtin&quot; integral of the CPU or compiler (&lt;= 128 bits)." alt="" coords="222,55,398,80"/>
+<area shape="poly" id="edge4_Node000000_Node000002" title=" " alt="" coords="160,81,221,74,222,80,161,86"/>
+<area shape="rect" id="Node000003" href="$structis__extended__integral.html" title="Container for true if T is an &quot;extended&quot; integral of the compiler (i.e.: 128&#45;bit)." alt="" coords="212,104,408,129"/>
+<area shape="poly" id="edge5_Node000000_Node000003" title=" " alt="" coords="161,99,212,104,212,109,160,104"/>
+<area shape="rect" id="Node000004" href="$structis__native__integral.html" title="Container for true if T is a &quot;native&quot; integral to the CPU (&lt;= 64 bits)." alt="" coords="222,153,398,179"/>
+<area shape="poly" id="edge6_Node000000_Node000004" title=" " alt="" coords="118,108,195,138,243,151,242,156,194,143,116,113"/>
 </map>

@@ -141,7 +141,7 @@ Private Attributes</h2></td></tr>
 <li>When A &lt; 1, then: A * N + B &lt; N</li>
 </ul>
 <p>While possibly asymptotic, this has been empirically validated up to 10,000 serial <code>F</code> steps. For safety, a counter has been added to ensure this class throws an exception above that level.</p>
-<p>The ability to discard the B-portion means only the contractive nature of <code>A</code> matters. These have been precomputed and stored in <code>Exponents::MAX_POW2_UNDER_POW3</code>.</p>
+<p>The ability to discard the B-portion means only the contractive nature of <code>A</code> matters. These have been precomputed and stored in <code><a class="el" href="namespaceExponents.html#afea47f1ca156afda94cc2283405fd0ba" title="Table of powers of three and the resultant power of two which is still below that power of three.">Exponents::MAX_POW2_UNDER_POW3</a></code>.</p>
 <dl class="section note"><dt>Note</dt><dd>This class has no calculate method, because the B-portion isn't tracked. </dd>
 <dd>
 Due to the nature of this class, no type <code>T</code> is necessary or possible. </dd></dl>
@@ -170,7 +170,7 @@ Due to the nature of this class, no type <code>T</code> is necessary or possible
 </div><div class="memdoc">
 
 <p>Compares the result of powers of 3 and 2, and returns true if <code>3^f &lt; 2^k</code>. </p>
-<p>These are precomputed and stored in an array within the <code>Exponents</code> namespace.</p>
+<p>These are precomputed and stored in an array within the <code><a class="el" href="namespaceExponents.html" title="Tables of exponents, mostly for powers of 2 and 3.">Exponents</a></code> namespace.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if <code>3^f &lt; 2^k</code>, otherwise false. </dd></dl>
 
 </div>

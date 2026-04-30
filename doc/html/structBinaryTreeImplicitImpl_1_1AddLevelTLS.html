@@ -106,7 +106,7 @@ Collaboration diagram for BinaryTreeImplicitImpl&lt; T &gt;::AddLevelTLS:</div>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a4fe358c673bb7eba372a297849e561da" id="r_a4fe358c673bb7eba372a297849e561da"><td class="memItemLeft" align="right" valign="top"><a id="a4fe358c673bb7eba372a297849e561da" name="a4fe358c673bb7eba372a297849e561da"></a>
 <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>uncovered_bitmap</b></td></tr>
-<tr class="memdesc:a4fe358c673bb7eba372a297849e561da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dedicated <code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code> for the thread to use without guards. Is merged later. <br /></td></tr>
+<tr class="memdesc:a4fe358c673bb7eba372a297849e561da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dedicated <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> for the thread to use without guards. Is merged later. <br /></td></tr>
 <tr class="separator:a4fe358c673bb7eba372a297849e561da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f528f44681da439c411ad13b46db56e" id="r_a7f528f44681da439c411ad13b46db56e"><td class="memItemLeft" align="right" valign="top"><a id="a7f528f44681da439c411ad13b46db56e" name="a7f528f44681da439c411ad13b46db56e"></a>
 std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>new_ancestors</b></td></tr>
@@ -122,7 +122,7 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>left_position</b></td></
 <tr class="separator:a489c30d3b72ab35e664ec8b48a751117"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26ab20675ba6e70fdd1ec39a006e4468" id="r_a26ab20675ba6e70fdd1ec39a006e4468"><td class="memItemLeft" align="right" valign="top"><a id="a26ab20675ba6e70fdd1ec39a006e4468" name="a26ab20675ba6e70fdd1ec39a006e4468"></a>
 <a class="el" href="classNode.html">Node</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>left_node</b></td></tr>
-<tr class="memdesc:a26ab20675ba6e70fdd1ec39a006e4468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Left child <code><a class="el" href="classNode.html">Node</a></code> object (scratch space). Reused via <code>Node::init()</code>. <br /></td></tr>
+<tr class="memdesc:a26ab20675ba6e70fdd1ec39a006e4468"><td class="mdescLeft">&#160;</td><td class="mdescRight">Left child <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> object (scratch space). Reused via <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">Node::init()</a></code>. <br /></td></tr>
 <tr class="separator:a26ab20675ba6e70fdd1ec39a006e4468"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40f5152ef07d64d4dd7a12950717226" id="r_aa40f5152ef07d64d4dd7a12950717226"><td class="memItemLeft" align="right" valign="top"><a id="aa40f5152ef07d64d4dd7a12950717226" name="aa40f5152ef07d64d4dd7a12950717226"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>right_value</b></td></tr>
@@ -134,13 +134,13 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>right_position</b></td><
 <tr class="separator:a031c148523387fb150285959af8df772"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99a026f3e1b20b1977cbc5a8e21774c7" id="r_a99a026f3e1b20b1977cbc5a8e21774c7"><td class="memItemLeft" align="right" valign="top"><a id="a99a026f3e1b20b1977cbc5a8e21774c7" name="a99a026f3e1b20b1977cbc5a8e21774c7"></a>
 <a class="el" href="classNode.html">Node</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>right_node</b></td></tr>
-<tr class="memdesc:a99a026f3e1b20b1977cbc5a8e21774c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Right child <code><a class="el" href="classNode.html">Node</a></code> object (scratch space). Reused via <code>Node::init()</code>. <br /></td></tr>
+<tr class="memdesc:a99a026f3e1b20b1977cbc5a8e21774c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Right child <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> object (scratch space). Reused via <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">Node::init()</a></code>. <br /></td></tr>
 <tr class="separator:a99a026f3e1b20b1977cbc5a8e21774c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
 struct BinaryTreeImplicitImpl&lt; T &gt;::AddLevelTLS</div><p>A thread-local cache structure for <code><a class="el" href="classBinaryTreeImplicitImpl.html#af93247b2efa3579ee7a92a0529aae36c" title="Add a level to the tree.">add_level()</a></code>. </p>
-<p>The <code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code> has a multithreading (OMP) for-each iterator which we leverage to engage multiple CPUs when adding nodes to a level. This struct creates safety and scratch space for that.</p>
+<p>The <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> has a multithreading (OMP) for-each iterator which we leverage to engage multiple CPUs when adding nodes to a level. This struct creates safety and scratch space for that.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This is not meant to be used anywhere else. </dd></dl>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="binary__tree__implicit_8hpp_source.html">binary_tree_implicit.hpp</a></li>

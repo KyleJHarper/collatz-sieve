@@ -205,28 +205,29 @@
 \DoxyCodeLine{00247\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
 \DoxyCodeLine{00248\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ T\ \mbox{\hyperlink{namespaceCollatzConstants_a2b92d28402e35ce06283c48a6a0edbd4}{get\_max\_initial\_value\_by\_bit}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit\_size}})\ \{}
 \DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Safety\ Check}}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bit\_size}}\ >\ \mbox{\hyperlink{classNode}{get\_max\_bits\_for\_max\_initial\_value\_by\_type<T>}}())\ \{}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Max\ initial\ value\ for\ bit\ size\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{bit\_size}})\ +\ \textcolor{stringliteral}{"{}\ not\ found."{}});}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00253\ }
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 64\ bits\ or\ less,\ which\ is\ fully\ discovered.}}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}]);}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}];}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ uint128\_to\_mpz(\mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}]);}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type\ for\ bit\ required."{}});}
-\DoxyCodeLine{00263\ \ \ \ \ \}}
-\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_bits}}\ =\ \mbox{\hyperlink{classNode}{get\_max\_bits\_for\_max\_initial\_value\_by\_type<T>}}();}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bit\_size}}\ >\ \mbox{\hyperlink{classNode}{max\_bits}})\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Max\ initial\ value\ for\ bit\ size\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{bit\_size}})\ +\ \textcolor{stringliteral}{"{}\ not\ found\ because\ it\ exceeds\ max\ bits:\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{max\_bits}})\ +\ \textcolor{stringliteral}{"{}."{}});}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 64\ bits\ or\ less,\ which\ is\ fully\ discovered.}}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}]);}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}];}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ uint128\_to\_mpz(\mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{MAX\_INITIAL\_VALUE\_BY\_BIT}}[\mbox{\hyperlink{classNode}{bit\_size}}]);}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type\ for\ bit\ required."{}});}
+\DoxyCodeLine{00264\ \ \ \ \ \}}
 \DoxyCodeLine{00265\ }
 \DoxyCodeLine{00266\ }
-\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ T\ \mbox{\hyperlink{namespaceCollatzConstants_a487c3bd2711a3eaae07c30f674c22a58}{get\_max\_initial\_value\_by\_type}}()\ \{}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_bits}}\ =\ \mbox{\hyperlink{classNode}{is\_gmp\_integral\_v<T>}}()\ ?\ 128\ :\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{get\_max\_initial\_value\_by\_bit<T>}}(\mbox{\hyperlink{classNode}{max\_bits}});}
-\DoxyCodeLine{00275\ \ \ \ \ \}}
-\DoxyCodeLine{00276\ \}}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ T\ \mbox{\hyperlink{namespaceCollatzConstants_a487c3bd2711a3eaae07c30f674c22a58}{get\_max\_initial\_value\_by\_type}}()\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_bits}}\ =\ \mbox{\hyperlink{classNode}{is\_gmp\_integral\_v<T>}}()\ ?\ 128\ :\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{get\_max\_initial\_value\_by\_bit<T>}}(\mbox{\hyperlink{classNode}{max\_bits}});}
+\DoxyCodeLine{00276\ \ \ \ \ \}}
+\DoxyCodeLine{00277\ \}}
 
 \end{DoxyCode}

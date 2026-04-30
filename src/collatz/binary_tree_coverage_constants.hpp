@@ -89,7 +89,7 @@ namespace BinaryTreeCoverageConstants {
 
         // Pick the right type, and convert as-needed.
         if constexpr(NativeIntegral<T>) {
-            if (sizeof(T) * 8 > level) {
+            if (level > sizeof(T) * 8) {
                 throw std::out_of_range("Level " + std::to_string(level) + " is outside the max range for your type T: " + ABIHelpers::demangle<T>());
             }
             return static_cast<T>(KNOWN_COVERAGE_MAP[level]);

@@ -6,6 +6,7 @@
 #include <CLI.hpp>
 #include <unistd.h>
 #include "collatz/binary_tree_coverage.hpp"
+#include "collatz/binary_tree_coverage_constants.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"
 
@@ -32,7 +33,7 @@ class CoverageBuilder {
 
     const BinaryTree<T, TreeType>& get_tree() const { return _tree; }
     // Add levels until we reach `levels` from caller.
-    void run(size_t levels) {
+    void run(level_t levels) {
         if (_use_precomputed) {
             if (levels > BinaryTreeCoverageConstants::MAX_KNOWN_COVERAGE_LEVEL) {
                 std::string msg = "You can't use precomputed coverage after level ";
@@ -42,7 +43,7 @@ class CoverageBuilder {
             }
             // Just spit out the results.
             BinaryTreeCoverage<T> global_coverage;
-            for (size_t level = 1; level <= levels; level++) {
+            for (level_t level = 1; level <= levels; level++) {
                 BinaryTreeCoverage<T> coverage;
                 coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage<T>(level));
                 coverage.set_total(BinaryTreeCoverageConstants::get_total<T>(level));
@@ -56,7 +57,7 @@ class CoverageBuilder {
         }
     }
     void add_level() {
-        size_t next_level = _tree.get_level_count() + 1;
+        level_t next_level = _tree.get_level_count() + 1;
         logger->debug("Building level {}...", next_level);
         _tree.add_level();
         BinaryTreeCoverage<T> coverage = _tree.get_coverage_map().find(next_level)->second;
@@ -71,15 +72,15 @@ class CoverageBuilder {
 
 
 template<AnySupportedIntegral T, typename TreeType>
-void run(size_t levels, bool use_precomputed, bool show_ancestors, size_t sleep_seconds, bool verify_non_hwm_nodes) {
-    std::unordered_map<size_t, BinaryTreeCoverage<T>> coverage_map;
+void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep_seconds, bool verify_non_hwm_nodes) {
+    std::unordered_map<level_t, BinaryTreeCoverage<T>> coverage_map;
     CoverageBuilder<T, TreeType> builder(show_ancestors, verify_non_hwm_nodes);
     builder.get_tree().assert_level_will_fit(levels);
     builder.use_precomputed(use_precomputed);
     builder.run(levels);
     BinaryTreeCoverage<T> global_coverage;
     if (use_precomputed) {
-        for (size_t level = 1; level <= levels; level++) {
+        for (level_t level = 1; level <= levels; level++) {
             BinaryTreeCoverage<T> coverage;
             coverage.set_covered(BinaryTreeCoverageConstants::get_known_coverage<T>(level));
             coverage.set_total(BinaryTreeCoverageConstants::get_total<T>(level));
@@ -186,14 +187,14 @@ int main(int argc, char **argv) {
     }
     // Now make sure it'll actually fit without overflowing.
     if (data_type == "uint64_t") {
-        size_t max_level = BinaryTreeMath<uint64_t>::st_max_level_of_type();
+        level_t max_level = BinaryTreeMath<uint64_t>::st_max_level_of_type();
         if (levels > max_level) {
             logger->info("Level (-l) is over {} and you didn't specify -i or -m.  Auto upgrading from uint64_t to uint128_t.", max_level);
             data_type = "uint128_t";
         }
     }
     if (data_type == "uint128_t") {
-        size_t max_level = BinaryTreeMath<uint128_t>::st_max_level_of_type();
+        level_t max_level = BinaryTreeMath<uint128_t>::st_max_level_of_type();
         if (levels > max_level) {
             logger->info("Level (-l) is over {} and you didn't specify -m.  Auto upgrading from uint128_t to mpz_class.", max_level);
             data_type = "mpz_class";

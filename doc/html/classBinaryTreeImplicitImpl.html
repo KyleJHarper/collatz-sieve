@@ -251,7 +251,7 @@ class BinaryTreeImplicitImpl&lt; T &gt;</div><p>A mathematically equivalent impl
 <p>This implementation is vastly superior in almost every metric, and is the default as of version 4.0.0.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see concepts.hpp). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -283,8 +283,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Add a level to the tree. </p>
 <p>Implicit tree building happens by tracking the left-to-right positions (not values) of nodes which haven't been removed by a HWM node or ancestor. This is representatively identical to a materialized tree's last level of nodes: anything remaining in the <code>_uncovered_positions</code> are the parent nodes from the previous level whose children must be processed.</p>
-<p>To achieve any sort of threading performance, each thread will get thread-local storage (TLS) from an <code><a class="el" href="structBinaryTreeImplicitImpl_1_1AddLevelTLS.html" title="A thread-local cache structure for add_level().">AddLevelTLS</a></code> struct, which includes its own <code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code> and vector of ancestors (if tracking them). When all threading is finished, the results are merged into <code>_uncovered_positions</code>, coverage is calculated via simple arithmetic, and this function ends.</p>
-<p>Threading itself is handed off to <code>NodeBitmap::for_each_transformer()</code>, along with the aforementioned callback (TLS) storage. This is in contrast to the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> which handles OMP directly inside the its own add level method. </p>
+<p>To achieve any sort of threading performance, each thread will get thread-local storage (TLS) from an <code><a class="el" href="structBinaryTreeImplicitImpl_1_1AddLevelTLS.html" title="A thread-local cache structure for add_level().">AddLevelTLS</a></code> struct, which includes its own <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> and vector of ancestors (if tracking them). When all threading is finished, the results are merged into <code>_uncovered_positions</code>, coverage is calculated via simple arithmetic, and this function ends.</p>
+<p>Threading itself is handed off to <code><a class="el" href="classNodeBitmap.html#a0d1c20c8e1e514168196eb3745976c00" title="A for-each transformer allowing callbacks with thread-local storage for transformation.">NodeBitmap::for_each_transformer()</a></code>, along with the aforementioned callback (TLS) storage. This is in contrast to the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> which handles OMP directly inside the its own add level method. </p>
 
 </div>
 </div>
@@ -595,7 +595,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Serialize the implicit tree specifics of this object for export. </p>
 <p>Serialization happens in this order:</p><ol type="1">
-<li>Uncovered positions (<code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code>)</li>
+<li>Uncovered positions (<code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code>)</li>
 </ol>
 <dl class="section note"><dt>Note</dt><dd>The <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade handles serialization of common items between implementations. </dd>
 <dd>
@@ -765,9 +765,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare two implicit trees' specific internals and return true if identical. </p>
-<p>This method only tests implicit tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (e.g.: level count).</p>
+<p>This method only tests implicit tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (<a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">e.g</a>.: level count).</p>
 <p>This function checks:</p><ol type="1">
-<li>The uncovered positions (<code><a class="el" href="classNodeBitmap.html">NodeBitmap</a></code>) are equal.</li>
+<li>The uncovered positions (<code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code>) are equal.</li>
 </ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

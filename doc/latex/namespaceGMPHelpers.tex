@@ -1,0 +1,76 @@
+\doxysection{GMPHelpers Namespace Reference}
+\hypertarget{namespaceGMPHelpers}{}\label{namespaceGMPHelpers}\index{GMPHelpers@{GMPHelpers}}
+
+
+Collection of methods for managing GMP data types, such as {\ttfamily mpz\+\_\+class} and {\ttfamily mpf\+\_\+class}.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMPHelpers_ab496fb066655b56caf01b6cd9c00419f}{gmp\+\_\+deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpz\+\_\+class} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMPHelpers_a96d63f8655fcb8bd20952aa375475e5b}{gmp\+\_\+deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpf\+\_\+class} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{namespaceGMPHelpers_a237ac39211bb0c9a8651322e88fb97ab}{mpz\+\_\+get\+\_\+ui64}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Retrieve xactly 64 bits from an {\ttfamily mpz\+\_\+t}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Collection of methods for managing GMP data types, such as {\ttfamily mpz\+\_\+class} and {\ttfamily mpf\+\_\+class}. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceGMPHelpers_a96d63f8655fcb8bd20952aa375475e5b}\label{namespaceGMPHelpers_a96d63f8655fcb8bd20952aa375475e5b} 
+\index{GMPHelpers@{GMPHelpers}!gmp\_deep\_sizeof@{gmp\_deep\_sizeof}}
+\index{gmp\_deep\_sizeof@{gmp\_deep\_sizeof}!GMPHelpers@{GMPHelpers}}
+\doxysubsubsection{\texorpdfstring{gmp\_deep\_sizeof()}{gmp\_deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMPHelpers\+::gmp\+\_\+deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Try to calculate the true (heap) size of an {\ttfamily mpf\+\_\+class} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Best attempt at the total bytes used by the object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGMPHelpers_ab496fb066655b56caf01b6cd9c00419f}\label{namespaceGMPHelpers_ab496fb066655b56caf01b6cd9c00419f} 
+\index{GMPHelpers@{GMPHelpers}!gmp\_deep\_sizeof@{gmp\_deep\_sizeof}}
+\index{gmp\_deep\_sizeof@{gmp\_deep\_sizeof}!GMPHelpers@{GMPHelpers}}
+\doxysubsubsection{\texorpdfstring{gmp\_deep\_sizeof()}{gmp\_deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMPHelpers\+::gmp\+\_\+deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Try to calculate the true (heap) size of an {\ttfamily mpz\+\_\+class} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Best attempt at the total bytes used by the object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGMPHelpers_a237ac39211bb0c9a8651322e88fb97ab}\label{namespaceGMPHelpers_a237ac39211bb0c9a8651322e88fb97ab} 
+\index{GMPHelpers@{GMPHelpers}!mpz\_get\_ui64@{mpz\_get\_ui64}}
+\index{mpz\_get\_ui64@{mpz\_get\_ui64}!GMPHelpers@{GMPHelpers}}
+\doxysubsubsection{\texorpdfstring{mpz\_get\_ui64()}{mpz\_get\_ui64()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{uint64\+\_\+t}} GMPHelpers\+::mpz\+\_\+get\+\_\+ui64 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieve xactly 64 bits from an {\ttfamily mpz\+\_\+t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the {\ttfamily mpz\+\_\+t} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily uint64\+\_\+t} with the bits. 
+\end{DoxyReturn}

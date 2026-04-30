@@ -81,7 +81,7 @@
 \DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ deep\_size()\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ \textcolor{keyword}{sizeof}(*this);}
 \DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ gmp\_deep\_sizeof(peak\_value);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{namespaceGMPHelpers_ab496fb066655b56caf01b6cd9c00419f}{GMPHelpers::gmp\_deep\_sizeof}}(peak\_value);}
 \DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
 \DoxyCodeLine{00087\ \ \ \ \ \}}
@@ -213,7 +213,7 @@
 \DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \_sequence\_overflow\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \_track\_sequence\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \_track\_metadata\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_metadata\ !=\ \textcolor{keyword}{nullptr})\ \{\ \_metadata-\/>reset();\ \}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_metadata\ !=\ \textcolor{keyword}{nullptr})\ \{\ \_metadata-\/>\mbox{\hyperlink{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}{reset}}();\ \}}
 \DoxyCodeLine{00217\ \ \ \ \ \}}
 \DoxyCodeLine{00218\ }
 \DoxyCodeLine{00219\ }
@@ -299,12 +299,12 @@
 \DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{mpz\_class}})\ *\ \_sequence.capacity();}
 \DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classNode}{val}}\ :\ \_sequence)\ \{}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ gmp\_deep\_sizeof(\mbox{\hyperlink{classNode}{val}});}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{namespaceGMPHelpers_ab496fb066655b56caf01b6cd9c00419f}{GMPHelpers::gmp\_deep\_sizeof}}(\mbox{\hyperlink{classNode}{val}});}
 \DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00305\ }
 \DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_metadata\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_metadata-\/>deep\_size();}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_metadata-\/>\mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\_size}}();}
 \DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00309\ }
 \DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
@@ -391,7 +391,7 @@
 \DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{tls\_out}};}
 \DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classNode}{tls\_initial\_value}}\ \&\ 1)\ ==\ 1)\ \{}
 \DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Odd}}
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.reset();}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.\mbox{\hyperlink{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}{reset}}();}
 \DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{trailing\_ones}}\ =\ count\_trailing\_ones(\mbox{\hyperlink{classNode}{tls\_initial\_value}});}
 \DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{trailing\_ones}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
 \DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.apply\_F();}
@@ -427,7 +427,7 @@
 \DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{tls\_out}};}
 \DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classNode}{tls\_initial\_value}}\ \&\ 1)\ ==\ 1)\ \{}
 \DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Odd}}
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.reset();}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.\mbox{\hyperlink{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}{reset}}();}
 \DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{trailing\_ones}}\ =\ count\_trailing\_ones(\mbox{\hyperlink{classNode}{tls\_initial\_value}});}
 \DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{trailing\_ones}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
 \DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{af\_map}}.apply\_F();}
@@ -560,7 +560,7 @@
 \DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{tmp}};}
 \DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tmp}}\ =\ \mbox{\hyperlink{classNode}{initial\_value}};}
 \DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{trailing\_ones}}\ =\ 0;}
-\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limit}}\ =\ Exponents::POW3\_MPZ\_ELEMENT\_COUNT\ -\/\ 1;}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limit}}\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
 \DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
 \DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{tmp}}\ >\ 1)\ \{}
 \DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
@@ -568,11 +568,11 @@
 \DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{trailing\_ones}}\ =\ count\_trailing\_ones(\mbox{\hyperlink{classNode}{tmp}});}
 \DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{steps}}\ +=\ (2\ *\ \mbox{\hyperlink{classNode}{trailing\_ones}});}
 \DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{trailing\_ones}}\ >\ \mbox{\hyperlink{classNode}{limit}})\ \{}
-\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tmp}}\ =\ ((Exponents::POW3\_MPZ[\mbox{\hyperlink{classNode}{limit}}]\ *\ (\mbox{\hyperlink{classNode}{tmp}}\ +\ 1))\ >>\ \mbox{\hyperlink{classNode}{limit}})\ -\/\ 1;}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tmp}}\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[\mbox{\hyperlink{classNode}{limit}}]\ *\ (\mbox{\hyperlink{classNode}{tmp}}\ +\ 1))\ >>\ \mbox{\hyperlink{classNode}{limit}})\ -\/\ 1;}
 \DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{trailing\_ones}}\ -\/=\ \mbox{\hyperlink{classNode}{limit}};}
 \DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{trailing\_ones}}\ >\ 0)\ \{}
-\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tmp}}\ =\ ((Exponents::POW3\_MPZ[\mbox{\hyperlink{classNode}{trailing\_ones}}]\ *\ (\mbox{\hyperlink{classNode}{tmp}}\ +\ 1))\ >>\ \mbox{\hyperlink{classNode}{trailing\_ones}})\ -\/\ 1;}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tmp}}\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[\mbox{\hyperlink{classNode}{trailing\_ones}}]\ *\ (\mbox{\hyperlink{classNode}{tmp}}\ +\ 1))\ >>\ \mbox{\hyperlink{classNode}{trailing\_ones}})\ -\/\ 1;}
 \DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
@@ -629,7 +629,7 @@
 \DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{bailout\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bailout\_value}}.get\_mpz\_t(),\ 1);}
 \DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{trailing\_ones}}\ =\ 0;}
-\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limit}}\ =\ Exponents::POW3\_MPZ\_ELEMENT\_COUNT\ -\/\ 1;}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limit}}\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
 \DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
 \DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{tmp}}\ >\ \mbox{\hyperlink{classNode}{bailout\_value}})\ \{}
 \DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
@@ -638,7 +638,7 @@
 \DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{trailing\_ones}}\ >\ \mbox{\hyperlink{classNode}{limit}})\ \{}
 \DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ tmp\ =\ ((CollatzConstants::POW3\_MPZ[limit]\ *\ (tmp\ +\ 1))\ >>\ limit)\ -\/\ 1;}}
 \DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ Exponents::POW3\_MPZ[\mbox{\hyperlink{classNode}{limit}}].get\_mpz\_t());}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[\mbox{\hyperlink{classNode}{limit}}].get\_mpz\_t());}
 \DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_tdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{limit}});}
 \DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ 1);}
 \DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{trailing\_ones}}\ -\/=\ \mbox{\hyperlink{classNode}{limit}};}
@@ -646,7 +646,7 @@
 \DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{trailing\_ones}}\ >\ 0)\ \{}
 \DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ tmp\ =\ ((CollatzConstants::POW3\_MPZ[trailing\_ones]\ *\ (tmp\ +\ 1))\ >>\ trailing\_ones)\ -\/\ 1;}}
 \DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ Exponents::POW3\_MPZ[\mbox{\hyperlink{classNode}{trailing\_ones}}].get\_mpz\_t());}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[\mbox{\hyperlink{classNode}{trailing\_ones}}].get\_mpz\_t());}
 \DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_tdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{trailing\_ones}});}
 \DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ 1);}
 \DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}

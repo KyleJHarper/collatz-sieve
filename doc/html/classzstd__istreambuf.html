@@ -77,7 +77,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -85,12 +84,17 @@ $(function() {
   <div class="headertitle"><div class="title">zstd_istreambuf Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <code>streambuf</code> subclass which wraps the C-style ZSTD bits to decompress a stream.  
+ <a href="classzstd__istreambuf.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="zstd__decompress_8hpp_source.html">zstd_decompress.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for zstd_istreambuf:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__istreambuf__inherit__graph.png" border="0" usemap="#azstd__istreambuf_inherit__map" alt="Inheritance graph"/></div>
 <map name="azstd__istreambuf_inherit__map" id="azstd__istreambuf_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,79,132,104"/>
+<area shape="rect" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to decompress a stream." alt="" coords="5,79,132,104"/>
 <area shape="rect" title=" " alt="" coords="10,5,127,31"/>
 <area shape="poly" title=" " alt="" coords="71,44,71,79,66,79,66,44"/>
 </map>
@@ -100,7 +104,7 @@ Collaboration diagram for zstd_istreambuf:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__istreambuf__coll__graph.png" border="0" usemap="#azstd__istreambuf_coll__map" alt="Collaboration graph"/></div>
 <map name="azstd__istreambuf_coll__map" id="azstd__istreambuf_coll__map">
-<area shape="rect" title=" " alt="" coords="5,79,132,104"/>
+<area shape="rect" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to decompress a stream." alt="" coords="5,79,132,104"/>
 <area shape="rect" title=" " alt="" coords="10,5,127,31"/>
 <area shape="poly" title=" " alt="" coords="71,44,71,79,66,79,66,44"/>
 </map>
@@ -108,49 +112,128 @@ Collaboration diagram for zstd_istreambuf:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a777a1f725474596c6f5850ecba0d79b2" id="r_a777a1f725474596c6f5850ecba0d79b2"><td class="memItemLeft" align="right" valign="top"><a id="a777a1f725474596c6f5850ecba0d79b2" name="a777a1f725474596c6f5850ecba0d79b2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>zstd_istreambuf</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__istreambuf.html">zstd_istreambuf</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a777a1f725474596c6f5850ecba0d79b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:a777a1f725474596c6f5850ecba0d79b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4f1773f021c453576ec08f9c9799479" id="r_ac4f1773f021c453576ec08f9c9799479"><td class="memItemLeft" align="right" valign="top"><a id="ac4f1773f021c453576ec08f9c9799479" name="ac4f1773f021c453576ec08f9c9799479"></a>
 <a class="el" href="classzstd__istreambuf.html">zstd_istreambuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__istreambuf.html">zstd_istreambuf</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:ac4f1773f021c453576ec08f9c9799479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:ac4f1773f021c453576ec08f9c9799479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8095f2e6091178288dede8c36185ec13" id="r_a8095f2e6091178288dede8c36185ec13"><td class="memItemLeft" align="right" valign="top"><a id="a8095f2e6091178288dede8c36185ec13" name="a8095f2e6091178288dede8c36185ec13"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>zstd_istreambuf</b> (std::streambuf *<a class="el" href="classNode.html">src</a>)</td></tr>
+<tr class="memdesc:a8095f2e6091178288dede8c36185ec13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor connects caller's <code>src</code> to read into the ZSTD decompressor. <br /></td></tr>
 <tr class="separator:a8095f2e6091178288dede8c36185ec13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae130e172d48ccd46282b6436229f6f69" id="r_ae130e172d48ccd46282b6436229f6f69"><td class="memItemLeft" align="right" valign="top"><a id="ae130e172d48ccd46282b6436229f6f69" name="ae130e172d48ccd46282b6436229f6f69"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~zstd_istreambuf</b> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memdesc:ae130e172d48ccd46282b6436229f6f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor simply needs to free() up the ZSTD stream. <br /></td></tr>
+<tr class="separator:ae130e172d48ccd46282b6436229f6f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a6fd98e416292c990b94a7c70a037ef16" id="r_a6fd98e416292c990b94a7c70a037ef16"><td class="memItemLeft" align="right" valign="top"><a id="a6fd98e416292c990b94a7c70a037ef16" name="a6fd98e416292c990b94a7c70a037ef16"></a>
-<a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><b>underflow</b> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memitem:a6fd98e416292c990b94a7c70a037ef16" id="r_a6fd98e416292c990b94a7c70a037ef16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__istreambuf.html#a6fd98e416292c990b94a7c70a037ef16">underflow</a> () <a class="el" href="classNode.html">override</a></td></tr>
+<tr class="memdesc:a6fd98e416292c990b94a7c70a037ef16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underflow check which will read in as much data as possible and decompress it.  <br /></td></tr>
 <tr class="separator:a6fd98e416292c990b94a7c70a037ef16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:aead03fbc3fb158fa52c9811a1e441e47" id="r_aead03fbc3fb158fa52c9811a1e441e47"><td class="memItemLeft" align="right" valign="top"><a id="aead03fbc3fb158fa52c9811a1e441e47" name="aead03fbc3fb158fa52c9811a1e441e47"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">code</a>)</td></tr>
+<tr class="memitem:aead03fbc3fb158fa52c9811a1e441e47" id="r_aead03fbc3fb158fa52c9811a1e441e47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__istreambuf.html#aead03fbc3fb158fa52c9811a1e441e47">check</a> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">code</a>)</td></tr>
+<tr class="memdesc:aead03fbc3fb158fa52c9811a1e441e47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for ZSTD_isError(), which checks an error code and throws the error name if found.  <br /></td></tr>
 <tr class="separator:aead03fbc3fb158fa52c9811a1e441e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ac02639c9283f9075f96b65355c664035" id="r_ac02639c9283f9075f96b65355c664035"><td class="memItemLeft" align="right" valign="top"><a id="ac02639c9283f9075f96b65355c664035" name="ac02639c9283f9075f96b65355c664035"></a>
 std::streambuf *&#160;</td><td class="memItemRight" valign="bottom"><b>_src</b></td></tr>
+<tr class="memdesc:ac02639c9283f9075f96b65355c664035"><td class="mdescLeft">&#160;</td><td class="mdescRight">The source stream to read compressed data from. <br /></td></tr>
 <tr class="separator:ac02639c9283f9075f96b65355c664035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfcd7ce090be935068f92c592a2fac1a" id="r_adfcd7ce090be935068f92c592a2fac1a"><td class="memItemLeft" align="right" valign="top"><a id="adfcd7ce090be935068f92c592a2fac1a" name="adfcd7ce090be935068f92c592a2fac1a"></a>
 <a class="el" href="classNode.html">ZSTD_DStream</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_zstd_dstream</b></td></tr>
+<tr class="memdesc:adfcd7ce090be935068f92c592a2fac1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ZSTD decompression object. <br /></td></tr>
 <tr class="separator:adfcd7ce090be935068f92c592a2fac1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb526c077e3fa00dd9d782cd76c17520" id="r_aeb526c077e3fa00dd9d782cd76c17520"><td class="memItemLeft" align="right" valign="top"><a id="aeb526c077e3fa00dd9d782cd76c17520" name="aeb526c077e3fa00dd9d782cd76c17520"></a>
 std::vector&lt; <a class="el" href="classNode.html">char</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_input_buffer</b></td></tr>
+<tr class="memdesc:aeb526c077e3fa00dd9d782cd76c17520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic input buffer to feed to ZSTD. <br /></td></tr>
 <tr class="separator:aeb526c077e3fa00dd9d782cd76c17520"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5df7ba590d849c20a337f7681e702fc" id="r_af5df7ba590d849c20a337f7681e702fc"><td class="memItemLeft" align="right" valign="top"><a id="af5df7ba590d849c20a337f7681e702fc" name="af5df7ba590d849c20a337f7681e702fc"></a>
 std::vector&lt; <a class="el" href="classNode.html">char</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_output_buffer</b></td></tr>
+<tr class="memdesc:af5df7ba590d849c20a337f7681e702fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic output buffer to write decompressed data to. <br /></td></tr>
 <tr class="separator:af5df7ba590d849c20a337f7681e702fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a057489095247828ebb81583ce7377966" id="r_a057489095247828ebb81583ce7377966"><td class="memItemLeft" align="right" valign="top"><a id="a057489095247828ebb81583ce7377966" name="a057489095247828ebb81583ce7377966"></a>
 <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_input_position</b> = 0</td></tr>
+<tr class="memdesc:a057489095247828ebb81583ce7377966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracker for input position while reading. <br /></td></tr>
 <tr class="separator:a057489095247828ebb81583ce7377966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabb2ff9ff1fbcb0d98182e34a943df41" id="r_aabb2ff9ff1fbcb0d98182e34a943df41"><td class="memItemLeft" align="right" valign="top"><a id="aabb2ff9ff1fbcb0d98182e34a943df41" name="aabb2ff9ff1fbcb0d98182e34a943df41"></a>
 <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_input_size</b> = 0</td></tr>
+<tr class="memdesc:aabb2ff9ff1fbcb0d98182e34a943df41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sentinel value for input while reading. <br /></td></tr>
 <tr class="separator:aabb2ff9ff1fbcb0d98182e34a943df41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <code>streambuf</code> subclass which wraps the C-style ZSTD bits to decompress a stream. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aead03fbc3fb158fa52c9811a1e441e47" name="aead03fbc3fb158fa52c9811a1e441e47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aead03fbc3fb158fa52c9811a1e441e47">&#9670;&#160;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> zstd_istreambuf::check </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramname"><em>code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wrapper for ZSTD_isError(), which checks an error code and throws the error name if found. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code</td><td>The code to check with <code>ZSTD_getErrorName</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6fd98e416292c990b94a7c70a037ef16" name="a6fd98e416292c990b94a7c70a037ef16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fd98e416292c990b94a7c70a037ef16">&#9670;&#160;</a></span>underflow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">int</a> zstd_istreambuf::underflow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Underflow check which will read in as much data as possible and decompress it. </p>
+<dl class="section return"><dt>Returns</dt><dd>Integer indicating underflow/EOF status. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="zstd__decompress_8hpp_source.html">zstd_decompress.hpp</a></li>
 </ul>

@@ -1,38 +1,66 @@
 \doxysection{Step\+Results Class Reference}
 \hypertarget{classStepResults}{}\label{classStepResults}\index{StepResults@{StepResults}}
+
+
+Storage class for the step-\/counter program.  
+
+
+
+
+{\ttfamily \#include $<$step\+\_\+counter\+\_\+gpu\+\_\+interface.\+hpp$>$}
+
 \doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStepResults_a21130a36f418b18feecc8dfab3dcaf88}\label{classStepResults_a21130a36f418b18feecc8dfab3dcaf88} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{level}}, tally\+\_\+t step\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Add a step count to the given level. \end{DoxyCompactList}\item 
+\Hypertarget{classStepResults_a932822122aa94a3e95bbeb5bd95aa147}\label{classStepResults_a932822122aa94a3e95bbeb5bd95aa147} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+aggregate} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{level}}, tally\+\_\+t \mbox{\hyperlink{classNode}{step}}, tally\+\_\+t \mbox{\hyperlink{classNode}{count}})
+\begin{DoxyCompactList}\small\item\em Add an aggregate number of steps, count times. \end{DoxyCompactList}\item 
+\Hypertarget{classStepResults_a4953ce1b64defde1d837f38a94dbd85a}\label{classStepResults_a4953ce1b64defde1d837f38a94dbd85a} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries merge} (\mbox{\hyperlink{classStepResults}{Step\+Results}} \&\mbox{\hyperlink{classNode}{other}})
+\begin{DoxyCompactList}\small\item\em Merges the results of another {\ttfamily \doxylink{classStepResults}{Step\+Results}} to this one. Usually for threading reasons. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classStepResults_a9f0673dd72bfee52e76dc5d9afc1dd4d}\label{classStepResults_a9f0673dd72bfee52e76dc5d9afc1dd4d} 
+{\bfseries Step\+Results} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accesstors}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classStepResults_a4a9b478f559c7ce80f70fd8c22eab416}\label{classStepResults_a4a9b478f559c7ce80f70fd8c22eab416} 
 \mbox{\hyperlink{classNode}{const}} std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ \& {\bfseries get\+\_\+by\+\_\+level\+\_\+sum} () \mbox{\hyperlink{classNode}{const}}
-\item 
+\begin{DoxyCompactList}\small\item\em Return the map tracking the number of steps of all nodes on each level. \end{DoxyCompactList}\item 
 \Hypertarget{classStepResults_abd2ac9fcd874791670a0388fb36cd207}\label{classStepResults_abd2ac9fcd874791670a0388fb36cd207} 
 \mbox{\hyperlink{classNode}{const}} std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ \& {\bfseries get\+\_\+by\+\_\+level\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
-\item 
+\begin{DoxyCompactList}\small\item\em Return the map tracking the number of items (values) found on each level. \end{DoxyCompactList}\item 
 \Hypertarget{classStepResults_a75458f733ce27a2e7ac6694a8c6a67a0}\label{classStepResults_a75458f733ce27a2e7ac6694a8c6a67a0} 
 \mbox{\hyperlink{classNode}{const}} std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ \& {\bfseries get\+\_\+by\+\_\+steps\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classStepResults_a21130a36f418b18feecc8dfab3dcaf88}\label{classStepResults_a21130a36f418b18feecc8dfab3dcaf88} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{level}}, tally\+\_\+t step\+\_\+count)
-\item 
-\Hypertarget{classStepResults_a932822122aa94a3e95bbeb5bd95aa147}\label{classStepResults_a932822122aa94a3e95bbeb5bd95aa147} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+aggregate} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{level}}, tally\+\_\+t \mbox{\hyperlink{classNode}{step}}, tally\+\_\+t \mbox{\hyperlink{classNode}{count}})
-\item 
-\Hypertarget{classStepResults_a4953ce1b64defde1d837f38a94dbd85a}\label{classStepResults_a4953ce1b64defde1d837f38a94dbd85a} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries merge} (\mbox{\hyperlink{classStepResults}{Step\+Results}} \&\mbox{\hyperlink{classNode}{other}})
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Return the map tracking the count of times a step-\/count happened. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classStepResults_a9eaff0df50c9733c98a19b61e1d793aa}\label{classStepResults_a9eaff0df50c9733c98a19b61e1d793aa} 
 std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ {\bfseries \+\_\+by\+\_\+level\+\_\+sum}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of steps of all nodes on a level. \end{DoxyCompactList}\item 
 \Hypertarget{classStepResults_a18ef8c5ee54300308d39c8efee91a7e2}\label{classStepResults_a18ef8c5ee54300308d39c8efee91a7e2} 
 std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ {\bfseries \+\_\+by\+\_\+level\+\_\+count}
-\item 
+\begin{DoxyCompactList}\small\item\em Number of items (values) reviewed on a given level. \end{DoxyCompactList}\item 
 \Hypertarget{classStepResults_ad3f861ae3afd0aed440d490b90ead849}\label{classStepResults_ad3f861ae3afd0aed440d490b90ead849} 
 std\+::map$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}}, tally\+\_\+t $>$ {\bfseries \+\_\+by\+\_\+steps\+\_\+count}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of times a step count appeared. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Storage class for the step-\/counter program. 
+
+\begin{DoxyNote}{Note}
+Tallies are stored with {\ttfamily uint128\+\_\+t}. 
+\end{DoxyNote}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

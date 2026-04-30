@@ -83,41 +83,64 @@ $(function() {
   <div class="headertitle"><div class="title">StepResults Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Storage class for the step-counter program.  
+ <a href="classStepResults.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="step__counter__gpu__interface_8hpp_source.html">step_counter_gpu_interface.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4a9b478f559c7ce80f70fd8c22eab416" id="r_a4a9b478f559c7ce80f70fd8c22eab416"><td class="memItemLeft" align="right" valign="top"><a id="a4a9b478f559c7ce80f70fd8c22eab416" name="a4a9b478f559c7ce80f70fd8c22eab416"></a>
-<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_level_sum</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a4a9b478f559c7ce80f70fd8c22eab416"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd2ac9fcd874791670a0388fb36cd207" id="r_abd2ac9fcd874791670a0388fb36cd207"><td class="memItemLeft" align="right" valign="top"><a id="abd2ac9fcd874791670a0388fb36cd207" name="abd2ac9fcd874791670a0388fb36cd207"></a>
-<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_level_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:abd2ac9fcd874791670a0388fb36cd207"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75458f733ce27a2e7ac6694a8c6a67a0" id="r_a75458f733ce27a2e7ac6694a8c6a67a0"><td class="memItemLeft" align="right" valign="top"><a id="a75458f733ce27a2e7ac6694a8c6a67a0" name="a75458f733ce27a2e7ac6694a8c6a67a0"></a>
-<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_steps_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a75458f733ce27a2e7ac6694a8c6a67a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21130a36f418b18feecc8dfab3dcaf88" id="r_a21130a36f418b18feecc8dfab3dcaf88"><td class="memItemLeft" align="right" valign="top"><a id="a21130a36f418b18feecc8dfab3dcaf88" name="a21130a36f418b18feecc8dfab3dcaf88"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">level</a>, tally_t step_count)</td></tr>
+<tr class="memdesc:a21130a36f418b18feecc8dfab3dcaf88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a step count to the given level. <br /></td></tr>
 <tr class="separator:a21130a36f418b18feecc8dfab3dcaf88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a932822122aa94a3e95bbeb5bd95aa147" id="r_a932822122aa94a3e95bbeb5bd95aa147"><td class="memItemLeft" align="right" valign="top"><a id="a932822122aa94a3e95bbeb5bd95aa147" name="a932822122aa94a3e95bbeb5bd95aa147"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_aggregate</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">level</a>, tally_t <a class="el" href="classNode.html">step</a>, tally_t <a class="el" href="classNode.html">count</a>)</td></tr>
+<tr class="memdesc:a932822122aa94a3e95bbeb5bd95aa147"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an aggregate number of steps, count times. <br /></td></tr>
 <tr class="separator:a932822122aa94a3e95bbeb5bd95aa147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4953ce1b64defde1d837f38a94dbd85a" id="r_a4953ce1b64defde1d837f38a94dbd85a"><td class="memItemLeft" align="right" valign="top"><a id="a4953ce1b64defde1d837f38a94dbd85a" name="a4953ce1b64defde1d837f38a94dbd85a"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>merge</b> (<a class="el" href="classStepResults.html">StepResults</a> &amp;<a class="el" href="classNode.html">other</a>)</td></tr>
+<tr class="memdesc:a4953ce1b64defde1d837f38a94dbd85a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merges the results of another <code><a class="el" href="classStepResults.html" title="Storage class for the step-counter program.">StepResults</a></code> to this one. Usually for threading reasons. <br /></td></tr>
 <tr class="separator:a4953ce1b64defde1d837f38a94dbd85a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
+<tr class="memitem:a9f0673dd72bfee52e76dc5d9afc1dd4d" id="r_a9f0673dd72bfee52e76dc5d9afc1dd4d"><td class="memItemLeft" align="right" valign="top"><a id="a9f0673dd72bfee52e76dc5d9afc1dd4d" name="a9f0673dd72bfee52e76dc5d9afc1dd4d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>StepResults</b> ()</td></tr>
+<tr class="memdesc:a9f0673dd72bfee52e76dc5d9afc1dd4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:a9f0673dd72bfee52e76dc5d9afc1dd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Accesstors</div></td></tr>
+<tr class="memitem:a4a9b478f559c7ce80f70fd8c22eab416" id="r_a4a9b478f559c7ce80f70fd8c22eab416"><td class="memItemLeft" align="right" valign="top"><a id="a4a9b478f559c7ce80f70fd8c22eab416" name="a4a9b478f559c7ce80f70fd8c22eab416"></a>
+<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_level_sum</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a4a9b478f559c7ce80f70fd8c22eab416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the map tracking the number of steps of all nodes on each level. <br /></td></tr>
+<tr class="separator:a4a9b478f559c7ce80f70fd8c22eab416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd2ac9fcd874791670a0388fb36cd207" id="r_abd2ac9fcd874791670a0388fb36cd207"><td class="memItemLeft" align="right" valign="top"><a id="abd2ac9fcd874791670a0388fb36cd207" name="abd2ac9fcd874791670a0388fb36cd207"></a>
+<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_level_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:abd2ac9fcd874791670a0388fb36cd207"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the map tracking the number of items (values) found on each level. <br /></td></tr>
+<tr class="separator:abd2ac9fcd874791670a0388fb36cd207"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75458f733ce27a2e7ac6694a8c6a67a0" id="r_a75458f733ce27a2e7ac6694a8c6a67a0"><td class="memItemLeft" align="right" valign="top"><a id="a75458f733ce27a2e7ac6694a8c6a67a0" name="a75458f733ce27a2e7ac6694a8c6a67a0"></a>
+<a class="el" href="classNode.html">const</a> std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_by_steps_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a75458f733ce27a2e7ac6694a8c6a67a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the map tracking the count of times a step-count happened. <br /></td></tr>
+<tr class="separator:a75458f733ce27a2e7ac6694a8c6a67a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9eaff0df50c9733c98a19b61e1d793aa" id="r_a9eaff0df50c9733c98a19b61e1d793aa"><td class="memItemLeft" align="right" valign="top"><a id="a9eaff0df50c9733c98a19b61e1d793aa" name="a9eaff0df50c9733c98a19b61e1d793aa"></a>
 std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_by_level_sum</b></td></tr>
+<tr class="memdesc:a9eaff0df50c9733c98a19b61e1d793aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of steps of all nodes on a level. <br /></td></tr>
 <tr class="separator:a9eaff0df50c9733c98a19b61e1d793aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18ef8c5ee54300308d39c8efee91a7e2" id="r_a18ef8c5ee54300308d39c8efee91a7e2"><td class="memItemLeft" align="right" valign="top"><a id="a18ef8c5ee54300308d39c8efee91a7e2" name="a18ef8c5ee54300308d39c8efee91a7e2"></a>
 std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_by_level_count</b></td></tr>
+<tr class="memdesc:a18ef8c5ee54300308d39c8efee91a7e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of items (values) reviewed on a given level. <br /></td></tr>
 <tr class="separator:a18ef8c5ee54300308d39c8efee91a7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f861ae3afd0aed440d490b90ead849" id="r_ad3f861ae3afd0aed440d490b90ead849"><td class="memItemLeft" align="right" valign="top"><a id="ad3f861ae3afd0aed440d490b90ead849" name="ad3f861ae3afd0aed440d490b90ead849"></a>
 std::map&lt; <a class="el" href="classNode.html">size_t</a>, tally_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_by_steps_count</b></td></tr>
+<tr class="memdesc:ad3f861ae3afd0aed440d490b90ead849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times a step count appeared. <br /></td></tr>
 <tr class="separator:ad3f861ae3afd0aed440d490b90ead849"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Storage class for the step-counter program. </p>
+<dl class="section note"><dt>Note</dt><dd>Tallies are stored with <code>uint128_t</code>. </dd></dl>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="step__counter__gpu__interface_8hpp_source.html">step_counter_gpu_interface.hpp</a></li>
 </ul>
 </div><!-- contents -->

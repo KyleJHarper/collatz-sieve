@@ -247,8 +247,9 @@ namespace CollatzConstants {
     template<AnySupportedIntegral T>
     inline constexpr T get_max_initial_value_by_bit(size_t bit_size) {
         // Safety Check
-        if (bit_size > get_max_bits_for_max_initial_value_by_type<T>()) {
-            throw std::out_of_range("Max initial value for bit size " + std::to_string(bit_size) + " not found.");
+        constexpr size_t max_bits = get_max_bits_for_max_initial_value_by_type<T>();
+        if (bit_size > max_bits) {
+            throw std::out_of_range("Max initial value for bit size " + std::to_string(bit_size) + " not found because it exceeds max bits: " + std::to_string(max_bits) + ".");
         }
 
         if constexpr(NativeIntegral<T>) {

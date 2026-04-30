@@ -21,10 +21,13 @@
 } while(0)
 
 
-//
-// Stolen from CollatzConstants
-//
-// Trying to perform 3X+1 on any value higher than this would overflow a 64-bit unsigned integer.
+
+/**
+* @brief Stores the highest integer which can take 3x + 1 without overflowing a given bit width.
+* @note This only supports 8, 16, 32, 64, and 128 bit widths.
+* @note This only supports unsigned types.
+* @note Copied from `CollatzConstants`
+*/
 __host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
     ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
@@ -33,8 +36,13 @@ __host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) << 127) + ((uint128_t(1) << 127) - 1) - 1) / 3  // 128 bit
     // Requires a little juggling to avoid overflow.  Yay PEMDAS!
 };
-//
-// Now a helper for it.
+
+
+
+/**
+* @brief Helper to return the correct `MAX_3XP1` for the type `T`.
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<typename T>
 __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
     static_assert(is_device_integral_v<T>, "T must be uint32_t, uint64_t, or uint128_t");
@@ -48,12 +56,17 @@ __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
 }
 
 
-//
-// Collatz Get Step Count
-// Find the number of steps for a given IV
+
+
 //
 // If the next 3x+1 would overflow, we set step_count to get_max_3xp1<T>().  Caller must check.
 //
+/**
+* @brief Find the number of steps for a given IV
+* @param initial_value The starting value to begin a Collatz sequence.
+* @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
+* @return The step count found.  If the next 3x+1 would overflow, we set step count to get_max_3xp1<T>().  Caller must check.
+*/
 template<typename T>
 __device__ tally_t collatz_step_count(T initial_value) {
     tally_t steps = 0;
@@ -77,9 +90,14 @@ __device__ tally_t collatz_step_count(T initial_value) {
 
 
 
-//
-// Kernel to capture the steps of Collatz sequences.
-//
+/**
+* @brief Kernel to capture the step count of a Collatz sequence.
+* @param start_value The first value to start testing sequences.
+* @param max_value The highest value to test to.
+* @param count Limiter for the number of values to test in this kernel.
+* @param d_steps Device memory location for step counts.
+* @param overflow_index Pointer to an overflow index which can be set if an overflow happens.
+*/
 template<typename T>
 __global__ void collatz_steps_kernel(
     T* start_value
@@ -108,28 +126,48 @@ __global__ void collatz_steps_kernel(
 
 
 
+/**
+* @class CollatzStepRunner
+* @brief Unifies a lot of the step counting logic into a heterogeneuos class.
+* @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
+*/
 template<typename T>
 class CollatzStepRunner {
     private:
+    /// @brief Pointer to a unified start value for CPU<->GPU communication of status.
     T* _unified_start_value_ptr = nullptr;
+    /// @brief Buffer size to align kernel dimensions with available capacity.
     size_t _buffer_size;
 
 
+
     public:
-    CollatzStepRunner(
-        size_t buffer_size
-        , T* unified_start_value_ptr
-    ) {
+    /// @name Lifecycle Management
+    /// @{
+
+    /// @brief Basic constructor.  Needs to know buffer size and get a link to a unified pointer.
+    CollatzStepRunner(size_t buffer_size, T* unified_start_value_ptr) {
         // Save buffer and size.
         _buffer_size = buffer_size;
         _unified_start_value_ptr = unified_start_value_ptr;
     }
 
+
+
+    /// @brief Default destructor.
     ~CollatzStepRunner() {}
 
-    //
-    // Host code to compute a bunch of peaks and then bring them to the host.  We will alloc on the device for you.
-    //
+    /// @}
+
+
+
+
+    /**
+    * @brief Host code to compute a bunch of peaks and then bring them to the host.  We will alloc on the device for you.
+    * @param max_value The maximum value to test.
+    * @param level The level being operated on.
+    * @param global_results Pointer to a global `StepResults` object for merging data.
+    */
     void compute_collatz_steps(
         T max_value
         , size_t level
@@ -227,28 +265,44 @@ class CollatzStepRunner {
     }
 };
 
-// Factory functions
+
+
+/// @brief Creates a `CollatzStepRunner`; exposed for use with host code via an interface.
 template<typename T>
 CollatzStepRunner<T>* create_runner(size_t buffer_size, T* unified_start_value_ptr) {
     return new CollatzStepRunner<T>(buffer_size, unified_start_value_ptr);
 }
 
+
+
+/// @brief Destroys a `CollatzStepRunner`; exposed for use with host code via an interface.
 template<typename T>
 void destroy_runner(CollatzStepRunner<T>* runner) {
     delete runner;
 }
 
+
+
+/// @brief Executes the `compute_collatz_steps()` on the GPU.  Exposed for host interface.
 template<typename T>
 void process_level_gpu(CollatzStepRunner<T>* runner, T max_value, size_t level, StepResults *global_results) {
     runner->compute_collatz_steps(max_value, level, global_results);
 }
 
 // Explicit instantiation definitions.
+/// @brief Explicit declaration of 64-bit runner.
 template class CollatzStepRunner<uint64_t>;
+/// @brief Explicit declaration of 128-bit runner.
 template class CollatzStepRunner<uint128_t>;
+/// @brief Explicit declaration of 64-bit create_runner method.
 template CollatzStepRunner<uint64_t>* create_runner<uint64_t>(size_t, uint64_t*);
+/// @brief Explicit declaration of 128-bit create_runner method.
 template CollatzStepRunner<uint128_t>* create_runner<uint128_t>(size_t, uint128_t*);
+/// @brief Explicit declaration of 64-bit process_level_gpu method.
 template void process_level_gpu<uint64_t>(CollatzStepRunner<uint64_t>*, uint64_t, size_t, StepResults*);
+/// @brief Explicit declaration of 128-bit process_level_gpu method.
 template void process_level_gpu<uint128_t>(CollatzStepRunner<uint128_t>*, uint128_t, size_t, StepResults*);
+/// @brief Explicit declaration of 64-bit destroy_runner method.
 template void destroy_runner<uint64_t>(CollatzStepRunner<uint64_t>*);
+/// @brief Explicit declaration of 128-bit destroy_runner method.
 template void destroy_runner<uint128_t>(CollatzStepRunner<uint128_t>*);

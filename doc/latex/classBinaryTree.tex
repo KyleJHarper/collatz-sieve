@@ -145,7 +145,7 @@ The {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Im
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see concepts.\+hpp). \\
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
 \hline
 {\em Tree\+Type} & The implementation type (with type T nested) to use for the {\ttfamily \+\_\+impl} member. \\
 \hline
@@ -215,7 +215,7 @@ This is an assertion, not a boolean. It will throw if verification is disabled a
 \begin{DoxyParams}{Parameters}
 {\em level} & The level being added. \\
 \hline
-{\em is\+\_\+verifying\+\_\+hwm\+\_\+nodes} & Flag indicating if verification is enabled or not. \\
+{\em is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} & Flag indicating if verification is enabled or not. \\
 \hline
 \end{DoxyParams}
 \Hypertarget{classBinaryTree_ac6ec6687fe24e4deba4c4e62b04afe69}\label{classBinaryTree_ac6ec6687fe24e4deba4c4e62b04afe69} 
@@ -365,7 +365,7 @@ Writes data from {\ttfamily \doxylink{classBinaryTree_a55b6bec9ea613408a53e1bd92
 {\em compression\+\_\+level} & The Zstd compression level to apply. Options are\+:
 \begin{DoxyItemize}
 \item 0) No compression. A raw file.
-\item 1-\/19) Zstd compression with normal range and end-\/directives (see Zstd internal.\+h).
+\item 1-\/19) Zstd compression with normal range and end-\/directives (see Zstd \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{internal.\+h}).
 \item 20-\/22) Zstd compression with long distance matching enabled and end-\/directive set to "{}flush"{} for better threading. 
 \end{DoxyItemize}\\
 \hline
@@ -432,7 +432,7 @@ This function checks\+:
 \item The is\+\_\+initialized flag.
 \item Coverage map.
 \item Ancestors (if enabled).
-\item Implementation-\/specific checks from {\ttfamily Tree\+Type\+::st\+\_\+equal()}.
+\item Implementation-\/specific checks from {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Tree\+Type\+::st\+\_\+equal()}}.
 \end{DoxyEnumerate}
 
 

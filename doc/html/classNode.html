@@ -86,15 +86,20 @@ $(function() {
   <div class="headertitle"><div class="title">Node&lt; T &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code>.  
+ <a href="classNode.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="node_8hpp_source.html">node.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for Node&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classNode__coll__graph.png" border="0" usemap="#aNode_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="aNode_3_01T_01_4_coll__map" id="aNode_3_01T_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="5,229,100,255"/>
+<area shape="rect" title="The value and metadata for a node inside of a BinaryTree." alt="" coords="5,229,100,255"/>
 <area shape="rect" title=" " alt="" coords="33,5,72,31"/>
 <area shape="poly" title=" " alt="" coords="51,44,46,93,47,171,54,229,48,229,42,171,41,93,46,44"/>
-<area shape="rect" href="classNode.html" title=" " alt="" coords="104,103,199,128"/>
+<area shape="rect" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree." alt="" coords="104,103,199,128"/>
 <area shape="poly" title=" " alt="" coords="77,39,141,100,137,104,73,42"/>
 <area shape="poly" title=" " alt="" coords="136,140,64,231,60,228,132,137"/>
 <area shape="poly" title=" " alt="" coords="213,105,222,108,225,116,217,125,199,128,199,123,215,120,220,115,218,112,211,110"/>
@@ -103,114 +108,120 @@ Collaboration diagram for Node&lt; T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ac3b0a7152287753c0707502e263c5e9d" id="r_ac3b0a7152287753c0707502e263c5e9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#ac3b0a7152287753c0707502e263c5e9d">deep_size</a> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ac3b0a7152287753c0707502e263c5e9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the size of this data structure as closely as possible.  <br /></td></tr>
+<tr class="separator:ac3b0a7152287753c0707502e263c5e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f924ff57fe20bb204b41407298555cb" id="r_a8f924ff57fe20bb204b41407298555cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a8f924ff57fe20bb204b41407298555cb">equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a8f924ff57fe20bb204b41407298555cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another node to this one.  <br /></td></tr>
+<tr class="separator:a8f924ff57fe20bb204b41407298555cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9517228032e6f0ce674e69bbbca02501" id="r_a9517228032e6f0ce674e69bbbca02501"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501">serialize</a> (std::ostream &amp;<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a9517228032e6f0ce674e69bbbca02501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the node specifics of this object for export.  <br /></td></tr>
+<tr class="separator:a9517228032e6f0ce674e69bbbca02501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abc023e5f1316182c73be4420e8eecc" id="r_a1abc023e5f1316182c73be4420e8eecc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a1abc023e5f1316182c73be4420e8eecc">deserialize</a> (std::istream &amp;<a class="el" href="classNode.html">in</a>, T &amp;<a class="el" href="classNode.html">parent_v</a>, T &amp;<a class="el" href="classNode.html">hwm_ancestor_v</a>, <a class="el" href="classNode.html">uint8_t</a> &amp;<a class="el" href="classNode.html">child_count</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:a1abc023e5f1316182c73be4420e8eecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501" title="Serialize the node specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
+<tr class="separator:a1abc023e5f1316182c73be4420e8eecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
+<tr class="memitem:a0ac1d44cfe588be564acf25485029bd8" id="r_a0ac1d44cfe588be564acf25485029bd8"><td class="memItemLeft" align="right" valign="top"><a id="a0ac1d44cfe588be564acf25485029bd8" name="a0ac1d44cfe588be564acf25485029bd8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> ()</td></tr>
+<tr class="memdesc:a0ac1d44cfe588be564acf25485029bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:a0ac1d44cfe588be564acf25485029bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad26a980b1363a1c2a05fb84e7c19a36a" id="r_ad26a980b1363a1c2a05fb84e7c19a36a"><td class="memItemLeft" align="right" valign="top"><a id="ad26a980b1363a1c2a05fb84e7c19a36a" name="ad26a980b1363a1c2a05fb84e7c19a36a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (<a class="el" href="classNode.html">const</a> T &amp;value, <a class="el" href="classNode.html">Node</a> *<a class="el" href="classNode.html">parent</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:ad26a980b1363a1c2a05fb84e7c19a36a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct which allows value specified and parent optionally set when initialized. <br /></td></tr>
 <tr class="separator:ad26a980b1363a1c2a05fb84e7c19a36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9094a9dcdb0d8d02db467549cda22da2" id="r_a9094a9dcdb0d8d02db467549cda22da2"><td class="memItemLeft" align="right" valign="top"><a id="a9094a9dcdb0d8d02db467549cda22da2" name="a9094a9dcdb0d8d02db467549cda22da2"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="classNode.html">const</a> T &amp;value, <a class="el" href="classNode.html">Node</a> *<a class="el" href="classNode.html">parent</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:ae923d0417581dd19784d55b901f0f7f0" id="r_ae923d0417581dd19784d55b901f0f7f0"><td class="memItemLeft" align="right" valign="top"><a id="ae923d0417581dd19784d55b901f0f7f0" name="ae923d0417581dd19784d55b901f0f7f0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~Node</b> ()</td></tr>
+<tr class="memdesc:ae923d0417581dd19784d55b901f0f7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, which simply needs to call <code><a class="el" href="classNode.html#a492a8099e26177947545b885999f8e2f" title="Releases (delete) all children if _owns_children is true.">release_children()</a></code> in case it owns any which need freed. <br /></td></tr>
+<tr class="separator:ae923d0417581dd19784d55b901f0f7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9094a9dcdb0d8d02db467549cda22da2" id="r_a9094a9dcdb0d8d02db467549cda22da2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2">init</a> (<a class="el" href="classNode.html">const</a> T &amp;value, <a class="el" href="classNode.html">Node</a> *<a class="el" href="classNode.html">parent</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:a9094a9dcdb0d8d02db467549cda22da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a node object with <code>value</code> and an optional parent, treating it like it's new.  <br /></td></tr>
 <tr class="separator:a9094a9dcdb0d8d02db467549cda22da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fde89f0ec750262d4f326276007a5f4" id="r_a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplParams" colspan="2"><a id="a4fde89f0ec750262d4f326276007a5f4" name="a4fde89f0ec750262d4f326276007a5f4"></a>
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </td></tr>
-<tr class="memitem:a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>init_sequence_helper</b> ()</td></tr>
+<tr class="memitem:a4fde89f0ec750262d4f326276007a5f4" id="r_a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </td></tr>
+<tr class="memitem:a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNode.html#a4fde89f0ec750262d4f326276007a5f4">init_sequence_helper</a> ()</td></tr>
+<tr class="memdesc:a4fde89f0ec750262d4f326276007a5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/HWM analysis.  <br /></td></tr>
 <tr class="separator:a4fde89f0ec750262d4f326276007a5f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dd2dadaf062f03fc80797a0cd0a03b5" id="r_a3dd2dadaf062f03fc80797a0cd0a03b5"><td class="memItemLeft" align="right" valign="top"><a id="a3dd2dadaf062f03fc80797a0cd0a03b5" name="a3dd2dadaf062f03fc80797a0cd0a03b5"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
+<tr class="memdesc:a3dd2dadaf062f03fc80797a0cd0a03b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset to make this act like a <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">new()</a> object. <br /></td></tr>
 <tr class="separator:a3dd2dadaf062f03fc80797a0cd0a03b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6aa77b6b6203cdb6ebb2f8d211d2856" id="r_ab6aa77b6b6203cdb6ebb2f8d211d2856"><td class="memItemLeft" align="right" valign="top"><a id="ab6aa77b6b6203cdb6ebb2f8d211d2856" name="ab6aa77b6b6203cdb6ebb2f8d211d2856"></a>
-<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>add_child</b> (T value)</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Child-Related Accessors</div></td></tr>
+<tr class="memitem:ab6aa77b6b6203cdb6ebb2f8d211d2856" id="r_ab6aa77b6b6203cdb6ebb2f8d211d2856"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#ab6aa77b6b6203cdb6ebb2f8d211d2856">add_child</a> (T value)</td></tr>
+<tr class="memdesc:ab6aa77b6b6203cdb6ebb2f8d211d2856"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a node object with <code>value</code> and assign it to this member's <code>_children</code> list.  <br /></td></tr>
 <tr class="separator:ab6aa77b6b6203cdb6ebb2f8d211d2856"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fbfcf7a86d8ebf2118e45999dee3790" id="r_a5fbfcf7a86d8ebf2118e45999dee3790"><td class="memItemLeft" align="right" valign="top"><a id="a5fbfcf7a86d8ebf2118e45999dee3790" name="a5fbfcf7a86d8ebf2118e45999dee3790"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign_child</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">child</a>)</td></tr>
+<tr class="memdesc:a5fbfcf7a86d8ebf2118e45999dee3790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign a child to this <code>_children</code> list, with no safety checks. <br /></td></tr>
 <tr class="separator:a5fbfcf7a86d8ebf2118e45999dee3790"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2e48781de0681e7147bf71ed20263b0" id="r_ad2e48781de0681e7147bf71ed20263b0"><td class="memItemLeft" align="right" valign="top"><a id="ad2e48781de0681e7147bf71ed20263b0" name="ad2e48781de0681e7147bf71ed20263b0"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign_parent</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">parent</a>)</td></tr>
-<tr class="separator:ad2e48781de0681e7147bf71ed20263b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a921a007d49f266256900adc55aab60" id="r_a0a921a007d49f266256900adc55aab60"><td class="memItemLeft" align="right" valign="top"><a id="a0a921a007d49f266256900adc55aab60" name="a0a921a007d49f266256900adc55aab60"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign_hwm_ancestor</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">hwm_ancestor</a>)</td></tr>
-<tr class="separator:a0a921a007d49f266256900adc55aab60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a991abe2497838e42015d6c08092d1fa8" id="r_a991abe2497838e42015d6c08092d1fa8"><td class="memItemLeft" align="right" valign="top"><a id="a991abe2497838e42015d6c08092d1fa8" name="a991abe2497838e42015d6c08092d1fa8"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>own_children</b> (<a class="el" href="classNode.html">bool</a> value)</td></tr>
+<tr class="memdesc:a991abe2497838e42015d6c08092d1fa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gain or relinquish ownership of children, mostly for destruction cascading purposes later. <br /></td></tr>
 <tr class="separator:a991abe2497838e42015d6c08092d1fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2784e42ef79815d508aeea0b2312f605" id="r_a2784e42ef79815d508aeea0b2312f605"><td class="memItemLeft" align="right" valign="top"><a id="a2784e42ef79815d508aeea0b2312f605" name="a2784e42ef79815d508aeea0b2312f605"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>release_child</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">child</a>)</td></tr>
+<tr class="memdesc:a2784e42ef79815d508aeea0b2312f605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release (delete) a single child if <code>_owns_children</code> is true. <br /></td></tr>
 <tr class="separator:a2784e42ef79815d508aeea0b2312f605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a492a8099e26177947545b885999f8e2f" id="r_a492a8099e26177947545b885999f8e2f"><td class="memItemLeft" align="right" valign="top"><a id="a492a8099e26177947545b885999f8e2f" name="a492a8099e26177947545b885999f8e2f"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>release_children</b> ()</td></tr>
+<tr class="memdesc:a492a8099e26177947545b885999f8e2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases (delete) all children if <code>_owns_children</code> is true. <br /></td></tr>
 <tr class="separator:a492a8099e26177947545b885999f8e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9289ecf82c1142f00ba3f4ce5eff2dba" id="r_a9289ecf82c1142f00ba3f4ce5eff2dba"><td class="memItemLeft" align="right" valign="top"><a id="a9289ecf82c1142f00ba3f4ce5eff2dba" name="a9289ecf82c1142f00ba3f4ce5eff2dba"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>spawn_children</b> ()</td></tr>
-<tr class="separator:a9289ecf82c1142f00ba3f4ce5eff2dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd9ce8e35f9f5840779592383ea6b344" id="r_acd9ce8e35f9f5840779592383ea6b344"><td class="memItemLeft" align="right" valign="top"><a id="acd9ce8e35f9f5840779592383ea6b344" name="acd9ce8e35f9f5840779592383ea6b344"></a>
-<a class="el" href="classNode.html">const</a> T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_value</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:acd9ce8e35f9f5840779592383ea6b344"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab43844ce28030e8b583d1de732ab43f7" id="r_ab43844ce28030e8b583d1de732ab43f7"><td class="memItemLeft" align="right" valign="top"><a id="ab43844ce28030e8b583d1de732ab43f7" name="ab43844ce28030e8b583d1de732ab43f7"></a>
-<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_parent</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:ab43844ce28030e8b583d1de732ab43f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2e96fdecdae4f193996072165f02ff5" id="r_af2e96fdecdae4f193996072165f02ff5"><td class="memItemLeft" align="right" valign="top"><a id="af2e96fdecdae4f193996072165f02ff5" name="af2e96fdecdae4f193996072165f02ff5"></a>
-<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_ancestor</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:af2e96fdecdae4f193996072165f02ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a384e4c5c02c237f1dad0aba304872cfc" id="r_a384e4c5c02c237f1dad0aba304872cfc"><td class="memItemLeft" align="right" valign="top"><a id="a384e4c5c02c237f1dad0aba304872cfc" name="a384e4c5c02c237f1dad0aba304872cfc"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_below_high_water_mark</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a384e4c5c02c237f1dad0aba304872cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad177ff820a4b9416d8a3ee46cabfe774" id="r_ad177ff820a4b9416d8a3ee46cabfe774"><td class="memItemLeft" align="right" valign="top"><a id="ad177ff820a4b9416d8a3ee46cabfe774" name="ad177ff820a4b9416d8a3ee46cabfe774"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>has_high_water_mark_ancestor</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:ad177ff820a4b9416d8a3ee46cabfe774"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e26152bd714bdbcb997fd946731a650" id="r_a1e26152bd714bdbcb997fd946731a650"><td class="memItemLeft" align="right" valign="top"><a id="a1e26152bd714bdbcb997fd946731a650" name="a1e26152bd714bdbcb997fd946731a650"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a1e26152bd714bdbcb997fd946731a650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae856e60ec35925b79b122e029ecdfa36" id="r_ae856e60ec35925b79b122e029ecdfa36"><td class="memItemLeft" align="right" valign="top"><a id="ae856e60ec35925b79b122e029ecdfa36" name="ae856e60ec35925b79b122e029ecdfa36"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>does_own_children</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ae856e60ec35925b79b122e029ecdfa36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this object "owns" children (for destruction purposes), false otherwise. <br /></td></tr>
 <tr class="separator:ae856e60ec35925b79b122e029ecdfa36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb1da29ab629cdffd61c6c005e558c21" id="r_afb1da29ab629cdffd61c6c005e558c21"><td class="memItemLeft" align="right" valign="top"><a id="afb1da29ab629cdffd61c6c005e558c21" name="afb1da29ab629cdffd61c6c005e558c21"></a>
 <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_child</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">index</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:afb1da29ab629cdffd61c6c005e558c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to a child. <br /></td></tr>
 <tr class="separator:afb1da29ab629cdffd61c6c005e558c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf7bf836a891fce518ab08ea88f8f85e" id="r_adf7bf836a891fce518ab08ea88f8f85e"><td class="memItemLeft" align="right" valign="top"><a id="adf7bf836a891fce518ab08ea88f8f85e" name="adf7bf836a891fce518ab08ea88f8f85e"></a>
 <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_child_unsafe</b> (<a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">index</a>)</td></tr>
+<tr class="memdesc:adf7bf836a891fce518ab08ea88f8f85e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a read-write pointer to a child. <br /></td></tr>
 <tr class="separator:adf7bf836a891fce518ab08ea88f8f85e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a799dc03140055b044e22341ba3c494fc" id="r_a799dc03140055b044e22341ba3c494fc"><td class="memItemLeft" align="right" valign="top"><a id="a799dc03140055b044e22341ba3c494fc" name="a799dc03140055b044e22341ba3c494fc"></a>
 <a class="el" href="classNode.html">uint8_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_child_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a799dc03140055b044e22341ba3c494fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of children assigned to this node. <br /></td></tr>
 <tr class="separator:a799dc03140055b044e22341ba3c494fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e5697c3b197c698f3d05bc8964fae23" id="r_a4e5697c3b197c698f3d05bc8964fae23"><td class="memItemLeft" align="right" valign="top"><a id="a4e5697c3b197c698f3d05bc8964fae23" name="a4e5697c3b197c698f3d05bc8964fae23"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_chain_length</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a4e5697c3b197c698f3d05bc8964fae23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0face88734db988d8d9d79d794802585" id="r_a0face88734db988d8d9d79d794802585"><td class="memItemLeft" align="right" valign="top"><a id="a0face88734db988d8d9d79d794802585" name="a0face88734db988d8d9d79d794802585"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_level</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a0face88734db988d8d9d79d794802585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
+<tr class="memitem:acd9ce8e35f9f5840779592383ea6b344" id="r_acd9ce8e35f9f5840779592383ea6b344"><td class="memItemLeft" align="right" valign="top"><a id="acd9ce8e35f9f5840779592383ea6b344" name="acd9ce8e35f9f5840779592383ea6b344"></a>
+<a class="el" href="classNode.html">const</a> T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_value</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:acd9ce8e35f9f5840779592383ea6b344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return this node's value. <br /></td></tr>
+<tr class="separator:acd9ce8e35f9f5840779592383ea6b344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a384e4c5c02c237f1dad0aba304872cfc" id="r_a384e4c5c02c237f1dad0aba304872cfc"><td class="memItemLeft" align="right" valign="top"><a id="a384e4c5c02c237f1dad0aba304872cfc" name="a384e4c5c02c237f1dad0aba304872cfc"></a>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_below_high_water_mark</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a384e4c5c02c237f1dad0aba304872cfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node is below the High-Water Mark. <br /></td></tr>
+<tr class="separator:a384e4c5c02c237f1dad0aba304872cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad177ff820a4b9416d8a3ee46cabfe774" id="r_ad177ff820a4b9416d8a3ee46cabfe774"><td class="memItemLeft" align="right" valign="top"><a id="ad177ff820a4b9416d8a3ee46cabfe774" name="ad177ff820a4b9416d8a3ee46cabfe774"></a>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>has_high_water_mark_ancestor</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ad177ff820a4b9416d8a3ee46cabfe774"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node has a HWM ancestor. <br /></td></tr>
+<tr class="separator:ad177ff820a4b9416d8a3ee46cabfe774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e26152bd714bdbcb997fd946731a650" id="r_a1e26152bd714bdbcb997fd946731a650"><td class="memItemLeft" align="right" valign="top"><a id="a1e26152bd714bdbcb997fd946731a650" name="a1e26152bd714bdbcb997fd946731a650"></a>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a1e26152bd714bdbcb997fd946731a650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node has been initialized with a value. <br /></td></tr>
+<tr class="separator:a1e26152bd714bdbcb997fd946731a650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4c1e85c78e0c0f5f2b6f2cfe410dc14" id="r_aa4c1e85c78e0c0f5f2b6f2cfe410dc14"><td class="memItemLeft" align="right" valign="top"><a id="aa4c1e85c78e0c0f5f2b6f2cfe410dc14" name="aa4c1e85c78e0c0f5f2b6f2cfe410dc14"></a>
+<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_chain_length</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:aa4c1e85c78e0c0f5f2b6f2cfe410dc14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the size of the FG chain for this node. Uses <code><a class="el" href="classBinaryTreeMath.html#ac8139f556292fce4501e9010174bddef" title="Returns the FG chain length of a node on any level.">BinaryTreeMath::st_fg_chain_length()</a></code> under the hood. <br /></td></tr>
+<tr class="separator:aa4c1e85c78e0c0f5f2b6f2cfe410dc14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4a1e8bf6b3e480e2d79c742174a1f6e" id="r_ac4a1e8bf6b3e480e2d79c742174a1f6e"><td class="memItemLeft" align="right" valign="top"><a id="ac4a1e8bf6b3e480e2d79c742174a1f6e" name="ac4a1e8bf6b3e480e2d79c742174a1f6e"></a>
+<a class="el" href="classNode.html">level_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_level</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ac4a1e8bf6b3e480e2d79c742174a1f6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return this node's level. It's calculated from <code><a class="el" href="classBinaryTreeMath.html#a77593656f36e970d58117fe24fb7f390" title="Calculate the level for a node from any value.">BinaryTreeMath::st_get_level_by_node_value()</a></code>. <br /></td></tr>
+<tr class="separator:ac4a1e8bf6b3e480e2d79c742174a1f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d885c2048c44187abd83b6027337046" id="r_a5d885c2048c44187abd83b6027337046"><td class="memItemLeft" align="right" valign="top"><a id="a5d885c2048c44187abd83b6027337046" name="a5d885c2048c44187abd83b6027337046"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>get_position</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a5d885c2048c44187abd83b6027337046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the position of this node. Uses <code><a class="el" href="classBinaryTreeMath.html#a9c933060b8bf36da748184ff45336606" title="Calculate node position from a node&#39;s value alone.">BinaryTreeMath::st_node_position()</a></code> under the hood. <br /></td></tr>
 <tr class="separator:a5d885c2048c44187abd83b6027337046"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7509b89f386c5d148ebd4c2749147664" id="r_a7509b89f386c5d148ebd4c2749147664"><td class="memItemLeft" align="right" valign="top"><a id="a7509b89f386c5d148ebd4c2749147664" name="a7509b89f386c5d148ebd4c2749147664"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a7509b89f386c5d148ebd4c2749147664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92652255576a27ebe2cd42d66b38e10d" id="r_a92652255576a27ebe2cd42d66b38e10d"><td class="memItemLeft" align="right" valign="top"><a id="a92652255576a27ebe2cd42d66b38e10d" name="a92652255576a27ebe2cd42d66b38e10d"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_chain_string</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a92652255576a27ebe2cd42d66b38e10d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the F-G chain for this node. Uses <code>Collatz::st_get_fg_chain_string()</code>. <br /></td></tr>
 <tr class="separator:a92652255576a27ebe2cd42d66b38e10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8b9c415bbc9ca5615d93d5aa07bfd0f" id="r_ae8b9c415bbc9ca5615d93d5aa07bfd0f"><td class="memItemLeft" align="right" valign="top"><a id="ae8b9c415bbc9ca5615d93d5aa07bfd0f" name="ae8b9c415bbc9ca5615d93d5aa07bfd0f"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_odd_even_chain_string</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ae8b9c415bbc9ca5615d93d5aa07bfd0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the odd-even (OE) chain for this node. Uses <code>Collatz::fg_to_oe()</code>. <br /></td></tr>
 <tr class="separator:ae8b9c415bbc9ca5615d93d5aa07bfd0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3b0a7152287753c0707502e263c5e9d" id="r_ac3b0a7152287753c0707502e263c5e9d"><td class="memItemLeft" align="right" valign="top"><a id="ac3b0a7152287753c0707502e263c5e9d" name="ac3b0a7152287753c0707502e263c5e9d"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deep_size</b> () <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:ac3b0a7152287753c0707502e263c5e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f924ff57fe20bb204b41407298555cb" id="r_a8f924ff57fe20bb204b41407298555cb"><td class="memItemLeft" align="right" valign="top"><a id="a8f924ff57fe20bb204b41407298555cb" name="a8f924ff57fe20bb204b41407298555cb"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a8f924ff57fe20bb204b41407298555cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9517228032e6f0ce674e69bbbca02501" id="r_a9517228032e6f0ce674e69bbbca02501"><td class="memItemLeft" align="right" valign="top"><a id="a9517228032e6f0ce674e69bbbca02501" name="a9517228032e6f0ce674e69bbbca02501"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>serialize</b> (std::ostream &amp;<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="separator:a9517228032e6f0ce674e69bbbca02501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1abc023e5f1316182c73be4420e8eecc" id="r_a1abc023e5f1316182c73be4420e8eecc"><td class="memItemLeft" align="right" valign="top"><a id="a1abc023e5f1316182c73be4420e8eecc" name="a1abc023e5f1316182c73be4420e8eecc"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deserialize</b> (std::istream &amp;<a class="el" href="classNode.html">in</a>, T &amp;<a class="el" href="classNode.html">parent_v</a>, T &amp;<a class="el" href="classNode.html">hwm_ancestor_v</a>, <a class="el" href="classNode.html">uint8_t</a> &amp;<a class="el" href="classNode.html">child_count</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
-<tr class="separator:a1abc023e5f1316182c73be4420e8eecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:afa27d526fd2a45b7c5ab3d199c128e89" id="r_afa27d526fd2a45b7c5ab3d199c128e89"><td class="memItemLeft" align="right" valign="top"><a id="afa27d526fd2a45b7c5ab3d199c128e89" name="afa27d526fd2a45b7c5ab3d199c128e89"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>st_spawn_children</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">node</a>)</td></tr>
-<tr class="separator:afa27d526fd2a45b7c5ab3d199c128e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02a1b0866f8842c9d5d35e53e0c4ca87" id="r_a02a1b0866f8842c9d5d35e53e0c4ca87"><td class="memItemLeft" align="right" valign="top"><a id="a02a1b0866f8842c9d5d35e53e0c4ca87" name="a02a1b0866f8842c9d5d35e53e0c4ca87"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>st_get_hwm_index</b> (T value)</td></tr>
-<tr class="separator:a02a1b0866f8842c9d5d35e53e0c4ca87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c91214103510f81a707a8257301a209" id="r_a3c91214103510f81a707a8257301a209"><td class="memItemLeft" align="right" valign="top"><a id="a3c91214103510f81a707a8257301a209" name="a3c91214103510f81a707a8257301a209"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>st_equal</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:a3c91214103510f81a707a8257301a209" id="r_a3c91214103510f81a707a8257301a209"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209">st_equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:a3c91214103510f81a707a8257301a209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two Nodes' specific internals and return true if identical.  <br /></td></tr>
 <tr class="separator:a3c91214103510f81a707a8257301a209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -225,7 +236,7 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b></td></tr>
 <a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_hwm_ancestor</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
 <tr class="separator:abd13687c9b16b43a273ad93d7260cd2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa05167b39499499f550d7527faf0436" id="r_aaa05167b39499499f550d7527faf0436"><td class="memItemLeft" align="right" valign="top"><a id="aaa05167b39499499f550d7527faf0436" name="aaa05167b39499499f550d7527faf0436"></a>
-<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_children</b> [MAX_CHILDREN] = {<a class="el" href="classNode.html">nullptr</a>, <a class="el" href="classNode.html">nullptr</a>}</td></tr>
+<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_children</b> [<a class="el" href="classNode.html#ab204ebe45f832d60ecc0a69bc07dc39f">MAX_CHILDREN</a>] = {<a class="el" href="classNode.html">nullptr</a>, <a class="el" href="classNode.html">nullptr</a>}</td></tr>
 <tr class="separator:aaa05167b39499499f550d7527faf0436"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a805bd36a7aae0f7d50f3bab642ffc9e2" id="r_a805bd36a7aae0f7d50f3bab642ffc9e2"><td class="memItemLeft" align="right" valign="top"><a id="a805bd36a7aae0f7d50f3bab642ffc9e2" name="a805bd36a7aae0f7d50f3bab642ffc9e2"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_below_hwm</b>: 1 = <a class="el" href="classNode.html">false</a></td></tr>
@@ -247,14 +258,486 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:ab204ebe45f832d60ecc0a69bc07dc39f" id="r_ab204ebe45f832d60ecc0a69bc07dc39f"><td class="memItemLeft" align="right" valign="top"><a id="ab204ebe45f832d60ecc0a69bc07dc39f" name="ab204ebe45f832d60ecc0a69bc07dc39f"></a>
 <a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CHILDREN</b> = 2</td></tr>
+<tr class="memdesc:ab204ebe45f832d60ecc0a69bc07dc39f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum amount of children a node is allowed to have. <br /></td></tr>
 <tr class="separator:ab204ebe45f832d60ecc0a69bc07dc39f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:ae944c1a7004ae58f280a1a5dc429f8cb" id="r_ae944c1a7004ae58f280a1a5dc429f8cb"><td class="memItemLeft" align="right" valign="top"><a id="ae944c1a7004ae58f280a1a5dc429f8cb" name="ae944c1a7004ae58f280a1a5dc429f8cb"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;<a class="el" href="classNode.html">os</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">m</a>)</td></tr>
+<tr class="memdesc:ae944c1a7004ae58f280a1a5dc429f8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cout and string-ified methods. <br /></td></tr>
 <tr class="separator:ae944c1a7004ae58f280a1a5dc429f8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Parent- and Ancestor-Related Accessors</h2></td></tr>
+<tr class="memitem:ad2e48781de0681e7147bf71ed20263b0" id="r_ad2e48781de0681e7147bf71ed20263b0"><td class="memItemLeft" align="right" valign="top"><a id="ad2e48781de0681e7147bf71ed20263b0" name="ad2e48781de0681e7147bf71ed20263b0"></a>
+<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign_parent</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">parent</a>)</td></tr>
+<tr class="memdesc:ad2e48781de0681e7147bf71ed20263b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the <code>parent</code> to this <code>_parent</code>, with no safety checks. <br /></td></tr>
+<tr class="separator:ad2e48781de0681e7147bf71ed20263b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab43844ce28030e8b583d1de732ab43f7" id="r_ab43844ce28030e8b583d1de732ab43f7"><td class="memItemLeft" align="right" valign="top"><a id="ab43844ce28030e8b583d1de732ab43f7" name="ab43844ce28030e8b583d1de732ab43f7"></a>
+<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_parent</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ab43844ce28030e8b583d1de732ab43f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to the parent. <br /></td></tr>
+<tr class="separator:ab43844ce28030e8b583d1de732ab43f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a921a007d49f266256900adc55aab60" id="r_a0a921a007d49f266256900adc55aab60"><td class="memItemLeft" align="right" valign="top"><a id="a0a921a007d49f266256900adc55aab60" name="a0a921a007d49f266256900adc55aab60"></a>
+<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign_hwm_ancestor</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">hwm_ancestor</a>)</td></tr>
+<tr class="memdesc:a0a921a007d49f266256900adc55aab60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the <code>hwm_ancestor</code> to this <code>_hwm_ancestor</code>, with no safety checks. <br /></td></tr>
+<tr class="separator:a0a921a007d49f266256900adc55aab60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2e96fdecdae4f193996072165f02ff5" id="r_af2e96fdecdae4f193996072165f02ff5"><td class="memItemLeft" align="right" valign="top"><a id="af2e96fdecdae4f193996072165f02ff5" name="af2e96fdecdae4f193996072165f02ff5"></a>
+<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_ancestor</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:af2e96fdecdae4f193996072165f02ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to the HWM ancestor. <br /></td></tr>
+<tr class="separator:af2e96fdecdae4f193996072165f02ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acff24e5b0eb62dd16bc72744ed2af9bb" id="r_acff24e5b0eb62dd16bc72744ed2af9bb"><td class="memItemLeft" align="right" valign="top"><a id="acff24e5b0eb62dd16bc72744ed2af9bb" name="acff24e5b0eb62dd16bc72744ed2af9bb"></a>
+<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:acff24e5b0eb62dd16bc72744ed2af9bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member helper to get this node's High-Water Mark index. See <code><a class="el" href="classNode.html#a63422be985eab555730bbde62c0ca2d3" title="Return the sequence index for the HWM of a given value.">st_get_hwm_index()</a></code>. <br /></td></tr>
+<tr class="separator:acff24e5b0eb62dd16bc72744ed2af9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63422be985eab555730bbde62c0ca2d3" id="r_a63422be985eab555730bbde62c0ca2d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a63422be985eab555730bbde62c0ca2d3">st_get_hwm_index</a> (T value)</td></tr>
+<tr class="memdesc:a63422be985eab555730bbde62c0ca2d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sequence index for the HWM of a given value.  <br /></td></tr>
+<tr class="separator:a63422be985eab555730bbde62c0ca2d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
+class Node&lt; T &gt;</div><p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code>. </p>
+<p>Nodes are the objects within a <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> or the workhorses used when building a <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab6aa77b6b6203cdb6ebb2f8d211d2856" name="ab6aa77b6b6203cdb6ebb2f8d211d2856"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6aa77b6b6203cdb6ebb2f8d211d2856">&#9670;&#160;</a></span>add_child()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">Node</a>&lt; T &gt; * <a class="el" href="classNode.html">Node</a>&lt; T &gt;::add_child </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a node object with <code>value</code> and assign it to this member's <code>_children</code> list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value of the child. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the child. </dd></dl>
+
+</div>
+</div>
+<a id="ac3b0a7152287753c0707502e263c5e9d" name="ac3b0a7152287753c0707502e263c5e9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3b0a7152287753c0707502e263c5e9d">&#9670;&#160;</a></span>deep_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::deep_size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the size of this data structure as closely as possible. </p>
+<dl class="section return"><dt>Returns</dt><dd>The size in bytes of the object. </dd></dl>
+
+</div>
+</div>
+<a id="a1abc023e5f1316182c73be4420e8eecc" name="a1abc023e5f1316182c73be4420e8eecc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1abc023e5f1316182c73be4420e8eecc">&#9670;&#160;</a></span>deserialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::deserialize </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>parent_v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>hwm_ancestor_v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">uint8_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>child_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deserialize this object for import following a previous <code><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501" title="Serialize the node specifics of this object for export.">serialize()</a></code>. </p>
+<p>Deserialization happens in the same order as serialization, obviously.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td>The stream to read data from. </td></tr>
+    <tr><td class="paramname">parent_v</td><td>A reference to return parent value to (for linking/validation). Zero == null when serialized. </td></tr>
+    <tr><td class="paramname">hwm_ancestor_v</td><td>A reference to return HWM ancestor value to (for linking/validation). Zero == null when serialized. </td></tr>
+    <tr><td class="paramname">child_count</td><td>A reference to return child count to (for linking/validation). </td></tr>
+    <tr><td class="paramname">err</td><td>Pointer to a string where errors, if any, are written. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A boolean indicating success or failure. Do not discard. </dd></dl>
+
+</div>
+</div>
+<a id="a8f924ff57fe20bb204b41407298555cb" name="a8f924ff57fe20bb204b41407298555cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f924ff57fe20bb204b41407298555cb">&#9670;&#160;</a></span>equal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::equal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare another node to this one. </p>
+<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">Node::st_equal()</a></code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">second</td><td>The second <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> to compare against this. </td></tr>
+    <tr><td class="paramname">err</td><td>Pointer to a string where inequality or error messages are stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if equal, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a9094a9dcdb0d8d02db467549cda22da2" name="a9094a9dcdb0d8d02db467549cda22da2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9094a9dcdb0d8d02db467549cda22da2">&#9670;&#160;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initializes a node object with <code>value</code> and an optional parent, treating it like it's new. </p>
+<p>This method is by far one of the hottest paths when building any tree type. It handles type-specific optimizations for you, and even handles overflow detection as well. It can be called reliably for any value.</p>
+<p>This method leans on <code><a class="el" href="classNode.html#a4fde89f0ec750262d4f326276007a5f4" title="Helper used exclusively by init() for type comparison when processing sequence for FG chain/HWM analy...">init_sequence_helper()</a></code> for the overflow detection and affine stride optimization.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Reference to the value for this node. </td></tr>
+    <tr><td class="paramname">parent</td><td>A pointer to a parent, if one exists. This only establishes a one-way connection: it does not asked <code>parent</code> to taken ownership of this (child) object. Caller must handle this. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4fde89f0ec750262d4f326276007a5f4" name="a4fde89f0ec750262d4f326276007a5f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fde89f0ec750262d4f326276007a5f4">&#9670;&#160;</a></span>init_sequence_helper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::init_sequence_helper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/HWM analysis. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9517228032e6f0ce674e69bbbca02501" name="a9517228032e6f0ce674e69bbbca02501"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9517228032e6f0ce674e69bbbca02501">&#9670;&#160;</a></span>serialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::serialize </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize the node specifics of this object for export. </p>
+<p>Serialization happens in this order:</p><ol type="1">
+<li>Value.</li>
+<li>Parent.</li>
+<li>HWM Ancestor.</li>
+<li>Flags.</li>
+<li>Child count.</li>
+</ol>
+<dl class="section note"><dt>Note</dt><dd>Children are not exported. They are linked during deserialization. </dd>
+<dd>
+This method does not throw. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>The stream to write data to. </td></tr>
+    <tr><td class="paramname">err</td><td>Pointer to a string where errors, if any, are written. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A boolean indicating success or failure. Do not discard. </dd></dl>
+
+</div>
+</div>
+<a id="a3c91214103510f81a707a8257301a209" name="a3c91214103510f81a707a8257301a209"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c91214103510f81a707a8257301a209">&#9670;&#160;</a></span>st_equal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_equal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare two Nodes' specific internals and return true if identical. </p>
+<p>This function checks:</p><ol type="1">
+<li>Pointers null agree.</li>
+<li><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> values match.</li>
+<li>Parent's null agree. If they exist, their values match.</li>
+<li>HWM Ancestor's flags and pointers null agree. If they exist, their values match.</li>
+<li>Children have matching counts, null agreement, and equal values.</li>
+<li>Flags for _is_below_hwm match.</li>
+<li>Flags for _is_initialized match.</li>
+<li>FG chain lengths and strings match.</li>
+</ol>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The first <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> to compare. </td></tr>
+    <tr><td class="paramname">second</td><td>The second <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> to compare. </td></tr>
+    <tr><td class="paramname">err</td><td>Pointer to a string where inequality or error messages are stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if equal, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a63422be985eab555730bbde62c0ca2d3" name="a63422be985eab555730bbde62c0ca2d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63422be985eab555730bbde62c0ca2d3">&#9670;&#160;</a></span>st_get_hwm_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_get_hwm_index </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the sequence index for the HWM of a given value. </p>
+<dl class="section note"><dt>Note</dt><dd>HWM data is available in the <a class="el" href="classCollatz.html">Collatz</a> object. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to process a sequence for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The index where High-Water Mark is reached. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="node_8hpp_source.html">node.hpp</a></li>
 </ul>

@@ -670,7 +670,7 @@ class BinaryTreeMath {
     * @param level The level of the node in question.
     * @return The number of FG links in the chain at the given level.
     */
-    static inline size_t st_fg_chain_length(level_t level) {
+    static inline seq_size_t st_fg_chain_length(level_t level) {
         return level - 1;
     }
 

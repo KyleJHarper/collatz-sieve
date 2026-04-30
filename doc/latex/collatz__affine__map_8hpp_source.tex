@@ -187,16 +187,16 @@
 \DoxyCodeLine{00257\ }
 \DoxyCodeLine{00265\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_a9060f7f774374ee830a1e316be1dcdc4}{is\_below}}()\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ our\ two's\ exponent\ exceeds\ the\ precalculated\ two's-\/exponent\ for\ our\ power\ of\ three,\ we're\ below.}}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ >\ Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT)\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}\ >\ \mbox{\hyperlink{namespaceExponents_accbaded6f43ce579264a5c9a760e9083}{Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT}})\ \{}
 \DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(}
 \DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Cannot\ lookup\ MAX\_POW2\_UNDER\_POW3\ with\ \_threes\_exp\ of\ "{}}}
 \DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ std::to\_string(\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}})}
 \DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}\ because\ the\ max\ known\ power\ of\ three\ under\ two\ is\ "{}}}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ std::to\_string(Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT)}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ std::to\_string(\mbox{\hyperlink{namespaceExponents_accbaded6f43ce579264a5c9a760e9083}{Exponents::MAX\_POW2\_UNDER\_POW3\_COUNT}})}
 \DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ \textcolor{stringliteral}{"{}."{}}}
 \DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ );}
 \DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ >\ Exponents::MAX\_POW2\_UNDER\_POW3[\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}];}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatzAffineMapShortcut_adc8181afe6d19abf493428d069fd4ae4}{\_twos\_exp}}\ >\ \mbox{\hyperlink{namespaceExponents_afea47f1ca156afda94cc2283405fd0ba}{Exponents::MAX\_POW2\_UNDER\_POW3}}[\mbox{\hyperlink{classCollatzAffineMapShortcut_a752d0d20f0e400f7e455a2c2be354e44}{\_threes\_exp}}];}
 \DoxyCodeLine{00277\ \ \ \ \ \}}
 \DoxyCodeLine{00278\ \};}
 

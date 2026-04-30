@@ -81,7 +81,7 @@ class CollatzMetadata {
     size_t deep_size() const {
         size_t total = sizeof(*this);
         if constexpr(GMPIntegral<T>) {
-            total += gmp_deep_sizeof(peak_value);
+            total += GMPHelpers::gmp_deep_sizeof(peak_value);
         }
         return total;
     }
@@ -299,7 +299,7 @@ class Collatz {
         } else if constexpr(GMPIntegral<T>) {
             total += sizeof(mpz_class) * _sequence.capacity();
             for (const auto& val : _sequence) {
-                total += gmp_deep_sizeof(val);
+                total += GMPHelpers::gmp_deep_sizeof(val);
             }
         }
 

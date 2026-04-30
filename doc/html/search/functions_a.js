@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['node_5fcount_0',['node_count',['../classBinaryTree.html#a501b4333691de390dbdf2c05011d194c',1,'BinaryTree']]]
+  ['load_0',['load',['../classBinaryTree.html#ac384237a30029bd1aba32b69ed952749',1,'BinaryTree']]]
 ];

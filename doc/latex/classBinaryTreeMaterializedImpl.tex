@@ -157,7 +157,7 @@ This was a first-\/principles implementation when starting out. It\textquotesing
 \end{DoxyNote}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see concepts.\+hpp). \\
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -321,7 +321,7 @@ Serialization happens in this order\+:
 \begin{DoxyEnumerate}
 \item The is\+\_\+pruning\+\_\+hwm\+\_\+nodes flag.
 \item The is\+\_\+pruning\+\_\+parent\+\_\+levels flag.
-\item The level map, which emits level numbers and node counts, and then uses {\ttfamily Node\+::serialize()} on each node.
+\item The level map, which emits level numbers and node counts, and then uses {\ttfamily \doxylink{classNode_a9517228032e6f0ce674e69bbbca02501}{Node\+::serialize()}} on each node.
 \end{DoxyEnumerate}
 
 \begin{DoxyNote}{Note}
@@ -410,13 +410,13 @@ This is intended for serialization/deserilization only.
 
 Compare two materialized trees\textquotesingle{} specific internals and return true if identical. 
 
-This method only tests materialized tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (e.\+g.\+: level count).
+This method only tests materialized tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (\doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{e.\+g}.\+: level count).
 
 This function checks\+:
 \begin{DoxyEnumerate}
 \item The is\+\_\+pruning\+\_\+hwm\+\_\+nodes flag.
 \item The is\+\_\+pruning\+\_\+parent\+\_\+levels flag.
-\item Level map ({\ttfamily \doxylink{classNode}{Node}} objects, which invoke their own {\ttfamily Node\+::st\+\_\+equal()}).
+\item Level map ({\ttfamily \doxylink{classNode}{Node}} objects, which invoke their own {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Node\+::st\+\_\+equal()}}).
 \end{DoxyEnumerate}
 
 

@@ -1,44 +1,126 @@
 \doxysection{Progress Class Reference}
 \hypertarget{classProgress}{}\label{classProgress}\index{Progress@{Progress}}
+
+
+Writes data from a pointer location to a file on a regular schedule, keeping a progress.  
+
+
+
+
+{\ttfamily \#include $<$progress.\+hpp$>$}
+
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a}\label{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a} 
-{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{file\+\_\+path}})
-\item 
-\Hypertarget{classProgress_a11fb7247afea0ef534ade36e1bc0a664}\label{classProgress_a11fb7247afea0ef534ade36e1bc0a664} 
-{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
-\Hypertarget{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69}\label{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69} 
-\mbox{\hyperlink{classProgress}{Progress}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
-\item 
-\Hypertarget{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8}\label{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries writeline} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}})
-\item 
-\Hypertarget{classProgress_a026edf64122af98c19be8a3715dfc908}\label{classProgress_a026edf64122af98c19be8a3715dfc908} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries monitor} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}}=5)
-\item 
-\Hypertarget{classProgress_ac31348e3ea575becbb547d3c107cc964}\label{classProgress_ac31348e3ea575becbb547d3c107cc964} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries monitor\+\_\+subtask} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}})
-\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8}{writeline}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em Writes a line containing a timestamp prefix and the callers value in {\ttfamily x}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classProgress_a026edf64122af98c19be8a3715dfc908}{monitor}} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}}=5)
+\begin{DoxyCompactList}\small\item\em Begins monitoring the data referenced by {\ttfamily x} in a new thread. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classProgress_ac31348e3ea575becbb547d3c107cc964}{monitor\+\_\+subtask}} (\mbox{\hyperlink{classNode}{Any\+Printable}} \&\mbox{\hyperlink{classNode}{x}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{delay\+\_\+seconds}})
+\begin{DoxyCompactList}\small\item\em The subtask running inside {\ttfamily \+\_\+monitor\+\_\+thread} after {\ttfamily \doxylink{classProgress_a026edf64122af98c19be8a3715dfc908}{monitor()}} is called. Should probably be private. \end{DoxyCompactList}\item 
 \Hypertarget{classProgress_a403ac17bf9336d034b2891ac7f16d199}\label{classProgress_a403ac17bf9336d034b2891ac7f16d199} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries join} ()
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Stops the monitoring thread by flagging it and calling join, if possible. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgress_a01d83f02dc49939dd5d14057932a8a8d}\label{classProgress_a01d83f02dc49939dd5d14057932a8a8d} 
+{\bfseries Progress} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a}\label{classProgress_ab7afceceb1d8cee8bcd9dd8a62aa239a} 
+{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{file\+\_\+path}})
+\begin{DoxyCompactList}\small\item\em Constructor taking a file path to write to. \end{DoxyCompactList}\item 
+\Hypertarget{classProgress_abfa443f16958768636a59a560b625317}\label{classProgress_abfa443f16958768636a59a560b625317} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Progress} ()
+\begin{DoxyCompactList}\small\item\em Destructor joins the monitoring thread and closes out handles. \end{DoxyCompactList}\item 
+\Hypertarget{classProgress_a11fb7247afea0ef534ade36e1bc0a664}\label{classProgress_a11fb7247afea0ef534ade36e1bc0a664} 
+{\bfseries Progress} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disable copy and move operations. \end{DoxyCompactList}\item 
+\Hypertarget{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69}\label{classProgress_a3db6fa941d753aa50f1c1a92d9c50f69} 
+\mbox{\hyperlink{classProgress}{Progress}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classProgress}{Progress}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disable copy and move operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classProgress_a67b8f98ca27a222965ccd51a8b43799f}\label{classProgress_a67b8f98ca27a222965ccd51a8b43799f} 
 std\+::string {\bfseries \+\_\+file\+\_\+path}
-\item 
+\begin{DoxyCompactList}\small\item\em String path written to. \end{DoxyCompactList}\item 
 \Hypertarget{classProgress_a940bb6a7698e40d9c93c13a4a099ea99}\label{classProgress_a940bb6a7698e40d9c93c13a4a099ea99} 
 std\+::thread {\bfseries \+\_\+monitor\+\_\+thread}
-\item 
+\begin{DoxyCompactList}\small\item\em Background thread which sleeps and writes. \end{DoxyCompactList}\item 
 \Hypertarget{classProgress_ab2c4e92db8b10d2b94d851e0c28a2ee5}\label{classProgress_ab2c4e92db8b10d2b94d851e0c28a2ee5} 
 std\+::atomic$<$ \mbox{\hyperlink{classNode}{bool}} $>$ {\bfseries \+\_\+stop} \{\mbox{\hyperlink{classNode}{false}}\}
-\item 
+\begin{DoxyCompactList}\small\item\em Stopping flag. \end{DoxyCompactList}\item 
 \Hypertarget{classProgress_a0f133870b4b81fadf89c929bb728cdc7}\label{classProgress_a0f133870b4b81fadf89c929bb728cdc7} 
 \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+sleep\+\_\+duration\+\_\+ms} = 100
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Sleep duration before emitting another progress report. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Writes data from a pointer location to a file on a regular schedule, keeping a progress. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classProgress_a026edf64122af98c19be8a3715dfc908}\label{classProgress_a026edf64122af98c19be8a3715dfc908} 
+\index{Progress@{Progress}!monitor@{monitor}}
+\index{monitor@{monitor}!Progress@{Progress}}
+\doxysubsubsection{\texorpdfstring{monitor()}{monitor()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} Progress\+::monitor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{Any\+Printable}} \&}]{x,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{delay\+\_\+seconds = {\ttfamily 5} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Begins monitoring the data referenced by {\ttfamily x} in a new thread. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Any\+Printable} & Any data type that is printable via a standard {\ttfamily \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}} operator. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The reference to connect with the new monitoring thread. \\
+\hline
+{\em delay\+\_\+seconds} & How often to tell the monitoring thread to read {\ttfamily x} and write it out. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classProgress_ac31348e3ea575becbb547d3c107cc964}\label{classProgress_ac31348e3ea575becbb547d3c107cc964} 
+\index{Progress@{Progress}!monitor\_subtask@{monitor\_subtask}}
+\index{monitor\_subtask@{monitor\_subtask}!Progress@{Progress}}
+\doxysubsubsection{\texorpdfstring{monitor\_subtask()}{monitor\_subtask()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} Progress\+::monitor\+\_\+subtask (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{Any\+Printable}} \&}]{x,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{delay\+\_\+seconds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The subtask running inside {\ttfamily \+\_\+monitor\+\_\+thread} after {\ttfamily \doxylink{classProgress_a026edf64122af98c19be8a3715dfc908}{monitor()}} is called. Should probably be private. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Any\+Printable} & Any data type that is printable via a standard {\ttfamily \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}} operator. \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8}\label{classProgress_a9c51de1eae2fb7ebfc140cdec691d6d8} 
+\index{Progress@{Progress}!writeline@{writeline}}
+\index{writeline@{writeline}!Progress@{Progress}}
+\doxysubsubsection{\texorpdfstring{writeline()}{writeline()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Any\+Printable}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} Progress\+::writeline (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Any\+Printable}} \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Writes a line containing a timestamp prefix and the callers value in {\ttfamily x}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Any\+Printable} & Any data type that is printable via a standard {\ttfamily \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}} operator. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Reference to the data to write. \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

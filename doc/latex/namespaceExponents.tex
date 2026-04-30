@@ -1,0 +1,160 @@
+\doxysection{Exponents Namespace Reference}
+\hypertarget{namespaceExponents}{}\label{namespaceExponents}\index{Exponents@{Exponents}}
+
+
+Tables of exponents, mostly for powers of 2 and 3.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{auto}} \mbox{\hyperlink{namespaceExponents_a842ac00090816a6c51637c183c93620c}{get\+\_\+power\+\_\+of\+\_\+three}} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{exp}}) -\/$>$ std\+::conditional\+\_\+t$<$ std\+::is\+\_\+same\+\_\+v$<$ T, \mbox{\hyperlink{classNode}{mpz\+\_\+class}} $>$, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&, T $>$
+\begin{DoxyCompactList}\small\item\em Return the correctly-\/typed power of three from the corresponding table. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{auto}} \mbox{\hyperlink{namespaceExponents_a7b4673c244ab5ea07867818119965e35}{get\+\_\+power\+\_\+of\+\_\+two}} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{exp}}) -\/$>$ std\+::conditional\+\_\+t$<$ std\+::is\+\_\+same\+\_\+v$<$ T, \mbox{\hyperlink{classNode}{mpz\+\_\+class}} $>$, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&, T $>$
+\begin{DoxyCompactList}\small\item\em Return the correctly-\/typed power of two from the corresponding table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceExponents_accbaded6f43ce579264a5c9a760e9083}\label{namespaceExponents_accbaded6f43ce579264a5c9a760e9083} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3\+\_\+\+COUNT} = 512
+\begin{DoxyCompactList}\small\item\em The number of powers-\/of-\/two beneath powers-\/of-\/three which have been precalculated for {\ttfamily MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceExponents_afea47f1ca156afda94cc2283405fd0ba}{MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3}} \mbox{[}\mbox{\hyperlink{namespaceExponents_accbaded6f43ce579264a5c9a760e9083}{MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Table of powers of three and the resultant power of two which is still below that power of three. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_ad7383a96a7e056891ed183acd52262ce}\label{namespaceExponents_ad7383a96a7e056891ed183acd52262ce} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW3\+\_\+64\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT} = 40
+\begin{DoxyCompactList}\small\item\em The number of powers of three which can exist in the array of 64-\/bit types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a0a1772f7a096153e1ebc7e1ed12382ef}\label{namespaceExponents_a0a1772f7a096153e1ebc7e1ed12382ef} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries POW3\+\_\+64\+BIT} \mbox{[}\mbox{\hyperlink{namespaceExponents_ad7383a96a7e056891ed183acd52262ce}{POW3\+\_\+64\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of three which will fit in a 64-\/bit type. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a4ac8c74d1070fa6be0de5d66997d2b49}\label{namespaceExponents_a4ac8c74d1070fa6be0de5d66997d2b49} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW3\+\_\+128\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT} = 80
+\begin{DoxyCompactList}\small\item\em The number of powers of three which can exist in the array of 128-\/bit types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a5b250547d7bb88f1037a258684ee3689}\label{namespaceExponents_a5b250547d7bb88f1037a258684ee3689} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} {\bfseries POW3\+\_\+128\+BIT} \mbox{[}\mbox{\hyperlink{namespaceExponents_a4ac8c74d1070fa6be0de5d66997d2b49}{POW3\+\_\+128\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of three which will fit in a 128-\/bit type. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a562a9874f650809872adb72ce9939eeb}\label{namespaceExponents_a562a9874f650809872adb72ce9939eeb} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW3\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT} = 512
+\begin{DoxyCompactList}\small\item\em The number of powers of three which can exist in the array of 128-\/bit types. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{POW3\+\_\+\+MPZ}} \mbox{[}\mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{POW3\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of three which will fit in an {\ttfamily mpz\+\_\+class}. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a83b21be1d6ee30034e2e0793b4ae6a7f}\label{namespaceExponents_a83b21be1d6ee30034e2e0793b4ae6a7f} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW2\+\_\+64\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT} = 64
+\begin{DoxyCompactList}\small\item\em The number of powers of two which can exist in the array of 64-\/bit types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_ab72cb63ba4348060b0accdefab619f04}\label{namespaceExponents_ab72cb63ba4348060b0accdefab619f04} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries POW2\+\_\+64\+BIT} \mbox{[}\mbox{\hyperlink{namespaceExponents_a83b21be1d6ee30034e2e0793b4ae6a7f}{POW2\+\_\+64\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of two which will fit in a 64-\/bit type. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_ada55e9f105ea84299be0344f4eb50fb7}\label{namespaceExponents_ada55e9f105ea84299be0344f4eb50fb7} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW2\+\_\+128\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT} = 128
+\begin{DoxyCompactList}\small\item\em The number of powers of two which can exist in the array of 128-\/bit types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a6b3b32bf6eb99a3174d8762db283176e}\label{namespaceExponents_a6b3b32bf6eb99a3174d8762db283176e} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} {\bfseries POW2\+\_\+128\+BIT} \mbox{[}\mbox{\hyperlink{namespaceExponents_ada55e9f105ea84299be0344f4eb50fb7}{POW2\+\_\+128\+BIT\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of two which will fit in a 128-\/bit type. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceExponents_a282134768ca1fecdc769c5997e7c5c2c}\label{namespaceExponents_a282134768ca1fecdc769c5997e7c5c2c} 
+\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries POW2\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT} = 512
+\begin{DoxyCompactList}\small\item\em The number of powers of two which can exist in the array of 128-\/bit types. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceExponents_a18f54f1024316245bbe126a55d5ec560}{POW2\+\_\+\+MPZ}} \mbox{[}\mbox{\hyperlink{namespaceExponents_a282134768ca1fecdc769c5997e7c5c2c}{POW2\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em All powers of two which will fit in an {\ttfamily mpz\+\_\+class}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tables of exponents, mostly for powers of 2 and 3. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceExponents_a842ac00090816a6c51637c183c93620c}\label{namespaceExponents_a842ac00090816a6c51637c183c93620c} 
+\index{Exponents@{Exponents}!get\_power\_of\_three@{get\_power\_of\_three}}
+\index{get\_power\_of\_three@{get\_power\_of\_three}!Exponents@{Exponents}}
+\doxysubsubsection{\texorpdfstring{get\_power\_of\_three()}{get\_power\_of\_three()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{auto}} Exponents\+::get\+\_\+power\+\_\+of\+\_\+three (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{exp }\end{DoxyParamCaption}) -\/$>$ std\+::conditional\+\_\+t$<$std\+::is\+\_\+same\+\_\+v$<$T, \mbox{\hyperlink{classNode}{mpz\+\_\+class}}$>$, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}}\&, T$>$ \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the correctly-\/typed power of three from the corresponding table. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em exp} & The exponent to look up. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A copy of the value from the table, or a reference to it when it\textquotesingle{}s {\ttfamily mpz\+\_\+class}. 
+\end{DoxyReturn}
+\Hypertarget{namespaceExponents_a7b4673c244ab5ea07867818119965e35}\label{namespaceExponents_a7b4673c244ab5ea07867818119965e35} 
+\index{Exponents@{Exponents}!get\_power\_of\_two@{get\_power\_of\_two}}
+\index{get\_power\_of\_two@{get\_power\_of\_two}!Exponents@{Exponents}}
+\doxysubsubsection{\texorpdfstring{get\_power\_of\_two()}{get\_power\_of\_two()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{auto}} Exponents\+::get\+\_\+power\+\_\+of\+\_\+two (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{exp }\end{DoxyParamCaption}) -\/$>$ std\+::conditional\+\_\+t$<$std\+::is\+\_\+same\+\_\+v$<$T, \mbox{\hyperlink{classNode}{mpz\+\_\+class}}$>$, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}}\&, T$>$ \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the correctly-\/typed power of two from the corresponding table. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em exp} & The exponent to look up. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A copy of the value from the table, or a reference to it when it\textquotesingle{}s {\ttfamily mpz\+\_\+class}. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespaceExponents_afea47f1ca156afda94cc2283405fd0ba}\label{namespaceExponents_afea47f1ca156afda94cc2283405fd0ba} 
+\index{Exponents@{Exponents}!MAX\_POW2\_UNDER\_POW3@{MAX\_POW2\_UNDER\_POW3}}
+\index{MAX\_POW2\_UNDER\_POW3@{MAX\_POW2\_UNDER\_POW3}!Exponents@{Exponents}}
+\doxysubsubsection{\texorpdfstring{MAX\_POW2\_UNDER\_POW3}{MAX\_POW2\_UNDER\_POW3}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} Exponents\+::\+MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3\mbox{[}\mbox{\hyperlink{namespaceExponents_accbaded6f43ce579264a5c9a760e9083}{MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3\+\_\+\+COUNT}}\mbox{]}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Table of powers of three and the resultant power of two which is still below that power of three. 
+
+Powers of two and three quickly overflow data types, such as 64-\/bit overflowing at 3\texorpdfstring{$^\wedge$}{\string^}41. This table provides a method for determining the same thing\+: is a power of 2 below a power of 3?
+
+It does this by using the array index as the exponent for powers of three, and the value of that element is the power of two which still remains below it.
+
+For example, {\ttfamily MAX\+\_\+\+POW2\+\_\+\+UNDER\+\_\+\+POW3\mbox{[}4\mbox{]}} would return {\ttfamily 6}. The {\ttfamily 4} is three\textquotesingle{}s exponent\+: 3\texorpdfstring{$^\wedge$}{\string^}4. The {\ttfamily 6} is the maximum two\textquotesingle{}s exponent\+: 2\texorpdfstring{$^\wedge$}{\string^}6. When expanded, the result is\+: {\ttfamily 3\texorpdfstring{$^\wedge$}{\string^}4 \texorpdfstring{$>$}{>} 2\texorpdfstring{$^\wedge$}{\string^}6 ==\texorpdfstring{$>$}{>} 81 \texorpdfstring{$>$}{>} 64}. The next power of two would be {\ttfamily 128} and would fail the condition.
+
+As a result, the entire array is simply a {\ttfamily size\+\_\+t} list and avoids type juggling.
+
+\begin{DoxyNote}{Note}
+The associated file "{}tools/pow2\+\_\+under\+\_\+pow3.\+py"{} helps build this table. 
+\end{DoxyNote}
+\Hypertarget{namespaceExponents_a18f54f1024316245bbe126a55d5ec560}\label{namespaceExponents_a18f54f1024316245bbe126a55d5ec560} 
+\index{Exponents@{Exponents}!POW2\_MPZ@{POW2\_MPZ}}
+\index{POW2\_MPZ@{POW2\_MPZ}!Exponents@{Exponents}}
+\doxysubsubsection{\texorpdfstring{POW2\_MPZ}{POW2\_MPZ}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} Exponents\+::\+POW2\+\_\+\+MPZ\mbox{[}\mbox{\hyperlink{namespaceExponents_a282134768ca1fecdc769c5997e7c5c2c}{POW2\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+All powers of two which will fit in an {\ttfamily mpz\+\_\+class}. 
+
+\begin{DoxyNote}{Note}
+This is an artificial limit imposed by the API. GMP has no maximum integer size limit. 
+\end{DoxyNote}
+\Hypertarget{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}\label{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4} 
+\index{Exponents@{Exponents}!POW3\_MPZ@{POW3\_MPZ}}
+\index{POW3\_MPZ@{POW3\_MPZ}!Exponents@{Exponents}}
+\doxysubsubsection{\texorpdfstring{POW3\_MPZ}{POW3\_MPZ}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} Exponents\+::\+POW3\+\_\+\+MPZ\mbox{[}\mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{POW3\+\_\+\+MPZ\+\_\+\+ELEMENT\+\_\+\+COUNT}}\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+All powers of three which will fit in an {\ttfamily mpz\+\_\+class}. 
+
+\begin{DoxyNote}{Note}
+This is an artificial limit imposed by the API. GMP has no maximum integer size limit. 
+\end{DoxyNote}

@@ -1,80 +1,427 @@
 \doxysection{Node\+Bitmap\texorpdfstring{$<$}{<} T, Backend\+Type \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classNodeBitmap}{}\label{classNodeBitmap}\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+
+
+The \doxylink{classNodeBitmap}{Node\+Bitmap} facade. Currently, only one implementation exists and is the default.  
+
+
+
+
+{\ttfamily \#include $<$node\+\_\+bitmap.\+hpp$>$}
+
 \doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26}\label{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\begin{DoxyCompactList}\small\item\em Add a value to the bitmap. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}{add\+\_\+range}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\begin{DoxyCompactList}\small\item\em Add a contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}{add\+\_\+range\+\_\+closed}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+\begin{DoxyCompactList}\small\item\em Add a closed, contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}{contains}} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Check for a value to exist (be "{}on"{}) in the bitmap. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e}\label{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\begin{DoxyCompactList}\small\item\em Removes an item from the bitmap. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}{cardinality}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Calculate the cardinality (count) of nodes turned "{}on"{}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\begin{DoxyCompactList}\small\item\em Merge (bitwise OR) another {\ttfamily Backend\+Type} into this one. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \& \mbox{\hyperlink{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}{operator\texorpdfstring{$\vert$}{|}=}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\begin{DoxyCompactList}\small\item\em An opertor which calls {\ttfamily \doxylink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge()}}. This is a convenience to do\+: {\ttfamily my\+\_\+bitmap \texorpdfstring{$\vert$}{|}= another\+\_\+bitmap}. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a}\label{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clone} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
+\begin{DoxyCompactList}\small\item\em Copy source bitmap and metadata into self, making an exact copy. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d}\label{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries optimize} ()
+\begin{DoxyCompactList}\small\item\em Calls any available optimization functions on internal members to free up wasted memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}{shrink\+\_\+to\+\_\+fit}} ()
+\begin{DoxyCompactList}\small\item\em Calls the shrink\+To\+Fit() method for each bitmap and sums them. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}{deep\+\_\+size}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Calculate the size of this data structure as closely as possible. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Compare another bitmap of {\ttfamily Backend\+Type} to this one. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Serialize the bitmap specifics of this object for export. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap_a666266bba700198551be03287f47ecd2}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}{serialize()}}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e}{for\+\_\+each\+\_\+value}} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\begin{DoxyCompactList}\small\item\em A for-\/each wrapper returning each value in the bitmap to {\ttfamily callback}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}{for\+\_\+each\+\_\+transformer}} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\begin{DoxyCompactList}\small\item\em A for-\/each transformer allowing callbacks with thread-\/local storage for transformation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae}\label{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae} 
+{\bfseries Node\+Bitmap} ()=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}\label{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Invoke the implementation\textquotesingle{}s clear method, wiping it out and freeing memory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8}\label{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8} 
 \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Backend\+Type}} \& {\bfseries get\+\_\+impl} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}\label{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{auto}} \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26}\label{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
-\item 
-\Hypertarget{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}\label{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
-\item 
-\Hypertarget{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}\label{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+range\+\_\+closed} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
-\item 
-\Hypertarget{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}\label{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries contains} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e}\label{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
-\item 
-\Hypertarget{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}\label{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f} 
-T {\bfseries cardinality} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}\label{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
-\item 
-\Hypertarget{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}\label{classNodeBitmap_a826307acc0967711fffd951ba9022b5b} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries merge} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
-\item 
-\Hypertarget{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}\label{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5} 
-\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \& {\bfseries operator\texorpdfstring{$\vert$}{|}=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
-\item 
-\Hypertarget{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a}\label{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries clone} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{src}})
-\item 
-\Hypertarget{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d}\label{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries optimize} ()
-\item 
-\Hypertarget{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}\label{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries shrink\+\_\+to\+\_\+fit} ()
-\item 
-\Hypertarget{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}\label{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}\label{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}\label{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries serialize} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classNodeBitmap_a666266bba700198551be03287f47ecd2}\label{classNodeBitmap_a666266bba700198551be03287f47ecd2} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries deserialize} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
-\item 
-\Hypertarget{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}\label{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+transformer} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\item 
-\Hypertarget{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e}\label{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+value} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get a readonly reference to the implementation object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{auto}} \& \mbox{\hyperlink{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}{get\+\_\+map}} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a readonly reference to the implementation\textquotesingle{}s map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}\label{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+equal} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Compare two Backend\+Types\textquotesingle{} internals and return true if identical. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}\label{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d} 
 \mbox{\hyperlink{classNode}{Backend\+Type}} {\bfseries \+\_\+impl}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The static implementation object for this facade. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}} = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$\newline
+class Node\+Bitmap$<$ T, Backend\+Type $>$}
+The \doxylink{classNodeBitmap}{Node\+Bitmap} facade. Currently, only one implementation exists and is the default. 
+
+\begin{DoxyNote}{Note}
+This class follows CRoaring techniques, including half-\/open vs closed variants and such. Pay attention. 
+\end{DoxyNote}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+{\em Backend\+Type} & The implementation to use. Currently only {\ttfamily \doxylink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} exists and is the default. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}\label{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!add\_range@{add\_range}}
+\index{add\_range@{add\_range}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{add\_range()}{add\_range()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::add\+\_\+range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{start,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add a contiguous range of values using the most optimized approach. 
+
+\begin{DoxyNote}{Note}
+This is the Half-\/\+Open range \mbox{[}star, end). Meaning, start is included but end isn\textquotesingle{}t. 
+\end{DoxyNote}
+\Hypertarget{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}\label{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!add\_range\_closed@{add\_range\_closed}}
+\index{add\_range\_closed@{add\_range\_closed}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{add\_range\_closed()}{add\_range\_closed()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::add\+\_\+range\+\_\+closed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{start,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add a closed, contiguous range of values using the most optimized approach. 
+
+\begin{DoxyNote}{Note}
+This is the Closed range \mbox{[}star, end\mbox{]}. Meaning, start and end are both included. 
+\end{DoxyNote}
+\Hypertarget{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}\label{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!cardinality@{cardinality}}
+\index{cardinality@{cardinality}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{cardinality()}{cardinality()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+T \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::cardinality (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calculate the cardinality (count) of nodes turned "{}on"{}. 
+
+\begin{DoxyReturn}{Returns}
+The count of "{}on"{} nodes, typed to caller\textquotesingle{}s {\ttfamily T}. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}\label{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!contains@{contains}}
+\index{contains@{contains}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::contains (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Check for a value to exist (be "{}on"{}) in the bitmap. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to search for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if present ("{}on"{}), false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}\label{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!deep\_size@{deep\_size}}
+\index{deep\_size@{deep\_size}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{deep\_size()}{deep\_size()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::deep\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calculate the size of this data structure as closely as possible. 
+
+\begin{DoxyNote}{Note}
+This is not always cheap. It requires iteration of all structures. 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+The size in bytes of the object. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_a666266bba700198551be03287f47ecd2}\label{classNodeBitmap_a666266bba700198551be03287f47ecd2} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!deserialize@{deserialize}}
+\index{deserialize@{deserialize}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Deserialize this object for import following a previous {\ttfamily \doxylink{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}{serialize()}}. 
+
+Deserialization happens in the same order as serialization, obviously.
+
+\begin{DoxyNote}{Note}
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em in} & The stream to read data from. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}\label{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!equal@{equal}}
+\index{equal@{equal}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{equal()}{equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compare another bitmap of {\ttfamily Backend\+Type} to this one. 
+
+This is a member helper which simply forwards to {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Backend\+Type\+::st\+\_\+equal()}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em second} & The second bitmap to compare against this. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}\label{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!for\_each\_transformer@{for\_each\_transformer}}
+\index{for\_each\_transformer@{for\_each\_transformer}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{for\_each\_transformer()}{for\_each\_transformer()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::for\+\_\+each\+\_\+transformer (\begin{DoxyParamCaption}\item[{Bitmap\+Transformer\+Policy}]{policy,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&}]{tls,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+A for-\/each transformer allowing callbacks with thread-\/local storage for transformation. 
+
+Applies {\ttfamily callback} to all values according to the Bitmap\+Transformer\+Policy (serial or parallel) requested. When serial, order is guaranteed.
+
+Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}
+
+The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+
+\begin{DoxyWarning}{Warning}
+Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
+\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & A function signature defined to match {\ttfamily callback}. \\
+\hline
+{\em TLS\+\_\+\+Type} & User-\/selected data type for the vector of thread-\/local storage to utilize. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \\
+\hline
+{\em tls} & A vector to store thread-\/local data in during callbacks. This method WILL call {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+resize()}} if the number of available threads reported by {\ttfamily omp\+\_\+get\+\_\+max\+\_\+threads()} exceeds {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+capacity()}}. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-\/will in caller\textquotesingle{}s {\ttfamily callback}. \\
+\hline
+{\em callback} & Method to invoke on each value. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e}\label{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!for\_each\_value@{for\_each\_value}}
+\index{for\_each\_value@{for\_each\_value}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{for\_each\_value()}{for\_each\_value()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::for\+\_\+each\+\_\+value (\begin{DoxyParamCaption}\item[{Bitmap\+Transformer\+Policy}]{policy,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+A for-\/each wrapper returning each value in the bitmap to {\ttfamily callback}. 
+
+This method uses {\ttfamily for\+\_\+each\+\_\+transformer} when TLS storage isn\textquotesingle{}t needed. It applies {\ttfamily callback} to all values.
+
+Callback must have this signature\+: {\ttfamily (const T\& value)}
+
+The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+
+\begin{DoxyWarning}{Warning}
+Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
+\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & A function signature defined to match {\ttfamily callback}. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \\
+\hline
+{\em callback} & Method to invoke on each value. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}\label{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!get\_map@{get\_map}}
+\index{get\_map@{get\_map}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{get\_map()}{get\_map()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{auto}} \& \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::get\+\_\+map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a readonly reference to the implementation\textquotesingle{}s map. 
+
+\begin{DoxyWarning}{Warning}
+This is fragile, as it is tied directly to implementation-\/specific logic without a {\ttfamily requires} or safety check. 
+\end{DoxyWarning}
+\Hypertarget{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}\label{classNodeBitmap_a826307acc0967711fffd951ba9022b5b} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!merge@{merge}}
+\index{merge@{merge}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{merge()}{merge()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::merge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Merge (bitwise OR) another {\ttfamily Backend\+Type} into this one. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & Another {\ttfamily Backend\+Type} of the exact same {\ttfamily T}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}\label{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!operator\texttt{"|}=@{operator\texttt{"|}=}}
+\index{operator\texttt{"|}=@{operator\texttt{"|}=}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texttt{"|}=()}{operator|=()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \& \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\mbox{\hyperlink{classNode}{\+::operator}}\texorpdfstring{$\vert$}{|}= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+An opertor which calls {\ttfamily \doxylink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge()}}. This is a convenience to do\+: {\ttfamily my\+\_\+bitmap \texorpdfstring{$\vert$}{|}= another\+\_\+bitmap}. 
+
+\begin{DoxyNote}{Note}
+Unlike {\ttfamily \doxylink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge()}}, caller receives {\ttfamily \texorpdfstring{$\ast$}{*}this} returned, not void. 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+This object, as required by {\ttfamily operator\texorpdfstring{$\vert$}{|}=}. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}\label{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!serialize@{serialize}}
+\index{serialize@{serialize}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Serialize the bitmap specifics of this object for export. 
+
+Serialization happens in this order\+:
+\begin{DoxyEnumerate}
+\item Implementation-\/specific items.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Since only one implemention exists, all work is handed off to it. \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{I.\+e}.\+: there\textquotesingle{}s no generalized data to control. 
+
+This method does not throw. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em out} & The stream to write data to. \\
+\hline
+{\em err} & Pointer to a string where errors, if any, are written. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}\label{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!shrink\_to\_fit@{shrink\_to\_fit}}
+\index{shrink\_to\_fit@{shrink\_to\_fit}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{shrink\_to\_fit()}{shrink\_to\_fit()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::shrink\+\_\+to\+\_\+fit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Calls the shrink\+To\+Fit() method for each bitmap and sums them. 
+
+\begin{DoxyWarning}{Warning}
+This is fragile because it is linked to implementation-\/specific behavior and not generic. 
+\end{DoxyWarning}
+\begin{DoxyReturn}{Returns}
+The amount of space reclaimed, because that\textquotesingle{}s what CRoaring\textquotesingle{}s API does too. 
+\end{DoxyReturn}
+\Hypertarget{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}\label{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3} 
+\index{NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}!st\_equal@{st\_equal}}
+\index{st\_equal@{st\_equal}!NodeBitmap$<$ T, BackendType $>$@{NodeBitmap$<$ T, BackendType $>$}}
+\doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Backend\+Type}}  = Flat\+Hash\+Bitmap\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T, \mbox{\hyperlink{classNode}{Backend\+Type}} $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Compare two Backend\+Types\textquotesingle{} internals and return true if identical. 
+
+This facade method currently just calls the implementation directly because there is no shared logic.
+
+This function checks\+:
+\begin{DoxyEnumerate}
+\item Implementation-\/specific details.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em first} & The first bitmap to compare. \\
+\hline
+{\em second} & The second bitmap to compare. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

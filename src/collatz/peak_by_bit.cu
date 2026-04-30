@@ -14,10 +14,14 @@
 } while(0)
 
 
-//
-// Stolen from CollatzConstants
-//
-// Trying to perform 3X+1 on any value higher than this would overflow a 64-bit unsigned integer.
+
+
+/**
+* @brief Stores the highest integer which can take 3x + 1 without overflowing a given bit width.
+* @note This only supports 8, 16, 32, 64, and 128 bit widths.
+* @note This only supports unsigned types.
+* @note Copied from `CollatzConstants`
+*/
 __host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
     ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
@@ -26,8 +30,13 @@ __host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) << 127) + ((uint128_t(1) << 127) - 1) - 1) / 3  // 128 bit
     // Requires a little juggling to avoid overflow.  Yay PEMDAS!
 };
-//
-// Now a helper for it.
+
+
+
+/**
+* @brief Helper to return the correct `MAX_3XP1` for the type `T`.
+* @tparam T Any supported integral (see concepts.hpp).
+*/
 template<typename T>
 __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
     static_assert(is_device_integral_v<T>, "T must be uint32_t, uint64_t, or uint128_t");
@@ -42,12 +51,12 @@ __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
 
 
 
-//
-// Collatz Get Peak
-// Find the peak value of an initial value, optinally stopping if we reach below HWM.
-//
-// If the next 3x+1 would overflow, we set peak to get_max_3xp1<T>().  Caller must check.
-//
+/**
+* @brief Find the peak value of an initial value, optinally stopping if we reach below HWM.
+* @param initial_value The starting value to begin a Collatz sequence.
+* @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
+* @return The peak value found.  If the next 3x+1 would overflow, we set peak to get_max_3xp1<T>().  Caller must check.
+*/
 template<typename T>
 __device__ T collatz_get_peak(
     T initial_value
@@ -90,9 +99,16 @@ __device__ T collatz_get_peak(
 
 
 
-//
-// Kernel to capture peaks of Collatz sequences.
-//
+/**
+* @brief Kernel to capture peaks of Collatz sequences.
+* @param base_initial_value The first initial value to find peak of.
+* @param max_allowed_value The highest value a sequence can reach before triggering overflow.
+* @param count The number of loops to run in this kernel.
+* @param d_peaks Device memory to write peaks to as they're found.
+* @param failing_index The index this method returns if a sequence exceeds `max_allowed_value`.
+* @param overflow_index The index this method returns if a sequence overflows the data type.
+* @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
+*/
 template<typename T>
 __global__ void collatz_peaks_kernel(
     T base_initial_value
@@ -131,19 +147,43 @@ __global__ void collatz_peaks_kernel(
 
 
 
+/**
+* @class CollatzPeakRunner
+* @brief Unifies a lot of the peak-by-bit logic into a single runner class for homogenous interaction with CPU.
+* @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
+*/
 template<typename T>
 class CollatzPeakRunner {
     private:
+    /// @brief Device memory to write peaks to as they're found.
     T* _d_peaks = nullptr;
+    /// @brief Pointer to pinned memory for GPU<->CPU synchronization.
     T* _h_peaks_pin = nullptr;
+    /// @brief Pointer to a unified memory location for base_initial_value.
     T* _unified_base_initial_value_ptr = nullptr;
+    /// @brief Pointer to a unified memory location for overflow index when an overflow happens.
     int* _unified_overflow_index_ptr = nullptr;
+    /// @brief Pointer to a unified memory location for failing index when a sequence exceeds max value.
     int* _unified_failing_index_ptr = nullptr;
+    /// @brief A memory stream for sychronizing host and device data.
     cudaStream_t _stream;
+    /// @brief Buffer size for controlling work chunking sent to kernels.
     size_t _buffer_size;
 
 
+
     public:
+    /// @name Lifecycle Management
+    /// @{
+
+    /**
+    * @brief Constructor to establish host and device memory in preparation for work.
+    * @param host_buffer Pointer to host memory to synchronize back to after computing work on the device.
+    * @param buffer_size Nuber of elements to process in a single pass, spread across grids/dimensions.
+    * @param unified_base_initial_value_ptr Pointer to a unified host-device memory location for base initial value.
+    * @param unified_overflow_index Pointer to a unified memory location for overflow index when an overflow happens.
+    * @param unified_failing_index Pointer to a unified memory location for failing index when a sequence exceeds max value.
+    */
     CollatzPeakRunner(
         T* host_buffer
         , size_t buffer_size
@@ -168,18 +208,22 @@ class CollatzPeakRunner {
         CUDA_CHECK(cudaStreamCreate(&_stream));
     }
 
+
+
+    /// @brief Destructor frees device memory, unregisters the host peaks pin, and destroys the sync stream.
     ~CollatzPeakRunner() {
         cudaFree(_d_peaks);
         cudaHostUnregister(_h_peaks_pin);
         cudaStreamDestroy(_stream);
     }
 
-    //
-    // Host code to compute a bunch of peaks and then bring them to the host.  We will alloc on the device for you.
-    //
-    void compute_collatz_peak(
-        size_t bit
-    ) {
+    /// @}
+
+
+
+    /// @brief Host code to compute a bunch of peaks and then bring them to the host.
+    /// @param bit The current bit being searched for.  I.e.: max value will be `2^bit` - 1.
+    void compute_collatz_peak(size_t bit) {
         const int threads_per_block = 128;
         int blocks = (_buffer_size + threads_per_block - 1) / threads_per_block;
         T max_allowed_value = (T(1) << bit) - 1;
@@ -217,28 +261,46 @@ class CollatzPeakRunner {
     }
 };
 
-// Factory functions
+
+
+/// @brief Creates a `CollatzPeakRunner`; exposed for use with host code via an interface.
 template<typename T>
 CollatzPeakRunner<T>* create_runner(T* host_buffer, size_t buffer_size, T* unified_base_initial_value_ptr, int* unified_overflow_index, int* unified_failing_index) {
     return new CollatzPeakRunner<T>(host_buffer, buffer_size, unified_base_initial_value_ptr, unified_overflow_index, unified_failing_index);
 }
 
+
+
+/// @brief Destroys a `CollatzPeakRunner`; exposed for use with host code via an interface.
 template<typename T>
 void destroy_runner(CollatzPeakRunner<T>* runner) {
     delete runner;
 }
 
+
+
+/// @brief Executes the `compute_collatz_peak()` on the GPU; exposed for use with the host code via an interface.
 template<typename T>
 void find_max_iv_for_bit_gpu(CollatzPeakRunner<T>* runner, size_t bit) {
     runner->compute_collatz_peak(bit);
 }
 
+
+
 // Explicit instantiations
+/// @brief Explicit declaration of 64-bit runner.
 template class CollatzPeakRunner<uint64_t>;
+/// @brief Explicit declaration of 128-bit runner.
 template class CollatzPeakRunner<__uint128_t>;
+/// @brief Explicit declaration of 64-bit create_runner method.
 template CollatzPeakRunner<uint64_t>* create_runner(uint64_t*, size_t, uint64_t*, int*, int*);
+/// @brief Explicit declaration of 128-bit create_runner method.
 template CollatzPeakRunner<__uint128_t>* create_runner(__uint128_t*, size_t, uint128_t*, int*, int*);
+/// @brief Explicit declaration of 64-bit destroy_runner method.
 template void destroy_runner(CollatzPeakRunner<uint64_t>*);
+/// @brief Explicit declaration of 128-bit destroy_runner method.
 template void destroy_runner(CollatzPeakRunner<__uint128_t>*);
+/// @brief Explicit declaration of 64-bit find_max_iv_for_bit_gpu method.
 template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint64_t>*, size_t);
+/// @brief Explicit declaration of 128-bit find_max_iv_for_bit_gpu method.
 template void find_max_iv_for_bit_gpu(CollatzPeakRunner<__uint128_t>*, size_t);

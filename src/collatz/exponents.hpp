@@ -6,16 +6,32 @@
 
 
 
-//
-// Just a bunch of exponents and values for lookup tables.
-//
-
+/**
+* @namespace Exponents
+* @brief Tables of exponents, mostly for powers of 2 and 3.
+*/
 namespace Exponents {
-    //
-    // Instead of comparing powers of three and two at their expanded values, we precompute the maximum exponent of two which remains
-    // below a given power of three.  This allows us to stay within size_t and avoid type juggling.
-    //
+    /// @brief The number of powers-of-two beneath powers-of-three which have been precalculated for `MAX_POW2_UNDER_POW3`.
     constexpr size_t MAX_POW2_UNDER_POW3_COUNT = 512;
+
+
+    /**
+    * @brief Table of powers of three and the resultant power of two which is still below that power of three.
+    *
+    * Powers of two and three quickly overflow data types, such as 64-bit overflowing at 3^41.  This table provides a method for
+    * determining the same thing: is a power of 2 below a power of 3?
+    *
+    * It does this by using the array index as the exponent for powers of three, and the value of that element is the power of two
+    * which still remains below it.
+    *
+    * For example, `MAX_POW2_UNDER_POW3[4]` would return `6`.  The `4` is three's exponent: 3^4.  The `6` is the maximum two's
+    * exponent: 2^6.  When expanded, the result is: `3^4 > 2^6 ==> 81 > 64`.  The next power of two would be `128` and would fail
+    * the condition.
+    *
+    * As a result, the entire array is simply a `size_t` list and avoids type juggling.
+    *
+    * @note The associated file "tools/pow2_under_pow3.py" helps build this table.
+    */
     constexpr size_t MAX_POW2_UNDER_POW3[MAX_POW2_UNDER_POW3_COUNT] = {
         0   // 3^0 > 2^-1 ==> 1 > 0.5  (next would be 1)  (Special case, set to 0, won't apply to us)
         ,1   // 3^1 > 2^1 ==> 3 > 2  (next would be 4)
@@ -532,10 +548,13 @@ namespace Exponents {
     };
 
 
-    //
-    // Power of 3
-    //
+
+    /// @brief The number of powers of three which can exist in the array of 64-bit types.
     constexpr size_t POW3_64BIT_ELEMENT_COUNT = 40;
+
+
+
+    /// @brief All powers of three which will fit in a 64-bit type.
     constexpr uint64_t POW3_64BIT[POW3_64BIT_ELEMENT_COUNT] = {
         1ULL
         , 3ULL
@@ -578,9 +597,16 @@ namespace Exponents {
         , 1350851717672992089ULL
         , 4052555153018976267ULL
     };
-    // 128-bit now.
+
+
+
+    /// @brief The number of powers of three which can exist in the array of 128-bit types.
     constexpr size_t POW3_128BIT_ELEMENT_COUNT = 80;
-    constexpr __uint128_t POW3_128BIT[POW3_128BIT_ELEMENT_COUNT] = {
+
+
+
+    /// @brief All powers of three which will fit in a 128-bit type.
+    constexpr uint128_t POW3_128BIT[POW3_128BIT_ELEMENT_COUNT] = {
         "1"_u128
         , "3"_u128
         , "9"_u128
@@ -662,8 +688,16 @@ namespace Exponents {
         , "16423203268260658146231467800709255289"_u128
         , "49269609804781974438694403402127765867"_u128
     };
-    // MPZ now.
+
+
+
+    /// @brief The number of powers of three which can exist in the array of 128-bit types.
     constexpr size_t POW3_MPZ_ELEMENT_COUNT = 512;
+
+
+
+    /// @brief All powers of three which will fit in an `mpz_class`.
+    /// @note This is an artificial limit imposed by the API.  GMP has no maximum integer size limit.
     static mpz_class POW3_MPZ[POW3_MPZ_ELEMENT_COUNT] = {
         "1"_mpz
         , "3"_mpz
@@ -1178,9 +1212,15 @@ namespace Exponents {
         , "2147038870254323900606007635779953450600162862400369838909393069878051860712837444446437714420669928265564703254954013278350389900148104542677560053192071060284505570414155498086451369156374704235671488852026919621310167184331764777252492949049"_mpz
         , "6441116610762971701818022907339860351800488587201109516728179209634155582138512333339313143262009784796694109764862039835051169700444313628032680159576213180853516711242466494259354107469124112707014466556080758863930501552995294331757478847147"_mpz
     };
-    //
-    // Helper to get the correctly typed powers of three.
-    //
+
+
+
+    /**
+    * @brief Return the correctly-typed power of three from the corresponding table.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @param exp The exponent to look up.
+    * @return A copy of the value from the table, or a reference to it when it's `mpz_class`.
+    */
     template<AnySupportedIntegral T>
     inline auto get_power_of_three(size_t exp) -> std::conditional_t<std::is_same_v<T, mpz_class>, const mpz_class&, T> {
         if constexpr(NativeIntegral<T>) {
@@ -1205,10 +1245,12 @@ namespace Exponents {
 
 
 
-    //
-    // Power of 2
-    //
+    /// @brief The number of powers of two which can exist in the array of 64-bit types.
     constexpr size_t POW2_64BIT_ELEMENT_COUNT = 64;
+
+
+
+    /// @brief All powers of two which will fit in a 64-bit type.
     constexpr uint64_t POW2_64BIT[POW2_64BIT_ELEMENT_COUNT] = {
         1ULL
         , 2ULL
@@ -1275,9 +1317,16 @@ namespace Exponents {
         , 4611686018427387904ULL
         , 9223372036854775808ULL
     };
-    // 128-bit now.
+
+
+
+    /// @brief The number of powers of two which can exist in the array of 128-bit types.
     constexpr size_t POW2_128BIT_ELEMENT_COUNT = 128;
-    constexpr __uint128_t POW2_128BIT[POW2_128BIT_ELEMENT_COUNT] = {
+
+
+
+    /// @brief All powers of two which will fit in a 128-bit type.
+    constexpr uint128_t POW2_128BIT[POW2_128BIT_ELEMENT_COUNT] = {
         "1"_u128
         , "2"_u128
         , "4"_u128
@@ -1407,8 +1456,16 @@ namespace Exponents {
         , "85070591730234615865843651857942052864"_u128
         , "170141183460469231731687303715884105728"_u128
     };
-    // MPZ now.
+
+
+
+    /// @brief The number of powers of two which can exist in the array of 128-bit types.
     constexpr size_t POW2_MPZ_ELEMENT_COUNT = 512;
+
+
+
+    /// @brief All powers of two which will fit in an `mpz_class`.
+    /// @note This is an artificial limit imposed by the API.  GMP has no maximum integer size limit.
     static mpz_class POW2_MPZ[POW2_MPZ_ELEMENT_COUNT] = {
         "1"_mpz
         , "2"_mpz
@@ -1923,9 +1980,15 @@ namespace Exponents {
         , "3351951982485649274893506249551461531869841455148098344430890360930441007518386744200468574541725856922507964546621512713438470702986642486608412251521024"_mpz
         , "6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042048"_mpz
     };
-    //
-    // Helper to get the correctly typed powers of two.
-    //
+
+
+
+    /**
+    * @brief Return the correctly-typed power of two from the corresponding table.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @param exp The exponent to look up.
+    * @return A copy of the value from the table, or a reference to it when it's `mpz_class`.
+    */
     template<AnySupportedIntegral T>
     inline auto get_power_of_two(size_t exp) -> std::conditional_t<std::is_same_v<T, mpz_class>, const mpz_class&, T> {
         if constexpr(NativeIntegral<T>) {

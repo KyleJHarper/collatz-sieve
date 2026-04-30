@@ -83,12 +83,17 @@ $(function() {
   <div class="headertitle"><div class="title">zstd_ostream Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Creates an ostream subclass and connects it to a <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code> so it may be passed around like a normal ostream.  
+ <a href="classzstd__ostream.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="zstd__compress_8hpp_source.html">zstd_compress.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for zstd_ostream:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__ostream__inherit__graph.png" border="0" usemap="#azstd__ostream_inherit__map" alt="Inheritance graph"/></div>
 <map name="azstd__ostream_inherit__map" id="azstd__ostream_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,79,116,104"/>
+<area shape="rect" title="Creates an ostream subclass and connects it to a zstd_ostreambuf so it may be passed around like a no..." alt="" coords="5,79,116,104"/>
 <area shape="rect" title=" " alt="" coords="9,5,113,31"/>
 <area shape="poly" title=" " alt="" coords="63,44,63,79,58,79,58,44"/>
 </map>
@@ -98,10 +103,10 @@ Collaboration diagram for zstd_ostream:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzstd__ostream__coll__graph.png" border="0" usemap="#azstd__ostream_coll__map" alt="Collaboration graph"/></div>
 <map name="azstd__ostream_coll__map" id="azstd__ostream_coll__map">
-<area shape="rect" title=" " alt="" coords="47,168,158,193"/>
+<area shape="rect" title="Creates an ostream subclass and connects it to a zstd_ostreambuf so it may be passed around like a no..." alt="" coords="47,168,158,193"/>
 <area shape="rect" title=" " alt="" coords="5,80,109,105"/>
 <area shape="poly" title=" " alt="" coords="72,117,99,166,94,169,68,119"/>
-<area shape="rect" href="classzstd__ostreambuf.html" title=" " alt="" coords="133,80,264,105"/>
+<area shape="rect" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C&#45;style ZSTD bits to create a compressed stream." alt="" coords="133,80,264,105"/>
 <area shape="poly" title=" " alt="" coords="177,116,118,169,114,165,174,112"/>
 <area shape="rect" title=" " alt="" coords="140,5,257,31"/>
 <area shape="poly" title=" " alt="" coords="201,45,201,80,196,80,196,45"/>
@@ -110,25 +115,80 @@ Collaboration diagram for zstd_ostream:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ad23c25fdb6947fec87fbb59f6cebdc27" id="r_ad23c25fdb6947fec87fbb59f6cebdc27"><td class="memItemLeft" align="right" valign="top"><a id="ad23c25fdb6947fec87fbb59f6cebdc27" name="ad23c25fdb6947fec87fbb59f6cebdc27"></a>
+<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>finalize</b> ()</td></tr>
+<tr class="memdesc:ad23c25fdb6947fec87fbb59f6cebdc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expose finalize for the streambuf. Nothing more. <br /></td></tr>
+<tr class="separator:ad23c25fdb6947fec87fbb59f6cebdc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:ae6f6cf96594a22e916d18c5f1c9c3a4b" id="r_ae6f6cf96594a22e916d18c5f1c9c3a4b"><td class="memItemLeft" align="right" valign="top"><a id="ae6f6cf96594a22e916d18c5f1c9c3a4b" name="ae6f6cf96594a22e916d18c5f1c9c3a4b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>zstd_ostream</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__ostream.html">zstd_ostream</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:ae6f6cf96594a22e916d18c5f1c9c3a4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:ae6f6cf96594a22e916d18c5f1c9c3a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68db1916ccd749a8c5dc5f823c537049" id="r_a68db1916ccd749a8c5dc5f823c537049"><td class="memItemLeft" align="right" valign="top"><a id="a68db1916ccd749a8c5dc5f823c537049" name="a68db1916ccd749a8c5dc5f823c537049"></a>
 <a class="el" href="classzstd__ostream.html">zstd_ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classzstd__ostream.html">zstd_ostream</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a68db1916ccd749a8c5dc5f823c537049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying and moving. <br /></td></tr>
 <tr class="separator:a68db1916ccd749a8c5dc5f823c537049"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf50c5b10a0a43b3e74e0401207de392" id="r_adf50c5b10a0a43b3e74e0401207de392"><td class="memItemLeft" align="right" valign="top"><a id="adf50c5b10a0a43b3e74e0401207de392" name="adf50c5b10a0a43b3e74e0401207de392"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>zstd_ostream</b> (std::ostream &amp;<a class="el" href="classNode.html">underlying</a>, <a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:adf50c5b10a0a43b3e74e0401207de392" id="r_adf50c5b10a0a43b3e74e0401207de392"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzstd__ostream.html#adf50c5b10a0a43b3e74e0401207de392">zstd_ostream</a> (std::ostream &amp;<a class="el" href="classNode.html">underlying</a>, <a class="el" href="classNode.html">int</a> <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memdesc:adf50c5b10a0a43b3e74e0401207de392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor takes an underlying ostream to connect with a <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code>.  <br /></td></tr>
 <tr class="separator:adf50c5b10a0a43b3e74e0401207de392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad23c25fdb6947fec87fbb59f6cebdc27" id="r_ad23c25fdb6947fec87fbb59f6cebdc27"><td class="memItemLeft" align="right" valign="top"><a id="ad23c25fdb6947fec87fbb59f6cebdc27" name="ad23c25fdb6947fec87fbb59f6cebdc27"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>finalize</b> ()</td></tr>
-<tr class="separator:ad23c25fdb6947fec87fbb59f6cebdc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a7bf0e2abf36b8f9ac89f2e9c3edc463c" id="r_a7bf0e2abf36b8f9ac89f2e9c3edc463c"><td class="memItemLeft" align="right" valign="top"><a id="a7bf0e2abf36b8f9ac89f2e9c3edc463c" name="a7bf0e2abf36b8f9ac89f2e9c3edc463c"></a>
 <a class="el" href="classzstd__ostreambuf.html">zstd_ostreambuf</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_buffer</b></td></tr>
+<tr class="memdesc:a7bf0e2abf36b8f9ac89f2e9c3edc463c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual streambuf to send data in/out of, connected to this objects <code>rdbuf</code>. <br /></td></tr>
 <tr class="separator:a7bf0e2abf36b8f9ac89f2e9c3edc463c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Creates an ostream subclass and connects it to a <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code> so it may be passed around like a normal ostream. </p>
+<p>This class largely just wraps the <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code> to make writing ZSTD data easier. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="adf50c5b10a0a43b3e74e0401207de392" name="adf50c5b10a0a43b3e74e0401207de392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf50c5b10a0a43b3e74e0401207de392">&#9670;&#160;</a></span>zstd_ostream()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zstd_ostream::zstd_ostream </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>underlying</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">int</a>&#160;</td>
+          <td class="paramname"><em>level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor takes an underlying ostream to connect with a <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code>. </p>
+<dl class="section note"><dt>Note</dt><dd>Details about compression level and behavior are in the <code><a class="el" href="classzstd__ostreambuf.html" title="A streambuf subclass which wraps the C-style ZSTD bits to create a compressed stream.">zstd_ostreambuf</a></code> documentation. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">underlying</td><td>The destination ostream where ZSTD should send compressed data. </td></tr>
+    <tr><td class="paramname">level</td><td>The compression level to use. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="zstd__compress_8hpp_source.html">zstd_compress.hpp</a></li>
 </ul>

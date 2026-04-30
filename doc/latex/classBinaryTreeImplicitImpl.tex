@@ -147,7 +147,7 @@ This implementation is vastly superior in almost every metric, and is the defaul
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see concepts.\+hpp). \\
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -168,7 +168,7 @@ Implicit tree building happens by tracking the left-\/to-\/right positions (not 
 
 To achieve any sort of threading performance, each thread will get thread-\/local storage (TLS) from an {\ttfamily \doxylink{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{Add\+Level\+TLS}} struct, which includes its own {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} and vector of ancestors (if tracking them). When all threading is finished, the results are merged into {\ttfamily \+\_\+uncovered\+\_\+positions}, coverage is calculated via simple arithmetic, and this function ends.
 
-Threading itself is handed off to {\ttfamily Node\+Bitmap\+::for\+\_\+each\+\_\+transformer()}, along with the aforementioned callback (TLS) storage. This is in contrast to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} which handles OMP directly inside the its own add level method. \Hypertarget{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}\label{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7} 
+Threading itself is handed off to {\ttfamily \doxylink{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}{Node\+Bitmap\+::for\+\_\+each\+\_\+transformer()}}, along with the aforementioned callback (TLS) storage. This is in contrast to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} which handles OMP directly inside the its own add level method. \Hypertarget{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}\label{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7} 
 \index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!deserialize@{deserialize}}
 \index{deserialize@{deserialize}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
@@ -395,7 +395,7 @@ This is intended for serialization/deserilization only.
 
 Compare two implicit trees\textquotesingle{} specific internals and return true if identical. 
 
-This method only tests implicit tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (e.\+g.\+: level count).
+This method only tests implicit tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (\doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{e.\+g}.\+: level count).
 
 This function checks\+:
 \begin{DoxyEnumerate}

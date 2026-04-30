@@ -13,307 +13,252 @@
 \DoxyCodeLine{00009\ }
 \DoxyCodeLine{00010\ }
 \DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{comment}{//}}
-\DoxyCodeLine{00013\ \textcolor{comment}{//\ Stream\ Helper}}
-\DoxyCodeLine{00014\ \textcolor{comment}{//\ Assist\ with\ serializing\ data,\ deserializing\ data,\ and\ providing\ feedback\ when\ failures\ occur\ without\ throwing.}}
-\DoxyCodeLine{00015\ \textcolor{comment}{//}}
-\DoxyCodeLine{00016\ \textcolor{comment}{//\ BIG\ FAT\ NOTE!}}
-\DoxyCodeLine{00017\ \textcolor{comment}{//\ We\ *only*\ write\ and\ read\ in\ little-\/endian.\ \ The\ end.}}
-\DoxyCodeLine{00018\ \textcolor{comment}{//}}
-\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \{}
-\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00021\ \ \ \ \ std::istream*\ \_in\_ptr\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00022\ \ \ \ \ std::ostream*\ \_out\_ptr\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00023\ \ \ \ \ std::string*\ \_err\_ptr\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00024\ \ \ \ \ std::string\ \_category\ =\ \textcolor{stringliteral}{"{}Uncategorized"{}};}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \_READ\_WRITE\_LIMIT\ =\ 1ULL\ <<\ 30;\ \ \textcolor{comment}{//\ \string~1GB}}
-\DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Get\ Out}}
-\DoxyCodeLine{00031\ \ \ \ \ \textcolor{comment}{//\ Private\ helper\ to\ use\ out\ and\ apply\ a\ null\ check}}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00033\ \ \ \ \ std::ostream\&\ get\_out()\ \{}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_out\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ std::istream*\ \mbox{\hyperlink{classStreamHelper_a7134f614d391b81d5f34282d38449680}{\_in\_ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00022\ \ \ \ \ std::ostream*\ \mbox{\hyperlink{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}{\_out\_ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00024\ \ \ \ \ std::string*\ \mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00026\ \ \ \ \ std::string\ \mbox{\hyperlink{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}{\_category}}\ =\ \textcolor{stringliteral}{"{}Uncategorized"{}};}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\_READ\_WRITE\_LIMIT}}\ =\ 1ULL\ <<\ 30;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00033\ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classStreamHelper_a4473a145f59564bb91491e6d02e16bde}{get\_out}}()\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}{\_out\_ptr}}\ ==\ \textcolor{keyword}{nullptr})\ \{}
 \DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Out\ stream\ is\ not\ defined\ (nullptr).\ \ Cannot\ write\ to\ it."{}});}
 \DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\_out\_ptr;}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}{\_out\_ptr}};}
 \DoxyCodeLine{00038\ \ \ \ \ \}}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{comment}{//\ Same\ for\ in.}}
-\DoxyCodeLine{00041\ \ \ \ \ std::istream\&\ get\_in()\ \{}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_in\_ptr\ ==\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}In\ stream\ is\ not\ defined\ (nullptr).\ \ Cannot\ read\ from\ it."{}});}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\_in\_ptr;}
-\DoxyCodeLine{00046\ \ \ \ \ \}}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}(std::istream*\ \mbox{\hyperlink{classNode}{in}},\ std::ostream*\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \_in\_ptr\ =\ \mbox{\hyperlink{classNode}{in}};}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \_out\_ptr\ =\ \mbox{\hyperlink{classNode}{out}};}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \_err\_ptr\ =\ \mbox{\hyperlink{classNode}{err}};}
-\DoxyCodeLine{00055\ \ \ \ \ \}}
-\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{comment}{//\ Same\ for\ in.}}
+\DoxyCodeLine{00045\ \ \ \ \ std::istream\&\ \mbox{\hyperlink{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f}{get\_in}}()\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classStreamHelper_a7134f614d391b81d5f34282d38449680}{\_in\_ptr}}\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}In\ stream\ is\ not\ defined\ (nullptr).\ \ Cannot\ read\ from\ it."{}});}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{classStreamHelper_a7134f614d391b81d5f34282d38449680}{\_in\_ptr}};}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{public}:}
 \DoxyCodeLine{00057\ }
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ Set\ Category}}
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{comment}{//\ Specify\ a\ category\ name\ to\ help\ disinguish\ where\ you're\ calling\ from.}}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ set\_category(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{category}})\ \{}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \_category\ =\ \mbox{\hyperlink{classNode}{category}};}
-\DoxyCodeLine{00065\ \ \ \ \ \}}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ }
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{comment}{//\ Early-\/exit\ helper.\ \ Emits\ a\ message\ and\ returns\ false\ for\ caller's\ flow-\/control.}}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00072\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ fail(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{msg}})\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_err\_ptr)\ \{}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \_err\_ptr-\/>empty())\ \{}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\_err\_ptr\ +=\ \textcolor{stringliteral}{"{}\ -\/>\ "{}};}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ *\_err\_ptr\ +=\ \textcolor{stringliteral}{"{}["{}}\ +\ \_category\ +\ \textcolor{stringliteral}{"{}]\ "{}}\ +\ \mbox{\hyperlink{classNode}{msg}};}
+\DoxyCodeLine{00064\ \ \ \ \ \mbox{\hyperlink{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4}{StreamHelper}}(std::istream*\ \mbox{\hyperlink{classNode}{in}},\ std::ostream*\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper_a7134f614d391b81d5f34282d38449680}{\_in\_ptr}}\ =\ \mbox{\hyperlink{classNode}{in}};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}{\_out\_ptr}}\ =\ \mbox{\hyperlink{classNode}{out}};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}}\ =\ \mbox{\hyperlink{classNode}{err}};}
+\DoxyCodeLine{00068\ \ \ \ \ \}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a}{set\_category}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{category}})\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}{\_category}}\ =\ \mbox{\hyperlink{classNode}{category}};}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
 \DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00081\ \ \ \ \ \};}
-\DoxyCodeLine{00082\ }
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ Write\ Bytes}}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ Generic\ helper\ to\ write\ bytes\ from\ any\ pointer\ location\ up\ to\ \`{}size`\ bytes.}}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00089\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ write\_bytes(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classNode}{data}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}})\ \{}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{size}}\ >\ \_READ\_WRITE\_LIMIT)\ \{}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ write\ more\ than\ "{}}\ +\ std::to\_string(\_READ\_WRITE\_LIMIT)\ +\ \textcolor{stringliteral}{"{}\ bytes\ ("{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ requested)"{}});}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classNode}{out}}\ =\ get\_out();}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.write(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{data}}),\ \mbox{\hyperlink{classNode}{size}});}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Failure\ in\ write\_bytes()\ writing\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ bytes"{}});}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00099\ \ \ \ \ \}}
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ }
-\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{//\ Read\ Bytes}}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ Generic\ helper\ to\ read\ bytes\ from\ any\ pointer\ location\ up\ to\ \`{}size`\ bytes.}}
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00107\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ read\_bytes(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classNode}{data}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}})\ \{}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{size}}\ >\ \_READ\_WRITE\_LIMIT)\ \{}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ read\ more\ than\ "{}}\ +\ std::to\_string(\_READ\_WRITE\_LIMIT)\ +\ \textcolor{stringliteral}{"{}\ bytes\ ("{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ requested)"{}});}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::istream\&\ \mbox{\hyperlink{classNode}{in}}\ =\ get\_in();}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{in}}.read(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{data}}),\ \mbox{\hyperlink{classNode}{size}});}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{in}})\ \{}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Failure\ in\ read\_bytes()\ reading\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ bytes"{}});}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00087\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{msg}})\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}})\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}}-\/>empty())\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}}\ +=\ \textcolor{stringliteral}{"{}\ -\/>\ "{}};}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ *\mbox{\hyperlink{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}{\_err\_ptr}}\ +=\ \textcolor{stringliteral}{"{}["{}}\ +\ \mbox{\hyperlink{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}{\_category}}\ +\ \textcolor{stringliteral}{"{}]\ "{}}\ +\ \mbox{\hyperlink{classNode}{msg}};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00095\ \ \ \ \ \};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00106\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd}{write\_bytes}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classNode}{data}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}})\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{size}}\ >\ \mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\_READ\_WRITE\_LIMIT}})\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ write\ more\ than\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\_READ\_WRITE\_LIMIT}})\ +\ \textcolor{stringliteral}{"{}\ bytes\ ("{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ requested)"{}});}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{classStreamHelper_a4473a145f59564bb91491e6d02e16bde}{get\_out}}();}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.write(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{data}}),\ \mbox{\hyperlink{classNode}{size}});}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{out}})\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Failure\ in\ write\_bytes()\ writing\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ bytes"{}});}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00117\ }
 \DoxyCodeLine{00118\ }
 \DoxyCodeLine{00119\ }
-\DoxyCodeLine{00120\ }
-\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ Serialize\ Integral}}
-\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//\ Will\ serialize\ any\ integral\ of\ type\ T.\ \ When\ type\ is\ fixed-\/width,\ the\ caller\ is\ expected\ to\ deserialize\ using\ the\ same\ type}}
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{comment}{//\ to\ ensure\ the\ correct\ number\ of\ bytes\ are\ read,\ and\ therefore\ no\ size\ data\ is\ emitted\ to\ the\ ostream.\ \ When\ the\ type\ is}}
-\DoxyCodeLine{00125\ \ \ \ \ \textcolor{comment}{//\ variable\ length\ (mpz\_class),\ we\ will\ emit\ sign\ and\ (if\ non-\/zero)\ chunk\ count\ and\ then\ limb\ data.}}
-\DoxyCodeLine{00126\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00127\ \ \ \ \ \textcolor{comment}{//\ Note,\ you\ must\ use\ a\ GuaranteedWidthIntegral.\ \ Things\ like\ size\_t\ and\ int/uint\ are\ not\ portable.}}
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00130\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ serialize\_integral(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classNode}{out}}\ =\ get\_out();}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{conceptGuaranteedWidthIntegral}{GuaranteedWidthIntegral<T>}});}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{final\_value}}\ =\ value;}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flip\ endianness\ if\ needed.}}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ 1\ \&\&\ is\_big\_endian())\ \{}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{final\_value}}\ =\ byteswap(\mbox{\hyperlink{classNode}{final\_value}});}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.write(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\&\mbox{\hyperlink{classNode}{final\_value}}),\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{final\_value}}));}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ write\ integral\ to\ out\ in\ serialize\_integral"{}});}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sign:\ 0\ =\ zero,\ 1\ =\ positive,\ -\/1\ =\ negative}}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{int8\_t}}\ \mbox{\hyperlink{classNode}{sign}}\ =\ \mbox{\hyperlink{classNode}{mpz\_sgn}}(value.get\_mpz\_t());}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ serialize\_integral(\mbox{\hyperlink{classNode}{sign}}))\ \{}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}MPZ\ sign\ serialize\ failed"{}});}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00149\ }
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ zero,\ we\ can\ just\ skip\ anything\ else.}}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ ==\ 0)\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00154\ }
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Export\ limbs\ (little-\/endian,\ 1\ byte\ per\ limb\ chunk)}}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}}\ =\ 0;}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{mpz\_sizeinbase}}(value.get\_mpz\_t(),\ 2)\ /\ 8\ +\ 1);}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_export}}(}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{buffer}}.data(),}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\mbox{\hyperlink{classNode}{size}},\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ the\ count\ for\ writing\ later.}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ word\ first.}}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{uint8\_t}}),\ \ \textcolor{comment}{//\ We're\ using\ 1-\/byte\ at\ a\ time.}}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ byte\ first}}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value.get\_mpz\_t()}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ );}
-\DoxyCodeLine{00167\ }
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Upgrade\ the\ count\ to\ uint64\_t.\ \ Then\ write\ it\ out\ for\ deserialization\ later.}}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ serialize\_integral(\mbox{\hyperlink{classNode}{size}}))\ \{}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}MPZ\ size\ serialize"{}});}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ data\ now.}}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ write\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{size}}))\ \{}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ write\ mpz\_class\ data\ payload\ in\ serialize\_integral"{}});}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00178\ }
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00181\ \ \ \ \ \}}
-\DoxyCodeLine{00182\ }
-\DoxyCodeLine{00183\ }
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00186\ \ \ \ \ \textcolor{comment}{//\ Deserialize\ Integral}}
-\DoxyCodeLine{00187\ \ \ \ \ \textcolor{comment}{//\ Will\ deserialize\ any\ integral\ of\ type\ T\ from\ "{}in"{}.\ \ When\ the\ type\ of\ T\ is\ fixed-\/width,\ this\ function\ uses\ the\ sizeof(T)\ to}}
-\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{//\ determine\ how\ many\ bytes\ to\ read.\ \ When\ T\ is\ variable\ length\ (mpz\_class),\ it\ will\ expect\ a\ 8\ bytes\ (unit64\_t)\ to\ indicate}}
-\DoxyCodeLine{00189\ \ \ \ \ \textcolor{comment}{//\ how\ many\ bytes\ of\ limb\ data\ should\ be\ read\ next.}}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00191\ \ \ \ \ \textcolor{comment}{//\ We\ will\ write\ the\ result\ to\ a\ return\ value\ (rv)\ to\ avoid\ allocs\ on\ the\ GMP\ path.}}
-\DoxyCodeLine{00192\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{//\ Note,\ you\ must\ use\ a\ GuaranteedWidthIntegral.\ \ Things\ like\ size\_t\ and\ int/uint\ are\ not\ portable.}}
-\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00196\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ deserialize\_integral(T\&\ \mbox{\hyperlink{classNode}{rv}})\ \{}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ std::istream\&\ \mbox{\hyperlink{classNode}{in}}\ =\ get\_in();}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{conceptGuaranteedWidthIntegral}{GuaranteedWidthIntegral<T>}});}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{in}}.read(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\&\mbox{\hyperlink{classNode}{rv}}),\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{rv}}));}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{in}})\ \{}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Failed\ to\ read\ integral\ from\ deserialize\_integral"{}});}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ from\ little-\/endian\ if\ this\ system\ is\ big\ endian.}}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ >\ 1\ \&\&\ is\_big\_endian())\ \{}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ byteswap(\mbox{\hyperlink{classNode}{rv}});}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ byte\ is\ the\ sign.}}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{int8\_t}}\ \mbox{\hyperlink{classNode}{sign}};}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ deserialize\_integral(\mbox{\hyperlink{classNode}{sign}}))\ \{}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}MPZ\ sign\ deserialize\ failed"{}});}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00214\ }
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ sign\ is\ zero,\ there's\ no\ size\ or\ data\ to\ read.}}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ ==\ 0)\ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ size\ into\ a\ uint64\_t\ from\ the\ next\ 8\ bytes.}}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}};}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ deserialize\_integral(\mbox{\hyperlink{classNode}{size}}))\ \{}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}MPZ\ size\ deserialize"{}});}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00225\ }
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ a\ buffer,\ and\ read\ the\ next\ <size>\ bytes\ in\ from\ it\ for\ limb\ data.}}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{size}});}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ read\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{size}}))\ \{}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Failed\ to\ read\ mpz\_class\ data"{}});}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Import\ the\ data\ to\ an\ mpz\_class\ object.}}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_import}}(}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}.get\_mpz\_t(),}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{size}},}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ word\ first.}}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{uint8\_t}}),\ \ \textcolor{comment}{//\ Using\ 1\ byte\ at\ a\ time.}}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ byte\ first.}}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{buffer}}.data()}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00127\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0}{read\_bytes}}(\textcolor{keywordtype}{void}*\ \mbox{\hyperlink{classNode}{data}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}})\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{size}}\ >\ \mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\_READ\_WRITE\_LIMIT}})\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ read\ more\ than\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\_READ\_WRITE\_LIMIT}})\ +\ \textcolor{stringliteral}{"{}\ bytes\ ("{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ requested)"{}});}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ std::istream\&\ \mbox{\hyperlink{classNode}{in}}\ =\ \mbox{\hyperlink{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f}{get\_in}}();}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{in}}.read(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{data}}),\ \mbox{\hyperlink{classNode}{size}});}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{in}})\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Failure\ in\ read\_bytes()\ reading\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{size}})\ +\ \textcolor{stringliteral}{"{}\ bytes"{}});}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00155\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{classStreamHelper_a4473a145f59564bb91491e6d02e16bde}{get\_out}}();}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{conceptGuaranteedWidthIntegral}{GuaranteedWidthIntegral<T>}});}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{final\_value}}\ =\ value;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flip\ endianness\ if\ needed.}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ 1\ \&\&\ is\_big\_endian())\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{final\_value}}\ =\ \mbox{\hyperlink{classStreamHelper_a861d9f8099cebfdb63a8984500d80427}{byteswap}}(\mbox{\hyperlink{classNode}{final\_value}});}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.write(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const\ }\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\&\mbox{\hyperlink{classNode}{final\_value}}),\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{final\_value}}));}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{out}})\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ write\ integral\ to\ out\ in\ serialize\_integral"{}});}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sign:\ 0\ =\ zero,\ 1\ =\ positive,\ -\/1\ =\ negative}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{int8\_t}}\ \mbox{\hyperlink{classNode}{sign}}\ =\ \mbox{\hyperlink{classNode}{mpz\_sgn}}(value.get\_mpz\_t());}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\mbox{\hyperlink{classNode}{sign}}))\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}MPZ\ sign\ serialize\ failed"{}});}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ zero,\ just\ skip\ anything\ else.}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Export\ limbs\ (little-\/endian,\ 1\ byte\ per\ limb\ chunk)}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}}\ =\ 0;}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{mpz\_sizeinbase}}(value.get\_mpz\_t(),\ 2)\ /\ 8\ +\ 1);}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_export}}(}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{buffer}}.data(),}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\mbox{\hyperlink{classNode}{size}},\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ the\ count\ for\ writing\ later.}}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ word\ first.}}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{uint8\_t}}),\ \ \textcolor{comment}{//\ Using\ 1-\/byte\ at\ a\ time.}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ byte\ first}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value.get\_mpz\_t()}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Upgrade\ the\ count\ to\ uint64\_t.\ \ Then\ write\ it\ out\ for\ deserialization\ later.}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\mbox{\hyperlink{classNode}{size}}))\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}MPZ\ size\ serialize"{}});}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ data\ now.}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd}{write\_bytes}}(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{size}}))\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ write\ mpz\_class\ data\ payload\ in\ serialize\_integral"{}});}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00224\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(T\&\ \mbox{\hyperlink{classNode}{rv}})\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ std::istream\&\ \mbox{\hyperlink{classNode}{in}}\ =\ \mbox{\hyperlink{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f}{get\_in}}();}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\mbox{\hyperlink{conceptGuaranteedWidthIntegral}{GuaranteedWidthIntegral<T>}});}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{in}}.read(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\&\mbox{\hyperlink{classNode}{rv}}),\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{rv}}));}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{in}})\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Failed\ to\ read\ integral\ from\ deserialize\_integral"{}});}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Convert\ from\ little-\/endian\ if\ this\ system\ is\ big\ endian.}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ >\ 1\ \&\&\ is\_big\_endian())\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ \mbox{\hyperlink{classStreamHelper_a861d9f8099cebfdb63a8984500d80427}{byteswap}}(\mbox{\hyperlink{classNode}{rv}});}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ First\ byte\ is\ the\ sign.}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{int8\_t}}\ \mbox{\hyperlink{classNode}{sign}};}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(\mbox{\hyperlink{classNode}{sign}}))\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}MPZ\ sign\ deserialize\ failed"{}});}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ the\ sign\ and\ flip\ it\ if\ necessary.}}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ <\ 0)\ \{}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ -\/\mbox{\hyperlink{classNode}{rv}};}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ sign\ is\ zero,\ there's\ no\ size\ or\ data\ to\ read.}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
 \DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00248\ }
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00251\ \ \ \ \ \}}
-\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Read\ the\ size\ into\ a\ uint64\_t\ from\ the\ next\ 8\ bytes.}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{size}};}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(\mbox{\hyperlink{classNode}{size}}))\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}MPZ\ size\ deserialize"{}});}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00253\ }
-\DoxyCodeLine{00254\ }
-\DoxyCodeLine{00255\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{//\ Serialize\ Bool}}
-\DoxyCodeLine{00257\ \ \ \ \ \textcolor{comment}{//\ AFAIK,\ bool\ types\ are\ not\ guaranteed\ to\ be\ 1\ byte.\ \ When\ serializing/deserializing\ them,\ enforce\ it\ by\ casting\ to\ uint8\_t.}}
-\DoxyCodeLine{00258\ \ \ \ \ \textcolor{comment}{//\ Lean\ on\ integral\ version\ for\ endian\ logic.}}
-\DoxyCodeLine{00259\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00260\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ serialize\_bool(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ value)\ \{}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{classNode}{u8\_value}}\ =\ value\ ?\ 1\ :\ 0;}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ serialize\_integral(\mbox{\hyperlink{classNode}{u8\_value}}))\ \{}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ serialize\ bool"{}});}
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00266\ \ \ \ \ \}}
-\DoxyCodeLine{00267\ }
-\DoxyCodeLine{00268\ }
-\DoxyCodeLine{00269\ }
-\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00271\ \ \ \ \ \textcolor{comment}{//\ Deserialize\ Bool}}
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{comment}{//\ AFAIK,\ bool\ types\ are\ not\ guaranteed\ to\ be\ 1\ byte.\ \ When\ serializing/deserializing\ them,\ enforce\ it\ by\ casting\ to\ uint8\_t.}}
-\DoxyCodeLine{00273\ \ \ \ \ \textcolor{comment}{//\ We'll\ use\ a\ return\ value\ (rv)\ to\ match\ others.}}
-\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{//\ Lean\ on\ integral\ version\ for\ endian\ logic.}}
-\DoxyCodeLine{00275\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00276\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ deserialize\_bool(\textcolor{keywordtype}{bool}\&\ \mbox{\hyperlink{classNode}{rv}})\ \{}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{classNode}{u8\_rv}};}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ deserialize\_integral(\mbox{\hyperlink{classNode}{u8\_rv}}))\ \{}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fail(\textcolor{stringliteral}{"{}Unable\ to\ deserialize\ bool"{}});}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ \mbox{\hyperlink{classNode}{u8\_rv}}\ ==\ 0\ ?\ \mbox{\hyperlink{classNode}{false}}\ :\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00283\ \ \ \ \ \}}
-\DoxyCodeLine{00284\ }
-\DoxyCodeLine{00285\ }
-\DoxyCodeLine{00286\ }
-\DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{//\ ByteSwap}}
-\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{//\ Perform\ a\ standard\ bswap\ on\ any\ builtin\ type.\ \ Requires\ \_\_builtin\_bswapXX().}}
-\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keyword}{template}<BuiltinIntegral\ T>}
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{static}\ T\ byteswap(T\ value)\ \{}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap16}}(value);}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap32}}(value);}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(value);}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 128-\/bit\ needs\ broken\ into\ two\ chunks.}}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value\ >>\ 64);}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low}}\ \ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value);}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{high}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{high}});}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low}}\ \ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{low}});}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{low}})\ <<\ 64)\ |\ \mbox{\hyperlink{classNode}{high}};}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(T)\ <=\ 16,\ \textcolor{stringliteral}{"{}Unsupported\ size\ for\ byteswap"{}});}
-\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00312\ \ \ \ \ \}}
-\DoxyCodeLine{00313\ \};}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ a\ buffer,\ and\ read\ the\ next\ <size>\ bytes\ in\ from\ it\ for\ limb\ data.}}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{size}});}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0}{read\_bytes}}(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{size}}))\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Failed\ to\ read\ mpz\_class\ data"{}});}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Import\ the\ data\ to\ an\ mpz\_class\ object.}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_import}}(}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}.get\_mpz\_t(),}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{size}},}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ word\ first.}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{uint8\_t}}),\ \ \textcolor{comment}{//\ Using\ 1\ byte\ at\ a\ time.}}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Least\ significant\ byte\ first.}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{buffer}}.data()}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ the\ sign\ and\ flip\ it\ if\ necessary.}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{sign}}\ <\ 0)\ \{}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ -\/\mbox{\hyperlink{classNode}{rv}};}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00279\ \ \ \ \ \}}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00293\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\&\ value)\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{classNode}{u8\_value}}\ =\ value\ ?\ 1\ :\ 0;}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\mbox{\hyperlink{classNode}{u8\_value}}))\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ serialize\ bool"{}});}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00299\ \ \ \ \ \}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00313\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\_bool}}(\textcolor{keywordtype}{bool}\&\ \mbox{\hyperlink{classNode}{rv}})\ \{}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{classNode}{u8\_rv}};}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(\mbox{\hyperlink{classNode}{u8\_rv}}))\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}Unable\ to\ deserialize\ bool"{}});}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rv}}\ =\ \mbox{\hyperlink{classNode}{u8\_rv}}\ ==\ 0\ ?\ \mbox{\hyperlink{classNode}{false}}\ :\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00320\ \ \ \ \ \}}
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{keyword}{template}<BuiltinIntegral\ T>}
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keyword}{static}\ T\ \mbox{\hyperlink{classStreamHelper_a861d9f8099cebfdb63a8984500d80427}{byteswap}}(T\&\ value)\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap16}}(value);}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap32}}(value);}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(value);}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 128-\/bit\ needs\ broken\ into\ two\ chunks.}}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value\ >>\ 64);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low}}\ \ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{high}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{high}});}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low}}\ \ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{low}});}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{low}})\ <<\ 64)\ |\ \mbox{\hyperlink{classNode}{high}};}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(T)\ <=\ 16,\ \textcolor{stringliteral}{"{}Unsupported\ size\ for\ byteswap"{}});}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ \};}
 
 \end{DoxyCode}
