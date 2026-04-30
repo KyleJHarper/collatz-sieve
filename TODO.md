@@ -40,9 +40,6 @@
 * Methods which want the sequence get an exception instead of a runtime sequence sent to it.
 * Document the new version, not the current.
 
-## Read from STDIN
-* Make it happen
-
 ## Affine F-Stride Table
 * Make a table of just consecutive F-steps into strides.
   * Peak by bit can make use of this as long as it doesn't overflow.... hmm...

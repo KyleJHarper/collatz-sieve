@@ -745,31 +745,39 @@ class BinaryTree {
 
     /**
     * @brief Read `deserialize()` data from the path specified.  Data may be raw or compressed with Zstd.
-    * @param path The path to the file to read.
+    * @param path The path to the file to read.  When path is "-", will read from stdin.
     * @return True if successful, false otherwise.
     */
     bool load(const std::string& path) {
-        // Open the file stream.
-        std::ifstream f_in(path, std::ios::binary);
-        if (!f_in) {
-            throw std::runtime_error("Failed to open file for reading");
-        }
-
-        // Link an istream to the file input to start.
-        std::istream* final_in = &f_in;
+        // Setup pointers to the file input and a potential zstd in.
+        std::ifstream file_in;
+        std::istream* final_in = nullptr;
         std::unique_ptr<zstd_istream> zstd_in;
+
+        // Open the file stream.
+        if (path == "-") {
+            // Read from stdin.
+            final_in = &std::cin;
+        } else {
+            // Read from a normal file.
+            file_in.open(path, std::ios::binary);
+            if (!file_in) {
+                throw std::runtime_error("Failed to open file for reading");
+            }
+            final_in = &file_in;
+        }
 
         // Check for Zstd compression.  Then rewind our cursor.
         std::string err;
         uint32_t four_byte_magic;
         {
             StreamHelper sh(final_in, nullptr, &err);
-            std::streampos pos = f_in.tellg();
+            std::streampos pos = final_in->tellg();
             if (! sh.deserialize_integral(four_byte_magic)) {
                 throw std::runtime_error("Failed to deserialize first four bytes to detect Zstd compression.  Error chain is: " + err);
             }
-            f_in.clear();
-            f_in.seekg(pos);
+            final_in->clear();
+            final_in->seekg(pos);
         }
 
         // If we have Zstd compression, we need to link the file to our decompressor and pass on a different istream.

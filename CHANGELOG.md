@@ -47,7 +47,8 @@ All-in-all, trees exported on different systems *should* work equally on any pla
 
 The `tree.save(...)` method accepts a `path`, which it expects to map to a file or file-like object (`std::ofstream` internally).
 Following the design of many GNU programs, you may specify a single hyphen to write to stdout: `tree.save("-")`.  Note, this will
-map output to `&std:cout`.  We also perform a simple `isatty()` to prevent writing binary data to terminal.
+map output to `&std:cout`.  We also perform a simple `isatty()` to prevent writing binary data to terminal.  The `tree.load()`
+method will also accept a hyphen to read from stdin: `tree.load("-")`.
 
 The `tree.save(...)` method will compress your tree with [ZStandard](https://github.com/facebook/zstd) by default, using the
 maximum compression, equivalent to CLI: `zstd --ultra -22`.  To improve multithreading performance, we start with the end directive
@@ -112,6 +113,9 @@ added back in necessarily if `reset()` was called.
 To resolve this, `add_level()` is now the authority to build the root node if needed, and juggle the coverage, level_map, and
 uncovered positions as needed.
 
+### Documentation (Doxygen)
+
+All documentation has been converted to Doxygen format.
 
 ## 3.6.0
 
