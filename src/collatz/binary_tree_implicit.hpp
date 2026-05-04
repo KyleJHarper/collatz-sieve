@@ -377,10 +377,10 @@ class BinaryTreeImplicitImpl {
         // Now loop.
         _uncovered_positions.for_each_transformer(BitmapTransformerPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
             // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 tls.left_position = (cb_position << 1) - 1;
                 tls.right_position = cb_position << 1;
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 mpz_mul_2exp(tls.left_position.get_mpz_t(), cb_position.get_mpz_t(), 1);
                 mpz_sub_ui(tls.left_position.get_mpz_t(), tls.left_position.get_mpz_t(), 1);
                 mpz_mul_2exp(tls.right_position.get_mpz_t(), cb_position.get_mpz_t(), 1);
@@ -390,10 +390,10 @@ class BinaryTreeImplicitImpl {
             // for (const T& position : tls.positions) {...}
 
             // Calculate the values from positions.  Use an out param on GMP path.
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 tls.left_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.left_position, _level_count);
                 tls.right_value = BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.right_position, _level_count);
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.left_position, _level_count, tls.left_value);
                 BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.right_position, _level_count, tls.right_value);
             }
@@ -446,9 +446,9 @@ class BinaryTreeImplicitImpl {
         // Always sort ancestors.
         if (_is_preserving_ancestors) {
             tbb::parallel_sort(_ancestors.begin(), _ancestors.end(), [](const Node<T>* a, const Node<T>* b) {
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     return a->get_value() < b->get_value();
-                } else {
+                } else if constexpr(GMPIntegral<T>) {
                     return mpz_cmp(a->get_value().get_mpz_t(), b->get_value().get_mpz_t()) < 0;
                 }
             });

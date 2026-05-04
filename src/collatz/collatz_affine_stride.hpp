@@ -109,11 +109,11 @@ namespace AffineStride {
     */
     template<AnySupportedIntegral T>
     static inline void apply_stride(T& value) {
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             // Basic arithemtic and masking is fine on this path.
             const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[value & AffineStride::STRIDE_MASK];
             value = ((value * stride.multiply) + stride.add) >> stride.shift;
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             // GMP needs the UI extracted and cleaner calls to avoid temps.
             uint64_t u64_value = value.get_ui();
             const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u64_value & AffineStride::STRIDE_MASK];

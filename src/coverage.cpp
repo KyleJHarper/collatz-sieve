@@ -97,7 +97,7 @@ void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep
         std::string merged = "";
         for (Node<T>* ancestor : builder.get_tree().get_ancestors()) {
             std::string s_val;
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 s_val = to_string_any(ancestor->get_value());
             } else {
                 s_val = ancestor->get_value().get_str();

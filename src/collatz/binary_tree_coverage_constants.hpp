@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abi_helpers.hpp"
+#include "abi.hpp"
 #include "concepts.hpp"
 #include "binary_tree_math.hpp"
 #include <array>
@@ -88,15 +88,15 @@ namespace BinaryTreeCoverageConstants {
         }
 
         // Pick the right type, and convert as-needed.
-        if constexpr(NativeIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             if (level > sizeof(T) * 8) {
-                throw std::out_of_range("Level " + std::to_string(level) + " is outside the max range for your type T: " + ABIHelpers::demangle<T>());
+                throw std::out_of_range("Level " + std::to_string(level) + " is outside the max range for your type T: " + ABI::demangle<T>());
             }
             return static_cast<T>(KNOWN_COVERAGE_MAP[level]);
-        } else if constexpr(ExtendedIntegral<T>) {
-            return KNOWN_COVERAGE_MAP[level];
         } else if constexpr(GMPIntegral<T>) {
-            return uint128_to_mpz(KNOWN_COVERAGE_MAP[level]);
+            return Int128::uint128_to_mpz(KNOWN_COVERAGE_MAP[level]);
+        } else {
+            throw std::logic_error("Unknown data type");
         }
 
         // Should never reach this.

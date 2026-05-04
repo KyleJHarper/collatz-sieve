@@ -242,7 +242,7 @@ class FLCKey {
     // Compute the bytes of an integral or mpz_class.  Endianness doesn't matter since all type T are the same within an instance.
     //
     void serialize(const T& value) {
-        if constexpr (BuiltinIntegral<T>) {
+        if constexpr (FixedWidthIntegral<T>) {
             for (size_t i = 0; i < sizeof(T); ++i) {
                 _bytes[FLCKeySize - 1 - i] = static_cast<uint8_t>((value >> (i * 8)) & 0xFF);
             }

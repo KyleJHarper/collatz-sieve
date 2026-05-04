@@ -15,4 +15,5 @@ tools/*.png
 *.progress
 perf.data*
 *.btree
+*.btree.zst
 

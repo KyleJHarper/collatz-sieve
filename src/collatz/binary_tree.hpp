@@ -10,7 +10,7 @@
 #include <fstream>
 #include "equality_helper.hpp"
 #include <tbb/parallel_sort.h>
-#include "abi_helpers.hpp"
+#include "abi.hpp"
 #include "zstd_compress.hpp"
 #include "zstd_decompress.hpp"
 #include <cstdio>
@@ -569,7 +569,7 @@ class BinaryTree {
                 + ") exceeds the amount permitted ("
                 + to_string_any(BinaryTreeMath<T>::st_max_level_of_type())
                 + ") by the type T you specified: "
-                + ABIHelpers::demangle(typeid(T).name())
+                + ABI::demangle(typeid(T).name())
                 + ".";
             return sh.fail(msg);
         }

@@ -81,10 +81,10 @@ class CollatzAffineMap {
     /// @brief Applies the accelerated `F` step by incrementing exponent counts and transforming `constant_portion` too.
     void apply_F() {
         // Adjust the constant portion before we modify any exponents.
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             // Built-in types can bit shift cheaper than looking up a table.  Do that instead.
             _constant_portion = ((_constant_portion << 1) + _constant_portion) + (T(1) << _twos_exp);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             // MPZ Class can do an mpz_add from a precaulated item in a table faster than an initialization + shift operator.
             mpz_mul(_constant_portion.get_mpz_t(), _constant_portion.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());
             mpz_add(_constant_portion.get_mpz_t(), _constant_portion.get_mpz_t(), Exponents::get_power_of_two<T>(_twos_exp).get_mpz_t());
@@ -111,7 +111,7 @@ class CollatzAffineMap {
     */
     T calculate(const T& value) const {
         T result = Exponents::get_power_of_three<T>(_threes_exp);
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             if (__builtin_mul_overflow(result, value, &result) || __builtin_add_overflow(result, _constant_portion, &result)) {
                 throw std::overflow_error(
                     "Overflow in CollatzAffineMap calculate() method.  Value is " + to_string_any(value)
@@ -125,8 +125,6 @@ class CollatzAffineMap {
             mpz_mul(result.get_mpz_t(), result.get_mpz_t(), value.get_mpz_t());
             mpz_add(result.get_mpz_t(), result.get_mpz_t(), _constant_portion.get_mpz_t());
             mpz_fdiv_q_2exp(result.get_mpz_t(), result.get_mpz_t(), _twos_exp);
-        } else {
-            throw std::logic_error("Unknown data type for calculate().");
         }
         return result;
     }
@@ -139,7 +137,7 @@ class CollatzAffineMap {
     * @param out The resut stored in callers memory, which avoids alloc on the GMP path.
     */
     void calculate(const T& value, T& out) const {
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             out = Exponents::get_power_of_three<T>(_threes_exp);
             if (__builtin_mul_overflow(out, value, &out) || __builtin_add_overflow(out, _constant_portion, &out)) {
                 throw std::overflow_error(
@@ -154,10 +152,9 @@ class CollatzAffineMap {
             mpz_mul(out.get_mpz_t(), Exponents::get_power_of_three<T>(_threes_exp).get_mpz_t(), value.get_mpz_t());
             mpz_add(out.get_mpz_t(), out.get_mpz_t(), _constant_portion.get_mpz_t());
             mpz_fdiv_q_2exp(out.get_mpz_t(), out.get_mpz_t(), _twos_exp);
-        } else {
-            throw std::logic_error("Unknown data type for calculate().");
         }
     }
+
 
 
     /**
@@ -167,13 +164,11 @@ class CollatzAffineMap {
     */
     bool is_below(const T& value) const {
         static thread_local T tmp;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             return calculate(value) < value;
         } else if constexpr(GMPIntegral<T>) {
             calculate(value, tmp);
             return tmp < value;
-        } else {
-            throw std::logic_error("Unknown type for is_below()");
         }
     }
 };

@@ -2,6 +2,7 @@
 #include "concepts.hpp"
 #include <gmp.h>
 #include "stdint.h"
+#include "udl.hpp"
 
 
 
@@ -1223,24 +1224,27 @@ namespace Exponents {
     */
     template<AnySupportedIntegral T>
     inline auto get_power_of_three(size_t exp) -> std::conditional_t<std::is_same_v<T, mpz_class>, const mpz_class&, T> {
-        if constexpr(NativeIntegral<T>) {
-            if (POW3_64BIT_ELEMENT_COUNT <= exp) {
-                throw std::out_of_range("Cannot get power of three for 64-bit integer with an exponent of " + std::to_string(exp) + ".");
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr(sizeof(T) <= 8) {
+                if (POW3_64BIT_ELEMENT_COUNT <= exp) {
+                    throw std::out_of_range("Cannot get power of three for 64-bit integer with an exponent of " + std::to_string(exp) + ".");
+                }
+                return POW3_64BIT[exp];
+            } else if constexpr(Int128Integral<T>) {
+                if (POW3_128BIT_ELEMENT_COUNT <= exp) {
+                    throw std::out_of_range("Cannot get power of three for 128-bit integer with an exponent of " + std::to_string(exp) + ".");
+                }
+                return POW3_128BIT[exp];
             }
-            return POW3_64BIT[exp];
-        } else if constexpr(ExtendedIntegral<T>) {
-            if (POW3_128BIT_ELEMENT_COUNT <= exp) {
-                throw std::out_of_range("Cannot get power of three for 128-bit integer with an exponent of " + std::to_string(exp) + ".");
-            }
-            return POW3_128BIT[exp];
         } else if constexpr(GMPIntegral<T>) {
             if (POW3_MPZ_ELEMENT_COUNT <= exp) {
                 throw std::out_of_range("Cannot get power of three for MPZ integer with an exponent of " + std::to_string(exp) + ".");
             }
             return POW3_MPZ[exp];
-        } else {
-            throw std::logic_error("Cannot determine date type for type T in get_power_of_three()");
         }
+
+        // Unknown type.  Throw.
+        throw std::logic_error("Cannot determine date type for type T in get_power_of_three()");
     }
 
 
@@ -1991,24 +1995,27 @@ namespace Exponents {
     */
     template<AnySupportedIntegral T>
     inline auto get_power_of_two(size_t exp) -> std::conditional_t<std::is_same_v<T, mpz_class>, const mpz_class&, T> {
-        if constexpr(NativeIntegral<T>) {
-            if (POW2_64BIT_ELEMENT_COUNT <= exp) {
-                throw std::out_of_range("Cannot get power of two for 64-bit integer with an exponent of " + std::to_string(exp) + ".");
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr(sizeof(T) <= 8) {
+                if (POW2_64BIT_ELEMENT_COUNT <= exp) {
+                    throw std::out_of_range("Cannot get power of two for 64-bit integer with an exponent of " + std::to_string(exp) + ".");
+                }
+                return POW2_64BIT[exp];
+            } else if constexpr (Int128Integral<T>) {
+                if (POW2_128BIT_ELEMENT_COUNT <= exp) {
+                    throw std::out_of_range("Cannot get power of two for 128-bit integer with an exponent of " + std::to_string(exp) + ".");
+                }
+                return POW2_128BIT[exp];
             }
-            return POW2_64BIT[exp];
-        } else if constexpr(ExtendedIntegral<T>) {
-            if (POW2_128BIT_ELEMENT_COUNT <= exp) {
-                throw std::out_of_range("Cannot get power of two for 128-bit integer with an exponent of " + std::to_string(exp) + ".");
-            }
-            return POW2_128BIT[exp];
         } else if constexpr(GMPIntegral<T>) {
             if (POW2_MPZ_ELEMENT_COUNT <= exp) {
                 throw std::out_of_range("Cannot get power of two for MPZ integer with an exponent of " + std::to_string(exp) + ".");
             }
             return POW2_MPZ[exp];
-        } else {
-            throw std::logic_error("Cannot determine date type for type T in get_power_of_two()");
         }
+
+        // Unknown type.  Throw.
+        throw std::logic_error("Cannot determine date type for type T in get_power_of_two()");
     }
 
 }

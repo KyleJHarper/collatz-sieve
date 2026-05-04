@@ -91,9 +91,9 @@ class BinaryTreeCoverage {
         }
         // Set r first so it's converted to a float.  Otherwise int/int ==> truncated int.
         mpf_class ratio;
-        if constexpr(ExtendedIntegral<T>) {
-            ratio = uint128_to_mpf(_covered);
-            ratio = ratio / uint128_to_mpz(_total);
+        if constexpr(Int128Integral<T>) {
+            ratio = Int128::uint128_to_mpf(_covered);
+            ratio = ratio / Int128::uint128_to_mpz(_total);
         } else {
            ratio = _covered;
            ratio /= _total;

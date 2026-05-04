@@ -1,7 +1,5 @@
 #pragma once
 
-#include <gmp.h>
-#include <gmpxx.h>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -10,11 +8,10 @@
 #include <string>
 #include <stdint.h>
 #include "concepts.hpp"
-#include "gmp_helpers.hpp"
-#include "count_trailing_helpers.hpp"
 #include "exponents.hpp"
 #include "collatz_affine_map.hpp"
 #include "collatz_constants.hpp"
+#include "bit.hpp"
 
 
 
@@ -81,7 +78,7 @@ class CollatzMetadata {
     size_t deep_size() const {
         size_t total = sizeof(*this);
         if constexpr(GMPIntegral<T>) {
-            total += GMPHelpers::gmp_deep_sizeof(peak_value);
+            total += GMP::gmp_deep_sizeof(peak_value);
         }
         return total;
     }
@@ -294,12 +291,12 @@ class Collatz {
     size_t deep_size() const {
         size_t total = sizeof(*this);
 
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             total += sizeof(T) * _sequence.capacity();
         } else if constexpr(GMPIntegral<T>) {
             total += sizeof(mpz_class) * _sequence.capacity();
             for (const auto& val : _sequence) {
-                total += GMPHelpers::gmp_deep_sizeof(val);
+                total += GMP::gmp_deep_sizeof(val);
             }
         }
 
@@ -329,30 +326,30 @@ class Collatz {
         }
 
         // Select the correct type to upgrade to, if needed for overflow.
-        if constexpr(NativeIntegral<T>) {
-            // If the type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
-            // Max initial value of 64 bit is 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
-            if constexpr(std::numeric_limits<T>::digits < 64) {
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr(sizeof(T) * 8 < 64) {
+                // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
+                // Max initial value of 64 bit is 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
                 uint64_t safe_initial_value = initial_value;
                 uint64_t safe_sentinel_value = sentinel_value;
                 return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
-            }
-            // Dealing with T of exactly 64 bits.  If it'll overflow, use 128-bit.
-            if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
-                // Native will overflow, but 128-bit won't.  Assignment of 64->128 is safe.
-                uint128_t safe_initial_value = initial_value;
-                uint128_t safe_sentinel_value = sentinel_value;
-                return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
-            }
-        } else if constexpr(ExtendedIntegral<T>) {
-            // Dealing with 128 bits.  If it'll overflow, use mpz_class.
-            if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
-                // Extended will overflow, but mpz_class won't.  Assignment of 128 -> mpz_class uses helper.
-                static thread_local mpz_class safe_initial_value;
-                static thread_local mpz_class safe_sentinel_value;
-                uint128_to_mpz(initial_value, safe_initial_value);
-                uint128_to_mpz(sentinel_value, safe_sentinel_value);
-                return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
+            } else if constexpr (sizeof(T) * 8 == 64) {
+                // Dealing with T of exactly 64 bits.  If it'll overflow, use 128-bit.  Otherwise, pass through.
+                if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
+                    uint128_t safe_initial_value = initial_value;
+                    uint128_t safe_sentinel_value = sentinel_value;
+                    return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
+                }
+            } else if constexpr (sizeof(T) * 8 == 128) {
+                // Dealing with 128 bits.  If it'll overflow, use mpz_class.
+                if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
+                    // Extended will overflow, but mpz_class won't.  Assignment of 128 -> mpz_class uses helper.
+                    static thread_local mpz_class safe_initial_value;
+                    static thread_local mpz_class safe_sentinel_value;
+                    Int128::uint128_to_mpz(initial_value, safe_initial_value);
+                    Int128::uint128_to_mpz(sentinel_value, safe_sentinel_value);
+                    return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
+                }
             }
         }
 
@@ -377,22 +374,22 @@ class Collatz {
         static thread_local T tls_initial_value;
         tls_initial_value = initial_value;
         while (tls_initial_value > 1) {
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 // The key optimizations are shifting by CTZ and using modulo instead of bitwise check.
                 if (tls_initial_value % 2 == 1) {
                     // Odd
                     tls_initial_value = (tls_initial_value << 1) + tls_initial_value + 1;
                 }
                 // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= count_trailing_zeros(tls_initial_value);
-            } else {
+                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
+            } else if constexpr(GMPIntegral<T>) {
                 // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
                 static thread_local CollatzAffineMap<T> af_map;
                 static thread_local T tls_out;
                 if ((tls_initial_value & 1) == 1) {
                     // Odd
                     af_map.reset();
-                    size_t trailing_ones = count_trailing_ones(tls_initial_value);
+                    size_t trailing_ones = Bit::count_trailing_ones(tls_initial_value);
                     for (size_t i = 0; i < trailing_ones; i++) {
                         af_map.apply_F();
                     }
@@ -400,7 +397,7 @@ class Collatz {
                     tls_initial_value = tls_out;
                 }
                 // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= count_trailing_zeros(tls_initial_value);
+                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
             }
         }
 
@@ -413,14 +410,14 @@ class Collatz {
         static thread_local T tls_initial_value;
         tls_initial_value = initial_value;
         while (tls_initial_value > sentinel_value) {
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 // The key optimizations are shifting by CTZ and using modulo instead of bitwise check.
                 if (tls_initial_value % 2 == 1) {
                     // Odd
                     tls_initial_value = (tls_initial_value << 1) + tls_initial_value + 1;
                 }
                 // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= count_trailing_zeros(tls_initial_value);
+                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
             } else {
                 // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
                 static thread_local CollatzAffineMap<T> af_map;
@@ -428,7 +425,7 @@ class Collatz {
                 if ((tls_initial_value & 1) == 1) {
                     // Odd
                     af_map.reset();
-                    size_t trailing_ones = count_trailing_ones(tls_initial_value);
+                    size_t trailing_ones = Bit::count_trailing_ones(tls_initial_value);
                     for (size_t i = 0; i < trailing_ones; i++) {
                         af_map.apply_F();
                     }
@@ -436,7 +433,7 @@ class Collatz {
                     tls_initial_value = tls_out;
                 }
                 // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= count_trailing_zeros(tls_initial_value);
+                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
             }
         }
 
@@ -459,7 +456,7 @@ class Collatz {
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
 
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
             T current_value = initial_value;
             while (current_value != 1) {
@@ -537,7 +534,7 @@ class Collatz {
         size_t right_shifts = 0;
         size_t steps = 0;
 
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             // Native types are fast as-is.  Affine compression doesn't help, except bit-shifting CTZ.
             T tmp = initial_value;
             // Check for overflow here, once, instead of over and over.
@@ -551,7 +548,7 @@ class Collatz {
                     steps++;
                 }
                 // Always even at this point.  Shift zeros out.
-                right_shifts = count_trailing_zeros(tmp);
+                right_shifts = Bit::count_trailing_zeros(tmp);
                 tmp >>= right_shifts;
                 steps += right_shifts;
             }
@@ -565,7 +562,7 @@ class Collatz {
             while (tmp > 1) {
                 // Handle odd.
                 if ((tmp & 1) == 1) {
-                    trailing_ones = count_trailing_ones(tmp);
+                    trailing_ones = Bit::count_trailing_ones(tmp);
                     steps += (2 * trailing_ones);
                     while (trailing_ones > limit) {
                         tmp = ((Exponents::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
@@ -576,12 +573,10 @@ class Collatz {
                     }
                 }
                 // Always even at this point.  Shift zeros out.
-                right_shifts = count_trailing_zeros(tmp);
+                right_shifts = Bit::count_trailing_zeros(tmp);
                 tmp >>= right_shifts;
                 steps += right_shifts;
             }
-        } else {
-            throw std::runtime_error("Cannot determine data type for st_get_step_count_fast().");
         }
         return steps;
     }
@@ -598,7 +593,7 @@ class Collatz {
         size_t right_shifts = 0;
         out_peak = initial_value;
 
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             // Native types are fast as-is.  Affine compression doesn't help, except bit-shifting CTZ.
             T tmp = initial_value;
             T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
@@ -614,7 +609,7 @@ class Collatz {
                     }
                 }
                 // Always even at this point.  Shift zeros out.  Can't affect peak.
-                right_shifts = count_trailing_zeros(tmp);
+                right_shifts = Bit::count_trailing_zeros(tmp);
                 tmp >>= right_shifts;
             }
         } else if constexpr(GMPIntegral<T>) {
@@ -634,7 +629,7 @@ class Collatz {
             while (tmp > bailout_value) {
                 // Handle odd.
                 if (mpz_odd_p(tmp.get_mpz_t())) {
-                    trailing_ones = count_trailing_ones(tmp);
+                    trailing_ones = Bit::count_trailing_ones(tmp);
                     while (trailing_ones > limit) {
                         // tmp = ((CollatzConstants::POW3_MPZ[limit] * (tmp + 1)) >> limit) - 1;
                         mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
@@ -658,11 +653,9 @@ class Collatz {
                     }
                 }
                 // Always even at this point.  Shift zeros out.
-                right_shifts = count_trailing_zeros(tmp);
+                right_shifts = Bit::count_trailing_zeros(tmp);
                 tmp >>= right_shifts;
             }
-        } else {
-            throw std::runtime_error("Cannot determine data type for st_get_step_count_fast().");
         }
     }
 
@@ -690,7 +683,7 @@ class Collatz {
                 is_F = false;
                 return false;
             } else {
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     is_F = (current_value & 1) == 1;
                 } else if constexpr(GMPIntegral<T>) {
                     is_F = mpz_odd_p(current_value.get_mpz_t());
@@ -724,7 +717,7 @@ class Collatz {
                 was_F = false;
                 return false;
             } else {
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     was_F = (current_value & 1) == 1;
                 } else if constexpr(GMPIntegral<T>) {
                     was_F = mpz_odd_p(current_value.get_mpz_t());

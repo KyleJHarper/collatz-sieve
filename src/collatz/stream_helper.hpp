@@ -1,6 +1,9 @@
 #pragma once
 
+#include "abi.hpp"
+#include "bit.hpp"
 #include "concepts.hpp"
+#include "endianness.hpp"
 #include <ostream>
 #include <istream>
 #include <stdexcept>
@@ -154,18 +157,18 @@ class StreamHelper {
     template<AnySupportedIntegral T>
     [[nodiscard]] bool serialize_integral(const T& value) {
         std::ostream& out = get_out();
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             static_assert(GuaranteedWidthIntegral<T>);
             T final_value = value;
             // Flip endianness if needed.
-            if constexpr(sizeof(T) > 1 && is_big_endian()) {
-                final_value = byteswap(final_value);
+            if constexpr(sizeof(T) > 1 && Endian::is_big_endian()) {
+                final_value = Bit::byteswap(final_value);
             }
             out.write(reinterpret_cast<const char*>(&final_value), sizeof(final_value));
             if (! out) {
                 return fail("Unable to write integral to out in serialize_integral");
             }
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             // Sign: 0 = zero, 1 = positive, -1 = negative
             int8_t sign = mpz_sgn(value.get_mpz_t());
             if (! serialize_integral(sign)) {
@@ -199,6 +202,8 @@ class StreamHelper {
             if (! write_bytes(buffer.data(), size)) {
                 return fail("Unable to write mpz_class data payload in serialize_integral");
             }
+        } else {
+            return fail("Unsupported type sent to seralize_integral(): " + ABI::demangle<T>());
         }
 
         // All good.
@@ -223,17 +228,17 @@ class StreamHelper {
     template<AnySupportedIntegral T>
     [[nodiscard]] bool deserialize_integral(T& rv) {
         std::istream& in = get_in();
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             static_assert(GuaranteedWidthIntegral<T>);
             in.read(reinterpret_cast<char*>(&rv), sizeof(rv));
             if (! in) {
                 return fail("Failed to read integral from deserialize_integral");
             }
             // Convert from little-endian if this system is big endian.
-            if constexpr (sizeof(T) > 1 && is_big_endian()) {
-                rv = byteswap(rv);
+            if constexpr (sizeof(T) > 1 && Endian::is_big_endian()) {
+                rv = Bit::byteswap(rv);
             }
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             // First byte is the sign.
             int8_t sign;
             if (! deserialize_integral(sign)) {
@@ -272,6 +277,8 @@ class StreamHelper {
             if (sign < 0) {
                 rv = -rv;
             }
+        } else {
+            return fail("Unsupported type sent to deseralize_integral(): " + ABI::demangle<T>());
         }
 
         // All good.
@@ -319,34 +326,4 @@ class StreamHelper {
         return true;
     }
 
-
-
-    /**
-    * @brief Simple `bswap` helper.  Handles 8, 16, 32, 64, and 128 bit.
-    * @param value Reference value to operate on.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @return The bswap'd version, typed to matching `T`.
-    */
-    template<BuiltinIntegral T>
-    static T byteswap(T& value) {
-        if constexpr (sizeof(T) == 1) {
-            return value;
-        } else if constexpr (sizeof(T) == 2) {
-            return __builtin_bswap16(value);
-        } else if constexpr (sizeof(T) == 4) {
-            return __builtin_bswap32(value);
-        } else if constexpr (sizeof(T) == 8) {
-            return __builtin_bswap64(value);
-        } else if constexpr (sizeof(T) == 16) {
-            // 128-bit needs broken into two chunks.
-            uint64_t high = static_cast<uint64_t>(value >> 64);
-            uint64_t low  = static_cast<uint64_t>(value);
-            high = __builtin_bswap64(high);
-            low  = __builtin_bswap64(low);
-            return (static_cast<T>(low) << 64) | high;
-        } else {
-            static_assert(sizeof(T) <= 16, "Unsupported size for byteswap");
-            return value;
-        }
-    }
 };

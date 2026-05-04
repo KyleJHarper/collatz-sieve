@@ -5,7 +5,8 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <string_view>
-#include "concepts.hpp"
+#include "typedefs.hpp"
+#include "int128.hpp"
 #include <cctype>
 #include <algorithm>
 
@@ -27,7 +28,7 @@ void init_logger();
 template <>
 struct fmt::formatter<int128_t> : fmt::formatter<std::string> {
     auto format(const int128_t& value, format_context& ctx) const {
-        return fmt::formatter<std::string>::format(int128_to_string(value), ctx);
+        return fmt::formatter<std::string>::format(Int128::int128_to_string(value), ctx);
     }
 };
 
@@ -40,7 +41,7 @@ struct fmt::formatter<int128_t> : fmt::formatter<std::string> {
 template <>
 struct fmt::formatter<uint128_t> : fmt::formatter<std::string> {
     auto format(const uint128_t& value, format_context& ctx) const {
-        return fmt::formatter<std::string>::format(uint128_to_string(value), ctx);
+        return fmt::formatter<std::string>::format(Int128::uint128_to_string(value), ctx);
     }
 };
 

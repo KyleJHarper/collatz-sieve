@@ -2,6 +2,7 @@
 #include "gmpxx.h"
 #include <array>
 #include "concepts.hpp"
+#include "udl.hpp"
 
 
 
@@ -49,7 +50,7 @@ namespace CollatzConstants {
     * @brief Helper to return the correct `MAX_3XP1` for the type `T`.
     * @tparam T Any supported integral (see concepts.hpp).
     */
-    template<BuiltinIntegral T>
+    template<FixedWidthIntegral T>
     inline constexpr uint128_t get_max_3xp1() {
         switch (sizeof(T) * 8) {
             case   8: return MAX_3XP1[0];
@@ -229,10 +230,11 @@ namespace CollatzConstants {
     */
     template<AnySupportedIntegral T>
     inline constexpr size_t get_max_bits_for_max_initial_value_by_type() {
-        if constexpr(NativeIntegral<T>) {
-            // 64 bits or less, which is fully discovered.
-            return sizeof(T) * 8;
-        } else if constexpr(ExtendedIntegral<T> || GMPIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr(sizeof(T) <= 16) {
+                return sizeof(T) * 8;
+            }
+        } else if constexpr(GMPIntegral<T>) {
             return MAX_INITIAL_VALUE_BY_BIT.size() - 1;
         }
     }
@@ -252,15 +254,11 @@ namespace CollatzConstants {
             throw std::out_of_range("Max initial value for bit size " + std::to_string(bit_size) + " not found because it exceeds max bits: " + std::to_string(max_bits) + ".");
         }
 
-        if constexpr(NativeIntegral<T>) {
-            // 64 bits or less, which is fully discovered.
+        if constexpr(FixedWidthIntegral<T>) {
             return static_cast<T>(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
-        } else if constexpr(ExtendedIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_BIT[bit_size];
         } else if constexpr(GMPIntegral<T>) {
-            return uint128_to_mpz(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
+            return Int128::uint128_to_mpz(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
         }
-        throw std::logic_error("Unknown type for bit required.");
     }
 
 
@@ -271,7 +269,7 @@ namespace CollatzConstants {
     */
     template<AnySupportedIntegral T>
     inline constexpr T get_max_initial_value_by_type() {
-        constexpr size_t max_bits = is_gmp_integral_v<T>() ? 128 : sizeof(T) * 8;
+        constexpr size_t max_bits = GMPIntegral<T> ? 128 : sizeof(T) * 8;
         return get_max_initial_value_by_bit<T>(max_bits);
     }
 }

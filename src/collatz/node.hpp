@@ -10,7 +10,6 @@
 #include <limits>
 #include <string>
 #include "collatz_affine_stride.hpp"
-#include "count_trailing_helpers.hpp"
 #include "stream_helper.hpp"
 #include "equality_helper.hpp"
 
@@ -93,30 +92,32 @@ class Node {
 
         // Establish or clear metadata object.  Reset() already cleared it, if it existed.
         _is_initialized = true;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             _value = value;
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             mpz_set(_value.get_mpz_t(), value.get_mpz_t());
         }
         _parent = parent;
 
         // Call a helper with a promoted type to process the sequence and build our FG/HWM info.  Doing this allows trees to build
         // up to 2^<bit-1>.
-        if constexpr(NativeIntegral<T>) {
-            // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
-            if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint64_t>(64)) {
-                init_sequence_helper<uint64_t>();
-            } else {
-                init_sequence_helper<uint128_t>();
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr (sizeof(T) * 8 <= 64) {
+                // Dealing with T of 64 bits or less.  If it'll overflow, use 128-bit.
+                if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint64_t>(64)) {
+                    init_sequence_helper<uint64_t>();
+                } else {
+                    init_sequence_helper<uint128_t>();
+                }
+            } else if constexpr(sizeof(T) * 8 == 128) {
+                // Dealing with 128 bits.  If it'll overflow, use mpz_class.
+                if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint128_t>(128)) {
+                    init_sequence_helper<uint128_t>();
+                } else {
+                    init_sequence_helper<mpz_class>();
+                }
             }
-        } else if constexpr(ExtendedIntegral<T>) {
-            // Dealing with 128 bits.  If it'll overflow, use mpz_class.
-            if (_value <= CollatzConstants::get_max_initial_value_by_bit<uint128_t>(128)) {
-                init_sequence_helper<uint128_t>();
-            } else {
-                init_sequence_helper<mpz_class>();
-            }
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             // Dealing with mpz_class.  Send as-is.
             init_sequence_helper<mpz_class>();
         }
@@ -152,13 +153,13 @@ class Node {
         // We need to elevate _value to type U in case it's not the same.
         static thread_local U u_value;
         static thread_local U u_current_value;
-        if constexpr(BuiltinIntegral<T> && BuiltinIntegral<U>) {
-            // Both types are builtin.  They can cast directly, even if they're the same.  Dirt cheap, so don't overthink this.
+        if constexpr(FixedWidthIntegral<T> && FixedWidthIntegral<U>) {
+            // Both types are fixed-width.  They can cast directly, even if they're the same.  Dirt cheap, so don't overthink this.
             u_value = U(_value);
             u_current_value = u_value;
-        } else if constexpr(ExtendedIntegral<T> && GMPIntegral<U>) {
-            // Node is uint128_t but required U is mpz_class.  Elevate.
-            uint128_to_mpz(_value, u_value);
+        } else if constexpr(FixedWidthIntegral<T> && GMPIntegral<U>) {
+            // Node is fixed-width (probably uint128_t) but required U is mpz_class.  Elevate.
+            Int128::uint128_to_mpz(_value, u_value);
             u_current_value = u_value;
         } else if constexpr(GMPIntegral<T> && GMPIntegral<U>) {
             // Both are GMP.  Just set, which is cheap.
@@ -177,12 +178,12 @@ class Node {
         // Mop up leftovers after striding.
         while (steps_taken < fg_chain_length) {
             // We're going to shift no matter what, so all we're checking for is odd.
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 // If it's odd, F step.
                 if (u_current_value % 2 == 1) {
                     u_current_value = (u_current_value << 1) + u_current_value + 1;
                 }
-            } else {
+            } else if constexpr (GMPIntegral<T>) {
                 // If it's odd, F step.
                 if (mpz_odd_p(u_current_value.get_mpz_t())) {
                     mpz_mul(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());
@@ -191,8 +192,8 @@ class Node {
             }
             // Always even at this point.  Shift by CTZ, clamped by FG chain length.
             // This technique isn't faster for 64/128-bit types, but it's faster for GMP, so we'll do it.
-            size_t zeros_count = std::min(static_cast<size_t>(count_trailing_zeros(u_current_value)), fg_chain_length - steps_taken);
-            if constexpr(BuiltinIntegral<T>) {
+            size_t zeros_count = std::min(static_cast<size_t>(Bit::count_trailing_zeros(u_current_value)), fg_chain_length - steps_taken);
+            if constexpr(FixedWidthIntegral<T>) {
                 u_current_value >>= zeros_count;
             } else {
                 mpz_tdiv_q_2exp(u_current_value.get_mpz_t(), u_current_value.get_mpz_t(), zeros_count);

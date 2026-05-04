@@ -400,15 +400,15 @@ void test_binary_tree_math() {
     //
     // Bit Reversal
     T value = 421;  // Binary: 110100101
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 1) == 1);   //         1
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 2) == 2);   //        10
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 3) == 5);   //       101
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 4) == 10);  //      1010
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 5) == 20);  //     10100
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 6) == 41);  //    101001
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 7) == 82);  //   1010010
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 8) == 165); //  10100101
-    assert(BinaryTreeMath<T>::st_reverse_low_bits(value, 9) == 331); // 101001011
+    assert(Bit::st_reverse_low_bits(value, 1) == 1);   //         1
+    assert(Bit::st_reverse_low_bits(value, 2) == 2);   //        10
+    assert(Bit::st_reverse_low_bits(value, 3) == 5);   //       101
+    assert(Bit::st_reverse_low_bits(value, 4) == 10);  //      1010
+    assert(Bit::st_reverse_low_bits(value, 5) == 20);  //     10100
+    assert(Bit::st_reverse_low_bits(value, 6) == 41);  //    101001
+    assert(Bit::st_reverse_low_bits(value, 7) == 82);  //   1010010
+    assert(Bit::st_reverse_low_bits(value, 8) == 165); //  10100101
+    assert(Bit::st_reverse_low_bits(value, 9) == 331); // 101001011
     //
     // Node Levels
     size_t level = 0;  // Always returns size_t

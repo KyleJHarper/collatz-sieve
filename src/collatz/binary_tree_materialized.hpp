@@ -566,7 +566,7 @@ class BinaryTreeMaterializedImpl {
                     Node<T>* parent = parents[parent_idx];
 
                     // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
-                    if constexpr(BuiltinIntegral<T>) {
+                    if constexpr(FixedWidthIntegral<T>) {
                         child_value_1 = parent->get_value() + step;
                         child_value_2 = child_value_1 + step;
                     } else if constexpr(GMPIntegral<T>) {
@@ -654,9 +654,9 @@ class BinaryTreeMaterializedImpl {
             }
             // Always sort them.
             tbb::parallel_sort(_ancestors.begin(), _ancestors.end(), [](const Node<T>* a, const Node<T>* b) {
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     return a->get_value() < b->get_value();
-                } else {
+                } else if constexpr(GMPIntegral<T>) {
                     return mpz_cmp(a->get_value().get_mpz_t(), b->get_value().get_mpz_t()) < 0;
                 }
             });

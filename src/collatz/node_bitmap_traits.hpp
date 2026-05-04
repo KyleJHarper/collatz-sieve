@@ -80,13 +80,13 @@ struct BitmapKeyTraits {
     * @return The prefix for `value`, as a `prefix_t` type.
     */
     static prefix_t get_prefix(const T& value) {
-        if constexpr (BuiltinIntegral<T>) {
+        if constexpr (FixedWidthIntegral<T>) {
             if constexpr (sizeof(T) <= SUFFIX_BYTES) {
                 return 0;
             } else {
                 return static_cast<prefix_t>(value >> SUFFIX_BITS);
             }
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             static thread_local mpz_class tmp;
             mpz_fdiv_q_2exp(tmp.get_mpz_t(), value.get_mpz_t(), SUFFIX_BITS);
             return tmp;
@@ -101,10 +101,10 @@ struct BitmapKeyTraits {
     * @param out Reference to a `prefix_t` where the prefix will be saved.
     */
     static void get_prefix(const T& value, prefix_t& out) {
-        if constexpr (BuiltinIntegral<T>) {
+        if constexpr (FixedWidthIntegral<T>) {
             if constexpr (sizeof(T) <= SUFFIX_BYTES) {
                 out = 0;
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 out = static_cast<prefix_t>(value >> SUFFIX_BITS);
             }
         } else {
@@ -120,9 +120,9 @@ struct BitmapKeyTraits {
     * @return The suffix for `value`, as a `suffix_t` type.
     */
     static suffix_t get_suffix(const T& value) {
-        if constexpr (BuiltinIntegral<T>) {
+        if constexpr (FixedWidthIntegral<T>) {
             return static_cast<suffix_t>(value & SUFFIX_MASK);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             return static_cast<suffix_t>(value.get_ui());
         }
     }

@@ -5,10 +5,10 @@
 
 
 /**
-* @namespace ABIHelpers
+* @namespace ABI
 * @brief Utilities to help interact with the Application Binary Interface (ABI).
 */
-namespace ABIHelpers {
+namespace ABI {
 
     /**
     * @brief Demangle's a mangled C++ type name.

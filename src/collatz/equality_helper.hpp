@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abi_helpers.hpp"
+#include "abi.hpp"
 #include "concepts.hpp"
 #include <type_traits>
 #include <typeinfo>
@@ -93,7 +93,7 @@ class EqualityHelper {
     */
     template<AnySupportedIntegral T>
     [[nodiscard]] bool integrals_equal(const T& a, const T& b) {
-        if constexpr (BuiltinIntegral<T>) {
+        if constexpr (FixedWidthIntegral<T>) {
             if (a != b) {
                 return fail("Integral mismatch:  a==" + to_string_any(a) + ", b==" + to_string_any(b));
             }
@@ -174,7 +174,7 @@ class EqualityHelper {
             if (! pointers_null_agree(a, b)) { return false; }
             return same_address(a, b);
         } else {
-            return fail("No known equality operator is available for type: " + ABIHelpers::demangle(typeid(T).name()));
+            return fail("No known equality operator is available for type: " + ABI::demangle(typeid(T).name()));
         }
     }
 

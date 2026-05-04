@@ -73,7 +73,7 @@ void test_node_bitmap_prefix_boundary() {
     //
     // Go beyond 64 bits when possible.
     bitmap.clear();
-    if constexpr(ExtendedIntegral<T>) {
+    if constexpr(FixedWidthIntegral<T> && sizeof(T) == 16) {
         low_bit = 64;
         high_bit = 128;
         for (size_t bits = low_bit; bits < high_bit; bits++) {

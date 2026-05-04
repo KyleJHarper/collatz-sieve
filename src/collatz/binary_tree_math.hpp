@@ -3,9 +3,9 @@
 #include <stdexcept>
 #include <cmath>
 #include "concepts.hpp"
+#include "bit.hpp"
 #include "collatz_constants.hpp"
 #include "exponents.hpp"
-#include "bitreverse_helpers.hpp"
 
 
 
@@ -98,12 +98,10 @@ class BinaryTreeMath {
     */
     static inline T st_node_count_of_level(level_t level) {
         static thread_local T count;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             count = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 1));
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return count;
     }
@@ -121,13 +119,11 @@ class BinaryTreeMath {
     */
     static inline T st_node_count_of_tree(level_t levels) {
         static thread_local T count;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             count = (T(1) << levels) - 1;
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), levels);
             mpz_sub_ui(count.get_mpz_t(), count.get_mpz_t(), 1);
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return count;
     }
@@ -148,14 +144,12 @@ class BinaryTreeMath {
         static thread_local T full_tree_count;
         static thread_local T sub_tree_count;
         static thread_local T final_count;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             final_count = (T(1) << max_level) - (T(1) << (min_level - 1));
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(full_tree_count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), max_level);
             mpz_pow_ui(sub_tree_count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), min_level - 1);
             mpz_sub(final_count.get_mpz_t(), full_tree_count.get_mpz_t(), sub_tree_count.get_mpz_t());
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return final_count;
     }
@@ -180,15 +174,13 @@ class BinaryTreeMath {
     */
     static inline level_t st_get_level_by_node_value(const T& value) {
         level_t level = 0;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             level = st_floor_log2(value + _offset) + 1;
         } else if constexpr(GMPIntegral<T>) {
             // Adding 1 is a waste of alloc here, so use a scratch variable.
             static thread_local mpz_class junk = 0;
             mpz_add_ui(junk.get_mpz_t(), value.get_mpz_t(), _offset);
             level = st_floor_log2(junk) + 1;
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return level;
     }
@@ -254,7 +246,7 @@ class BinaryTreeMath {
     * @return True if the level will fit, false otherwise.
     */
     static inline bool st_level_will_fit(level_t level) {
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             return level <= BinaryTreeMath<T>::st_max_level_of_type();
         }
         return true;
@@ -297,13 +289,11 @@ class BinaryTreeMath {
     */
     static inline T st_first_node_value_of_level(level_t level) {
         static thread_local T first_node_value;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             first_node_value = (T(1) << (level - 1)) - _offset;
-        } else if constexpr(std::same_as<T, mpz_class>) {
+        } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(first_node_value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
             mpz_sub_ui(first_node_value.get_mpz_t(), first_node_value.get_mpz_t(), _offset);
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return first_node_value;
     }
@@ -336,37 +326,33 @@ class BinaryTreeMath {
         static thread_local T index;
 
         // Lift: 2^(L-1)
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             lift = Exponents::get_power_of_two<T>(level - 1);
             lift = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // New Position: bit_reverse_L(pos - 1)
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             index = position - 1;
         } else if constexpr(GMPIntegral<T>) {
             mpz_sub_ui(index.get_mpz_t(), position.get_mpz_t(), 1);
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // Reverse the low bits.  For GMP, use an out param to avoid alloc (yes, even with TLS).
-        if constexpr(BuiltinIntegral<T>) {
-            index = st_reverse_low_bits(index, (level - 1));
-        } else {
+        if constexpr(FixedWidthIntegral<T>) {
+            index = Bit::st_reverse_low_bits(index, (level - 1));
+        } else if constexpr (GMPIntegral<T>) {
             static thread_local T index_copy;
             index_copy = index;
-            st_reverse_low_bits(index_copy, (level - 1), index);
+            Bit::st_reverse_low_bits(index_copy, (level - 1), index);
         }
 
         // Return
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             return lift + index - _offset;
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             static thread_local T result;
             mpz_set(result.get_mpz_t(), lift.get_mpz_t());
             mpz_add(result.get_mpz_t(), result.get_mpz_t(), index.get_mpz_t());
@@ -403,37 +389,33 @@ class BinaryTreeMath {
         static thread_local T index;
 
         // Lift: 2^(L-1)
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             lift = Exponents::get_power_of_two<T>(level - 1);
             lift = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(lift.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 1));
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // New Position: bit_reverse_L(pos - 1)
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             index = position - 1;
         } else if constexpr(GMPIntegral<T>) {
             mpz_sub_ui(index.get_mpz_t(), position.get_mpz_t(), 1);
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // Reverse the low bits.  For GMP, use an out param to avoid alloc (yes, even with TLS).
-        if constexpr(BuiltinIntegral<T>) {
-            index = st_reverse_low_bits(index, (level - 1));
-        } else {
+        if constexpr(FixedWidthIntegral<T>) {
+            index = Bit::st_reverse_low_bits(index, (level - 1));
+        } else if constexpr(GMPIntegral<T>) {
             static thread_local T index_copy;
             index_copy = index;
-            st_reverse_low_bits(index_copy, (level - 1), index);
+            Bit::st_reverse_low_bits(index_copy, (level - 1), index);
         }
 
         // Return
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             out = lift + index - _offset;
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             mpz_set(out.get_mpz_t(), lift.get_mpz_t());
             mpz_add(out.get_mpz_t(), out.get_mpz_t(), index.get_mpz_t());
             mpz_sub_ui(out.get_mpz_t(), out.get_mpz_t(), _offset);
@@ -469,23 +451,19 @@ class BinaryTreeMath {
         static thread_local T position;
 
         // Get lower bits.
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             low_bits = value_plus_offset & ((T(1) << (level - 1)) - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_class mask = (mpz_class(1) << (level - 1)) - 1;
             low_bits = value_plus_offset & mask;
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // Get the position now.
-        position = BinaryTreeMath<T>::st_reverse_low_bits(low_bits, level - 1);
-        if constexpr(BuiltinIntegral<T>) {
+        position = Bit::st_reverse_low_bits(low_bits, level - 1);
+        if constexpr(FixedWidthIntegral<T>) {
             position += 1;
         } else if constexpr(GMPIntegral<T>) {
             mpz_add_ui(position.get_mpz_t(), position.get_mpz_t(), 1);
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         return position;
@@ -529,12 +507,10 @@ class BinaryTreeMath {
         quantity = position / 2;
 
         // Scale: 2^(L-2)
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             scale = T(1) << (level - 2);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(scale.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - 2));
-        } else {
-            throw std::logic_error("Unknown type.");
         }
 
         // Result of multiplication should be correctly typed.
@@ -611,22 +587,18 @@ class BinaryTreeMath {
 
             // Value: -(2^(a-1) - 3)
             // Remember to use a positive value, even though it's technically a decreasing summation (negative).
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 value = (T(1) << (a - 1)) - 3;
             } else if constexpr(GMPIntegral<T>) {
                 mpz_pow_ui(value.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (a - 1));
                 mpz_sub_ui(value.get_mpz_t(), value.get_mpz_t(), 3);
-            } else {
-                throw std::logic_error("Unknown type.");
             }
 
             // Scale: 2^(L-a)
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 scale = T(1) << (level - a);
             } else if constexpr(GMPIntegral<T>) {
                 mpz_pow_ui(scale.get_mpz_t(), _MPZ_TWO.get_mpz_t(), (level - a));
-            } else {
-                throw std::logic_error("Unknown type.");
             }
 
             // Add to Summation
@@ -677,118 +649,10 @@ class BinaryTreeMath {
 
 
     /**
-    * @brief Reverse the bits of any type `T` requested.  Used largely for partial reversing later.
-    *
-    * The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values within
-    * the tree, largely due to the constant power-of-two increase.  To leverage this, one must take the bits from a node's value or
-    * position and reverse them, but only a certain number of them on the LSB (least significant bit) side.  There are many ways to
-    * do this, including a basic loop, which was used originally and then removed (diff 3.2.0).  Ultimately compiler intrisics were
-    * and some black-box-ish helperes were built to speed this up since it's a hot path.
-    *
-    * @warning This method does not support `mpz_class`.  The methods which would use it handle `mpz_class` directly bit-by-bit. It
-    * is entirely possible to handle `mpz_class` if needed some day, but it's expensive and unnecessary.
-    *
-    * @param x The data to reverse.
-    * @return The same data and the same type, with bits reversed.
-    */
-    static inline T st_bit_reverse_full(const T& x) {
-        if constexpr(NativeIntegral<T>) {
-            // Native types have a direct builtin.  Use it.
-            using U = std::make_unsigned_t<T>;
-            U ux = static_cast<U>(x);
-            if constexpr (sizeof(T) == 1) {
-                return static_cast<T>(bitreverse8(ux));
-            } else if constexpr (sizeof(T) == 2) {
-                return static_cast<T>(bitreverse16(ux));
-            } else if constexpr (sizeof(T) == 4) {
-                return static_cast<T>(bitreverse32(ux));
-            } else if constexpr (sizeof(T) == 8) {
-                return static_cast<T>(bitreverse64(ux));
-            }
-        } else if constexpr(ExtendedIntegral<T>) {
-            // Extended 128-bit integrals need a little juggling.
-            using U = make_unsigned_custom_t<T>;
-            U ux = static_cast<U>(x);
-
-            uint64_t low  = (uint64_t)ux;
-            uint64_t high = (uint64_t)(ux >> 64);
-            uint64_t rev_low  = bitreverse64(high);
-            uint64_t rev_high = bitreverse64(low);
-            return static_cast<T>(( (U)rev_high << 64 ) | rev_low);
-        } else if constexpr(GMPIntegral<T>) {
-            // GMP is arbitrary precision, and is unsupported currently.
-            throw std::logic_error("Cannot fully reverse mpz_class");
-        } else {
-            static_assert(false, "Must use a supported type T");
-        }
-    }
-
-
-
-    /**
-    * @brief Reverse the lower bits of a value, returning only those reversed bits.
-    *
-    * @param value The data to undergo bit reversal.
-    * @param bits The number of lower bits to reverse and return.
-    * @return The lower bits isolated and reversed in a value of type `T`.
-    */
-    static inline T st_reverse_low_bits(const T& value, size_t bits) {
-        // Test for zero.
-        T result = 0;
-        if (bits == 0) { return result; }
-
-        // Reverse and shift by the correct amount.
-        if constexpr(BuiltinIntegral<T>) {
-            result = st_bit_reverse_full(value);
-            constexpr size_t WIDTH = sizeof(T) * 8;
-            result >>= (WIDTH - bits);
-        } else if constexpr(GMPIntegral<T>) {
-            for (size_t bit = 0; bit < bits; bit++) {
-                if (mpz_tstbit(value.get_mpz_t(), bit)) {
-                    mpz_setbit(result.get_mpz_t(), bits - 1 - bit);
-                }
-            }
-        }
-
-        // Return.
-        return result;
-    }
-
-
-
-    /**
-    * @brief Reverse the lower bits of a value, returning only those reversed bits (out param version).
-    *
-    * @param value The data to undergo bit reversal.
-    * @param bits The number of lower bits to reverse and return.
-    * @param out The lower bits isolated and reversed in a value of type `T`.
-    */
-    static inline void st_reverse_low_bits(const T& value, size_t bits, T& out) {
-        // Test for zero.
-        out = 0;
-        if (bits == 0) { return; }
-
-        // Reverse and shift by the correct amount.
-        if constexpr(BuiltinIntegral<T>) {
-            out = st_bit_reverse_full(value);
-            constexpr size_t WIDTH = sizeof(T) * 8;
-            out >>= (WIDTH - bits);
-        } else if constexpr(GMPIntegral<T>) {
-            for (size_t bit = 0; bit < bits; bit++) {
-                if (mpz_tstbit(value.get_mpz_t(), bit)) {
-                    mpz_setbit(out.get_mpz_t(), bits - 1 - bit);
-                }
-            }
-        }
-    }
-
-
-
-    /**
     * @brief A log base-2 for integers (most significant bit based).
     *
-    * The std::log2() returns double precision which only affords 53 bits for integrer portion.  This means it doesn't even work
-    * for uint64_t.  GMP also has its own means for log2 (`sizeinbase()`).  This method uses `CTZ` functions to overcome this.
+    * The std::log2() returns double precision which only affords 53 bits for integer portion.  This means it doesn't even work for
+    * uint64_t.  GMP also has its own means for log2 (`sizeinbase()`).  This method uses `CLZ` functions to overcome this.
     *
     * @param val The value to operate on.
     * @return The integer of floor(log2(val)).
@@ -796,18 +660,18 @@ class BinaryTreeMath {
     static inline size_t st_floor_log2(const T& val) {
         if (val == 0) { return 0; }
         size_t result = 0;
-        if constexpr(NativeIntegral<T>) {
-            result = 63 - __builtin_clzll(val);
-        } else if constexpr(ExtendedIntegral<T>) {
-            if (val >> 64) {
-                result = 127 - __builtin_clzll((uint64_t)(val >> 64));
-            } else {
-                result = 63 - __builtin_clzll((uint64_t)val);
+        if constexpr(FixedWidthIntegral<T>) {
+            if constexpr(sizeof(T) < 64) {
+                result = 63 - __builtin_clzll(val);
+            } else if constexpr(sizeof(T) == 128) {
+                if (val >> 64) {
+                    result = 127 - __builtin_clzll((uint64_t)(val >> 64));
+                } else {
+                    result = 63 - __builtin_clzll((uint64_t)val);
+                }
             }
         } else if constexpr(GMPIntegral<T>) {
             result = mpz_sizeinbase(val.get_mpz_t(), 2) - 1;
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return result;
     }
@@ -828,12 +692,10 @@ class BinaryTreeMath {
     */
     static inline T st_step(level_t level) {
         static thread_local T step;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             step = T(1) << (level - 1);
         } else if constexpr(GMPIntegral<T>) {
             mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 1));
-        } else {
-            throw std::logic_error("Unknown type.");
         }
         return step;
     }

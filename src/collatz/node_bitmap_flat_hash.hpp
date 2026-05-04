@@ -13,6 +13,7 @@
 #include <roaring/roaring.hh>
 #include <stdexcept>
 #include <string>
+#include "gmp.hpp"
 #include "stream_helper.hpp"
 #include "equality_helper.hpp"
 
@@ -48,9 +49,9 @@ class FlatHashBitmapImpl {
     *   2. When `T` is anything else, it's assumed to be `mpz_class`, and both `absl::Hash<prefix_t>` and `MpzEq` are needed.
     */
     using map_t = std::conditional_t<
-        BuiltinIntegral<T>
+        FixedWidthIntegral<T>
         , absl::flat_hash_map<prefix_t, roaring::Roaring>
-        , absl::flat_hash_map<prefix_t, roaring::Roaring, absl::Hash<prefix_t>, MpzEq>
+        , absl::flat_hash_map<prefix_t, roaring::Roaring, absl::Hash<prefix_t>, GMP::MpzEq>
     >;
     /// @brief The `absl::flat_hash_map` typed to `prefix_t` and a `roaring::Roaring` bitmap.
     map_t _flat_map;
@@ -118,9 +119,9 @@ class FlatHashBitmapImpl {
     void add(const T& value) {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             prefix = Traits::get_prefix(value);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             Traits::get_prefix(value, prefix);
         }
         // Suffix is just a uint32_t.
@@ -143,10 +144,10 @@ class FlatHashBitmapImpl {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t start_prefix;
         static thread_local prefix_t end_prefix;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             start_prefix = Traits::get_prefix(start);
             end_prefix = Traits::get_prefix(end);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             Traits::get_prefix(start, start_prefix);
             Traits::get_prefix(end, end_prefix);
         }
@@ -212,9 +213,9 @@ class FlatHashBitmapImpl {
     bool contains(const T& value) const {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             prefix = Traits::get_prefix(value);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             Traits::get_prefix(value, prefix);
         }
         // Suffix is just a uint32_t.
@@ -234,9 +235,9 @@ class FlatHashBitmapImpl {
     void remove(const T& value) {
         // Prefix can be mpz_class, so use TLS and out&.
         static thread_local prefix_t prefix;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             prefix = Traits::get_prefix(value);
-        } else {
+        } else if constexpr(GMPIntegral<T>) {
             Traits::get_prefix(value, prefix);
         }
         // Suffix is just a uint32_t.
@@ -263,9 +264,9 @@ class FlatHashBitmapImpl {
     T cardinality() const {
         T total = 0;
         for (const auto& [prefix, bitmap] : _flat_map) {
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 total += bitmap.cardinality();
-            } else {
+            } else if constexpr(GMPIntegral<T>) {
                 mpz_add_ui(total.get_mpz_t(), total.get_mpz_t(), bitmap.cardinality());
             }
         }
@@ -625,9 +626,9 @@ class FlatHashBitmapImpl {
                 // Shift the prefix once instead of deeper inside the while() loop.  For smaller types, set to 0.
                 if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
                     // T can hold the prefix.  Let it shift.
-                    if constexpr(BuiltinIntegral<T>) {
+                    if constexpr(FixedWidthIntegral<T>) {
                         shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-                    } else {
+                    } else if constexpr(GMPIntegral<T>) {
                         mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
                     }
                 } else {
@@ -644,9 +645,9 @@ class FlatHashBitmapImpl {
                 // Loop this iterator until done.  Use addition instead of bitwise-OR (|) to avoid alloc on GMP path.
                 while (bitmap_iterator.has_value) {
                     suffix = bitmap_iterator.current_value;
-                    if constexpr(BuiltinIntegral<T>) {
+                    if constexpr(FixedWidthIntegral<T>) {
                         value = shifted_prefix + suffix;
-                    } else {
+                    } else if constexpr(GMPIntegral<T>) {
                         mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
                     }
                     stop = callback(value, my_tls);
@@ -693,9 +694,9 @@ class FlatHashBitmapImpl {
                     // Shift the prefix once instead of deeper inside the while()/for() loops.  For smaller types, set to 0.
                     if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
                         // T can hold the prefix.  Let it shift.
-                        if constexpr(BuiltinIntegral<T>) {
+                        if constexpr(FixedWidthIntegral<T>) {
                             shifted_prefix = static_cast<T>(prefix) << Traits::SUFFIX_BITS;
-                        } else {
+                        } else if constexpr(GMPIntegral<T>) {
                             mpz_mul_2exp(shifted_prefix.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
                         }
                     } else {
@@ -729,9 +730,9 @@ class FlatHashBitmapImpl {
                         suffix_t suffix_val;
 
                         // Build the shifted prefix and key combo so it isn't repeated below.
-                        if constexpr(BuiltinIntegral<T>) {
+                        if constexpr(FixedWidthIntegral<T>) {
                             shifted_prefix_and_key = shifted_prefix + shifted_key;
-                        } else {
+                        } else if constexpr(GMPIntegral<T>) {
                             mpz_add_ui(shifted_prefix_and_key.get_mpz_t(), shifted_prefix.get_mpz_t(), shifted_key);
                         }
 
@@ -742,9 +743,9 @@ class FlatHashBitmapImpl {
                                 const roaring::internal::array_container_t* array_container = (roaring::internal::array_container_t*)container;
                                 for (int array_index = 0; array_index < array_container->cardinality; array_index++) {
                                     suffix_val = array_container->array[array_index];
-                                    if constexpr(BuiltinIntegral<T>) {
+                                    if constexpr(FixedWidthIntegral<T>) {
                                         value = shifted_prefix_and_key + suffix_val;
-                                    } else {
+                                    } else if constexpr(GMPIntegral<T>) {
                                         mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                     }
                                     local_stop = callback(value, my_tls);
@@ -766,9 +767,9 @@ class FlatHashBitmapImpl {
                                         int offset = __builtin_ctzll(word);
                                         // Multiply out the word index by the number of bits per word, then add the offset.  That's the next "on" node.
                                         suffix_val = (word_index * Traits::ROARING_WORD_BITS) + offset;
-                                        if constexpr(BuiltinIntegral<T>) {
+                                        if constexpr(FixedWidthIntegral<T>) {
                                             value = shifted_prefix_and_key + suffix_val;
-                                        } else {
+                                        } else if constexpr(GMPIntegral<T>) {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
                                         local_stop = callback(value, my_tls);
@@ -790,9 +791,9 @@ class FlatHashBitmapImpl {
                                     roaring_value_t length = run_container->runs[run_index].length;
                                     suffix_t end = start + length;
                                     for (suffix_val = start; suffix_val <= end; suffix_val++) {
-                                        if constexpr(BuiltinIntegral<T>) {
+                                        if constexpr(FixedWidthIntegral<T>) {
                                             value = shifted_prefix_and_key + suffix_val;
-                                        } else {
+                                        } else if constexpr(GMPIntegral<T>) {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
                                         local_stop = callback(value, my_tls);

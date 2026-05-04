@@ -68,7 +68,7 @@ void test_1(T max_value, T report_every) {
 
 template<AnySupportedIntegral T>
 void test_1_1(T max_value, T report_every) {
-    if constexpr(BuiltinIntegral<T>) {
+    if constexpr(FixedWidthIntegral<T>) {
         logger->info(("Test 1.1 -- Not applicable to non-GMP types."));
         return;
     }
@@ -91,14 +91,14 @@ void test_1_1(T max_value, T report_every) {
             steps++;
             if (n % 2 == 0) {
                 // Even
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     n = n / 2;
                 } else {
                     mpz_fdiv_q_2exp(n.get_mpz_t(), n.get_mpz_t(), 1);
                 }
             } else {
                 // Odd
-                if constexpr(BuiltinIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T>) {
                     n = (3 * n) + 1;
                 } else {
                     mpz_mul_ui(n.get_mpz_t(), n.get_mpz_t(), 3);
@@ -321,7 +321,7 @@ void test_7(T max_value, T report_every) {
                 steps++;
             }
             // Always Even At This Point
-            right_shifts = count_trailing_zeros(n);
+            right_shifts = Bit::count_trailing_zeros(n);
             n >>= right_shifts;
             steps += right_shifts;
         }
@@ -356,7 +356,7 @@ void test_8(T max_value, T report_every) {
         while (n > 1) {
             // The number of trailing ones indicates how many times we'll do (3x+1)/2, followed by an even at the end.
             if ((n & 1) == 1) {
-                trailing_ones = count_trailing_ones(n);
+                trailing_ones = Bit::count_trailing_ones(n);
                 if (trailing_ones > 4) {
                     for (size_t i = 1; i <= trailing_ones; i++) {
                         // Combine it as: (3x + 1) / 2.
@@ -370,7 +370,7 @@ void test_8(T max_value, T report_every) {
                 }
             }
             // Always Even At This Point
-            right_shifts = count_trailing_zeros(n);
+            right_shifts = Bit::count_trailing_zeros(n);
             n >>= right_shifts;
             steps += right_shifts;
         }
@@ -407,7 +407,7 @@ void test_9(T max_value, T report_every) {
             if ((n & 1) == 1) {
                 af_map.reset();
                 static thread_local T tls_out;
-                trailing_ones = count_trailing_ones(n);
+                trailing_ones = Bit::count_trailing_ones(n);
                 steps += (2 * trailing_ones);
                 for (size_t i = 0; i < trailing_ones; i++) {
                     af_map.apply_F();
@@ -416,7 +416,7 @@ void test_9(T max_value, T report_every) {
                 n = tls_out;
             }
             // Always Even At This Point
-            right_shifts = count_trailing_zeros(n);
+            right_shifts = Bit::count_trailing_zeros(n);
             n >>= right_shifts;
             steps += right_shifts;
         }
@@ -453,7 +453,7 @@ void test_10(T max_value, T report_every) {
             if ((n & 1) == 1) {
                 af_map.reset();
                 static thread_local T tls_out;
-                trailing_ones = count_trailing_ones(n);
+                trailing_ones = Bit::count_trailing_ones(n);
                 steps += (2 * trailing_ones);
                 for (size_t i = 0; i < trailing_ones; i++) {
                     af_map.apply_F();
@@ -462,7 +462,7 @@ void test_10(T max_value, T report_every) {
                 n = tls_out;
             }
             // Always Even At This Point
-            right_shifts = count_trailing_zeros(n);
+            right_shifts = Bit::count_trailing_zeros(n);
             n >>= right_shifts;
             steps += right_shifts;
         }
@@ -478,7 +478,7 @@ void test_10(T max_value, T report_every) {
 template<AnySupportedIntegral T>
 void test_uint64_t_ideal(T max_value, T report_every) {
     logger->info("Test uint64_t ideal -- Ideal for uint64_t");
-    if constexpr(NativeIntegral<T>) {
+    if constexpr(FixedWidthIntegral<T> && sizeof(T) == 8) {
         logger->info("  - Test 1 Verdict: Naive baseline.");
         logger->info("  - Test 2 Verdict: Use n % 2 instead of n & 1.");
         logger->info("  - Test 3 Verdict: Perform shift and add.");
@@ -511,7 +511,7 @@ void test_uint64_t_ideal(T max_value, T report_every) {
                     steps++;
                 }
                 // Always Even At This Point
-                right_shifts = count_trailing_zeros(n);
+                right_shifts = Bit::count_trailing_zeros(n);
                 n >>= right_shifts;
                 steps += right_shifts;
             }
@@ -530,7 +530,7 @@ void test_uint64_t_ideal(T max_value, T report_every) {
 template<AnySupportedIntegral T>
 void test_uint128_t_ideal(T max_value, T report_every) {
     logger->info("Test uint128_t ideal -- Ideal for uint128_t");
-    if constexpr(ExtendedIntegral<T>) {
+    if constexpr(FixedWidthIntegral<T> && sizeof(T) == 16) {
         logger->info("  - Test 1 Verdict: Naive baseline.");
         logger->info("  - Test 2 Verdict: Negligible.  Use n % 2 instead of n & 1.");
         logger->info("  - Test 3 Verdict: Negligible.  Perform shift and add.");
@@ -563,7 +563,7 @@ void test_uint128_t_ideal(T max_value, T report_every) {
                     steps++;
                 }
                 // Always Even At This Point
-                right_shifts = count_trailing_zeros(n);
+                right_shifts = Bit::count_trailing_zeros(n);
                 n >>= right_shifts;
                 steps += right_shifts;
             }
@@ -615,7 +615,7 @@ void test_mpz_class_ideal(T max_value, T report_every) {
                     // Odd
                     af_map.reset();
                     static thread_local T tls_out;
-                    trailing_ones = count_trailing_ones(n);
+                    trailing_ones = Bit::count_trailing_ones(n);
                     steps += (2 * trailing_ones);
                     for (size_t i = 0; i < trailing_ones; i++) {
                         af_map.apply_F();
@@ -624,7 +624,7 @@ void test_mpz_class_ideal(T max_value, T report_every) {
                     n = tls_out;
                 }
                 // Always Even At This Point
-                right_shifts = count_trailing_zeros(n);
+                right_shifts = Bit::count_trailing_zeros(n);
                 n >>= right_shifts;
                 steps += right_shifts;
             }

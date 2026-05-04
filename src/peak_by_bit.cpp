@@ -85,7 +85,7 @@ class PeakIVScanner {
             selected_initial_bit = max_known_bit;
         }
         if constexpr(GMPIntegral<T>) {
-            uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(selected_initial_bit), _base_initial_value);
+            Int128::uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(selected_initial_bit), _base_initial_value);
         } else  {
             _base_initial_value = CollatzConstants::get_max_initial_value_by_bit<T>(selected_initial_bit);
         }
@@ -181,7 +181,7 @@ class PeakIVScanner {
 
         // Create a GPU runner, in case the GPU is leveraged.
         CollatzPeakRunner<T>* gpu_runner = nullptr;
-        if constexpr(BuiltinIntegral<T>) {
+        if constexpr(FixedWidthIntegral<T>) {
             if (has_gpu) {
                 gpu_runner = create_runner(
                     _collatz_peaks.data()
@@ -207,13 +207,13 @@ class PeakIVScanner {
         // Main loop for each bit.
         for (size_t bit = _start_bit; bit <= _max_bit; bit++) {
             // If we're using the precomputed table, send it.
-            if constexpr(is_builtin_integral_v<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 if (use_table && bit < CollatzConstants::get_max_bits_for_max_initial_value_by_type<T>()) {
                     T max_iv = CollatzConstants::get_max_initial_value_by_bit<T>(bit);
                     logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
-                    if constexpr(ExtendedIntegral<T>) {
+                    if constexpr(sizeof(T) == 16) {
                         _base_initial_value = max_iv;
-                        results.set(bit, uint128_to_mpz(max_iv));
+                        results.set(bit, Int128::uint128_to_mpz(max_iv));
                     } else {
                         _base_initial_value = max_iv;
                         results.set(bit, mpz_class(max_iv));
@@ -223,7 +223,7 @@ class PeakIVScanner {
             }
 
             // Calculate the max allowed value.  It will be -1 since unisgned values start at 0.
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 _max_allowed_value = T(1) << bit;
             } else {
                 mpz_ui_pow_ui(_max_allowed_value.get_mpz_t(), 2, bit);
@@ -237,7 +237,7 @@ class PeakIVScanner {
 
             // Find the first failing index.  Use the GPU if we can, otherwise use the CPU.
             used_gpu = false;
-            if constexpr(BuiltinIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T>) {
                 if (has_gpu) {
                     // Find the peak via a kernel which will do all the work.
                     find_max_iv_for_bit_gpu(gpu_runner, bit);
@@ -251,25 +251,29 @@ class PeakIVScanner {
 
             // Check for overflows with 64 and 128 bit integrals.
             promote_test = false;
-            if constexpr(NativeIntegral<T>) {
-                if (bit > 63) {
-                    logger->warn("Reached 64+ bits and must upgrade to uint128_t.");
-                    promote_test = true;
-                }
-                if (*unified_overflow_index_ptr < INT_MAX) {
-                    T overflow_initial_value = _base_initial_value + *unified_overflow_index_ptr;
-                    logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to uint128_t.", overflow_initial_value);
-                    promote_test = true;
-                }
-            } else if constexpr(ExtendedIntegral<T>) {
-                if (bit > 127) {
-                    logger->warn("Reached 128+ bits and must upgrade to GMP.");
-                    promote_test = true;
-                }
-                if (*unified_overflow_index_ptr < INT_MAX) {
-                    T overflow_initial_value= _base_initial_value + *unified_overflow_index_ptr;
-                    logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
-                    promote_test = true;
+            if constexpr (FixedWidthIntegral<T>) {
+                if constexpr (sizeof(T) <= 64) {
+                    // Working with 64-bit types under the hood.
+                    if (bit > 63) {
+                        logger->warn("Reached 64+ bits and must upgrade to uint128_t.");
+                        promote_test = true;
+                    }
+                    if (*unified_overflow_index_ptr < INT_MAX) {
+                        T overflow_initial_value = _base_initial_value + *unified_overflow_index_ptr;
+                        logger->warn("Reached overflow when filling buffers, in a sequence for uint64_t with IV: {}.  Upgrading to uint128_t.", overflow_initial_value);
+                        promote_test = true;
+                    }
+                } else if constexpr (sizeof(T) == 128) {
+                    // Working with 128-bit type.
+                    if (bit > 127) {
+                        logger->warn("Reached 128+ bits and must upgrade to GMP.");
+                        promote_test = true;
+                    }
+                    if (*unified_overflow_index_ptr < INT_MAX) {
+                        T overflow_initial_value= _base_initial_value + *unified_overflow_index_ptr;
+                        logger->warn("Reached overflow when filling buffers, in a sequence for uint128_t with IV: {}.  Upgrading to GMP.", overflow_initial_value);
+                        promote_test = true;
+                    }
                 }
             }
 
@@ -277,11 +281,11 @@ class PeakIVScanner {
             if (promote_test) {
                 progress.join();
                 PeakIVScannerResults promoted_results;
-                if constexpr(NativeIntegral<T>) {
+                if constexpr(FixedWidthIntegral<T> && sizeof(T) <= 8) {
                     PeakIVScanner<uint128_t> promoted_test(_max_bit, bit, uint128_t(_base_initial_value));
                     promoted_results = promoted_test.run(use_table);
-                } else if constexpr(ExtendedIntegral<T>) {
-                    PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, uint128_to_mpz(_base_initial_value));
+                } else if constexpr(FixedWidthIntegral<T> && sizeof(T) == 128) {
+                    PeakIVScanner<mpz_class> promoted_test(_max_bit, bit, Int128::uint128_to_mpz(_base_initial_value));
                     promoted_results = promoted_test.run(use_table);
                 }
                 // Merge the results and return them.
@@ -310,8 +314,8 @@ class PeakIVScanner {
             T max_iv = failure_initial_value - 1;
             logger->debug("Found a peak over allowed at index {}.  Next value ({}) hit a peak of {}.", *unified_failing_index_ptr, failure_initial_value, _collatz_peaks[*unified_failing_index_ptr]);
             logger->debug("Found a max IV of {} for 2^{}", max_iv, bit);
-            if constexpr(ExtendedIntegral<T>) {
-                results.set(bit, uint128_to_mpz(max_iv));
+            if constexpr(Int128Integral<T>) {
+                results.set(bit, Int128::uint128_to_mpz(max_iv));
             } else {
                 results.set(bit, mpz_class(max_iv));
             }
@@ -368,7 +372,7 @@ int main(int argc, char **argv) {
     );
     options.add_flag("-t,--table", use_table, "Use the precomputed table when possible.");
     CLI11_PARSE(options, argc, argv);
-    starting_value = str_to_uint128(starting_value_s);
+    starting_value = Int128::str_to_uint128(starting_value_s);
     logger->debug("Selected options were:");
     logger->debug("  Force int128: {}", force_i128);
     logger->debug("  Force MPZ: {}", force_mpz);
@@ -394,7 +398,7 @@ int main(int argc, char **argv) {
     }
     PeakIVScannerResults results;
     if (force_mpz) {
-        PeakIVScanner<mpz_class> test(max_bit, start_bit, uint128_to_mpz(starting_value));
+        PeakIVScanner<mpz_class> test(max_bit, start_bit, Int128::uint128_to_mpz(starting_value));
         results = test.run(use_table);
     } else if (force_i128) {
         PeakIVScanner<uint128_t> test(max_bit, start_bit, starting_value);
@@ -431,7 +435,7 @@ int main(int argc, char **argv) {
     bool coherent = true;
     mpz_class comparison = 0;
     for (auto& [bit, max_iv] : results.get_results()) {
-        comparison = uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(bit));
+        comparison = Int128::uint128_to_mpz(CollatzConstants::get_max_initial_value_by_bit<uint128_t>(bit));
         if (max_iv != comparison) {
             coherent = false;
             logger->warn("For 2^{} the calculated IV was {} but our records show {}.", bit, max_iv, comparison);

@@ -82,7 +82,7 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
 
     // Make the runner.
     CollatzStepRunner<T>* gpu_runner = nullptr;
-    if constexpr(BuiltinIntegral<T>) {
+    if constexpr(FixedWidthIntegral<T>) {
         if (has_gpu) {
             gpu_runner = create_runner(BUFFER_SIZE, unified_start_value_ptr);
         }
@@ -97,7 +97,7 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
         logger->debug("Processing bit {}.", bit);
         // Overflow check.
         if (bit > bit_limit) {
-            if constexpr(NativeIntegral<T>) {
+            if constexpr(FixedWidthIntegral<T> && sizeof(T) <= 64) {
                 progress.join();
                 StepResults other_results = run_it<uint128_t>(bit, max_bit);
                 results.merge(other_results);

@@ -12,12 +12,13 @@
 //
 template<typename T>
 void test_collatz_types() {
-    static_assert(NativeIntegral<int>);
-    static_assert(NativeIntegral<uint64_t>);
-    static_assert(!NativeIntegral<uint128_t>);
+    static_assert(FixedWidthIntegral<int>);
+    static_assert(FixedWidthIntegral<uint64_t>);
+    static_assert(FixedWidthIntegral<uint128_t>);
 
-    static_assert(ExtendedIntegral<uint128_t>);
-    static_assert(!ExtendedIntegral<uint64_t>);
+    static_assert(Int128Integral<int128_t>);
+    static_assert(Int128Integral<uint128_t>);
+    static_assert(!Int128Integral<uint64_t>);
 
     static_assert(GMPIntegral<mpz_class>);
     static_assert(!GMPIntegral<uint64_t>);
