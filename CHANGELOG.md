@@ -15,6 +15,36 @@ Note: when larger memory and/or high core count was required, the donor system w
 
 ## 4.0.0
 
+### Code Refactor
+
+All code was refactored to clarify intent and improve overall composition.  The most major change has been to the concepts for data
+types and how they're leveraged.  There are two primary types: `FixedWidthIntegral` and `GMPIntegral`.  These give time-memory
+trade-offs, and allow for a cost-based model, wherein larger types are generally slower and use more memory, but allow larger
+values.
+
+The `FixedWidthIntegral` includes anything that responds to `std::integral` as `true`, which covers all integer types up to 64
+bits.  128-bit support is appended to the fixed-width concept with another concept: `Int128Integral`.  Your compiler must support
+this, and this is currently only tested with GCC/clang's __int128.
+
+Testing was done to fall back on `absl::uint128`, but there are hurdles to consider when doing this.  Due to time constraints, this
+was discarded.  Regardless, the objective was to make extension easier.  Theoretically, it should possible to use any
+fixed-width integral (e.g.: absl, boost) as long as it:
+
+* Is truly fixed width and stack-allocated.
+* Responds to arithmetic operators the same as standard integrals.
+* Responds to bitwise operators the same as standard integrals, especially shifting and masking.
+* Responds reasonably to promotion from equal or lower types.
+
+In practice, however, there's `constexpr` juggling and gotchas that I simply don't have time for.
+
+Finally, the `GMPIntegral` is a special code path which allows `mpz_class` as the type.  This type has no limit on digits, but is
+much slower than fixed-width types, and only becomes competitive around 512+ bits.
+
+Note, the decision to use `GMPIntegral` instead of wrapping it further inside something like `UnlimitedWidthIntegral` came down to
+GMP's ubiquity and first-class performance.  Furthermore, supporting an additional arbitrary type such as GMP would require a major
+refactor, not a simple tweak to the typedef's and concepts.  Ergo, if it's ever desired, the extension of the `GMPIntegral` concept
+into another larger concept would be a trivial effort by comparison.
+
 ### BinaryTree Composition Changes
 
 The `BinaryTree` class is now a static facade in front of the `BinaryTreeImplicitImpl` and `BinaryTreeMaterializedImpl` classes.
@@ -89,7 +119,7 @@ Compression Results Table (Implicit Tree, Level 40, 1GB Raw)
 |         19 |          1030 |             77 |  7.36% |
 |         20 |          1030 |             43 |  4.11% |
 |         21 |          1030 |             30 |  2.86% |
-|         21 |          1030 |             21 |  1.97% |
+|         22 |          1030 |             21 |  1.97% |
 
 #### Materialized Saving is a Bad Idea
 
@@ -107,7 +137,7 @@ To aid with save/load testing, an `equal()` method was added to all classes whic
 ### Root Node Instantiation Moved
 
 The `BinaryTree*Impl` classes built the `_root_node` in the `init()` method.  This was never a good idea, because it meant that a
-default-constructed node would have no root node even after `add_level()` was called.  It also meant the root node wouldn't be
+default-constructed tree would have no root node even after `add_level()` was called.  It also meant the root node wouldn't be
 added back in necessarily if `reset()` was called.
 
 To resolve this, `add_level()` is now the authority to build the root node if needed, and juggle the coverage, level_map, and

@@ -2,6 +2,7 @@
 #include <string_view>
 #include <gmpxx.h>
 #include "typedefs.hpp"
+// #include "concepts.hpp"
 
 
 
@@ -76,13 +77,13 @@ namespace Int128 {
         if (value == 0) return "0";
 
         bool negative = value < 0;
-        unsigned __int128 v = negative ? -value : value;
+        uint128_t u_value = negative ? uint128_t(-(value + 1)) + 1  : uint128_t(value);
 
         std::string result;
-        while (v > 0) {
-            int digit = v % 10;
-            result.push_back('0' + digit);
-            v /= 10;
+        while (u_value > 0) {
+            auto digit = static_cast<unsigned>(u_value % 10);
+            result.push_back(static_cast<char>('0' + digit));
+            u_value /= 10;
         }
         if (negative) result.push_back('-');
         std::reverse(result.begin(), result.end());
@@ -98,14 +99,15 @@ namespace Int128 {
     */
     inline std::string uint128_to_string(uint128_t value) {
         if (value == 0) return "0";
-        std::string s;
+
+        std::string result;
         while (value > 0) {
-            unsigned digit = value % 10;
-            s.push_back('0' + digit);
+            auto digit = static_cast<unsigned>(value % 10);
+            result.push_back(static_cast<char>('0' + digit));
             value /= 10;
         }
-        std::reverse(s.begin(), s.end());
-        return s;
+        std::reverse(result.begin(), result.end());
+        return result;
     }
 
 

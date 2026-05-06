@@ -4,6 +4,7 @@
 #include "binary_tree_math.hpp"
 #include "collatz_constants.hpp"
 #include "concepts.hpp"
+#include "string.hpp"
 #include <cstdint>
 #include <gmp.h>
 #include <cmath>
@@ -414,7 +415,7 @@ class Node {
 
     /// @brief Get the odd-even (OE) chain for this node.  Uses `Collatz::fg_to_oe()`.
     std::string get_odd_even_chain_string() const {
-        return Collatz<T>::fg_to_oe(get_fg_chain_string(), std::numeric_limits<size_t>::max(), false);
+        return Collatz<T>::st_fg_to_oe(get_fg_chain_string(), std::numeric_limits<size_t>::max(), false);
     }
 
     /// @}

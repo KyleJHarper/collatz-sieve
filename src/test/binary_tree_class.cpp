@@ -840,7 +840,7 @@ void test_binary_tree_save_load_equal() {
     }
 
     // Start with smaller trees
-    const size_t INITIAL_LEVELS = 16;
+    const size_t INITIAL_LEVELS = 15;
     size_t levels = INITIAL_LEVELS;
 
     // Level count differs.

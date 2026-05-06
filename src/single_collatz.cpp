@@ -12,10 +12,9 @@ int main(int argc, char **argv) {
 
     mpz_class initial_value = 0;
     initial_value.set_str(argv[1], 10);
-    Collatz c = Collatz<mpz_class>(initial_value, true, true);
+    Collatz c = Collatz<mpz_class>(initial_value);
 
     std::cout << "Value is: " << c << std::endl;
-    std::cout << "Sequence is: " << c.get_sequence_string() << std::endl;
     std::cout << "OE pattern is: " << c.get_oe_pattern_string() << std::endl;
     std::cout << "HWM index is: " << c.get_hwm_index() << std::endl;
     std::cout << "Stop count: " << c.get_step_count() << std::endl;

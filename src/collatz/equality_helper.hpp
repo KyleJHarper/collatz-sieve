@@ -2,6 +2,7 @@
 
 #include "abi.hpp"
 #include "concepts.hpp"
+#include "string.hpp"
 #include <type_traits>
 #include <typeinfo>
 

@@ -3,9 +3,6 @@
 ## Exponents Pass
 * Rework the exponents to be less derpy.
 
-## Update README for 64-bit
-* We lock in 64-bit as the basis for the platform pretty hard with concepts.hpp.  Note that.
-
 ## Peak-By-Bit
 * Re-verify GPU on Peak by Bit.  For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from finding 2^109 lately.
 * We are currently testing every number until it hits HWM, but if we used a forward-looking cache we could probably speed the program up.  Problem is I have no idea how to do that with CUDA...  Maybe there's a CRoaring that compiles on CUDA...?
@@ -18,7 +15,10 @@
 * Leverage a GPU, if possible.
 * See if we can use a bitmap instead of an LRU cache.
 
-### FLC
+## Per-Method Tests
+* Change the test classes to make sure each method is tested... maybe?
+
+## FLC
 * What are we even doing with the forward-looking-cache class?
 
 ## Scan for Ancestor Resolution
@@ -34,24 +34,10 @@
 * Modify the comments to be auto-documenting.
 * Add this theme: https://jothepro.github.io/doxygen-awesome-css/
 
-## Rewrite Collatz Class
-* Sequence tracking takes up 24 bytes, even when not used.
-* It blows out cache lines when it is used.
-* Methods which want the sequence get an exception instead of a runtime sequence sent to it.
-* Document the new version, not the current.
-
 ## Affine F-Stride Table
 * Make a table of just consecutive F-steps into strides.
   * Peak by bit can make use of this as long as it doesn't overflow.... hmm...
   * st_verify can use it too since we're guaranteed to not dip below our sentinel value.
-
-## Update Concepts
-* The native, extended, and builtin concepts are overly complex and aren't portable.
-* Consolidate the ones which respond to std::integral, and document that bigger than CPU hardware == slower.
-* Keep GMP the way it is, other than maybe rename it.
-* The string-ify helpers could use some TLC.  128-bit version should handle signed/unsigned.
-* Reorganize the code.  Move GMP and int128 stuff to custom files.  Absl too.
-* Should we throw in Absl's fixed-width types for support?  If they work but just have a higher cost model, why not?
 
 ## Logs From 384-CPU System
 

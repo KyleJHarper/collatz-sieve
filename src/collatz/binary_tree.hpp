@@ -4,6 +4,7 @@
 #include "binary_tree_implicit.hpp"
 #include "binary_tree_types.hpp"
 #include "concepts.hpp"
+#include "string.hpp"
 #include <stdexcept>
 #include <type_traits>
 #include "stream_helper.hpp"

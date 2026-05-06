@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include "concepts.hpp"
+#include "string.hpp"
 #include "equality_helper.hpp"
 #include "node.hpp"
 #include "binary_tree_math.hpp"

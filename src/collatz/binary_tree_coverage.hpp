@@ -1,6 +1,7 @@
 #pragma once
 
 #include "concepts.hpp"
+#include "string.hpp"
 #include <gmp.h>
 #include <gmpxx.h>
 #include <string>

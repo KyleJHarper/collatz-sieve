@@ -1,6 +1,7 @@
 #pragma once
 
 #include "concepts.hpp"
+#include "string.hpp"
 #include "node_bitmap_traits.hpp"
 #include "roaring/containers/array.h"
 #include "roaring/containers/bitset.h"

@@ -181,15 +181,9 @@ int main(int argc, char **argv) {
 
     // Size Data
     std::cout << "Building objects for size data with " << levels << " levels..." << std::flush;
-    Collatz collatz_with_seq_and_metadata_uint64_t = Collatz<uint64_t>(27, true, true);
-    Collatz collatz_with_seq_and_metadata_uint128_t = Collatz<uint128_t>(27, true, true);
-    Collatz collatz_with_seq_and_metadata_mpz_c = Collatz<mpz_class>(27, true, true);
-    Collatz collatz_with_seq_no_metadata_uint64_t = Collatz<uint64_t>(27, true, false);
-    Collatz collatz_with_seq_no_metadata_uint128_t = Collatz<uint128_t>(27, true, false);
-    Collatz collatz_with_seq_no_metadata_mpz_c = Collatz<mpz_class>(27, true, false);
-    Collatz collatz_with_no_seq_metadata_uint64_t = Collatz<uint64_t>(27, false, true);
-    Collatz collatz_with_no_seq_metadata_uint128_t = Collatz<uint128_t>(27, false, true);
-    Collatz collatz_with_no_seq_metadata_mpz_c = Collatz<mpz_class>(27, false, true);
+    Collatz collatz_uint64_t = Collatz<uint64_t>(27);
+    Collatz collatz_uint128_t = Collatz<uint128_t>(27);
+    Collatz collatz_mpz_c = Collatz<mpz_class>(27);
     Node node_uint64_t = Node<uint64_t>(27);
     Node node_uint128_t = Node<uint128_t>(27);
     Node node_mpz_c = Node<mpz_class>(27);
@@ -201,35 +195,35 @@ int main(int argc, char **argv) {
 
     // BT without pruning
     size_t rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t_without_pruning = BinaryTree<uint64_t>(levels, BTWithoutPrune);
+    MaterializedBinaryTree<uint64_t> tree_uint64_t_without_pruning(levels, BTWithoutPrune);
     size_t rss_uint64_t = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint128_t_without_pruning = BinaryTree<uint128_t>(levels, BTWithoutPrune);
+    MaterializedBinaryTree<uint128_t> tree_uint128_t_without_pruning(levels, BTWithoutPrune);
     size_t rss_uint128_t = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c_without_pruning = BinaryTree<mpz_class>(levels, BTWithoutPrune);
+    MaterializedBinaryTree<mpz_class> tree_mpz_c_without_pruning(levels, BTWithoutPrune);
     size_t rss_mpz_c = getCurrentRSSBytes() - rss_t1;
 
     // BT with pruning
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t_with_pruning = BinaryTree<uint64_t>(levels, BTWithPrune);
+    MaterializedBinaryTree<uint64_t> tree_uint64_t_with_pruning(levels, BTWithPrune);
     size_t rss_uint64_t_with_pruning = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint128_t_with_pruning = BinaryTree<uint128_t>(levels, BTWithPrune);
+    MaterializedBinaryTree<uint128_t> tree_uint128_t_with_pruning(levels, BTWithPrune);
     size_t rss_uint128_t_with_pruning = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c_with_pruning = BinaryTree<mpz_class>(levels, BTWithPrune);
+    MaterializedBinaryTree<mpz_class> tree_mpz_c_with_pruning(levels, BTWithPrune);
     size_t rss_mpz_c_with_pruning = getCurrentRSSBytes() - rss_t1;
 
     // BT Implicit
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint64_t_implicit = BinaryTree<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels);
+    ImplicitBinaryTree<uint64_t> tree_uint64_t_implicit(levels);
     size_t rss_uint64_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_uint128_t_implicit = BinaryTree<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels);
+    ImplicitBinaryTree<uint128_t> tree_uint128_t_implicit(levels);
     size_t rss_uint128_t_implicit = getCurrentRSSBytes() - rss_t1;
     rss_t1 = getCurrentRSSBytes();
-    BinaryTree tree_mpz_c_implicit = BinaryTree<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels);
+    ImplicitBinaryTree<mpz_class> tree_mpz_c_implicit(levels);
     size_t rss_mpz_c_implicit = getCurrentRSSBytes() - rss_t1;
 
     // Bytes Per Node
@@ -286,8 +280,8 @@ int main(int argc, char **argv) {
         duration_uint128_t_with_pruning[i] = tree_build_time<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, BTWithPrune);
         duration_mpz_class_with_pruning[i] = tree_build_time<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, BTWithPrune);
         duration_uint64_t_implicit[i] = tree_build_time<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels, DEFAULT_OPTS);
-        duration_uint128_t_implicit[i] = tree_build_time<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, DEFAULT_OPTS);
-        duration_mpz_class_implicit[i] = tree_build_time<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, DEFAULT_OPTS);
+        duration_uint128_t_implicit[i] = tree_build_time<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels, DEFAULT_OPTS);
+        duration_mpz_class_implicit[i] = tree_build_time<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels, DEFAULT_OPTS);
     }
     std::cout << " done." << std::endl;
 
@@ -318,10 +312,7 @@ int main(int argc, char **argv) {
     // Collatz
     table.push_back({""});
     table.push_back(add("Collatz (shallow)", sizeof(Collatz<uint64_t>), sizeof(Collatz<uint128_t>), sizeof(Collatz<mpz_class>)));
-    table.push_back({"Collatz(27) (deep)", "--", "--", "--", "--", "--", "--", "--", "--"});
-    table.push_back(add("  With 112 Stops, With Metadata", collatz_with_seq_and_metadata_uint64_t.deep_size(), collatz_with_seq_and_metadata_uint128_t.deep_size(), collatz_with_seq_and_metadata_mpz_c.deep_size()));
-    table.push_back(add("  With 112 Stops, Without Metadata", collatz_with_seq_no_metadata_uint64_t.deep_size(), collatz_with_seq_no_metadata_uint128_t.deep_size(), collatz_with_seq_no_metadata_mpz_c.deep_size()));
-    table.push_back(add("  Without Stops, With Metadata", collatz_with_no_seq_metadata_uint64_t.deep_size(), collatz_with_no_seq_metadata_uint128_t.deep_size(), collatz_with_no_seq_metadata_mpz_c.deep_size()));
+    table.push_back(add("Collatz (deep)", collatz_uint64_t.deep_size(), collatz_uint128_t.deep_size(), collatz_mpz_c.deep_size()));
 
     // Node
     table.push_back({""});

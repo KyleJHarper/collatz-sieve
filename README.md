@@ -2,6 +2,14 @@
 
 __A Monotonic Binary-Tree Reduction of the Collatz Search Space__
 
+
+# TODO
+* Cost model stuff with data types, extending support
+* Save and load
+* 128-bit compiler support is NOT optional
+
+
+
 # Overview
 
 An implementation of the data structure and sieve outlined in Kyle Harper's analysis and optimization of the
