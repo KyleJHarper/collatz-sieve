@@ -7,9 +7,9 @@
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cmath>}}
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}collatz\_constants.hpp"{}}}
-\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}exponents.hpp"{}}}
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}bitreverse\_helpers.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}bit.hpp"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}collatz\_constants.hpp"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}exponents.hpp"{}}}
 \DoxyCodeLine{00009\ }
 \DoxyCodeLine{00010\ }
 \DoxyCodeLine{00011\ }
@@ -51,473 +51,364 @@
 \DoxyCodeLine{00089\ }
 \DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024}{st\_node\_count\_of\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
 \DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{count}};}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{count}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
 \DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{count}};}
-\DoxyCodeLine{00109\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00107\ \ \ \ \ \}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ }
 \DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00112\ }
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_abb34d91a594ac1f8667d3d531b62ad4e}{st\_node\_count\_of\_tree}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{levels}})\ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{count}};}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{count}}\ =\ (T(1)\ <<\ \mbox{\hyperlink{classNode}{levels}})\ -\/\ 1;}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{levels}});}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{count}};}
-\DoxyCodeLine{00133\ \ \ \ \ \}}
-\DoxyCodeLine{00134\ }
-\DoxyCodeLine{00135\ }
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a21222c83db75eae2c7d93d9d338a6ecb}{st\_node\_count\_of\_levels}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{min\_level}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}})\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{full\_tree\_count}};}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{sub\_tree\_count}};}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{final\_count}};}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{final\_count}}\ =\ (T(1)\ <<\ \mbox{\hyperlink{classNode}{max\_level}})\ -\/\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{min\_level}}\ -\/\ 1));}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{full\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_level}});}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{sub\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{min\_level}}\ -\/\ 1);}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub}}(\mbox{\hyperlink{classNode}{final\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{full\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{sub\_tree\_count}}.get\_mpz\_t());}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{final\_count}};}
-\DoxyCodeLine{00161\ \ \ \ \ \}}
-\DoxyCodeLine{00162\ }
-\DoxyCodeLine{00164\ }
-\DoxyCodeLine{00165\ }
-\DoxyCodeLine{00166\ }
-\DoxyCodeLine{00169\ }
-\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\_get\_level\_by\_node\_value}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}}\ =\ 0;}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(value\ +\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}})\ +\ 1;}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adding\ 1\ is\ a\ waste\ of\ alloc\ here,\ so\ use\ a\ scratch\ variable.}}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{junk}}\ =\ 0;}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{junk}}.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(\mbox{\hyperlink{classNode}{junk}})\ +\ 1;}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level}};}
-\DoxyCodeLine{00194\ \ \ \ \ \}}
-\DoxyCodeLine{00195\ }
-\DoxyCodeLine{00196\ }
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_af705321c961a71c6f5780c7c2ef004ed}{st\_max\_full\_level\_at\_node\_value}}(T\ value)\ \{}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{failure\_point}};}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{failure\_point}}\ =\ value\ +\ 1;}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\_get\_level\_by\_node\_value}}(\mbox{\hyperlink{classNode}{failure\_point}})\ -\/\ 1;}
-\DoxyCodeLine{00217\ \ \ \ \ \}}
-\DoxyCodeLine{00218\ }
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ }
-\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_a5a6123a3cc28228ef182e574521433ad}{st\_max\_level\_of\_type}}()\ \{}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ level\ is\ scaled\ with\ tree\ size\ (diadic)\ but\ must\ respect\ implementation\ limits,\ ergo:}}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Bit\ width}}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Minus\ 1\ because\ the\ last\ node\ on\ 2\string^bit\ level\ overflows\ due\ to\ counting\ starting\ at\ 0.}}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Minus\ 1\ if\ the\ type\ is\ signed.}}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}}\ =\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ (std::is\_signed\_v<T>\ ?\ 1\ :\ 0);}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{max\_level}};}
-\DoxyCodeLine{00241\ \ \ \ \ \}}
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00243\ }
-\DoxyCodeLine{00244\ }
-\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeMath_a8e275b4ae6e1cac86737b7a45579392b}{st\_level\_will\_fit}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level\ <=\ BinaryTreeMath<T>::st\_max\_level\_of\_type}}();}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00261\ \ \ \ \ \}}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ }
-\DoxyCodeLine{00266\ }
-\DoxyCodeLine{00269\ }
-\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classBinaryTreeMath_aca35417871e1eb282adbccdc228fb988}{st\_max\_node\_value\_at\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{max\_n}};}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{level}});}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{max\_n}};}
-\DoxyCodeLine{00285\ \ \ \ \ \}}
-\DoxyCodeLine{00286\ }
-\DoxyCodeLine{00287\ }
-\DoxyCodeLine{00288\ }
-\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{first\_node\_value}};}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{first\_node\_value}}\ =\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::same\_as<T,\ mpz\_class>)\ \{}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{first\_node\_value}};}
-\DoxyCodeLine{00309\ \ \ \ \ \}}
-\DoxyCodeLine{00310\ }
-\DoxyCodeLine{00311\ }
-\DoxyCodeLine{00312\ }
-\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a5a11595e85505535bb32a40749370083}{st\_node\_value\_by\_position\_and\_level}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{lift}};}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index}};}
-\DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lift:\ 2\string^(L-\/1)}}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ Exponents::get\_power\_of\_two<T>(\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00347\ }
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ Position:\ bit\_reverse\_L(pos\ -\/\ 1)}}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classNode}{position}}\ -\/\ 1;}
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{index}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00356\ }
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ the\ low\ bits.\ \ For\ GMP,\ use\ an\ out\ param\ to\ avoid\ alloc\ (yes,\ even\ with\ TLS).}}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index\_copy}};}
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index\_copy}}\ =\ \mbox{\hyperlink{classNode}{index}};}
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index\_copy}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1),\ \mbox{\hyperlink{classNode}{index}});}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_abb34d91a594ac1f8667d3d531b62ad4e}{st\_node\_count\_of\_tree}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{levels}})\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{count}}\ =\ (T(1)\ <<\ \mbox{\hyperlink{classNode}{levels}})\ -\/\ 1;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{levels}});}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{count}}.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{count}};}
+\DoxyCodeLine{00129\ \ \ \ \ \}}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a21222c83db75eae2c7d93d9d338a6ecb}{st\_node\_count\_of\_levels}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{min\_level}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}})\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{full\_tree\_count}};}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{sub\_tree\_count}};}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{final\_count}};}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{final\_count}}\ =\ (T(1)\ <<\ \mbox{\hyperlink{classNode}{max\_level}})\ -\/\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{min\_level}}\ -\/\ 1));}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{full\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_level}});}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{sub\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{min\_level}}\ -\/\ 1);}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub}}(\mbox{\hyperlink{classNode}{final\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{full\_tree\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{sub\_tree\_count}}.get\_mpz\_t());}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{final\_count}};}
+\DoxyCodeLine{00155\ \ \ \ \ \}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\_get\_level\_by\_node\_value}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}}\ =\ 0;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(value\ +\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}})\ +\ 1;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adding\ 1\ is\ a\ waste\ of\ alloc\ here,\ so\ use\ a\ scratch\ variable.}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{junk}}\ =\ 0;}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{junk}}.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(\mbox{\hyperlink{classNode}{junk}})\ +\ 1;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level}};}
+\DoxyCodeLine{00186\ \ \ \ \ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_af705321c961a71c6f5780c7c2ef004ed}{st\_max\_full\_level\_at\_node\_value}}(T\ value)\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{failure\_point}};}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{failure\_point}}\ =\ value\ +\ 1;}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\_get\_level\_by\_node\_value}}(\mbox{\hyperlink{classNode}{failure\_point}})\ -\/\ 1;}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_a5a6123a3cc28228ef182e574521433ad}{st\_max\_level\_of\_type}}()\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ level\ is\ scaled\ with\ tree\ size\ (diadic)\ but\ must\ respect\ implementation\ limits,\ ergo:}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Bit\ width}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Minus\ 1\ because\ the\ last\ node\ on\ 2\string^bit\ level\ overflows\ due\ to\ counting\ starting\ at\ 0.}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ Minus\ 1\ if\ the\ type\ is\ signed.}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{max\_level}}\ =\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ (std::is\_signed\_v<T>\ ?\ 1\ :\ 0);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{max\_level}};}
+\DoxyCodeLine{00233\ \ \ \ \ \}}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeMath_a8e275b4ae6e1cac86737b7a45579392b}{st\_level\_will\_fit}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level\ <=\ BinaryTreeMath<T>::st\_max\_level\_of\_type}}();}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00253\ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classBinaryTreeMath_aca35417871e1eb282adbccdc228fb988}{st\_max\_node\_value\_at\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{max\_n}};}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{level}});}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{max\_n}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{max\_n}};}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{first\_node\_value}};}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{first\_node\_value}}\ =\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{first\_node\_value}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{first\_node\_value}};}
+\DoxyCodeLine{00299\ \ \ \ \ \}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a5a11595e85505535bb32a40749370083}{st\_node\_value\_by\_position\_and\_level}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{lift}};}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index}};}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lift:\ 2\string^(L-\/1)}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ Exponents::get\_power\_of\_two<T>(\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ Position:\ bit\_reverse\_L(pos\ -\/\ 1)}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classNode}{position}}\ -\/\ 1;}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{index}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ the\ low\ bits.\ \ For\ GMP,\ use\ an\ out\ param\ to\ avoid\ alloc\ (yes,\ even\ with\ TLS).}}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{Bit::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index\_copy}};}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index\_copy}}\ =\ \mbox{\hyperlink{classNode}{index}};}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{Bit::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index\_copy}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1),\ \mbox{\hyperlink{classNode}{index}});}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return}}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{lift}}\ +\ \mbox{\hyperlink{classNode}{index}}\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_set}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t());}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{index}}.get\_mpz\_t());}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00362\ \ \ \ \ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ }
 \DoxyCodeLine{00365\ }
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return}}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{lift}}\ +\ \mbox{\hyperlink{classNode}{index}}\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_set}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t());}
-\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{index}}.get\_mpz\_t());}
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00376\ \ \ \ \ \}}
-\DoxyCodeLine{00377\ }
-\DoxyCodeLine{00378\ }
-\DoxyCodeLine{00379\ }
-\DoxyCodeLine{00401\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeMath_a97e6bfad91ed9f81a6da9e422f251083}{st\_node\_value\_by\_position\_and\_level}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}},\ T\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{lift}};}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index}};}
-\DoxyCodeLine{00404\ }
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lift:\ 2\string^(L-\/1)}}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ Exponents::get\_power\_of\_two<T>(\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeMath_a97e6bfad91ed9f81a6da9e422f251083}{st\_node\_value\_by\_position\_and\_level}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}},\ T\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{lift}};}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index}};}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Lift:\ 2\string^(L-\/1)}}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ Exponents::get\_power\_of\_two<T>(\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{lift}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ Position:\ bit\_reverse\_L(pos\ -\/\ 1)}}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classNode}{position}}\ -\/\ 1;}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{index}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ the\ low\ bits.\ \ For\ GMP,\ use\ an\ out\ param\ to\ avoid\ alloc\ (yes,\ even\ with\ TLS).}}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{Bit::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
 \DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index\_copy}};}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index\_copy}}\ =\ \mbox{\hyperlink{classNode}{index}};}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{Bit::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index\_copy}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1),\ \mbox{\hyperlink{classNode}{index}});}
 \DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00414\ }
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ New\ Position:\ bit\_reverse\_L(pos\ -\/\ 1)}}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classNode}{position}}\ -\/\ 1;}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{classNode}{lift}}\ +\ \mbox{\hyperlink{classNode}{index}}\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
 \DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{index}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_set}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t());}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{index}}.get\_mpz\_t());}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
 \DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00423\ }
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ the\ low\ bits.\ \ For\ GMP,\ use\ an\ out\ param\ to\ avoid\ alloc\ (yes,\ even\ with\ TLS).}}
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{index\_copy}};}
-\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index\_copy}}\ =\ \mbox{\hyperlink{classNode}{index}};}
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{index\_copy}},\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1),\ \mbox{\hyperlink{classNode}{index}});}
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00432\ }
-\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return}}
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{classNode}{lift}}\ +\ \mbox{\hyperlink{classNode}{index}}\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_set}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{lift}}.get\_mpz\_t());}
-\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{index}}.get\_mpz\_t());}
-\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}});}
-\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00441\ \ \ \ \ \}}
-\DoxyCodeLine{00442\ }
-\DoxyCodeLine{00443\ }
-\DoxyCodeLine{00444\ }
-\DoxyCodeLine{00465\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a9c933060b8bf36da748184ff45336606}{st\_node\_position}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{BinaryTreeMath<T>::st\_get\_level\_by\_node\_value}}(value);}
-\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ =\ value\ +\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
-\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{low\_bits}};}
-\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{position}};}
-\DoxyCodeLine{00470\ }
-\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ lower\ bits.}}
-\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low\_bits}}\ =\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ \&\ ((T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ 1);}
-\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{mask}}\ =\ (\mbox{\hyperlink{classNode}{mpz\_class}}(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ 1;}
-\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low\_bits}}\ =\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ \&\ \mbox{\hyperlink{classNode}{mask}};}
-\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00480\ }
-\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ position\ now.}}
-\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{position}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{BinaryTreeMath<T>::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{low\_bits}},\ \mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{position}}\ +=\ 1;}
-\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00490\ }
-\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{position}};}
-\DoxyCodeLine{00492\ \ \ \ \ \}}
-\DoxyCodeLine{00493\ }
-\DoxyCodeLine{00494\ }
-\DoxyCodeLine{00495\ }
-\DoxyCodeLine{00518\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Calculates\ positive\ S1\ series\ correctly,\ but\ the\ whole\ approach\ is\ superseded\ by\ bitwise\ operations"{}})]]}
-\DoxyCodeLine{00519\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\_s1\_summation}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ value\ =\ 1;}
-\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{quantity}};}
-\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scale}};}
-\DoxyCodeLine{00523\ }
-\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Leave\ unless\ the\ level\ is\ high\ enough\ to\ have\ any\ quantity.\ \ AKA:\ L\ >\ 1}}
-\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ <\ 2)\ \{\ \textcolor{keywordflow}{return}\ T(0);\ \}}
-\DoxyCodeLine{00526\ }
-\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Quantity:\ ceil((pos\ -\/\ 1)\ /\ 2)}}
-\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ can\ simplify\ because:\ ceil((P\ -\/\ 1)\ /\ 2)\ ==>\ ((P\ -\/\ 1)+1)/2\ ==>\ pos\ /\ 2}}
-\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{quantity}}\ =\ \mbox{\hyperlink{classNode}{position}}\ /\ 2;}
-\DoxyCodeLine{00530\ }
-\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scale:\ 2\string^(L-\/2)}}
-\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{scale}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2);}
-\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scale}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2));}
-\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00539\ }
-\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Result\ of\ multiplication\ should\ be\ correctly\ typed.}}
-\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\ *\ \mbox{\hyperlink{classNode}{quantity}}\ *\ \mbox{\hyperlink{classNode}{scale}};}
-\DoxyCodeLine{00542\ \ \ \ \ \}}
-\DoxyCodeLine{00543\ }
-\DoxyCodeLine{00544\ }
-\DoxyCodeLine{00545\ }
-\DoxyCodeLine{00571\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Calculates\ negative\ S2\ series\ correctly,\ but\ the\ whole\ approach\ is\ superseded\ by\ bitwise\ operations"{}})]]}
-\DoxyCodeLine{00572\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\_s2\_summation}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{quantity}};}
-\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ value;}
-\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scale}};}
-\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{summation}};}
-\DoxyCodeLine{00577\ }
-\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Summation\ Loop}}
-\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{summation}}\ =\ 0;}
-\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{a}}=3;\ \mbox{\hyperlink{classNode}{a}}<=\mbox{\hyperlink{classNode}{level}};\ \mbox{\hyperlink{classNode}{a}}++)\ \{}
-\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Quantity:\ ceil((P\ -\/\ 2\string^(a-\/2))\ /\ 2\string^(a-\/1))}}
-\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Simplification\ exists\ because\ ceiling\ behaves\ this\ way:}}
-\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ceil(x/y)\ ==>\ (x\ +\ y\ -\/\ 1)\ /\ y}}
-\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Currently\ the\ formula\ contains:}}
-\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ x\ (numerator)\ \ :\ P\ -\/\ 2\string^(a-\/2)}}
-\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ y\ (denominator):\ 2\string^(a-\/1)}}
-\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ceiling(x/y)\ \ \ :\ (x\ +\ y\ -\/\ 1)\ /\ y}}
-\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ With\ ceiling\ applied\ it\ looks\ like\ this:}}
-\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ -\/\ 2\string^(a-\/2)\ +\ 2\string^(a-\/1)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
-\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ first\ subtraction\ can\ be\ rewritten\ as\ addition\ of\ a\ negative:}}
-\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ (-\/2\string^(a-\/2))\ +\ 2\string^(a-\/1)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
-\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ it\ isolate\ the\ powers\ of\ two\ sections\ in\ the\ numerator\ to\ see\ how\ they\ simplify:}}
-\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ -\/2\string^(a-\/2)\ +\ 2\string^(a-\/1)}}
-\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ -\/2\string^(a-\/2)\ +\ 2\ *\ 2\string^(a-\/2)}}
-\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ -\/2\string^(a-\/2)\ +\ 2\string^(a-\/2)\ +\ 2\string^(a-\/2)}}
-\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ 2\string^(a-\/2)}}
-\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ full\ numerator\ is\ now\ simplified\ to:}}
-\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ P\ +\ 2\string^(a-\/2)\ -\/\ 1}}
-\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ full\ expression\ is\ now\ just:}}
-\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ 2\string^(a-\/2)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
-\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Some\ arithmetic\ and\ bit\ shifting\ covers\ the\ rest:}}
-\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ (T(1)\ <<\ (a\ -\/\ 2))\ -\/\ 1)\ >>\ (a\ -\/\ 1)}}
-\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{quantity}}\ =\ (\mbox{\hyperlink{classNode}{position}}\ +\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 2))\ -\/\ 1)\ >>\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1);}
+\DoxyCodeLine{00423\ \ \ \ \ \}}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00447\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a9c933060b8bf36da748184ff45336606}{st\_node\_position}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{BinaryTreeMath<T>::st\_get\_level\_by\_node\_value}}(value);}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ =\ value\ +\ \mbox{\hyperlink{classBinaryTreeMath_ac86b5b08a2aba7c55777e7b16d502f56}{\_offset}};}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{low\_bits}};}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{position}};}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ lower\ bits.}}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low\_bits}}\ =\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ \&\ ((T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ 1);}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{mask}}\ =\ (\mbox{\hyperlink{classNode}{mpz\_class}}(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1))\ -\/\ 1;}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low\_bits}}\ =\ \mbox{\hyperlink{classNode}{value\_plus\_offset}}\ \&\ \mbox{\hyperlink{classNode}{mask}};}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ the\ position\ now.}}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{position}}\ =\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{Bit::st\_reverse\_low\_bits}}(\mbox{\hyperlink{classNode}{low\_bits}},\ \mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{position}}\ +=\ 1;}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{position}}.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{position}};}
+\DoxyCodeLine{00470\ \ \ \ \ \}}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00496\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Calculates\ positive\ S1\ series\ correctly,\ but\ the\ whole\ approach\ is\ superseded\ by\ bitwise\ operations"{}})]]}
+\DoxyCodeLine{00497\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\_s1\_summation}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ value\ =\ 1;}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{quantity}};}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scale}};}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Leave\ unless\ the\ level\ is\ high\ enough\ to\ have\ any\ quantity.\ \ AKA:\ L\ >\ 1}}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ <\ 2)\ \{\ \textcolor{keywordflow}{return}\ T(0);\ \}}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Quantity:\ ceil((pos\ -\/\ 1)\ /\ 2)}}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ can\ simplify\ because:\ ceil((P\ -\/\ 1)\ /\ 2)\ ==>\ ((P\ -\/\ 1)+1)/2\ ==>\ pos\ /\ 2}}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{quantity}}\ =\ \mbox{\hyperlink{classNode}{position}}\ /\ 2;}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scale:\ 2\string^(L-\/2)}}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{scale}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2);}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scale}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2));}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Result\ of\ multiplication\ should\ be\ correctly\ typed.}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value\ *\ \mbox{\hyperlink{classNode}{quantity}}\ *\ \mbox{\hyperlink{classNode}{scale}};}
+\DoxyCodeLine{00518\ \ \ \ \ \}}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00547\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Calculates\ negative\ S2\ series\ correctly,\ but\ the\ whole\ approach\ is\ superseded\ by\ bitwise\ operations"{}})]]}
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\_s2\_summation}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{quantity}};}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ value;}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scale}};}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{summation}};}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Summation\ Loop}}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{summation}}\ =\ 0;}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{a}}=3;\ \mbox{\hyperlink{classNode}{a}}<=\mbox{\hyperlink{classNode}{level}};\ \mbox{\hyperlink{classNode}{a}}++)\ \{}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Quantity:\ ceil((P\ -\/\ 2\string^(a-\/2))\ /\ 2\string^(a-\/1))}}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Simplification\ exists\ because\ ceiling\ behaves\ this\ way:}}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ceil(x/y)\ ==>\ (x\ +\ y\ -\/\ 1)\ /\ y}}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Currently\ the\ formula\ contains:}}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ x\ (numerator)\ \ :\ P\ -\/\ 2\string^(a-\/2)}}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ y\ (denominator):\ 2\string^(a-\/1)}}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ceiling(x/y)\ \ \ :\ (x\ +\ y\ -\/\ 1)\ /\ y}}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ With\ ceiling\ applied\ it\ looks\ like\ this:}}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ -\/\ 2\string^(a-\/2)\ +\ 2\string^(a-\/1)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ first\ subtraction\ can\ be\ rewritten\ as\ addition\ of\ a\ negative:}}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ (-\/2\string^(a-\/2))\ +\ 2\string^(a-\/1)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ it\ isolate\ the\ powers\ of\ two\ sections\ in\ the\ numerator\ to\ see\ how\ they\ simplify:}}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ -\/2\string^(a-\/2)\ +\ 2\string^(a-\/1)}}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ -\/2\string^(a-\/2)\ +\ 2\ *\ 2\string^(a-\/2)}}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ -\/2\string^(a-\/2)\ +\ 2\string^(a-\/2)\ +\ 2\string^(a-\/2)}}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ ==>\ 2\string^(a-\/2)}}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ full\ numerator\ is\ now\ simplified\ to:}}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ P\ +\ 2\string^(a-\/2)\ -\/\ 1}}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ full\ expression\ is\ now\ just:}}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ 2\string^(a-\/2)\ -\/\ 1)\ /\ 2\string^(a-\/1)}}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Some\ arithmetic\ and\ bit\ shifting\ covers\ the\ rest:}}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ (P\ +\ (T(1)\ <<\ (a\ -\/\ 2))\ -\/\ 1)\ >>\ (a\ -\/\ 1)}}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{quantity}}\ =\ (\mbox{\hyperlink{classNode}{position}}\ +\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 2))\ -\/\ 1)\ >>\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1);}
+\DoxyCodeLine{00587\ }
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Value:\ -\/(2\string^(a-\/1)\ -\/\ 3)}}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remember\ to\ use\ a\ positive\ value,\ even\ though\ it's\ technically\ a\ decreasing\ summation\ (negative).}}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1))\ -\/\ 3;}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1));}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ 3);}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scale:\ 2\string^(L-\/a)}}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{scale}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ \mbox{\hyperlink{classNode}{a}});}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scale}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ \mbox{\hyperlink{classNode}{a}}));}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00603\ }
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ to\ Summation}}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{summation}}\ +=\ (\mbox{\hyperlink{classNode}{quantity}}\ *\ value\ *\ \mbox{\hyperlink{classNode}{scale}});}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ it.}}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{summation}};}
+\DoxyCodeLine{00610\ \ \ \ \ \}}
 \DoxyCodeLine{00611\ }
-\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Value:\ -\/(2\string^(a-\/1)\ -\/\ 3)}}
-\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remember\ to\ use\ a\ positive\ value,\ even\ though\ it's\ technically\ a\ decreasing\ summation\ (negative).}}
-\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1))\ -\/\ 3;}
-\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{a}}\ -\/\ 1));}
-\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub\_ui}}(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ 3);}
-\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00622\ }
-\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Scale:\ 2\string^(L-\/a)}}
-\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{scale}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ \mbox{\hyperlink{classNode}{a}});}
-\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scale}}.get\_mpz\_t(),\ \mbox{\hyperlink{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}{\_MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ \mbox{\hyperlink{classNode}{a}}));}
-\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00612\ }
+\DoxyCodeLine{00613\ }
+\DoxyCodeLine{00625\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Uses\ old\ S1\ and\ S2\ formulas\ which\ are\ slow"{}})]]}
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_af6c0b21e284c9773e5396e91f9e29b51}{st\_node\_value\_by\_position\_and\_level\_\_deprecated}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classNode}{level}})\ +\ \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\_s1\_summation}}(\mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level}})\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\_s2\_summation}}(\mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level}});}
+\DoxyCodeLine{00628\ \ \ \ \ \}}
+\DoxyCodeLine{00629\ }
 \DoxyCodeLine{00631\ }
-\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ to\ Summation}}
-\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{summation}}\ +=\ (\mbox{\hyperlink{classNode}{quantity}}\ *\ value\ *\ \mbox{\hyperlink{classNode}{scale}});}
-\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00635\ }
-\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ it.}}
-\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{summation}};}
-\DoxyCodeLine{00638\ \ \ \ \ \}}
-\DoxyCodeLine{00639\ }
-\DoxyCodeLine{00640\ }
-\DoxyCodeLine{00641\ }
-\DoxyCodeLine{00653\ \ \ \ \ [[deprecated(\textcolor{stringliteral}{"{}Uses\ old\ S1\ and\ S2\ formulas\ which\ are\ slow"{}})]]}
-\DoxyCodeLine{00654\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_af6c0b21e284c9773e5396e91f9e29b51}{st\_node\_value\_by\_position\_and\_level\_\_deprecated}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classNode}{level}})\ +\ \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\_s1\_summation}}(\mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level}})\ -\/\ \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\_s2\_summation}}(\mbox{\hyperlink{classNode}{position}},\ \mbox{\hyperlink{classNode}{level}});}
-\DoxyCodeLine{00656\ \ \ \ \ \}}
-\DoxyCodeLine{00657\ }
-\DoxyCodeLine{00659\ }
-\DoxyCodeLine{00660\ }
-\DoxyCodeLine{00661\ }
-\DoxyCodeLine{00673\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{seq\_size\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{st\_fg\_chain\_length}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level}}\ -\/\ 1;}
-\DoxyCodeLine{00675\ \ \ \ \ \}}
-\DoxyCodeLine{00676\ }
-\DoxyCodeLine{00677\ }
+\DoxyCodeLine{00632\ }
+\DoxyCodeLine{00633\ }
+\DoxyCodeLine{00645\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{seq\_size\_t}}\ \mbox{\hyperlink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{st\_fg\_chain\_length}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{level}}\ -\/\ 1;}
+\DoxyCodeLine{00647\ \ \ \ \ \}}
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00660\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{val}})\ \{}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{val}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{result}}\ =\ 0;}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <\ 64)\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 63\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}(\mbox{\hyperlink{classNode}{val}});}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ ==\ 128)\ \{}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{val}}\ >>\ 64)\ \{}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 127\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}((\mbox{\hyperlink{classNode}{uint64\_t}})(\mbox{\hyperlink{classNode}{val}}\ >>\ 64));}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 63\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}((\mbox{\hyperlink{classNode}{uint64\_t}})\mbox{\hyperlink{classNode}{val}});}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mpz\_sizeinbase}}(\mbox{\hyperlink{classNode}{val}}.get\_mpz\_t(),\ 2)\ -\/\ 1;}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00677\ \ \ \ \ \}}
 \DoxyCodeLine{00678\ }
-\DoxyCodeLine{00694\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c}{st\_bit\_reverse\_full}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
-\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ types\ have\ a\ direct\ builtin.\ \ Use\ it.}}
-\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{U}}\ =\ std::make\_unsigned\_t<T>;}
-\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{U}}\ \mbox{\hyperlink{classNode}{ux}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{U}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
-\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(bitreverse8(\mbox{\hyperlink{classNode}{ux}}));}
-\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
-\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(bitreverse16(\mbox{\hyperlink{classNode}{ux}}));}
-\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
-\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(bitreverse32(\mbox{\hyperlink{classNode}{ux}}));}
-\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
-\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(bitreverse64(\mbox{\hyperlink{classNode}{ux}}));}
-\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
-\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Extended\ 128-\/bit\ integrals\ need\ a\ little\ juggling.}}
-\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{U}}\ =\ \mbox{\hyperlink{classNode}{make\_unsigned\_custom\_t<T>}};}
-\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{U}}\ \mbox{\hyperlink{classNode}{ux}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{U}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00712\ }
-\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low}}\ \ =\ (\mbox{\hyperlink{classNode}{uint64\_t}})\mbox{\hyperlink{classNode}{ux}};}
-\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high}}\ =\ (\mbox{\hyperlink{classNode}{uint64\_t}})(\mbox{\hyperlink{classNode}{ux}}\ >>\ 64);}
-\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{rev\_low}}\ \ =\ bitreverse64(\mbox{\hyperlink{classNode}{high}});}
-\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{rev\_high}}\ =\ bitreverse64(\mbox{\hyperlink{classNode}{low}});}
-\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}((\ (\mbox{\hyperlink{classNode}{U}})\mbox{\hyperlink{classNode}{rev\_high}}\ <<\ 64\ )\ |\ \mbox{\hyperlink{classNode}{rev\_low}});}
-\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ is\ arbitrary\ precision,\ and\ is\ unsupported\ currently.}}
-\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Cannot\ fully\ reverse\ mpz\_class"{}});}
-\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}Must\ use\ a\ supported\ type\ T"{}});}
-\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00724\ \ \ \ \ \}}
-\DoxyCodeLine{00725\ }
-\DoxyCodeLine{00726\ }
-\DoxyCodeLine{00727\ }
-\DoxyCodeLine{00735\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}})\ \{}
-\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
-\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{result}}\ =\ 0;}
-\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bits}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};\ \}}
-\DoxyCodeLine{00739\ }
-\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
-\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c}{st\_bit\_reverse\_full}}(value);}
-\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{WIDTH}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ >>=\ (\mbox{\hyperlink{classNode}{WIDTH}}\ -\/\ \mbox{\hyperlink{classNode}{bits}});}
-\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit}}\ =\ 0;\ \mbox{\hyperlink{classNode}{bit}}\ <\ \mbox{\hyperlink{classNode}{bits}};\ \mbox{\hyperlink{classNode}{bit}}++)\ \{}
-\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mpz\_tstbit}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bit}}))\ \{}
-\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_setbit}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{bit}});}
-\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00752\ }
-\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return.}}
-\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00755\ \ \ \ \ \}}
-\DoxyCodeLine{00756\ }
-\DoxyCodeLine{00757\ }
-\DoxyCodeLine{00758\ }
-\DoxyCodeLine{00766\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeMath_aabac80d3395aac8321d1ef280feebdd5}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}},\ T\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
-\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ 0;}
-\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bits}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00770\ }
-\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
-\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c}{st\_bit\_reverse\_full}}(value);}
-\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{WIDTH}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ >>=\ (\mbox{\hyperlink{classNode}{WIDTH}}\ -\/\ \mbox{\hyperlink{classNode}{bits}});}
-\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit}}\ =\ 0;\ \mbox{\hyperlink{classNode}{bit}}\ <\ \mbox{\hyperlink{classNode}{bits}};\ \mbox{\hyperlink{classNode}{bit}}++)\ \{}
-\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mpz\_tstbit}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bit}}))\ \{}
-\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_setbit}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{bit}});}
-\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00783\ \ \ \ \ \}}
-\DoxyCodeLine{00784\ }
-\DoxyCodeLine{00785\ }
-\DoxyCodeLine{00786\ }
-\DoxyCodeLine{00796\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\_floor\_log2}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{val}})\ \{}
-\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{val}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ 0;\ \}}
-\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{result}}\ =\ 0;}
-\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
-\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 63\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}(\mbox{\hyperlink{classNode}{val}});}
-\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
-\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{val}}\ >>\ 64)\ \{}
-\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 127\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}((\mbox{\hyperlink{classNode}{uint64\_t}})(\mbox{\hyperlink{classNode}{val}}\ >>\ 64));}
-\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00805\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ 63\ -\/\ \mbox{\hyperlink{classNode}{\_\_builtin\_clzll}}((\mbox{\hyperlink{classNode}{uint64\_t}})\mbox{\hyperlink{classNode}{val}});}
-\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mpz\_sizeinbase}}(\mbox{\hyperlink{classNode}{val}}.get\_mpz\_t(),\ 2)\ -\/\ 1;}
-\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00813\ \ \ \ \ \}}
-\DoxyCodeLine{00814\ }
-\DoxyCodeLine{00815\ }
-\DoxyCodeLine{00816\ }
-\DoxyCodeLine{00829\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\_step}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{step}};}
-\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
-\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{step}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00833\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{step}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ type."{}});}
-\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{step}};}
-\DoxyCodeLine{00839\ \ \ \ \ \}}
-\DoxyCodeLine{00840\ }
-\DoxyCodeLine{00841\ \};}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00693\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\_step}}(\mbox{\hyperlink{classNode}{level\_t}}\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{step}};}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{step}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{step}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{step}};}
+\DoxyCodeLine{00701\ \ \ \ \ \}}
+\DoxyCodeLine{00702\ }
+\DoxyCodeLine{00703\ \};}
 
 \end{DoxyCode}

@@ -237,7 +237,7 @@
 \DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{//\ Compute\ the\ bytes\ of\ an\ integral\ or\ mpz\_class.\ \ Endianness\ doesn't\ matter\ since\ all\ type\ T\ are\ the\ same\ within\ an\ instance.}}
 \DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{void}\ serialize(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \textcolor{keyword}{sizeof}(T);\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
 \DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_bytes[FLCKeySize\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{i}}]\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint8\_t}}\textcolor{keyword}{>}((value\ >>\ (\mbox{\hyperlink{classNode}{i}}\ *\ 8))\ \&\ 0xFF);}
 \DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \}}

@@ -1,0 +1,26 @@
+\doxysection{string.\+hpp}
+\hypertarget{string_8hpp_source}{}\label{string_8hpp_source}\index{src/collatz/string.hpp@{src/collatz/string.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}int128.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00015\ \textcolor{keyword}{inline}\ std::string\ to\_string\_any(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{val}})\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptPrintableIntegral}{PrintableIntegral<T>}})\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::to\_string(\mbox{\hyperlink{classNode}{val}});}
+\DoxyCodeLine{00018\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{Int128::uint128\_to\_string}}(\mbox{\hyperlink{classNode}{val}});}
+\DoxyCodeLine{00020\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{val}}.get\_str();}
+\DoxyCodeLine{00022\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Unknown\ type\ passed\ to\ to\_string\_any():\ "{}}\ +\ ABI::demangle<T>());}
+\DoxyCodeLine{00024\ \ \ \ \ \}}
+\DoxyCodeLine{00025\ \}}
+\DoxyCodeLine{00026\ }
+
+\end{DoxyCode}

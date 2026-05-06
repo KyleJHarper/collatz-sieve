@@ -50,7 +50,7 @@
 \DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{table\_size}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
 \DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{n}}\ =\ \mbox{\hyperlink{classNode}{i}};}
 \DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{StrideType}}\ \mbox{\hyperlink{classNode}{stride}};}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ step\_count\ =\ 0;\ step\_count\ <\ \mbox{\hyperlink{classNode}{bits}};\ step\_count++)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{step\_count}}\ =\ 0;\ \mbox{\hyperlink{classNode}{step\_count}}\ <\ \mbox{\hyperlink{classNode}{bits}};\ \mbox{\hyperlink{classNode}{step\_count}}++)\ \{}
 \DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{n}}\ \&\ 1)\ \{}
 \DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.add\ =\ ((\mbox{\hyperlink{classNode}{stride}}.add\ <<\ 1)\ +\ \mbox{\hyperlink{classNode}{stride}}.add)\ +\ (\mbox{\hyperlink{classNode}{uint64\_t}}(1)\ <<\ \mbox{\hyperlink{classNode}{stride}}.shift);}
 \DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stride}}.multiply\ *=\ 3;}
@@ -83,11 +83,11 @@
 \DoxyCodeLine{00104\ }
 \DoxyCodeLine{00110\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
 \DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}{apply\_stride}}(T\&\ value)\ \{}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Basic\ arithemtic\ and\ masking\ is\ fine\ on\ this\ path.}}
 \DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ \mbox{\hyperlink{classNode}{stride}}\ =\ \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{AffineStride::STRIDE\_TABLE}}[value\ \&\ \mbox{\hyperlink{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}{AffineStride::STRIDE\_MASK}}];}
 \DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ ((value\ *\ \mbox{\hyperlink{classNode}{stride}}.multiply)\ +\ \mbox{\hyperlink{classNode}{stride}}.add)\ >>\ \mbox{\hyperlink{classNode}{stride}}.shift;}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ needs\ the\ UI\ extracted\ and\ cleaner\ calls\ to\ avoid\ temps.}}
 \DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_value}}\ =\ value.get\_ui();}
 \DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ \mbox{\hyperlink{classNode}{stride}}\ =\ \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{AffineStride::STRIDE\_TABLE}}[\mbox{\hyperlink{classNode}{u64\_value}}\ \&\ \mbox{\hyperlink{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}{AffineStride::STRIDE\_MASK}}];}

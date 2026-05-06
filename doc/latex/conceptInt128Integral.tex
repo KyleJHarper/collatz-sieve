@@ -1,0 +1,22 @@
+\doxysection{Int128\+Integral Concept Reference}
+\hypertarget{conceptInt128Integral}{}\label{conceptInt128Integral}\index{Int128Integral@{Int128Integral}}
+
+
+Concept for larger integrals at each bit size. Currently only 128 bit.  
+
+
+
+
+{\ttfamily \#include $<$concepts.\+hpp$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptInt128Integral}{Int128Integral}}\ =\ \ (std::is\_same\_v<T,\ int128\_t>\ ||\ std::is\_same\_v<T,\ uint128\_t>)}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Concept for larger integrals at each bit size. Currently only 128 bit. 

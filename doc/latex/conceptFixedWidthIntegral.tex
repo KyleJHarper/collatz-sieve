@@ -1,0 +1,22 @@
+\doxysection{Fixed\+Width\+Integral Concept Reference}
+\hypertarget{conceptFixedWidthIntegral}{}\label{conceptFixedWidthIntegral}\index{FixedWidthIntegral@{FixedWidthIntegral}}
+
+
+Concept for any fixed-\/width integral. Includes platform-\/specific widths such as {\ttfamily size\+\_\+t} and {\ttfamily int}.  
+
+
+
+
+{\ttfamily \#include $<$concepts.\+hpp$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral}}\ =\ \ (std::integral<T>\ ||\ \mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Concept for any fixed-\/width integral. Includes platform-\/specific widths such as {\ttfamily size\+\_\+t} and {\ttfamily int}. 

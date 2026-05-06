@@ -21,12 +21,6 @@ The core algorithms supporting tree building and navigation.
 \item 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{st\+\_\+fg\+\_\+chain\+\_\+length}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Returns the FG chain length of a node on any level. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c}{st\+\_\+bit\+\_\+reverse\+\_\+full}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{x}})
-\begin{DoxyCompactList}\small\item\em Reverse the bits of any type {\ttfamily T} requested. Used largely for partial reversing later. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}{st\+\_\+reverse\+\_\+low\+\_\+bits}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{bits}})
-\begin{DoxyCompactList}\small\item\em Reverse the lower bits of a value, returning only those reversed bits. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath_aabac80d3395aac8321d1ef280feebdd5}{st\+\_\+reverse\+\_\+low\+\_\+bits}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{bits}}, T \&\mbox{\hyperlink{classNode}{out}})
-\begin{DoxyCompactList}\small\item\em Reverse the lower bits of a value, returning only those reversed bits (out param version). \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\+\_\+floor\+\_\+log2}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{val}})
 \begin{DoxyCompactList}\small\item\em A log base-\/2 for integers (most significant bit based). \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\+\_\+step}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
@@ -97,7 +91,7 @@ The core algorithms supporting tree building and navigation.
 \item 
 \Hypertarget{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66}\label{classBinaryTreeMath_a6166e08850f860b2d2a13970fc597f66} 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} {\bfseries \+\_\+\+MPZ\+\_\+\+TWO} = 2
-\begin{DoxyCompactList}\small\item\em Static 2 for GMP operations to prevent allocs. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Static 2 for \doxylink{namespaceGMP}{GMP} operations to prevent allocs. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMath_a5bffc775222f5fa29522c4a100b515b0}\label{classBinaryTreeMath_a5bffc775222f5fa29522c4a100b515b0} 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+\+ROOT\+\_\+\+VALUE\+\_\+\+DEFAULT} = 1
 \begin{DoxyCompactList}\small\item\em The default root value, which is 1 as of version 2.\+0.\+0. \end{DoxyCompactList}\item 
@@ -152,30 +146,6 @@ This class is not meant to be instantiated, and will throw an error if you try.
 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c}\label{classBinaryTreeMath_a745226452a9595b04aa58aac6564563c} 
-\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_bit\_reverse\_full@{st\_bit\_reverse\_full}}
-\index{st\_bit\_reverse\_full@{st\_bit\_reverse\_full}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{st\_bit\_reverse\_full()}{st\_bit\_reverse\_full()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+bit\+\_\+reverse\+\_\+full (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Reverse the bits of any type {\ttfamily T} requested. Used largely for partial reversing later. 
-
-The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values within the tree, largely due to the constant power-\/of-\/two increase. To leverage this, one must take the bits from a node\textquotesingle{}s value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side. There are many ways to do this, including a basic loop, which was used originally and then removed (diff 3.\+2.\+0). Ultimately compiler intrisics were and some black-\/box-\/ish helperes were built to speed this up since it\textquotesingle{}s a hot path.
-
-\begin{DoxyWarning}{Warning}
-This method does not support {\ttfamily mpz\+\_\+class}. The methods which would use it handle {\ttfamily mpz\+\_\+class} directly bit-\/by-\/bit. It is entirely possible to handle {\ttfamily mpz\+\_\+class} if needed some day, but it\textquotesingle{}s expensive and unnecessary.
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em x} & The data to reverse. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-The same data and the same type, with bits reversed. 
-\end{DoxyReturn}
 \Hypertarget{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}\label{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef} 
 \index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_fg\_chain\_length@{st\_fg\_chain\_length}}
 \index{st\_fg\_chain\_length@{st\_fg\_chain\_length}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
@@ -233,7 +203,7 @@ The first node value at {\ttfamily level}, typed to {\ttfamily T}.
 
 A log base-\/2 for integers (most significant bit based). 
 
-The std\+::log2() returns double precision which only affords 53 bits for integrer portion. This means it doesn\textquotesingle{}t even work for uint64\+\_\+t. GMP also has its own means for log2 ({\ttfamily sizeinbase()}). This method uses {\ttfamily CTZ} functions to overcome this.
+The std\+::log2() returns double precision which only affords 53 bits for integer portion. This means it doesn\textquotesingle{}t even work for uint64\+\_\+t. \doxylink{namespaceGMP}{GMP} also has its own means for log2 ({\ttfamily sizeinbase()}). This method uses {\ttfamily CLZ} functions to overcome this.
 
 
 \begin{DoxyParams}{Parameters}
@@ -549,47 +519,6 @@ $ first\_node\_value + S1 - S2 $
 \begin{DoxyReturn}{Returns}
 The value of the node at the given position and level. 
 \end{DoxyReturn}
-\Hypertarget{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265}\label{classBinaryTreeMath_a62c9fe3dc59287f26ce13f1301af8265} 
-\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_reverse\_low\_bits@{st\_reverse\_low\_bits}}
-\index{st\_reverse\_low\_bits@{st\_reverse\_low\_bits}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{st\_reverse\_low\_bits()}{st\_reverse\_low\_bits()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+reverse\+\_\+low\+\_\+bits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{bits }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Reverse the lower bits of a value, returning only those reversed bits. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The data to undergo bit reversal. \\
-\hline
-{\em bits} & The number of lower bits to reverse and return. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-The lower bits isolated and reversed in a value of type {\ttfamily T}. 
-\end{DoxyReturn}
-\Hypertarget{classBinaryTreeMath_aabac80d3395aac8321d1ef280feebdd5}\label{classBinaryTreeMath_aabac80d3395aac8321d1ef280feebdd5} 
-\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_reverse\_low\_bits@{st\_reverse\_low\_bits}}
-\index{st\_reverse\_low\_bits@{st\_reverse\_low\_bits}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{st\_reverse\_low\_bits()}{st\_reverse\_low\_bits()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+reverse\+\_\+low\+\_\+bits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{bits,  }\item[{T \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Reverse the lower bits of a value, returning only those reversed bits (out param version). 
-
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The data to undergo bit reversal. \\
-\hline
-{\em bits} & The number of lower bits to reverse and return. \\
-\hline
-{\em out} & The lower bits isolated and reversed in a value of type {\ttfamily T}. \\
-\hline
-\end{DoxyParams}
 \Hypertarget{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}\label{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e} 
 \index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_s1\_summation@{st\_s1\_summation}}
 \index{st\_s1\_summation@{st\_s1\_summation}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}

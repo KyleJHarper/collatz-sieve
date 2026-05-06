@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['abihelpers_0',['ABIHelpers',['../namespaceABIHelpers.html',1,'']]],
+  ['abi_0',['ABI',['../namespaceABI.html',1,'']]],
   ['add_1',['add',['../structAffineStride_1_1Stride.html#a86ae2b814b6d1f62186a545b85b7fae3',1,'AffineStride::Stride::add'],['../structAffineStride_1_1LongStride.html#add61f22e2b40a39e3ed5d09024d60e00',1,'AffineStride::LongStride::add'],['../classNodeBitmap.html#a7b1aa301f1af14f2594a40825c215f26',1,'NodeBitmap::add()'],['../classFlatHashBitmapImpl.html#a675c7dbc81e008f378536f9809fd9ae3',1,'FlatHashBitmapImpl::add()'],['../classStepResults.html#a21130a36f418b18feecc8dfab3dcaf88',1,'StepResults::add(size_t level, tally_t step_count)']]],
   ['add_5faggregate_2',['add_aggregate',['../classStepResults.html#a932822122aa94a3e95bbeb5bd95aa147',1,'StepResults']]],
   ['add_5fchild_3',['add_child',['../classNode.html#ab6aa77b6b6203cdb6ebb2f8d211d2856',1,'Node']]],

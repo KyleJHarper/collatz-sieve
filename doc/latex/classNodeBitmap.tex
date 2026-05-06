@@ -243,7 +243,7 @@ Applies {\ttfamily callback} to all values according to the Bitmap\+Transformer\
 
 Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}
 
-The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
@@ -280,7 +280,7 @@ This method uses {\ttfamily for\+\_\+each\+\_\+transformer} when TLS storage isn
 
 Callback must have this signature\+: {\ttfamily (const T\& value)}
 
-The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.

@@ -78,7 +78,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -125,13 +124,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a230aeec34408c3d89d975984f3f5b7e4" id="r_a230aeec34408c3d89d975984f3f5b7e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a230aeec34408c3d89d975984f3f5b7e4">StreamHelper</a> (std::istream *<a class="el" href="classNode.html">in</a>, std::ostream *<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
 <tr class="memdesc:a230aeec34408c3d89d975984f3f5b7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic constructor.  <br /></td></tr>
 <tr class="separator:a230aeec34408c3d89d975984f3f5b7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a861d9f8099cebfdb63a8984500d80427" id="r_a861d9f8099cebfdb63a8984500d80427"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a> T&gt; </td></tr>
-<tr class="memitem:a861d9f8099cebfdb63a8984500d80427"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a861d9f8099cebfdb63a8984500d80427">byteswap</a> (T &amp;value)</td></tr>
-<tr class="memdesc:a861d9f8099cebfdb63a8984500d80427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple <code>bswap</code> helper. Handles 8, 16, 32, 64, and 128 bit.  <br /></td></tr>
-<tr class="separator:a861d9f8099cebfdb63a8984500d80427"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -229,49 +221,6 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a861d9f8099cebfdb63a8984500d80427" name="a861d9f8099cebfdb63a8984500d80427"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a861d9f8099cebfdb63a8984500d80427">&#9670;&#160;</a></span>byteswap()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T StreamHelper::byteswap </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Simple <code>bswap</code> helper. Handles 8, 16, 32, 64, and 128 bit. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>Reference value to operate on. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The bswap'd version, typed to matching <code>T</code>. </dd></dl>
-
-</div>
-</div>
 <a id="a85200b98bc03c8c403a2f606c82d064a" name="a85200b98bc03c8c403a2f606c82d064a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85200b98bc03c8c403a2f606c82d064a">&#9670;&#160;</a></span>deserialize_bool()</h2>
 
@@ -342,7 +291,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 When using fixed-width, caller must use a <code>GuaranteedWidthIntegral</code>. Things like size_t and int/uint are not portable. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">rv</td><td>Reference to the caller's memory to deserialize into. Avoids GMP alloc(). </td></tr>
+    <tr><td class="paramname">rv</td><td>Reference to the caller's memory to deserialize into. Avoids <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> alloc(). </td></tr>
   </table>
   </dd>
 </dl>

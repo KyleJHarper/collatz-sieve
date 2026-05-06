@@ -54,13 +54,13 @@
 \DoxyCodeLine{00075\ }
 \DoxyCodeLine{00076\ }
 \DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\_t}}\ \mbox{\hyperlink{structBitmapKeyTraits_a2ab5ac93ce33c8011f76fc8cab231893}{get\_prefix}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ <=\ \mbox{\hyperlink{structBitmapKeyTraits_a6520ffa13b6aeb1fb7ca2f1c0c1ea142}{SUFFIX\_BYTES}})\ \{}
 \DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
 \DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\_t}}\textcolor{keyword}{>}(value\ >>\ \mbox{\hyperlink{structBitmapKeyTraits_a319eba2d881b3133e3621f3ce1a0218a}{SUFFIX\_BITS}});}
 \DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{tmp}};}
 \DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_fdiv\_q\_2exp}}(\mbox{\hyperlink{classNode}{tmp}}.get\_mpz\_t(),\ value.get\_mpz\_t(),\ \mbox{\hyperlink{structBitmapKeyTraits_a319eba2d881b3133e3621f3ce1a0218a}{SUFFIX\_BITS}});}
 \DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{tmp}};}
@@ -70,10 +70,10 @@
 \DoxyCodeLine{00096\ }
 \DoxyCodeLine{00097\ }
 \DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structBitmapKeyTraits_a8c7e17a23d2e41f2838d527e24edbd43}{get\_prefix}}(\textcolor{keyword}{const}\ T\&\ value,\ \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ <=\ \mbox{\hyperlink{structBitmapKeyTraits_a6520ffa13b6aeb1fb7ca2f1c0c1ea142}{SUFFIX\_BYTES}})\ \{}
 \DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ 0;}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\_t}}\textcolor{keyword}{>}(value\ >>\ \mbox{\hyperlink{structBitmapKeyTraits_a319eba2d881b3133e3621f3ce1a0218a}{SUFFIX\_BITS}});}
 \DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
@@ -84,9 +84,9 @@
 \DoxyCodeLine{00115\ }
 \DoxyCodeLine{00116\ }
 \DoxyCodeLine{00122\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\_t}}\ \mbox{\hyperlink{structBitmapKeyTraits_a0e15a1b65daf2ac4fa63e0d3deaf3a9b}{get\_suffix}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptBuiltinIntegral}{BuiltinIntegral<T>}})\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\_t}}\textcolor{keyword}{>}(value\ \&\ \mbox{\hyperlink{structBitmapKeyTraits_af6280e805a4eb7fe52a680bb87074a7c}{SUFFIX\_MASK}});}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
 \DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\_t}}\textcolor{keyword}{>}(value.get\_ui());}
 \DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00128\ \ \ \ \ \}}

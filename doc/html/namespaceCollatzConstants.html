@@ -83,12 +83,12 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Constants and helpers for <a class="el" href="classCollatz.html">Collatz</a> sequence processing.  
+<p>Constants and helpers for <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> sequence processing.  
 <a href="namespaceCollatzConstants.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a82106944a580665c6694c96cd51f42df" id="r_a82106944a580665c6694c96cd51f42df"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a> T&gt; </td></tr>
+<tr class="memitem:a82106944a580665c6694c96cd51f42df" id="r_a82106944a580665c6694c96cd51f42df"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFixedWidthIntegral.html">FixedWidthIntegral</a> T&gt; </td></tr>
 <tr class="memitem:a82106944a580665c6694c96cd51f42df"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">uint128_t</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceCollatzConstants.html#a82106944a580665c6694c96cd51f42df">get_max_3xp1</a> ()</td></tr>
 <tr class="memdesc:a82106944a580665c6694c96cd51f42df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper to return the correct <code>MAX_3XP1</code> for the type <code>T</code>.  <br /></td></tr>
 <tr class="separator:a82106944a580665c6694c96cd51f42df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +147,7 @@ Variables</h2></td></tr>
 <tr class="separator:ae4bb1d3844419388a44932d7b60e5ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Constants and helpers for <a class="el" href="classCollatz.html">Collatz</a> sequence processing. </p>
+<div class="textblock"><p>Constants and helpers for <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> sequence processing. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a82106944a580665c6694c96cd51f42df" name="a82106944a580665c6694c96cd51f42df"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82106944a580665c6694c96cd51f42df">&#9670;&#160;</a></span>get_max_3xp1()</h2>
@@ -155,7 +155,7 @@ Variables</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a> T&gt; </div>
+template&lt;<a class="el" href="conceptFixedWidthIntegral.html">FixedWidthIntegral</a> T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -490,7 +490,7 @@ This only supports unsigned types. </dd></dl>
 <p>Precomputed maximum initial values for <code>2^bit</code>. Values over this can overflow during their sequence. </p>
 <p>Each array index represents the bit size of a given data type. For example, uint32_t == 32 bits, so the maximum initial value that can be used without overflowing during a sequence would be <code>MAX_INITIAL_VALUE_BY_BIT[32]</code>.</p>
 <p>Consequently, each of these values can be increased by 1 to find the first overflow point, fyi.</p>
-<dl class="section user"><dt>Example</dt><dd>Given <code>uint8_t</code> is 8 bits, the largest value it can hold is 255 (2^8 - 1). The max initial value shown in the table is 26. No value (step) created by an initial value at or below this point (1-26) will cause an overflow when its <a class="el" href="classCollatz.html">Collatz</a> sequence is processed. The next value (27) will:<ul>
+<dl class="section user"><dt>Example</dt><dd>Given <code>uint8_t</code> is 8 bits, the largest value it can hold is 255 (2^8 - 1). The max initial value shown in the table is 26. No value (step) created by an initial value at or below this point (1-26) will cause an overflow when its <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> sequence is processed. The next value (27) will:<ul>
 <li>27, 82, 41, 124, 62, 31, 94, 47, 142, 71, 214, 107, 322 (overflow)</li>
 </ul>
 </dd></dl>

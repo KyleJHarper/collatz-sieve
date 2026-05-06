@@ -2,7 +2,7 @@
 \hypertarget{conceptGMPIntegral}{}\label{conceptGMPIntegral}\index{GMPIntegral@{GMPIntegral}}
 
 
-Concept applicable to {\ttfamily T} when it\textquotesingle{}s a GMP integral.  
+Concept for \doxylink{namespaceGMP}{GMP} integrals\+: mpz\+\_\+class.  
 
 
 
@@ -13,10 +13,10 @@ Concept applicable to {\ttfamily T} when it\textquotesingle{}s a GMP integral.
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
-\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral}}\ =\ \ \mbox{\hyperlink{classNode}{is\_gmp\_integral\_v<T>}}}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral}}\ =\ \ (std::is\_same\_v<T,\ mpz\_class>)}
 
 \end{DoxyCode}
 
 
 \doxysubsection{Detailed Description}
-Concept applicable to {\ttfamily T} when it\textquotesingle{}s a GMP integral. 
+Concept for \doxylink{namespaceGMP}{GMP} integrals\+: mpz\+\_\+class. 

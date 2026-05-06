@@ -2,7 +2,17 @@
 \hypertarget{classCollatz}{}\label{classCollatz}\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}}
 
 
-Collaboration diagram for Collatz\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+A small object with metadata for a \doxylink{classCollatz}{Collatz} sequence. Mostly used for its static methods.  
+
+
+
+
+{\ttfamily \#include $<$collatz.\+hpp$>$}
+
+
+
+Collaboration diagram for Collatz\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -12,144 +22,424 @@ Collaboration diagram for Collatz\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classCollatz_ace6bc2a0e0b8ff6b510bcb1652c517fe}\label{classCollatz_ace6bc2a0e0b8ff6b510bcb1652c517fe} 
-{\bfseries Collatz} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{track\+\_\+sequence}}=\mbox{\hyperlink{classNode}{false}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{track\+\_\+metadata}}=\mbox{\hyperlink{classNode}{false}})
+\Hypertarget{classCollatz_a4fb36272dff7d0e4d543e42226615588}\label{classCollatz_a4fb36272dff7d0e4d543e42226615588} 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Deeply scan the object and report its size. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a5121ff5bda5fd8a4526b7d6a40dd947d}\label{classCollatz_a5121ff5bda5fd8a4526b7d6a40dd947d} 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+sequence\+\_\+step} (\mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Run through all the steps of a sequence. Uses {\ttfamily \doxylink{classCollatz_a09bd6ec43c83b8fd6e7bffb4721a547d}{st\+\_\+for\+\_\+each\+\_\+sequence\+\_\+step()}} under the hood. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_af2f47ffeccdf236e45ae2a581c8b199c}\label{classCollatz_af2f47ffeccdf236e45ae2a581c8b199c} 
+std\+::string {\bfseries get\+\_\+fg\+\_\+pattern\+\_\+string} (\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}()) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Generate the F-\/G chain as a string for a sequence with some initial value. Uses {\ttfamily \doxylink{classCollatz_a8ee1f8a061bedb3e82c4c80fe36d4f17}{st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string()}}. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_ad3793586a6af869c0330cdbe769a9bad}\label{classCollatz_ad3793586a6af869c0330cdbe769a9bad} 
+std\+::string {\bfseries get\+\_\+oe\+\_\+pattern\+\_\+string} (\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
+\begin{DoxyCompactList}\small\item\em Generate the O-\/E chain as a string for a sequence with some initial value. Uses {\ttfamily \doxylink{classCollatz_aff36ffade9c7d284d27de9147c0f15c9}{st\+\_\+get\+\_\+oe\+\_\+pattern\+\_\+string()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classCollatz_ac3fbfa2fbde90df0e79790654d851db1}\label{classCollatz_ac3fbfa2fbde90df0e79790654d851db1} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries init} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{track\+\_\+sequence}}=\mbox{\hyperlink{classNode}{false}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{track\+\_\+metadata}}=\mbox{\hyperlink{classNode}{false}})
-\item 
+\Hypertarget{classCollatz_a072e85b7c6db2e7dffd401fcf7e04521}\label{classCollatz_a072e85b7c6db2e7dffd401fcf7e04521} 
+{\bfseries Collatz} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_afa6f01d7f6e4ebccd3086250660406e1}\label{classCollatz_afa6f01d7f6e4ebccd3086250660406e1} 
+{\bfseries Collatz} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em Constructor which calls {\ttfamily \doxylink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init()}} right away. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em Runs the sequence and builds the metadata, reusing the object if needed. \end{DoxyCompactList}\item 
 \Hypertarget{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889}\label{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
-\item 
-\Hypertarget{classCollatz_a18a6ad77109cf8ef2abccf98a0cd01dd}\label{classCollatz_a18a6ad77109cf8ef2abccf98a0cd01dd} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries release\+\_\+metadata} ()
+\begin{DoxyCompactList}\small\item\em Reset members to make this act like a new() object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors}\par
+\begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classCollatz_a7220372a1109186c701506d15129314a}\label{classCollatz_a7220372a1109186c701506d15129314a} 
 \mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+initial\+\_\+value} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_ad337e14af9da03104cf9186edc031729}\label{classCollatz_ad337e14af9da03104cf9186edc031729} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries get\+\_\+is\+\_\+overflowed} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_ac17f2b197c09150aa5b193e0ed6efff4}\label{classCollatz_ac17f2b197c09150aa5b193e0ed6efff4} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries get\+\_\+is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a806e46c668945fb21943ef79ec71ff87}\label{classCollatz_a806e46c668945fb21943ef79ec71ff87} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries get\+\_\+track\+\_\+sequence} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a97277890466ff0f0008bb7dac03fd034}\label{classCollatz_a97277890466ff0f0008bb7dac03fd034} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries get\+\_\+track\+\_\+metadata} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a2fd4b61bdf6c1b181ca7300a4a9fc37d}\label{classCollatz_a2fd4b61bdf6c1b181ca7300a4a9fc37d} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classCollatzMetadata}{Collatz\+Metadata}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+metadata} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a686d0cb0c8702352a31bf79dbb06f15a}\label{classCollatz_a686d0cb0c8702352a31bf79dbb06f15a} 
-\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ T $>$ \& {\bfseries get\+\_\+sequence} () \mbox{\hyperlink{classNode}{const}}
-\item 
+\begin{DoxyCompactList}\small\item\em Return the initial value set when created or when last {\ttfamily \doxylink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init()}} was called. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a336d8fa59234cdaf9b91866f03df2b0b}\label{classCollatz_a336d8fa59234cdaf9b91866f03df2b0b} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries has\+\_\+overflowed} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Returns true if the sequence overflowed. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a987bc9af0d6e9800a86819f8af0079e7}\label{classCollatz_a987bc9af0d6e9800a86819f8af0079e7} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Returns true if the object has been initialized and is ready for use. \end{DoxyCompactList}\item 
 \Hypertarget{classCollatz_ada4600f08f862724804bb54d22291130}\label{classCollatz_ada4600f08f862724804bb54d22291130} 
 \mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+peak\+\_\+value} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_af530910c3768237e6c88d6a8b96f6b59}\label{classCollatz_af530910c3768237e6c88d6a8b96f6b59} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+hwm\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a71481ac8b7c7aae470a7a8c938c8db67}\label{classCollatz_a71481ac8b7c7aae470a7a8c938c8db67} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+step\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_afcffcf68cb5f1c08efa9aef09d6166fa}\label{classCollatz_afcffcf68cb5f1c08efa9aef09d6166fa} 
-std\+::string {\bfseries get\+\_\+sequence\+\_\+string} ()
-\item 
-\Hypertarget{classCollatz_a4fb36272dff7d0e4d543e42226615588}\label{classCollatz_a4fb36272dff7d0e4d543e42226615588} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a5121ff5bda5fd8a4526b7d6a40dd947d}\label{classCollatz_a5121ff5bda5fd8a4526b7d6a40dd947d} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+sequence\+\_\+step} (\mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_aaa425752dc54d0de98644f539096099e}\label{classCollatz_aaa425752dc54d0de98644f539096099e} 
-std\+::string {\bfseries get\+\_\+fg\+\_\+pattern\+\_\+string} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}()) \mbox{\hyperlink{classNode}{const}}
-\item 
-\Hypertarget{classCollatz_a2f24a4d7434199f2ac8c0bc376520a9d}\label{classCollatz_a2f24a4d7434199f2ac8c0bc376520a9d} 
-std\+::string {\bfseries get\+\_\+oe\+\_\+pattern\+\_\+string} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Return the peak value found for the initial value sent. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a0478fad7960232858b0a5ea852ce638e}\label{classCollatz_a0478fad7960232858b0a5ea852ce638e} 
+\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries get\+\_\+hwm\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Return the index of the sequence where the High-\/\+Water Mark was found for initial value sent. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a}\label{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a} 
+\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries get\+\_\+step\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Return the step count of the sequence (stopping time) for initial value sent. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a3273d5a80a00f0f0b63e3ac1c4318fb5}\label{classCollatz_a3273d5a80a00f0f0b63e3ac1c4318fb5} 
+std\+::vector$<$ T $>$ {\bfseries get\+\_\+sequence} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Return the sequence as a vector of {\ttfamily T}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8}\label{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+verify} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}}=1)
-\item 
-\Hypertarget{classCollatz_aa41e509262fa95764bb4372f614a6507}\label{classCollatz_aa41e509262fa95764bb4372f614a6507} 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+call\+\_\+verify\+\_\+impl} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}})
-\item 
-\Hypertarget{classCollatz_af387e39dd5dfd93e43d71063e88b279b}\label{classCollatz_af387e39dd5dfd93e43d71063e88b279b} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+verify\+\_\+impl} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
-\item 
-\Hypertarget{classCollatz_af2898cd1432847ddcb794c178139d9f5}\label{classCollatz_af2898cd1432847ddcb794c178139d9f5} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} {\bfseries st\+\_\+verify\+\_\+impl} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}})
-\item 
-\Hypertarget{classCollatz_add8dacedcb8a11eb2626d92da584c332}\label{classCollatz_add8dacedcb8a11eb2626d92da584c332} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+sequence\+\_\+step} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\item 
-\Hypertarget{classCollatz_aff2f1748eb92a5af6032fccb30c8885a}\label{classCollatz_aff2f1748eb92a5af6032fccb30c8885a} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries st\+\_\+get\+\_\+step\+\_\+count} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
-\item 
-\Hypertarget{classCollatz_a6093da7230c05690d5a1fcf124a79c14}\label{classCollatz_a6093da7230c05690d5a1fcf124a79c14} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries st\+\_\+get\+\_\+step\+\_\+count\+\_\+fast} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
-\item 
-\Hypertarget{classCollatz_a35e19b57ebe462227c7a2354745dc400}\label{classCollatz_a35e19b57ebe462227c7a2354745dc400} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries st\+\_\+get\+\_\+peak\+\_\+fast} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, T \&\mbox{\hyperlink{classNode}{out\+\_\+peak}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{stop\+\_\+at\+\_\+hwm}}=\mbox{\hyperlink{classNode}{false}})
-\item 
-\Hypertarget{classCollatz_a602b613a61d9f242385da1dc5786717c}\label{classCollatz_a602b613a61d9f242385da1dc5786717c} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+fg\+\_\+chain\+\_\+link} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\item 
-\Hypertarget{classCollatz_afac284ce8ed01a9a0d62fedb1c5868d0}\label{classCollatz_afac284ce8ed01a9a0d62fedb1c5868d0} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} {\bfseries for\+\_\+each\+\_\+fg\+\_\+step} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\item 
-\Hypertarget{classCollatz_a9762046d1d418ee953eb0e8655d5fe54}\label{classCollatz_a9762046d1d418ee953eb0e8655d5fe54} 
-\mbox{\hyperlink{classNode}{static}} std\+::string {\bfseries st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
-\item 
-\Hypertarget{classCollatz_a81a997554b9c49866b8a183cb4cb8307}\label{classCollatz_a81a997554b9c49866b8a183cb4cb8307} 
-\mbox{\hyperlink{classNode}{static}} std\+::string {\bfseries st\+\_\+get\+\_\+oe\+\_\+pattern\+\_\+string} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
-\item 
-\Hypertarget{classCollatz_a00b5625eaef4a1b033011f6cce5d83b3}\label{classCollatz_a00b5625eaef4a1b033011f6cce5d83b3} 
-\mbox{\hyperlink{classNode}{static}} std\+::string {\bfseries fg\+\_\+to\+\_\+oe} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{fg\+\_\+pattern}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+oe\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}(), \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{strip\+\_\+last\+\_\+e}}=\mbox{\hyperlink{classNode}{true}})
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Static Public Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\Hypertarget{classCollatz_a343185098e5484beb0d3fe7938024a12}\label{classCollatz_a343185098e5484beb0d3fe7938024a12} 
-\mbox{\hyperlink{classNode}{static}} std\+::string {\bfseries E\+\_\+\+NO\+\_\+\+SEQUENCE\+\_\+\+TRACKING} = "{}You \mbox{\hyperlink{classNode}{disabled}} \mbox{\hyperlink{classNode}{sequence}} \mbox{\hyperlink{classNode}{tracking}} \mbox{\hyperlink{classNode}{when}} \mbox{\hyperlink{classNode}{you}} \mbox{\hyperlink{classNode}{created}} \mbox{\hyperlink{classNode}{this}} \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{object."{}}}
-\item 
-\Hypertarget{classCollatz_aa832ac1badda9f0ebc2826770f56f203}\label{classCollatz_aa832ac1badda9f0ebc2826770f56f203} 
-\mbox{\hyperlink{classNode}{static}} std\+::string {\bfseries E\+\_\+\+NO\+\_\+\+METADATA\+\_\+\+TRACKING} = "{}You \mbox{\hyperlink{classNode}{disabled}} \mbox{\hyperlink{classNode}{metadata}} \mbox{\hyperlink{classNode}{when}} \mbox{\hyperlink{classNode}{you}} \mbox{\hyperlink{classNode}{created}} \mbox{\hyperlink{classNode}{this}} \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{object."{}}}
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8}{st\+\_\+verify}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}}=1)
+\begin{DoxyCompactList}\small\item\em Verify any number down to 1 (or a custom value) as fast as possible. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz_aa41e509262fa95764bb4372f614a6507}{st\+\_\+call\+\_\+verify\+\_\+impl}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em A method to help handle sentinel value juggling for {\ttfamily \doxylink{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8}{st\+\_\+verify()}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz_af387e39dd5dfd93e43d71063e88b279b}{st\+\_\+verify\+\_\+impl}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em Verification implementation, which assumes down to {\ttfamily 1}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz_af2898cd1432847ddcb794c178139d9f5}{st\+\_\+verify\+\_\+impl}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{sentinel\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em Verification implementation, which tests down to {\ttfamily sentinel\+\_\+value}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz_a09bd6ec43c83b8fd6e7bffb4721a547d}{st\+\_\+for\+\_\+each\+\_\+sequence\+\_\+step}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\begin{DoxyCompactList}\small\item\em Run through the sequence with a callback each step, including the initial value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classCollatz_a5668b843a0498f67564a6ac30c158e8b}{st\+\_\+get\+\_\+step\+\_\+count}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}})
+\begin{DoxyCompactList}\small\item\em Returns the number of steps (stopping time) for any initial value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz_a4e4d0a8077e81835117eb51b5a29985b}{st\+\_\+get\+\_\+peak}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, T \&\mbox{\hyperlink{classNode}{out\+\_\+peak}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{stop\+\_\+at\+\_\+hwm}}=\mbox{\hyperlink{classNode}{false}})
+\begin{DoxyCompactList}\small\item\em Finds the peak value of a sequence, optionally stopping at High-\/\+Water Mark. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz_adc2ae32ebbf8d1e0a0f633a3fe7b3c98}{st\+\_\+for\+\_\+each\+\_\+fg\+\_\+chain\+\_\+link}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\begin{DoxyCompactList}\small\item\em Generate an FG chain on-\/the-\/fly and return the link (F or G) to a callback. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz_a2ee874dc22231287e333d0b64dd1aee6}{st\+\_\+for\+\_\+each\+\_\+fg\+\_\+step}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
+\begin{DoxyCompactList}\small\item\em Steps through a \doxylink{classCollatz}{Collatz} sequence using F and G steps instead of normal ones. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz_a8ee1f8a061bedb3e82c4c80fe36d4f17}{st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
+\begin{DoxyCompactList}\small\item\em Generate the F-\/G chain as a string for a sequence with some initial value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz_aff36ffade9c7d284d27de9147c0f15c9}{st\+\_\+get\+\_\+oe\+\_\+pattern\+\_\+string}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{initial\+\_\+value}}, \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}())
+\begin{DoxyCompactList}\small\item\em Generate the O-\/E (odd-\/even) chain as a string for a sequence with some initial value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz_aadf7f177a7c2123bec4ebbf5e5694195}{st\+\_\+fg\+\_\+to\+\_\+oe}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{fg\+\_\+pattern}}, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+oe\+\_\+chars}}=std\+::numeric\+\_\+limits$<$ \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$\mbox{\hyperlink{classNode}{\+::max}}(), \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{strip\+\_\+last\+\_\+e}}=\mbox{\hyperlink{classNode}{true}})
+\begin{DoxyCompactList}\small\item\em Convert an FG chain (string) to an OE pattern/chain (string). \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classCollatz_a5f7ed19366fce0d697e42745f55f3429}\label{classCollatz_a5f7ed19366fce0d697e42745f55f3429} 
-T {\bfseries \+\_\+initial\+\_\+value}
+T {\bfseries \+\_\+initial\+\_\+value} = 0
+\item 
+\Hypertarget{classCollatz_adabddfd8f0d3729a41b6e118c95afcf2}\label{classCollatz_adabddfd8f0d3729a41b6e118c95afcf2} 
+T {\bfseries \+\_\+peak\+\_\+value} = 0
+\item 
+\Hypertarget{classCollatz_a694850331dfcd7afb99f936c16c290c8}\label{classCollatz_a694850331dfcd7afb99f936c16c290c8} 
+\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries \+\_\+hwm\+\_\+index} = 0
+\item 
+\Hypertarget{classCollatz_a0c1fba7d69ae0406f1a1a3e91d1e7444}\label{classCollatz_a0c1fba7d69ae0406f1a1a3e91d1e7444} 
+\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries \+\_\+step\+\_\+count} = 0
 \item 
 \Hypertarget{classCollatz_a25030b782bce62642dd8879b6ee49c48}\label{classCollatz_a25030b782bce62642dd8879b6ee49c48} 
 \mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+initialized}\+: 1
 \item 
-\Hypertarget{classCollatz_ae622a219f0f8dee5c2bba2cd5994c20e}\label{classCollatz_ae622a219f0f8dee5c2bba2cd5994c20e} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+track\+\_\+sequence}\+: 1
-\item 
-\Hypertarget{classCollatz_a06763460c048acdafa1b248b1df44ddf}\label{classCollatz_a06763460c048acdafa1b248b1df44ddf} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+track\+\_\+metadata}\+: 1
-\item 
-\Hypertarget{classCollatz_abda020a6701a56500f4a9d1c45eb1564}\label{classCollatz_abda020a6701a56500f4a9d1c45eb1564} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+sequence\+\_\+overflow}\+: 1
-\item 
-\Hypertarget{classCollatz_ad4d4a0459ff3da38eb10c752312b3cf5}\label{classCollatz_ad4d4a0459ff3da38eb10c752312b3cf5} 
-std\+::vector$<$ T $>$ {\bfseries \+\_\+sequence}
-\item 
-\Hypertarget{classCollatz_ab07969d5eb27c66d631da710255d9f26}\label{classCollatz_ab07969d5eb27c66d631da710255d9f26} 
-\mbox{\hyperlink{classCollatzMetadata}{Collatz\+Metadata}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+metadata} = \mbox{\hyperlink{classNode}{nullptr}}
+\Hypertarget{classCollatz_a9ab1abf698d1a7816a2cdbf9828d7929}\label{classCollatz_a9ab1abf698d1a7816a2cdbf9828d7929} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+sequence\+\_\+overflows}\+: 1
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classCollatz_a5993e94a75ee3a0c8b0c1e25588b28da}\label{classCollatz_a5993e94a75ee3a0c8b0c1e25588b28da} 
 std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&\mbox{\hyperlink{classNode}{os}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{m}})
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Treat the initial value as the \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}() output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+class Collatz$<$ T $>$}
+A small object with metadata for a \doxylink{classCollatz}{Collatz} sequence. Mostly used for its static methods. 
+
+This class will, upon initialization via the constructor or {\ttfamily \doxylink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init()}}, set the metadata for a \doxylink{classCollatz}{Collatz} sequence starting at the specified {\ttfamily \+\_\+initial\+\_\+value}.
+
+Originally, sequences were stored in-\/memory, but this blows out cache lines, and is generally useless. The for\+\_\+each iterators are so fast it\textquotesingle{}s almost never useful to cache them. If callers want them cached, they must do so externally, with a vector or similar.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCollatz_a33c0998331a6f9e2b655bed17e85e873}\label{classCollatz_a33c0998331a6f9e2b655bed17e85e873} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!init@{init}}
+\index{init@{init}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Runs the sequence and builds the metadata, reusing the object if needed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The initial value in the sequence. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatz_aa41e509262fa95764bb4372f614a6507}\label{classCollatz_aa41e509262fa95764bb4372f614a6507} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_call\_verify\_impl@{st\_call\_verify\_impl}}
+\index{st\_call\_verify\_impl@{st\_call\_verify\_impl}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_call\_verify\_impl()}{st\_call\_verify\_impl()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+call\+\_\+verify\+\_\+impl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{U}} \&}]{sentinel\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+A method to help handle sentinel value juggling for {\ttfamily \doxylink{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8}{st\+\_\+verify()}}. 
+
+This method exists to help with some unrolling/micro-\/optimizing in the {\ttfamily \doxylink{classCollatz_af387e39dd5dfd93e43d71063e88b279b}{st\+\_\+verify\+\_\+impl()}} methods. You probably shouldn\textquotesingle{}t call it manually.
+
+\begin{DoxyNote}{Note}
+In the event a number is divergent (cyclic), this method will hang. 
+\end{DoxyNote}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Required type to avoid overflow, which may exceed T. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The starting value for a sequence. \\
+\hline
+{\em sentinel\+\_\+value} & The value to stop at. Usually 1 or a High-\/\+Water Mark. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the sequence reached the sentinel value, hangs otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_aadf7f177a7c2123bec4ebbf5e5694195}\label{classCollatz_aadf7f177a7c2123bec4ebbf5e5694195} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_fg\_to\_oe@{st\_fg\_to\_oe}}
+\index{st\_fg\_to\_oe@{st\_fg\_to\_oe}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_fg\_to\_oe()}{st\_fg\_to\_oe()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+fg\+\_\+to\+\_\+oe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{fg\+\_\+pattern,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{max\+\_\+oe\+\_\+chars = {\ttfamily std\+:\+:numeric\+\_\+limits$<$\mbox{\hyperlink{classNode}{size\+\_\+t}}$>$\mbox{\hyperlink{classNode}{\+::max}}()},  }\item[{\mbox{\hyperlink{classNode}{bool}}}]{strip\+\_\+last\+\_\+e = {\ttfamily \mbox{\hyperlink{classNode}{true}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Convert an FG chain (string) to an OE pattern/chain (string). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fg\+\_\+pattern} & The FG chain to convert. \\
+\hline
+{\em max\+\_\+oe\+\_\+chars} & The maximum number of O and E characters (steps) to accumulate before quitting prematurely. \\
+\hline
+{\em strip\+\_\+last\+\_\+e} & Remove the last E. This is necessary when going down to 1, for example. Because \textquotesingle{}F\textquotesingle{} =\texorpdfstring{$>$}{>} OE, which would send the value back to 4 and make the OE chain wrong. If stopping at a value other than 1, this might need to be false. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string representation of the OE chain. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_adc2ae32ebbf8d1e0a0f633a3fe7b3c98}\label{classCollatz_adc2ae32ebbf8d1e0a0f633a3fe7b3c98} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_for\_each\_fg\_chain\_link@{st\_for\_each\_fg\_chain\_link}}
+\index{st\_for\_each\_fg\_chain\_link@{st\_for\_each\_fg\_chain\_link}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_for\_each\_fg\_chain\_link()}{st\_for\_each\_fg\_chain\_link()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+for\+\_\+each\+\_\+fg\+\_\+chain\+\_\+link (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Generate an FG chain on-\/the-\/fly and return the link (F or G) to a callback. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & Caller\textquotesingle{}s function type. Must be\+: {\ttfamily bool(bool)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of the sequence. \\
+\hline
+{\em callback} & The method to invoke with each F or G step. When F, true. When G, false. Caller may return false to stop execution at any time. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatz_a2ee874dc22231287e333d0b64dd1aee6}\label{classCollatz_a2ee874dc22231287e333d0b64dd1aee6} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_for\_each\_fg\_step@{st\_for\_each\_fg\_step}}
+\index{st\_for\_each\_fg\_step@{st\_for\_each\_fg\_step}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_for\_each\_fg\_step()}{st\_for\_each\_fg\_step()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+for\+\_\+each\+\_\+fg\+\_\+step (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Steps through a \doxylink{classCollatz}{Collatz} sequence using F and G steps instead of normal ones. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & Caller\textquotesingle{}s function type. Must be\+: {\ttfamily const T\&} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of the sequence. \\
+\hline
+{\em callback} & The method to invoke with each F or G step\textquotesingle{}s value. Caller may return false to stop execution at any time. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatz_a09bd6ec43c83b8fd6e7bffb4721a547d}\label{classCollatz_a09bd6ec43c83b8fd6e7bffb4721a547d} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_for\_each\_sequence\_step@{st\_for\_each\_sequence\_step}}
+\index{st\_for\_each\_sequence\_step@{st\_for\_each\_sequence\_step}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_for\_each\_sequence\_step()}{st\_for\_each\_sequence\_step()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+for\+\_\+each\+\_\+sequence\+\_\+step (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Run through the sequence with a callback each step, including the initial value. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & A callback function type. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of a sequence to process. Will be returned as the first step. \\
+\hline
+{\em callback} & Caller\textquotesingle{}s callback. Must be callable as {\ttfamily const T\&} to prevent alloc on \doxylink{namespaceGMP}{GMP} path. Must return true to stop early, false otherwise. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatz_a8ee1f8a061bedb3e82c4c80fe36d4f17}\label{classCollatz_a8ee1f8a061bedb3e82c4c80fe36d4f17} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_get\_fg\_chain\_string@{st\_get\_fg\_chain\_string}}
+\index{st\_get\_fg\_chain\_string@{st\_get\_fg\_chain\_string}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_get\_fg\_chain\_string()}{st\_get\_fg\_chain\_string()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}}}]{max\+\_\+chars = {\ttfamily std\+:\+:numeric\+\_\+limits$<$\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}}$>$\mbox{\hyperlink{classNode}{\+::max}}()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Generate the F-\/G chain as a string for a sequence with some initial value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of the sequence to calculate. \\
+\hline
+{\em max\+\_\+chars} & The maximum number of F and G characters (steps) to accumulate before quitting prematurely. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The string representation of the full FG chain. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_aff36ffade9c7d284d27de9147c0f15c9}\label{classCollatz_aff36ffade9c7d284d27de9147c0f15c9} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_get\_oe\_pattern\_string@{st\_get\_oe\_pattern\_string}}
+\index{st\_get\_oe\_pattern\_string@{st\_get\_oe\_pattern\_string}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_get\_oe\_pattern\_string()}{st\_get\_oe\_pattern\_string()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} std\+::string \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+get\+\_\+oe\+\_\+pattern\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}}}]{max\+\_\+chars = {\ttfamily std\+:\+:numeric\+\_\+limits$<$\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}}$>$\mbox{\hyperlink{classNode}{\+::max}}()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Generate the O-\/E (odd-\/even) chain as a string for a sequence with some initial value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of the sequence to calculate. \\
+\hline
+{\em max\+\_\+chars} & The maximum number of O and E characters (steps) to accumulate before quitting prematurely. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The string representation of the full OE chain. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_a4e4d0a8077e81835117eb51b5a29985b}\label{classCollatz_a4e4d0a8077e81835117eb51b5a29985b} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_get\_peak@{st\_get\_peak}}
+\index{st\_get\_peak@{st\_get\_peak}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_get\_peak()}{st\_get\_peak()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+get\+\_\+peak (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{T \&}]{out\+\_\+peak,  }\item[{\mbox{\hyperlink{classNode}{bool}}}]{stop\+\_\+at\+\_\+hwm = {\ttfamily \mbox{\hyperlink{classNode}{false}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Finds the peak value of a sequence, optionally stopping at High-\/\+Water Mark. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of a sequence to calculate. \\
+\hline
+{\em out\+\_\+peak} & Caller\textquotesingle{}s memory to store peak value. \\
+\hline
+{\em stop\+\_\+at\+\_\+hwm} & Flag to stop at High-\/\+Water Mark when testing peaks, mostly for the peak-\/by-\/bit program. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classCollatz_a5668b843a0498f67564a6ac30c158e8b}\label{classCollatz_a5668b843a0498f67564a6ac30c158e8b} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_get\_step\_count@{st\_get\_step\_count}}
+\index{st\_get\_step\_count@{st\_get\_step\_count}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_get\_step\_count()}{st\_get\_step\_count()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+get\+\_\+step\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns the number of steps (stopping time) for any initial value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The first value of a sequence to calculate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of steps (stopping time) to reach 1. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8}\label{classCollatz_a15694b9ef93d9c23f72cfaacf6a5faa8} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_verify@{st\_verify}}
+\index{st\_verify@{st\_verify}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_verify()}{st\_verify()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+verify (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{sentinel\+\_\+value = {\ttfamily 1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Verify any number down to 1 (or a custom value) as fast as possible. 
+
+Takes any initial value and verifies the sequence reaches 1 or the sentinel value requested. This method handles overflow detection and promotion by itself, and then calls the correctly typed implementation method.
+
+\begin{DoxyNote}{Note}
+In the event a number is divergent (cyclic), this method will hang. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The starting value for a sequence. \\
+\hline
+{\em sentinel\+\_\+value} & The value to stop at. Usually 1 or a High-\/\+Water Mark. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the sequence reached the sentinel value, hangs otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_af387e39dd5dfd93e43d71063e88b279b}\label{classCollatz_af387e39dd5dfd93e43d71063e88b279b} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_verify\_impl@{st\_verify\_impl}}
+\index{st\_verify\_impl@{st\_verify\_impl}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_verify\_impl()}{st\_verify\_impl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+verify\+\_\+impl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Verification implementation, which assumes down to {\ttfamily 1}. 
+
+\begin{DoxyNote}{Note}
+This version saves a few clock cycles compared to the dynamic sentinel value version of this method. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The starting value for a sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the sequence reached the sentinel value, hangs otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classCollatz_af2898cd1432847ddcb794c178139d9f5}\label{classCollatz_af2898cd1432847ddcb794c178139d9f5} 
+\index{Collatz$<$ T $>$@{Collatz$<$ T $>$}!st\_verify\_impl@{st\_verify\_impl}}
+\index{st\_verify\_impl@{st\_verify\_impl}!Collatz$<$ T $>$@{Collatz$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_verify\_impl()}{st\_verify\_impl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classCollatz}{Collatz}}$<$ T $>$\+::st\+\_\+verify\+\_\+impl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{initial\+\_\+value,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{sentinel\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Verification implementation, which tests down to {\ttfamily sentinel\+\_\+value}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initial\+\_\+value} & The starting value for a sequence. \\
+\hline
+{\em sentinel\+\_\+value} & The value to stop at. Usually 1 or a High-\/\+Water Mark. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the sequence reached the sentinel value, hangs otherwise. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

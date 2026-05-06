@@ -1,0 +1,24 @@
+\doxysection{Printable\+Integral Concept Reference}
+\hypertarget{conceptPrintableIntegral}{}\label{conceptPrintableIntegral}\index{PrintableIntegral@{PrintableIntegral}}
+
+
+Concept to detect which integrals will respond to operator\texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} for printing.  
+
+
+
+
+{\ttfamily \#include $<$concepts.\+hpp$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptPrintableIntegral}{PrintableIntegral}}\ =\ \ std::integral<T>\ \&\&\ \textcolor{keyword}{requires}(std::ostream\&\ \mbox{\hyperlink{classNode}{os}},\ T\ \mbox{\hyperlink{classNode}{val}})\ \{}
+\DoxyCodeLine{\ \ \ \ \{\ \mbox{\hyperlink{classNode}{os}}\ <<\ \mbox{\hyperlink{classNode}{val}}\ \}\ -\/>\ std::same\_as<std::ostream\&>;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Concept to detect which integrals will respond to operator\texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} for printing. 

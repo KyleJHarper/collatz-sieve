@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gmphelpers_0',['GMPHelpers',['../namespaceGMPHelpers.html',1,'']]]
+  ['gmp_0',['GMP',['../namespaceGMP.html',1,'']]]
 ];

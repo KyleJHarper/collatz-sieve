@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['builtinintegral_0',['BuiltinIntegral',['../conceptBuiltinIntegral.html',1,'']]]
+  ['fixedwidthintegral_0',['FixedWidthIntegral',['../conceptFixedWidthIntegral.html',1,'']]]
 ];

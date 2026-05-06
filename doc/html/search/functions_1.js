@@ -5,7 +5,11 @@ var searchData=
   ['binarytreeimplicitimpl_2',['BinaryTreeImplicitImpl',['../classBinaryTreeImplicitImpl.html#aa6d9b93bba379bc42747e64663c78a64',1,'BinaryTreeImplicitImpl']]],
   ['binarytreematerializedimpl_3',['BinaryTreeMaterializedImpl',['../classBinaryTreeMaterializedImpl.html#aaf2222a8b9879d8524b5307ef7bc92c0',1,'BinaryTreeMaterializedImpl']]],
   ['binarytreemath_4',['BinaryTreeMath',['../classBinaryTreeMath.html#a57cea2bbffc530a34f8df8c5cfc3c714',1,'BinaryTreeMath']]],
-  ['booleans_5fequal_5',['booleans_equal',['../classEqualityHelper.html#ab054df866a778a5a6b2344ec436cf6dd',1,'EqualityHelper']]],
-  ['build_5fstride_5ftable_6',['build_stride_table',['../namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f',1,'AffineStride']]],
-  ['byteswap_7',['byteswap',['../classStreamHelper.html#a861d9f8099cebfdb63a8984500d80427',1,'StreamHelper']]]
+  ['bitreverse16_5',['bitreverse16',['../namespaceBit.html#a294cb0b8604fedd1f0c442481965410f',1,'Bit']]],
+  ['bitreverse32_6',['bitreverse32',['../namespaceBit.html#afaf387fe5a15973f7a6aa007ed04442a',1,'Bit']]],
+  ['bitreverse64_7',['bitreverse64',['../namespaceBit.html#ae5d745bd7263fa684d3d2d5566723bb4',1,'Bit']]],
+  ['bitreverse8_8',['bitreverse8',['../namespaceBit.html#a12741c85ac515c7522899adf0b8a9737',1,'Bit']]],
+  ['booleans_5fequal_9',['booleans_equal',['../classEqualityHelper.html#ab054df866a778a5a6b2344ec436cf6dd',1,'EqualityHelper']]],
+  ['build_5fstride_5ftable_10',['build_stride_table',['../namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f',1,'AffineStride']]],
+  ['byteswap_11',['byteswap',['../namespaceBit.html#ab5a8975fcf5cda4d39941d651ddf8ede',1,'Bit']]]
 ];

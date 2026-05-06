@@ -161,7 +161,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a83a230b4a005c8d503d586459548ec26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:aa05e67f6ac161821bb4ebafb8c69c4be" id="r_aa05e67f6ac161821bb4ebafb8c69c4be"><td class="memItemLeft" align="right" valign="top"><a id="aa05e67f6ac161821bb4ebafb8c69c4be" name="aa05e67f6ac161821bb4ebafb8c69c4be"></a>
-<a class="el" href="classNode.html">const</a> <a class="el" href="classFlatHashBitmapImpl.html#ac8ae66d0fcc3ed63fd898a83acedd193">map_t</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_map</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<a class="el" href="classNode.html">const</a> <a class="el" href="classFlatHashBitmapImpl.html#a4b5fcf5161367f41636763e14e09d2f8">map_t</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_map</b> () <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:aa05e67f6ac161821bb4ebafb8c69c4be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly reference to the internal flat map (the Abseil object). <br /></td></tr>
 <tr class="separator:aa05e67f6ac161821bb4ebafb8c69c4be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd7d8ba5e735cc04a8b8e84d528ae933" id="r_afd7d8ba5e735cc04a8b8e84d528ae933"><td class="memItemLeft" align="right" valign="top"><a id="afd7d8ba5e735cc04a8b8e84d528ae933" name="afd7d8ba5e735cc04a8b8e84d528ae933"></a>
@@ -205,9 +205,9 @@ Private Types</h2></td></tr>
 <a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>roaring_word_t</b> = Traits::roaring_word_t</td></tr>
 <tr class="memdesc:aa561591eefe440a94f7467131f802b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Taken from <code><a class="el" href="structBitmapKeyTraits.html" title="Helpers to handle prefix and suffix keys for the hash map.">BitmapKeyTraits</a></code>. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">node_bitmap_traits.hpp</a>. <br /></td></tr>
 <tr class="separator:aa561591eefe440a94f7467131f802b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ae66d0fcc3ed63fd898a83acedd193" id="r_ac8ae66d0fcc3ed63fd898a83acedd193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFlatHashBitmapImpl.html#ac8ae66d0fcc3ed63fd898a83acedd193">map_t</a> = std::conditional_t&lt; <a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a>&lt; T &gt;, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a> &gt;, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::Hash</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a> &gt;, <a class="el" href="structMpzEq.html">MpzEq</a> &gt; &gt;</td></tr>
-<tr class="memdesc:ac8ae66d0fcc3ed63fd898a83acedd193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a map type to help cover all necessary components of an <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::flat_hash_map</a></code>.  <br /></td></tr>
-<tr class="separator:ac8ae66d0fcc3ed63fd898a83acedd193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b5fcf5161367f41636763e14e09d2f8" id="r_a4b5fcf5161367f41636763e14e09d2f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFlatHashBitmapImpl.html#a4b5fcf5161367f41636763e14e09d2f8">map_t</a> = std::conditional_t&lt; <a class="el" href="conceptFixedWidthIntegral.html">FixedWidthIntegral</a>&lt; T &gt;, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a> &gt;, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::Hash</a>&lt; <a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a> &gt;, <a class="el" href="structGMP_1_1MpzEq.html">GMP::MpzEq</a> &gt; &gt;</td></tr>
+<tr class="memdesc:a4b5fcf5161367f41636763e14e09d2f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a map type to help cover all necessary components of an <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::flat_hash_map</a></code>.  <br /></td></tr>
+<tr class="separator:a4b5fcf5161367f41636763e14e09d2f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -223,7 +223,7 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a5f440cb32e17015df5550132626de4a9" id="r_a5f440cb32e17015df5550132626de4a9"><td class="memItemLeft" align="right" valign="top"><a id="a5f440cb32e17015df5550132626de4a9" name="a5f440cb32e17015df5550132626de4a9"></a>
-<a class="el" href="classFlatHashBitmapImpl.html#ac8ae66d0fcc3ed63fd898a83acedd193">map_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_flat_map</b></td></tr>
+<a class="el" href="classFlatHashBitmapImpl.html#a4b5fcf5161367f41636763e14e09d2f8">map_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_flat_map</b></td></tr>
 <tr class="memdesc:a5f440cb32e17015df5550132626de4a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::flat_hash_map</a></code> typed to <code>prefix_t</code> and a <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">roaring::Roaring</a></code> bitmap. <br /></td></tr>
 <tr class="separator:a5f440cb32e17015df5550132626de4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a616e9adfdff042f600723fc0d21e1d41" id="r_a616e9adfdff042f600723fc0d21e1d41"><td class="memItemLeft" align="right" valign="top"><a id="a616e9adfdff042f600723fc0d21e1d41" name="a616e9adfdff042f600723fc0d21e1d41"></a>
@@ -244,8 +244,8 @@ This class is an Impl, and not meant to be used directly. Use the <code><a class
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ac8ae66d0fcc3ed63fd898a83acedd193" name="ac8ae66d0fcc3ed63fd898a83acedd193"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8ae66d0fcc3ed63fd898a83acedd193">&#9670;&#160;</a></span>map_t</h2>
+<a id="a4b5fcf5161367f41636763e14e09d2f8" name="a4b5fcf5161367f41636763e14e09d2f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b5fcf5161367f41636763e14e09d2f8">&#9670;&#160;</a></span>map_t</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,7 +256,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">using</a> <a class="el" href="classFlatHashBitmapImpl.html">FlatHashBitmapImpl</a>&lt; T &gt;::map_t =  std::conditional_t&lt; <a class="el" href="conceptBuiltinIntegral.html">BuiltinIntegral</a>&lt;T&gt; , <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>&gt; , <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::Hash</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>&gt;, <a class="el" href="structMpzEq.html">MpzEq</a>&gt; &gt;</td>
+          <td class="memname"><a class="el" href="classNode.html">using</a> <a class="el" href="classFlatHashBitmapImpl.html">FlatHashBitmapImpl</a>&lt; T &gt;::map_t =  std::conditional_t&lt; <a class="el" href="conceptFixedWidthIntegral.html">FixedWidthIntegral</a>&lt;T&gt; , <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>&gt; , <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::flat_hash_map</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">roaring::Roaring</a>, <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8">absl::Hash</a>&lt;<a class="el" href="classFlatHashBitmapImpl.html#a95225c12a859fab216043e8d06ab6269">prefix_t</a>&gt;, <a class="el" href="structGMP_1_1MpzEq.html">GMP::MpzEq</a>&gt; &gt;</td>
         </tr>
       </table>
   </td>
@@ -269,7 +269,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <p>Defines a map type to help cover all necessary components of an <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::flat_hash_map</a></code>. </p>
 <p>The following categories apply:</p><ol type="1">
 <li>When <code>T</code> is a fixed-width integral, Absl can hash it directly, so nothing special is required.</li>
-<li>When <code>T</code> is anything else, it's assumed to be <code>mpz_class</code>, and both <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::Hash</a>&lt;prefix_t&gt;</code> and <code><a class="el" href="structMpzEq.html" title="An equality operator wrapped in a struct for Abseil-CPP to compare hash values with.">MpzEq</a></code> are needed. </li>
+<li>When <code>T</code> is anything else, it's assumed to be <code>mpz_class</code>, and both <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">absl::Hash</a>&lt;prefix_t&gt;</code> and <code>MpzEq</code> are needed. </li>
 </ol>
 
 </div>
@@ -601,7 +601,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <p>A for-each transformer allowing callbacks with thread-local storage for transformation. </p>
 <p>Applies <code>callback</code> to all values according to the BitmapTransformerPolicy (serial or parallel) requested. When serial, order is guaranteed.</p>
 <p>Callback must have this signature: <code>(const T&amp; value, TLS_Type&amp; tls)</code></p>
-<p>The const and ref prevent GMP allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -662,7 +662,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <p>A for-each wrapper returning each value in the bitmap to <code>callback</code>. </p>
 <p>This method uses <code>for_each_transformer</code> when TLS storage isn't needed. It applies <code>callback</code> to all values.</p>
 <p>Callback must have this signature: <code>(const T&amp; value)</code></p>
-<p>The const and ref prevent GMP allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">

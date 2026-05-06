@@ -1,0 +1,102 @@
+\doxysection{int128.\+hpp}
+\hypertarget{int128_8hpp_source}{}\label{int128_8hpp_source}\index{src/collatz/int128.hpp@{src/collatz/int128.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <gmpxx.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}typedefs.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ \#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceInt128}{Int128}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint128\_t\ \mbox{\hyperlink{namespaceInt128_ae0d66f6030e335adee2080056112035b}{parse\_u128}}(std::string\_view\ \mbox{\hyperlink{classNode}{view}})\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ uint128\_t\ value\ =\ 0;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ :\ \mbox{\hyperlink{classNode}{view}})\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ <\ \textcolor{charliteral}{'0'}\ ||\ \mbox{\hyperlink{classNode}{c}}\ >\ \textcolor{charliteral}{'9'})}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{stringliteral}{"{}Invalid\ digit\ in\ uint128\ literal"{}};}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ value\ *\ 10\ +\ (\mbox{\hyperlink{classNode}{c}}\ -\/\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\_to\_mpz}}(uint128\_t\ \mbox{\hyperlink{classNode}{v}},\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ \mbox{\hyperlink{classNode}{dest}})\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{parts}}[2]\ =\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{v}}),\ \ \ \ \ \ \ \textcolor{comment}{//\ low\ 64}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{v}}\ >>\ 64)\ \ \textcolor{comment}{//\ high\ 64}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_import}}(\mbox{\hyperlink{classNode}{dest}}.get\_mpz\_t(),\ 2,\ -\/1,\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{parts}}[0]),\ 0,\ 0,\ \mbox{\hyperlink{classNode}{parts}});}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\_to\_mpz}}(uint128\_t\ \mbox{\hyperlink{classNode}{v}})\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\_to\_mpz}}(\mbox{\hyperlink{classNode}{v}},\ \mbox{\hyperlink{classNode}{result}});}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00056\ \ \ \ \ \}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classNode}{mpf\_class}}\ \mbox{\hyperlink{namespaceInt128_af45eda82ffe223c719787f65ff92deba}{uint128\_to\_mpf}}(uint128\_t\ \mbox{\hyperlink{classNode}{v}})\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{mpf\_class}}(\mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\_to\_mpz}}(\mbox{\hyperlink{classNode}{v}}));}
+\DoxyCodeLine{00067\ \ \ \ \ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{int128\_to\_string}}(\mbox{\hyperlink{classNode}{int128\_t}}\ value)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}0"{}};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{negative}}\ =\ value\ <\ 0;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ uint128\_t\ \mbox{\hyperlink{classNode}{u\_value}}\ =\ \mbox{\hyperlink{classNode}{negative}}\ ?\ uint128\_t(-\/(value\ +\ 1))\ +\ 1\ \ :\ uint128\_t(value);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{u\_value}}\ >\ 0)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{digit}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{u\_value}}\ \%\ 10);}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}.push\_back(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'}\ +\ \mbox{\hyperlink{classNode}{digit}}));}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{u\_value}}\ /=\ 10;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{negative}})\ \mbox{\hyperlink{classNode}{result}}.push\_back(\textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ std::reverse(\mbox{\hyperlink{classNode}{result}}.begin(),\ \mbox{\hyperlink{classNode}{result}}.end());}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{uint128\_to\_string}}(uint128\_t\ value)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}0"{}};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (value\ >\ 0)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{digit}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(value\ \%\ 10);}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}.push\_back(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'}\ +\ \mbox{\hyperlink{classNode}{digit}}));}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ value\ /=\ 10;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ std::reverse(\mbox{\hyperlink{classNode}{result}}.begin(),\ \mbox{\hyperlink{classNode}{result}}.end());}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{inline}\ uint128\_t\ \mbox{\hyperlink{namespaceInt128_a76b639637831fc36c57f6dc0463a8936}{str\_to\_uint128}}(\textcolor{keyword}{const}\ std::string\&\ \mbox{\hyperlink{classNode}{s}})\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{s}}.empty())\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Empty\ string\ for\ uint128\_t"{}});}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ uint128\_t\ \mbox{\hyperlink{classNode}{result}}\ =\ 0;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ :\ \mbox{\hyperlink{classNode}{s}})\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isdigit(\mbox{\hyperlink{classNode}{c}}))\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Invalid\ character\ in\ uint128\_t:\ "{}}\ +\ \mbox{\hyperlink{classNode}{s}});}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{digit}}\ =\ \mbox{\hyperlink{classNode}{c}}\ -\/\ \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{result}}\ *\ 10\ +\ \mbox{\hyperlink{classNode}{digit}};}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \}}
+
+\end{DoxyCode}

@@ -2,7 +2,7 @@
 \hypertarget{conceptAnySupportedIntegral}{}\label{conceptAnySupportedIntegral}\index{AnySupportedIntegral@{AnySupportedIntegral}}
 
 
-Concept applicable to {\ttfamily T} when it\textquotesingle{}s any supported integral.  
+Any supported integral is either a {\ttfamily Fixed\+Width\+Integral} or a {\ttfamily GMPIntegral}.  
 
 
 
@@ -13,10 +13,10 @@ Concept applicable to {\ttfamily T} when it\textquotesingle{}s any supported int
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
-\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptAnySupportedIntegral}{AnySupportedIntegral}}\ =\ \ \mbox{\hyperlink{classNode}{is\_any\_supported\_integral\_v<T>}}}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptAnySupportedIntegral}{AnySupportedIntegral}}\ =\ \ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}}\ ||\ \mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})}
 
 \end{DoxyCode}
 
 
 \doxysubsection{Detailed Description}
-Concept applicable to {\ttfamily T} when it\textquotesingle{}s any supported integral. 
+Any supported integral is either a {\ttfamily Fixed\+Width\+Integral} or a {\ttfamily GMPIntegral}. 

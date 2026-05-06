@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['exponents_0',['Exponents',['../namespaceExponents.html',1,'']]]
+  ['endian_0',['Endian',['../namespaceEndian.html',1,'']]],
+  ['exponents_1',['Exponents',['../namespaceExponents.html',1,'']]]
 ];

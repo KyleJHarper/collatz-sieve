@@ -1,0 +1,197 @@
+\doxysection{Bit Namespace Reference}
+\hypertarget{namespaceBit}{}\label{namespaceBit}\index{Bit@{Bit}}
+
+
+\doxylink{namespaceBit}{Bit} manipulation functions.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceBit_a12741c85ac515c7522899adf0b8a9737}\label{namespaceBit_a12741c85ac515c7522899adf0b8a9737} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint8\+\_\+t}} {\bfseries bitreverse8} (\mbox{\hyperlink{classNode}{uint8\+\_\+t}} \mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em \doxylink{namespaceBit}{Bit} reversal for 8-\/bit unsigned type. Uses {\ttfamily \+\_\+\+\_\+builtin\+\_\+bitreverse8()} if available, otherwise blackbox shifting. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceBit_a294cb0b8604fedd1f0c442481965410f}\label{namespaceBit_a294cb0b8604fedd1f0c442481965410f} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint16\+\_\+t}} {\bfseries bitreverse16} (\mbox{\hyperlink{classNode}{uint16\+\_\+t}} \mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em \doxylink{namespaceBit}{Bit} reversal for 16-\/bit unsigned type. Uses {\ttfamily \+\_\+\+\_\+builtin\+\_\+bitreverse16()} if available, otherwise blackbox shifting. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a}\label{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint32\+\_\+t}} {\bfseries bitreverse32} (\mbox{\hyperlink{classNode}{uint32\+\_\+t}} \mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em \doxylink{namespaceBit}{Bit} reversal for 32-\/bit unsigned type. Uses {\ttfamily \+\_\+\+\_\+builtin\+\_\+bitreverse32()} if available, otherwise blackbox shifting. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}\label{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4} 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries bitreverse64} (\mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em \doxylink{namespaceBit}{Bit} reversal for 64-\/bit unsigned type. Uses {\ttfamily \+\_\+\+\_\+builtin\+\_\+bitreverse64()} if available, otherwise blackbox shifting. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\+\_\+bit\+\_\+reverse\+\_\+full}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em Reverse the bits of any type {\ttfamily T} requested. Used largely for partial reversing later. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{st\+\_\+reverse\+\_\+low\+\_\+bits}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{bits}})
+\begin{DoxyCompactList}\small\item\em Reverse the lower bits of a value, returning only those reversed bits. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceBit_a27b5dc7bda5fd77306798c254c0a2680}{st\+\_\+reverse\+\_\+low\+\_\+bits}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{bits}}, T \&\mbox{\hyperlink{classNode}{out}})
+\begin{DoxyCompactList}\small\item\em Reverse the lower bits of a value, returning only those reversed bits (out param version). \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\+\_\+trailing\+\_\+zeros}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{x}})
+\begin{DoxyCompactList}\small\item\em Find the number of trailing zeros for any type {\ttfamily T}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{count\+\_\+trailing\+\_\+ones}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{n}})
+\begin{DoxyCompactList}\small\item\em Find the number of trailing ones for any type {\ttfamily T}. Simply uses {\ttfamily count\+\_\+trailing\+\_\+zeros(\texorpdfstring{$\sim$}{\string~}n)} essentially. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{namespaceBit_ab5a8975fcf5cda4d39941d651ddf8ede}{byteswap}} (T \&value)
+\begin{DoxyCompactList}\small\item\em Simple {\ttfamily bswap} helper. Handles 8, 16, 32, 64, and 128 bit. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{namespaceBit}{Bit} manipulation functions. 
+
+Where bit reversal is desired, attempts to use the {\ttfamily \+\_\+\+\_\+builtin\+\_\+bitreverseX} family of functions. Performance is highest when systems have them, but in their absence these methods will default to black-\/box-\/ish manual shifting, which is ironically not much slower 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceBit_ab5a8975fcf5cda4d39941d651ddf8ede}\label{namespaceBit_ab5a8975fcf5cda4d39941d651ddf8ede} 
+\index{Bit@{Bit}!byteswap@{byteswap}}
+\index{byteswap@{byteswap}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{byteswap()}{byteswap()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} T Bit\+::byteswap (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Simple {\ttfamily bswap} helper. Handles 8, 16, 32, 64, and 128 bit. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Reference value to operate on. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any fixed-\/width integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The bswap\textquotesingle{}d version, typed to matching {\ttfamily T}. 
+\end{DoxyReturn}
+\Hypertarget{namespaceBit_a714bf2865e70558aacfdb18709972f2d}\label{namespaceBit_a714bf2865e70558aacfdb18709972f2d} 
+\index{Bit@{Bit}!count\_trailing\_ones@{count\_trailing\_ones}}
+\index{count\_trailing\_ones@{count\_trailing\_ones}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{count\_trailing\_ones()}{count\_trailing\_ones()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{int}} Bit\+::count\+\_\+trailing\+\_\+ones (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Find the number of trailing ones for any type {\ttfamily T}. Simply uses {\ttfamily count\+\_\+trailing\+\_\+zeros(\texorpdfstring{$\sim$}{\string~}n)} essentially. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Reference to the value to apply CTO on. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+An integer telling how many were found. This follows {\ttfamily \+\_\+\+\_\+builtin\+\_\+ctzll()} behavior. 
+\end{DoxyReturn}
+\Hypertarget{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}\label{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d} 
+\index{Bit@{Bit}!count\_trailing\_zeros@{count\_trailing\_zeros}}
+\index{count\_trailing\_zeros@{count\_trailing\_zeros}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{count\_trailing\_zeros()}{count\_trailing\_zeros()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{int}} Bit\+::count\+\_\+trailing\+\_\+zeros (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Find the number of trailing zeros for any type {\ttfamily T}. 
+
+\begin{DoxyNote}{Note}
+When {\ttfamily x} is 0, this method returns 0. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Reference to the value to apply CTZ on. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+An integer telling how many were found. This follows {\ttfamily \+\_\+\+\_\+builtin\+\_\+ctzll()} behavior. 
+\end{DoxyReturn}
+\Hypertarget{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}\label{namespaceBit_ab010c837f197187f6c4f1eeb240efccb} 
+\index{Bit@{Bit}!st\_bit\_reverse\_full@{st\_bit\_reverse\_full}}
+\index{st\_bit\_reverse\_full@{st\_bit\_reverse\_full}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{st\_bit\_reverse\_full()}{st\_bit\_reverse\_full()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} T Bit\+::st\+\_\+bit\+\_\+reverse\+\_\+full (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Reverse the bits of any type {\ttfamily T} requested. Used largely for partial reversing later. 
+
+The nature of the binary tree structure means certain liberties can be taken when calculating positions or node values within the tree, largely due to the constant power-\/of-\/two increase. To leverage this, one must take the bits from a node\textquotesingle{}s value or position and reverse them, but only a certain number of them on the LSB (least significant bit) side. There are many ways to do this, including a basic loop, which was used originally and then removed (diff 3.\+2.\+0). Ultimately compiler intrisics were and some black-\/box-\/ish helperes were built to speed this up since it\textquotesingle{}s a hot path.
+
+\begin{DoxyWarning}{Warning}
+This method does not support {\ttfamily mpz\+\_\+class}. The methods which would use it handle {\ttfamily mpz\+\_\+class} directly bit-\/by-\/bit. It is entirely possible to handle {\ttfamily mpz\+\_\+class} if needed some day, but it\textquotesingle{}s expensive and unnecessary.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The data to reverse. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & A fixed-\/width integral. (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}) \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The same data and the same type, with bits reversed. 
+\end{DoxyReturn}
+\Hypertarget{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}\label{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe} 
+\index{Bit@{Bit}!st\_reverse\_low\_bits@{st\_reverse\_low\_bits}}
+\index{st\_reverse\_low\_bits@{st\_reverse\_low\_bits}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{st\_reverse\_low\_bits()}{st\_reverse\_low\_bits()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} T Bit\+::st\+\_\+reverse\+\_\+low\+\_\+bits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{bits }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Reverse the lower bits of a value, returning only those reversed bits. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The data to undergo bit reversal. \\
+\hline
+{\em bits} & The number of lower bits to reverse and return. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+The lower bits isolated and reversed in a value of type {\ttfamily T}. 
+\end{DoxyReturn}
+\Hypertarget{namespaceBit_a27b5dc7bda5fd77306798c254c0a2680}\label{namespaceBit_a27b5dc7bda5fd77306798c254c0a2680} 
+\index{Bit@{Bit}!st\_reverse\_low\_bits@{st\_reverse\_low\_bits}}
+\index{st\_reverse\_low\_bits@{st\_reverse\_low\_bits}!Bit@{Bit}}
+\doxysubsubsection{\texorpdfstring{st\_reverse\_low\_bits()}{st\_reverse\_low\_bits()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} Bit\+::st\+\_\+reverse\+\_\+low\+\_\+bits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{bits,  }\item[{T \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Reverse the lower bits of a value, returning only those reversed bits (out param version). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The data to undergo bit reversal. \\
+\hline
+{\em bits} & The number of lower bits to reverse and return. \\
+\hline
+{\em out} & The lower bits isolated and reversed in a value of type {\ttfamily T}. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}

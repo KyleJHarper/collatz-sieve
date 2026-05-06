@@ -63,7 +63,7 @@ T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{ca
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be}\label{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193}{map\+\_\+t}} \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Get a readonly reference to the internal flat map (the Abseil object). \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933}\label{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933} 
 \mbox{\hyperlink{classNode}{const}} std\+::vector$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$ \& {\bfseries get\+\_\+sorted\+\_\+prefixes} () \mbox{\hyperlink{classNode}{const}}
@@ -98,7 +98,7 @@ T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{ca
 \Hypertarget{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}\label{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a} 
 \mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+word\+\_\+t} = Traits\+::roaring\+\_\+word\+\_\+t
 \begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193}{map\+\_\+t}} = std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}}$<$ T $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}} $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$, \mbox{\hyperlink{structMpzEq}{Mpz\+Eq}} $>$ $>$
+\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} = std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$ T $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}} $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}} $>$ $>$
 \begin{DoxyCompactList}\small\item\em Defines a map type to help cover all necessary components of an {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
@@ -113,7 +113,7 @@ T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{ca
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}\label{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9} 
-\mbox{\hyperlink{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193}{map\+\_\+t}} {\bfseries \+\_\+flat\+\_\+map}
+\mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} {\bfseries \+\_\+flat\+\_\+map}
 \begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}} typed to {\ttfamily prefix\+\_\+t} and a {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}} bitmap. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}\label{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41} 
 std\+::vector$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$ {\bfseries \+\_\+sorted\+\_\+prefixes}
@@ -138,12 +138,12 @@ This class is an Impl, and not meant to be used directly. Use the {\ttfamily \do
 
 
 \doxysubsection{Member Typedef Documentation}
-\Hypertarget{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193}\label{classFlatHashBitmapImpl_ac8ae66d0fcc3ed63fd898a83acedd193} 
+\Hypertarget{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}\label{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8} 
 \index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!map\_t@{map\_t}}
 \index{map\_t@{map\_t}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{map\_t}{map\_t}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::map\+\_\+t =  std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptBuiltinIntegral}{Builtin\+Integral}}$<$T$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}$>$, \mbox{\hyperlink{structMpzEq}{Mpz\+Eq}}$>$ $>$\hspace{0.3cm}{\ttfamily [private]}}
+\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::map\+\_\+t =  std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$T$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}$>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}}$>$ $>$\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
@@ -152,7 +152,7 @@ Defines a map type to help cover all necessary components of an {\ttfamily \doxy
 The following categories apply\+:
 \begin{DoxyEnumerate}
 \item When {\ttfamily T} is a fixed-\/width integral, Absl can hash it directly, so nothing special is required.
-\item When {\ttfamily T} is anything else, it\textquotesingle{}s assumed to be {\ttfamily mpz\+\_\+class}, and both {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}\texorpdfstring{$<$}{<}prefix\+\_\+t\texorpdfstring{$>$}{>}} and {\ttfamily \doxylink{structMpzEq}{Mpz\+Eq}} are needed. 
+\item When {\ttfamily T} is anything else, it\textquotesingle{}s assumed to be {\ttfamily mpz\+\_\+class}, and both {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}\texorpdfstring{$<$}{<}prefix\+\_\+t\texorpdfstring{$>$}{>}} and {\ttfamily Mpz\+Eq} are needed. 
 \end{DoxyEnumerate}
 
 \doxysubsection{Member Function Documentation}
@@ -299,7 +299,7 @@ Applies {\ttfamily callback} to all values according to the Bitmap\+Transformer\
 
 Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}
 
-The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
@@ -336,7 +336,7 @@ This method uses {\ttfamily for\+\_\+each\+\_\+transformer} when TLS storage isn
 
 Callback must have this signature\+: {\ttfamily (const T\& value)}
 
-The const and ref prevent GMP allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.

@@ -1,0 +1,101 @@
+\doxysection{GMP Namespace Reference}
+\hypertarget{namespaceGMP}{}\label{namespaceGMP}\index{GMP@{GMP}}
+
+
+Collection of methods for managing \doxylink{namespaceGMP}{GMP} data types, such as {\ttfamily mpz\+\_\+class} and {\ttfamily mpf\+\_\+class}.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structGMP_1_1MpzEq}{Mpz\+Eq}}
+\begin{DoxyCompactList}\small\item\em An equality operator wrapped in a struct for Abseil-\/\+CPP to compare hash values with. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMP_a11bb62a33b6b93a453fae10178bb4745}{gmp\+\_\+deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpz\+\_\+class} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMP_af7b4d8137db872923e6fad558fe9aaec}{gmp\+\_\+deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpf\+\_\+class} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{namespaceGMP_a24ff6f3d714e0c6e852018410755d440}{mpz\+\_\+get\+\_\+ui64}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}} \&\mbox{\hyperlink{classNode}{obj}})
+\begin{DoxyCompactList}\small\item\em Retrieve xactly 64 bits from an {\ttfamily mpz\+\_\+t}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceGMP_a07297412a60efc96a3e175fb548bf2ab}{parse\+\_\+mpz}} (std\+::string\+\_\+view \mbox{\hyperlink{classNode}{view}})
+\begin{DoxyCompactList}\small\item\em Convert a string view to an {\ttfamily mpz\+\_\+class}. Uses \doxylink{namespaceGMP}{GMP}\textquotesingle{}s {\ttfamily mpz\+\_\+set\+\_\+string()} internally. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Collection of methods for managing \doxylink{namespaceGMP}{GMP} data types, such as {\ttfamily mpz\+\_\+class} and {\ttfamily mpf\+\_\+class}. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceGMP_af7b4d8137db872923e6fad558fe9aaec}\label{namespaceGMP_af7b4d8137db872923e6fad558fe9aaec} 
+\index{GMP@{GMP}!gmp\_deep\_sizeof@{gmp\_deep\_sizeof}}
+\index{gmp\_deep\_sizeof@{gmp\_deep\_sizeof}!GMP@{GMP}}
+\doxysubsubsection{\texorpdfstring{gmp\_deep\_sizeof()}{gmp\_deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMP\+::gmp\+\_\+deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Try to calculate the true (heap) size of an {\ttfamily mpf\+\_\+class} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Best attempt at the total bytes used by the object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGMP_a11bb62a33b6b93a453fae10178bb4745}\label{namespaceGMP_a11bb62a33b6b93a453fae10178bb4745} 
+\index{GMP@{GMP}!gmp\_deep\_sizeof@{gmp\_deep\_sizeof}}
+\index{gmp\_deep\_sizeof@{gmp\_deep\_sizeof}!GMP@{GMP}}
+\doxysubsubsection{\texorpdfstring{gmp\_deep\_sizeof()}{gmp\_deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMP\+::gmp\+\_\+deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Try to calculate the true (heap) size of an {\ttfamily mpz\+\_\+class} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Best attempt at the total bytes used by the object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGMP_a24ff6f3d714e0c6e852018410755d440}\label{namespaceGMP_a24ff6f3d714e0c6e852018410755d440} 
+\index{GMP@{GMP}!mpz\_get\_ui64@{mpz\_get\_ui64}}
+\index{mpz\_get\_ui64@{mpz\_get\_ui64}!GMP@{GMP}}
+\doxysubsubsection{\texorpdfstring{mpz\_get\_ui64()}{mpz\_get\_ui64()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{uint64\+\_\+t}} GMP\+::mpz\+\_\+get\+\_\+ui64 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieve xactly 64 bits from an {\ttfamily mpz\+\_\+t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Reference to the {\ttfamily mpz\+\_\+t} object. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily uint64\+\_\+t} with the bits. 
+\end{DoxyReturn}
+\Hypertarget{namespaceGMP_a07297412a60efc96a3e175fb548bf2ab}\label{namespaceGMP_a07297412a60efc96a3e175fb548bf2ab} 
+\index{GMP@{GMP}!parse\_mpz@{parse\_mpz}}
+\index{parse\_mpz@{parse\_mpz}!GMP@{GMP}}
+\doxysubsubsection{\texorpdfstring{parse\_mpz()}{parse\_mpz()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} GMP\+::parse\+\_\+mpz (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a string view to an {\ttfamily mpz\+\_\+class}. Uses \doxylink{namespaceGMP}{GMP}\textquotesingle{}s {\ttfamily mpz\+\_\+set\+\_\+string()} internally. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em view} & The string view to parse. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The mpz\+\_\+class representation of the string digits sent, if valid. 
+\end{DoxyReturn}

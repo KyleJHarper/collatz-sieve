@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['isimplicittree_0',['IsImplicitTree',['../conceptIsImplicitTree.html',1,'']]],
-  ['ismaterializedtree_1',['IsMaterializedTree',['../conceptIsMaterializedTree.html',1,'']]]
+  ['printableintegral_0',['PrintableIntegral',['../conceptPrintableIntegral.html',1,'']]]
 ];

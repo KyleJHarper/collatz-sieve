@@ -518,7 +518,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <p>A for-each transformer allowing callbacks with thread-local storage for transformation. </p>
 <p>Applies <code>callback</code> to all values according to the BitmapTransformerPolicy (serial or parallel) requested. When serial, order is guaranteed.</p>
 <p>Callback must have this signature: <code>(const T&amp; value, TLS_Type&amp; tls)</code></p>
-<p>The const and ref prevent GMP allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -579,7 +579,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <p>A for-each wrapper returning each value in the bitmap to <code>callback</code>. </p>
 <p>This method uses <code>for_each_transformer</code> when TLS storage isn't needed. It applies <code>callback</code> to all values.</p>
 <p>Callback must have this signature: <code>(const T&amp; value)</code></p>
-<p>The const and ref prevent GMP allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">

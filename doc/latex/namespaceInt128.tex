@@ -1,0 +1,155 @@
+\doxysection{Int128 Namespace Reference}
+\hypertarget{namespaceInt128}{}\label{namespaceInt128}\index{Int128@{Int128}}
+
+
+Collection of methods for managing 128-\/bit integer data types.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{constexpr}} uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_ae0d66f6030e335adee2080056112035b}{parse\+\_\+u128}} (std\+::string\+\_\+view \mbox{\hyperlink{classNode}{view}})
+\begin{DoxyCompactList}\small\item\em Convert a string view to a {\ttfamily uint128\+\_\+t}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}}, \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&\mbox{\hyperlink{classNode}{dest}})
+\begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} type to an {\ttfamily mpz\+\_\+class}, storing it in caller\textquotesingle{}s memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceInt128_aa435d62c7a2873f6caf6cc78c2513f4d}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}})
+\begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpz\+\_\+class}, returning new memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{mpf\+\_\+class}} \mbox{\hyperlink{namespaceInt128_af45eda82ffe223c719787f65ff92deba}{uint128\+\_\+to\+\_\+mpf}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}})
+\begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpf\+\_\+class}, returning new memory. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{int128\+\_\+to\+\_\+string}} (\mbox{\hyperlink{classNode}{int128\+\_\+t}} value)
+\begin{DoxyCompactList}\small\item\em Convert a signed {\ttfamily int128\+\_\+t} value to string. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{uint128\+\_\+to\+\_\+string}} (uint128\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Convert an unsigned {\ttfamily uint128\+\_\+t} value to string. \end{DoxyCompactList}\item 
+uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_a76b639637831fc36c57f6dc0463a8936}{str\+\_\+to\+\_\+uint128}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{s}})
+\begin{DoxyCompactList}\small\item\em Convert a string to a {\ttfamily uint128\+\_\+t}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Collection of methods for managing 128-\/bit integer data types. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}\label{namespaceInt128_af43ab9717154d6f64be361c73286a4c9} 
+\index{Int128@{Int128}!int128\_to\_string@{int128\_to\_string}}
+\index{int128\_to\_string@{int128\_to\_string}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{int128\_to\_string()}{int128\_to\_string()}}
+{\footnotesize\ttfamily std\+::string Int128\+::int128\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{int128\+\_\+t}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a signed {\ttfamily int128\+\_\+t} value to string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value to string-\/ify. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+New string with the digits represented by the value, including a negative sign "{}-\/"{}. 
+\end{DoxyReturn}
+\Hypertarget{namespaceInt128_ae0d66f6030e335adee2080056112035b}\label{namespaceInt128_ae0d66f6030e335adee2080056112035b} 
+\index{Int128@{Int128}!parse\_u128@{parse\_u128}}
+\index{parse\_u128@{parse\_u128}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{parse\_u128()}{parse\_u128()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} uint128\+\_\+t Int128\+::parse\+\_\+u128 (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Convert a string view to a {\ttfamily uint128\+\_\+t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em view} & The string view to parse. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The uint128\+\_\+t representation of the string digits sent, if valid. 
+\end{DoxyReturn}
+\Hypertarget{namespaceInt128_a76b639637831fc36c57f6dc0463a8936}\label{namespaceInt128_a76b639637831fc36c57f6dc0463a8936} 
+\index{Int128@{Int128}!str\_to\_uint128@{str\_to\_uint128}}
+\index{str\_to\_uint128@{str\_to\_uint128}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{str\_to\_uint128()}{str\_to\_uint128()}}
+{\footnotesize\ttfamily uint128\+\_\+t Int128\+::str\+\_\+to\+\_\+uint128 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a string to a {\ttfamily uint128\+\_\+t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily uint128\+\_\+t} representing the digits converted to an integral. 
+\end{DoxyReturn}
+\Hypertarget{namespaceInt128_af45eda82ffe223c719787f65ff92deba}\label{namespaceInt128_af45eda82ffe223c719787f65ff92deba} 
+\index{Int128@{Int128}!uint128\_to\_mpf@{uint128\_to\_mpf}}
+\index{uint128\_to\_mpf@{uint128\_to\_mpf}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{uint128\_to\_mpf()}{uint128\_to\_mpf()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpf\+\_\+class}} Int128\+::uint128\+\_\+to\+\_\+mpf (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpf\+\_\+class}, returning new memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Value to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The same value in an {\ttfamily mpf\+\_\+class} object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceInt128_aa435d62c7a2873f6caf6cc78c2513f4d}\label{namespaceInt128_aa435d62c7a2873f6caf6cc78c2513f4d} 
+\index{Int128@{Int128}!uint128\_to\_mpz@{uint128\_to\_mpz}}
+\index{uint128\_to\_mpz@{uint128\_to\_mpz}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{uint128\_to\_mpz()}{uint128\_to\_mpz()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpz\+\_\+class}, returning new memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Value to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The same value in an {\ttfamily mpz\+\_\+class} object. 
+\end{DoxyReturn}
+\Hypertarget{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}\label{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9} 
+\index{Int128@{Int128}!uint128\_to\_mpz@{uint128\_to\_mpz}}
+\index{uint128\_to\_mpz@{uint128\_to\_mpz}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{uint128\_to\_mpz()}{uint128\_to\_mpz()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{void}} Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v,  }\item[{\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{dest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert a {\ttfamily uint128\+\_\+t} type to an {\ttfamily mpz\+\_\+class}, storing it in caller\textquotesingle{}s memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Value to convert. \\
+\hline
+{\em dest} & Reference to the {\ttfamily mpz\+\_\+class} object to write to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{namespaceInt128_af5a5a2e4039d50255dff767144086b69}\label{namespaceInt128_af5a5a2e4039d50255dff767144086b69} 
+\index{Int128@{Int128}!uint128\_to\_string@{uint128\_to\_string}}
+\index{uint128\_to\_string@{uint128\_to\_string}!Int128@{Int128}}
+\doxysubsubsection{\texorpdfstring{uint128\_to\_string()}{uint128\_to\_string()}}
+{\footnotesize\ttfamily std\+::string Int128\+::uint128\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Convert an unsigned {\ttfamily uint128\+\_\+t} value to string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value to string-\/ify. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+New string with the digits represented by the value. 
+\end{DoxyReturn}

@@ -4,7 +4,7 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi\_helpers.hpp"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi.hpp"{}}}
 \DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}binary\_tree\_math.hpp"{}}}
 \DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <array>}}
@@ -76,15 +76,15 @@
 \DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00089\ }
 \DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ right\ type,\ and\ convert\ as-\/needed.}}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptNativeIntegral}{NativeIntegral<T>}})\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ >\ \textcolor{keyword}{sizeof}(T)\ *\ 8)\ \{}
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Level\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{level}})\ +\ \textcolor{stringliteral}{"{}\ is\ outside\ the\ max\ range\ for\ your\ type\ T:\ "{}}\ +\ ABIHelpers::demangle<T>());}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Level\ "{}}\ +\ std::to\_string(\mbox{\hyperlink{classNode}{level}})\ +\ \textcolor{stringliteral}{"{}\ is\ outside\ the\ max\ range\ for\ your\ type\ T:\ "{}}\ +\ ABI::demangle<T>());}
 \DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptExtendedIntegral}{ExtendedIntegral<T>}})\ \{}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}];}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ uint128\_to\_mpz(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(\mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\_COVERAGE\_MAP}}[\mbox{\hyperlink{classNode}{level}}]);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Unknown\ data\ type"{}});}
 \DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00101\ }
 \DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Should\ never\ reach\ this.}}

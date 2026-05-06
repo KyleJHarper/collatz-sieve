@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['gmpintegral_0',['GMPIntegral',['../conceptGMPIntegral.html',1,'']]],
-  ['guaranteedwidthintegral_1',['GuaranteedWidthIntegral',['../conceptGuaranteedWidthIntegral.html',1,'']]]
+  ['int128integral_0',['Int128Integral',['../conceptInt128Integral.html',1,'']]],
+  ['isimplicittree_1',['IsImplicitTree',['../conceptIsImplicitTree.html',1,'']]],
+  ['ismaterializedtree_2',['IsMaterializedTree',['../conceptIsMaterializedTree.html',1,'']]]
 ];
