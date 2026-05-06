@@ -44,27 +44,27 @@
 \DoxyCodeLine{00064\ }
 \DoxyCodeLine{00065\ }
 \DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structGMP_1_1MpzEq}{MpzEq}}\ \{}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ \mbox{\hyperlink{classNode}{b}})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{a}}\ ==\ \mbox{\hyperlink{classNode}{b}};}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00074\ \ \ \ \ \};}
-\DoxyCodeLine{00075\ }
-\DoxyCodeLine{00076\ \}}
-\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structGMP_1_1MpzEq_ad70c461a1327d46aef2fbbfacae0d60f}{operator()}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ \mbox{\hyperlink{classNode}{a}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ \mbox{\hyperlink{classNode}{b}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{a}}\ ==\ \mbox{\hyperlink{classNode}{b}};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \}}
 \DoxyCodeLine{00078\ }
 \DoxyCodeLine{00079\ }
-\DoxyCodeLine{00085\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ H>}
-\DoxyCodeLine{00086\ \mbox{\hyperlink{classNode}{H}}\ AbslHashValue(\mbox{\hyperlink{classNode}{H}}\ \mbox{\hyperlink{classNode}{h}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ value)\ \{}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ limb\ count\ and\ add\ it\ to\ the\ hash.}}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mp\_limb\_t}}*\ \mbox{\hyperlink{classNode}{limbs}}\ =\ \mbox{\hyperlink{classNode}{mpz\_limbs\_read}}(value.get\_mpz\_t());}
-\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limb\_count}}\ =\ \mbox{\hyperlink{classNode}{mpz\_size}}(value.get\_mpz\_t());}
-\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limb\_count}});}
-\DoxyCodeLine{00091\ }
-\DoxyCodeLine{00092\ \ \ \ \ \textcolor{comment}{//\ Now\ include\ the\ limbs\ themselves.}}
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{limb\_count}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limbs}}[\mbox{\hyperlink{classNode}{i}}]);}
-\DoxyCodeLine{00095\ \ \ \ \ \}}
-\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{h}};}
-\DoxyCodeLine{00097\ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00086\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ H>}
+\DoxyCodeLine{00087\ \mbox{\hyperlink{classNode}{H}}\ AbslHashValue(\mbox{\hyperlink{classNode}{H}}\ \mbox{\hyperlink{classNode}{h}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ value)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ Get\ the\ limb\ count\ and\ add\ it\ to\ the\ hash.}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mp\_limb\_t}}*\ \mbox{\hyperlink{classNode}{limbs}}\ =\ \mbox{\hyperlink{classNode}{mpz\_limbs\_read}}(value.get\_mpz\_t());}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{limb\_count}}\ =\ \mbox{\hyperlink{classNode}{mpz\_size}}(value.get\_mpz\_t());}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limb\_count}});}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{comment}{//\ Now\ include\ the\ limbs\ themselves.}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{limb\_count}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{h}}\ =\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine}}(std::move(\mbox{\hyperlink{classNode}{h}}),\ \mbox{\hyperlink{classNode}{limbs}}[\mbox{\hyperlink{classNode}{i}}]);}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{h}};}
+\DoxyCodeLine{00098\ \}}
 
 \end{DoxyCode}

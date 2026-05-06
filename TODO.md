@@ -30,10 +30,6 @@
 * Some of the odd nodes become larger odds on the same level.
 * etc.
 
-## Documentation
-* Modify the comments to be auto-documenting.
-* Add this theme: https://jothepro.github.io/doxygen-awesome-css/
-
 ## Affine F-Stride Table
 * Make a table of just consecutive F-steps into strides.
   * Peak by bit can make use of this as long as it doesn't overflow.... hmm...

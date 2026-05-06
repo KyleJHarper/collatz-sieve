@@ -197,7 +197,7 @@ namespace Bit {
     /**
     * @brief Find the number of trailing zeros for any type `T`.
     * @note When `x` is 0, this method returns 0.
-    * @param n Reference to the value to apply CTZ on.
+    * @param x Reference to the value to apply CTZ on.
     * @tparam T Any supported integral (see concepts.hpp).
     * @return An integer telling how many were found.  This follows `__builtin_ctzll()` behavior.
     */

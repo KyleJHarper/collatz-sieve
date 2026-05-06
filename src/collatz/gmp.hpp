@@ -68,6 +68,7 @@ namespace GMP {
     * @brief An equality operator wrapped in a struct for Abseil-CPP to compare hash values with.
     */
     struct MpzEq {
+        /// @brief Equality test.
         bool operator()(const mpz_class& a, const mpz_class& b) const {
             return a == b;
         }
