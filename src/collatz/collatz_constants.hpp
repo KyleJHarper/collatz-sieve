@@ -16,7 +16,7 @@
 */
 namespace CollatzConstants {
     /// @brief Highest known empircally tested level.  See [Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).
-    static const uint64_t LARGEST_EMPIRICALLY_TESTED_LEVEL = 72;
+    static const level_t LARGEST_EMPIRICALLY_TESTED_LEVEL = 72;
 
     // GMP will sometimes alloc() if you operate on a non-GMP (e.g.: ui) value.
     static const mpz_class MPZ_ONE = 1;    ///< Constant `mpz_class(1)` to prevent allocs in some cases.

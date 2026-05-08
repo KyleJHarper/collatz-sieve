@@ -6,35 +6,307 @@
 #include <gmpxx.h>
 #include <omp.h>
 #include <stdexcept>
+#include "helpers.hpp"
 #include "../collatz/binary_tree.hpp"
 #include "../collatz/binary_tree_coverage_constants.hpp"
 
 
-//
-// All of these tests need to work with native integrals and GMP.
-// All of these tests need to work with 0-rooted and 1-rooted (traditional) binary trees.
-// All of these tests need to work with Materialized and Implicit trees, where applicable.
-//
-// WHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-//
 
 
 template<AnySupportedIntegral T>
 void test_binary_tree_basic_construction() {
+    start_test(__func__);
+
     // Tree should be implicit by default.
     BinaryTree<T> tree_implicit_by_default(5);
     assert(tree_implicit_by_default.is_implicit());
+
     // Make a materialized one and do some tests.
     MaterializedBinaryTree<T> tree(5);
     assert(tree.is_materialized());
+
     // Build extras to ensure isolation, double-freeing, etc are all good.  These will destruct at function end (end of scope).
     MaterializedBinaryTree<T> tree2(2);
     MaterializedBinaryTree<T> tree3(4);
     MaterializedBinaryTree<T> tree4(5);
     MaterializedBinaryTree<T> tree5(6);
     MaterializedBinaryTree<T> tree6(7);
-    assert(tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
+
+    // Aliases should work.
+    MaterializedBinaryTree<T> x(1);
+    assert(x.is_materialized());
+    ImplicitBinaryTree<T> y(1);
+    assert(y.is_implicit());
+
+    // Empty trees should be okay.
+    ImplicitBinaryTree<T> zero_implicit_tree;
+    assert(zero_implicit_tree.get_level_count() == 0);
+    assert(zero_implicit_tree.is_initialized() == false);
+    MaterializedBinaryTree<T> zero_materialized_tree;
+    assert(zero_materialized_tree.get_level_count() == 0);
+    assert(zero_materialized_tree.is_initialized() == false);
+
+    // Adding levels to them should be fine.
+    zero_implicit_tree.add_level();
+    zero_materialized_tree.add_level();
+    assert(zero_implicit_tree.get_level_count() == 1);
+    assert(zero_materialized_tree.get_level_count() == 1);
+    assert(zero_implicit_tree.is_initialized() == true);
+    assert(zero_materialized_tree.is_initialized() == true);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_init() {
+    start_test(__func__);
+
+    // Make a tree.
+    BinaryTree<T> tree(5);
     assert(tree.get_level_count() == 5);
+
+    // Shrink it.
+    tree.init(3);
+    assert(tree.get_level_count() == 3);
+
+    // Add a level.
+    tree.add_level();
+    assert(tree.get_level_count() == 4);
+
+    // Grow it.
+    tree.init(16);
+    assert(tree.get_level_count() == 16);
+
+    // Start from an uninitialized tree.
+    BinaryTree<T> uninitialized_tree;
+    assert(uninitialized_tree.is_initialized() == false);
+    uninitialized_tree.init(14);
+    assert(tree.get_level_count() == 14);
+    assert(uninitialized_tree.is_initialized() == true);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_reset() {
+    start_test(__func__);
+
+    ImplicitBinaryTree<T> implicit_tree(6);
+    MaterializedBinaryTree<T> materialized_tree(6);
+
+    assert(implicit_tree.get_level_count() == 6);
+    assert(materialized_tree.get_level_count() == 6);
+    assert(implicit_tree.is_initialized() == true);
+    assert(materialized_tree.is_initialized() == true);
+
+    // Now reset.
+    implicit_tree.reset();
+    materialized_tree.reset();
+    assert(implicit_tree.get_level_count() == 0);
+    assert(materialized_tree.get_level_count() == 0);
+    assert(implicit_tree.is_initialized() == false);
+    assert(materialized_tree.is_initialized() == false);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_impl() {
+    start_test(__func__);
+
+    // Implicit
+    BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(8);
+    const BinaryTreeImplicitImpl<T> implicit_impl = implicit_tree.get_impl();
+    assert(implicit_impl.is_implicit());
+
+    // Materialized
+    BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(8);
+    const BinaryTreeMaterializedImpl<T> materialized_impl = materialized_tree.get_impl();
+    assert(materialized_impl.is_materialized());
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_tree_type() {
+    start_test(__func__);
+
+    // Implicit
+    BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(8);
+    assert(implicit_tree.get_tree_type() == TreeTypeEnum::IMPLICIT);
+
+    // Materialized
+    BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(8);
+    assert(materialized_tree.get_tree_type() == TreeTypeEnum::MATERIALIZED);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_level_count() {
+    start_test(__func__);
+
+    level_t max_level = 16;
+    for (level_t level = 1; level <= max_level; level++) {
+        // Implicit
+        ImplicitBinaryTree<T> implicit_tree(level);
+        assert(implicit_tree.get_level_count() == level);
+        implicit_tree.add_level();
+        assert(implicit_tree.get_level_count() == level + 1);
+
+        // Materialized
+        MaterializedBinaryTree<T> materialized_tree(level);
+        assert(materialized_tree.get_level_count() == level);
+        materialized_tree.add_level();
+        assert(materialized_tree.get_level_count() == level + 1);
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_root_node() {
+    start_test(__func__);
+
+    ImplicitBinaryTree<T> implicit_tree;
+    assert(implicit_tree.get_root_node() == nullptr);
+    implicit_tree.init(4);
+    assert(implicit_tree.get_root_node() != nullptr);
+    assert(implicit_tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
+
+    MaterializedBinaryTree<T> materialized_tree;
+    assert(materialized_tree.get_root_node() == nullptr);
+    materialized_tree.init(4);
+    assert(materialized_tree.get_root_node() != nullptr);
+    assert(materialized_tree.get_root_node()->get_value() == BinaryTreeMath<T>::get_root_value());
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_coverage_map() {
+    start_test(__func__);
+
+    level_t max_level = 4;
+
+    // Implicit
+    ImplicitBinaryTree<T> implicit_tree(max_level);
+    const std::unordered_map<level_t, BinaryTreeCoverage<T>>& implicit_coverage_map = implicit_tree.get_coverage_map();
+    assert(implicit_coverage_map.size() == max_level);
+    for (level_t level = 1; level <= max_level; level++) {
+        const BinaryTreeCoverage<T>& coverage = implicit_coverage_map.at(level);
+        assert(coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+        assert(coverage.get_total() == BinaryTreeCoverageConstants::get_total<T>(level));
+    }
+
+    // Materialized
+    MaterializedBinaryTree<T> materialized_tree(max_level);
+    const std::unordered_map<level_t, BinaryTreeCoverage<T>>& materialized_coverage_map = materialized_tree.get_coverage_map();
+    assert(materialized_coverage_map.size() == max_level);
+    for (level_t level = 1; level <= max_level; level++) {
+        const BinaryTreeCoverage<T>& coverage = materialized_coverage_map.at(level);
+        assert(coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
+        assert(coverage.get_total() == BinaryTreeCoverageConstants::get_total<T>(level));
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_get_ancestors() {
+    start_test(__func__);
+
+    level_t max_level = 4;
+    BinaryTreeOptions opts_without_ancestors;
+    opts_without_ancestors.preserve_ancestors = false;
+    BinaryTreeOptions opts_with_ancestors;
+    opts_with_ancestors.preserve_ancestors = true;
+
+    // Implicit
+    ImplicitBinaryTree<T> implicit_tree_without_ancestors(max_level, opts_without_ancestors);
+    assert(implicit_tree_without_ancestors.get_ancestors().size() == 0);
+    ImplicitBinaryTree<T> implicit_tree_with_ancestors(max_level, opts_with_ancestors);
+    assert(implicit_tree_with_ancestors.get_ancestors().size() > 0);
+    assert(implicit_tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
+    assert(implicit_tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
+
+    // Materialized
+    MaterializedBinaryTree<T> materialized_tree_without_ancestors(max_level, opts_without_ancestors);
+    assert(materialized_tree_without_ancestors.get_ancestors().size() == 0);
+    MaterializedBinaryTree<T> materialized_tree_with_ancestors(max_level, opts_with_ancestors);
+    assert(materialized_tree_with_ancestors.get_ancestors().size() > 0);
+    assert(materialized_tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
+    assert(materialized_tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_is_verifying_non_hwm_nodes() {
+    start_test(__func__);
+
+    // Implicit
+    ImplicitBinaryTree<T> implicit_tree;
+    assert(implicit_tree.is_verifying_non_hwm_nodes() == false);
+    implicit_tree.enable_non_hwm_node_verification();
+    assert(implicit_tree.is_verifying_non_hwm_nodes() == true);
+    implicit_tree.disable_non_hwm_node_verification();
+    assert(implicit_tree.is_verifying_non_hwm_nodes() == false);
+
+    // Materialized
+    MaterializedBinaryTree<T> materialized_tree;
+    assert(materialized_tree.is_verifying_non_hwm_nodes() == false);
+    materialized_tree.enable_non_hwm_node_verification();
+    assert(materialized_tree.is_verifying_non_hwm_nodes() == true);
+    materialized_tree.disable_non_hwm_node_verification();
+    assert(materialized_tree.is_verifying_non_hwm_nodes() == false);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_node_count() {
+    start_test(__func__);
+
+    level_t levels = 8;
+
+    ImplicitBinaryTree<T> implicit_tree(levels);
+    assert(implicit_tree.node_count() == BinaryTreeMath<T>::st_node_count_of_tree(levels));
+
+    MaterializedBinaryTree<T> materialized_tree(levels);
+    assert(materialized_tree.node_count() == BinaryTreeMath<T>::st_node_count_of_tree(levels));
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_materialized_level_map() {
+    start_test(__func__);
+
+    // Materialized
+    MaterializedBinaryTree<T> tree(5);
     const auto& map = tree.get_level_map();
     size_t level = 0;
     //
@@ -88,9 +360,99 @@ void test_binary_tree_basic_construction() {
     assert(map.at(level)[13]->get_value() == 26 + BinaryTreeMath<T>::get_root_value());
     assert(map.at(level)[14]->get_value() == 22 + BinaryTreeMath<T>::get_root_value());
     assert(map.at(level)[15]->get_value() == 30 + BinaryTreeMath<T>::get_root_value());
+
+    end_test();
+}
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_materialized_pruning_options() {
+    start_test(__func__);
+
+    BinaryTreeOptions opts_with_no_pruning;
+    opts_with_no_pruning.prune_hwm_nodes = false;
+    opts_with_no_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_hwm_pruning;
+    opts_with_hwm_pruning.prune_hwm_nodes = true;
+    opts_with_hwm_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_parent_pruning;
+    opts_with_parent_pruning.prune_hwm_nodes = false;
+    opts_with_parent_pruning.prune_parent_levels = true;
+    BinaryTreeOptions opts_with_all_pruning;
+    opts_with_all_pruning.prune_hwm_nodes = true;
+    opts_with_all_pruning.prune_parent_levels = true;
+
+    // Materialized
+    level_t levels = 8;
+    MaterializedBinaryTree<T> tree_with_no_pruning(levels, opts_with_no_pruning);
+    assert(tree_with_no_pruning.is_pruning_hwm_nodes() == false);
+    assert(tree_with_no_pruning.is_pruning_parent_levels() == false);
+    MaterializedBinaryTree<T> tree_with_hwm_pruning(levels, opts_with_hwm_pruning);
+    assert(tree_with_hwm_pruning.is_pruning_hwm_nodes() == true);
+    assert(tree_with_hwm_pruning.is_pruning_parent_levels() == false);
+    MaterializedBinaryTree<T> tree_with_parent_pruning(levels, opts_with_parent_pruning);
+    assert(tree_with_parent_pruning.is_pruning_hwm_nodes() == false);
+    assert(tree_with_parent_pruning.is_pruning_parent_levels() == true);
+    MaterializedBinaryTree<T> tree_with_all_pruning(levels, opts_with_all_pruning);
+    assert(tree_with_all_pruning.is_pruning_hwm_nodes() == true);
+    assert(tree_with_all_pruning.is_pruning_parent_levels() == true);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_materialized_real_node_count() {
+    start_test(__func__);
+
+    BinaryTreeOptions opts_with_no_pruning;
+    opts_with_no_pruning.prune_hwm_nodes = false;
+    opts_with_no_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_hwm_pruning;
+    opts_with_hwm_pruning.prune_hwm_nodes = true;
+    opts_with_hwm_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_parent_pruning;
+    opts_with_parent_pruning.prune_hwm_nodes = false;
+    opts_with_parent_pruning.prune_parent_levels = true;
+    BinaryTreeOptions opts_with_all_pruning;
+    opts_with_all_pruning.prune_hwm_nodes = true;
+    opts_with_all_pruning.prune_parent_levels = true;
+
+    // Materialized
+    level_t levels = 8;
+    MaterializedBinaryTree<T> tree_with_no_pruning(levels, opts_with_no_pruning);
+    assert(tree_with_no_pruning.real_node_count() == 255);
+    MaterializedBinaryTree<T> tree_with_hwm_pruning(levels, opts_with_hwm_pruning);
+    assert(tree_with_hwm_pruning.real_node_count() == 33);
+    MaterializedBinaryTree<T> tree_with_parent_pruning(levels, opts_with_parent_pruning);
+    assert(tree_with_parent_pruning.real_node_count() == 128);
+    MaterializedBinaryTree<T> tree_with_all_pruning(levels, opts_with_all_pruning);
+    assert(tree_with_all_pruning.real_node_count() == 13);
+
+    // Compare real node count to level map count.
+    MaterializedBinaryTree<T> tree(levels);
+    T expected_count = (T{1} << levels) - 1;
+    T map_count = 0;
+    const auto& map = tree.get_level_map();
+    for (level_t i = 1; i <= tree.get_level_count(); i++) {
+        map_count += map.at(i).size();
+    }
+    assert(tree.real_node_count() == expected_count);
+    assert(map_count == expected_count);
     //
-    //
-    // Build an Implicit tree using the more complext signature.
+    // No implicit tree test here because there's no map.
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_implicit_uncovered_positions() {
+    start_test(__func__);
+
+    // Implicit
     BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(1);
     assert(implicit_tree.get_level_count() == 1);
     const auto& uncovered_positions = implicit_tree.get_uncovered_positions();
@@ -172,12 +534,130 @@ void test_binary_tree_basic_construction() {
         assert(uncovered_positions.contains(16));
     }
 
-    // Aliases should work.
-    MaterializedBinaryTree<T> x(1);
-    assert(x.is_materialized());
-    ImplicitBinaryTree<T> y(1);
-    assert(y.is_implicit());
+    end_test();
 }
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_assert_level_will_fit() {
+    start_test(__func__);
+
+    // The limits of type T are already tested in the BinaryTreeMath tests, but they'll be checked again here.
+    level_t max_level = BinaryTreeMath<T>::st_max_level_of_type();
+
+    // Implicit
+    // 8 bit can't build a 16 level tree
+    try {
+        ImplicitBinaryTree<uint8_t> tree_implicit(16);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
+    }
+    // A 32-bit tree type can.
+    ImplicitBinaryTree<uint32_t> tree_implicit(16);
+    // An 8 bit can, however,  handle a 4-level tree.
+    ImplicitBinaryTree<uint8_t> tree2_implicit(4);
+    // It can make a 7-level tree too.
+    ImplicitBinaryTree<uint8_t> tree3_implicit(7);
+    // Adding another level should break.
+    try {
+        tree3_implicit.add_level();
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 8") != std::string::npos);
+    }
+    // Build up to type T's max.
+    if (FixedWidthIntegral<T>) {
+        ImplicitBinaryTree<T> tree_implicit_empty;
+        tree_implicit_empty.assert_level_will_fit(max_level);
+        try {
+            ImplicitBinaryTree<T> tree_implicit(max_level + 1);
+            assert(false); // Should throw
+        } catch (const std::out_of_range& e) {
+            assert(std::string(e.what()).find("Cannot build a BinaryTree with " + std::to_string(max_level + 1)) != std::string::npos);
+        }
+    }
+
+    // Materialized
+    // 8 bit can't build a 16 level tree
+    try {
+        MaterializedBinaryTree<uint8_t> tree(16);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
+    }
+    // A 32-bit tree type can.
+    MaterializedBinaryTree<uint32_t> tree(16);
+    // An 8 bit can, however,  handle a 4-level tree.
+    MaterializedBinaryTree<uint8_t> tree2(4);
+    // It can make a 7-level tree too.
+    MaterializedBinaryTree<uint8_t> tree3(7);
+    // Adding another level should break.
+    try {
+        tree3.add_level();
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot build a BinaryTree with 8") != std::string::npos);
+    }
+    // Build up to type T's max.
+    if (FixedWidthIntegral<T>) {
+        MaterializedBinaryTree<T> tree_materialized_empty;
+        tree_materialized_empty.assert_level_will_fit(max_level);
+        try {
+            MaterializedBinaryTree<T> tree_materialized(max_level + 1);
+            assert(false); // Should throw
+        } catch (const std::out_of_range& e) {
+            assert(std::string(e.what()).find("Cannot build a BinaryTree with " + std::to_string(max_level + 1)) != std::string::npos);
+        }
+    }
+
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_assert_level_verification() {
+    start_test(__func__);
+
+    // Implicit
+    ImplicitBinaryTree<T> implicit_tree;
+    // Testing to the known limit without verification is okay.
+    for (level_t level = 1; level < CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL; level++) {
+        implicit_tree.assert_level_verification(level, false);
+    }
+    // Building over the max level should fail without verification.
+    try {
+        implicit_tree.assert_level_verification(CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1, false);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Tree has reached max level of previously verified space") != std::string::npos);
+    }
+    // With verification enabled, should be okay.
+    implicit_tree.assert_level_verification(CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1, true);
+
+    // Implicit
+    MaterializedBinaryTree<T> materialized_tree;
+    // Testing to the known limit without verification is okay.
+    for (level_t level = 1; level < CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL; level++) {
+        materialized_tree.assert_level_verification(level, false);
+    }
+    // Building over the max level should fail without verification.
+    try {
+        materialized_tree.assert_level_verification(CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1, false);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("Tree has reached max level of previously verified space") != std::string::npos);
+    }
+    // With verification enabled, should be okay.
+    materialized_tree.assert_level_verification(CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1, true);
+
+    end_test();
+}
+
+
 
 
 template<AnySupportedIntegral T>
@@ -312,71 +792,6 @@ void test_binary_tree_coverage_coherency_at_scale() {
 }
 
 
-template<AnySupportedIntegral T>
-void test_binary_tree_node_count_should_match_map() {
-    size_t levels = 5;
-    MaterializedBinaryTree<T> tree(levels);
-    T expected_count = (T{1} << levels) - 1;
-    size_t map_count = 0;
-    const auto& map = tree.get_level_map();
-    for (size_t i = 1; i <= tree.get_level_count(); i++) {
-        map_count += map.at(i).size();
-    }
-    assert(tree.real_node_count() == expected_count);
-    assert(map_count == expected_count);
-    //
-    // No implicit tree test here because there's no map.
-}
-
-
-template<AnySupportedIntegral T>
-void test_binary_tree_too_many_levels() {
-    //
-    // Materialized
-    // 8 bit can't build a 16 level tree
-    try {
-        MaterializedBinaryTree<uint8_t> tree(16);
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
-    }
-    // A 32-bit tree type can.
-    MaterializedBinaryTree<uint32_t> tree(16);
-    // An 8 bit can, however,  handle a 4-level tree.
-    MaterializedBinaryTree<uint8_t> tree2(4);
-    // It can make a 7-level tree too.
-    MaterializedBinaryTree<uint8_t> tree3(7);
-    // Adding another level should break.
-    try {
-        tree3.add_level();
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 8") != std::string::npos);
-    }
-    //
-    // Implicit
-    // 8 bit can't build a 16 level tree
-    try {
-        ImplicitBinaryTree<uint8_t> tree_implicit(16);
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 16") != std::string::npos);
-    }
-    // A 32-bit tree type can.
-    ImplicitBinaryTree<uint32_t> tree_implicit(16);
-    // An 8 bit can, however,  handle a 4-level tree.
-    ImplicitBinaryTree<uint8_t> tree2_implicit(4);
-    // It can make a 7-level tree too.
-    ImplicitBinaryTree<uint8_t> tree3_implicit(7);
-    // Adding another level should break.
-    try {
-        tree3_implicit.add_level();
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("Cannot build a BinaryTree with 8") != std::string::npos);
-    }
-}
-
 
 template<AnySupportedIntegral T>
 void test_binary_tree_multi_threaded() {
@@ -392,200 +807,6 @@ void test_binary_tree_multi_threaded() {
     }
 }
 
-
-template<AnySupportedIntegral T>
-void test_binary_tree_math() {
-    // Root Default
-    assert(BinaryTreeMath<T>::get_default_root_value() == 1);
-    //
-    // Bit Reversal
-    T value = 421;  // Binary: 110100101
-    assert(Bit::st_reverse_low_bits(value, 1) == 1);   //         1
-    assert(Bit::st_reverse_low_bits(value, 2) == 2);   //        10
-    assert(Bit::st_reverse_low_bits(value, 3) == 5);   //       101
-    assert(Bit::st_reverse_low_bits(value, 4) == 10);  //      1010
-    assert(Bit::st_reverse_low_bits(value, 5) == 20);  //     10100
-    assert(Bit::st_reverse_low_bits(value, 6) == 41);  //    101001
-    assert(Bit::st_reverse_low_bits(value, 7) == 82);  //   1010010
-    assert(Bit::st_reverse_low_bits(value, 8) == 165); //  10100101
-    assert(Bit::st_reverse_low_bits(value, 9) == 331); // 101001011
-    //
-    // Node Levels
-    size_t level = 0;  // Always returns size_t
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 2) : assert(level == 1);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 2) : assert(level == 2);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(3);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 3) : assert(level == 2);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(4);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 3) : assert(level == 3);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(7);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 4) : assert(level == 3);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(14);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 4) : assert(level == 4);
-    level = BinaryTreeMath<T>::st_get_level_by_node_value(101);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(level == 7) : assert(level == 7);
-    //
-    // Node Positions
-    T position = 0;
-    position = BinaryTreeMath<T>::st_node_position(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 1) : assert(position == 1);
-    position = BinaryTreeMath<T>::st_node_position(2);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 2) : assert(position == 1);
-    position = BinaryTreeMath<T>::st_node_position(3);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 1) : assert(position == 2);
-    position = BinaryTreeMath<T>::st_node_position(4);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 3) : assert(position == 1);
-    position = BinaryTreeMath<T>::st_node_position(5);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 2) : assert(position == 3);
-    position = BinaryTreeMath<T>::st_node_position(6);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 4) : assert(position == 2);
-    position = BinaryTreeMath<T>::st_node_position(7);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 1) : assert(position == 4);
-    position = BinaryTreeMath<T>::st_node_position(46);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(position == 31) : assert(position == 15);
-    //
-    // Max Position of Level (AKA node count)
-    T max_position = BinaryTreeMath<T>::st_node_count_of_level(1);
-    assert(max_position == 1);
-    max_position = BinaryTreeMath<T>::st_node_count_of_level(2);
-    assert(max_position == 2);
-    max_position = BinaryTreeMath<T>::st_node_count_of_level(3);
-    assert(max_position == 4);
-    max_position = BinaryTreeMath<T>::st_node_count_of_level(4);
-    assert(max_position == 8);
-    max_position = BinaryTreeMath<T>::st_node_count_of_level(5);
-    assert(max_position == 16);
-    //
-    // Max Node Value at Level
-    mpz_class max_node = 0; // Always returns MPZ
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(1);
-    assert(max_node == 0 + BinaryTreeMath<T>::get_root_value());
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(2);
-    assert(max_node == 2 + BinaryTreeMath<T>::get_root_value());
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(3);
-    assert(max_node == 6 + BinaryTreeMath<T>::get_root_value());
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(4);
-    assert(max_node == 14 + BinaryTreeMath<T>::get_root_value());
-    max_node = BinaryTreeMath<T>::st_max_node_value_at_level(5);
-    assert(max_node == 30 + BinaryTreeMath<T>::get_root_value());
-    //
-    // Max Full Level at Node
-    size_t max_level = 0; // Always returns size_t.
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(1);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 1) : assert(max_level == 1);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(4);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 2) : assert(max_level == 2);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(6);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 2);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(7);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 3) : assert(max_level == 3);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(26);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(29);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 4) : assert(max_level == 4);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(30);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 4);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(31);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(49);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 5) : assert(max_level == 5);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(63);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 6) : assert(max_level == 6);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(125);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 6) : assert(max_level == 6);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(126);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 7) : assert(max_level == 6);
-    max_level = BinaryTreeMath<T>::st_max_full_level_at_node_value(127);
-    BinaryTreeMath<T>::get_root_value() == 0 ? assert(max_level == 7) : assert(max_level == 7);
-    //
-    // First Node of Level
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(1) == 0 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(2) == 1 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(3) == 3 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(4) == 7 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(5) == 15 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_first_node_value_of_level(6) == 31 + BinaryTreeMath<T>::get_root_value());
-    //
-    // Node Value by Position and Level
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 1) == 0 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 2) == 1 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 2) == 2 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 3) == 3 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 3) == 5 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(3, 3) == 4 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(4, 3) == 6 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(1, 4) == 7 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(2, 4) == 11 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(3, 4) == 9 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(4, 4) == 13 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(5, 4) == 8 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(6, 4) == 12 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(7, 4) == 10 + BinaryTreeMath<T>::get_root_value());
-    assert(BinaryTreeMath<T>::st_node_value_by_position_and_level(8, 4) == 14 + BinaryTreeMath<T>::get_root_value());
-    //
-    // Deprecated Form
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 1) == 0 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 2) == 1 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 2) == 2 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 3) == 3 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 3) == 5 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(3, 3) == 4 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(4, 3) == 6 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(1, 4) == 7 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(2, 4) == 11 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(3, 4) == 9 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(4, 4) == 13 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(5, 4) == 8 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(6, 4) == 12 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(7, 4) == 10 + BinaryTreeMath<T>::get_root_value());
-    // assert(BinaryTreeMath<T>::st_node_value_by_position_and_level__deprecated(8, 4) == 14 + BinaryTreeMath<T>::get_root_value());
-}
-
-
-template<AnySupportedIntegral T>
-void test_binary_tree_level_will_fit() {
-    // Levels are now able to handle bit_width - 1 [-1 if signed].
-    // 8-bit
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(7) == true);
-    assert(BinaryTreeMath<uint8_t>::st_level_will_fit(8) == false);
-    // 8-bit (signed)
-    assert(BinaryTreeMath<int8_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<int8_t>::st_level_will_fit(6) == true);
-    assert(BinaryTreeMath<int8_t>::st_level_will_fit(7) == false);
-    assert(BinaryTreeMath<int8_t>::st_level_will_fit(8) == false);
-    // 16-bit
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(15) == true);
-    assert(BinaryTreeMath<uint16_t>::st_level_will_fit(16) == false);
-    // 16-bit (signed)
-    assert(BinaryTreeMath<int16_t>::st_level_will_fit(4) == true);
-    assert(BinaryTreeMath<int16_t>::st_level_will_fit(14) == true);
-    assert(BinaryTreeMath<int16_t>::st_level_will_fit(15) == false);
-    assert(BinaryTreeMath<int16_t>::st_level_will_fit(16) == false);
-    // 32-bit
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(10) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(31) == true);
-    assert(BinaryTreeMath<uint32_t>::st_level_will_fit(32) == false);
-    // 32-bit (signed)
-    assert(BinaryTreeMath<int32_t>::st_level_will_fit(10) == true);
-    assert(BinaryTreeMath<int32_t>::st_level_will_fit(30) == true);
-    assert(BinaryTreeMath<int32_t>::st_level_will_fit(31) == false);
-    assert(BinaryTreeMath<int32_t>::st_level_will_fit(32) == false);
-    // 64-bit
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(18) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(63) == true);
-    assert(BinaryTreeMath<uint64_t>::st_level_will_fit(64) == false);
-    // 64-bit (signed)
-    assert(BinaryTreeMath<int64_t>::st_level_will_fit(18) == true);
-    assert(BinaryTreeMath<int64_t>::st_level_will_fit(62) == true);
-    assert(BinaryTreeMath<int64_t>::st_level_will_fit(63) == false);
-    assert(BinaryTreeMath<int64_t>::st_level_will_fit(64) == false);
-    // MPZ Has No Ceiling
-    assert(BinaryTreeMath<mpz_class>::st_level_will_fit(999) == true);
-}
 
 
 template<AnySupportedIntegral T>
@@ -896,16 +1117,31 @@ void test_binary_tree_save_load_equal() {
 
 
 
-//
-// Wrapper to run all tests.
-//
 template<AnySupportedIntegral T>
 void run_all(size_t root_value) {
-    BinaryTreeMath<T>::set_root_value(root_value);
+    std::string extra = "  Using " + std::to_string(root_value) + "-based tree root.";
+    announce_run_all<T>(extra);
 
-    std::cout << "test_binary_tree_basic_construction() ..." << std::flush;
+    BinaryTreeMath<T>::set_root_value(root_value);
     test_binary_tree_basic_construction<T>();
-    std::cout << " passed.\n";
+    test_binary_tree_init<T>();
+    test_binary_tree_reset<T>();
+    test_binary_tree_get_impl<T>();
+    test_binary_tree_get_tree_type<T>();
+    test_binary_tree_get_level_count<T>();
+    test_binary_tree_get_root_node<T>();
+    test_binary_tree_get_coverage_map<T>();
+    test_binary_tree_get_ancestors<T>();
+    test_binary_tree_is_verifying_non_hwm_nodes<T>();
+    test_binary_tree_node_count<T>();
+    test_binary_tree_materialized_level_map<T>();
+    test_binary_tree_materialized_pruning_options<T>();
+    test_binary_tree_materialized_real_node_count<T>();
+    test_binary_tree_implicit_uncovered_positions<T>();
+    test_binary_tree_assert_level_will_fit<T>();
+    test_binary_tree_assert_level_verification<T>();
+
+
 
     std::cout << "test_binary_tree_deep_size() ..." << std::flush;
     test_binary_tree_deep_size<T>();
@@ -944,16 +1180,8 @@ void run_all(size_t root_value) {
     test_binary_tree_multi_threaded<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_binary_tree_math() ..." << std::flush;
-    test_binary_tree_math<T>();
-    std::cout << " passed.\n";
-
     std::cout << "test_binary_tree_pruned() ..." << std::flush;
     test_binary_tree_pruned<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_level_will_fit() ..." << std::flush;
-    test_binary_tree_level_will_fit<T>();
     std::cout << " passed.\n";
 
     std::cout << "test_binary_tree_save_load_equal() ..." << std::flush;
@@ -966,25 +1194,15 @@ void run_all(size_t root_value) {
 
 
 int main() {
-    std::cout << "=====================" << std::endl;
-    std::cout << "BinaryTree Tests" << std::endl;
-    std::cout << "=====================" << std::endl;
-
-    std::cout << "Performing tests with uint64_t, 0-based tree." << std::endl;
+    std::string name = "BinaryTree";
+    preamble(name);
     run_all<uint64_t>(0);
-    std::cout << "Performing tests with uint64_t, 1-based tree." << std::endl;
     run_all<uint64_t>(1);
-
-    std::cout << "Performing tests with uint128_t, 0-based tree." << std::endl;
     run_all<uint128_t>(0);
-    std::cout << "Performing tests with uint128_t, 1-based tree." << std::endl;
     run_all<uint128_t>(1);
-
-    std::cout << "Performing tests with mpz_class, 0-based tree." << std::endl;
     run_all<mpz_class>(0);
-    std::cout << "Performing tests with mpz_class, 1-based tree." << std::endl;
     run_all<mpz_class>(1);
+    done(name);
 
-    std::cout << "All BinaryTree<T> tests passed.\n";
     return 0;
 }

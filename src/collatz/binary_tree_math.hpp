@@ -1,5 +1,6 @@
 #pragma once
 #include <gmp.h>
+#include <limits>
 #include <stdexcept>
 #include <cmath>
 #include "concepts.hpp"
@@ -71,7 +72,10 @@ class BinaryTreeMath {
     /// @brief Get the offset from _root_value, which is always `1 - _root_value`, and is updated with calls to `set_root_value()`.
     static size_t get_offset() { return _offset; }
     /// @brief Returns `_root_value` to the default of 1 (after 2.0.0).
-    static void reset_root_value() { _root_value = _ROOT_VALUE_DEFAULT; }
+    static void reset_root_value() {
+        _root_value = _ROOT_VALUE_DEFAULT;
+        _offset = 1 - _root_value;
+    }
     /// @brief Sets the root value and enforces it be 0 or 1.  Anything else throws an error.
     static void set_root_value(size_t value) {
         if (value != 0 && value != 1) {
@@ -109,28 +113,6 @@ class BinaryTreeMath {
 
 
     /**
-    * @brief The number of nodes in a tree of level L depth, summing all levels.  Inclusive.
-    *
-    * \par Formula
-    * \f$ 2^{level} - 1\f$
-    *
-    * @param levels Number of levels in the tree.
-    * @return Count of nodes, typed to your `T`.
-    */
-    static inline T st_node_count_of_tree(level_t levels) {
-        static thread_local T count;
-        if constexpr(FixedWidthIntegral<T>) {
-            count = (T(1) << levels) - 1;
-        } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), levels);
-            mpz_sub_ui(count.get_mpz_t(), count.get_mpz_t(), 1);
-        }
-        return count;
-    }
-
-
-
-    /**
     * @brief The number of nodes between two levels, inclusive.
     *
     * \par Formula
@@ -152,6 +134,28 @@ class BinaryTreeMath {
             mpz_sub(final_count.get_mpz_t(), full_tree_count.get_mpz_t(), sub_tree_count.get_mpz_t());
         }
         return final_count;
+    }
+
+
+
+    /**
+    * @brief The number of nodes in a tree of level L depth, summing all levels.  Inclusive.
+    *
+    * \par Formula
+    * \f$ 2^{level} - 1\f$
+    *
+    * @param levels Number of levels in the tree.
+    * @return Count of nodes, typed to your `T`.
+    */
+    static inline T st_node_count_of_tree(level_t levels) {
+        static thread_local T count;
+        if constexpr(FixedWidthIntegral<T>) {
+            count = (T(1) << levels) - 1;
+        } else if constexpr(GMPIntegral<T>) {
+            mpz_pow_ui(count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), levels);
+            mpz_sub_ui(count.get_mpz_t(), count.get_mpz_t(), 1);
+        }
+        return count;
     }
 
     /// @}
@@ -220,15 +224,18 @@ class BinaryTreeMath {
     * \par Formula
     * \f$ \text{Simply bits} \f$
     *
-    * @return Maximum level for type `T`.
+    * @return Maximum level for type `T`.  When GMP, sends `level_t` max.
     */
     static inline level_t st_max_level_of_type() {
         // Max level is scaled with tree size (diadic) but must respect implementation limits, ergo:
         //   Bit width
         //   Minus 1 because the last node on 2^bit level overflows due to counting starting at 0.
         //   Minus 1 if the type is signed.
+        if (GMPIntegral<T>) {
+            return std::numeric_limits<level_t>::max();
+        }
         size_t bits = sizeof(T) * 8;
-        level_t max_level = bits - 1 - (std::is_signed_v<T> ? 1 : 0);
+        level_t max_level = bits - 1 - (std::numeric_limits<T>::is_signed ? 1 : 0);
         return max_level;
     }
 
@@ -266,14 +273,21 @@ class BinaryTreeMath {
     * \f$ 2^{level} - 1 - Offset \f$
     *
     * @param level The level to calculate maximum node value for.
-    * @return The max node value for the level, always typed to `mpz_class`.
+    * @return The max node value for the level, typed to `T`.
     */
-    static inline mpz_class st_max_node_value_at_level(level_t level) {
-        static thread_local mpz_class max_n;
-        mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
-        mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 1);
-        mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
-        return max_n;
+    static inline T st_max_node_value_at_level(level_t level) {
+        if constexpr (FixedWidthIntegral<T>) {
+            if (sizeof(T) * 8 < level) {
+                throw std::out_of_range("Level too high for st_max_node_value_at_level");
+            }
+            return (T(1) << level) - 1 - _offset;
+        } else if constexpr (GMPIntegral<T>) {
+            static thread_local mpz_class max_n;
+            mpz_pow_ui(max_n.get_mpz_t(), _MPZ_TWO.get_mpz_t(), level);
+            mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), 1);
+            mpz_sub_ui(max_n.get_mpz_t(), max_n.get_mpz_t(), _offset);
+            return max_n;
+        }
     }
 
 

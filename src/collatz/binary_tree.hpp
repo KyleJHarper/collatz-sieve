@@ -6,7 +6,6 @@
 #include "concepts.hpp"
 #include "string.hpp"
 #include <stdexcept>
-#include <type_traits>
 #include "stream_helper.hpp"
 #include <fstream>
 #include "equality_helper.hpp"
@@ -236,7 +235,7 @@ class BinaryTree {
     void assert_level_will_fit(level_t level) const {
         if (! BinaryTreeMath<T>::st_level_will_fit(level)) {
             size_t bits = sizeof(T) * 8;
-            level_t max_level = bits - 1 - (std::is_signed_v<T> ? 1 : 0);
+            level_t max_level = BinaryTreeMath<T>::st_max_level_of_type();
             std::string msg = "Cannot build a BinaryTree with ";
             msg += to_string_any(level) + " levels and type '" + typeid(T).name() + "' with ";
             msg += to_string_any(bits) + " bits. A Collatz sequence will overflow.";
@@ -276,7 +275,7 @@ class BinaryTree {
             + to_string_any(level)
             + ".  You have disabled runtime verification, which means this and future levels are NOT fully verified!"
             + "  Refusing to build level.";
-            throw std::runtime_error(msg);
+            throw std::out_of_range(msg);
         }
     }
 
@@ -361,11 +360,8 @@ class BinaryTree {
                 return eq.fail("Coverage map in 'first' has level " + to_string_any(level) + " but 'second doesn't.");
             }
             const BinaryTreeCoverage<T>& s_coverage = second.get_coverage_map().at(level);
-            if (eq.unequal(f_coverage.get_covered(), s_coverage.get_covered())) {
-                return eq.fail("Coverage get_covered() mismatch");
-            }
-            if (eq.unequal(f_coverage.get_total(), s_coverage.get_total())) {
-                return eq.fail("Coverage get_total() mismatch");
+            if (! f_coverage.equal(s_coverage, err)) {
+                return eq.fail("Coverage doesn't match");
             }
         }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "concepts.hpp"
 #include <gmp.h>
+#include <limits>
 #include <stdint.h>
 #include <type_traits>
 
@@ -105,7 +106,7 @@ namespace Bit {
     template<FixedWidthIntegral T>
     static inline T st_bit_reverse_full(const T& x) {
         // When the type is signed, convert it to unsigned and try again.
-        if constexpr(std::is_signed_v<T>) {
+        if constexpr(std::numeric_limits<T>::is_signed) {
             using U = std::make_unsigned_t<T>;
             U ux = static_cast<U>(x);
             return st_bit_reverse_full(ux);

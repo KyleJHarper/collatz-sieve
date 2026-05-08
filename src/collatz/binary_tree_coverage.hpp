@@ -4,8 +4,10 @@
 #include "string.hpp"
 #include <gmp.h>
 #include <gmpxx.h>
+#include <stdexcept>
 #include <string>
 #include "stream_helper.hpp"
+#include "equality_helper.hpp"
 
 
 
@@ -68,7 +70,6 @@ class BinaryTreeCoverage {
     void add_covered(T count=1) { _covered += count; }
     /// @brief Add `count` to the total.
     void add_total(T count=1) { _total += count; }
-
     /// @brief Get covered tally.
     const T& get_covered() const { return _covered; }
     /// @brief Get total tally.
@@ -88,7 +89,7 @@ class BinaryTreeCoverage {
     */
     const mpf_class get_ratio(bool as_percent = false) {
         if (_total < 1) {
-            throw std::runtime_error("You cannot call get_ratio() when 'total' is 0 or less.");
+            throw std::out_of_range("You cannot call get_ratio() when 'total' is 0 or less.");
         }
         // Set r first so it's converted to a float.  Otherwise int/int ==> truncated int.
         mpf_class ratio;
@@ -157,7 +158,7 @@ class BinaryTreeCoverage {
     * @param err Pointer to a string where errors, if any, are written.
     * @return A boolean indicating success or failure.  Do not discard.
     */
-    [[nodiscard]] bool deserialize(std::istream& in, std::string* err) {
+    [[nodiscard]] bool deserialize(std::istream& in, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("BinaryTreeCoverage");
 
@@ -170,6 +171,60 @@ class BinaryTreeCoverage {
 
         // All good
         return true;
+    }
+
+
+
+    //
+    // Equal
+    // Compares this coverage to "other".  Returns true if equal.
+    //
+    // Returns true if they are equal in representation.  False otherwise.
+    // Will explain what failed to *err if sent.
+    //
+    /**
+    * @brief Compare two BinaryTreeCoverages' specific internals and return true if identical.
+    *
+    * This function checks:
+    *   1. Totals match.
+    *   2. Covered match.
+    *
+    * @param first The first BinaryTreeCoverage to compare.
+    * @param second The second BinaryTreeCoverage to compare.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
+    static bool st_equal (const BinaryTreeCoverage<T>& first, const BinaryTreeCoverage<T>& second, std::string* err = nullptr) {
+        EqualityHelper eq(err);
+        eq.set_category("BinaryTreeCoverage");
+
+        // Total
+        if (eq.unequal(first.get_total(), second.get_total())) {
+            return eq.fail("Coverages' totals don't match");
+        }
+
+        // Covered
+        if (eq.unequal(first.get_covered(), second.get_covered())) {
+            return eq.fail("Coverages' covered values don't match");
+        }
+
+        // All good.
+        return true;
+    }
+
+
+
+    /**
+    * @brief Compare another coverage to this one.
+    *
+    * This is a member helper which simply forwards to `BinaryTreeCoverage::st_equal()`.
+    *
+    * @param second The second BinaryTreeCoverage to compare against this.
+    * @param err Pointer to a string where inequality or error messages are stored.
+    * @return True if equal, false otherwise.
+    */
+    bool equal(const BinaryTreeCoverage<T>& second, std::string* err = nullptr) const {
+        return BinaryTreeCoverage<T>::st_equal(*this, second, err);
     }
 
 };

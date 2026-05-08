@@ -149,10 +149,16 @@ endif()
 # Tests
 # --------------------------
 set(TESTS
+    abi
+    binary_tree_coverage_constants
+    binary_tree_coverage
+    binary_tree_math
+    binary_tree_options
+    binary_tree
+
     collatz_class
     node_class
     node_bitmap_class
-    binary_tree_class
     forward_looking_cache_class
 )
 
