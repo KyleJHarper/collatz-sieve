@@ -69,6 +69,12 @@ class BinaryTreeMaterializedImpl {
     BinaryTreeMaterializedImpl() = default;
 
 
+    /// @brief Disallow copying and moving.
+    BinaryTreeMaterializedImpl(const BinaryTreeMaterializedImpl&) = delete;
+    /// @brief Disallow copying and moving.
+    BinaryTreeMaterializedImpl& operator=(const BinaryTreeMaterializedImpl&) = delete;
+
+
 
     /**
     * @brief Destructor will remove any ancestors and clear the level map.
@@ -107,8 +113,13 @@ class BinaryTreeMaterializedImpl {
         _coverage_map.clear();
         _level_map.clear();
         _level_count = 0;
+        for (Node<T>* ancestor : _ancestors) {
+            delete ancestor;
+        }
         _ancestors.clear();
-        _root_node = nullptr;
+        if (_root_node != nullptr) {
+            _root_node = nullptr;
+        }
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
         _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
@@ -508,6 +519,9 @@ class BinaryTreeMaterializedImpl {
     * When parent level pruning is enabled, all parents are trimmed, which keeps only the last level of nodes in memory.
     */
     void add_level() {
+        // Ensure initialization is set.
+        _is_initialized = true;
+
         // When we have no levels, this simply crafts a 0- or 1-based root node and manually sets level map and coverage.
         if (_level_count == 0) {
             _level_count = 1;

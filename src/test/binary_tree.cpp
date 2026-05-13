@@ -46,7 +46,7 @@ void test_binary_tree_basic_construction() {
     assert(zero_materialized_tree.get_level_count() == 0);
     assert(zero_materialized_tree.is_initialized() == false);
 
-    // Adding levels to them should be fine.
+    // Adding levels to them should be fine, and should flag initialization.
     zero_implicit_tree.add_level();
     zero_materialized_tree.add_level();
     assert(zero_implicit_tree.get_level_count() == 1);
@@ -80,11 +80,18 @@ void test_binary_tree_init() {
     assert(tree.get_level_count() == 16);
 
     // Start from an uninitialized tree.
-    BinaryTree<T> uninitialized_tree;
-    assert(uninitialized_tree.is_initialized() == false);
-    uninitialized_tree.init(14);
-    assert(tree.get_level_count() == 14);
-    assert(uninitialized_tree.is_initialized() == true);
+    // Implicit
+    ImplicitBinaryTree<T> uninitialized_implicit_tree;
+    assert(uninitialized_implicit_tree.is_initialized() == false);
+    uninitialized_implicit_tree.init(14);
+    assert(uninitialized_implicit_tree.get_level_count() == 14);
+    assert(uninitialized_implicit_tree.is_initialized() == true);
+    // Materialized
+    MaterializedBinaryTree<T> uninitialized_materialized_tree;
+    assert(uninitialized_materialized_tree.is_initialized() == false);
+    uninitialized_materialized_tree.init(14);
+    assert(uninitialized_materialized_tree.get_level_count() == 14);
+    assert(uninitialized_materialized_tree.is_initialized() == true);
 
     end_test();
 }
@@ -122,12 +129,12 @@ void test_binary_tree_get_impl() {
 
     // Implicit
     BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(8);
-    const BinaryTreeImplicitImpl<T> implicit_impl = implicit_tree.get_impl();
+    const BinaryTreeImplicitImpl<T>& implicit_impl = implicit_tree.get_impl();
     assert(implicit_impl.is_implicit());
 
     // Materialized
     BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(8);
-    const BinaryTreeMaterializedImpl<T> materialized_impl = materialized_tree.get_impl();
+    const BinaryTreeMaterializedImpl<T>& materialized_impl = materialized_tree.get_impl();
     assert(materialized_impl.is_materialized());
 
     end_test();
@@ -232,7 +239,7 @@ template<AnySupportedIntegral T>
 void test_binary_tree_get_ancestors() {
     start_test(__func__);
 
-    level_t max_level = 4;
+    level_t max_level = 5;
     BinaryTreeOptions opts_without_ancestors;
     opts_without_ancestors.preserve_ancestors = false;
     BinaryTreeOptions opts_with_ancestors;
@@ -245,6 +252,7 @@ void test_binary_tree_get_ancestors() {
     assert(implicit_tree_with_ancestors.get_ancestors().size() > 0);
     assert(implicit_tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
     assert(implicit_tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
+    assert(implicit_tree_with_ancestors.get_ancestors()[2]->get_value() == 19);
 
     // Materialized
     MaterializedBinaryTree<T> materialized_tree_without_ancestors(max_level, opts_without_ancestors);
@@ -253,6 +261,7 @@ void test_binary_tree_get_ancestors() {
     assert(materialized_tree_with_ancestors.get_ancestors().size() > 0);
     assert(materialized_tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
     assert(materialized_tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
+    assert(materialized_tree_with_ancestors.get_ancestors()[2]->get_value() == 19);
 
     end_test();
 }
@@ -659,79 +668,8 @@ void test_binary_tree_assert_level_verification() {
 
 
 
-
-template<AnySupportedIntegral T>
-void test_binary_tree_deep_size() {
-    MaterializedBinaryTree<T> tree(2);
-    size_t size = tree.deep_size();
-    assert(size > sizeof(tree)); // Make sure something was counted
-    ImplicitBinaryTree<T> tree_implicit(2);
-    size_t size_implicit = tree_implicit.deep_size();
-    assert(size_implicit > sizeof(tree_implicit)); // Make sure something was counted
-}
-
-
-template<AnySupportedIntegral T>
-void test_binary_tree_generate_node_at_valid() {
-    // Materialized Tree feature, but owned by the facade.
-    size_t root_value = BinaryTreeMath<T>::get_root_value();
-    Node<T>* node = nullptr;
-    node = BinaryTree<T>::st_generate_node_at(2, 1);
-    assert(node != nullptr);
-    assert(node->get_value() == 1 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(3, 1);
-    assert(node != nullptr);
-    assert(node->get_value() == 3 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(3, 4);
-    assert(node != nullptr);
-    assert(node->get_value() == 6 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(4, 4);
-    assert(node != nullptr);
-    assert(node->get_value() == 13 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(4, 5);
-    assert(node != nullptr);
-    assert(node->get_value() == 8 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(4, 8);
-    assert(node != nullptr);
-    assert(node->get_value() == 14 + root_value);
-    delete node;
-    node = BinaryTree<T>::st_generate_node_at(5, 12);
-    assert(node != nullptr);
-    assert(node->get_value() == 28 + root_value);
-    delete node;
-}
-
-
-template<AnySupportedIntegral T>
-void test_binary_tree_generate_node_at_invalid_pos() {
-    try {
-        BinaryTree<T>::st_generate_node_at(3, 0);
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("position 0") != std::string::npos);
-    }
-    //
-    try {
-        BinaryTree<T>::st_generate_node_at(3, 9); // 2^3 = 8 max
-        assert(false); // Should throw
-    } catch (const std::out_of_range& e) {
-        assert(std::string(e.what()).find("outside of a level") != std::string::npos);
-    }
-}
-
-
-template<AnySupportedIntegral T, typename TreeType>
-void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const BinaryTreeOptions& opts = BinaryTreeOptions{}) {
-    // Set threads.
-    omp_set_num_threads(threads);
-    //
-    // Build trees.
-    BinaryTree<T, TreeType> tree(levels, opts);
+template<typename TreeType, AnySupportedIntegral T>
+void confirm_coverage(BinaryTree<T, TreeType>& tree) {
     BinaryTreeCoverage<T> global_coverage;
     T level_target_total = 0;
     for (size_t level=1; level<=tree.get_level_count(); level++) {
@@ -739,150 +677,84 @@ void test_binary_tree_coverage(size_t levels = 16, size_t threads = 1, const Bin
         const BinaryTreeCoverage<T>* level_coverage = &tree.get_coverage_map().find(level)->second;
         global_coverage.add_covered(level_coverage->get_covered());
         global_coverage.add_total(level_coverage->get_total());
-        // std::cout << "\nI see level_coverage->get_covered()=" << to_string_any(level_coverage->get_covered())
-        // << " and known_coverage=" << to_string_any(BinaryTreeCoverageConstants::get_known_coverage<T>(level))
-        // << " on level=" << level << std::endl;
         assert(level_coverage->get_covered() == BinaryTreeCoverageConstants::get_known_coverage<T>(level));
         assert(level_coverage->get_total() == level_target_total);
     }
-    assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(levels));
-    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
-    //
-    // Materialized trees have pruning options.
-    if constexpr (std::same_as<TreeType, BinaryTreeMaterializedImpl<T>>) {
-        // Tree should always have: 2^(level+1) - 2 nodes total if it's not pruned.
-        // We allow pruning of HWM nodes and/or levels.  Need tests for each.
-        //
-        // Option 1: false and false
-        // This is a tree with all its nodes.  Counts should line up without adjustment.
-        if (!tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
-            assert(tree.real_node_count() == (T{1} << (tree.get_level_count())) - 1);
-        }
-        // Option 2: true and false
-        // HWM pruning is on, but levels are not erased.  Keeps a fulled pared list of non-HWM nodes.  Just add covered back in.
-        if (tree.is_pruning_hwm_nodes() && !tree.is_pruning_parent_levels()) {
-            T node_count_summary = tree.real_node_count();
-            for (size_t level = 1; level <= tree.get_level_count(); level++) {
-                node_count_summary += tree.get_coverage_map().find(level)->second.get_covered();
-            }
-            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
-        }
-        // Option 3: false and true
-        // HWM pruning is off, but parent levels are removed.  Keeps a full final level and nothing more.  Add previous known coverage.
-        if (!tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
-            T node_count_summary = tree.real_node_count() + BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels - 1);
-            assert(node_count_summary == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
-        }
-        // Option 4: true and true
-        // HWM pruning is on, and parent levels are removed.  Keeps a pared-down final level of non-HWM nodes.
-        if (tree.is_pruning_hwm_nodes() && tree.is_pruning_parent_levels()) {
-            T node_count_plus_uncovered = tree.real_node_count();
-            for (size_t level = 1; level < tree.get_level_count(); level++) {
-                node_count_plus_uncovered += tree.get_coverage_map().find(level)->second.get_uncovered();
-            }
-            assert(node_count_plus_uncovered + BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(levels) == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, levels));
-        }
-    }
+    assert(global_coverage.get_covered() == BinaryTreeCoverageConstants::get_known_coverage_sum_to_level<T>(tree.get_level_count()));
+    assert(global_coverage.get_total() == BinaryTreeCoverageConstants::get_total_sum_of_levels<T>(1, tree.get_level_count()));
 }
-
-
 template<AnySupportedIntegral T>
-void test_binary_tree_coverage_coherency_at_scale() {
-    test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>(32, 8);
-}
+void test_binary_tree_add_level() {
+    start_test(__func__);
 
+    // Large-scale trees should work.
+    // Doesn't work for materialized, because it'll eat all the RAM.
+    // Use 33+ to activate multiple prefixes in NodeBitmap.
+    ImplicitBinaryTree<T> big_tree(33);
+    confirm_coverage(big_tree);
 
-
-template<AnySupportedIntegral T>
-void test_binary_tree_multi_threaded() {
-    BinaryTreeOptions opts;
-    size_t max_threads = 4;
-    // Materialized
-    for (size_t threads = 1; threads <= max_threads; threads++) {
-        test_binary_tree_coverage<T, BinaryTreeMaterializedImpl<T>>(16, threads, opts);
-    }
-    // Implicit
-    for (size_t threads = 1; threads <= max_threads; threads++) {
-        test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>(16, threads, opts);
-    }
-}
-
-
-
-template<AnySupportedIntegral T>
-void test_binary_tree_pruned() {
-    BinaryTreeOptions opts_with_hwm_prune_without_level_prune;
-    opts_with_hwm_prune_without_level_prune.prune_hwm_nodes = true;
-    opts_with_hwm_prune_without_level_prune.prune_parent_levels = false;
-    BinaryTreeOptions opts_with_hwm_prune_with_level_prune;
-    opts_with_hwm_prune_with_level_prune.prune_hwm_nodes = true;
-    opts_with_hwm_prune_with_level_prune.prune_parent_levels = true;
-    BinaryTreeOptions opts_without_hwm_prune_with_level_prune;
-    opts_without_hwm_prune_with_level_prune.prune_hwm_nodes = false;
-    opts_without_hwm_prune_with_level_prune.prune_parent_levels = true;
-    // Now test levels 1-16 and make sure the node count returned adds up (literally) to the total.
-    size_t max_test_level = 16;
-    size_t max_threads = 8;
-    std::cout << "\n  Testing "<< max_test_level << " levels of multi-threaded deep tree building, coverage, and pruning combinations because THIS SHIT CANNOT FAIL!" << std::endl;
-    for (size_t level = 1; level <= max_test_level; level++) {
-        std::cout << "    Level " << level << "...";
-        for (size_t thread_count = 1; thread_count <= max_threads; thread_count++) {
+    // Multi-threading should produce identical results.
+    // Pruning shouldn't affect coverage totals.
+    BinaryTreeOptions opts_hwm_pruning_only;
+    opts_hwm_pruning_only.prune_hwm_nodes = true;
+    opts_hwm_pruning_only.prune_parent_levels = false;
+    BinaryTreeOptions opts_all_pruning;
+    opts_all_pruning.prune_hwm_nodes = true;
+    opts_all_pruning.prune_parent_levels = true;
+    BinaryTreeOptions opts_level_pruning_only;
+    opts_level_pruning_only.prune_hwm_nodes = false;
+    opts_level_pruning_only.prune_parent_levels = true;
+    BinaryTreeOptions opts_no_pruning;
+    opts_no_pruning.prune_hwm_nodes = false;
+    opts_no_pruning.prune_parent_levels = false;
+    int original_thread_count = omp_get_max_threads();
+    level_t max_level = 16;
+    for (level_t level = 1; level < max_level; level++) {
+        for (int threads = 1; threads < 8; threads++) {
+            omp_set_num_threads(threads);
+            // Implicit
+            ImplicitBinaryTree<T> implicit_tree_1(level, opts_no_pruning);
+            ImplicitBinaryTree<T> implicit_tree_2(level, opts_hwm_pruning_only);
+            ImplicitBinaryTree<T> implicit_tree_3(level, opts_level_pruning_only);
+            ImplicitBinaryTree<T> implicit_tree_4(level, opts_all_pruning);
+            confirm_coverage(implicit_tree_1);
+            confirm_coverage(implicit_tree_2);
+            confirm_coverage(implicit_tree_3);
+            confirm_coverage(implicit_tree_4);
             // Materialized
-            test_binary_tree_coverage<T, BinaryTreeMaterializedImpl<T>>(3, 1, opts_with_hwm_prune_without_level_prune);
-            test_binary_tree_coverage<T, BinaryTreeMaterializedImpl<T>>(level, 1, opts_with_hwm_prune_with_level_prune);
-            test_binary_tree_coverage<T, BinaryTreeMaterializedImpl<T>>(level, 1, opts_without_hwm_prune_with_level_prune);
-            // Implicit trees shouldn't care about pruning options, and work without error.
-            test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>(3, 1, opts_with_hwm_prune_without_level_prune);
-            test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>(level, 1, opts_with_hwm_prune_with_level_prune);
-            test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>(level, 1, opts_without_hwm_prune_with_level_prune);
+            MaterializedBinaryTree<T> materialized_tree_1(level, opts_no_pruning);
+            MaterializedBinaryTree<T> materialized_tree_2(level, opts_hwm_pruning_only);
+            MaterializedBinaryTree<T> materialized_tree_3(level, opts_level_pruning_only);
+            MaterializedBinaryTree<T> materialized_tree_4(level, opts_all_pruning);
+            confirm_coverage(materialized_tree_1);
+            confirm_coverage(materialized_tree_2);
+            confirm_coverage(materialized_tree_3);
+            confirm_coverage(materialized_tree_4);
         }
-        std::cout << " Okay!" << std::endl;
     }
-    // Now test with level pruning too.
-    // A pruned tree should always have a drastically smaller size.
-    size_t levels = 16;
-    float reduction_factor = 0.9;
-    MaterializedBinaryTree<T> tree_raw(levels);
-    MaterializedBinaryTree<T> tree_pruned(levels, opts_with_hwm_prune_without_level_prune);
-    assert(tree_raw.deep_size() * reduction_factor > tree_pruned.deep_size());
+    omp_set_num_threads(original_thread_count);
+
+    end_test();
 }
+
 
 
 template<AnySupportedIntegral T>
-void test_binary_tree_ancestors() {
-    // When disabled, they shouldn't be tracked.
-    size_t levels = 5;
-    BinaryTreeOptions opts;
-    opts.preserve_ancestors = false;
-    MaterializedBinaryTree<T> tree(levels, opts);
-    assert(tree.get_ancestors().size() == 0);
-    //
-    // Tracking them should work.
-    opts.preserve_ancestors = true;
-    MaterializedBinaryTree<T> tree_with_ancestors(levels, opts);
-    assert(tree_with_ancestors.get_ancestors().size() == 3);
-    assert(tree_with_ancestors.get_ancestors()[0]->get_value() == 2);
-    assert(tree_with_ancestors.get_ancestors()[1]->get_value() == 5);
-    assert(tree_with_ancestors.get_ancestors()[2]->get_value() == 19);
-    //
-    // Implicit should work too.
-    BinaryTreeOptions opts_implicit;
-    opts_implicit.preserve_ancestors = false;
-    BinaryTree<T, BinaryTreeImplicitImpl<T>> tree_implicit(levels, opts_implicit);
-    assert(tree.get_ancestors().size() == 0);
-    //
-    // Tracking them should work.
-    opts_implicit.preserve_ancestors = true;
-    BinaryTree<T, BinaryTreeImplicitImpl<T>> tree_implicit_with_ancestors(levels, opts_implicit);
-    assert(tree_implicit_with_ancestors.get_ancestors().size() == 3);
-    assert(tree_implicit_with_ancestors.get_ancestors()[0]->get_value() == 2);
-    assert(tree_implicit_with_ancestors.get_ancestors()[1]->get_value() == 5);
-    assert(tree_implicit_with_ancestors.get_ancestors()[2]->get_value() == 19);
+void test_binary_tree_deep_size() {
+    start_test(__func__);
+
+    MaterializedBinaryTree<T> tree(2);
+    size_t size = tree.deep_size();
+    assert(size > sizeof(tree)); // Make sure something was counted
+    ImplicitBinaryTree<T> tree_implicit(2);
+    size_t size_implicit = tree_implicit.deep_size();
+    assert(size_implicit > sizeof(tree_implicit)); // Make sure something was counted
+
+    end_test();
 }
 
 
 
-// Save-Load-Equality Helpers to DRY up code in test_binary_tree_save_load_equal.
 template<AnySupportedIntegral T, typename TreeType>
 void sle_assert_trees_equal(const BinaryTree<T, TreeType>& first, const BinaryTree<T, TreeType>& second) {
     std::string err;
@@ -1049,6 +921,8 @@ void sle_helper(
 }
 template<AnySupportedIntegral T>
 void test_binary_tree_save_load_equal() {
+    start_test(__func__);
+
     namespace fs = std::filesystem;
 
     // Saving to a console via stdout ("-") should fail.
@@ -1113,6 +987,64 @@ void test_binary_tree_save_load_equal() {
         assert(std::string(e.what()).find("You've activated my trap card!") != std::string::npos);
     }
     if (fs::exists(tree_path)) { fs::remove(tree_path); }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_st_generate_node_at() {
+    start_test(__func__);
+
+    // Materialized Tree feature, but owned by the facade.
+    size_t root_value = BinaryTreeMath<T>::get_root_value();
+    Node<T>* node = nullptr;
+    node = BinaryTree<T>::st_generate_node_at(2, 1);
+    assert(node != nullptr);
+    assert(node->get_value() == 1 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(3, 1);
+    assert(node != nullptr);
+    assert(node->get_value() == 3 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(3, 4);
+    assert(node != nullptr);
+    assert(node->get_value() == 6 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(4, 4);
+    assert(node != nullptr);
+    assert(node->get_value() == 13 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(4, 5);
+    assert(node != nullptr);
+    assert(node->get_value() == 8 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(4, 8);
+    assert(node != nullptr);
+    assert(node->get_value() == 14 + root_value);
+    delete node;
+    node = BinaryTree<T>::st_generate_node_at(5, 12);
+    assert(node != nullptr);
+    assert(node->get_value() == 28 + root_value);
+    delete node;
+
+    // Invalid positions should throw.
+    try {
+        BinaryTree<T>::st_generate_node_at(3, 0);
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("position 0") != std::string::npos);
+    }
+    //
+    try {
+        BinaryTree<T>::st_generate_node_at(3, 9); // 2^3 = 8 max
+        assert(false); // Should throw
+    } catch (const std::out_of_range& e) {
+        assert(std::string(e.what()).find("outside of a level") != std::string::npos);
+    }
+
+    end_test();
 }
 
 
@@ -1140,53 +1072,10 @@ void run_all(size_t root_value) {
     test_binary_tree_implicit_uncovered_positions<T>();
     test_binary_tree_assert_level_will_fit<T>();
     test_binary_tree_assert_level_verification<T>();
-
-
-
-    std::cout << "test_binary_tree_deep_size() ..." << std::flush;
+    test_binary_tree_add_level<T>();
     test_binary_tree_deep_size<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_generate_node_at_valid() ..." << std::flush;
-    test_binary_tree_generate_node_at_valid<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_generate_node_at_invalid_pos() ..." << std::flush;
-    test_binary_tree_generate_node_at_invalid_pos<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_coverage() ..." << std::flush;
-    test_binary_tree_coverage<T, BinaryTreeMaterializedImpl<T>>();
-    test_binary_tree_coverage<T, BinaryTreeImplicitImpl<T>>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_coverage_coherency_at_scale() ..." << std::flush;
-    test_binary_tree_coverage_coherency_at_scale<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_ancestors() ..." << std::flush;
-    test_binary_tree_ancestors<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_node_count_should_match_map() ..." << std::flush;
-    test_binary_tree_node_count_should_match_map<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_too_many_levels() ..." << std::flush;
-    test_binary_tree_too_many_levels<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_multi_threaded() ..." << std::flush;
-    test_binary_tree_multi_threaded<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_pruned() ..." << std::flush;
-    test_binary_tree_pruned<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_binary_tree_save_load_equal() ..." << std::flush;
     test_binary_tree_save_load_equal<T>();
-    std::cout << " passed.\n";
+    test_binary_tree_st_generate_node_at<T>();
 
     BinaryTreeMath<T>::reset_root_value();
 }

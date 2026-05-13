@@ -68,6 +68,13 @@ class BinaryTreeImplicitImpl {
 
 
 
+    /// @brief Disallow copying and moving.
+    BinaryTreeImplicitImpl(const BinaryTreeImplicitImpl&) = delete;
+    /// @brief Disallow copying and moving.
+    BinaryTreeImplicitImpl& operator=(const BinaryTreeImplicitImpl&) = delete;
+
+
+
     /**
     * @brief Destructor will remove any ancestors accumulated, and that's all.
     */
@@ -76,6 +83,9 @@ class BinaryTreeImplicitImpl {
             delete node;
         }
         _ancestors.clear();
+        if (_root_node != nullptr) {
+            delete _root_node;
+        }
     }
 
 
@@ -88,7 +98,13 @@ class BinaryTreeImplicitImpl {
         _coverage_map.clear();
         _uncovered_positions.clear();
         _level_count = 0;
+        for (Node<T>* ancestor : _ancestors) {
+            delete ancestor;
+        }
         _ancestors.clear();
+        if (_root_node != nullptr) {
+            delete _root_node;
+        };
         _root_node = nullptr;
         _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
         _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
@@ -354,6 +370,9 @@ class BinaryTreeImplicitImpl {
     * This is in contrast to the `BinaryTreeMaterializedImpl` which handles OMP directly inside the its own add level method.
     */
     void add_level() {
+        // Ensure initialization is set.
+        _is_initialized = true;
+
         // When there are no levels, this simply crafts a 0- or 1-based root node and manually sets level map and coverage.
         if (_level_count == 0) {
             _level_count = 1;
