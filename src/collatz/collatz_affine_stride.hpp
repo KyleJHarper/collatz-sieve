@@ -59,7 +59,7 @@ namespace AffineStride {
         const uint64_t table_size = uint64_t(1) << bits;
         std::array<StrideType, 1ULL << bits> stride_table{};
 
-        // With our table preallocated, we can use index-based iteration.  Since we're looking at LSBs, we naturally get our order
+        // With the table preallocated, it can use index-based iteration.  Since it's looking at LSBs, we naturally get the order
         // and can simply loop through them sequentially.
         for (uint64_t i = 0; i < table_size; i++) {
             uint64_t n = i;

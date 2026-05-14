@@ -712,7 +712,7 @@ void test_binary_tree_add_level() {
     for (level_t level = 1; level < max_level; level++) {
         for (int threads = 1; threads < 8; threads++) {
             omp_set_num_threads(threads);
-            // Implicit
+            // Implicit (Pruning doesn't exist, but shouldn't cause problems when set)
             ImplicitBinaryTree<T> implicit_tree_1(level, opts_no_pruning);
             ImplicitBinaryTree<T> implicit_tree_2(level, opts_hwm_pruning_only);
             ImplicitBinaryTree<T> implicit_tree_3(level, opts_level_pruning_only);

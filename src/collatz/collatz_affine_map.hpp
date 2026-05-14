@@ -5,6 +5,7 @@
 #include "collatz_constants.hpp"
 #include <stdexcept>
 #include <string>
+#include "string.hpp"
 
 
 
@@ -73,6 +74,20 @@ class CollatzAffineMap {
         _threes_exp = 0;
         _constant_portion = 0;
     }
+
+    /// @}
+
+
+
+    /// @name Accessors
+    /// @{
+
+    /// @brief Get the two's exponent.
+    uint32_t get_twos_exp() const { return _twos_exp; }
+    /// @brief Get the three's exponent.
+    uint32_t get_threes_exp() const { return _threes_exp; }
+    /// @brief Get the constant portion.
+    T get_constant_portion() const { return _constant_portion; }
 
     /// @}
 
@@ -229,13 +244,24 @@ class CollatzAffineMapShortcut {
     /// @}
 
 
+    /// @name Accessors
+    /// @{
+
+    /// @brief Get the two's exponent.
+    uint32_t get_twos_exp() const { return _twos_exp; }
+    /// @brief Get the three's exponent.
+    uint32_t get_threes_exp() const { return _threes_exp; }
+
+    /// @}
+
+
 
     /// @brief Increments counts, and that's all.
     void apply_F() {
         // Test to ensure we aren't in excess of the empirically tested limit for contractive A * N + B <= N.
         // Only applies to F steps, because only they grow B.
         if (_threes_exp >= MAX_SERIAL_F_TESTED) {
-            throw std::out_of_range("AffineMapShortcut cannot apply another F step because the maximum of " + std::to_string(MAX_SERIAL_F_TESTED) + " serial F steps has been reached.");
+            throw std::out_of_range("CollatzAffineMapShortcut cannot apply another F step because the maximum of " + std::to_string(MAX_SERIAL_F_TESTED) + " serial F steps has been reached.");
         }
         _threes_exp += 1;
         _twos_exp += 1;

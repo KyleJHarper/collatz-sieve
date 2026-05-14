@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -48,15 +47,15 @@ class Collatz {
     private:
     // Memory packing and alignment matter!  Keep this class LIGHT.  All data must fit within one cache line.
     //                                   uint64_t | total | uint128_t | total | mpz_class | total
-    T _initial_value = 0;             //        8 |     8 |        16 |    16 |        16 |    16
-    T _peak_value = 0;                //        8 |    16 |        16 |    32 |        16 |    32
-    seq_size_t _hwm_index = 0;        //        4 |    20 |         4 |    36 |         4 |    36
-    seq_size_t _step_count = 0;       //        4 |    24 |         4 |    40 |         4 |    40
-    bool _is_initialized : 1;         //      1:1 |    25 |       1:1 |    41 |       1:1 |    41
-    bool _sequence_overflows : 1;     //      1:2 |    25 |       1:2 |    41 |       1:2 |    41  (6 bits padding)
-    // Alignment Padding              //        7 |    32 |         7 |    48 |         7 |    48
-    // Struct Padding (u128 only)     //        0 |    48 |         0 |    48 |         0 |    48
-    // Free Padding to Cacheline      //       16 |    64 |        16 |    64 |        16 |    64
+    T _initial_value = 0;                  //        8 |     8 |        16 |    16 |        16 |    16
+    T _peak_value = 0;                     //        8 |    16 |        16 |    32 |        16 |    32
+    seq_size_t _hwm_index = 0;             //        4 |    20 |         4 |    36 |         4 |    36
+    seq_size_t _step_count = 0;            //        4 |    24 |         4 |    40 |         4 |    40
+    bool _is_initialized : 1 = false;      //      1:1 |    25 |       1:1 |    41 |       1:1 |    41
+    bool _sequence_overflows : 1 = false;  //      1:2 |    25 |       1:2 |    41 |       1:2 |    41  (6 bits padding)
+    // Alignment Padding                   //        7 |    32 |         7 |    48 |         7 |    48
+    // Struct Padding (u128 only)          //        0 |    48 |         0 |    48 |         0 |    48
+    // Free Padding to Cacheline           //       16 |    64 |        16 |    64 |        16 |    64
     // -- Cache Line --
 
 
@@ -130,13 +129,6 @@ class Collatz {
     }
 
     /// @}
-
-
-
-    /// @brief Treat the initial value as the <<() output.
-    friend std::ostream& operator<<(std::ostream &os, const Collatz<T>& m) {
-        return os << m._initial_value;
-    }
 
 
 
@@ -630,7 +622,7 @@ class Collatz {
 
 
     /// @brief Generate the F-G chain as a string for a sequence with some initial value.  Uses `st_get_fg_chain_string()`.
-    std::string get_fg_pattern_string(seq_size_t max_chars = std::numeric_limits<seq_size_t>::max()) const {
+    std::string get_fg_chain_string(seq_size_t max_chars = std::numeric_limits<seq_size_t>::max()) const {
         return Collatz<T>::st_get_fg_chain_string(_initial_value, max_chars);
     }
 

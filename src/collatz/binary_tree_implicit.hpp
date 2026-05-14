@@ -68,10 +68,17 @@ class BinaryTreeImplicitImpl {
 
 
 
-    /// @brief Disallow copying and moving.
+    /// @brief Disallow copying.
     BinaryTreeImplicitImpl(const BinaryTreeImplicitImpl&) = delete;
-    /// @brief Disallow copying and moving.
+    /// @brief Disallow copying.
     BinaryTreeImplicitImpl& operator=(const BinaryTreeImplicitImpl&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    BinaryTreeImplicitImpl(BinaryTreeImplicitImpl&&) noexcept = default;
+    /// @brief Moving is okay.
+    BinaryTreeImplicitImpl& operator=(BinaryTreeImplicitImpl&&) noexcept = default;
 
 
 

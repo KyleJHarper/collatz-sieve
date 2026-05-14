@@ -69,10 +69,17 @@ class BinaryTreeMaterializedImpl {
     BinaryTreeMaterializedImpl() = default;
 
 
-    /// @brief Disallow copying and moving.
+    /// @brief Disallow copying.
     BinaryTreeMaterializedImpl(const BinaryTreeMaterializedImpl&) = delete;
-    /// @brief Disallow copying and moving.
+    /// @brief Disallow copying.
     BinaryTreeMaterializedImpl& operator=(const BinaryTreeMaterializedImpl&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    BinaryTreeMaterializedImpl(BinaryTreeMaterializedImpl&&) noexcept = default;
+    /// @brief Moving is okay.
+    BinaryTreeMaterializedImpl& operator=(BinaryTreeMaterializedImpl&&) noexcept = default;
 
 
 

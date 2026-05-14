@@ -42,7 +42,7 @@ void test_collatz_basic() {
     assert(c.get_sequence()[0] == 6);
     assert(c.get_sequence().back() == 1);
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
-    assert(c.get_fg_pattern_string() == "GFFGGGF");
+    assert(c.get_fg_chain_string() == "GFFGGGF");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
 }
 
@@ -56,7 +56,7 @@ void test_collatz_reset_and_reuse() {
     Collatz<T> c(7);
     assert(c.get_initial_value() == 7);
     assert(c.get_oe_pattern_string() == "OEOEOEEOEEEOEEEEO");
-    assert(c.get_fg_pattern_string() == "FFFGFGGFGGGF");
+    assert(c.get_fg_chain_string() == "FFFGFGGFGGGF");
     c.init(6);  // Reuse with new value
     assert(c.get_initial_value() == 6);
     assert(c.get_peak_value() == 16);  // Collatz(6): 6→3→10→5→16→8→4→2→1
@@ -66,19 +66,6 @@ void test_collatz_reset_and_reuse() {
     assert(c.get_oe_pattern_string() == "EOEOEEEEO");
     assert(c.get_hwm_index() == 1);  // index where value drops below initial
 }
-
-
-
-//
-// Zero Check
-//
-template<typename T>
-void test_collatz_zero() {
-    Collatz<T> c(0);
-    assert(c.get_sequence().size() == 0);
-    assert(c.get_oe_pattern_string().empty());
-}
-
 
 
 //
@@ -93,33 +80,6 @@ void test_collatz_one() {
 
 
 
-//
-// Affine map
-//
-template<AnySupportedIntegral T>
-void test_collatz_affine_map() {
-    Collatz<T> c(17);
-    assert(c.get_fg_pattern_string() == "FGFGGFGGGF");
-    CollatzAffineMap<T> map;
-    map.apply_F();
-    assert(map.calculate(17) == 26);
-    map.apply_G();
-    assert(map.calculate(17) == 13);
-    map.apply_F();
-    assert(map.calculate(17) == 20);
-    map.apply_G();
-    assert(map.calculate(17) == 10);
-    map.apply_G();
-    assert(map.calculate(17) == 5);
-    map.apply_F();
-    assert(map.calculate(17) == 8);
-    map.apply_G();
-    assert(map.calculate(17) == 4);
-    map.apply_G();
-    assert(map.calculate(17) == 2);
-    map.apply_G();
-    assert(map.calculate(17) == 1);
-}
 
 
 
@@ -140,16 +100,8 @@ void run_all() {
     test_collatz_reset_and_reuse<T>();
     std::cout << " passed.\n";
 
-    std::cout << "test_collatz_zero() ..." << std::flush;
-    test_collatz_zero<T>();
-    std::cout << " passed.\n";
-
     std::cout << "test_collatz_one() ..." << std::flush;
     test_collatz_one<T>();
-    std::cout << " passed.\n";
-
-    std::cout << "test_collatz_affine_map() ..." << std::flush;
-    test_collatz_affine_map<T>();
     std::cout << " passed.\n";
 }
 

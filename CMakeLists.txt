@@ -155,6 +155,12 @@ set(TESTS
     binary_tree_math
     binary_tree_options
     binary_tree
+    bit
+    collatz_affine_map
+    collatz_affine_map_shortcut
+    collatz_affine_stride
+    collatz_constants
+    collatz
 
     collatz_class
     node_class

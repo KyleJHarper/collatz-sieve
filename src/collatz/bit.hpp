@@ -236,9 +236,6 @@ namespace Bit {
             // GMP has a scan1 function to find the first 1, so we can use it.
             return mpz_scan1(x.get_mpz_t(), 0);
         }
-
-        // If execution ever reaches this, no valid path was found.
-        throw std::logic_error("Cannot discern data type when calling count_trailing_zeros.");
     }
 
 
@@ -261,9 +258,6 @@ namespace Bit {
             inverted_n = ~n;
             return count_trailing_zeros(inverted_n);
         }
-
-        // If execution ever reaches this, no valid path was found.
-        throw std::logic_error("Cannot discern data type when calling count_trailing_ones.");
     }
 
 

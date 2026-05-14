@@ -91,6 +91,20 @@ class FlatHashBitmapImpl {
 
 
 
+    /// @brief Disallow copying.
+    FlatHashBitmapImpl(const FlatHashBitmapImpl&) = delete;
+    /// @brief Disallow copying.
+    FlatHashBitmapImpl& operator=(const FlatHashBitmapImpl&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    FlatHashBitmapImpl(FlatHashBitmapImpl&&) noexcept = default;
+    /// @brief Moving is okay.
+    FlatHashBitmapImpl& operator=(FlatHashBitmapImpl&&) noexcept = default;
+
+
+
     /// @brief Removes all items from all bitmaps by clearing the entire hash object.
     void clear() {
         _flat_map.clear();

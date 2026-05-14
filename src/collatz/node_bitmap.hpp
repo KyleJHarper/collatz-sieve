@@ -33,6 +33,22 @@ class NodeBitmap {
     /// @brief Default constructor.
     NodeBitmap() = default;
 
+
+
+    /// @brief Disallow copying.
+    NodeBitmap(const NodeBitmap&) = delete;
+    /// @brief Disallow copying.
+    NodeBitmap& operator=(const NodeBitmap&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    NodeBitmap(NodeBitmap&&) noexcept = default;
+    /// @brief Moving is okay.
+    NodeBitmap& operator=(NodeBitmap&&) noexcept = default;
+
+
+
     /// @brief Invoke the implementation's clear method, wiping it out and freeing memory.
     void clear() { _impl.clear(); }
 

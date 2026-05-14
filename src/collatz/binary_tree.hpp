@@ -102,6 +102,20 @@ class BinaryTree {
 
 
 
+    /// @brief Disallow copying.
+    BinaryTree(const BinaryTree&) = delete;
+    /// @brief Disallow copying.
+    BinaryTree& operator=(const BinaryTree&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    BinaryTree(BinaryTree&&) noexcept = default;
+    /// @brief Moving is okay.
+    BinaryTree& operator=(BinaryTree&&) noexcept = default;
+
+
+
     /**
     * @brief Destruction of the facade is simple.  Implementations in `_impl` have custom destruction, as needed.
     */

@@ -68,6 +68,20 @@ class Node {
 
 
 
+    /// @brief Disallow copying.
+    Node(const Node&) = delete;
+    /// @brief Disallow copying.
+    Node& operator=(const Node&) = delete;
+
+
+
+    /// @brief Moving is okay.
+    Node(Node&&) noexcept = default;
+    /// @brief Moving is okay.
+    Node& operator=(Node&&) noexcept = default;
+
+
+
     /// @brief Destructor, which simply needs to call `release_children()` in case it owns any which need freed.
     ~Node() {
         release_children();
