@@ -496,7 +496,7 @@ class Node {
         // they might be coming from different collections or trees, so we have to compare values, not pointers.
 
         // Values
-        if (eq.unequal(first->get_value(), second->get_value())) {
+        if (! eq.equal(first->get_value(), second->get_value())) {
             return eq.fail("Node values mismatch");
         }
 
@@ -505,29 +505,29 @@ class Node {
             return eq.fail("Parent nodes' pointers don't agree on null state");
         }
         if (first->get_parent() != nullptr) {
-            if (eq.unequal(first->get_parent()->get_value(), second->get_parent()->get_value())) {
+            if (! eq.equal(first->get_parent()->get_value(), second->get_parent()->get_value())) {
                 return eq.fail("Nodes' parents' values mismatch");
             }
         }
 
         // HWM Ancestor
-        if (eq.unequal(first->has_high_water_mark_ancestor(), second->has_high_water_mark_ancestor())) {
+        if (! eq.equal(first->has_high_water_mark_ancestor(), second->has_high_water_mark_ancestor())) {
             return eq.fail("Has HWM ancestor mismatch");
         }
         if (! eq.pointers_null_agree(first->get_hwm_ancestor(), second->get_hwm_ancestor())) {
             return eq.fail("HWM ancestors don't agree on null state");
         }
         if (first->get_hwm_ancestor() != nullptr) {
-            if (eq.unequal(first->get_hwm_ancestor()->get_value(), second->get_hwm_ancestor()->get_value())) {
+            if (! eq.equal(first->get_hwm_ancestor()->get_value(), second->get_hwm_ancestor()->get_value())) {
                 return eq.fail("HWM ancestor's value mismatch");
             }
         }
 
         // Children
-        if (eq.unequal(first->get_child_count(), second->get_child_count())) {
+        if (! eq.equal(first->get_child_count(), second->get_child_count())) {
             return eq.fail("Node child counts mismatch");
         }
-        if (eq.unequal(first->does_own_children(), second->does_own_children())) {
+        if (! eq.equal(first->does_own_children(), second->does_own_children())) {
             return eq.fail("Nodes' down_own_children mismatch");
         }
         for (size_t child_id = 0; child_id < first->get_child_count(); child_id++) {
@@ -535,7 +535,7 @@ class Node {
                 return eq.fail("Child ID " + to_string_any(child_id) + " mismatch on null state");
             }
             if (first->get_child(child_id) != nullptr) {
-                if (eq.unequal(first->get_child(child_id)->get_value(), second->get_child(child_id)->get_value())) {
+                if (! eq.equal(first->get_child(child_id)->get_value(), second->get_child(child_id)->get_value())) {
                     return eq.fail("Child ID " + to_string_any(child_id) + " values mismatch");
                 }
                 // Ensure each child knows we are the parent.
@@ -549,18 +549,18 @@ class Node {
         }
 
         // Remaining flags.
-        if (eq.unequal(first->is_below_high_water_mark(), second->is_below_high_water_mark())) {
+        if (! eq.equal(first->is_below_high_water_mark(), second->is_below_high_water_mark())) {
             return eq.fail("Nodes' is_below_high_water_mark mismatch");
         }
-        if (eq.unequal(first->is_initialized(), second->is_initialized())) {
+        if (! eq.equal(first->is_initialized(), second->is_initialized())) {
             return eq.fail("Nodes' is_initialize mismatch");
         }
 
         // FG Chain Bits
-        if (eq.unequal(first->get_fg_chain_length(), second->get_fg_chain_length())) {
+        if (! eq.equal(first->get_fg_chain_length(), second->get_fg_chain_length())) {
             return eq.fail("Nodes' FG chain length mismatch");
         }
-        if (eq.unequal(first->get_fg_chain_string(), second->get_fg_chain_string())) {
+        if (! eq.equal(first->get_fg_chain_string(), second->get_fg_chain_string())) {
             return eq.fail("Nodes' FG chain string mismatch");
         }
 

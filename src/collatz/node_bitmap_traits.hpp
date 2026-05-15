@@ -33,10 +33,6 @@ struct BitmapKeyTraits {
     /// @brief Maximum value for `suffix_t`.
     static constexpr suffix_t SUFFIX_MAX = std::numeric_limits<suffix_t>::max();
 
-    // Prefix is going to be fixed instead of a bunch of complicated logic.
-    //   mpz_class -> mpz_class because only it can handle arbitrarily large numbers
-    //   uint64_t or lower -> uint32_t because SUFFIX is hard-coded to 32 bits
-    //   uint128_t -> uint128_t because we only need 96 bits but there's no uint96_t
     /**
     * @brief Prefix for a `FlatHashBitmapImpl`.
     *
@@ -104,10 +100,10 @@ struct BitmapKeyTraits {
         if constexpr (FixedWidthIntegral<T>) {
             if constexpr (sizeof(T) <= SUFFIX_BYTES) {
                 out = 0;
-            } else if constexpr(GMPIntegral<T>) {
+            } else {
                 out = static_cast<prefix_t>(value >> SUFFIX_BITS);
             }
-        } else {
+        } else if constexpr (GMPIntegral<T>) {
             mpz_fdiv_q_2exp(out.get_mpz_t(), value.get_mpz_t(), SUFFIX_BITS);
         }
     }

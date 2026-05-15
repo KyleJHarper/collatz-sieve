@@ -299,15 +299,15 @@ class BinaryTreeMaterializedImpl {
         eq.set_category("BinaryTreeMaterializedImpl");
 
         // Flags
-        if (eq.unequal(first.is_pruning_hwm_nodes(), second.is_pruning_hwm_nodes())) {
+        if (! eq.equal(first.is_pruning_hwm_nodes(), second.is_pruning_hwm_nodes())) {
             return eq.fail("Is pruning hwm nodes mismatch");
         }
-        if (eq.unequal(first.is_pruning_parent_levels(), second.is_pruning_parent_levels())) {
+        if (! eq.equal(first.is_pruning_parent_levels(), second.is_pruning_parent_levels())) {
             return eq.fail("Is pruning parent levels mismatch");
         }
 
         // Level Map
-        if (eq.unequal(first.get_level_map().size(), second.get_level_map().size())) {
+        if (! eq.equal(first.get_level_map().size(), second.get_level_map().size())) {
             return eq.fail("Level map count mismatch");
         }
         for (const auto& [level, f_nodes] : first.get_level_map()) {
@@ -315,7 +315,7 @@ class BinaryTreeMaterializedImpl {
                 return eq.fail("First level map has level " + to_string_any(level) + ", but the second level map doesn't.");
             }
             const std::vector<Node<T>*>& s_nodes = second.get_level_map().at(level);
-            if (eq.unequal(f_nodes.size(), s_nodes.size())) {
+            if (! eq.equal(f_nodes.size(), s_nodes.size())) {
                 return eq.fail("Node counts on level " + to_string_any(level) + " mismatch");
             }
             for (size_t i = 0; i < f_nodes.size(); i++) {

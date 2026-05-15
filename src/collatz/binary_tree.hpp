@@ -348,24 +348,24 @@ class BinaryTree {
         }
 
         // Level count
-        if (eq.unequal(first.get_level_count(), second.get_level_count())) {
+        if (! eq.equal(first.get_level_count(), second.get_level_count())) {
             return eq.fail("Level counts differ");
         }
 
         // Flags
-        if (eq.unequal(first.is_preserving_ancestors(), second.is_preserving_ancestors())) {
+        if (! eq.equal(first.is_preserving_ancestors(), second.is_preserving_ancestors())) {
             return eq.fail("Is preserving ancestors mismatch");
         }
-        if (eq.unequal(first.is_verifying_non_hwm_nodes(), second.is_verifying_non_hwm_nodes())) {
+        if (! eq.equal(first.is_verifying_non_hwm_nodes(), second.is_verifying_non_hwm_nodes())) {
             return eq.fail("Is verifying hwm nodes mismatch");
         }
-        if (eq.unequal(first.is_initialized(), second.is_initialized())) {
+        if (! eq.equal(first.is_initialized(), second.is_initialized())) {
             return eq.fail("Is initialized mismatch");
         }
 
         // Coverage
         // Ensure the same size because it's cheap.
-        if (eq.unequal(first.get_coverage_map().size(), second.get_coverage_map().size())) {
+        if (! eq.equal(first.get_coverage_map().size(), second.get_coverage_map().size())) {
             return eq.fail("Coverage map size differs");
         }
         // Compare each level+coverage combo.
@@ -383,7 +383,7 @@ class BinaryTree {
         // For this to work, they must be a consistent order, which the impls guarantee on add_level();
         const std::vector<Node<T>*>& f_ancestors = first.get_ancestors();
         const std::vector<Node<T>*>& s_ancestors = second.get_ancestors();
-        if (eq.unequal(f_ancestors.size(), s_ancestors.size())) {
+        if (! eq.equal(f_ancestors.size(), s_ancestors.size())) {
             return eq.fail("Ancestor count mismatch");
         }
         for (size_t i = 0; i < f_ancestors.size(); i++) {

@@ -12,7 +12,6 @@
 #include <gmp.h>
 #include <omp.h>
 #include <roaring/roaring.hh>
-#include <stdexcept>
 #include <string>
 #include "gmp.hpp"
 #include "stream_helper.hpp"
@@ -329,11 +328,8 @@ class FlatHashBitmapImpl {
             add_prefix_key(src_prefix);
             // Build the key on our map.
             auto [it, last_inserted] = _flat_map.try_emplace(src_prefix);
-            // Clone the src to our new bitmap using the overwrite method.
-            bool successful = roaring::api::roaring_bitmap_overwrite(it->second, src_bitmap);
-            if (!successful) {
-                throw std::runtime_error("Unable to clone a bitmap using roaring_bitmap_overwite when calling clone().");
-            }
+            // Clone the src to our new bitmap using copy semantics.
+            it->second = src_bitmap;
         }
     }
 
@@ -412,12 +408,12 @@ class FlatHashBitmapImpl {
         const std::vector<prefix_t>& f_prefixes = first.get_sorted_prefixes();
         const std::vector<prefix_t>& s_prefixes = second.get_sorted_prefixes();
         // Check size.
-        if (eq.unequal(f_prefixes.size(), s_prefixes.size())) {
+        if (! eq.equal(f_prefixes.size(), s_prefixes.size())) {
             return eq.fail("Flat hash impl sorted_prefxies size mistmatch");
         }
         // Prefixes should match and are already sorted.  Test each prefix, and then the CRoaring bitmap beneath it.
         for (size_t i = 0; i < f_prefixes.size(); i++) {
-            if (eq.unequal(f_prefixes.at(i), s_prefixes.at(i))) {
+            if (! eq.equal(f_prefixes.at(i), s_prefixes.at(i))) {
                 return eq.fail("Flat hash prefix at ID " + to_string_any(i) + " mismatch");
             }
             const roaring::Roaring& f_roaring = f_flat_map.at(f_prefixes.at(i));

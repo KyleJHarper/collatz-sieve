@@ -6,12 +6,6 @@
 
 
 
-//
-// The NodeBitmap facade.  It uses prefixes and suffixes (implementation-specific) to store values in a CRoaring bitmap.  The only
-// implementation currently is a flat hash map for prefixes with a 32-bit suffix for the CRoaring bitmap.
-//
-// NOTE!  We will follow the CRoaring techniques, such as HALF-OPEN vs CLOSED variants and such.  Pay attention!
-//
 /**
 * @class NodeBitmap
 * @brief The NodeBitmap facade.  Currently, only one implementation exists and is the default.
@@ -24,6 +18,7 @@ class NodeBitmap {
     private:
     /// @brief The static implementation object for this facade.
     BackendType _impl;
+
 
 
     public:
@@ -130,7 +125,7 @@ class NodeBitmap {
 
 
     /// @brief Copy source bitmap and metadata into self, making an exact copy.
-    void clone(const NodeBitmap<T, BackendType>& src) { _impl.clone(src); }
+    void clone(const NodeBitmap<T, BackendType>& src) { _impl.clone(src.get_impl()); }
 
 
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 #include <string_view>
 #include <gmpxx.h>
 #include "typedefs.hpp"
@@ -21,7 +22,7 @@ namespace Int128 {
         uint128_t value = 0;
         for (char c : view) {
             if (c < '0' || c > '9')
-                throw "Invalid digit in uint128 literal";
+                throw std::invalid_argument("Invalid digit in uint128 literal");
             value = value * 10 + (c - '0');
         }
         return value;

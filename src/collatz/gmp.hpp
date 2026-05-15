@@ -18,7 +18,7 @@ namespace GMP {
     * @param obj Reference to the object.
     * @return Best attempt at the total bytes used by the object.
     */
-    inline size_t gmp_deep_sizeof(const mpz_class& obj) {
+    inline size_t deep_sizeof(const mpz_class& obj) {
         return sizeof(mpz_class) + (mpz_size(obj.get_mpz_t()) * sizeof(mp_limb_t));
     }
 
@@ -29,18 +29,18 @@ namespace GMP {
     * @param obj Reference to the object.
     * @return Best attempt at the total bytes used by the object.
     */
-    inline size_t gmp_deep_sizeof(const mpf_class& obj) {
+    inline size_t deep_sizeof(const mpf_class& obj) {
         return sizeof(mpf_class) + (mpf_size(obj.get_mpf_t()) * sizeof(mp_limb_t));
     }
 
 
 
     /**
-    * @brief Retrieve xactly 64 bits from an `mpz_t`.
+    * @brief Retrieve exactly 64 bits from an `mpz_t`.
     * @param obj Reference to the `mpz_t` object.
     * @return A `uint64_t` with the bits.
     */
-    inline uint64_t mpz_get_ui64(const mpz_t& obj) {
+    inline uint64_t mpz_get_ui64(const mpz_t obj) {
         uint64_t result = 0;
         mpz_export(&result, nullptr, -1, sizeof(result), 0, 0, obj);
         return result;
@@ -56,7 +56,7 @@ namespace GMP {
     inline mpz_class parse_mpz(std::string_view view) {
         mpz_class value;
         if (mpz_set_str(value.get_mpz_t(), view.data(), 10) != 0) {
-            throw std::runtime_error("invalid digit in _mpz literal");
+            throw std::invalid_argument("invalid digit in _mpz literal");
         }
         return value;
     }

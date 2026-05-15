@@ -199,12 +199,12 @@ class BinaryTreeCoverage {
         eq.set_category("BinaryTreeCoverage");
 
         // Total
-        if (eq.unequal(first.get_total(), second.get_total())) {
+        if (! eq.equal(first.get_total(), second.get_total())) {
             return eq.fail("Coverages' totals don't match");
         }
 
         // Covered
-        if (eq.unequal(first.get_covered(), second.get_covered())) {
+        if (! eq.equal(first.get_covered(), second.get_covered())) {
             return eq.fail("Coverages' covered values don't match");
         }
 

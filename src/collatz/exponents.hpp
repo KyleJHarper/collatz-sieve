@@ -1242,9 +1242,6 @@ namespace Exponents {
             }
             return POW3_MPZ[exp];
         }
-
-        // Unknown type.  Throw.
-        throw std::logic_error("Cannot determine date type for type T in get_power_of_three()");
     }
 
 
@@ -2013,9 +2010,6 @@ namespace Exponents {
             }
             return POW2_MPZ[exp];
         }
-
-        // Unknown type.  Throw.
-        throw std::logic_error("Cannot determine date type for type T in get_power_of_two()");
     }
 
 }

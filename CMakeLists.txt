@@ -161,10 +161,14 @@ set(TESTS
     collatz_affine_stride
     collatz_constants
     collatz
+    equality_helper
+    exponents
+    gmp
+    int128
+    node_bitmap_traits
+    node_bitmap
 
-    collatz_class
     node_class
-    node_bitmap_class
     forward_looking_cache_class
 )
 

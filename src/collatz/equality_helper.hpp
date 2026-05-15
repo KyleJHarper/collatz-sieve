@@ -116,7 +116,7 @@ class EqualityHelper {
     */
     [[nodiscard]] bool booleans_equal(const bool a, const bool b) {
         if (a != b) {
-            return fail("Boolean parity mismatch: a==" + to_string_any(a) + ", b==" + to_string_any(b));
+            return fail("Boolean parity mismatch:  a==" + to_string_any(a) + ", b==" + to_string_any(b));
         }
         return true;
     }
@@ -177,14 +177,6 @@ class EqualityHelper {
         } else {
             return fail("No known equality operator is available for type: " + ABI::demangle(typeid(T).name()));
         }
-    }
-
-
-
-    /// @brief Helper which simply performs: `!equal(a, b)`.  See it for details.
-    template<typename T>
-    [[nodiscard]] bool unequal(const T& a, const T& b) {
-        return !equal(a, b);
     }
 
 };
