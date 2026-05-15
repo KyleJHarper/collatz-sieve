@@ -538,9 +538,11 @@ void test_node_bitmap_equality() {
 
     NodeBitmap<T> first;
     NodeBitmap<T> second;
+    NodeBitmap<T> different;
     first.add_range(BitmapKeyTraits<T>::SUFFIX_MAX, BitmapKeyTraits<T>::SUFFIX_MAX * 2);
     second.add_range(BitmapKeyTraits<T>::SUFFIX_MAX, BitmapKeyTraits<T>::SUFFIX_MAX * 2);
-    assert(equality(first, second));
+    different.add_range(1, 10);
+    assert(equality(first, second, different));
 
     end_test();
 }

@@ -83,7 +83,7 @@ inline bool cloneable(const ObjType& src) {
 
 
 template<typename ObjType>
-inline bool equality(const ObjType& first, const ObjType& second) {
+inline bool equality(const ObjType& first, const ObjType& second, const ObjType& different) {
     std::string err;
 
     // An object should always be equal to itself.
@@ -101,6 +101,12 @@ inline bool equality(const ObjType& first, const ObjType& second) {
     // Static member should exist and work.
     if (! ObjType::st_equal(first, second, &err)) {
         std::cout << "First object is not equal to second (static method).  Error is: " << err << std::endl;
+        return false;
+    }
+
+    // A different object shouldn't match.
+    if (first.equal(different, &err)) {
+        std::cout << "First object is equal to different, yet shouldn't be.";
         return false;
     }
 

@@ -167,8 +167,8 @@ set(TESTS
     int128
     node_bitmap_traits
     node_bitmap
+    node
 
-    node_class
     forward_looking_cache_class
 )
 

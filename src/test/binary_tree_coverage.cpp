@@ -92,15 +92,18 @@ void test_binary_tree_coverage_equality() {
     const T total = 53;
 
     // Build Objects
-    BinaryTreeCoverage<T> coverage;
-    coverage.set_covered(covered);
-    coverage.set_total(total);
-    BinaryTreeCoverage<T> coverage2;
-    coverage2.set_covered(covered);
-    coverage2.set_total(total);
+    BinaryTreeCoverage<T> first;
+    first.set_covered(covered);
+    first.set_total(total);
+    BinaryTreeCoverage<T> second;
+    second.set_covered(covered);
+    second.set_total(total);
+    BinaryTreeCoverage<T> different;
+    different.set_covered(covered + 1);
+    different.set_total(total + 2);
 
     // Test
-    assert(equality(coverage, coverage2));
+    assert(equality(first, second, different));
 
     end_test();
 }

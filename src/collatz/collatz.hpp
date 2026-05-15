@@ -611,6 +611,9 @@ class Collatz {
     static std::string st_get_fg_chain_string(const T& initial_value, seq_size_t max_chars = std::numeric_limits<seq_size_t>::max()) {
         std::string result;
         seq_size_t count = 0;
+        if (max_chars == 0) {
+            return result;
+        }
         Collatz<T>::st_for_each_fg_chain_link(initial_value, [&](bool is_F) {
             result += (is_F ? 'F' : 'G');
             count++;
