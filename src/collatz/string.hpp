@@ -1,6 +1,4 @@
 #pragma once
-#include <stdexcept>
-#include "abi.hpp"
 #include "int128.hpp"
 #include "concepts.hpp"
 
@@ -19,8 +17,6 @@ inline std::string to_string_any(const T& val) {
         return Int128::uint128_to_string(val);
     } else if constexpr (GMPIntegral<T>) {
         return val.get_str();
-    } else {
-        throw std::runtime_error("Unknown type passed to to_string_any(): " + ABI::demangle<T>());
     }
 }
 

@@ -758,19 +758,6 @@ void test_stream_helper_deserialize_bool() {
 
 
 template<AnySupportedIntegral T>
-void test_stream_helper_() {
-    start_test(__func__);
-
-    std::string err;
-    std::stringstream stream;
-    StreamHelper sh(&stream, &stream, &err);
-
-    end_test();
-}
-
-
-
-template<AnySupportedIntegral T>
 void run_all() {
     announce_run_all<T>();
 

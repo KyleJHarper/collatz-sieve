@@ -188,11 +188,6 @@ class zstd_ostreambuf : public std::streambuf {
 
 
 
-    //
-    // Finalize
-    // Zstd requires us to (obviously) flush any remaining data to it for work, but also check ZSTD_e_end when in MT mode until it
-    // reports 0.  There's potential compression and some ZSTD-specific finalization happening until it returns 0.
-    //
     /**
     * @brief Flush all remaining buffers and wait for ZSTD to say its finished.
     *

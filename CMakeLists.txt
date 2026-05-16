@@ -169,6 +169,10 @@ set(TESTS
     node_bitmap
     node
     stream_helper
+    string
+    typedefs
+    udl
+    zstandard
 )
 
 enable_testing()
