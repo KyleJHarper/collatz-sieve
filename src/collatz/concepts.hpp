@@ -33,18 +33,6 @@ concept AnySupportedIntegral = (FixedWidthIntegral<T> || GMPIntegral<T>);
 
 
 
-/// @brief Concept applicable to any fixed, guaranteed-width type.  Mostly for serializing/deserializing.
-template<typename T>
-concept GuaranteedWidthIntegral = (
-    std::is_same_v<T, int8_t> || std::is_same_v<T, uint8_t> ||
-    std::is_same_v<T, int16_t> || std::is_same_v<T, uint16_t> ||
-    std::is_same_v<T, int32_t> || std::is_same_v<T, uint32_t> ||
-    std::is_same_v<T, int64_t> || std::is_same_v<T, uint64_t> ||
-    std::is_same_v<T, int128_t> || std::is_same_v<T, uint128_t>
-);
-
-
-
 /// @brief Concept to detect which integrals will respond to operator<< for printing.
 template <typename T>
 concept PrintableIntegral = std::integral<T> && requires(std::ostream& os, T val) {

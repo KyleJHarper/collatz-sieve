@@ -168,8 +168,7 @@ set(TESTS
     node_bitmap_traits
     node_bitmap
     node
-
-    forward_looking_cache_class
+    stream_helper
 )
 
 enable_testing()

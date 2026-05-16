@@ -56,6 +56,18 @@ T \mbox{\hyperlink{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}{cardinalit
 \Hypertarget{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae}\label{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae} 
 {\bfseries Node\+Bitmap} ()=\mbox{\hyperlink{classNode}{default}}
 \begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_a23d5a6364e935bc311f1cd8e0d9c282d}\label{classNodeBitmap_a23d5a6364e935bc311f1cd8e0d9c282d} 
+{\bfseries Node\+Bitmap} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_aa3efe8f1c7055d09889f1899b22de1cd}\label{classNodeBitmap_aa3efe8f1c7055d09889f1899b22de1cd} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_a92616da068db07eb6ce11f0424292f37}\label{classNodeBitmap_a92616da068db07eb6ce11f0424292f37} 
+{\bfseries Node\+Bitmap} (\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classNodeBitmap_aaec97a82cf9856ee4e85aa254f9ec716}\label{classNodeBitmap_aaec97a82cf9856ee4e85aa254f9ec716} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \& {\bfseries operator=} (\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}\label{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
 \begin{DoxyCompactList}\small\item\em Invoke the implementation\textquotesingle{}s clear method, wiping it out and freeing memory. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -215,7 +227,7 @@ A boolean indicating success or failure. Do not discard.
 
 Compare another bitmap of {\ttfamily Backend\+Type} to this one. 
 
-This is a member helper which simply forwards to {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Backend\+Type\+::st\+\_\+equal()}}.
+This is a member helper which simply forwards to {\ttfamily \doxylink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{Backend\+Type\+::st\+\_\+equal()}}.
 
 
 \begin{DoxyParams}{Parameters}

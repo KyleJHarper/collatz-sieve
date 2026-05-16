@@ -40,6 +40,18 @@ The \doxylink{classBinaryTree}{Binary\+Tree} facade which will apply Harper\text
 \begin{DoxyCompactList}\small\item\em Default constructor. No levels added. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classBinaryTree_afac59a30a1f62f8cf802b9c4fdd5e751}{Binary\+Tree}} (level\+\_\+t \mbox{\hyperlink{classNode}{levels}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}} \&\mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\})
 \begin{DoxyCompactList}\small\item\em Constructor which will call {\ttfamily \doxylink{classBinaryTree_a2eeaf4a7727c29a727d01845add1475b}{init()}} and set custom options, if specified. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a839b5bff7567f72aacb6d318e2283b3c}\label{classBinaryTree_a839b5bff7567f72aacb6d318e2283b3c} 
+{\bfseries Binary\+Tree} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a089bd73dcf73c718400143e744b2d50d}\label{classBinaryTree_a089bd73dcf73c718400143e744b2d50d} 
+\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_aaf79a5c1ff02239db05fc436dd4d847a}\label{classBinaryTree_aaf79a5c1ff02239db05fc436dd4d847a} 
+{\bfseries Binary\+Tree} (\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a2624728fd4f3c4ecdce4ba1038781384}\label{classBinaryTree_a2624728fd4f3c4ecdce4ba1038781384} 
+\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \& {\bfseries operator=} (\mbox{\hyperlink{classBinaryTree}{Binary\+Tree}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTree_aa1900e64abaad323570b2f3106a67042}\label{classBinaryTree_aa1900e64abaad323570b2f3106a67042} 
 {\bfseries \texorpdfstring{$\sim$}{\string~}\+Binary\+Tree} ()=\mbox{\hyperlink{classNode}{default}}
 \begin{DoxyCompactList}\small\item\em Destruction of the facade is simple. Implementations in {\ttfamily \+\_\+impl} have custom destruction, as needed. \end{DoxyCompactList}\item 
@@ -199,7 +211,7 @@ This facade will assert the level fits, assert verification is correctly handled
 
 Assert non High-\/\+Water Mark verification is enabled when necessary. 
 
-If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by {\ttfamily \doxylink{namespaceCollatzConstants_ab4329241ca5fc331afc866655cc91bb2}{Collatz\+Constants\+::\+LARGEST\+\_\+\+EMPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL}}.
+If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by {\ttfamily \doxylink{namespaceCollatzConstants_a973af5204c6bff2e94087a73f2b4af0c}{Collatz\+Constants\+::\+LARGEST\+\_\+\+EMPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL}}.
 
 \begin{DoxyParagraph}{Deeper Explanation}
 
@@ -432,7 +444,7 @@ This function checks\+:
 \item The is\+\_\+initialized flag.
 \item Coverage map.
 \item Ancestors (if enabled).
-\item Implementation-\/specific checks from {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Tree\+Type\+::st\+\_\+equal()}}.
+\item Implementation-\/specific checks from {\ttfamily \doxylink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{Tree\+Type\+::st\+\_\+equal()}}.
 \end{DoxyEnumerate}
 
 

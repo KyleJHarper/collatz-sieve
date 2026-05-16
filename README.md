@@ -1,3 +1,8 @@
+# TODO
+
+* Do not use platform-dependent types (int, size_t, long, etc)
+(Maybe just the serialization API can handle this...?)
+
 # Harper's Sieve of Collatz
 
 __A Monotonic Binary-Tree Reduction of the Collatz Search Space__

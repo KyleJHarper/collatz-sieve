@@ -100,30 +100,58 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c88f91f30a684e8718cf3ecfca66613" id="r_a5c88f91f30a684e8718cf3ecfca66613"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a5c88f91f30a684e8718cf3ecfca66613">fail</a> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">msg</a>)</td></tr>
 <tr class="memdesc:a5c88f91f30a684e8718cf3ecfca66613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Early-exit helper. Emits a message and returns false for caller's flow-control.  <br /></td></tr>
 <tr class="separator:a5c88f91f30a684e8718cf3ecfca66613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
+<tr class="memitem:a230aeec34408c3d89d975984f3f5b7e4" id="r_a230aeec34408c3d89d975984f3f5b7e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a230aeec34408c3d89d975984f3f5b7e4">StreamHelper</a> (std::istream *<a class="el" href="classNode.html">in</a>, std::ostream *<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:a230aeec34408c3d89d975984f3f5b7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic constructor.  <br /></td></tr>
+<tr class="separator:a230aeec34408c3d89d975984f3f5b7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Binary Serialization</div></td></tr>
 <tr class="memitem:a54d51dafd1d31decba126bd1f44b1ecd" id="r_a54d51dafd1d31decba126bd1f44b1ecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a54d51dafd1d31decba126bd1f44b1ecd">write_bytes</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">void</a> *<a class="el" href="classNode.html">data</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> <a class="el" href="classNode.html">size</a>)</td></tr>
 <tr class="memdesc:a54d51dafd1d31decba126bd1f44b1ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic helper to write bytes from any pointer location up to <code>size</code> bytes.  <br /></td></tr>
 <tr class="separator:a54d51dafd1d31decba126bd1f44b1ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa0e0c53d4a2669cef847fd3c305f6e0" id="r_afa0e0c53d4a2669cef847fd3c305f6e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#afa0e0c53d4a2669cef847fd3c305f6e0">read_bytes</a> (<a class="el" href="classNode.html">void</a> *<a class="el" href="classNode.html">data</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> <a class="el" href="classNode.html">size</a>)</td></tr>
 <tr class="memdesc:afa0e0c53d4a2669cef847fd3c305f6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic helper to read bytes from any pointer location up to <code>size</code> bytes.  <br /></td></tr>
 <tr class="separator:afa0e0c53d4a2669cef847fd3c305f6e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfc9679f40161822a20dd8734af8ba20" id="r_abfc9679f40161822a20dd8734af8ba20"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:abfc9679f40161822a20dd8734af8ba20"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#abfc9679f40161822a20dd8734af8ba20">serialize_integral</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
-<tr class="memdesc:abfc9679f40161822a20dd8734af8ba20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.  <br /></td></tr>
-<tr class="separator:abfc9679f40161822a20dd8734af8ba20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bef7f72a2603c25a4424a167015a2cc" id="r_a1bef7f72a2603c25a4424a167015a2cc"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:a1bef7f72a2603c25a4424a167015a2cc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a1bef7f72a2603c25a4424a167015a2cc">deserialize_integral</a> (T &amp;<a class="el" href="classNode.html">rv</a>)</td></tr>
-<tr class="memdesc:a1bef7f72a2603c25a4424a167015a2cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize any supported integral of type <code>T</code>.  <br /></td></tr>
-<tr class="separator:a1bef7f72a2603c25a4424a167015a2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Boolean Serialization</div></td></tr>
 <tr class="memitem:a3ecb10b3639c7ad20d1d4f92425fffd1" id="r_a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a3ecb10b3639c7ad20d1d4f92425fffd1">serialize_bool</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a> &amp;value)</td></tr>
 <tr class="memdesc:a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize boolean values.  <br /></td></tr>
 <tr class="separator:a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85200b98bc03c8c403a2f606c82d064a" id="r_a85200b98bc03c8c403a2f606c82d064a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a85200b98bc03c8c403a2f606c82d064a">deserialize_bool</a> (<a class="el" href="classNode.html">bool</a> &amp;<a class="el" href="classNode.html">rv</a>)</td></tr>
 <tr class="memdesc:a85200b98bc03c8c403a2f606c82d064a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize boolean values.  <br /></td></tr>
 <tr class="separator:a85200b98bc03c8c403a2f606c82d064a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
-<tr class="memitem:a230aeec34408c3d89d975984f3f5b7e4" id="r_a230aeec34408c3d89d975984f3f5b7e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a230aeec34408c3d89d975984f3f5b7e4">StreamHelper</a> (std::istream *<a class="el" href="classNode.html">in</a>, std::ostream *<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
-<tr class="memdesc:a230aeec34408c3d89d975984f3f5b7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic constructor.  <br /></td></tr>
-<tr class="separator:a230aeec34408c3d89d975984f3f5b7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Integral Serialization</div></td></tr>
+<tr class="memitem:a129cd3269e2b8b27aa1070d7f0b7abc4" id="r_a129cd3269e2b8b27aa1070d7f0b7abc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a129cd3269e2b8b27aa1070d7f0b7abc4">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int8_t</a> &amp;value)</td></tr>
+<tr class="memdesc:a129cd3269e2b8b27aa1070d7f0b7abc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:a129cd3269e2b8b27aa1070d7f0b7abc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8411d291fdd27fece7c53eff57c8629" id="r_af8411d291fdd27fece7c53eff57c8629"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#af8411d291fdd27fece7c53eff57c8629">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint8_t</a> &amp;value)</td></tr>
+<tr class="memdesc:af8411d291fdd27fece7c53eff57c8629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:af8411d291fdd27fece7c53eff57c8629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88f9cb674f4198aa08c293adaa06b99b" id="r_a88f9cb674f4198aa08c293adaa06b99b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a88f9cb674f4198aa08c293adaa06b99b">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int16_t</a> &amp;value)</td></tr>
+<tr class="memdesc:a88f9cb674f4198aa08c293adaa06b99b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:a88f9cb674f4198aa08c293adaa06b99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabca457b4c2bdc547e0fd7454ed8a822" id="r_aabca457b4c2bdc547e0fd7454ed8a822"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#aabca457b4c2bdc547e0fd7454ed8a822">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint16_t</a> &amp;value)</td></tr>
+<tr class="memdesc:aabca457b4c2bdc547e0fd7454ed8a822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:aabca457b4c2bdc547e0fd7454ed8a822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0226fb771d48f4af1aa13b6a193bfaf" id="r_ac0226fb771d48f4af1aa13b6a193bfaf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#ac0226fb771d48f4af1aa13b6a193bfaf">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int32_t</a> &amp;value)</td></tr>
+<tr class="memdesc:ac0226fb771d48f4af1aa13b6a193bfaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:ac0226fb771d48f4af1aa13b6a193bfaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e3922db60b466ff790ef9124940d65b" id="r_a6e3922db60b466ff790ef9124940d65b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a6e3922db60b466ff790ef9124940d65b">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint32_t</a> &amp;value)</td></tr>
+<tr class="memdesc:a6e3922db60b466ff790ef9124940d65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:a6e3922db60b466ff790ef9124940d65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad90685242856ea9cf3e8bee2b85fb30d" id="r_ad90685242856ea9cf3e8bee2b85fb30d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#ad90685242856ea9cf3e8bee2b85fb30d">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int64_t</a> &amp;value)</td></tr>
+<tr class="memdesc:ad90685242856ea9cf3e8bee2b85fb30d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:ad90685242856ea9cf3e8bee2b85fb30d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22a1617f6add29cd33f38a958f5213ba" id="r_a22a1617f6add29cd33f38a958f5213ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a22a1617f6add29cd33f38a958f5213ba">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> &amp;value)</td></tr>
+<tr class="memdesc:a22a1617f6add29cd33f38a958f5213ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:a22a1617f6add29cd33f38a958f5213ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd32a9ee425ccdfe0b40ca52f9527e11" id="r_acd32a9ee425ccdfe0b40ca52f9527e11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#acd32a9ee425ccdfe0b40ca52f9527e11">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int128_t</a> &amp;value)</td></tr>
+<tr class="memdesc:acd32a9ee425ccdfe0b40ca52f9527e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:acd32a9ee425ccdfe0b40ca52f9527e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab03d1aa0d2b57eaf30cfbc27eeea336b" id="r_ab03d1aa0d2b57eaf30cfbc27eeea336b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#ab03d1aa0d2b57eaf30cfbc27eeea336b">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint128_t</a> &amp;value)</td></tr>
+<tr class="memdesc:ab03d1aa0d2b57eaf30cfbc27eeea336b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:ab03d1aa0d2b57eaf30cfbc27eeea336b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2d985508b81f1a9501f5e9894f81f87" id="r_ad2d985508b81f1a9501f5e9894f81f87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#ad2d985508b81f1a9501f5e9894f81f87">serialize_integral</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_class</a> &amp;value)</td></tr>
+<tr class="memdesc:ad2d985508b81f1a9501f5e9894f81f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.    <br /></td></tr>
+<tr class="separator:ad2d985508b81f1a9501f5e9894f81f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -135,6 +163,14 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_out
 std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_in</b> ()</td></tr>
 <tr class="memdesc:a618bf81e5e31099079338ac7d892ce6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Private helper to use <code>_in_ptr</code> and apply a null check. <br /></td></tr>
 <tr class="separator:a618bf81e5e31099079338ac7d892ce6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a199a73b242577a67dc025499e73858" id="r_a4a199a73b242577a67dc025499e73858"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
+<tr class="memitem:a4a199a73b242577a67dc025499e73858"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a4a199a73b242577a67dc025499e73858">serialize_integral_impl</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memdesc:a4a199a73b242577a67dc025499e73858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.  <br /></td></tr>
+<tr class="separator:a4a199a73b242577a67dc025499e73858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44732068977a5e7b6db7c4b519bee2bb" id="r_a44732068977a5e7b6db7c4b519bee2bb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
+<tr class="memitem:a44732068977a5e7b6db7c4b519bee2bb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a44732068977a5e7b6db7c4b519bee2bb">deserialize_integral_impl</a> (T &amp;<a class="el" href="classNode.html">rv</a>)</td></tr>
+<tr class="memdesc:a44732068977a5e7b6db7c4b519bee2bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize any supported integral of type <code>T</code>.  <br /></td></tr>
+<tr class="separator:a44732068977a5e7b6db7c4b519bee2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -258,8 +294,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1bef7f72a2603c25a4424a167015a2cc" name="a1bef7f72a2603c25a4424a167015a2cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bef7f72a2603c25a4424a167015a2cc">&#9670;&#160;</a></span>deserialize_integral()</h2>
+<a id="a44732068977a5e7b6db7c4b519bee2bb" name="a44732068977a5e7b6db7c4b519bee2bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44732068977a5e7b6db7c4b519bee2bb">&#9670;&#160;</a></span>deserialize_integral_impl()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +306,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::deserialize_integral </td>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::deserialize_integral_impl </td>
           <td>(</td>
           <td class="paramtype">T &amp;&#160;</td>
           <td class="paramname"><em>rv</em></td><td>)</td>
@@ -279,16 +315,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Deserialize any supported integral of type <code>T</code>. </p>
-<p>Will deserialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is expected in the istream. When the type is variable length (mpz_class), this will expect a sign and (if non-zero) chunk count and then limb data.</p>
-<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd>
-<dd>
-When using fixed-width, caller must use a <code>GuaranteedWidthIntegral</code>. Things like size_t and int/uint are not portable. </dd></dl>
+<p>Will deserialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is expected in the istream. When the type is variable length (mpz_class), this will expect a sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rv</td><td>Reference to the caller's memory to deserialize into. Avoids <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> alloc(). </td></tr>
@@ -425,13 +460,11 @@ When using fixed-width, caller must use a <code>GuaranteedWidthIntegral</code>. 
 
 </div>
 </div>
-<a id="abfc9679f40161822a20dd8734af8ba20" name="abfc9679f40161822a20dd8734af8ba20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfc9679f40161822a20dd8734af8ba20">&#9670;&#160;</a></span>serialize_integral()</h2>
+<a id="acd32a9ee425ccdfe0b40ca52f9527e11" name="acd32a9ee425ccdfe0b40ca52f9527e11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd32a9ee425ccdfe0b40ca52f9527e11">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[1/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -439,7 +472,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
         <tr>
           <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int128_t</a> &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -451,11 +484,496 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="a88f9cb674f4198aa08c293adaa06b99b" name="a88f9cb674f4198aa08c293adaa06b99b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88f9cb674f4198aa08c293adaa06b99b">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[2/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int16_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="ac0226fb771d48f4af1aa13b6a193bfaf" name="ac0226fb771d48f4af1aa13b6a193bfaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0226fb771d48f4af1aa13b6a193bfaf">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[3/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int32_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="ad90685242856ea9cf3e8bee2b85fb30d" name="ad90685242856ea9cf3e8bee2b85fb30d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad90685242856ea9cf3e8bee2b85fb30d">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[4/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int64_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="a129cd3269e2b8b27aa1070d7f0b7abc4" name="a129cd3269e2b8b27aa1070d7f0b7abc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a129cd3269e2b8b27aa1070d7f0b7abc4">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[5/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">int8_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="ad2d985508b81f1a9501f5e9894f81f87" name="ad2d985508b81f1a9501f5e9894f81f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2d985508b81f1a9501f5e9894f81f87">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[6/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_class</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="ab03d1aa0d2b57eaf30cfbc27eeea336b" name="ab03d1aa0d2b57eaf30cfbc27eeea336b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab03d1aa0d2b57eaf30cfbc27eeea336b">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[7/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint128_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="aabca457b4c2bdc547e0fd7454ed8a822" name="aabca457b4c2bdc547e0fd7454ed8a822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabca457b4c2bdc547e0fd7454ed8a822">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[8/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint16_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="a6e3922db60b466ff790ef9124940d65b" name="a6e3922db60b466ff790ef9124940d65b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e3922db60b466ff790ef9124940d65b">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[9/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint32_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="a22a1617f6add29cd33f38a958f5213ba" name="a22a1617f6add29cd33f38a958f5213ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22a1617f6add29cd33f38a958f5213ba">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[10/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="af8411d291fdd27fece7c53eff57c8629" name="af8411d291fdd27fece7c53eff57c8629"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8411d291fdd27fece7c53eff57c8629">&#9670;&#160;</a></span>serialize_integral() <span class="overload">[11/11]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint8_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Serialize any supported integral of type <code>T</code>.   </p>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if successful, false otherwise.   </dd></dl>
+
+</div>
+</div>
+<a id="a4a199a73b242577a67dc025499e73858" name="a4a199a73b242577a67dc025499e73858"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a199a73b242577a67dc025499e73858">&#9670;&#160;</a></span>serialize_integral_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral_impl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 <p>Serialize any supported integral of type <code>T</code>. </p>
-<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign and (if non-zero) chunk count and then limb data.</p>
-<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd>
-<dd>
-When using fixed-width, caller must use a <code>GuaranteedWidthIntegral</code>. Things like size_t and int/uint are not portable. </dd></dl>
+<p>Will serialize any integral of type <code>T</code>. When type is fixed-width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.</p>
+<dl class="section note"><dt>Note</dt><dd>This method does not throw. Do not discard. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>When using fixed-width, caller must use an explicit-width integral. Things like size_t and int/uint are not portable. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>The value to serialize. </td></tr>

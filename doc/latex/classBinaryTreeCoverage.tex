@@ -27,8 +27,10 @@ Collaboration diagram for Binary\+Tree\+Coverage\texorpdfstring{$<$}{<} T \texor
 \begin{DoxyCompactList}\small\item\em Merge results from another coverage into this one. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Serialize this object for export. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}})
-\begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_aed019b25ae78aa020ddd7e94bcad2d90}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeCoverage_a8125a71c19265ea95a382457cc697bfb}{serialize()}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_afc5bb45905dea56a330a1791cb947c27}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Compare another coverage to this one. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
@@ -65,6 +67,11 @@ Collaboration diagram for Binary\+Tree\+Coverage\texorpdfstring{$<$}{<} T \texor
 T \mbox{\hyperlink{classBinaryTreeCoverage_a7bbf93ef0d63c3b9d46fb7300ffc78df}{get\+\_\+uncovered}} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Get uncovered tally, which is {\ttfamily \+\_\+total -\/ \+\_\+covered}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage_a941234ca7915ddc5e568107ba87d1b71}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\begin{DoxyCompactList}\small\item\em Compare two Binary\+Tree\+Coverages\textquotesingle{} specific internals and return true if identical. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -110,12 +117,12 @@ Constructor which sets covered and total initially.
 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac}\label{classBinaryTreeCoverage_ae1995364becfef4723dada49868ea6ac} 
+\Hypertarget{classBinaryTreeCoverage_aed019b25ae78aa020ddd7e94bcad2d90}\label{classBinaryTreeCoverage_aed019b25ae78aa020ddd7e94bcad2d90} 
 \index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!deserialize@{deserialize}}
 \index{deserialize@{deserialize}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -135,6 +142,29 @@ This method does not throw.
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeCoverage_afc5bb45905dea56a330a1791cb947c27}\label{classBinaryTreeCoverage_afc5bb45905dea56a330a1791cb947c27} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!equal@{equal}}
+\index{equal@{equal}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{equal()}{equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compare another coverage to this one. 
+
+This is a member helper which simply forwards to {\ttfamily \doxylink{classBinaryTreeCoverage_a941234ca7915ddc5e568107ba87d1b71}{Binary\+Tree\+Coverage\+::st\+\_\+equal()}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em second} & The second \doxylink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage} to compare against this. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
 \end{DoxyReturn}
 \Hypertarget{classBinaryTreeCoverage_ad8279e71a5f559f216a974050926642e}\label{classBinaryTreeCoverage_ad8279e71a5f559f216a974050926642e} 
 \index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!get\_ratio@{get\_ratio}}
@@ -214,6 +244,35 @@ This method does not throw.
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 A boolean indicating success or failure. Do not discard. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeCoverage_a941234ca7915ddc5e568107ba87d1b71}\label{classBinaryTreeCoverage_a941234ca7915ddc5e568107ba87d1b71} 
+\index{BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}!st\_equal@{st\_equal}}
+\index{st\_equal@{st\_equal}!BinaryTreeCoverage$<$ T $>$@{BinaryTreeCoverage$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Compare two Binary\+Tree\+Coverages\textquotesingle{} specific internals and return true if identical. 
+
+This function checks\+:
+\begin{DoxyEnumerate}
+\item Totals match.
+\item Covered match.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em first} & The first \doxylink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage} to compare. \\
+\hline
+{\em second} & The second \doxylink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage} to compare. \\
+\hline
+{\em err} & Pointer to a string where inequality or error messages are stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if equal, false otherwise. 
 \end{DoxyReturn}
 
 

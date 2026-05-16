@@ -19,11 +19,11 @@ The core algorithms supporting tree building and navigation.
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{st\+\_\+fg\+\_\+chain\+\_\+length}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{st\+\_\+fg\+\_\+chain\+\_\+length}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Returns the FG chain length of a node on any level. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\+\_\+floor\+\_\+log2}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{val}})
 \begin{DoxyCompactList}\small\item\em A log base-\/2 for integers (most significant bit based). \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\+\_\+step}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\+\_\+step}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em The magnitude of value to add to a child based on its parent\textquotesingle{}s level. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Accessors}\par
 \begin{DoxyCompactItemize}
@@ -47,43 +47,43 @@ The core algorithms supporting tree building and navigation.
 \begin{Indent}\textbf{ Node Counts}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+level}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+level}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em The number of nodesof a specific level on the tree. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_abb34d91a594ac1f8667d3d531b62ad4e}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+tree}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{levels}})
-\begin{DoxyCompactList}\small\item\em The number of nodes in a tree of level L depth, summing all levels. Inclusive. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a21222c83db75eae2c7d93d9d338a6ecb}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+levels}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{min\+\_\+level}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+level}})
-\begin{DoxyCompactList}\small\item\em The number of nodes between two levels, inclusive. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a21222c83db75eae2c7d93d9d338a6ecb}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+levels}} (level\+\_\+t \mbox{\hyperlink{classNode}{min\+\_\+level}}, level\+\_\+t \mbox{\hyperlink{classNode}{max\+\_\+level}})
+\begin{DoxyCompactList}\small\item\em The number of nodes between two levels, inclusive. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_abb34d91a594ac1f8667d3d531b62ad4e}{st\+\_\+node\+\_\+count\+\_\+of\+\_\+tree}} (level\+\_\+t \mbox{\hyperlink{classNode}{levels}})
+\begin{DoxyCompactList}\small\item\em The number of nodes in a tree of level L depth, summing all levels. Inclusive. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Level Operations}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\+\_\+get\+\_\+level\+\_\+by\+\_\+node\+\_\+value}} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{st\+\_\+get\+\_\+level\+\_\+by\+\_\+node\+\_\+value}} (\mbox{\hyperlink{classNode}{const}} T \&value)
 \begin{DoxyCompactList}\small\item\em Calculate the level for a node from any value. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_af705321c961a71c6f5780c7c2ef004ed}{st\+\_\+max\+\_\+full\+\_\+level\+\_\+at\+\_\+node\+\_\+value}} (T value)
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath_af705321c961a71c6f5780c7c2ef004ed}{st\+\_\+max\+\_\+full\+\_\+level\+\_\+at\+\_\+node\+\_\+value}} (T value)
 \begin{DoxyCompactList}\small\item\em Maximum full level available given any node value. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_a5a6123a3cc28228ef182e574521433ad}{st\+\_\+max\+\_\+level\+\_\+of\+\_\+type}} ()
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath_a5a6123a3cc28228ef182e574521433ad}{st\+\_\+max\+\_\+level\+\_\+of\+\_\+type}} ()
 \begin{DoxyCompactList}\small\item\em Reads type {\ttfamily T} to determine the maximum level supported without overflowing. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMath_a8e275b4ae6e1cac86737b7a45579392b}{st\+\_\+level\+\_\+will\+\_\+fit}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMath_a8e275b4ae6e1cac86737b7a45579392b}{st\+\_\+level\+\_\+will\+\_\+fit}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Determine if the level sent will fit within the type {\ttfamily T} specified. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Position and Value Operations}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{classBinaryTreeMath_aca35417871e1eb282adbccdc228fb988}{st\+\_\+max\+\_\+node\+\_\+value\+\_\+at\+\_\+level}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a308d907cab5282063998393f8bb1394f}{st\+\_\+max\+\_\+node\+\_\+value\+\_\+at\+\_\+level}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Calculate the highest value a node can have and remain on a given level. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\+\_\+first\+\_\+node\+\_\+value\+\_\+of\+\_\+level}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{st\+\_\+first\+\_\+node\+\_\+value\+\_\+of\+\_\+level}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Calculate the first node\textquotesingle{}s value on any level. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a5a11595e85505535bb32a40749370083}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a5a11595e85505535bb32a40749370083}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Calculate a node\textquotesingle{}s value by its position and level. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath_a97e6bfad91ed9f81a6da9e422f251083}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}}, T \&\mbox{\hyperlink{classNode}{out}})
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath_a97e6bfad91ed9f81a6da9e422f251083}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, level\+\_\+t \mbox{\hyperlink{classNode}{level}}, T \&\mbox{\hyperlink{classNode}{out}})
 \begin{DoxyCompactList}\small\item\em Calculate a node\textquotesingle{}s value by its position and level (out-\/param version). \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a9c933060b8bf36da748184ff45336606}{st\+\_\+node\+\_\+position}} (\mbox{\hyperlink{classNode}{const}} T \&value)
 \begin{DoxyCompactList}\small\item\em Calculate node position from a node\textquotesingle{}s value alone. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\+\_\+s1\+\_\+summation}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a6565799a11e571f5054969d53c38bc7e}{st\+\_\+s1\+\_\+summation}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Sums the increases from the {\ttfamily S1} sequence described in Harper\textquotesingle{}s research. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\+\_\+s2\+\_\+summation}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_ab9216463e9936ef2d060c5a5267649a9}{st\+\_\+s2\+\_\+summation}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Sums the decreases from the {\ttfamily S2} sequence described in Harper\textquotesingle{}s research. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_af6c0b21e284c9773e5396e91f9e29b51}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level\+\_\+\+\_\+deprecated}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_af6c0b21e284c9773e5396e91f9e29b51}{st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level\+\_\+\+\_\+deprecated}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{position}}, level\+\_\+t \mbox{\hyperlink{classNode}{level}})
 \begin{DoxyCompactList}\small\item\em Calculate a node\textquotesingle{}s value by its position and level. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Private Attributes}
@@ -151,7 +151,7 @@ This class is not meant to be instantiated, and will throw an error if you try.
 \index{st\_fg\_chain\_length@{st\_fg\_chain\_length}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_fg\_chain\_length()}{st\_fg\_chain\_length()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+fg\+\_\+chain\+\_\+length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+fg\+\_\+chain\+\_\+length (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -175,7 +175,7 @@ The number of FG links in the chain at the given level.
 \index{st\_first\_node\_value\_of\_level@{st\_first\_node\_value\_of\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_first\_node\_value\_of\_level()}{st\_first\_node\_value\_of\_level()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+first\+\_\+node\+\_\+value\+\_\+of\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+first\+\_\+node\+\_\+value\+\_\+of\+\_\+level (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -218,7 +218,7 @@ The integer of floor(log2(val)).
 \index{st\_get\_level\_by\_node\_value@{st\_get\_level\_by\_node\_value}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_get\_level\_by\_node\_value()}{st\_get\_level\_by\_node\_value()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+get\+\_\+level\+\_\+by\+\_\+node\+\_\+value (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+get\+\_\+level\+\_\+by\+\_\+node\+\_\+value (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -242,7 +242,7 @@ The level for {\ttfamily value}.
 \index{st\_level\_will\_fit@{st\_level\_will\_fit}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_level\_will\_fit()}{st\_level\_will\_fit()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+level\+\_\+will\+\_\+fit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+level\+\_\+will\+\_\+fit (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -261,7 +261,7 @@ True if the level will fit, false otherwise.
 \index{st\_max\_full\_level\_at\_node\_value@{st\_max\_full\_level\_at\_node\_value}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_max\_full\_level\_at\_node\_value()}{st\_max\_full\_level\_at\_node\_value()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+full\+\_\+level\+\_\+at\+\_\+node\+\_\+value (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+full\+\_\+level\+\_\+at\+\_\+node\+\_\+value (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -282,7 +282,7 @@ $
 \index{st\_max\_level\_of\_type@{st\_max\_level\_of\_type}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_max\_level\_of\_type()}{st\_max\_level\_of\_type()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+level\+\_\+of\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} level\+\_\+t \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+level\+\_\+of\+\_\+type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -294,14 +294,14 @@ This calculation used to be more complex, because it took into consideration the
 $ \text{Simply bits} $
 \end{DoxyParagraph}
 \begin{DoxyReturn}{Returns}
-Maximum level for type {\ttfamily T}. 
+Maximum level for type {\ttfamily T}. When \doxylink{namespaceGMP}{GMP}, sends {\ttfamily level\+\_\+t} max. 
 \end{DoxyReturn}
-\Hypertarget{classBinaryTreeMath_aca35417871e1eb282adbccdc228fb988}\label{classBinaryTreeMath_aca35417871e1eb282adbccdc228fb988} 
+\Hypertarget{classBinaryTreeMath_a308d907cab5282063998393f8bb1394f}\label{classBinaryTreeMath_a308d907cab5282063998393f8bb1394f} 
 \index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_max\_node\_value\_at\_level@{st\_max\_node\_value\_at\_level}}
 \index{st\_max\_node\_value\_at\_level@{st\_max\_node\_value\_at\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_max\_node\_value\_at\_level()}{st\_max\_node\_value\_at\_level()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+node\+\_\+value\+\_\+at\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+max\+\_\+node\+\_\+value\+\_\+at\+\_\+level (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -316,14 +316,14 @@ $ 2^{level} - 1 - Offset $
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The max node value for the level, always typed to {\ttfamily mpz\+\_\+class}. 
+The max node value for the level, typed to {\ttfamily T}. 
 \end{DoxyReturn}
 \Hypertarget{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024}\label{classBinaryTreeMath_ab6597ebd8bdce898ee2005a392ef6024} 
 \index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_node\_count\_of\_level@{st\_node\_count\_of\_level}}
 \index{st\_node\_count\_of\_level@{st\_node\_count\_of\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_count\_of\_level()}{st\_node\_count\_of\_level()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+level (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -345,7 +345,7 @@ The count of nodes, typed to your {\ttfamily T}.
 \index{st\_node\_count\_of\_levels@{st\_node\_count\_of\_levels}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_count\_of\_levels()}{st\_node\_count\_of\_levels()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+levels (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{min\+\_\+level,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+levels (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{min\+\_\+level,  }\item[{level\+\_\+t}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -369,7 +369,7 @@ Number of nodes, typed to your {\ttfamily T}.
 \index{st\_node\_count\_of\_tree@{st\_node\_count\_of\_tree}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_count\_of\_tree()}{st\_node\_count\_of\_tree()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{levels }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+count\+\_\+of\+\_\+tree (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{levels }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -423,7 +423,7 @@ The position for the node, typed to {\ttfamily T}.
 \index{st\_node\_value\_by\_position\_and\_level@{st\_node\_value\_by\_position\_and\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_value\_by\_position\_and\_level()}{st\_node\_value\_by\_position\_and\_level()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -460,7 +460,7 @@ The value of the node at the given position and level.
 \index{st\_node\_value\_by\_position\_and\_level@{st\_node\_value\_by\_position\_and\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_value\_by\_position\_and\_level()}{st\_node\_value\_by\_position\_and\_level()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level,  }\item[{T \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{level\+\_\+t}]{level,  }\item[{T \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -496,7 +496,7 @@ $
 \index{st\_node\_value\_by\_position\_and\_level\_\_deprecated@{st\_node\_value\_by\_position\_and\_level\_\_deprecated}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_node\_value\_by\_position\_and\_level\_\_deprecated()}{st\_node\_value\_by\_position\_and\_level\_\_deprecated()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level\+\_\+\+\_\+deprecated (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+node\+\_\+value\+\_\+by\+\_\+position\+\_\+and\+\_\+level\+\_\+\+\_\+deprecated (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -524,7 +524,7 @@ The value of the node at the given position and level.
 \index{st\_s1\_summation@{st\_s1\_summation}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_s1\_summation()}{st\_s1\_summation()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+s1\+\_\+summation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+s1\+\_\+summation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -558,7 +558,7 @@ The summation of the S1 series, returned as type {\ttfamily T}.
 \index{st\_s2\_summation@{st\_s2\_summation}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_s2\_summation()}{st\_s2\_summation()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+s2\+\_\+summation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+s2\+\_\+summation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{position,  }\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -598,7 +598,7 @@ The summation of the S2 series, returned as type {\ttfamily T}, and signed posit
 \index{st\_step@{st\_step}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_step()}{st\_step()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+step (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+step (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 

@@ -80,7 +80,6 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classCollatz-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Collatz&lt; T &gt; Class Template Reference</div></div>
 </div><!--header-->
@@ -112,10 +111,10 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <tr class="memitem:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>for_each_sequence_step</b> (<a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run through all the steps of a sequence. Uses <code><a class="el" href="classCollatz.html#a09bd6ec43c83b8fd6e7bffb4721a547d" title="Run through the sequence with a callback each step, including the initial value.">st_for_each_sequence_step()</a></code> under the hood. <br /></td></tr>
 <tr class="separator:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2f47ffeccdf236e45ae2a581c8b199c" id="r_af2f47ffeccdf236e45ae2a581c8b199c"><td class="memItemLeft" align="right" valign="top"><a id="af2f47ffeccdf236e45ae2a581c8b199c" name="af2f47ffeccdf236e45ae2a581c8b199c"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_pattern_string</b> (<a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>()) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:af2f47ffeccdf236e45ae2a581c8b199c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the F-G chain as a string for a sequence with some initial value. Uses <code><a class="el" href="classCollatz.html#a8ee1f8a061bedb3e82c4c80fe36d4f17" title="Generate the F-G chain as a string for a sequence with some initial value.">st_get_fg_chain_string()</a></code>. <br /></td></tr>
-<tr class="separator:af2f47ffeccdf236e45ae2a581c8b199c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67ee1cceacfb714f7d6b2359c23cd6e9" id="r_a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="memItemLeft" align="right" valign="top"><a id="a67ee1cceacfb714f7d6b2359c23cd6e9" name="a67ee1cceacfb714f7d6b2359c23cd6e9"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_chain_string</b> (<a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>()) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the F-G chain as a string for a sequence with some initial value. Uses <code><a class="el" href="classCollatz.html#a8ee1f8a061bedb3e82c4c80fe36d4f17" title="Generate the F-G chain as a string for a sequence with some initial value.">st_get_fg_chain_string()</a></code>. <br /></td></tr>
+<tr class="separator:a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3793586a6af869c0330cdbe769a9bad" id="r_ad3793586a6af869c0330cdbe769a9bad"><td class="memItemLeft" align="right" valign="top"><a id="ad3793586a6af869c0330cdbe769a9bad" name="ad3793586a6af869c0330cdbe769a9bad"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_oe_pattern_string</b> (<a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>())</td></tr>
 <tr class="memdesc:ad3793586a6af869c0330cdbe769a9bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the O-E chain as a string for a sequence with some initial value. Uses <code><a class="el" href="classCollatz.html#aff36ffade9c7d284d27de9147c0f15c9" title="Generate the O-E (odd-even) chain as a string for a sequence with some initial value.">st_get_oe_pattern_string()</a></code>. <br /></td></tr>
@@ -224,18 +223,11 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_peak_value</b> = 0</td>
 <a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_step_count</b> = 0</td></tr>
 <tr class="separator:a0c1fba7d69ae0406f1a1a3e91d1e7444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25030b782bce62642dd8879b6ee49c48" id="r_a25030b782bce62642dd8879b6ee49c48"><td class="memItemLeft" align="right" valign="top"><a id="a25030b782bce62642dd8879b6ee49c48" name="a25030b782bce62642dd8879b6ee49c48"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b>: 1</td></tr>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b>: 1 = <a class="el" href="classNode.html">false</a></td></tr>
 <tr class="separator:a25030b782bce62642dd8879b6ee49c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ab1abf698d1a7816a2cdbf9828d7929" id="r_a9ab1abf698d1a7816a2cdbf9828d7929"><td class="memItemLeft" align="right" valign="top"><a id="a9ab1abf698d1a7816a2cdbf9828d7929" name="a9ab1abf698d1a7816a2cdbf9828d7929"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_sequence_overflows</b>: 1</td></tr>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_sequence_overflows</b>: 1 = <a class="el" href="classNode.html">false</a></td></tr>
 <tr class="separator:a9ab1abf698d1a7816a2cdbf9828d7929"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a5993e94a75ee3a0c8b0c1e25588b28da" id="r_a5993e94a75ee3a0c8b0c1e25588b28da"><td class="memItemLeft" align="right" valign="top"><a id="a5993e94a75ee3a0c8b0c1e25588b28da" name="a5993e94a75ee3a0c8b0c1e25588b28da"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;<a class="el" href="classNode.html">os</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">m</a>)</td></tr>
-<tr class="memdesc:a5993e94a75ee3a0c8b0c1e25588b28da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Treat the initial value as the &lt;&lt;() output. <br /></td></tr>
-<tr class="separator:a5993e94a75ee3a0c8b0c1e25588b28da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />

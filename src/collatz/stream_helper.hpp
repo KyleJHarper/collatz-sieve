@@ -27,8 +27,6 @@ class StreamHelper {
     std::string* _err_ptr = nullptr;
     /// @brief A category to append to each message sent to `_err_ptr`.
     std::string _category = "Uncategorized";
-    /// *@brief A cap on data reading to prevent misuse or bugs eating RAM.  ~1GB.
-    static constexpr uint64_t _READ_WRITE_LIMIT = 1ULL << 30;
 
 
 
@@ -55,6 +53,11 @@ class StreamHelper {
 
 
     public:
+    /// *@brief A cap on data reading to prevent misuse or bugs eating RAM.  ~1GB.
+    static constexpr uint64_t READ_WRITE_LIMIT = 1ULL << 30;
+
+
+
     /// @name Lifecycle Management
     /// @{
 
@@ -99,57 +102,18 @@ class StreamHelper {
 
 
 
-    /**
-    * @brief Generic helper to write bytes from any pointer location up to `size` bytes.
-    * @note This method does not throw.  Do not discard.
-    * @param data Any contiguous data writable by `reinterpret_cast<const char*>`.
-    * @param size The number of bytes to write.
-    * @return True if successful, false otherwise.
-    */
-    [[nodiscard]] bool write_bytes(const void* data, const uint64_t size) {
-        if (size > _READ_WRITE_LIMIT) {
-            return fail("Unable to write more than " + std::to_string(_READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
-        }
-        std::ostream& out = get_out();
-        out.write(reinterpret_cast<const char*>(data), size);
-        if (! out) {
-            return fail("Failure in write_bytes() writing " + std::to_string(size) + " bytes");
-        }
-        return true;
-    }
-
-
-
-    /**
-    * @brief Generic helper to read bytes from any pointer location up to `size` bytes.
-    * @note This method does not throw.  Do not discard.
-    * @param data Any contiguous data readable by `reinterpret_cast<const char*>`.
-    * @param size The number of bytes to write.
-    * @return True if successful, false otherwise.
-    */
-    [[nodiscard]] bool read_bytes(void* data, const uint64_t size) {
-        if (size > _READ_WRITE_LIMIT) {
-            return fail("Unable to read more than " + std::to_string(_READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
-        }
-        std::istream& in = get_in();
-        in.read(reinterpret_cast<char*>(data), size);
-        if (! in) {
-            return fail("Failure in read_bytes() reading " + std::to_string(size) + " bytes");
-        }
-        return true;
-    }
-
-
+    /// @name Integral Serialization
+    /// @{
 
     /**
     * @brief Serialize any supported integral of type `T`.
     *
     * Will serialize any integral of type `T`.  When type is fixed-width, the caller is expected to deserialize using the same type
     * to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream.  When the type is
-    * variable length (mpz_class), this will emit sign and (if non-zero) chunk count and then limb data.
+    * variable length (mpz_class), this will emit sign, data size, and (if non-zero) limb data.
     *
     * @note This method does not throw.  Do not discard.
-    * @note When using fixed-width, caller must use a `GuaranteedWidthIntegral`.  Things like size_t and int/uint are not portable.
+    * @warning When using fixed-width, caller must use an explicit-width integral.  Things like size_t and int/uint are not portable.
     * @param value The value to serialize.
     * @tparam T Any supported integral (see concepts.hpp).
     * @return True if successful, false otherwise.
@@ -158,7 +122,6 @@ class StreamHelper {
     [[nodiscard]] bool serialize_integral(const T& value) {
         std::ostream& out = get_out();
         if constexpr(FixedWidthIntegral<T>) {
-            static_assert(GuaranteedWidthIntegral<T>);
             T final_value = value;
             // Flip endianness if needed.
             if constexpr(sizeof(T) > 1 && Endian::is_big_endian()) {
@@ -217,10 +180,10 @@ class StreamHelper {
     *
     * Will deserialize any integral of type `T`.  When type is fixed-width, the caller is expected to deserialize using the same
     * type to ensure the correct number of bytes are read, and therefore no size data is expected in the istream.  When the type is
-    * variable length (mpz_class), this will expect a sign and (if non-zero) chunk count and then limb data.
+    * variable length (mpz_class), this will expect a sign, data size, and (if non-zero) limb data.
     *
     * @note This method does not throw.  Do not discard.
-    * @note When using fixed-width, caller must use a `GuaranteedWidthIntegral`.  Things like size_t and int/uint are not portable.
+    * @warning When using fixed-width, caller must use an explicit-width integral.  Things like size_t and int/uint are not portable.
     * @param rv Reference to the caller's memory to deserialize into.  Avoids GMP alloc().
     * @tparam T Any supported integral (see concepts.hpp).
     * @return True if successful, false otherwise.
@@ -229,7 +192,6 @@ class StreamHelper {
     [[nodiscard]] bool deserialize_integral(T& rv) {
         std::istream& in = get_in();
         if constexpr(FixedWidthIntegral<T>) {
-            static_assert(GuaranteedWidthIntegral<T>);
             in.read(reinterpret_cast<char*>(&rv), sizeof(rv));
             if (! in) {
                 return fail("Failed to read integral from deserialize_integral");
@@ -285,7 +247,59 @@ class StreamHelper {
         return true;
     }
 
+    /// @}
 
+
+
+    /// @name Binary Serialization
+    /// @{
+
+    /**
+    * @brief Generic helper to write bytes from any pointer location up to `size` bytes.
+    * @note This method does not throw.  Do not discard.
+    * @param data Any contiguous data writable by `reinterpret_cast<const char*>`.
+    * @param size The number of bytes to write.
+    * @return True if successful, false otherwise.
+    */
+    [[nodiscard]] bool write_bytes(const void* data, const uint64_t size) {
+        if (size > READ_WRITE_LIMIT) {
+            return fail("Unable to write more than " + std::to_string(READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
+        }
+        std::ostream& out = get_out();
+        out.write(reinterpret_cast<const char*>(data), size);
+        if (! out) {
+            return fail("Failure in write_bytes() writing " + std::to_string(size) + " bytes");
+        }
+        return true;
+    }
+
+
+
+    /**
+    * @brief Generic helper to read bytes from any pointer location up to `size` bytes.
+    * @note This method does not throw.  Do not discard.
+    * @param data Any contiguous data readable by `reinterpret_cast<const char*>`.
+    * @param size The number of bytes to write.
+    * @return True if successful, false otherwise.
+    */
+    [[nodiscard]] bool read_bytes(void* data, const uint64_t size) {
+        if (size > READ_WRITE_LIMIT) {
+            return fail("Unable to read more than " + std::to_string(READ_WRITE_LIMIT) + " bytes (" + std::to_string(size) + " requested)");
+        }
+        std::istream& in = get_in();
+        in.read(reinterpret_cast<char*>(data), size);
+        if (! in) {
+            return fail("Failure in read_bytes() reading " + std::to_string(size) + " bytes");
+        }
+        return true;
+    }
+
+    /// @}
+
+
+
+    /// @name Boolean Serialization
+    /// @{
 
     /**
     * @brief Serialize boolean values.
@@ -322,8 +336,10 @@ class StreamHelper {
         if (! deserialize_integral(u8_rv)) {
             return fail("Unable to deserialize bool");
         }
-        rv = u8_rv == 0 ? false : true;
+        rv = u8_rv > 0;
         return true;
     }
+
+    /// @}
 
 };

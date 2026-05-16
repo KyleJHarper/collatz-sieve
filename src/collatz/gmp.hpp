@@ -41,8 +41,15 @@ namespace GMP {
     * @return A `uint64_t` with the bits.
     */
     inline uint64_t mpz_get_ui64(const mpz_t obj) {
+        static thread_local mpz_class truncated;
+        // Extract only 64 bits via "division" (masking).
+        mpz_fdiv_r_2exp(truncated.get_mpz_t(), obj, 64);
+
+        // Now call export into a uint64_t.
         uint64_t result = 0;
-        mpz_export(&result, nullptr, -1, sizeof(result), 0, 0, obj);
+        mpz_export(&result, nullptr, -1, sizeof(result), 0, 0, truncated.get_mpz_t());
+
+        // Return it.
         return result;
     }
 

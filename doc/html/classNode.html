@@ -111,9 +111,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac3b0a7152287753c0707502e263c5e9d" id="r_ac3b0a7152287753c0707502e263c5e9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#ac3b0a7152287753c0707502e263c5e9d">deep_size</a> () <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:ac3b0a7152287753c0707502e263c5e9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the size of this data structure as closely as possible.  <br /></td></tr>
 <tr class="separator:ac3b0a7152287753c0707502e263c5e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f924ff57fe20bb204b41407298555cb" id="r_a8f924ff57fe20bb204b41407298555cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a8f924ff57fe20bb204b41407298555cb">equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:a8f924ff57fe20bb204b41407298555cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another node to this one.  <br /></td></tr>
-<tr class="separator:a8f924ff57fe20bb204b41407298555cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fe2019d9fbed003fe9e04537c026bd3" id="r_a6fe2019d9fbed003fe9e04537c026bd3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a6fe2019d9fbed003fe9e04537c026bd3">equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a6fe2019d9fbed003fe9e04537c026bd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another node to this one.  <br /></td></tr>
+<tr class="separator:a6fe2019d9fbed003fe9e04537c026bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9517228032e6f0ce674e69bbbca02501" id="r_a9517228032e6f0ce674e69bbbca02501"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501">serialize</a> (std::ostream &amp;<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:a9517228032e6f0ce674e69bbbca02501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the node specifics of this object for export.  <br /></td></tr>
 <tr class="separator:a9517228032e6f0ce674e69bbbca02501"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,6 +129,22 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (<a class="el" href="classNode.html">const</a> T &amp;value, <a class="el" href="classNode.html">Node</a> *<a class="el" href="classNode.html">parent</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
 <tr class="memdesc:ad26a980b1363a1c2a05fb84e7c19a36a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct which allows value specified and parent optionally set when initialized. <br /></td></tr>
 <tr class="separator:ad26a980b1363a1c2a05fb84e7c19a36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac949a08e80b9beb215d614b47a8c422c" id="r_ac949a08e80b9beb215d614b47a8c422c"><td class="memItemLeft" align="right" valign="top"><a id="ac949a08e80b9beb215d614b47a8c422c" name="ac949a08e80b9beb215d614b47a8c422c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:ac949a08e80b9beb215d614b47a8c422c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:ac949a08e80b9beb215d614b47a8c422c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9fe3e0f304f32b887cdad86eb657522" id="r_aa9fe3e0f304f32b887cdad86eb657522"><td class="memItemLeft" align="right" valign="top"><a id="aa9fe3e0f304f32b887cdad86eb657522" name="aa9fe3e0f304f32b887cdad86eb657522"></a>
+<a class="el" href="classNode.html">Node</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:aa9fe3e0f304f32b887cdad86eb657522"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:aa9fe3e0f304f32b887cdad86eb657522"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f90944f0966137b4537b6ccfac44638" id="r_a0f90944f0966137b4537b6ccfac44638"><td class="memItemLeft" align="right" valign="top"><a id="a0f90944f0966137b4537b6ccfac44638" name="a0f90944f0966137b4537b6ccfac44638"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (<a class="el" href="classNode.html">Node</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:a0f90944f0966137b4537b6ccfac44638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:a0f90944f0966137b4537b6ccfac44638"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b0fe6d4a3ea0c0692c92a20fe07b6a2" id="r_a9b0fe6d4a3ea0c0692c92a20fe07b6a2"><td class="memItemLeft" align="right" valign="top"><a id="a9b0fe6d4a3ea0c0692c92a20fe07b6a2" name="a9b0fe6d4a3ea0c0692c92a20fe07b6a2"></a>
+<a class="el" href="classNode.html">Node</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">Node</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:a9b0fe6d4a3ea0c0692c92a20fe07b6a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:a9b0fe6d4a3ea0c0692c92a20fe07b6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae923d0417581dd19784d55b901f0f7f0" id="r_ae923d0417581dd19784d55b901f0f7f0"><td class="memItemLeft" align="right" valign="top"><a id="ae923d0417581dd19784d55b901f0f7f0" name="ae923d0417581dd19784d55b901f0f7f0"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>~Node</b> ()</td></tr>
 <tr class="memdesc:ae923d0417581dd19784d55b901f0f7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, which simply needs to call <code><a class="el" href="classNode.html#a492a8099e26177947545b885999f8e2f" title="Releases (delete) all children if _owns_children is true.">release_children()</a></code> in case it owns any which need freed. <br /></td></tr>
@@ -220,14 +236,17 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_odd_even_c
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a17282dcd2faed3e704e04be5c08dbaf3" id="r_a17282dcd2faed3e704e04be5c08dbaf3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a17282dcd2faed3e704e04be5c08dbaf3">st_equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memdesc:a17282dcd2faed3e704e04be5c08dbaf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two Nodes' specific internals and return true if identical.  <br /></td></tr>
+<tr class="separator:a17282dcd2faed3e704e04be5c08dbaf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c91214103510f81a707a8257301a209" id="r_a3c91214103510f81a707a8257301a209"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209">st_equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
-<tr class="memdesc:a3c91214103510f81a707a8257301a209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two Nodes' specific internals and return true if identical.  <br /></td></tr>
+<tr class="memdesc:a3c91214103510f81a707a8257301a209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another node to this one.  <br /></td></tr>
 <tr class="separator:a3c91214103510f81a707a8257301a209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af6bb4ddd5efe6c69085081cc229ab8f6" id="r_af6bb4ddd5efe6c69085081cc229ab8f6"><td class="memItemLeft" align="right" valign="top"><a id="af6bb4ddd5efe6c69085081cc229ab8f6" name="af6bb4ddd5efe6c69085081cc229ab8f6"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b></td></tr>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b> = 0</td></tr>
 <tr class="separator:af6bb4ddd5efe6c69085081cc229ab8f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca6aed9c76de85f62c3f8f2020b341eb" id="r_aca6aed9c76de85f62c3f8f2020b341eb"><td class="memItemLeft" align="right" valign="top"><a id="aca6aed9c76de85f62c3f8f2020b341eb" name="aca6aed9c76de85f62c3f8f2020b341eb"></a>
 <a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_parent</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
@@ -442,8 +461,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a8f924ff57fe20bb204b41407298555cb" name="a8f924ff57fe20bb204b41407298555cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f924ff57fe20bb204b41407298555cb">&#9670;&#160;</a></span>equal()</h2>
+<a id="a6fe2019d9fbed003fe9e04537c026bd3" name="a6fe2019d9fbed003fe9e04537c026bd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fe2019d9fbed003fe9e04537c026bd3">&#9670;&#160;</a></span>equal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -456,7 +475,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
         <tr>
           <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
@@ -479,7 +498,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare another node to this one. </p>
-<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">Node::st_equal()</a></code>.</p>
+<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a17282dcd2faed3e704e04be5c08dbaf3" title="Compare two Nodes&#39; specific internals and return true if identical.">Node::st_equal()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">second</td><td>The second <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> to compare against this. </td></tr>
@@ -635,8 +654,8 @@ This method does not throw. </dd></dl>
 
 </div>
 </div>
-<a id="a3c91214103510f81a707a8257301a209" name="a3c91214103510f81a707a8257301a209"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c91214103510f81a707a8257301a209">&#9670;&#160;</a></span>st_equal()</h2>
+<a id="a17282dcd2faed3e704e04be5c08dbaf3" name="a17282dcd2faed3e704e04be5c08dbaf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17282dcd2faed3e704e04be5c08dbaf3">&#9670;&#160;</a></span>st_equal() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -649,13 +668,13 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
         <tr>
           <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>first</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
@@ -697,6 +716,61 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if equal, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a3c91214103510f81a707a8257301a209" name="a3c91214103510f81a707a8257301a209"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c91214103510f81a707a8257301a209">&#9670;&#160;</a></span>st_equal() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_equal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compare another node to this one. </p>
+<p>This version allows pointers in case the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> object is null (root nodes, etc).</p>
+<p>See the <code>st_equal(&amp;)</code> version for details.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The first <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> (pointer) to compare. </td></tr>
+    <tr><td class="paramname">second</td><td>The second <a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> (pointer) to compare. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

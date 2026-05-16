@@ -129,6 +129,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afac59a30a1f62f8cf802b9c4fdd5e751" id="r_afac59a30a1f62f8cf802b9c4fdd5e751"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#afac59a30a1f62f8cf802b9c4fdd5e751">BinaryTree</a> (level_t <a class="el" href="classNode.html">levels</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a> &amp;<a class="el" href="classNode.html">opts</a>=<a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{})</td></tr>
 <tr class="memdesc:afac59a30a1f62f8cf802b9c4fdd5e751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor which will call <code><a class="el" href="classBinaryTree.html#a2eeaf4a7727c29a727d01845add1475b" title="Initializes the tree, rebuilding it if necessary.">init()</a></code> and set custom options, if specified.  <br /></td></tr>
 <tr class="separator:afac59a30a1f62f8cf802b9c4fdd5e751"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a839b5bff7567f72aacb6d318e2283b3c" id="r_a839b5bff7567f72aacb6d318e2283b3c"><td class="memItemLeft" align="right" valign="top"><a id="a839b5bff7567f72aacb6d318e2283b3c" name="a839b5bff7567f72aacb6d318e2283b3c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTree</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a839b5bff7567f72aacb6d318e2283b3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:a839b5bff7567f72aacb6d318e2283b3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a089bd73dcf73c718400143e744b2d50d" id="r_a089bd73dcf73c718400143e744b2d50d"><td class="memItemLeft" align="right" valign="top"><a id="a089bd73dcf73c718400143e744b2d50d" name="a089bd73dcf73c718400143e744b2d50d"></a>
+<a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a089bd73dcf73c718400143e744b2d50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:a089bd73dcf73c718400143e744b2d50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf79a5c1ff02239db05fc436dd4d847a" id="r_aaf79a5c1ff02239db05fc436dd4d847a"><td class="memItemLeft" align="right" valign="top"><a id="aaf79a5c1ff02239db05fc436dd4d847a" name="aaf79a5c1ff02239db05fc436dd4d847a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTree</b> (<a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:aaf79a5c1ff02239db05fc436dd4d847a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:aaf79a5c1ff02239db05fc436dd4d847a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2624728fd4f3c4ecdce4ba1038781384" id="r_a2624728fd4f3c4ecdce4ba1038781384"><td class="memItemLeft" align="right" valign="top"><a id="a2624728fd4f3c4ecdce4ba1038781384" name="a2624728fd4f3c4ecdce4ba1038781384"></a>
+<a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classBinaryTree.html">BinaryTree</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:a2624728fd4f3c4ecdce4ba1038781384"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:a2624728fd4f3c4ecdce4ba1038781384"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1900e64abaad323570b2f3106a67042" id="r_aa1900e64abaad323570b2f3106a67042"><td class="memItemLeft" align="right" valign="top"><a id="aa1900e64abaad323570b2f3106a67042" name="aa1900e64abaad323570b2f3106a67042"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>~BinaryTree</b> ()=<a class="el" href="classNode.html">default</a></td></tr>
 <tr class="memdesc:aa1900e64abaad323570b2f3106a67042"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruction of the facade is simple. Implementations in <code>_impl</code> have custom destruction, as needed. <br /></td></tr>
@@ -364,7 +380,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Assert non High-Water Mark verification is enabled when necessary. </p>
-<p>If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by <code><a class="el" href="namespaceCollatzConstants.html#ab4329241ca5fc331afc866655cc91bb2" title="Highest known empircally tested level. See Barina.">CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL</a></code>.</p>
+<p>If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by <code><a class="el" href="namespaceCollatzConstants.html#a973af5204c6bff2e94087a73f2b4af0c" title="Highest known empircally tested level. See Barina.">CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL</a></code>.</p>
 <dl class="section user"><dt>Deeper Explanation</dt><dd></dd></dl>
 <p>When building a tree, the nodes which don't meet HWM (directly or by ancestor) need to be checked. For example, the number <code>14</code> is below the HWM because of the <code>G</code> step on node <code>2</code>. Its value becomes <code>7</code>. That node isn't a HWM node, descendant of one, nor has it been verified by the tree. This leaves pockets of nodes that aren't verified, which means the overall High-Water Mark of the tree isn't valid.</p>
 <p>To compensate, verification can be activated via the <code><a class="el" href="structBinaryTreeOptions.html" title="An options package for building BinaryTree objects.">BinaryTreeOptions</a></code> during <code><a class="el" href="classBinaryTree.html#a2eeaf4a7727c29a727d01845add1475b" title="Initializes the tree, rebuilding it if necessary.">init()</a></code>, or by calling <code><a class="el" href="classBinaryTree.html#ac25d4b4510a44522433e9f7c195c7209" title="Explicitly enable non-HWM node verification.">enable_non_hwm_node_verification()</a></code> on an instantiated tree. However, external work by <a href="https://link.springer.com/article/10.1007/s11227-025-07337-0">David Barina</a> has empirically verified up to <code>2^71</code>, which is the first node on level <code>72</code> of a tree. Ergo, nodes up through level <code>71</code> are verified and do not need re-verification.</p>
@@ -805,7 +821,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <li>The is_initialized flag.</li>
 <li>Coverage map.</li>
 <li>Ancestors (if enabled).</li>
-<li>Implementation-specific checks from <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">TreeType::st_equal()</a></code>.</li>
+<li>Implementation-specific checks from <code><a class="el" href="classNode.html#a17282dcd2faed3e704e04be5c08dbaf3" title="Compare two Nodes&#39; specific internals and return true if identical.">TreeType::st_equal()</a></code>.</li>
 </ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

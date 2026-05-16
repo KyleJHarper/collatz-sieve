@@ -285,7 +285,7 @@ class CollatzAffineMapShortcut {
     */
     bool is_below() const {
         // If our two's exponent exceeds the precalculated two's-exponent for our power of three, we're below.
-        if (_threes_exp > Exponents::MAX_POW2_UNDER_POW3_COUNT) {
+        if (_threes_exp >= Exponents::MAX_POW2_UNDER_POW3_COUNT) {
             throw std::out_of_range(
                 "Cannot lookup MAX_POW2_UNDER_POW3 with _threes_exp of "
                 + std::to_string(_threes_exp)

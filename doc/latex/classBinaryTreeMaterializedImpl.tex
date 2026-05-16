@@ -29,6 +29,18 @@ An implementation of the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} wh
 \Hypertarget{classBinaryTreeMaterializedImpl_aaf2222a8b9879d8524b5307ef7bc92c0}\label{classBinaryTreeMaterializedImpl_aaf2222a8b9879d8524b5307ef7bc92c0} 
 {\bfseries Binary\+Tree\+Materialized\+Impl} ()=\mbox{\hyperlink{classNode}{default}}
 \begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a3d5eee83ca6dfaa910d5478db8418705}\label{classBinaryTreeMaterializedImpl_a3d5eee83ca6dfaa910d5478db8418705} 
+{\bfseries Binary\+Tree\+Materialized\+Impl} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_aabc777d2b5f116f830233dd1bd3c8be3}\label{classBinaryTreeMaterializedImpl_aabc777d2b5f116f830233dd1bd3c8be3} 
+\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a212839e1c0cb5f6319fce9a73568ab1d}\label{classBinaryTreeMaterializedImpl_a212839e1c0cb5f6319fce9a73568ab1d} 
+{\bfseries Binary\+Tree\+Materialized\+Impl} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a7e458d970761d52b5df18d47e9669dcb}\label{classBinaryTreeMaterializedImpl_a7e458d970761d52b5df18d47e9669dcb} 
+\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a04160de8e70f8ea032add1d949611d07}\label{classBinaryTreeMaterializedImpl_a04160de8e70f8ea032add1d949611d07} 
 {\bfseries \texorpdfstring{$\sim$}{\string~}\+Binary\+Tree\+Materialized\+Impl} ()
 \begin{DoxyCompactList}\small\item\em Destructor will remove any ancestors and clear the level map. \end{DoxyCompactList}\item 
@@ -416,7 +428,7 @@ This function checks\+:
 \begin{DoxyEnumerate}
 \item The is\+\_\+pruning\+\_\+hwm\+\_\+nodes flag.
 \item The is\+\_\+pruning\+\_\+parent\+\_\+levels flag.
-\item Level map ({\ttfamily \doxylink{classNode}{Node}} objects, which invoke their own {\ttfamily \doxylink{classNode_a3c91214103510f81a707a8257301a209}{Node\+::st\+\_\+equal()}}).
+\item Level map ({\ttfamily \doxylink{classNode}{Node}} objects, which invoke their own {\ttfamily \doxylink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{Node\+::st\+\_\+equal()}}).
 \end{DoxyEnumerate}
 
 

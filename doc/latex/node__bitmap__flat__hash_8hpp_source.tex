@@ -16,651 +16,657 @@
 \DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <gmp.h>}}
 \DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <omp.h>}}
 \DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <roaring/roaring.hh>}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <string>}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}gmp.hpp"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}stream\_helper.hpp"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}equality\_helper.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}gmp.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}stream\_helper.hpp"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}equality\_helper.hpp"{}}}
+\DoxyCodeLine{00019\ }
 \DoxyCodeLine{00020\ }
 \DoxyCodeLine{00021\ }
 \DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{comment}{//}}
-\DoxyCodeLine{00025\ \textcolor{comment}{//\ FlatHashBitmap}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ FlatHashBitmap}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//}}
 \DoxyCodeLine{00026\ \textcolor{comment}{//}}
-\DoxyCodeLine{00027\ \textcolor{comment}{//}}
-\DoxyCodeLine{00035\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00036\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\ \{}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{Traits}}\ =\ \mbox{\hyperlink{classNode}{BitmapKeyTraits<T>}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ =\ \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{Traits::prefix\_t}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ =\ Traits::suffix\_t;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}{roaring\_key\_t}}\ =\ Traits::roaring\_key\_t;\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ =\ Traits::roaring\_value\_t;\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}{roaring\_typecode\_t}}\ =\ Traits::roaring\_typecode\_t;\ \ \ }
-\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}{roaring\_word\_t}}\ =\ Traits::roaring\_word\_t;\ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\ =\ std::conditional\_t<}
-\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}}}
-\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl::flat\_hash\_map<prefix\_t,\ roaring::Roaring>}}}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl::flat\_hash\_map<prefix\_t,\ roaring::Roaring,\ absl::Hash<prefix\_t>}},\ \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP::MpzEq}}>}
-\DoxyCodeLine{00056\ \ \ \ \ >;}
-\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}};}
-\DoxyCodeLine{00060\ \ \ \ \ std::vector<prefix\_t>\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}};}
+\DoxyCodeLine{00034\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00035\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{Traits}}\ =\ \mbox{\hyperlink{classNode}{BitmapKeyTraits<T>}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ =\ \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{Traits::prefix\_t}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ =\ Traits::suffix\_t;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}{roaring\_key\_t}}\ =\ Traits::roaring\_key\_t;\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ =\ Traits::roaring\_value\_t;\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}{roaring\_typecode\_t}}\ =\ Traits::roaring\_typecode\_t;\ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}{roaring\_word\_t}}\ =\ Traits::roaring\_word\_t;\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\ =\ std::conditional\_t<}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl::flat\_hash\_map<prefix\_t,\ roaring::Roaring>}}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl::flat\_hash\_map<prefix\_t,\ roaring::Roaring,\ absl::Hash<prefix\_t>}},\ \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP::MpzEq}}>}
+\DoxyCodeLine{00055\ \ \ \ \ >;}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}};}
+\DoxyCodeLine{00059\ \ \ \ \ std::vector<prefix\_t>\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}};}
+\DoxyCodeLine{00060\ }
 \DoxyCodeLine{00061\ }
 \DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ std::lower\_bound(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.begin(),\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end(),\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ duplicates\ and\ only\ insert\ if\ there\ are\ none.}}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end()\ ||\ *\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
-\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.insert(\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ std::lower\_bound(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.begin(),\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end(),\ \mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ duplicates\ and\ only\ insert\ if\ there\ are\ none.}}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end()\ ||\ *\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.insert(\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ }
 \DoxyCodeLine{00072\ }
 \DoxyCodeLine{00073\ }
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}{remove\_prefix\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ std::lower\_bound(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.begin(),\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end(),\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end()\ \&\&\ *\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.erase(\mbox{\hyperlink{classNode}{it}});}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}{remove\_prefix\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ std::lower\_bound(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.begin(),\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end(),\ \mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.end()\ \&\&\ *\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classNode}{prefix}})\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.erase(\mbox{\hyperlink{classNode}{it}});}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ \ \ \ \ \}}
+\DoxyCodeLine{00081\ }
 \DoxyCodeLine{00082\ }
 \DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00088\ }
-\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad351442d4426f23b4795eee8eb817005}{FlatHashBitmapImpl}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad351442d4426f23b4795eee8eb817005}{FlatHashBitmapImpl}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00090\ }
 \DoxyCodeLine{00091\ }
 \DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}()\ \{}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.clear();}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.clear();}
-\DoxyCodeLine{00098\ \ \ \ \ \}}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a9ddb1fd61784b5914c261b678f91a947}{FlatHashBitmapImpl}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_ac4c310c676e1fc6b3f0f1ca8bfbb0de5}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ }
 \DoxyCodeLine{00099\ }
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ }
-\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a704953f1babccee6ac3ce50783038822}{FlatHashBitmapImpl}}(\mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&\ \mbox{\hyperlink{classNode}{operator}}=(\mbox{\hyperlink{classFlatHashBitmapImpl}{FlatHashBitmapImpl}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be}{get\_map}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}};\ \}}
-\DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ }
-\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933}{get\_sorted\_prefixes}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}};\ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}()\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.clear();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.clear();}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
 \DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ }
 \DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ }
-\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}{add}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be}{get\_map}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}};\ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933}{get\_sorted\_prefixes}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}};\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00129\ }
 \DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.add(\mbox{\hyperlink{classNode}{suffix}});}
-\DoxyCodeLine{00136\ \ \ \ \ \}}
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00139\ }
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\_range}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{start\_prefix}};}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{end\_prefix}};}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{start\_prefix}}\ =\ Traits::get\_prefix(\mbox{\hyperlink{classNode}{start}});}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{end\_prefix}}\ =\ Traits::get\_prefix(\mbox{\hyperlink{classNode}{end}});}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{start\_prefix}});}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(\mbox{\hyperlink{classNode}{end}},\ \mbox{\hyperlink{classNode}{end\_prefix}});}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{start\_suffix}}\ =\ Traits::get\_suffix(\mbox{\hyperlink{classNode}{start}});}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{end\_suffix}}\ =\ Traits::get\_suffix(\mbox{\hyperlink{classNode}{end}});}
-\DoxyCodeLine{00158\ }
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{start\_prefix}}\ ==\ \mbox{\hyperlink{classNode}{end\_prefix}})\ \{}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ They\ all\ fall\ into\ the\ same\ prefix.\ \ Call\ a\ single\ addRange()\ and\ then\ leave.}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{start\_prefix}});}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{start\_prefix}});}
-\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.addRange(\mbox{\hyperlink{classNode}{start\_suffix}},\ \mbox{\hyperlink{classNode}{end\_suffix}});}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Insert\ the\ remainder\ of\ prefix\_1\ which\ clearly\ goes\ to\ SUFFIX\_MAX\ since\ prefix\_2\ is\ beyond\ it.}}
-\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ suffix\ is\ full,\ we\ use\ addRangeClosed()\ to\ encapsulate\ it.}}
-\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{first\_it}},\ \mbox{\hyperlink{classNode}{first\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{start\_prefix}});}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{first\_inserted}})\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{start\_prefix}});}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{first\_it}}-\/>second.addRangeClosed(\mbox{\hyperlink{classNode}{start\_suffix}},\ Traits::SUFFIX\_MAX);}
-\DoxyCodeLine{00174\ }
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ any\ intermediary\ prefixes,\ which\ are\ incremental\ of\ course\ between\ prefix\_start\ and\ prefix\_end,\ non-\/inclusive.}}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Again,\ since\ the\ suffix\ is\ guaranteed\ full,\ we\ use\ addRangeClosed()\ to\ encapsulate\ it.}}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{middle\_prefix}}\ =\ \mbox{\hyperlink{classNode}{start\_prefix}}\ +\ 1;\ \mbox{\hyperlink{classNode}{middle\_prefix}}\ <\ \mbox{\hyperlink{classNode}{end\_prefix}};\ \mbox{\hyperlink{classNode}{middle\_prefix}}++)\ \{}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{mid\_it}},\ \mbox{\hyperlink{classNode}{mid\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{middle\_prefix}});}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mid\_inserted}})\ \{}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{middle\_prefix}});}
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mid\_it}}-\/>second.addRangeClosed(0,\ Traits::SUFFIX\_MAX);}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ remaining\ bits\ to\ the\ last\ prefix,\ ending\ at\ "{}end"{}\ of\ course.}}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reminder,\ we\ do\ NOT\ include\ the\ last\ value\ (end\_suffix)\ because\ this\ is\ the\ half-\/open\ variant.}}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{last\_it}},\ \mbox{\hyperlink{classNode}{last\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{end\_prefix}});}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{last\_inserted}})\ \{}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{end\_prefix}});}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{last\_it}}-\/>second.addRange(0,\ \mbox{\hyperlink{classNode}{end\_suffix}});}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00193\ \ \ \ \ \}}
-\DoxyCodeLine{00194\ }
-\DoxyCodeLine{00195\ }
-\DoxyCodeLine{00196\ }
-\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}{add\_range\_closed}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Just\ call\ the\ add\_range()\ and\ throw\ the\ end\ on\ after-\/the-\/fact.}}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\_range}}(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}{add}}(\mbox{\hyperlink{classNode}{end}});}
-\DoxyCodeLine{00205\ \ \ \ \ \}}
-\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}{add}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.add(\mbox{\hyperlink{classNode}{suffix}});}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\_range}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{start\_prefix}};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{end\_prefix}};}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{start\_prefix}}\ =\ Traits::get\_prefix(\mbox{\hyperlink{classNode}{start}});}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{end\_prefix}}\ =\ Traits::get\_prefix(\mbox{\hyperlink{classNode}{end}});}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{start\_prefix}});}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(\mbox{\hyperlink{classNode}{end}},\ \mbox{\hyperlink{classNode}{end\_prefix}});}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{start\_suffix}}\ =\ Traits::get\_suffix(\mbox{\hyperlink{classNode}{start}});}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{end\_suffix}}\ =\ Traits::get\_suffix(\mbox{\hyperlink{classNode}{end}});}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{start\_prefix}}\ ==\ \mbox{\hyperlink{classNode}{end\_prefix}})\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ They\ all\ fall\ into\ the\ same\ prefix.\ \ Call\ a\ single\ addRange()\ and\ then\ leave.}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{start\_prefix}});}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{start\_prefix}});}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.addRange(\mbox{\hyperlink{classNode}{start\_suffix}},\ \mbox{\hyperlink{classNode}{end\_suffix}});}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Insert\ the\ remainder\ of\ prefix\_1\ which\ clearly\ goes\ to\ SUFFIX\_MAX\ since\ prefix\_2\ is\ beyond\ it.}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ suffix\ is\ full,\ we\ use\ addRangeClosed()\ to\ encapsulate\ it.}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{first\_it}},\ \mbox{\hyperlink{classNode}{first\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{start\_prefix}});}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{first\_inserted}})\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{start\_prefix}});}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{first\_it}}-\/>second.addRangeClosed(\mbox{\hyperlink{classNode}{start\_suffix}},\ Traits::SUFFIX\_MAX);}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ any\ intermediary\ prefixes,\ which\ are\ incremental\ of\ course\ between\ prefix\_start\ and\ prefix\_end,\ non-\/inclusive.}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Again,\ since\ the\ suffix\ is\ guaranteed\ full,\ we\ use\ addRangeClosed()\ to\ encapsulate\ it.}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{middle\_prefix}}\ =\ \mbox{\hyperlink{classNode}{start\_prefix}}\ +\ 1;\ \mbox{\hyperlink{classNode}{middle\_prefix}}\ <\ \mbox{\hyperlink{classNode}{end\_prefix}};\ \mbox{\hyperlink{classNode}{middle\_prefix}}++)\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{mid\_it}},\ \mbox{\hyperlink{classNode}{mid\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{middle\_prefix}});}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mid\_inserted}})\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{middle\_prefix}});}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mid\_it}}-\/>second.addRangeClosed(0,\ Traits::SUFFIX\_MAX);}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ remaining\ bits\ to\ the\ last\ prefix,\ ending\ at\ "{}end"{}\ of\ course.}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reminder,\ we\ do\ NOT\ include\ the\ last\ value\ (end\_suffix)\ because\ this\ is\ the\ half-\/open\ variant.}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{last\_it}},\ \mbox{\hyperlink{classNode}{last\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{end\_prefix}});}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{last\_inserted}})\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{end\_prefix}});}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{last\_it}}-\/>second.addRange(0,\ \mbox{\hyperlink{classNode}{end\_suffix}});}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
 \DoxyCodeLine{00207\ }
 \DoxyCodeLine{00208\ }
-\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}{contains}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
-\DoxyCodeLine{00224\ }
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00229\ }
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{it}}-\/>second.contains(\mbox{\hyperlink{classNode}{suffix}});}
-\DoxyCodeLine{00231\ \ \ \ \ \}}
-\DoxyCodeLine{00232\ }
-\DoxyCodeLine{00233\ }
-\DoxyCodeLine{00234\ }
-\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}{remove}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}{add\_range\_closed}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Just\ call\ the\ add\_range()\ and\ throw\ the\ end\ on\ after-\/the-\/fact.}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\_range}}(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}{add}}(\mbox{\hyperlink{classNode}{end}});}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}{contains}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{it}}-\/>second.contains(\mbox{\hyperlink{classNode}{suffix}});}
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
 \DoxyCodeLine{00246\ }
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.remove(\mbox{\hyperlink{classNode}{suffix}});}
-\DoxyCodeLine{00252\ }
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}-\/>second.isEmpty())\ \{}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.erase(\mbox{\hyperlink{classNode}{it}});}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}{remove\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}{remove}}(\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefix\ can\ be\ mpz\_class,\ so\ use\ TLS\ and\ out\&.}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{prefix}}\ =\ Traits::get\_prefix(value);}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ Traits::get\_prefix(value,\ \mbox{\hyperlink{classNode}{prefix}});}
 \DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00257\ \ \ \ \ \}}
-\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Suffix\ is\ just\ a\ uint32\_t.}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}}\ =\ Traits::get\_suffix(value);}
 \DoxyCodeLine{00259\ }
-\DoxyCodeLine{00260\ }
-\DoxyCodeLine{00265\ \ \ \ \ T\ \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{cardinality}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{bitmap}}.cardinality();}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{total}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{total}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bitmap}}.cardinality());}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
-\DoxyCodeLine{00275\ \ \ \ \ \}}
-\DoxyCodeLine{00276\ }
-\DoxyCodeLine{00277\ }
-\DoxyCodeLine{00278\ }
-\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{src\_prefix}},\ \mbox{\hyperlink{classNode}{src\_bitmap}}]\ :\ \mbox{\hyperlink{classNode}{src}}.get\_map())\ \{}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ an\ iterator\ to\ our\ keypair.}}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{src\_prefix}});}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ prefix\ if\ it\ was\ missing.}}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{src\_prefix}});}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Merge\ using\ bitwise\ |=.}}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second\ |=\ \mbox{\hyperlink{classNode}{src\_bitmap}};}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00294\ \ \ \ \ \}}
-\DoxyCodeLine{00295\ }
-\DoxyCodeLine{00296\ }
-\DoxyCodeLine{00297\ }
-\DoxyCodeLine{00303\ \ \ \ \ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}{operator|=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}}(\mbox{\hyperlink{classNode}{src}});}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00306\ \ \ \ \ \}}
-\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second.remove(\mbox{\hyperlink{classNode}{suffix}});}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}-\/>second.isEmpty())\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.erase(\mbox{\hyperlink{classNode}{it}});}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}{remove\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00270\ \ \ \ \ \}}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00278\ \ \ \ \ T\ \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{cardinality}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{bitmap}}.cardinality();}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{total}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{total}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bitmap}}.cardinality());}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00288\ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{src\_prefix}},\ \mbox{\hyperlink{classNode}{src\_bitmap}}]\ :\ \mbox{\hyperlink{classNode}{src}}.get\_map())\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ an\ iterator\ to\ our\ keypair.}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{src\_prefix}});}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ prefix\ if\ it\ was\ missing.}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{src\_prefix}});}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Merge\ using\ bitwise\ |=.}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second\ |=\ \mbox{\hyperlink{classNode}{src\_bitmap}};}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \}}
 \DoxyCodeLine{00308\ }
 \DoxyCodeLine{00309\ }
-\DoxyCodeLine{00311\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de}{clone}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}();}
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{src\_prefix}},\ \mbox{\hyperlink{classNode}{src\_bitmap}}]\ :\ \mbox{\hyperlink{classNode}{src}}.get\_map())\ \{}
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ to\ the\ prefix\ key\ list.}}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{src\_prefix}});}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ key\ on\ our\ map.}}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{last\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{src\_prefix}});}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clone\ the\ src\ to\ our\ new\ bitmap\ using\ the\ overwrite\ method.}}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{successful}}\ =\ roaring::api::roaring\_bitmap\_overwrite(\mbox{\hyperlink{classNode}{it}}-\/>second,\ \mbox{\hyperlink{classNode}{src\_bitmap}});}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classNode}{successful}})\ \{}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Unable\ to\ clone\ a\ bitmap\ using\ roaring\_bitmap\_overwite\ when\ calling\ clone()."{}});}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00324\ \ \ \ \ \}}
-\DoxyCodeLine{00325\ }
-\DoxyCodeLine{00326\ }
-\DoxyCodeLine{00327\ }
-\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d}{optimize}}()\ \{}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
-\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{bitmap}}.runOptimize();}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00336\ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00316\ \ \ \ \ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}{operator|=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}}(\mbox{\hyperlink{classNode}{src}});}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00319\ \ \ \ \ \}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ }
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de}{clone}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}();}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{src\_prefix}},\ \mbox{\hyperlink{classNode}{src\_bitmap}}]\ :\ \mbox{\hyperlink{classNode}{src}}.get\_map())\ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ to\ the\ prefix\ key\ list.}}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{src\_prefix}});}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ key\ on\ our\ map.}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{last\_inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{src\_prefix}});}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clone\ the\ src\ to\ our\ new\ bitmap\ using\ copy\ semantics.}}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second\ =\ \mbox{\hyperlink{classNode}{src\_bitmap}};}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00334\ \ \ \ \ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ }
 \DoxyCodeLine{00337\ }
-\DoxyCodeLine{00338\ }
-\DoxyCodeLine{00339\ }
-\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96}{shrink\_to\_fit}}()\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{bitmap}}.shrinkToFit();}
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
-\DoxyCodeLine{00350\ \ \ \ \ \}}
-\DoxyCodeLine{00351\ }
-\DoxyCodeLine{00352\ }
-\DoxyCodeLine{00353\ }
-\DoxyCodeLine{00359\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff}{deep\_size}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \textcolor{keyword}{sizeof}(*this);}
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d}{optimize}}()\ \{}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{bitmap}}.runOptimize();}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00346\ \ \ \ \ \}}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96}{shrink\_to\_fit}}()\ \{}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ [\mbox{\hyperlink{classNode}{prefix}},\ \mbox{\hyperlink{classNode}{bitmap}}]\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{bitmap}}.shrinkToFit();}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00360\ \ \ \ \ \}}
+\DoxyCodeLine{00361\ }
 \DoxyCodeLine{00362\ }
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ map's\ internal\ storage.\ \ Should\ be\ size\ of\ a\ pair\ of\ <T,Roaring>\ and\ a\ byte\ of\ metadata.}}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.capacity()\ *\ (\textcolor{keyword}{sizeof}(std::pair<const\ prefix\_t,\ roaring::Roaring>)\ +\ 1);}
-\DoxyCodeLine{00365\ }
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ size\ of\ the\ roaring\ objects.}}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classNode}{pair}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{pair}}.second.getSizeInBytes(\textcolor{keyword}{false});}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00370\ }
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
-\DoxyCodeLine{00372\ \ \ \ \ \}}
-\DoxyCodeLine{00373\ }
-\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff}{deep\_size}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \textcolor{keyword}{sizeof}(*this);}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ map's\ internal\ storage.\ \ Should\ be\ size\ of\ a\ pair\ of\ <T,Roaring>\ and\ a\ byte\ of\ metadata.}}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.capacity()\ *\ (\textcolor{keyword}{sizeof}(std::pair<const\ prefix\_t,\ roaring::Roaring>)\ +\ 1);}
 \DoxyCodeLine{00375\ }
-\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\_equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{first}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEqualityHelper}{EqualityHelper}}\ \mbox{\hyperlink{classNode}{eq}}(\mbox{\hyperlink{classNode}{err}});}
-\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{eq}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
-\DoxyCodeLine{00394\ }
-\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ flat\ hash\ maps\ and\ prefixes.}}
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classNode}{f\_flat\_map}}\ =\ \mbox{\hyperlink{classNode}{first}}.get\_map();}
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classNode}{s\_flat\_map}}\ =\ \mbox{\hyperlink{classNode}{second}}.get\_map();}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classNode}{f\_prefixes}}\ =\ \mbox{\hyperlink{classNode}{first}}.get\_sorted\_prefixes();}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classNode}{s\_prefixes}}\ =\ \mbox{\hyperlink{classNode}{second}}.get\_sorted\_prefixes();}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ size.}}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{eq}}.unequal(\mbox{\hyperlink{classNode}{f\_prefixes}}.size(),\ \mbox{\hyperlink{classNode}{s\_prefixes}}.size()))\ \{}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Flat\ hash\ impl\ sorted\_prefxies\ size\ mistmatch"{}});}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefixes\ should\ match\ and\ are\ already\ sorted.\ \ Test\ each\ prefix,\ and\ then\ the\ CRoaring\ bitmap\ beneath\ it.}}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{f\_prefixes}}.size();\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{eq}}.unequal(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}),\ \mbox{\hyperlink{classNode}{s\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}})))\ \{}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Flat\ hash\ prefix\ at\ ID\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{i}})\ +\ \textcolor{stringliteral}{"{}\ mismatch"{}});}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{f\_roaring}}\ =\ \mbox{\hyperlink{classNode}{f\_flat\_map}}.at(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}));}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{s\_roaring}}\ =\ \mbox{\hyperlink{classNode}{s\_flat\_map}}.at(\mbox{\hyperlink{classNode}{s\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}));}
-\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ roaring::api::roaring\_bitmap\_equals(\&(\mbox{\hyperlink{classNode}{f\_roaring}}.roaring),\ \&(\mbox{\hyperlink{classNode}{s\_roaring}}.roaring)))\ \{}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Bitmaps\ do\ not\ match\ for\ prefix\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}})));}
-\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00415\ }
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Guess\ they're\ equal.}}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00418\ \ \ \ \ \}}
-\DoxyCodeLine{00419\ }
-\DoxyCodeLine{00420\ }
-\DoxyCodeLine{00421\ }
-\DoxyCodeLine{00431\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db}{equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\_equal}}(*\textcolor{keyword}{this},\ \mbox{\hyperlink{classNode}{second}},\ \mbox{\hyperlink{classNode}{err}});}
-\DoxyCodeLine{00433\ \ \ \ \ \}}
-\DoxyCodeLine{00434\ }
-\DoxyCodeLine{00435\ }
-\DoxyCodeLine{00436\ }
-\DoxyCodeLine{00450\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize}}(std::ostream\&\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \mbox{\hyperlink{classNode}{sh}}(\textcolor{keyword}{nullptr},\ \&\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}});}
-\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{sh}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
-\DoxyCodeLine{00453\ }
-\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ out\ the\ number\ of\ prefixes/bitmaps.}}
-\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.size());}
-\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}))\ \{}
-\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}prefix\_count=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}));}
-\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00459\ }
-\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ loop\ through\ each\ key-\/value\ pair.\ \ Make\ sure\ to\ do\ them\ in\ order\ so\ exported\ files\ remain\ deterministic.}}
-\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}})\ \{}
-\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ prefix.}}
-\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{prefix}}))\ \{}
-\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
-\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ bitmap.}}
-\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
-\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ find\ bitmap\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
-\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{bitmap}}\ =\ \mbox{\hyperlink{classNode}{it}}-\/>second;}
-\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ how\ much\ space\ the\ bitmap\ will\ take.}}
-\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{bitmap}}.getSizeInBytes(\textcolor{keyword}{true}));}
-\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}bitmap\_size=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}));}
-\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ buffer\ and\ flush\ it.}}
-\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}});}
-\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{actual\_bytes}}\ =\ \mbox{\hyperlink{classNode}{bitmap}}.write(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{actual\_bytes}}\ !=\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}})\ \{}
-\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}Number\ of\ bytes\ to\ write\ expected\ by\ getSizeInBytes\ doesn't\ match\ actual\ bytes\ returned"{}});}
-\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.write\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
-\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}roaring\ bitmap\ data"{}});}
-\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00487\ }
-\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
-\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00490\ \ \ \ \ \}}
-\DoxyCodeLine{00491\ }
-\DoxyCodeLine{00492\ }
-\DoxyCodeLine{00493\ }
-\DoxyCodeLine{00504\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}{deserialize}}(std::istream\&\ \mbox{\hyperlink{classNode}{in}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \mbox{\hyperlink{classNode}{sh}}(\&\mbox{\hyperlink{classNode}{in}},\ \textcolor{keyword}{nullptr},\ \mbox{\hyperlink{classNode}{err}});}
-\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{sh}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
-\DoxyCodeLine{00507\ }
-\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ it\ out\ (reset).}}
-\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}();}
-\DoxyCodeLine{00510\ }
-\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefixes}}
-\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}}\ =\ 0;}
-\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}))\ \{}
-\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ prefix\ count"{}});}
-\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
-\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
-\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{prefix}}))\ \{}
-\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ prefix\ value\ for\ index\ i=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{i}}));}
-\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}\ =\ 0;}
-\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
-\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ bitmap\ size\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
-\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}});}
-\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.read\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}})))\ \{}
-\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ bitmap\ data\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
-\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Try\ to\ place\ the\ prefix,\ which\ will\ build\ out\ bitmap\ too.}}
-\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
-\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second\ =\ roaring::Roaring::read(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{true});}
-\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00536\ }
-\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good}}
-\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00539\ \ \ \ \ \}}
-\DoxyCodeLine{00540\ }
-\DoxyCodeLine{00541\ }
-\DoxyCodeLine{00542\ }
-\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00561\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1}{for\_each\_value}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{}
-\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ we\ make\ GMP\ over\ and\ over.}}
-\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
-\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{dummy\_tls}};}
-\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}{for\_each\_transformer}}(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{dummy\_tls}},\ [\&](\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keyword}{auto}\&)\ \{}
-\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{callback}}(value);}
-\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00568\ \ \ \ \ \}}
-\DoxyCodeLine{00569\ }
-\DoxyCodeLine{00570\ }
-\DoxyCodeLine{00571\ }
-\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func,\ \textcolor{keyword}{typename}\ TLS\_Type>}
-\DoxyCodeLine{00595\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}{for\_each\_transformer}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ std::vector<TLS\_Type>\&\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{}
-\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ we\ make\ GMP\ over\ and\ over.}}
-\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_r\_v<bool,\ Func,\ const\ T\&,\ TLS\_Type\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ as\ void(const\ T\&,\ TLS\_Type\&)"{}});}
-\DoxyCodeLine{00598\ }
-\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ the\ TLS\ has\ enough\ elements\ before\ proceeding.}}
-\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_threads}}\ =\ \mbox{\hyperlink{classNode}{policy}}\ ==\ BitmapTransformerPolicy::SERIAL\ ?\ 1\ :\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_max\_threads}}());}
-\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.size()\ <\ \mbox{\hyperlink{classNode}{max\_threads}})\ \{}
-\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.resize(\mbox{\hyperlink{classNode}{max\_threads}});}
-\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00604\ }
-\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ a\ control-\/stop.}}
-\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ std::atomic<bool>\ \mbox{\hyperlink{classNode}{atomic\_stop}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{stop}};}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ size\ of\ the\ roaring\ objects.}}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classNode}{pair}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}})\ \{}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \mbox{\hyperlink{classNode}{pair}}.second.getSizeInBytes(\textcolor{keyword}{false});}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00382\ \ \ \ \ \}}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00401\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\_equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{first}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEqualityHelper}{EqualityHelper}}\ \mbox{\hyperlink{classNode}{eq}}(\mbox{\hyperlink{classNode}{err}});}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{eq}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ flat\ hash\ maps\ and\ prefixes.}}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classNode}{f\_flat\_map}}\ =\ \mbox{\hyperlink{classNode}{first}}.get\_map();}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\_t}}\&\ \mbox{\hyperlink{classNode}{s\_flat\_map}}\ =\ \mbox{\hyperlink{classNode}{second}}.get\_map();}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classNode}{f\_prefixes}}\ =\ \mbox{\hyperlink{classNode}{first}}.get\_sorted\_prefixes();}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<prefix\_t>\&\ \mbox{\hyperlink{classNode}{s\_prefixes}}\ =\ \mbox{\hyperlink{classNode}{second}}.get\_sorted\_prefixes();}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ size.}}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{eq}}.\mbox{\hyperlink{classNode_a6fe2019d9fbed003fe9e04537c026bd3}{equal}}(\mbox{\hyperlink{classNode}{f\_prefixes}}.size(),\ \mbox{\hyperlink{classNode}{s\_prefixes}}.size()))\ \{}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Flat\ hash\ impl\ sorted\_prefxies\ size\ mistmatch"{}});}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefixes\ should\ match\ and\ are\ already\ sorted.\ \ Test\ each\ prefix,\ and\ then\ the\ CRoaring\ bitmap\ beneath\ it.}}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{f\_prefixes}}.size();\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{eq}}.\mbox{\hyperlink{classNode_a6fe2019d9fbed003fe9e04537c026bd3}{equal}}(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}),\ \mbox{\hyperlink{classNode}{s\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}})))\ \{}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Flat\ hash\ prefix\ at\ ID\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{i}})\ +\ \textcolor{stringliteral}{"{}\ mismatch"{}});}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{f\_roaring}}\ =\ \mbox{\hyperlink{classNode}{f\_flat\_map}}.at(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}));}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{s\_roaring}}\ =\ \mbox{\hyperlink{classNode}{s\_flat\_map}}.at(\mbox{\hyperlink{classNode}{s\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}}));}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ roaring::api::roaring\_bitmap\_equals(\&(\mbox{\hyperlink{classNode}{f\_roaring}}.roaring),\ \&(\mbox{\hyperlink{classNode}{s\_roaring}}.roaring)))\ \{}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{eq}}.fail(\textcolor{stringliteral}{"{}Bitmaps\ do\ not\ match\ for\ prefix\ "{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{f\_prefixes}}.at(\mbox{\hyperlink{classNode}{i}})));}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Guess\ they're\ equal.}}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00428\ \ \ \ \ \}}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db}{equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FlatHashBitmapImpl<T>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\_equal}}(*\textcolor{keyword}{this},\ \mbox{\hyperlink{classNode}{second}},\ \mbox{\hyperlink{classNode}{err}});}
+\DoxyCodeLine{00443\ \ \ \ \ \}}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00460\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize}}(std::ostream\&\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \mbox{\hyperlink{classNode}{sh}}(\textcolor{keyword}{nullptr},\ \&\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}});}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{sh}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ out\ the\ number\ of\ prefixes/bitmaps.}}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.size());}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}))\ \{}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}prefix\_count=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}));}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ loop\ through\ each\ key-\/value\ pair.\ \ Make\ sure\ to\ do\ them\ in\ order\ so\ exported\ files\ remain\ deterministic.}}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}})\ \{}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ prefix.}}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{prefix}}))\ \{}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ bitmap.}}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.end())\ \{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ find\ bitmap\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{bitmap}}\ =\ \mbox{\hyperlink{classNode}{it}}-\/>second;}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ how\ much\ space\ the\ bitmap\ will\ take.}}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{bitmap}}.getSizeInBytes(\textcolor{keyword}{true}));}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.serialize\_integral(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}bitmap\_size=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}));}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ buffer\ and\ flush\ it.}}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}});}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{actual\_bytes}}\ =\ \mbox{\hyperlink{classNode}{bitmap}}.write(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{actual\_bytes}}\ !=\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}})\ \{}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}Number\ of\ bytes\ to\ write\ expected\ by\ getSizeInBytes\ doesn't\ match\ actual\ bytes\ returned"{}});}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.write\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}roaring\ bitmap\ data"{}});}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00500\ \ \ \ \ \}}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00514\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}{deserialize}}(std::istream\&\ \mbox{\hyperlink{classNode}{in}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ \mbox{\hyperlink{classNode}{sh}}(\&\mbox{\hyperlink{classNode}{in}},\ \textcolor{keyword}{nullptr},\ \mbox{\hyperlink{classNode}{err}});}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{sh}}.set\_category(\textcolor{stringliteral}{"{}FlatHashBitmapImpl"{}});}
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ it\ out\ (reset).}}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}{clear}}();}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prefixes}}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}}\ =\ 0;}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{u64\_prefix\_count}}))\ \{}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ prefix\ count"{}});}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{u64\_prefix\_count}};\ \mbox{\hyperlink{classNode}{i}}++)\ \{}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\ \mbox{\hyperlink{classNode}{prefix}};}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{prefix}}))\ \{}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ prefix\ value\ for\ index\ i=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{i}}));}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{u64\_bitmap\_size}}\ =\ 0;}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.deserialize\_integral(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}}))\ \{}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ bitmap\ size\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classNode}{buffer}}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}});}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classNode}{sh}}.read\_bytes(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{u64\_bitmap\_size}})))\ \{}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{sh}}.fail(\textcolor{stringliteral}{"{}couldn't\ read\ bitmap\ data\ for\ prefix=="{}}\ +\ to\_string\_any(\mbox{\hyperlink{classNode}{prefix}}));}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Try\ to\ place\ the\ prefix,\ which\ will\ build\ out\ bitmap\ too.}}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ [\mbox{\hyperlink{classNode}{it}},\ \mbox{\hyperlink{classNode}{inserted}}]\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.try\_emplace(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{inserted}})\ \{}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}{add\_prefix\_key}}(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{it}}-\/>second\ =\ roaring::Roaring::read(\mbox{\hyperlink{classNode}{buffer}}.data(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good}}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00549\ \ \ \ \ \}}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00571\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1}{for\_each\_value}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ we\ make\ GMP\ over\ and\ over.}}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ std::vector<uint8\_t>\ \mbox{\hyperlink{classNode}{dummy\_tls}};}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}{for\_each\_transformer}}(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{dummy\_tls}},\ [\&](\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keyword}{auto}\&)\ \{}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{callback}}(value);}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00578\ \ \ \ \ \}}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func,\ \textcolor{keyword}{typename}\ TLS\_Type>}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}{for\_each\_transformer}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ std::vector<TLS\_Type>\&\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ we\ make\ GMP\ over\ and\ over.}}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_r\_v<bool,\ Func,\ const\ T\&,\ TLS\_Type\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ as\ void(const\ T\&,\ TLS\_Type\&)"{}});}
 \DoxyCodeLine{00608\ }
-\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ according\ to\ policy.}}
-\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{policy}}\ ==\ BitmapTransformerPolicy::SERIAL)\ \{}
-\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Serial\ Path}}
-\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Guarantees\ sequential\ processing.\ \ Can\ efficiently\ use\ exposed\ iterators.}}
-\DoxyCodeLine{00613\ }
-\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ these,\ just\ in\ case\ of\ temp\ allocs.}}
-\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \ \ T\ value;}
-\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix}};}
-\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}};}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ the\ TLS\ has\ enough\ elements\ before\ proceeding.}}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_threads}}\ =\ \mbox{\hyperlink{classNode}{policy}}\ ==\ BitmapTransformerPolicy::SERIAL\ ?\ 1\ :\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_max\_threads}}());}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{tls}}.size()\ <\ \mbox{\hyperlink{classNode}{max\_threads}})\ \{}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{tls}}.resize(\mbox{\hyperlink{classNode}{max\_threads}});}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ a\ control-\/stop.}}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ std::atomic<bool>\ \mbox{\hyperlink{classNode}{atomic\_stop}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{stop}};}
 \DoxyCodeLine{00618\ }
-\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Even\ though\ this\ path\ is\ not\ threaded,\ get\ a\ thread\ ID\ for\ clarity.}}
-\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{my\_thread\_id}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_thread\_num}}());}
-\DoxyCodeLine{00621\ }
-\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ TLS\ should\ only\ need\ index\ 0.}}
-\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{TLS\_Type}}\&\ \mbox{\hyperlink{classNode}{my\_tls}}\ =\ \mbox{\hyperlink{classNode}{tls}}[\mbox{\hyperlink{classNode}{my\_thread\_id}}];}
-\DoxyCodeLine{00624\ }
-\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ prefixes\ in\ order.}}
-\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}})\ \{}
-\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ the\ prefix\ once\ instead\ of\ deeper\ inside\ the\ while()\ loop.\ \ For\ smaller\ types,\ set\ to\ 0.}}
-\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ Traits::SUFFIX\_BYTES)\ \{}
-\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ can\ hold\ the\ prefix.\ \ Let\ it\ shift.}}
-\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{prefix}})\ <<\ Traits::SUFFIX\_BITS;}
-\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul\_2exp}}(\mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{prefix}}.get\_mpz\_t(),\ Traits::SUFFIX\_BITS);}
-\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ is\ smaller\ than\ suffix\_t,\ which\ means\ the\ only\ prefix\ it'll\ ever\ have\ is\ 0.}}
-\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ it\ manually,\ because\ small-\/T\ means\ it\ can't\ shift\ SUFFIX\_BITS\ wide.}}
-\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ 0;}
-\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00640\ }
-\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ bitmap\ and\ connect\ an\ iterator.}}
-\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{roaring\_obj}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}})-\/>second;}
-\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_uint32\_iterator\_t\ \mbox{\hyperlink{classNode}{bitmap\_iterator}};}
-\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_iterator\_init(\&\mbox{\hyperlink{classNode}{roaring\_obj}}.roaring,\ \&\mbox{\hyperlink{classNode}{bitmap\_iterator}});}
-\DoxyCodeLine{00645\ }
-\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ this\ iterator\ until\ done.\ \ Use\ addition\ instead\ of\ bitwise-\/OR\ (|)\ to\ avoid\ alloc\ on\ GMP\ path.}}
-\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{bitmap\_iterator}}.has\_value)\ \{}
-\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix}}\ =\ \mbox{\hyperlink{classNode}{bitmap\_iterator}}.current\_value;}
-\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ +\ \mbox{\hyperlink{classNode}{suffix}};}
-\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix}});}
-\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
-\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{stop}})\ \{\ \textcolor{keywordflow}{break};\ \}}
-\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_uint32\_iterator\_advance(\&\mbox{\hyperlink{classNode}{bitmap\_iterator}});}
-\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00658\ }
-\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ stopping,\ break\ from\ the\ prefix\ for()\ loop\ too.}}
-\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{stop}})\ \{\ \textcolor{keywordflow}{break};\ \}}
-\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parallel\ Path}}
-\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Work\ is\ threaded,\ breaking\ sequential\ guarantee.\ \ Uses\ CRoaring\ internals\ for\ performance.}}
-\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ While\ throwing\ \_sorted\_prefixes\ at\ OMP\ might\ seem\ ideal,\ it\ would\ result\ in\ only\ a\ single\ thread\ working\ until\ level}}
-\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 32.\ \ This\ is\ because\ CRoaring\ uses\ a\ 32-\/bit\ map\ (16\ bit\ key,\ 16\ bit\ suffix)\ internally.}}
-\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ As\ such,\ this\ will\ read\ the\ internal\ high-\/low\ containers\ and\ iterate\ based\ on\ their\ type\ (array,\ bitmap,\ RLE).}}
-\DoxyCodeLine{00670\ }
-\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ parallel\ region\ early\ and\ establish\ thread-\/locals.}}
-\DoxyCodeLine{00672\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#pragma\ omp\ parallel\ default(none)\ shared(tls,\ atomic\_stop,\ callback)}}
-\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ a\ thread\ ID.}}
-\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{my\_thread\_id}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_thread\_num}}());}
-\DoxyCodeLine{00676\ }
-\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ an\ element\ from\ the\ TLS.}}
-\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{TLS\_Type}}\&\ \mbox{\hyperlink{classNode}{my\_tls}}\ =\ \mbox{\hyperlink{classNode}{tls}}[\mbox{\hyperlink{classNode}{my\_thread\_id}}];}
-\DoxyCodeLine{00679\ }
-\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ a\ local-\/stop.}}
-\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00682\ }
-\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ a\ few\ locals\ to\ avoid\ lots\ of\ potential\ alloc\ on\ GMP\ path.}}
-\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ value;}
-\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix}};}
-\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}};}
-\DoxyCodeLine{00687\ }
-\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ prefixes.}}
-\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{prefix\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{prefix\_index}}\ <\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.size();\ \mbox{\hyperlink{classNode}{prefix\_index}}++)\ \{}
-\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ if\ needed.}}
-\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{atomic\_stop}}.load(std::memory\_order\_relaxed))\ \{\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ according\ to\ policy.}}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{policy}}\ ==\ BitmapTransformerPolicy::SERIAL)\ \{}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Serial\ Path}}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Guarantees\ sequential\ processing.\ \ Can\ efficiently\ use\ exposed\ iterators.}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ these,\ just\ in\ case\ of\ temp\ allocs.}}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ T\ value;}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix}};}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix}};}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Even\ though\ this\ path\ is\ not\ threaded,\ get\ a\ thread\ ID\ for\ clarity.}}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{my\_thread\_id}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_thread\_num}}());}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ TLS\ should\ only\ need\ index\ 0.}}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{TLS\_Type}}\&\ \mbox{\hyperlink{classNode}{my\_tls}}\ =\ \mbox{\hyperlink{classNode}{tls}}[\mbox{\hyperlink{classNode}{my\_thread\_id}}];}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ prefixes\ in\ order.}}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ :\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}})\ \{}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ the\ prefix\ once\ instead\ of\ deeper\ inside\ the\ while()\ loop.\ \ For\ smaller\ types,\ set\ to\ 0.}}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ Traits::SUFFIX\_BYTES)\ \{}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ can\ hold\ the\ prefix.\ \ Let\ it\ shift.}}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{prefix}})\ <<\ Traits::SUFFIX\_BITS;}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul\_2exp}}(\mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{prefix}}.get\_mpz\_t(),\ Traits::SUFFIX\_BITS);}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ is\ smaller\ than\ suffix\_t,\ which\ means\ the\ only\ prefix\ it'll\ ever\ have\ is\ 0.}}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ it\ manually,\ because\ small-\/T\ means\ it\ can't\ shift\ SUFFIX\_BITS\ wide.}}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ 0;}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00650\ }
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ the\ bitmap\ and\ connect\ an\ iterator.}}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring::Roaring}}\&\ \mbox{\hyperlink{classNode}{roaring\_obj}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}})-\/>second;}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_uint32\_iterator\_t\ \mbox{\hyperlink{classNode}{bitmap\_iterator}};}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_iterator\_init(\&\mbox{\hyperlink{classNode}{roaring\_obj}}.roaring,\ \&\mbox{\hyperlink{classNode}{bitmap\_iterator}});}
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ this\ iterator\ until\ done.\ \ Use\ addition\ instead\ of\ bitwise-\/OR\ (|)\ to\ avoid\ alloc\ on\ GMP\ path.}}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{bitmap\_iterator}}.has\_value)\ \{}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix}}\ =\ \mbox{\hyperlink{classNode}{bitmap\_iterator}}.current\_value;}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ +\ \mbox{\hyperlink{classNode}{suffix}};}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix}});}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{stop}})\ \{\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ roaring::api::roaring\_uint32\_iterator\_advance(\&\mbox{\hyperlink{classNode}{bitmap\_iterator}});}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ stopping,\ break\ from\ the\ prefix\ for()\ loop\ too.}}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{stop}})\ \{\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Parallel\ Path}}
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Work\ is\ threaded,\ breaking\ sequential\ guarantee.\ \ Uses\ CRoaring\ internals\ for\ performance.}}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ While\ throwing\ \_sorted\_prefixes\ at\ OMP\ might\ seem\ ideal,\ it\ would\ result\ in\ only\ a\ single\ thread\ working\ until\ level}}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 32.\ \ This\ is\ because\ CRoaring\ uses\ a\ 32-\/bit\ map\ (16\ bit\ key,\ 16\ bit\ suffix)\ internally.}}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ As\ such,\ this\ will\ read\ the\ internal\ high-\/low\ containers\ and\ iterate\ based\ on\ their\ type\ (array,\ bitmap,\ RLE).}}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Open\ the\ parallel\ region\ early\ and\ establish\ thread-\/locals.}}
+\DoxyCodeLine{00682\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#pragma\ omp\ parallel\ default(none)\ shared(tls,\ atomic\_stop,\ callback)}}
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Get\ a\ thread\ ID.}}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{my\_thread\_id}}\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{omp\_get\_thread\_num}}());}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ an\ element\ from\ the\ TLS.}}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{TLS\_Type}}\&\ \mbox{\hyperlink{classNode}{my\_tls}}\ =\ \mbox{\hyperlink{classNode}{tls}}[\mbox{\hyperlink{classNode}{my\_thread\_id}}];}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ a\ local-\/stop.}}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00692\ }
-\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ prefix\ and\ then\ build\ a\ shifted\_prefix\ so\ it\ isn't\ recomputed.}}
-\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}[\mbox{\hyperlink{classNode}{prefix\_index}}];}
-\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ the\ prefix\ once\ instead\ of\ deeper\ inside\ the\ while()/for()\ loops.\ \ For\ smaller\ types,\ set\ to\ 0.}}
-\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ Traits::SUFFIX\_BYTES)\ \{}
-\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ can\ hold\ the\ prefix.\ \ Let\ it\ shift.}}
-\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{prefix}})\ <<\ Traits::SUFFIX\_BITS;}
-\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul\_2exp}}(\mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{prefix}}.get\_mpz\_t(),\ Traits::SUFFIX\_BITS);}
-\DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ is\ smaller\ than\ suffix\_t,\ which\ means\ the\ only\ prefix\ it'll\ ever\ have\ is\ 0.}}
-\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ it\ manually,\ because\ small-\/T\ means\ it\ can't\ shift\ SUFFIX\_BITS\ wide.}}
-\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ 0;}
-\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00708\ }
-\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ our\ bitmap\ and\ connect\ to\ the\ internal\ storage\ components.}}
-\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
-\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::roaring\_bitmap\_t*\ \mbox{\hyperlink{classNode}{roaring\_bitmap}}\ =\ \&(\mbox{\hyperlink{classNode}{it}}-\/>second.roaring);}
-\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::roaring\_array\_t*\ \mbox{\hyperlink{classNode}{high\_low\_container}}\ =\ \&(\mbox{\hyperlink{classNode}{roaring\_bitmap}}-\/>high\_low\_container);}
-\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ container\ bits.\ \ Probably\ optimized\ away,\ but\ meh.}}
-\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_keys}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>keys;}
-\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_containers}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>containers;}
-\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_typecodes}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>typecodes;}
-\DoxyCodeLine{00717\ }
-\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ inner\ loop\ around\ the\ keys\ and\ sub\ containers.\ \ Split\ it\ up\ with\ OMP.}}
-\DoxyCodeLine{00719\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#pragma\ omp\ for\ schedule(dynamic)}}
-\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{high\_low\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{high\_low\_index}}\ <\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>size;\ \mbox{\hyperlink{classNode}{high\_low\_index}}++)\ \{}
-\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ stop\ again\ at\ the\ chunk\ level.}}
-\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{atomic\_stop}}.load(std::memory\_order\_relaxed))\ \{\ \textcolor{keywordflow}{continue};\ \}}
-\DoxyCodeLine{00723\ }
-\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ roaring\ key,\ the\ container,\ and\ type\ code.}}
-\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}{roaring\_key\_t}}\ \mbox{\hyperlink{classNode}{suffix\_key}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_keys}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
-\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::container\_s*\ \mbox{\hyperlink{classNode}{container}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_containers}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
-\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}{roaring\_typecode\_t}}\ \mbox{\hyperlink{classNode}{typecode}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_typecodes}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
-\DoxyCodeLine{00728\ }
-\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ and\ promote+shift\ the\ key\ into\ full\ suffix\_t\ space.}}
-\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{shifted\_key}}\ =\ (\mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}(\mbox{\hyperlink{classNode}{suffix\_key}}))\ <<\ Traits::ROARING\_KEY\_BITS;}
-\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix\_val}};}
-\DoxyCodeLine{00732\ }
-\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ shifted\ prefix\ and\ key\ combo\ so\ it\ isn't\ repeated\ below.}}
-\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ +\ \mbox{\hyperlink{classNode}{shifted\_key}};}
-\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_key}});}
-\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00739\ }
-\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Select\ the\ correct\ iteration\ method\ based\ on\ the\ typecode\ to\ retrieve\ and\ process\ suffixes.}}
-\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ addition\ instead\ of\ bitwise-\/OR\ (|)\ to\ avoid\ alloc\ on\ GMP\ path.}}
-\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classNode}{typecode}})\ \{}
-\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{ARRAY\_CONTAINER\_TYPE}}:\ \{}
-\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::array\_container\_t*\ \mbox{\hyperlink{classNode}{array\_container}}\ =\ (roaring::internal::array\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
-\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{array\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{array\_index}}\ <\ \mbox{\hyperlink{classNode}{array\_container}}-\/>cardinality;\ \mbox{\hyperlink{classNode}{array\_index}}++)\ \{}
-\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix\_val}}\ =\ \mbox{\hyperlink{classNode}{array\_container}}-\/>array[\mbox{\hyperlink{classNode}{array\_index}}];}
-\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
-\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
-\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
-\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
-\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
-\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00760\ }
-\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{BITSET\_CONTAINER\_TYPE}}:\ \{}
-\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::bitset\_container\_t*\ \mbox{\hyperlink{classNode}{bitset\_container}}\ =\ (\textcolor{keyword}{const}\ roaring::internal::bitset\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
-\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{word\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{word\_index}}\ <\ roaring::internal::BITSET\_CONTAINER\_SIZE\_IN\_WORDS;\ \mbox{\hyperlink{classNode}{word\_index}}++)\ \{}
-\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}{roaring\_word\_t}}\ \mbox{\hyperlink{classNode}{word}}\ =\ \mbox{\hyperlink{classNode}{bitset\_container}}-\/>words[\mbox{\hyperlink{classNode}{word\_index}}];}
-\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ until\ there\ are\ no\ more\ on-\/bits\ in\ the\ word.}}
-\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{word}}\ !=\ 0)\ \{}
-\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset\ by\ counting\ the\ number\ of\ trailing\ zeros,\ giving\ us\ the\ next\ "{}1"{}\ position.}}
-\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{offset}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_ctzll}}(\mbox{\hyperlink{classNode}{word}});}
-\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Multiply\ out\ the\ word\ index\ by\ the\ number\ of\ bits\ per\ word,\ then\ add\ the\ offset.\ \ That's\ the\ next\ "{}on"{}\ node.}}
-\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix\_val}}\ =\ (\mbox{\hyperlink{classNode}{word\_index}}\ *\ Traits::ROARING\_WORD\_BITS)\ +\ \mbox{\hyperlink{classNode}{offset}};}
-\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
-\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
-\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
-\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
-\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
-\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ bitwise-\/AND\ the\ word\ minus\ one\ to\ wipe\ out\ the\ least-\/significant\ 1s\ place\ which\ was\ just\ processed.}}
-\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{word}}\ \&=\ (\mbox{\hyperlink{classNode}{word}}\ -\/\ 1);}
-\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00787\ }
-\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{RUN\_CONTAINER\_TYPE}}:\ \{}
-\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::run\_container\_t*\ \mbox{\hyperlink{classNode}{run\_container}}\ =\ (\textcolor{keyword}{const}\ roaring::internal::run\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
-\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{run\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{run\_index}}\ <\ \mbox{\hyperlink{classNode}{run\_container}}-\/>n\_runs;\ \mbox{\hyperlink{classNode}{run\_index}}++)\ \{}
-\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ \mbox{\hyperlink{classNode}{start}}\ =\ \mbox{\hyperlink{classNode}{run\_container}}-\/>runs[\mbox{\hyperlink{classNode}{run\_index}}].value;}
-\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ \mbox{\hyperlink{classNode}{length}}\ =\ \mbox{\hyperlink{classNode}{run\_container}}-\/>runs[\mbox{\hyperlink{classNode}{run\_index}}].length;}
-\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{end}}\ =\ \mbox{\hyperlink{classNode}{start}}\ +\ \mbox{\hyperlink{classNode}{length}};}
-\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{suffix\_val}}\ =\ \mbox{\hyperlink{classNode}{start}};\ \mbox{\hyperlink{classNode}{suffix\_val}}\ <=\ \mbox{\hyperlink{classNode}{end}};\ \mbox{\hyperlink{classNode}{suffix\_val}}++)\ \{}
-\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
-\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
-\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
-\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
-\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
-\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00805\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ omp\ for\ loop}}
-\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ for\ prefix\_index}}
-\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ omp\ parallel\ region}}
-\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ if\ serial/parallel}}
-\DoxyCodeLine{00814\ \ \ \ \ \}}
-\DoxyCodeLine{00815\ }
-\DoxyCodeLine{00816\ \};}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ a\ few\ locals\ to\ avoid\ lots\ of\ potential\ alloc\ on\ GMP\ path.}}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ value;}
+\DoxyCodeLine{00695\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix}};}
+\DoxyCodeLine{00696\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}};}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ prefixes.}}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{prefix\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{prefix\_index}}\ <\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}.size();\ \mbox{\hyperlink{classNode}{prefix\_index}}++)\ \{}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ if\ needed.}}
+\DoxyCodeLine{00701\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{atomic\_stop}}.load(std::memory\_order\_relaxed))\ \{\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00702\ }
+\DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ prefix\ and\ then\ build\ a\ shifted\_prefix\ so\ it\ isn't\ recomputed.}}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\_t}}\&\ \mbox{\hyperlink{classNode}{prefix}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}{\_sorted\_prefixes}}[\mbox{\hyperlink{classNode}{prefix\_index}}];}
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ the\ prefix\ once\ instead\ of\ deeper\ inside\ the\ while()/for()\ loops.\ \ For\ smaller\ types,\ set\ to\ 0.}}
+\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ >\ Traits::SUFFIX\_BYTES)\ \{}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ can\ hold\ the\ prefix.\ \ Let\ it\ shift.}}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{prefix}})\ <<\ Traits::SUFFIX\_BITS;}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_mul\_2exp}}(\mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{prefix}}.get\_mpz\_t(),\ Traits::SUFFIX\_BITS);}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ T\ is\ smaller\ than\ suffix\_t,\ which\ means\ the\ only\ prefix\ it'll\ ever\ have\ is\ 0.}}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ it\ manually,\ because\ small-\/T\ means\ it\ can't\ shift\ SUFFIX\_BITS\ wide.}}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ =\ 0;}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00718\ }
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ our\ bitmap\ and\ connect\ to\ the\ internal\ storage\ components.}}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}{\_flat\_map}}.find(\mbox{\hyperlink{classNode}{prefix}});}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::roaring\_bitmap\_t*\ \mbox{\hyperlink{classNode}{roaring\_bitmap}}\ =\ \&(\mbox{\hyperlink{classNode}{it}}-\/>second.roaring);}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::roaring\_array\_t*\ \mbox{\hyperlink{classNode}{high\_low\_container}}\ =\ \&(\mbox{\hyperlink{classNode}{roaring\_bitmap}}-\/>high\_low\_container);}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ container\ bits.\ \ Probably\ optimized\ away,\ but\ meh.}}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_keys}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>keys;}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_containers}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>containers;}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}*\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_typecodes}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>typecodes;}
+\DoxyCodeLine{00727\ }
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ inner\ loop\ around\ the\ keys\ and\ sub\ containers.\ \ Split\ it\ up\ with\ OMP.}}
+\DoxyCodeLine{00729\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#pragma\ omp\ for\ schedule(dynamic)}}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{high\_low\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{high\_low\_index}}\ <\ \mbox{\hyperlink{classNode}{high\_low\_container}}-\/>size;\ \mbox{\hyperlink{classNode}{high\_low\_index}}++)\ \{}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ stop\ again\ at\ the\ chunk\ level.}}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{atomic\_stop}}.load(std::memory\_order\_relaxed))\ \{\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Grab\ the\ roaring\ key,\ the\ container,\ and\ type\ code.}}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}{roaring\_key\_t}}\ \mbox{\hyperlink{classNode}{suffix\_key}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_keys}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::api::container\_s*\ \mbox{\hyperlink{classNode}{container}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_containers}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}{roaring\_typecode\_t}}\ \mbox{\hyperlink{classNode}{typecode}}\ =\ \mbox{\hyperlink{classNode}{high\_low\_container\_\_typecodes}}[\mbox{\hyperlink{classNode}{high\_low\_index}}];}
+\DoxyCodeLine{00738\ }
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ and\ promote+shift\ the\ key\ into\ full\ suffix\_t\ space.}}
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{shifted\_key}}\ =\ (\mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}(\mbox{\hyperlink{classNode}{suffix\_key}}))\ <<\ Traits::ROARING\_KEY\_BITS;}
+\DoxyCodeLine{00741\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{suffix\_val}};}
+\DoxyCodeLine{00742\ }
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ shifted\ prefix\ and\ key\ combo\ so\ it\ isn't\ repeated\ below.}}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix}}\ +\ \mbox{\hyperlink{classNode}{shifted\_key}};}
+\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(\mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_key}});}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00749\ }
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Select\ the\ correct\ iteration\ method\ based\ on\ the\ typecode\ to\ retrieve\ and\ process\ suffixes.}}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ addition\ instead\ of\ bitwise-\/OR\ (|)\ to\ avoid\ alloc\ on\ GMP\ path.}}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classNode}{typecode}})\ \{}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{ARRAY\_CONTAINER\_TYPE}}:\ \{}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::array\_container\_t*\ \mbox{\hyperlink{classNode}{array\_container}}\ =\ (roaring::internal::array\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{array\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{array\_index}}\ <\ \mbox{\hyperlink{classNode}{array\_container}}-\/>cardinality;\ \mbox{\hyperlink{classNode}{array\_index}}++)\ \{}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix\_val}}\ =\ \mbox{\hyperlink{classNode}{array\_container}}-\/>array[\mbox{\hyperlink{classNode}{array\_index}}];}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00770\ }
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{BITSET\_CONTAINER\_TYPE}}:\ \{}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::bitset\_container\_t*\ \mbox{\hyperlink{classNode}{bitset\_container}}\ =\ (\textcolor{keyword}{const}\ roaring::internal::bitset\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{word\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{word\_index}}\ <\ roaring::internal::BITSET\_CONTAINER\_SIZE\_IN\_WORDS;\ \mbox{\hyperlink{classNode}{word\_index}}++)\ \{}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}{roaring\_word\_t}}\ \mbox{\hyperlink{classNode}{word}}\ =\ \mbox{\hyperlink{classNode}{bitset\_container}}-\/>words[\mbox{\hyperlink{classNode}{word\_index}}];}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ until\ there\ are\ no\ more\ on-\/bits\ in\ the\ word.}}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{word}}\ !=\ 0)\ \{}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ offset\ by\ counting\ the\ number\ of\ trailing\ zeros,\ giving\ us\ the\ next\ "{}1"{}\ position.}}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{offset}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_ctzll}}(\mbox{\hyperlink{classNode}{word}});}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Multiply\ out\ the\ word\ index\ by\ the\ number\ of\ bits\ per\ word,\ then\ add\ the\ offset.\ \ That's\ the\ next\ "{}on"{}\ node.}}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{suffix\_val}}\ =\ (\mbox{\hyperlink{classNode}{word\_index}}\ *\ Traits::ROARING\_WORD\_BITS)\ +\ \mbox{\hyperlink{classNode}{offset}};}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ bitwise-\/AND\ the\ word\ minus\ one\ to\ wipe\ out\ the\ least-\/significant\ 1s\ place\ which\ was\ just\ processed.}}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{word}}\ \&=\ (\mbox{\hyperlink{classNode}{word}}\ -\/\ 1);}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{classNode}{RUN\_CONTAINER\_TYPE}}:\ \{}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ roaring::internal::run\_container\_t*\ \mbox{\hyperlink{classNode}{run\_container}}\ =\ (\textcolor{keyword}{const}\ roaring::internal::run\_container\_t*)\mbox{\hyperlink{classNode}{container}};}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{run\_index}}\ =\ 0;\ \mbox{\hyperlink{classNode}{run\_index}}\ <\ \mbox{\hyperlink{classNode}{run\_container}}-\/>n\_runs;\ \mbox{\hyperlink{classNode}{run\_index}}++)\ \{}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ \mbox{\hyperlink{classNode}{start}}\ =\ \mbox{\hyperlink{classNode}{run\_container}}-\/>runs[\mbox{\hyperlink{classNode}{run\_index}}].value;}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}{roaring\_value\_t}}\ \mbox{\hyperlink{classNode}{length}}\ =\ \mbox{\hyperlink{classNode}{run\_container}}-\/>runs[\mbox{\hyperlink{classNode}{run\_index}}].length;}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\_t}}\ \mbox{\hyperlink{classNode}{end}}\ =\ \mbox{\hyperlink{classNode}{start}}\ +\ \mbox{\hyperlink{classNode}{length}};}
+\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{classNode}{suffix\_val}}\ =\ \mbox{\hyperlink{classNode}{start}};\ \mbox{\hyperlink{classNode}{suffix\_val}}\ <=\ \mbox{\hyperlink{classNode}{end}};\ \mbox{\hyperlink{classNode}{suffix\_val}}++)\ \{}
+\DoxyCodeLine{00805\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}\ +\ \mbox{\hyperlink{classNode}{suffix\_val}};}
+\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00808\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_add\_ui}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{shifted\_prefix\_and\_key}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{suffix\_val}});}
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{local\_stop}}\ =\ \mbox{\hyperlink{classNode}{callback}}(value,\ \mbox{\hyperlink{classNode}{my\_tls}});}
+\DoxyCodeLine{00811\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{local\_stop}})\ \{}
+\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{atomic\_stop}}.store(\textcolor{keyword}{true},\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ omp\ for\ loop}}
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ for\ prefix\_index}}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ omp\ parallel\ region}}
+\DoxyCodeLine{00823\ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{//\ end\ if\ serial/parallel}}
+\DoxyCodeLine{00824\ \ \ \ \ \}}
+\DoxyCodeLine{00825\ }
+\DoxyCodeLine{00826\ \};}
 
 \end{DoxyCode}

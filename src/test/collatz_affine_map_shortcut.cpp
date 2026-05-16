@@ -141,7 +141,7 @@ void test_collatz_affine_map_shortcut_is_below() {
 
     // Out of range check.
     map.reset();
-    for (size_t i = 1; i <= Exponents::MAX_POW2_UNDER_POW3_COUNT; i++) {
+    for (size_t i = 1; i < Exponents::MAX_POW2_UNDER_POW3_COUNT; i++) {
         map.apply_F();
     }
     // Works still.

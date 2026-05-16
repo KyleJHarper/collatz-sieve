@@ -154,6 +154,22 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> ()=<a class="el" href="classNode.html">default</a></td></tr>
 <tr class="memdesc:a7bca77d844b4cc84e6eac16ff034f0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
 <tr class="separator:a7bca77d844b4cc84e6eac16ff034f0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23d5a6364e935bc311f1cd8e0d9c282d" id="r_a23d5a6364e935bc311f1cd8e0d9c282d"><td class="memItemLeft" align="right" valign="top"><a id="a23d5a6364e935bc311f1cd8e0d9c282d" name="a23d5a6364e935bc311f1cd8e0d9c282d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:a23d5a6364e935bc311f1cd8e0d9c282d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:a23d5a6364e935bc311f1cd8e0d9c282d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3efe8f1c7055d09889f1899b22de1cd" id="r_aa3efe8f1c7055d09889f1899b22de1cd"><td class="memItemLeft" align="right" valign="top"><a id="aa3efe8f1c7055d09889f1899b22de1cd" name="aa3efe8f1c7055d09889f1899b22de1cd"></a>
+<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<tr class="memdesc:aa3efe8f1c7055d09889f1899b22de1cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
+<tr class="separator:aa3efe8f1c7055d09889f1899b22de1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92616da068db07eb6ce11f0424292f37" id="r_a92616da068db07eb6ce11f0424292f37"><td class="memItemLeft" align="right" valign="top"><a id="a92616da068db07eb6ce11f0424292f37" name="a92616da068db07eb6ce11f0424292f37"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:a92616da068db07eb6ce11f0424292f37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:a92616da068db07eb6ce11f0424292f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaec97a82cf9856ee4e85aa254f9ec716" id="r_aaec97a82cf9856ee4e85aa254f9ec716"><td class="memItemLeft" align="right" valign="top"><a id="aaec97a82cf9856ee4e85aa254f9ec716" name="aaec97a82cf9856ee4e85aa254f9ec716"></a>
+<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<tr class="memdesc:aaec97a82cf9856ee4e85aa254f9ec716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
+<tr class="separator:aaec97a82cf9856ee4e85aa254f9ec716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fadde7c7f89b0a425c292146740a3ea" id="r_a4fadde7c7f89b0a425c292146740a3ea"><td class="memItemLeft" align="right" valign="top"><a id="a4fadde7c7f89b0a425c292146740a3ea" name="a4fadde7c7f89b0a425c292146740a3ea"></a>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="memdesc:a4fadde7c7f89b0a425c292146740a3ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invoke the implementation's clear method, wiping it out and freeing memory. <br /></td></tr>
@@ -459,7 +475,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare another bitmap of <code>BackendType</code> to this one. </p>
-<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a3c91214103510f81a707a8257301a209" title="Compare two Nodes&#39; specific internals and return true if identical.">BackendType::st_equal()</a></code>.</p>
+<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a17282dcd2faed3e704e04be5c08dbaf3" title="Compare two Nodes&#39; specific internals and return true if identical.">BackendType::st_equal()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">second</td><td>The second bitmap to compare against this. </td></tr>
