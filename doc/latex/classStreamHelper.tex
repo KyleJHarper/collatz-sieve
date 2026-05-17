@@ -23,6 +23,14 @@ Assists with serializing data, deserializing data, and providing feedback when f
 \mbox{\hyperlink{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4}{Stream\+Helper}} (std\+::istream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{in}}, std\+::ostream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
 \begin{DoxyCompactList}\small\item\em Basic constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
+\begin{Indent}\textbf{ Integral Serialization}\par
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} T \&value)
+\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\+\_\+integral}} (T \&\mbox{\hyperlink{classNode}{rv}})
+\begin{DoxyCompactList}\small\item\em Deserialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
 \begin{Indent}\textbf{ Binary Serialization}\par
 \begin{DoxyCompactItemize}
 \item 
@@ -39,32 +47,14 @@ Assists with serializing data, deserializing data, and providing feedback when f
 \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\+\_\+bool}} (\mbox{\hyperlink{classNode}{bool}} \&\mbox{\hyperlink{classNode}{rv}})
 \begin{DoxyCompactList}\small\item\em Deserialize boolean values. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
-\begin{Indent}\textbf{ Integral Serialization}\par
+\doxysubsubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a129cd3269e2b8b27aa1070d7f0b7abc4}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int8\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_af8411d291fdd27fece7c53eff57c8629}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint8\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a88f9cb674f4198aa08c293adaa06b99b}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int16\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_aabca457b4c2bdc547e0fd7454ed8a822}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint16\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_ac0226fb771d48f4af1aa13b6a193bfaf}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int32\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a6e3922db60b466ff790ef9124940d65b}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint32\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_ad90685242856ea9cf3e8bee2b85fb30d}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int64\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a22a1617f6add29cd33f38a958f5213ba}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_acd32a9ee425ccdfe0b40ca52f9527e11}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int128\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_ab03d1aa0d2b57eaf30cfbc27eeea336b}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_ad2d985508b81f1a9501f5e9894f81f87}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}.   \end{DoxyCompactList}\end{DoxyCompactItemize}
-\end{Indent}
+\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classStreamHelper_a13c0ed516aa5177c61f19082208b9d87}{READ\+\_\+\+WRITE\+\_\+\+LIMIT}} = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30
+\begin{DoxyCompactList}\small\item\em 
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}\end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -73,11 +63,7 @@ std\+::ostream \& {\bfseries get\+\_\+out} ()
 \begin{DoxyCompactList}\small\item\em Private helper to use \textquotesingle{}\+\_\+out\+\_\+ptr\`{} and apply a null check. \end{DoxyCompactList}\item 
 \Hypertarget{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f}\label{classStreamHelper_a618bf81e5e31099079338ac7d892ce6f} 
 std\+::istream \& {\bfseries get\+\_\+in} ()
-\begin{DoxyCompactList}\small\item\em Private helper to use {\ttfamily \+\_\+in\+\_\+ptr} and apply a null check. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a4a199a73b242577a67dc025499e73858}{serialize\+\_\+integral\+\_\+impl}} (\mbox{\hyperlink{classNode}{const}} T \&value)
-\begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a44732068977a5e7b6db7c4b519bee2bb}{deserialize\+\_\+integral\+\_\+impl}} (T \&\mbox{\hyperlink{classNode}{rv}})
-\begin{DoxyCompactList}\small\item\em Deserialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Private helper to use {\ttfamily \+\_\+in\+\_\+ptr} and apply a null check. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -93,14 +79,6 @@ std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = \mbox{
 \Hypertarget{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}\label{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41} 
 std\+::string {\bfseries \+\_\+category} = "{}Uncategorized"{}
 \begin{DoxyCompactList}\small\item\em A category to append to each message sent to {\ttfamily \+\_\+err\+\_\+ptr}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Static Private Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classStreamHelper_a886dd96f247144f22906496e0fb8723a}{\+\_\+\+READ\+\_\+\+WRITE\+\_\+\+LIMIT}} = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30
-\begin{DoxyCompactList}\small\item\em 
-\begin{DoxyItemize}
-\item 
-\end{DoxyItemize}\end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -157,12 +135,12 @@ This method does not throw. Do not discard.
 \begin{DoxyReturn}{Returns}
 True if successful, false otherwise. 
 \end{DoxyReturn}
-\Hypertarget{classStreamHelper_a44732068977a5e7b6db7c4b519bee2bb}\label{classStreamHelper_a44732068977a5e7b6db7c4b519bee2bb} 
-\index{StreamHelper@{StreamHelper}!deserialize\_integral\_impl@{deserialize\_integral\_impl}}
-\index{deserialize\_integral\_impl@{deserialize\_integral\_impl}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{deserialize\_integral\_impl()}{deserialize\_integral\_impl()}}
+\Hypertarget{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}\label{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc} 
+\index{StreamHelper@{StreamHelper}!deserialize\_integral@{deserialize\_integral}}
+\index{deserialize\_integral@{deserialize\_integral}!StreamHelper@{StreamHelper}}
+\doxysubsubsection{\texorpdfstring{deserialize\_integral()}{deserialize\_integral()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::deserialize\+\_\+integral\+\_\+impl (\begin{DoxyParamCaption}\item[{T \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::deserialize\+\_\+integral (\begin{DoxyParamCaption}\item[{T \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -256,353 +234,12 @@ This method does not throw. Do not discard.
 \begin{DoxyReturn}{Returns}
 True if successful, false otherwise. 
 \end{DoxyReturn}
-\Hypertarget{classStreamHelper_acd32a9ee425ccdfe0b40ca52f9527e11}\label{classStreamHelper_acd32a9ee425ccdfe0b40ca52f9527e11} 
+\Hypertarget{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}\label{classStreamHelper_abfc9679f40161822a20dd8734af8ba20} 
 \index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
 \index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [1/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int128\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_a88f9cb674f4198aa08c293adaa06b99b}\label{classStreamHelper_a88f9cb674f4198aa08c293adaa06b99b} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [2/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int16\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_ac0226fb771d48f4af1aa13b6a193bfaf}\label{classStreamHelper_ac0226fb771d48f4af1aa13b6a193bfaf} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [3/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int32\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_ad90685242856ea9cf3e8bee2b85fb30d}\label{classStreamHelper_ad90685242856ea9cf3e8bee2b85fb30d} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [4/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int64\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_a129cd3269e2b8b27aa1070d7f0b7abc4}\label{classStreamHelper_a129cd3269e2b8b27aa1070d7f0b7abc4} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [5/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{int8\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_ad2d985508b81f1a9501f5e9894f81f87}\label{classStreamHelper_ad2d985508b81f1a9501f5e9894f81f87} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [6/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_ab03d1aa0d2b57eaf30cfbc27eeea336b}\label{classStreamHelper_ab03d1aa0d2b57eaf30cfbc27eeea336b} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [7/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint128\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_aabca457b4c2bdc547e0fd7454ed8a822}\label{classStreamHelper_aabca457b4c2bdc547e0fd7454ed8a822} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [8/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint16\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_a6e3922db60b466ff790ef9124940d65b}\label{classStreamHelper_a6e3922db60b466ff790ef9124940d65b} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [9/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint32\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_a22a1617f6add29cd33f38a958f5213ba}\label{classStreamHelper_a22a1617f6add29cd33f38a958f5213ba} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [10/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_af8411d291fdd27fece7c53eff57c8629}\label{classStreamHelper_af8411d291fdd27fece7c53eff57c8629} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral@{serialize\_integral}}
-\index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}\hspace{0.1cm}{\footnotesize\ttfamily [11/11]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint8\+\_\+t}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Serialize any supported integral of type {\ttfamily T}.   
-
-Will serialize any integral of type {\ttfamily T}. When type is fixed-\/width, the caller is expected to deserialize using the same type to ensure the correct number of bytes are read, and therefore no size data is emitted to the ostream. When the type is variable length (mpz\+\_\+class), this will emit sign, data size, and (if non-\/zero) limb data.
-
-\begin{DoxyNote}{Note}
-This method does not throw. Do not discard. 
-\end{DoxyNote}
-\begin{DoxyWarning}{Warning}
-When using fixed-\/width, caller must use an explicit-\/width integral. Things like size\+\_\+t and int/uint are not portable. 
-\end{DoxyWarning}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to serialize. \\
-\hline
-\end{DoxyParams}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-\begin{DoxyReturn}{Returns}
-True if successful, false otherwise.   
-\end{DoxyReturn}
-\Hypertarget{classStreamHelper_a4a199a73b242577a67dc025499e73858}\label{classStreamHelper_a4a199a73b242577a67dc025499e73858} 
-\index{StreamHelper@{StreamHelper}!serialize\_integral\_impl@{serialize\_integral\_impl}}
-\index{serialize\_integral\_impl@{serialize\_integral\_impl}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{serialize\_integral\_impl()}{serialize\_integral\_impl()}}
+\doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral\+\_\+impl (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -655,11 +292,11 @@ True if successful, false otherwise.
 
 
 \doxysubsection{Member Data Documentation}
-\Hypertarget{classStreamHelper_a886dd96f247144f22906496e0fb8723a}\label{classStreamHelper_a886dd96f247144f22906496e0fb8723a} 
-\index{StreamHelper@{StreamHelper}!\_READ\_WRITE\_LIMIT@{\_READ\_WRITE\_LIMIT}}
-\index{\_READ\_WRITE\_LIMIT@{\_READ\_WRITE\_LIMIT}!StreamHelper@{StreamHelper}}
-\doxysubsubsection{\texorpdfstring{\_READ\_WRITE\_LIMIT}{\_READ\_WRITE\_LIMIT}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} Stream\+Helper\+::\+\_\+\+READ\+\_\+\+WRITE\+\_\+\+LIMIT = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}, {\ttfamily [private]}}
+\Hypertarget{classStreamHelper_a13c0ed516aa5177c61f19082208b9d87}\label{classStreamHelper_a13c0ed516aa5177c61f19082208b9d87} 
+\index{StreamHelper@{StreamHelper}!READ\_WRITE\_LIMIT@{READ\_WRITE\_LIMIT}}
+\index{READ\_WRITE\_LIMIT@{READ\_WRITE\_LIMIT}!StreamHelper@{StreamHelper}}
+\doxysubsubsection{\texorpdfstring{READ\_WRITE\_LIMIT}{READ\_WRITE\_LIMIT}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} Stream\+Helper\+::\+READ\+\_\+\+WRITE\+\_\+\+LIMIT = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
 
 
 

@@ -5,26 +5,32 @@
 
 # Harper's Sieve of Collatz
 
-__A Monotonic Binary-Tree Reduction of the Collatz Search Space__
+__A Monotonic Reduction of the Collatz Search Space__
 
 # Overview
 
 An implementation of the data structure and sieve outlined in Kyle Harper's analysis and optimization of the
 [Collatz Conjecture's](https://en.wikipedia.org/wiki/Collatz_conjecture) problem space.
 
-The code builds a binary tree in a unique, deterministic manner which allows the classification of parents and children into
-__F-G Chains__.  These chains create _coverage_ via __High-Water Mark__ nodes.  The result eliminates large subtrees, leaving less
-than 1% of the search space ℕ after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU, requiring only ~40MB of
-memory.  Larger trees are possible, using more resources, and growing closer to 100% coverage (though never 100%).  The following
-table shows coverage using `uint64_t` on a desktop PC (i5-14600, DDR5).
+The code builds a binary tree in a unique, deterministic manner which allows the classification of parents and children into parity
+vectors, called __F-G Chains__.  These chains identify __High-Water Mark__ nodes whose parity vectors prove contractive for itself
+and all descendants, creating _coverage_ of a congruence class equivalent to a subtree.  The result leaves less than 1% of the
+search space ℕ after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU, requiring only ~40MB of memory.
+Larger trees are possible by its monotonic nature, using more resources, and growing closer to 100% coverage (though never 100%).
+The following table shows coverage and performance when building a tree using `uint64_t` on a desktop PC (i5-14600, DDR5).
 
-| Tree Levels | Coverage | Time (sec) |
-| ----------: | -------: | ---------: |
-|          10 |   92.58% |         <1 |
-|          20 |   97.14% |         <1 |
-|          30 |   98.81% |         <1 |
-|          35 |   99.12% |          2 |
-|          40 |   99.34% |         50 |
+| Tree Levels | Coverage | Time (sec) | Size (MB) |
+| ----------: | -------: | ---------: | --------: |
+|          10 |   92.58% |         <1 |        <1 |
+|          20 |   97.14% |         <1 |        <1 |
+|          30 |   98.81% |         <1 |         3 |
+|          35 |   99.12% |          2 |        52 |
+|          40 |   99.34% |         50 |      1100 |
+
+The `BinaryTree` at the core Harper's Sieve is a sieve in the truest sense: it filters out entire classes of integers from needing
+verification.  The _coverage_ listed above is achieved by the sieve alone.  That said, it does not preclude other techniques to
+further reduce space or accelerate verification steps.  Mod-3 tables, stride tables, stopping-time (High-Water Mark) shortcuts, and
+other techniques can (and should) be leveraged during the verification phase.
 
 This implementation is written in C++ and supports fixed-widths up to 128 bits, as well as arbitrary precision via
 [GMP](https://gmplib.org/).  It assumes your system is capable of 64-bit support, especially `uint64_t`, and `__int128` found in
@@ -69,6 +75,8 @@ BinaryTree<uint64_t> tree(3);
 
 The API accepts any native, fixed-width type up to 128 bits, such as `uint8_t`, `uint16_t`, etc.  GCC/Clang's 128-bit type has been
 typedef'd to `uint128_t` for convenience.  The API expects an unsigned type.
+
+Do not use implicit-width types (`size_t` and `uint`) if you plan to export/import trees.  They are, by definition, not portable.
 
 The API supports >128 bits with GMP's `mpz_class`.  It has been highly optimized, but is still 2-5x slower than native types for
 the same bit size.
@@ -130,6 +138,14 @@ this. As for the `CRoaring` object, we invoke the portable version of their expo
 
 All-in-all, trees exported on different systems *should* work equally on any platform.
 
+#### Type Consistency and Promotion
+
+Currently, exported trees can only be imported to identically-sized types.  For example, if you build a `BinaryTree<uint64_t>` and
+export it, you cannot load it into a `BinaryTree<uint128_t>`.  This is due to `sizeof(T)` being an implicit assumption inside the
+methods like `StreamHelper::serialize_integral()`, along with custom pathing for GMP's `mpz_class`.
+
+An item is on the TODO list for type promotion, but currently isn't available.
+
 #### Output and Compression
 
 The `tree.save(...)` method accepts a `path`, which it expects to map to a file or file-like object (`std::ofstream` internally).
@@ -151,7 +167,7 @@ entirely and write in raw format to disk.
 Both Materialized and Implicit trees compress well.  Above level ~32, compression tends toward ~2-3% (97-98% reduction).  So yeah,
 we REALLY REALLY recommend you use compression.
 
-Compression Results Table (Implicit Tree, Level 40, 1GB Raw)
+Compression Results Table (Implicit Tree, Level 40, 64-bit type 1GB Raw)
 
 | Zstd Level | Raw Size (MB) | Comp Size (MB) | Ratio  |
 | ---------: | ------------: | -------------: | -----: |
@@ -190,8 +206,8 @@ Furthermore, be aware the size output is huge.  A simple 28-level tree with `zst
 
 While other compilers, platforms, and standards might work, we have only built and tested using:
 
-* GCC and Clang compilers.
-* Linux (specifically, Ubuntu 24.04)
+* GCC and Clang compilers
+* Linux
 * C++20
 * jemalloc via LD_PRELOAD (recommended, not required)
 * Libraries as defined in CMakeLists (OMP, GMP, etc)
@@ -200,4 +216,4 @@ While other compilers, platforms, and standards might work, we have only built a
 The build system is CMake and should be (semi) easy-to-use.  The `rebuild.sh` script helps clone repos, link things, and execute
 `cmake` to build and link programs.  If you're a build expert and want to make an MR to make this smoother for others, please do.
 
-Once built, you can execute `tests.sh` to run all the unit/regression/whatever test programs.  This too could use polish.
+Once built, you can execute `tests.sh` to run all the unit/regression/whatever test programs.

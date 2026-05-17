@@ -9,7 +9,7 @@ var searchData=
   ['get_5fchild_5fcount_6',['get_child_count',['../classNode.html#a799dc03140055b044e22341ba3c494fc',1,'Node']]],
   ['get_5fchild_5funsafe_7',['get_child_unsafe',['../classNode.html#adf7bf836a891fce518ab08ea88f8f85e',1,'Node']]],
   ['get_5fconstant_5fportion_8',['get_constant_portion',['../classCollatzAffineMap.html#a5275216ce4ca8cf845333dad3d551d4c',1,'CollatzAffineMap']]],
-  ['get_5fcoverage_5fmap_9',['get_coverage_map',['../classBinaryTreeMaterializedImpl.html#a581b430bfba0bd70284ccf4b8bd21c3d',1,'BinaryTreeMaterializedImpl::get_coverage_map()'],['../classBinaryTreeImplicitImpl.html#aa7e07c3c9e0583fc2362d4067a4e3af4',1,'BinaryTreeImplicitImpl::get_coverage_map()'],['../classBinaryTree.html#a2d79511075a9f24975969e68515be041',1,'BinaryTree::get_coverage_map()']]],
+  ['get_5fcoverage_5fmap_9',['get_coverage_map',['../classBinaryTreeMaterializedImpl.html#a581b430bfba0bd70284ccf4b8bd21c3d',1,'BinaryTreeMaterializedImpl::get_coverage_map()'],['../classBinaryTree.html#a2d79511075a9f24975969e68515be041',1,'BinaryTree::get_coverage_map()'],['../classBinaryTreeImplicitImpl.html#aa7e07c3c9e0583fc2362d4067a4e3af4',1,'BinaryTreeImplicitImpl::get_coverage_map() const']]],
   ['get_5fcoverage_5fmap_5frw_10',['get_coverage_map_rw',['../classBinaryTreeImplicitImpl.html#a92c4d67add8d3c1f2b14d878ca92d010',1,'BinaryTreeImplicitImpl::get_coverage_map_rw()'],['../classBinaryTreeMaterializedImpl.html#af001f547cd87327c7c68b7851bee2924',1,'BinaryTreeMaterializedImpl::get_coverage_map_rw()']]],
   ['get_5fcovered_11',['get_covered',['../classBinaryTreeCoverage.html#a15d2753cace5a9796621ec7683132ca5',1,'BinaryTreeCoverage']]],
   ['get_5fdefault_5froot_5fvalue_12',['get_default_root_value',['../classBinaryTreeMath.html#ac912afb53b0ee46bcb82255a5409a02e',1,'BinaryTreeMath']]],
@@ -23,7 +23,7 @@ var searchData=
   ['get_5fknown_5fcoverage_20',['get_known_coverage',['../namespaceBinaryTreeCoverageConstants.html#a07b60eb7c7a649f566827a7adf485955',1,'BinaryTreeCoverageConstants']]],
   ['get_5fknown_5fcoverage_5fsum_5fto_5flevel_21',['get_known_coverage_sum_to_level',['../namespaceBinaryTreeCoverageConstants.html#a289f5c2c769944793e05392b9a366d20',1,'BinaryTreeCoverageConstants']]],
   ['get_5flevel_22',['get_level',['../classNode.html#ac4a1e8bf6b3e480e2d79c742174a1f6e',1,'Node']]],
-  ['get_5flevel_5fcount_23',['get_level_count',['../classBinaryTreeMaterializedImpl.html#aa20fa5738170a49c469a8ca60833c0a8',1,'BinaryTreeMaterializedImpl::get_level_count()'],['../classBinaryTreeImplicitImpl.html#a8387926066cbb07350c1c63573bf5f7b',1,'BinaryTreeImplicitImpl::get_level_count()'],['../classBinaryTree.html#a8dafafd77fe1caa4522d79be0ed99919',1,'BinaryTree::get_level_count() const']]],
+  ['get_5flevel_5fcount_23',['get_level_count',['../classBinaryTree.html#a8dafafd77fe1caa4522d79be0ed99919',1,'BinaryTree::get_level_count()'],['../classBinaryTreeImplicitImpl.html#a8387926066cbb07350c1c63573bf5f7b',1,'BinaryTreeImplicitImpl::get_level_count()'],['../classBinaryTreeMaterializedImpl.html#aa20fa5738170a49c469a8ca60833c0a8',1,'BinaryTreeMaterializedImpl::get_level_count()']]],
   ['get_5flevel_5fmap_24',['get_level_map',['../classBinaryTree.html#a0db608de5a943ddb8724cdd625994684',1,'BinaryTree::get_level_map()'],['../classBinaryTreeMaterializedImpl.html#adde8aa871f0c8b733935a47e725acd35',1,'BinaryTreeMaterializedImpl::get_level_map()']]],
   ['get_5fmap_25',['get_map',['../classNodeBitmap.html#a13927112bebae98e3670a9e5c826d7ef',1,'NodeBitmap::get_map()'],['../classFlatHashBitmapImpl.html#aa05e67f6ac161821bb4ebafb8c69c4be',1,'FlatHashBitmapImpl::get_map()']]],
   ['get_5fmax_5f3xp1_26',['get_max_3xp1',['../namespaceCollatzConstants.html#a82106944a580665c6694c96cd51f42df',1,'CollatzConstants']]],
@@ -49,7 +49,7 @@ var searchData=
   ['get_5fstep_5fcount_46',['get_step_count',['../classCollatz.html#a6cf1d94aee87d3d45bd5269d9c9d606a',1,'Collatz']]],
   ['get_5fsuffix_47',['get_suffix',['../structBitmapKeyTraits.html#a0e15a1b65daf2ac4fa63e0d3deaf3a9b',1,'BitmapKeyTraits']]],
   ['get_5fthrees_5fexp_48',['get_threes_exp',['../classCollatzAffineMap.html#a237413ce67be218c904b860c35372ef2',1,'CollatzAffineMap::get_threes_exp()'],['../classCollatzAffineMapShortcut.html#af23051fdcd15aeecf69e0ad870c8b7b3',1,'CollatzAffineMapShortcut::get_threes_exp()']]],
-  ['get_5ftotal_49',['get_total',['../namespaceBinaryTreeCoverageConstants.html#ab48c55474857d3346fe513bb5288294a',1,'BinaryTreeCoverageConstants::get_total()'],['../classBinaryTreeCoverage.html#adb9d943b2f6559cf6fe8c1a93e1dfb49',1,'BinaryTreeCoverage::get_total()']]],
+  ['get_5ftotal_49',['get_total',['../classBinaryTreeCoverage.html#adb9d943b2f6559cf6fe8c1a93e1dfb49',1,'BinaryTreeCoverage::get_total()'],['../namespaceBinaryTreeCoverageConstants.html#ab48c55474857d3346fe513bb5288294a',1,'BinaryTreeCoverageConstants::get_total(level_t level)']]],
   ['get_5ftotal_5fsum_5fof_5flevels_50',['get_total_sum_of_levels',['../namespaceBinaryTreeCoverageConstants.html#a147cfd35d4a0fa73c334dab843eaa1b2',1,'BinaryTreeCoverageConstants']]],
   ['get_5ftree_5ftype_51',['get_tree_type',['../classBinaryTreeMaterializedImpl.html#a58d626e36e2685ca316d2212fc1685db',1,'BinaryTreeMaterializedImpl::get_tree_type()'],['../classBinaryTreeImplicitImpl.html#a463e1ca16e1960b9eba30d7a0410a4d8',1,'BinaryTreeImplicitImpl::get_tree_type()'],['../classBinaryTree.html#a8cb6b6af458e98910f71c1985bd78eee',1,'BinaryTree::get_tree_type()']]],
   ['get_5ftwos_5fexp_52',['get_twos_exp',['../classCollatzAffineMapShortcut.html#a465cca6b38e15f28d8ff8695d8e68db1',1,'CollatzAffineMapShortcut::get_twos_exp()'],['../classCollatzAffineMap.html#a92477d80a9ae92e86ca378855a40d6e4',1,'CollatzAffineMap::get_twos_exp()']]],
@@ -57,6 +57,5 @@ var searchData=
   ['get_5funcovered_5fpositions_54',['get_uncovered_positions',['../classBinaryTreeImplicitImpl.html#a2b72c8f71ff0c72a64bae86c09a2dc28',1,'BinaryTreeImplicitImpl::get_uncovered_positions()'],['../classBinaryTree.html#a8af75d9e71b73df8449db3c6b87bee44',1,'BinaryTree::get_uncovered_positions()']]],
   ['get_5fvalue_55',['get_value',['../classNode.html#acd9ce8e35f9f5840779592383ea6b344',1,'Node']]],
   ['gmp_56',['GMP',['../namespaceGMP.html',1,'']]],
-  ['gmpintegral_57',['GMPIntegral',['../conceptGMPIntegral.html',1,'']]],
-  ['guaranteedwidthintegral_58',['GuaranteedWidthIntegral',['../conceptGuaranteedWidthIntegral.html',1,'']]]
+  ['gmpintegral_57',['GMPIntegral',['../conceptGMPIntegral.html',1,'']]]
 ];

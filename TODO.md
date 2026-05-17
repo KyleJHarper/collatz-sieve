@@ -1,7 +1,11 @@
 # Current Work
 
-## Exponents Pass
-* Rework the exponents to be less derpy.
+## Type Promotion
+* Can we get type promotion of a tree, either at runtime or via save/load?
+* * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
+
+## Build Env
+* Switch to FetchContent for the repos.  Conslidates everything to `cmake ...`
 
 ## Peak-By-Bit
 * Re-verify GPU on Peak by Bit.  For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from finding 2^109 lately.
@@ -14,9 +18,6 @@
 * Switch to an implicit tree.
 * Leverage a GPU, if possible.
 * See if we can use a bitmap instead of an LRU cache.
-
-## Per-Method Tests
-* Change the test classes to make sure each method is tested... maybe?
 
 ## FLC
 * What are we even doing with the forward-looking-cache class?

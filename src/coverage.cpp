@@ -130,6 +130,9 @@ void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep
         logger->warn("Coherency failed!  {} levels failed.  See above.", failing_levels);
     }
 
+    // Report size.
+    logger->debug("Table size (bytes): {}", builder.get_tree().deep_size());
+
     if (sleep_seconds > 0) {
         logger->info("Sleep requested for {} seconds.  Doing so.", sleep_seconds);
         sleep(sleep_seconds);
