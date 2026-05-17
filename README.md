@@ -1,8 +1,3 @@
-# TODO
-
-* Do not use platform-dependent types (int, size_t, long, etc)
-(Maybe just the serialization API can handle this...?)
-
 # Harper's Sieve of Collatz
 
 __A Monotonic Reduction of the Collatz Search Space__
@@ -211,9 +206,8 @@ While other compilers, platforms, and standards might work, we have only built a
 * C++20
 * jemalloc via LD_PRELOAD (recommended, not required)
 * Libraries as defined in CMakeLists (OMP, GMP, etc)
-* Libraries cloned via `rebuild.sh`
 
-The build system is CMake and should be (semi) easy-to-use.  The `rebuild.sh` script helps clone repos, link things, and execute
-`cmake` to build and link programs.  If you're a build expert and want to make an MR to make this smoother for others, please do.
+The build system is CMake and should be (semi) easy-to-use.  The `rebuild.sh` script helps invoke `cmake` in sensible ways, but you
+may perform this manually of course.
 
 Once built, you can execute `tests.sh` to run all the unit/regression/whatever test programs.

@@ -4,9 +4,6 @@
 * Can we get type promotion of a tree, either at runtime or via save/load?
 * * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
 
-## Build Env
-* Switch to FetchContent for the repos.  Conslidates everything to `cmake ...`
-
 ## Peak-By-Bit
 * Re-verify GPU on Peak by Bit.  For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from finding 2^109 lately.
 * We are currently testing every number until it hits HWM, but if we used a forward-looking cache we could probably speed the program up.  Problem is I have no idea how to do that with CUDA...  Maybe there's a CRoaring that compiles on CUDA...?

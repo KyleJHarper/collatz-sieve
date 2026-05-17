@@ -153,6 +153,10 @@ There is now a unit test nearly 1-to-1 for each method or function.  Additionall
 also included.  Tests follow a common pattern.  The additional testing adds significant rigor to the code, and as a result causes
 the test suite to run slower.  A full Debug + Release run takes ~3-5 minutes on the donor system (i5-14600).
 
+### Dependency Management Change
+
+The `rebuild.sh` script no longer clones repos.  Instead, CMake calls to `FetchContent` handle external sources.
+
 ## 3.6.0
 
 ### Affine Strides

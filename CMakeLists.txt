@@ -18,6 +18,73 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 
 
 # --------------------------
+# FetchContent
+# --------------------------
+# Use FetchContent for external libs.
+include(FetchContent)
+set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/include")
+
+# Configure Dependencies
+# -- roaring
+set(ENABLE_ROARING_TESTS OFF CACHE BOOL "" FORCE)
+set(ROARING_BUILD_STATIC ON CACHE BOOL "" FORCE)
+# -- zstd
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+# Helper to keep things consistent.
+function(add_git_dependency name repo tag)
+    message(STATUS "Fetching ${name} (${tag})...")
+    FetchContent_Declare(
+        ${name}
+        GIT_REPOSITORY ${repo}
+        GIT_TAG ${tag}
+        GIT_SHALLOW TRUE
+        # SOURCE_DIR "${FETCHCONTENT_BASE_DIR}/${name}"
+    )
+    FetchContent_MakeAvailable(${name})
+endfunction()
+
+# Abseil
+add_git_dependency(
+    abseil-cpp
+    https://github.com/abseil/abseil-cpp.git
+    20250814.0
+)
+
+# CLI11
+add_git_dependency(
+    CLI11
+    https://github.com/CLIUtils/CLI11.git
+    v2.5.0
+)
+
+# CRoaring
+add_git_dependency(
+    CRoaring
+    https://github.com/RoaringBitmap/CRoaring.git
+    v4.6.1
+)
+
+# Spdlog
+add_git_dependency(
+    spdlog
+    https://github.com/gabime/spdlog.git
+    v1.15.3
+)
+
+# Zstd
+add_git_dependency(
+    zstd
+    https://github.com/facebook/zstd.git
+    v1.5.7
+)
+# (It doesn't emit directory info reliably.  Add it manually.  Then link against libzstd_static lib.)
+add_subdirectory(${CMAKE_SOURCE_DIR}/include/zstd/build/cmake)
+
+# --------------------------
 # Global settings
 # --------------------------
 set(CMAKE_CXX_STANDARD 20)
@@ -64,32 +131,6 @@ set(PROJECT_LIBS
     absl::hash
     roaring
 )
-
-
-
-# --------------------------
-# Abseil's CMake build system
-# --------------------------
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/abseil-cpp)
-
-
-
-# --------------------------
-# CRoaring's CMake build system
-# --------------------------
-set(ENABLE_ROARING_TESTS OFF CACHE BOOL "" FORCE)
-set(ROARING_BUILD_STATIC ON CACHE BOOL "" FORCE)
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/CRoaring)
-
-
-
-# --------------------------
-# Zstd's CMake build system
-# --------------------------
-set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
-set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/zstd/build/cmake)
 
 
 
