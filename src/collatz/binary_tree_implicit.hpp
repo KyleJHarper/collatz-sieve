@@ -402,7 +402,7 @@ class BinaryTreeImplicitImpl {
         }
 
         // Now loop.
-        _uncovered_positions.for_each_transformer(BitmapTransformerPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
+        _uncovered_positions.for_each_transformer(ForEachPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
             // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
             if constexpr(FixedWidthIntegral<T>) {
                 tls.left_position = (cb_position << 1) - 1;

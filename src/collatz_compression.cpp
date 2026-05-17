@@ -12,7 +12,7 @@
 #include "collatz/collatz.hpp"
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/collatz_affine_map.hpp"
-#include "CLI.hpp"
+#include <CLI/CLI.hpp>
 
 
 

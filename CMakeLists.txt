@@ -13,8 +13,9 @@ if(CUDAToolkit_FOUND)
 endif()
 
 # Write binaries to a bin dir.
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 
 # --------------------------
@@ -22,7 +23,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 # --------------------------
 # Use FetchContent for external libs.
 include(FetchContent)
-set(FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 # Configure Dependencies
 # -- roaring
@@ -82,7 +82,11 @@ add_git_dependency(
     v1.5.7
 )
 # (It doesn't emit directory info reliably.  Add it manually.  Then link against libzstd_static lib.)
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/zstd/build/cmake)
+add_subdirectory(
+    ${CMAKE_BINARY_DIR}/_deps/zstd-src/build/cmake
+    ${CMAKE_BINARY_DIR}/_deps/zstd-build
+)
+
 
 # --------------------------
 # Global settings
@@ -105,13 +109,6 @@ endif()
 # Extra compile flags
 add_compile_options(-Wall -Wextra)
 
-# Include directories.  Absl and CRoaring export their own info.
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include/spdlog/include
-    ${CMAKE_SOURCE_DIR}/include/CLI11/include/CLI
-    ${CMAKE_SOURCE_DIR}/include/zstd
-)
-
 # Packages
 find_package(TBB REQUIRED)
 find_package(OpenMP REQUIRED)
@@ -130,6 +127,7 @@ set(PROJECT_LIBS
     absl::flat_hash_map
     absl::hash
     roaring
+    CLI11::CLI11
 )
 
 
@@ -137,8 +135,8 @@ set(PROJECT_LIBS
 # --------------------------
 # Shared objects
 # --------------------------
-add_library(logging OBJECT src/logging.cpp)
-target_link_libraries(logging PRIVATE absl::hash)
+add_library(logging STATIC src/logging.cpp)
+target_link_libraries(logging PUBLIC absl::hash spdlog::spdlog)
 
 
 
@@ -161,7 +159,9 @@ set(GPU_PROGRAMS
 
 # CPU-only programs
 foreach(prog ${CPU_PROGRAMS})
-    add_executable(${prog} src/${prog}.cpp $<TARGET_OBJECTS:logging>)
+    # add_executable(${prog} src/${prog}.cpp $<TARGET_OBJECTS:logging>)
+    add_executable(${prog} src/${prog}.cpp)
+    target_link_libraries(${prog} PRIVATE logging)
     target_link_libraries(${prog} PRIVATE ${PROJECT_LIBS})
 endforeach()
 
@@ -177,6 +177,7 @@ if(CUDAToolkit_FOUND)
                 CUDA_STANDARD_REQUIRED ON
                 CUDA_ARCHITECTURES "89;90"
             )
+            target_link_libraries(${prog} PRIVATE logging)
             target_link_libraries(${prog} PRIVATE ${PROJECT_LIBS})
         else()
             message(WARNING "GPU source file ${GPU_SRC} not found for program ${prog}")
@@ -204,6 +205,7 @@ set(TESTS
     collatz
     equality_helper
     exponents
+    for_each_policy
     gmp
     int128
     node_bitmap_traits
@@ -219,6 +221,7 @@ set(TESTS
 enable_testing()
 foreach(test ${TESTS})
     add_executable(test__${test} src/test/${test}.cpp $<TARGET_OBJECTS:logging>)
+    target_link_libraries(test__${test} PRIVATE logging)
     target_link_libraries(test__${test} PRIVATE ${PROJECT_LIBS})
     add_test(NAME ${test} COMMAND test__${test})
 endforeach()

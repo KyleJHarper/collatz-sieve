@@ -8,18 +8,6 @@
 
 
 template<AnySupportedIntegral T>
-void test_node_bitmap_traits_transformer_policy() {
-    start_test(__func__);
-
-    assert(static_cast<int>(BitmapTransformerPolicy::SERIAL) == 1);
-    assert(static_cast<int>(BitmapTransformerPolicy::PARALLEL) == 2);
-
-    end_test();
-}
-
-
-
-template<AnySupportedIntegral T>
 void test_node_bitmap_traits_suffix_t() {
     start_test(__func__);
 
@@ -155,7 +143,6 @@ template<AnySupportedIntegral T>
 void run_all() {
     announce_run_all<T>();
 
-    test_node_bitmap_traits_transformer_policy<T>();
     test_node_bitmap_traits_suffix_t<T>();
     test_node_bitmap_traits_prefix_t<T>();
     test_node_bitmap_traits_roaring_types<T>();

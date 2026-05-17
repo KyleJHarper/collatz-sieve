@@ -7,14 +7,6 @@
 
 
 
-/// @brief Enum helper for letting callers decide between serial (sequential) and parallel operation.
-enum class BitmapTransformerPolicy {
-    SERIAL = 1,
-    PARALLEL = 2,
-};
-
-
-
 /**
 * @struct BitmapKeyTraits
 * @brief Helpers to handle prefix and suffix keys for the hash map.

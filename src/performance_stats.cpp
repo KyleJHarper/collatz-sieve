@@ -12,8 +12,11 @@
 #include "collatz/concepts.hpp"
 #include <fstream>
 #include <unistd.h>
-#include "CLI.hpp"
+#include <CLI/CLI.hpp>
+
 using namespace std::chrono;
+
+
 
 //
 // Get RSS Bytes

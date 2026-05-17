@@ -1,6 +1,6 @@
 #include <gmp.h>
 #include <gmpxx.h>
-#include "CLI.hpp"
+#include <CLI/CLI.hpp>
 #include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"
 #include "collatz/collatz.hpp"

@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <gmpxx.h>
 #include <stdexcept>
-#include "CLI.hpp"
+#include <CLI/CLI.hpp>
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/concepts.hpp"
 #include "collatz/logging.hpp"

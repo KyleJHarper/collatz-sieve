@@ -16,14 +16,11 @@
 #include "gmp.hpp"
 #include "stream_helper.hpp"
 #include "equality_helper.hpp"
+#include "for_each_policy.hpp"
 
 
 
 
-//
-// FlatHashBitmap
-//
-//
 /**
 * @class FlatHashBitmapImpl
 * @brief An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap.
@@ -553,7 +550,7 @@ class FlatHashBitmapImpl {
     /**
     * @brief A for-each wrapper returning each value in the bitmap to `callback`.
     *
-    * This method uses `for_each_transformer` when TLS storage isn't needed.  It applies `callback` to all values.
+    * This method uses `for_each_value_with_tls` when TLS storage isn't needed.  It applies `callback` to all values.
     *
     * Callback must have this signature: `(const T& value)`
     *
@@ -564,15 +561,15 @@ class FlatHashBitmapImpl {
     * are invalidated upon changes.
     *
     * @tparam Func A function signature defined to match `callback`.
-    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
     * @param callback Method to invoke on each value.
     */
     template<typename Func>
-    void for_each_value(BitmapTransformerPolicy policy, Func&& callback) {
+    void for_each_value(ForEachPolicy policy, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
         std::vector<uint8_t> dummy_tls;
-        for_each_transformer(policy, dummy_tls, [&](const T& value, auto&) {
+        for_each_value_with_tls(policy, dummy_tls, [&](const T& value, auto&) {
             return callback(value);
         });
     }
@@ -580,10 +577,10 @@ class FlatHashBitmapImpl {
 
 
     /**
-    * @brief A for-each transformer allowing callbacks with thread-local storage for transformation.
+    * @brief A for-each iterator allowing callbacks with thread-local storage for transformation.
     *
-    * Applies `callback` to all values according to the BitmapTransformerPolicy (serial or parallel) requested.  When serial, order
-    * is guaranteed.
+    * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  When serial, order is
+    * guaranteed.
     *
     * Callback must have this signature: `(const T& value, TLS_Type& tls)`
     *
@@ -595,19 +592,19 @@ class FlatHashBitmapImpl {
     *
     * @tparam Func A function signature defined to match `callback`.
     * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
-    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
     * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
     * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
     * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
     * @param callback Method to invoke on each value.
     */
     template<typename Func, typename TLS_Type>
-    void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
+    void for_each_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_invocable_r_v<bool, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
 
         // Ensure the TLS has enough elements before proceeding.
-        const size_t max_threads = policy == BitmapTransformerPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
+        const size_t max_threads = policy == ForEachPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
         if (tls.size() < max_threads) {
             tls.resize(max_threads);
         }
@@ -617,7 +614,7 @@ class FlatHashBitmapImpl {
         bool stop;
 
         // Process according to policy.
-        if (policy == BitmapTransformerPolicy::SERIAL) {
+        if (policy == ForEachPolicy::SERIAL) {
             // Serial Path
             // Guarantees sequential processing.  Can efficiently use exposed iterators.
 

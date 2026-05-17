@@ -561,7 +561,7 @@ void test_node_bitmap_for_each_value() {
 
     // Serial
     size_t tally = 0;
-    bitmap.for_each_value(BitmapTransformerPolicy::SERIAL, [&](const T& value) {
+    bitmap.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
         tally++;
         return false;
@@ -570,7 +570,7 @@ void test_node_bitmap_for_each_value() {
 
     // Parallel
     std::atomic<size_t> atomic_tally = 0;
-    bitmap.for_each_value(BitmapTransformerPolicy::PARALLEL, [&](const T& value) {
+    bitmap.for_each_value(ForEachPolicy::PARALLEL, [&](const T& value) {
         assert(bitmap.contains(value));
         atomic_tally.fetch_add(1, std::memory_order_relaxed);
         return false;
@@ -595,19 +595,19 @@ void test_node_bitmap_for_each_transformer() {
     // Serial
     std::vector<NodeBitmap<T>> callback_storage;
     callback_storage.resize(1);
-    bitmap.for_each_transformer(BitmapTransformerPolicy::SERIAL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
+    bitmap.for_each_transformer(ForEachPolicy::SERIAL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
         assert(bitmap.contains(value));
         tls.add(value);
         return false;
     });
     assert(bitmap.cardinality() == callback_storage[0].cardinality());
-    callback_storage[0].for_each_value(BitmapTransformerPolicy::SERIAL, [&](const T& value) {
+    callback_storage[0].for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
         return false;
     });
 
     // Parallel
-    bitmap.for_each_transformer(BitmapTransformerPolicy::PARALLEL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
+    bitmap.for_each_transformer(ForEachPolicy::PARALLEL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
         assert(bitmap.contains(value));
         tls.add(value);
         return false;
@@ -618,7 +618,7 @@ void test_node_bitmap_for_each_transformer() {
         transformed_map |= storage;
     }
     assert(bitmap.cardinality() == transformed_map.cardinality());
-    transformed_map.for_each_value(BitmapTransformerPolicy::SERIAL, [&](const T& value) {
+    transformed_map.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
         return false;
     });

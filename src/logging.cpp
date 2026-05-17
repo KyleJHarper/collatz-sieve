@@ -1,7 +1,6 @@
 #include <filesystem>
 #include "collatz/logging.hpp"
-#include "spdlog/spdlog.h"
-
+#include <spdlog/spdlog.h>
 
 // Define the global logger instance
 std::shared_ptr<spdlog::logger> logger = nullptr;

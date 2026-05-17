@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string>
 #include "collatz/binary_tree.hpp"
-#include <CLI.hpp>
+#include <CLI/CLI.hpp>
 #include <unistd.h>
 #include "collatz/binary_tree_coverage.hpp"
 #include "collatz/binary_tree_coverage_constants.hpp"

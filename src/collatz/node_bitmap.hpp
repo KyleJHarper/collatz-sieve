@@ -1,6 +1,7 @@
 #pragma once
 
 #include "concepts.hpp"
+#include "for_each_policy.hpp"
 #include "node_bitmap_flat_hash.hpp"
 
 
@@ -232,7 +233,7 @@ class NodeBitmap {
     * @param callback Method to invoke on each value.
     */
     template<typename Func>
-    void for_each_value(BitmapTransformerPolicy policy, Func&& callback) { _impl.for_each_value(policy, callback); }
+    void for_each_value(ForEachPolicy policy, Func&& callback) { _impl.for_each_value(policy, callback); }
 
 
 
@@ -259,5 +260,5 @@ class NodeBitmap {
     * @param callback Method to invoke on each value.
     */
     template<typename Func, typename TLS_Type>
-    void for_each_transformer(BitmapTransformerPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) { _impl.for_each_transformer(policy, tls, callback); }
+    void for_each_transformer(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) { _impl.for_each_value_with_tls(policy, tls, callback); }
 };

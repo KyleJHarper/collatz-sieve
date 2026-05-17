@@ -828,6 +828,37 @@ class BinaryTree {
         Node<T>* node = new Node<T>(node_value);
         return node;
     }
+
+
+
+    /**
+    * @brief A for-each emitter/transformer allowing callbacks with thread-local storage for transformation.
+    *
+    * Applies `callback` to all values according to the BitmapTransformerPolicy (serial or parallel) requested.  When serial, order
+    * is guaranteed.
+    *
+    * Callback must have this signature: `(const T& value, TLS_Type& tls)`
+    *
+    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
+    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    *
+    * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
+    * are invalidated upon changes.
+    *
+    * @tparam Func A function signature defined to match `callback`.
+    * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
+    * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
+    * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
+    * @param callback Method to invoke on each value.
+    */
+    // template<typename Func, typename TLS_Type>
+    // void for_each_uncovered_value(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
+    //     // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+    //     static_assert(std::is_invocable_r_v<bool, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
+    // }
+
 };
 
 

@@ -3,7 +3,7 @@
 set -e
 
 for build in 'Debug' 'Release' ; do
-  for program in bin/${build}/test__* ; do
+  for program in build/${build}/bin/test__* ; do
     ${program}
     echo
   done
