@@ -12,6 +12,66 @@ Note: when larger memory and/or high core count was required, the donor system w
 
 # Version History
 
+## 4.1.0
+
+### Value Iterator
+
+The `BinaryTree` class handles nodes by-position, not by-value.  This is how classification remains stable, and as a side effect,
+the `BinaryTreeImplicitImpl` (default tree type) achieves staggering compression inside its `NodeBitmap`.  Each position in the
+bitmap requires ~0.5 bytes.
+
+To iterate over actual values, conversion is required.  The `BinaryTree` facade has a `generate_value_map()` which will perform a
+bulk conversion of positions into values.  This data then lives within the tree, and will be exported/imported whenever `save()` or
+`load()` is called (serialize/deserialize under the hood).  The data is far more sparse, but still impressive at ~2 bytes each,
+regardless of the underlying data type.  The `generate_value_map()` method uses `ForEachPolicy::SERIAL` by default.  If you want
+parallel value map building, you may, but the parallel version uses 3-5x more memory during benchmarking, and only speeds up build
+time by ~2x, sometimes it's even slower than serial.
+
+#### Iteration Is FAST
+
+The `tree.for_each_value()` is mostly a wrapper over the `NodeBitmap().for_each_value_with_tls()`.  As such, reads are blazingly
+fast and low-memory due to prefix hoisting, locality, and iterating over CRoaring's internal containers directly.  Note that the
+serial policy uses CRoaring's iterator, which is slower than the parallel policy codepath which iterates containers directly. As
+such, you should almost always use `ForEachPolicy::PARALLEL` even with just 1 thread, unless you truly need guaranteed order.
+
+The `NodeBitmap` approach was tested extensively.  It outperforms raw memory (`malloc`) because raw memory uses 4-8x time the RAM
+and hits memory bandwidth limits (and possibly pointer chasing) long before the CPU saturates.  Multithreading helped, but couldn't
+outpace our `NodeBitmap`.  It also outperforms compressed memory.  The compressed memory was slightly smaller in size, and this
+might scale at higher tree levels, but the decompression time was so massive it killed the overall throughput.
+
+Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 1,117,834,900
+surviving positions/values.  Note, the c/ms (count per millisecond) is not a typo.  The system can provide billions of values per
+second.
+
+| Data Type | Policy   | Threads | Bitmap MB | Raw MB | Comp MB | Bitmap c/ms | Raw c/ms   | Comp c/ms |
+| :-------- | :------- | ------: |---------: | -----: | ------: | ----------: | ---------: | --------: |
+| uint64_t  | Serial   |       1 |     1,014 |  4,026 |     685 |     810,572 |  2,180,507 |   105,011 |
+| uint64_t  | Serial   |       2 |     1,014 |  4,026 |     685 |     794,702 |  2,085,702 |   104,657 |
+| uint64_t  | Serial   |       4 |     1,014 |  4,026 |     685 |     799,519 |  2,217,154 |   107,187 |
+| uint64_t  | Serial   |       8 |     1,014 |  4,026 |     685 |     780,595 |  2,102,321 |   106,130 |
+| uint64_t  | Serial   |      12 |     1,014 |  4,026 |     685 |     798,309 |  2,110,731 |   105,705 |
+| uint64_t  | Parallel |       1 |     1,014 |  4,026 |     685 |   2,867,841 |  2,110,731 |   106,088 |
+| uint64_t  | Parallel |       2 |     1,014 |  4,026 |     685 |   5,123,133 |  4,221,462 |   108,398 |
+| uint64_t  | Parallel |       4 |     1,014 |  4,026 |     685 |   8,118,196 |  7,130,848 |   108,242 |
+| uint64_t  | Parallel |       8 |     1,014 |  4,026 |     685 |  11,726,283 |  8,245,043 |   110,278 |
+| uint64_t  | Parallel |      12 |     1,014 |  4,026 |     685 |  12,563,875 |  9,422,906 |   109,750 |
+| uint128_t | Serial   |       1 |     1,014 |  8,052 |     687 |     725,835 |  1,319,206 |    80,219 |
+| uint128_t | Serial   |       2 |     1,014 |  8,052 |     687 |     715,987 |  1,159,742 |    81,181 |
+| uint128_t | Serial   |       4 |     1,014 |  8,052 |     687 |     719,894 |  1,296,517 |    79,006 |
+| uint128_t | Serial   |       8 |     1,014 |  8,052 |     687 |     742,169 |  1,342,704 |    79,350 |
+| uint128_t | Serial   |      12 |     1,014 |  8,052 |     687 |     709,251 |  1,188,474 |    84,052 |
+| uint128_t | Parallel |       1 |     1,014 |  8,052 |     687 |   2,029,549 |  1,191,157 |    81,570 |
+| uint128_t | Parallel |       2 |     1,014 |  8,052 |     687 |   3,404,404 |  2,145,051 |    82,360 |
+| uint128_t | Parallel |       4 |     1,014 |  8,052 |     687 |   5,996,394 |  3,614,265 |    87,742 |
+| uint128_t | Parallel |       8 |     1,014 |  8,052 |     687 |   8,245,043 |  4,510,109 |    87,524 |
+| uint128_t | Parallel |      12 |     1,014 |  8,052 |     687 |   9,956,278 |  4,978,139 |    84,632 |
+
+Note: `mpz_class` was not tested as extensively, but appears to iterate ~20x slower.  Roughly 180,000/ms.
+
+#### Continuation
+
+The iterator supports an additional parameter for a `start` value, which allows continuation from a given point.  It isn't an exact
+value, but guarantees to be at or below the start.
 
 ## 4.0.0
 

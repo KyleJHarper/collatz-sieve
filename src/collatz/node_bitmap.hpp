@@ -1,7 +1,7 @@
 #pragma once
 
 #include "concepts.hpp"
-#include "for_each_policy.hpp"
+#include "for_each.hpp"
 #include "node_bitmap_flat_hash.hpp"
 
 
@@ -72,7 +72,7 @@ class NodeBitmap {
 
     /**
     * @brief Add a contiguous range of values using the most optimized approach.
-    * @note This is the Half-Open range [star, end).  Meaning, start is included but end isn't.
+    * @note This is the Half-Open range [start, end).  Meaning, start is included but end isn't.
     */
     void add_range(const T& start, const T& end) { _impl.add_range(start, end); }
 
@@ -80,9 +80,18 @@ class NodeBitmap {
 
     /**
     * @brief Add a closed, contiguous range of values using the most optimized approach.
-    * @note This is the Closed range [star, end].  Meaning, start and end are both included.
+    * @note This is the Closed range [start, end].  Meaning, start and end are both included.
     */
     void add_range_closed(const T& start, const T& end) { _impl.add_range_closed(start, end); }
+
+
+
+    /**
+    * @brief Adds many sparse values at once.  May span prefixes.  Order not required.  Impl will sort for you.
+    * @param count The number of elements of type `T` in `values`.
+    * @param values The memory location with values to add.
+    */
+    void add_many(const size_t count, T* values) { _impl.add_many(count, values); }
 
 
 
@@ -100,11 +109,26 @@ class NodeBitmap {
 
 
 
+    /// @brief Returns the smallest value in the NodeBitmap.
+    T minimum() const { return _impl.minimum(); }
+
+
+
+    /// @brief Returns the largest value in the NodeBitmap.
+    T maximum() const { return _impl.maximum(); }
+
+
+
     /**
     * @brief Calculate the cardinality (count) of nodes turned "on".
     * @return The count of "on" nodes, typed to caller's `T`.
     */
     T cardinality() const { return _impl.cardinality(); }
+
+
+
+    /// @brief Returns true if the bitmap is empty, false otherwise.
+    bool empty() const { return _impl.empty(); }
 
 
 
@@ -216,11 +240,11 @@ class NodeBitmap {
 
 
     /**
-    * @brief A for-each wrapper returning each value in the bitmap to `callback`.
+    * @brief A for-each iterator returning each value in the bitmap to `callback`.
     *
-    * This method uses `for_each_transformer` when TLS storage isn't needed.  It applies `callback` to all values.
+    * This method uses `for_each_value_with_tls` when TLS storage isn't needed.  It applies `callback` to all values.
     *
-    * Callback must have this signature: `(const T& value)`
+    * Callback must have this signature: `(const T& value)`  Return type must be `ForEachSignal`.
     *
     * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
     * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
@@ -229,21 +253,23 @@ class NodeBitmap {
     * are invalidated upon changes.
     *
     * @tparam Func A function signature defined to match `callback`.
-    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
-    * @param callback Method to invoke on each value.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
+    * @param callback Method to invoke on each value.  Must return a `ForEachSignal`.
     */
     template<typename Func>
-    void for_each_value(ForEachPolicy policy, Func&& callback) { _impl.for_each_value(policy, callback); }
+    void for_each_value(ForEachPolicy policy, Func&& callback) const {
+        _impl.for_each_value(policy, callback);
+    }
 
 
 
     /**
-    * @brief A for-each transformer allowing callbacks with thread-local storage for transformation.
+    * @brief A for-each iterator allowing callbacks with thread-local storage for transformation.
     *
-    * Applies `callback` to all values according to the BitmapTransformerPolicy (serial or parallel) requested.  When serial, order
-    * is guaranteed.
+    * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  When serial, order is
+    * guaranteed.
     *
-    * Callback must have this signature: `(const T& value, TLS_Type& tls)`
+    * Callback must have this signature: `(const T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
     *
     * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
     * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
@@ -253,12 +279,14 @@ class NodeBitmap {
     *
     * @tparam Func A function signature defined to match `callback`.
     * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
-    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
     * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
     * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
     * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
-    * @param callback Method to invoke on each value.
+    * @param callback Method to invoke on each value.  Must return a `ForEachSignal`.
     */
     template<typename Func, typename TLS_Type>
-    void for_each_transformer(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) { _impl.for_each_value_with_tls(policy, tls, callback); }
+    void for_each_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) const {
+        _impl.for_each_value_with_tls(policy, tls, callback);
+    }
 };

@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include "concepts.hpp"
+#include "for_each.hpp"
 #include "string.hpp"
 #include "equality_helper.hpp"
 #include "node.hpp"
@@ -14,6 +15,7 @@
 #include "stream_helper.hpp"
 #include <omp.h>
 #include <tbb/parallel_sort.h>
+#include "node_bitmap.hpp"
 
 
 
@@ -40,6 +42,8 @@ class BinaryTreeMaterializedImpl {
     level_t _level_count = 0;
     /// @brief The main storage for `Node` objects, placed in a map keyed by level.
     std::unordered_map<level_t, std::vector<Node<T>*>> _level_map;
+    /// @brief Bitmap containing a list of all values still not covered.
+    NodeBitmap<T> _uncovered_values;
     /// @brief Map of levels and their associated coverage.
     std::unordered_map<level_t, BinaryTreeCoverage<T>> _coverage_map;
     /// @brief Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree.
@@ -119,6 +123,7 @@ class BinaryTreeMaterializedImpl {
         _is_initialized = false;
         _coverage_map.clear();
         _level_map.clear();
+        _uncovered_values.clear();
         _level_count = 0;
         for (Node<T>* ancestor : _ancestors) {
             delete ancestor;
@@ -212,6 +217,14 @@ class BinaryTreeMaterializedImpl {
     /// @param value The true or false value to set.
     void set_is_initialized(const bool value) { _is_initialized = value; }
 
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    const NodeBitmap<T>& get_uncovered_values() const { return _uncovered_values; }
+    /// @brief Get a read-write reference to the uncovered values map.
+    /// @warning This is intended for serialization/deserilization only.
+    NodeBitmap<T>& get_uncovered_values_rw() { return _uncovered_values; }
+    /// @brief Clears the value map.  Usually for debugging.
+    void clear_uncovered_values() { _uncovered_values.clear(); }
+
     /// @}
 
 
@@ -263,6 +276,9 @@ class BinaryTreeMaterializedImpl {
                 }
             }
         }
+
+        // Add uncovered values bitmap.
+        total += _uncovered_values.deep_size();
 
         // Account for _coverage_map
         total += sizeof(_coverage_map);
@@ -529,6 +545,9 @@ class BinaryTreeMaterializedImpl {
         // Ensure initialization is set.
         _is_initialized = true;
 
+        // Clear the value bitmap since it would otherwise be stale/incorrect.
+        _uncovered_values.clear();
+
         // When we have no levels, this simply crafts a 0- or 1-based root node and manually sets level map and coverage.
         if (_level_count == 0) {
             _level_count = 1;
@@ -545,8 +564,8 @@ class BinaryTreeMaterializedImpl {
         level_t child_level = _level_count + 1;
         _level_count++;
 
-        // Build the step value.  Each level doubles the tree, so we need to respect T with GMP-size values.
-        T step = BinaryTreeMath<T>::st_step(parent_level);
+        // Build the scaling factor value.  Each level doubles the tree, so we need to respect T with GMP-size values.
+        T scaling_factor = BinaryTreeMath<T>::st_scaling_factor(child_level);
 
         // Calculate parent and child counts for looping and indexing.
         // Note: size_t is safe, because no one can fit 2^64 nodes in RAM.
@@ -565,7 +584,7 @@ class BinaryTreeMaterializedImpl {
 
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
-        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, step, child_level, parent_count, _is_pruning_hwm_nodes, _is_preserving_ancestors, omp_local_ancestors_group, _is_verifying_non_hwm_nodes, eptr)
+        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, scaling_factor, child_level, parent_count, _is_pruning_hwm_nodes, _is_preserving_ancestors, omp_local_ancestors_group, _is_verifying_non_hwm_nodes, eptr)
         {
             try {
                 // Use local child values.
@@ -589,11 +608,11 @@ class BinaryTreeMaterializedImpl {
 
                     // Compute the child values.  Avoid alloc() with GMP with arithmetic operators.
                     if constexpr(FixedWidthIntegral<T>) {
-                        child_value_1 = parent->get_value() + step;
-                        child_value_2 = child_value_1 + step;
+                        child_value_1 = parent->get_value() + scaling_factor;
+                        child_value_2 = child_value_1 + scaling_factor;
                     } else if constexpr(GMPIntegral<T>) {
-                        mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), step.get_mpz_t());
-                        mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), step.get_mpz_t());
+                        mpz_add(child_value_1.get_mpz_t(), parent->get_value().get_mpz_t(), scaling_factor.get_mpz_t());
+                        mpz_add(child_value_2.get_mpz_t(), child_value_1.get_mpz_t(), scaling_factor.get_mpz_t());
                     }
 
                     // Instaniate the children.
@@ -714,12 +733,75 @@ class BinaryTreeMaterializedImpl {
         // Coverage is tallied above.  If pruning, logic is different because ancestors were purged already, which means their
         // descendents were purged, but still count toward coverage.  Luckily, by shrinking the vector above, this method can rely
         // on .size() to report how many are *not* covered, which means covered = total - .size().
-        T total = step * 2;
+        T total = scaling_factor * 2;
         T covered = covered_or_pruned;
         if (_is_pruning_hwm_nodes) {
             covered = total - _level_map[child_level].size();
         }
         _coverage_map[child_level] = BinaryTreeCoverage<T>(covered, total);
+    }
+
+
+
+    /**
+    * @brief Builds a value map as a `NodeBitmap` for iteration later.
+    * @tparam BUFFER_SIZE Controls memory usage of temporary buffers.  Larger values can aid performance at the cost of more memory
+    * and vice-versa.
+    * @param policy The type of `ForEachPolicy` to build the value map.  Serial is slower but uses less temporary memory.  Parallel
+    * uses 3-5x more memory (or more depending on OMP thread count) for only ~2x speedup.  Default is `ForEachPolicy::SERIAL`.
+    */
+    template<size_t BUFFER_SIZE = 1 << 24>
+    void generate_value_map(ForEachPolicy policy = ForEachPolicy::SERIAL) {
+        _uncovered_values.clear();
+
+        if (policy == ForEachPolicy::SERIAL) {
+            // Just loop through the level map one-by-one.
+            std::vector<T> buffer;
+            buffer.reserve(BUFFER_SIZE);
+            for (const Node<T>* node : _level_map[_level_count]) {
+                // Non-pruned trees have covered nodes in memory.  Check for them.
+                if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+                    continue;
+                }
+                buffer.push_back(node->get_value());
+                if (buffer.size() >= BUFFER_SIZE) {
+                    _uncovered_values.add_many(buffer.size(), buffer.data());
+                    buffer.clear();
+                }
+            }
+            _uncovered_values.add_many(buffer.size(), buffer.data());
+        } else {
+            struct ValueMapTLS {
+                NodeBitmap<T> bitmap;
+                std::vector<T> buffer;
+            };
+            std::vector<ValueMapTLS> tls_vector;
+            tls_vector.resize(omp_get_max_threads());
+            #pragma omp parallel default(none) shared(_level_map, tls_vector)
+            {
+                int my_thread_id = omp_get_thread_num();
+                ValueMapTLS& my_tls = tls_vector[my_thread_id];
+                my_tls.buffer.reserve(BUFFER_SIZE);
+                #pragma omp for
+                for (size_t i = 0; i < _level_map[_level_count].size(); i++) {
+                    my_tls.buffer.push_back(_level_map[_level_count][i]->get_value());
+                    if (my_tls.buffer.size() >= BUFFER_SIZE) {
+                        my_tls.bitmap.add_many(my_tls.buffer.size(), my_tls.buffer.data());
+                        my_tls.buffer.clear();
+                    }
+                }
+                my_tls.bitmap.add_many(my_tls.buffer.size(), my_tls.buffer.data());
+            }
+            // Now merge bitmaps and remaining buffers.
+            for (ValueMapTLS& tls : tls_vector) {
+                _uncovered_values |= tls.bitmap;
+                tls.bitmap.clear();
+                _uncovered_values.add_many(tls.buffer.size(), tls.buffer.data());
+            }
+        }
+
+        // Optimize
+        _uncovered_values.optimize();
     }
 
 };

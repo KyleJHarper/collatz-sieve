@@ -4,7 +4,9 @@
 #include "binary_tree_implicit.hpp"
 #include "binary_tree_types.hpp"
 #include "concepts.hpp"
+#include "for_each.hpp"
 #include "string.hpp"
+#include <atomic>
 #include <stdexcept>
 #include "stream_helper.hpp"
 #include <fstream>
@@ -45,7 +47,7 @@ struct BinaryTreeFileHeader {
     /// @brief Magic bytes.
     const char magic[MAGIC_SIZE] = {'H', 'a', 'r', 'p', 'e', 'r', 'T', 'r', 'e', 'e'}; // "HarperTree"
     /// @brief Version number.  Must change whenever serialization/deserialization changes happen.
-    const uint32_t version = 1;
+    const uint32_t version = 2;
 };
 
 
@@ -189,6 +191,12 @@ class BinaryTree {
     /// @brief Get the number of nodes for a tree of this size.
     /// @note This uses `BinaryTreeMath::st_node_count_of_tree()`.  It does not walk the actual `_impl` or read it in any way.
     T node_count() const { return BinaryTreeMath<T>::st_node_count_of_tree(_impl.get_level_count()); }
+
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    const NodeBitmap<T>& get_uncovered_values() const { return _impl.get_uncovered_values(); }
+    /// @brief Get a read-write reference to the uncovered values map.
+    /// @warning This is intended for serialization/deserilization only.
+    NodeBitmap<T>& get_uncovered_values_rw() { return _impl.get_uncovered_values_rw(); }
 
     /// @}
 
@@ -392,6 +400,11 @@ class BinaryTree {
             }
         }
 
+        // Uncovered Values Bitmap
+        if (! first.get_uncovered_values().equal(second.get_uncovered_values())) {
+            return eq.fail("Value bitmaps mismatch");
+        }
+
         // Implementation-specific checks.
         if (! TreeType::st_equal(first.get_impl(), second.get_impl(), err)) {
             return eq.fail("Implementation-specific details mismatched");
@@ -510,6 +523,11 @@ class BinaryTree {
             if (! ancestor->serialize(out, err)) {
                 return sh.fail("ancestor with value==" + to_string_any(ancestor->get_value()));
             }
+        }
+
+        // Uncovered Values Bitmap
+        if (! get_uncovered_values().serialize(out, err)) {
+            return sh.fail("uncovered values error");
         }
 
         // Implementation-Specific Hook
@@ -673,6 +691,11 @@ class BinaryTree {
             ancestors_rw.push_back(new_node);
         }
 
+        // Uncovered Values Bitmap
+        if (! get_uncovered_values_rw().deserialize(in, err)) {
+            return sh.fail("uncovered values bitmap");
+        }
+
         // Implementation-specific hook
         if (! _impl.deserialize(in, err)) {
             return sh.fail("implementation-specific hook issues");
@@ -832,32 +855,131 @@ class BinaryTree {
 
 
     /**
-    * @brief A for-each emitter/transformer allowing callbacks with thread-local storage for transformation.
+    * @brief Builds a value map as a `NodeBitmap` for iteration later.
+    * @tparam BUFFER_SIZE Controls memory usage of temporary buffers.  Larger values can aid performance at the cost of more memory
+    * and vice-versa.
+    * @param policy The type of `ForEachPolicy` to build the value map.  Serial is slower but uses less temporary memory.  Parallel
+    * uses 3-5x more memory (or more depending on OMP thread count) for only ~2x speedup.  Default is `ForEachPolicy::SERIAL`.
+    */
+    template<size_t BUFFER_SIZE = 1 << 24>
+    void generate_value_map(ForEachPolicy policy = ForEachPolicy::SERIAL) { _impl.template generate_value_map<BUFFER_SIZE>(policy); }
+
+
+
+    /// @brief Clears the value map.  Usually for debugging.
+    void clear_uncovered_values() { _impl.clear_uncovered_values(); }
+
+
+
+    /**
+    * @brief A for-each iterator of all uncovered values allowing callbacks with thread-local storage.
     *
-    * Applies `callback` to all values according to the BitmapTransformerPolicy (serial or parallel) requested.  When serial, order
-    * is guaranteed.
+    * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  Callback must have this
+    * signature: `(const T& value, TLS_Type& tls)`.  The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether
+    * caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting
+    * values for processing and passing them back.
     *
-    * Callback must have this signature: `(const T& value, TLS_Type& tls)`
+    * Callback must return `ForEachSignal::GO` or `ForEachSignal::STOP` to continue or abort processing.
     *
-    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
-    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    * \par Serial and Parallel Processing
+    * When serial, order is guaranteed, and iteration happens sequentially through a CRoaring iterator object.  This is slower than
+    * the parallel method, even when only using 1 thread, therefore parallel is the default.  When parallel, values are returned
+    * according to the `NodeBitmap` internal iteration, which is ultimately barriered on the prefix level.  In other words, the
+    * `#pragma omp for...` only loops over high-low containers.  This means you can be sure all threads are always working within
+    * the same prefix at any given time.  Ergo, if you must stop prematurely, you can be assured all values in the previous prefix
+    * were fully processed.  Only the current prefix might be sparsely processed.
     *
-    * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
+    * @warning Caller may NOT modify this tree while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.
+    *
+    * @note This method is identical between implementations.  Therefore the facade handles it.
     *
     * @tparam Func A function signature defined to match `callback`.
     * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
-    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See node_bitmap_traits.hpp.
-    * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
-    * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
-    * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
+    * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
+    * @param tls A vector to store thread-local data in during callbacks.  This method (or an impl method) WILL call `tls.resize()`
+    * if the number of available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is
+    * given a slice (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
     * @param callback Method to invoke on each value.
+    * @param start Value to start with, helpful for continuation.  This is NOT a guarantee to start at this exact value.  It's a
+    * guarantee to start at or below this value.  This is done by bumping the internal `multiplier` herein so it can avoid an `if`
+    * block inside the hot path, which sometimes affects both compiler and CPU optimizations.
     */
-    // template<typename Func, typename TLS_Type>
-    // void for_each_uncovered_value(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
-    //     // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-    //     static_assert(std::is_invocable_r_v<bool, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
-    // }
+    template<typename Func, typename TLS_Type>
+    void for_each_uncovered_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback, const T start = 0) const {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_invocable_v<Func, const T&, TLS_Type&>, "Callback must be callable with (const T&, TLS_Type&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
+
+        // NodeBitmap handles the tls resizing, so leave it alone here.
+
+        // Pull the impl's reference to uncovered values.
+        const NodeBitmap<T>& uncovered_values = get_uncovered_values();
+
+        // Throw an error if they didn't generate the value map.
+        if (uncovered_values.empty()) {
+            throw std::runtime_error("Value map not generated.  Must call generate_value_map() before iterating this.");
+        }
+
+        // Get the correct scaling factor for the next levels, which is always level_count + 1.
+        const T scaling_factor = BinaryTreeMath<T>::st_scaling_factor(get_level_count() + 1);
+
+        // Create the multiplier to use with the scaling factor, which grows by one with each loop.
+        T multiplier = 1;
+
+        // Bump the multiplier if a start value requires it.  Take the maximum value of the tree and subtract it from the start
+        // value requested, then divide it by the scaling factor to get the mutliplier.
+        if (start > uncovered_values.maximum()) {
+            multiplier += ((start - uncovered_values.maximum()) / scaling_factor);
+        }
+
+        // Hoist the total scaling value.
+        T total_scaling_factor = scaling_factor * multiplier;
+
+        // Loop until the caller is done.
+        std::atomic<ForEachSignal> a_signal = ForEachSignal::CONTINUE;
+        while(a_signal.load(std::memory_order_relaxed) == ForEachSignal::CONTINUE) {
+            // Loop through each position, adjusting it with the total scaling factor before sending it back.
+            uncovered_values.for_each_value_with_tls(policy, tls, [&](const T& value, TLS_Type& my_tls) {
+                if constexpr(FixedWidthIntegral<T>) {
+                    if (callback(total_scaling_factor + value, my_tls) == ForEachSignal::BREAK) {
+                        a_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
+                        return ForEachSignal::BREAK;
+                    }
+                    return ForEachSignal::CONTINUE;
+                } else if constexpr(GMPIntegral<T>) {
+                    static thread_local mpz_class total;
+                    mpz_add(total.get_mpz_t(), value.get_mpz_t(), total_scaling_factor.get_mpz_t());
+                    if (callback(total, my_tls) == ForEachSignal::BREAK) {
+                        a_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
+                        return ForEachSignal::BREAK;
+                    }
+                    return ForEachSignal::CONTINUE;
+                }
+            });
+
+            // Bump the multiplier and scaling factor for the next range of future nodes.
+            multiplier++;
+            total_scaling_factor = scaling_factor * multiplier;
+        }
+    }
+
+
+
+    /// @brief A for-each iterator of all uncovered values.  Wrapper over `for_each_uncovered_value_with_tls`.
+    template<typename Func>
+    void for_each_uncovered_value(ForEachPolicy policy, Func&& callback, const T start = 0) const {
+        // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
+        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&>, ForEachSignal>, "Callback must return ForEachSignal");
+
+        std::vector<uint8_t> dummy_tls;
+        for_each_uncovered_value_with_tls(policy, dummy_tls, [&](const T& value, auto&) {
+            return callback(value);
+        }, start);
+    }
 
 };
 

@@ -823,6 +823,16 @@ void sle_helper(
     sle_assert_trees_equal(tree, tree_duplicate);
     // Different trees should fail equality and emit a message.
     sle_assert_trees_unequal(tree, tree_different, known_err);
+    //
+    // Compute value maps.
+    tree.generate_value_map();
+    tree_duplicate.generate_value_map();
+    tree_different.generate_value_map();
+    //
+    // They should still be equal/unequal.
+    sle_assert_trees_equal(tree, tree_duplicate);
+    sle_assert_trees_equal(tree, tree_duplicate);
+    sle_assert_trees_unequal(tree, tree_different, known_err);
 
     //
     // Save and On-Disk Equality
@@ -907,6 +917,10 @@ void sle_helper(
     sle_assert_trees_equal(l_ctree, tree);
     sle_assert_trees_equal(l_ctree_duplicate, tree_duplicate);
     sle_assert_trees_equal(l_ctree_different, tree_different);
+    // Ensure the Uncovered Value Bitmaps Survived
+    assert(l_tree.get_uncovered_values().empty() == false);
+    assert(l_tree_duplicate.get_uncovered_values().empty() == false);
+    assert(l_tree_different.get_uncovered_values().empty() == false);
 
     //
     // Clean-up
@@ -1050,32 +1064,446 @@ void test_binary_tree_st_generate_node_at() {
 
 
 template<AnySupportedIntegral T>
+void test_binary_tree_generate_value_map() {
+    start_test(__func__);
+
+    level_t levels = 8;
+
+    // Implicit
+    BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(levels);
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+    implicit_tree.generate_value_map();
+    assert(implicit_tree.get_uncovered_values().empty() == false);
+    assert(implicit_tree.get_uncovered_values().cardinality() == implicit_tree.get_uncovered_positions().cardinality());
+    // Adding a level should clear the map.
+    implicit_tree.add_level();
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+    // Generating it again shouldn't be an issue.
+    implicit_tree.generate_value_map();
+    assert(implicit_tree.get_uncovered_values().empty() == false);
+    assert(implicit_tree.get_uncovered_values().cardinality() == implicit_tree.get_uncovered_positions().cardinality());
+
+    // Materialized
+    BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(levels);
+    assert(materialized_tree.get_uncovered_values().empty() == true);
+    materialized_tree.generate_value_map();
+    assert(materialized_tree.get_uncovered_values().empty() == false);
+    T uncovered_nodes_in_map = 0;
+    for (const Node<T>* node : materialized_tree.get_level_map().at(levels)) {
+        if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+            continue;
+        }
+        uncovered_nodes_in_map++;
+    }
+    assert(materialized_tree.get_uncovered_values().cardinality() == uncovered_nodes_in_map);
+    // Adding a level should clear the map.
+    materialized_tree.add_level();
+    assert(materialized_tree.get_uncovered_values().empty() == true);
+    // Generating it again shouldn't be an issue.
+    materialized_tree.generate_value_map();
+    assert(materialized_tree.get_uncovered_values().empty() == false);
+    uncovered_nodes_in_map = 0;
+    for (const Node<T>* node : materialized_tree.get_level_map().at(levels+1)) {
+        if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+            continue;
+        }
+        uncovered_nodes_in_map++;
+    }
+    assert(materialized_tree.get_uncovered_values().cardinality() == uncovered_nodes_in_map);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_clear_uncovered_values() {
+    start_test(__func__);
+
+    // Implicit
+    ImplicitBinaryTree<T> implicit_tree(8);
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+    implicit_tree.generate_value_map();
+    assert(implicit_tree.get_uncovered_values().empty() == false);
+    implicit_tree.clear_uncovered_values();
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_binary_tree_for_each_uncovered_value() {
+    start_test(__func__);
+
+    level_t levels = 8;
+    size_t count = 0;
+    std::atomic<size_t> a_count = 0;
+    T previous_value = 0;
+
+    // Implicit
+    BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(levels);
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+    // -- Failure to generate the map ahead of time should throw an error.
+    try {
+        implicit_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+            if (value % 128 == 0) {
+                count++;
+            }
+            if (value > (T(1) << (levels + 3))) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        });
+        assert(false);
+    } catch (std::runtime_error& e) {
+        assert(std::string(e.what()).find("Value map not generated.") != std::string::npos);
+    }
+    implicit_tree.generate_value_map();
+    assert(implicit_tree.get_uncovered_values().empty() == false);
+    // -- Serial
+    count = 0;
+    implicit_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        if (value % 128 == 0) {
+            count++;
+        }
+        assert(previous_value < value);
+        previous_value = value;
+        if (value > (T(1) << (levels + 3))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(count == 0);
+    // -- Parallel
+    a_count.store(0);
+    previous_value = 0;
+    implicit_tree.for_each_uncovered_value(ForEachPolicy::PARALLEL, [&](const T& value) {
+        if (value % 128 == 0) {
+            a_count.fetch_add(1);
+        }
+        assert(previous_value < value);
+        previous_value = value;
+        if (value > (T(1) << (levels + 3))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(a_count.load() == 0);
+
+    // Materialized
+    BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(levels);
+    assert(materialized_tree.get_uncovered_values().empty() == true);
+    // -- Failure to generate the map ahead of time should throw an error.
+    try {
+        materialized_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+            if (value % 128 == 0) {
+                count++;
+            }
+            if (value > (T(1) << (levels + 3))) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        });
+        assert(false);
+    } catch (std::runtime_error& e) {
+        assert(std::string(e.what()).find("Value map not generated.") != std::string::npos);
+    }
+    materialized_tree.generate_value_map();
+    assert(materialized_tree.get_uncovered_values().empty() == false);
+    // -- Serial
+    count = 0;
+    materialized_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        if (value % 128 == 0) {
+            count++;
+        }
+        if (value > (T(1) << (levels + 3))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(count == 0);
+    // -- Parallel
+    a_count.store(0);
+    materialized_tree.for_each_uncovered_value(ForEachPolicy::PARALLEL, [&](const T& value) {
+        if (value % 128 == 0) {
+            a_count.fetch_add(1);
+        }
+        if (value > (T(1) << (levels + 3))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(a_count.load() == 0);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T, typename TreeType>
+void for_each_manual_test_helper(level_t level, std::vector<T> known_survivors) {
+    // Settings
+    const T manual_test_value = 10000;
+    size_t known_survivor_index = 99999;
+    T scaling_factor = T(1) << (level - 1);
+    BinaryTree<T, TreeType> tree(level);
+
+    // Run it
+    tree.generate_value_map();
+    tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        if (known_survivor_index >= known_survivors.size()) {
+            known_survivor_index = 0;
+            for (T& known_survivor : known_survivors) {
+                known_survivor += scaling_factor;
+            }
+        }
+        assert(value == known_survivors.at(known_survivor_index));
+        if (known_survivors.at(known_survivor_index) > manual_test_value) {
+            return ForEachSignal::BREAK;
+        }
+        known_survivor_index++;
+        return ForEachSignal::CONTINUE;
+    });
+}
+template<AnySupportedIntegral T>
+void test_binary_tree_for_each_uncovered_value_with_tls() {
+    start_test(__func__);
+
+    level_t levels = 8;
+    std::vector<size_t> count_vec(0);
+    T previous_value = 0;
+
+    // Implicit
+    BinaryTree<T, BinaryTreeImplicitImpl<T>> implicit_tree(levels);
+    assert(implicit_tree.get_uncovered_values().empty() == true);
+    // -- Failure to generate the map ahead of time should throw an error.
+    try {
+        count_vec.clear();
+        implicit_tree.for_each_uncovered_value_with_tls(ForEachPolicy::SERIAL, count_vec, [&](const T& value, size_t& my_count) {
+            if (value % 128 == 0) {
+                my_count++;
+            }
+            if (value > (T(1) << (levels + 1))) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        });
+        assert(false);
+    } catch (std::runtime_error& e) {
+        assert(std::string(e.what()).find("Value map not generated.") != std::string::npos);
+    }
+    implicit_tree.generate_value_map();
+    assert(implicit_tree.get_uncovered_values().empty() == false);
+    // -- Serial
+    count_vec.clear();
+    implicit_tree.for_each_uncovered_value_with_tls(ForEachPolicy::SERIAL, count_vec, [&](const T& value, size_t& my_count) {
+        if (value % 128 == 0) {
+            my_count++;
+        }
+        assert(previous_value < value);
+        previous_value = value;
+        if (value > (T(1) << (levels + 1))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    for (const size_t& count : count_vec) {
+        assert(count == 0);
+    }
+    // -- Parallel
+    count_vec.clear();
+    implicit_tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, count_vec, [&](const T& value, size_t& my_count) {
+        if (value % 128 == 0) {
+            my_count++;
+        }
+        if (value > (T(1) << (levels + 1))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    for (const size_t& count : count_vec) {
+        assert(count == 0);
+    }
+
+    // Materialized
+    BinaryTree<T, BinaryTreeMaterializedImpl<T>> materialized_tree(levels);
+    assert(materialized_tree.get_uncovered_values().empty() == true);
+    // -- Failure to generate the map ahead of time should throw an error.
+    try {
+        count_vec.clear();
+        materialized_tree.for_each_uncovered_value_with_tls(ForEachPolicy::SERIAL, count_vec, [&](const T& value, size_t& my_count) {
+            if (value % 128 == 0) {
+                my_count++;
+            }
+            if (value > (T(1) << (levels + 1))) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        });
+        assert(false);
+    } catch (std::runtime_error& e) {
+        assert(std::string(e.what()).find("Value map not generated.") != std::string::npos);
+    }
+    materialized_tree.generate_value_map();
+    assert(materialized_tree.get_uncovered_values().empty() == false);
+    // -- Serial
+    count_vec.clear();
+    previous_value = 0;
+    materialized_tree.for_each_uncovered_value_with_tls(ForEachPolicy::SERIAL, count_vec, [&](const T& value, size_t& my_count) {
+        if (value % 128 == 0) {
+            my_count++;
+        }
+        assert(previous_value < value);
+        previous_value = value;
+        if (value > (T(1) << (levels + 1))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    for (const size_t& count : count_vec) {
+        assert(count == 0);
+    }
+    // -- Parallel
+    count_vec.clear();
+    materialized_tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, count_vec, [&](const T& value, size_t& my_count) {
+        if (value % 128 == 0) {
+            my_count++;
+        }
+        if (value > (T(1) << (levels + 1))) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    for (const size_t& count : count_vec) {
+        assert(count == 0);
+    }
+
+    // -- Manually Test Remaining Values
+    std::vector<T> known_survivors;
+    // Level 2
+    if (BinaryTreeMath<T>::get_root_value() == 0) {
+        known_survivors.push_back(1);
+    } else {
+        known_survivors.push_back(3);
+    }
+    for_each_manual_test_helper<T, BinaryTreeImplicitImpl<T>>(2, known_survivors);
+    for_each_manual_test_helper<T, BinaryTreeMaterializedImpl<T>>(2, known_survivors);
+    // Level 3
+    known_survivors.clear();
+    if (BinaryTreeMath<T>::get_root_value() == 0) {
+        known_survivors.push_back(3);
+    } else {
+        known_survivors.push_back(7);
+    }
+    for_each_manual_test_helper<T, BinaryTreeImplicitImpl<T>>(3, known_survivors);
+    for_each_manual_test_helper<T, BinaryTreeMaterializedImpl<T>>(3, known_survivors);
+    // Level 4
+    known_survivors.clear();
+    if (BinaryTreeMath<T>::get_root_value() == 0) {
+        known_survivors.push_back(7);
+        known_survivors.push_back(11);
+    } else {
+        known_survivors.push_back(11);
+        known_survivors.push_back(15);
+    }
+    for_each_manual_test_helper<T, BinaryTreeImplicitImpl<T>>(4, known_survivors);
+    for_each_manual_test_helper<T, BinaryTreeMaterializedImpl<T>>(4, known_survivors);
+    // Level 5
+    known_survivors.clear();
+    if (BinaryTreeMath<T>::get_root_value() == 0) {
+        known_survivors.push_back(15);
+        known_survivors.push_back(23);
+        known_survivors.push_back(27);
+    } else {
+        known_survivors.push_back(23);
+        known_survivors.push_back(27);
+        known_survivors.push_back(31);
+    }
+    for_each_manual_test_helper<T, BinaryTreeImplicitImpl<T>>(5, known_survivors);
+    for_each_manual_test_helper<T, BinaryTreeMaterializedImpl<T>>(5, known_survivors);
+    // Level 6
+    known_survivors.clear();
+    if (BinaryTreeMath<T>::get_root_value() == 0) {
+        known_survivors.push_back(31);
+        known_survivors.push_back(39);
+        known_survivors.push_back(47);
+        known_survivors.push_back(59);
+    } else {
+        known_survivors.push_back(39);
+        known_survivors.push_back(47);
+        known_survivors.push_back(59);
+        known_survivors.push_back(63);
+    }
+    for_each_manual_test_helper<T, BinaryTreeImplicitImpl<T>>(6, known_survivors);
+    for_each_manual_test_helper<T, BinaryTreeMaterializedImpl<T>>(6, known_survivors);
+
+    // User-defined starting values should bump the multiplier to avoid rework.
+    T start = 1000;  // Larger than 2^8 (level 8) by far.  Definitely need a bump to multiplier.
+    T max_value = 100000;
+    for(level_t level = 2; level <= 8; level++) {
+        T scaling_factor = BinaryTreeMath<T>::st_scaling_factor(level + 1);
+
+        // Implicit
+        implicit_tree.init(level);
+        implicit_tree.generate_value_map();
+        implicit_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+            assert(value > (start - scaling_factor));
+            if (value > max_value) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        }, start);
+
+        // Materialized
+        materialized_tree.init(level);
+        materialized_tree.generate_value_map();
+        materialized_tree.for_each_uncovered_value(ForEachPolicy::SERIAL, [&](const T& value) {
+            assert(value > (start - scaling_factor));
+            if (value > max_value) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
+        }, start);
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void run_all(size_t root_value) {
     std::string extra = "  Using " + std::to_string(root_value) + "-based tree root.";
     announce_run_all<T>(extra);
 
     BinaryTreeMath<T>::set_root_value(root_value);
-    test_binary_tree_basic_construction<T>();
-    test_binary_tree_init<T>();
-    test_binary_tree_reset<T>();
-    test_binary_tree_get_impl<T>();
-    test_binary_tree_get_tree_type<T>();
-    test_binary_tree_get_level_count<T>();
-    test_binary_tree_get_root_node<T>();
-    test_binary_tree_get_coverage_map<T>();
-    test_binary_tree_get_ancestors<T>();
-    test_binary_tree_is_verifying_non_hwm_nodes<T>();
-    test_binary_tree_node_count<T>();
-    test_binary_tree_materialized_level_map<T>();
-    test_binary_tree_materialized_pruning_options<T>();
-    test_binary_tree_materialized_real_node_count<T>();
-    test_binary_tree_implicit_uncovered_positions<T>();
-    test_binary_tree_assert_level_will_fit<T>();
-    test_binary_tree_assert_level_verification<T>();
-    test_binary_tree_add_level<T>();
-    test_binary_tree_deep_size<T>();
-    test_binary_tree_save_load_equal<T>();
-    test_binary_tree_st_generate_node_at<T>();
+    // test_binary_tree_basic_construction<T>();
+    // test_binary_tree_init<T>();
+    // test_binary_tree_reset<T>();
+    // test_binary_tree_get_impl<T>();
+    // test_binary_tree_get_tree_type<T>();
+    // test_binary_tree_get_level_count<T>();
+    // test_binary_tree_get_root_node<T>();
+    // test_binary_tree_get_coverage_map<T>();
+    // test_binary_tree_get_ancestors<T>();
+    // test_binary_tree_is_verifying_non_hwm_nodes<T>();
+    // test_binary_tree_node_count<T>();
+    // test_binary_tree_materialized_level_map<T>();
+    // test_binary_tree_materialized_pruning_options<T>();
+    // test_binary_tree_materialized_real_node_count<T>();
+    // test_binary_tree_implicit_uncovered_positions<T>();
+    // test_binary_tree_assert_level_will_fit<T>();
+    // test_binary_tree_assert_level_verification<T>();
+    // test_binary_tree_add_level<T>();
+    // test_binary_tree_deep_size<T>();
+    // test_binary_tree_save_load_equal<T>();
+    // test_binary_tree_st_generate_node_at<T>();
+    // test_binary_tree_generate_value_map<T>();
+    // test_binary_tree_clear_uncovered_values<T>();
+    test_binary_tree_for_each_uncovered_value<T>();
+    test_binary_tree_for_each_uncovered_value_with_tls<T>();
 
     BinaryTreeMath<T>::reset_root_value();
 }

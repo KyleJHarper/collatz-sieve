@@ -10,13 +10,16 @@
 #include <absl/container/flat_hash_map.h>
 #include <atomic>
 #include <gmp.h>
+#include <limits>
 #include <omp.h>
 #include <roaring/roaring.hh>
+#include <stdexcept>
 #include <string>
+#include <tbb/parallel_sort.h>
 #include "gmp.hpp"
 #include "stream_helper.hpp"
 #include "equality_helper.hpp"
-#include "for_each_policy.hpp"
+#include "for_each.hpp"
 
 
 
@@ -126,6 +129,13 @@ class FlatHashBitmapImpl {
 
 
 
+    /// @brief Tests a key for presence.  Returns true if found, false otherwise.
+    void has_prefix_key(const prefix_t& prefix) const {
+        return std::binary_search(_sorted_prefixes.begin(), _sorted_prefixes.end(), prefix);
+    }
+
+
+
     /// @brief Add a value to the bitmap.
     void add(const T& value) {
         // Prefix can be mpz_class, so use TLS and out&.
@@ -217,6 +227,88 @@ class FlatHashBitmapImpl {
 
 
     /**
+    * @brief Adds many sparse values at once.  May span prefixes.  Order not required.  Impl will sort for you.
+    * @param count The number of elements of type `T` in `values`.
+    * @param values The memory location with values to add.
+    */
+    void add_many(const size_t count, T* values) {
+        // Safety check.
+        if (count < 1) {
+            return;
+        }
+
+        // Sort the values.
+        T* end = values + count;
+        if (count < 100000) {
+            std::sort(values, end);
+        } else {
+            tbb::parallel_sort(values, end);
+        }
+
+        // Loop through the values one time, bumping the prefix only when a change is needed.
+        // By computing the prefix's max value, it can be compared in the loop instead of extracting each value's prefix.
+        prefix_t current_prefix = Traits::get_prefix(values[0]);
+        T prefix_max_value = (static_cast<T>(current_prefix + 1) << Traits::SUFFIX_BITS) - 1;
+        if constexpr(FixedWidthIntegral<T>) {
+            if (current_prefix == std::numeric_limits<prefix_t>::max()) {
+                prefix_max_value = std::numeric_limits<T>::max();
+            }
+        }
+        const size_t BUFFER_SIZE = size_t(1) << 16;  // 64K * sizeof()
+        std::vector<suffix_t> suffixes;
+        suffixes.reserve(BUFFER_SIZE);
+        for(const T* value = values; value < end; value++) {
+            // Bump the prefix if necessary.  Must flush too.
+            if (*value > prefix_max_value) {
+                // Must flush the current buffer due to new prefix.
+                add_many_with_prefix(current_prefix, suffixes.size(), suffixes.data());
+                suffixes.clear();
+
+                // Create new prefix and max value.
+                current_prefix = Traits::get_prefix(*value);
+                prefix_max_value = (static_cast<T>(current_prefix + 1) << Traits::SUFFIX_BITS) - 1;
+                if constexpr(FixedWidthIntegral<T>) {
+                    if (current_prefix == std::numeric_limits<prefix_t>::max()) {
+                        prefix_max_value = std::numeric_limits<T>::max();
+                    }
+                }
+            }
+
+            // Add the suffix to the buffer.
+            suffixes.push_back(Traits::get_suffix(*value));
+
+            // Flush if necessary.
+            if (suffixes.size() >= suffixes.capacity()) {
+                add_many_with_prefix(current_prefix, suffixes.size(), suffixes.data());
+                suffixes.clear();
+            }
+        }
+
+        // Flush the remaining buffer, if it has any data.
+        if (suffixes.empty() == false) {
+            add_many_with_prefix(current_prefix, suffixes.size(), suffixes.data());
+            suffixes.clear();
+        }
+    }
+
+
+
+    /**
+    * @brief Adds all `suffixes` to the bitmap matching a given prefix.  Will add the prefix if it's missing.
+    * @param prefix The prefix to look up a roaring map for insertion.
+    * @param suffixes A memory location of suffixes to add to the roaring bitmap.
+    */
+    void add_many_with_prefix(const prefix_t& prefix, const size_t count, const suffix_t* suffixes) {
+        auto [it, inserted] = _flat_map.try_emplace(prefix);
+        if (inserted) {
+            add_prefix_key(prefix);
+        }
+        it->second.addMany(count, suffixes);
+    }
+
+
+
+    /**
     * @brief Check for a value to exist (be "on") in the bitmap.
     * @param value The value to search for.
     * @return True if present ("on"), false otherwise.
@@ -268,6 +360,66 @@ class FlatHashBitmapImpl {
 
 
 
+    /// @brief Returns the smallest value in the NodeBitmap.  Throws exception if empty.
+    T minimum() const {
+        if (empty()) {
+            throw std::out_of_range("Cannot request NodeBitmap minimum() when the bitmap is empty.");
+        }
+
+        // Since prefixes are sorted, the first one has the lowest values.
+        const prefix_t& prefix = _sorted_prefixes.front();
+        const roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
+
+        // Shift and return the minimum.  When T is small, prefix is nada.
+        T value = 0;
+        if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
+            if constexpr(FixedWidthIntegral<T>) {
+                value = (static_cast<T>(prefix) << Traits::SUFFIX_BITS) + roaring_obj.minimum();
+            } else if constexpr(GMPIntegral<T>) {
+                mpz_mul_2exp(value.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), roaring_obj.minimum());
+            }
+        } else {
+            // T is smaller than suffix_t, which means the only prefix it'll ever have is 0.
+            // Set it manually, because small-T means it can't shift SUFFIX_BITS wide.
+            value = 0 + roaring_obj.minimum();
+        }
+
+        return value;
+    }
+
+
+
+    /// @brief Returns the largest value in the NodeBitmap.  Throws exception if empty.
+    T maximum() const {
+        if (empty()) {
+            throw std::out_of_range("Cannot request NodeBitmap maximum() when the bitmap is empty.");
+        }
+
+        // Since prefixes are sorted, the last one has the highest values.
+        const prefix_t& prefix = _sorted_prefixes.back();
+        const roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
+
+        // Shift and return the minimum.  When T is small, prefix is nada.
+        T value = 0;
+        if constexpr(sizeof(T) > Traits::SUFFIX_BYTES) {
+            if constexpr(FixedWidthIntegral<T>) {
+                value = (static_cast<T>(prefix) << Traits::SUFFIX_BITS) + roaring_obj.maximum();
+            } else if constexpr(GMPIntegral<T>) {
+                mpz_mul_2exp(value.get_mpz_t(), prefix.get_mpz_t(), Traits::SUFFIX_BITS);
+                mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), roaring_obj.maximum());
+            }
+        } else {
+            // T is smaller than suffix_t, which means the only prefix it'll ever have is 0.
+            // Set it manually, because small-T means it can't shift SUFFIX_BITS wide.
+            value = 0 + roaring_obj.maximum();
+        }
+
+        return value;
+    }
+
+
+
     /**
     * @brief Calculate the cardinality (count) of nodes turned "on".
     * @return The count of "on" nodes, typed to caller's `T`.
@@ -282,6 +434,15 @@ class FlatHashBitmapImpl {
             }
         }
         return total;
+    }
+
+
+
+    /// @brief Returns true if the bitmap is empty, false otherwise.
+    bool empty() const {
+        // Can't have a single value unless we have a prefix, and can't have a prefix without at least one value.  Use it.
+        // This provides a high-speed method of "is it empty?".
+        return _sorted_prefixes.empty();
     }
 
 
@@ -548,11 +709,11 @@ class FlatHashBitmapImpl {
 
 
     /**
-    * @brief A for-each wrapper returning each value in the bitmap to `callback`.
+    * @brief A for-each iterator returning each value in the bitmap to `callback`.
     *
     * This method uses `for_each_value_with_tls` when TLS storage isn't needed.  It applies `callback` to all values.
     *
-    * Callback must have this signature: `(const T& value)`
+    * Callback must have this signature: `(const T& value)`  Return type must be `ForEachSignal`.
     *
     * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
     * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
@@ -562,12 +723,15 @@ class FlatHashBitmapImpl {
     *
     * @tparam Func A function signature defined to match `callback`.
     * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
-    * @param callback Method to invoke on each value.
+    * @param callback Method to invoke on each value.  Must return a `ForEachSignal`.
     */
     template<typename Func>
-    void for_each_value(ForEachPolicy policy, Func&& callback) {
+    void for_each_value(ForEachPolicy policy, Func&& callback) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
         static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&>, ForEachSignal>, "Callback must return ForEachSignal");
+
         std::vector<uint8_t> dummy_tls;
         for_each_value_with_tls(policy, dummy_tls, [&](const T& value, auto&) {
             return callback(value);
@@ -582,7 +746,7 @@ class FlatHashBitmapImpl {
     * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  When serial, order is
     * guaranteed.
     *
-    * Callback must have this signature: `(const T& value, TLS_Type& tls)`
+    * Callback must have this signature: `(const T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
     *
     * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
     * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
@@ -596,12 +760,14 @@ class FlatHashBitmapImpl {
     * @param tls A vector to store thread-local data in during callbacks.  This method WILL call `tls.resize()` if the number of
     * available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is given a slice
     * (indexed element) of that vector.  This storage may be modified at-will in caller's `callback`.
-    * @param callback Method to invoke on each value.
+    * @param callback Method to invoke on each value.  Must return a `ForEachSignal`.
     */
     template<typename Func, typename TLS_Type>
-    void for_each_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) {
+    void for_each_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_r_v<bool, Func, const T&, TLS_Type&>, "Callback must be callable as void(const T&, TLS_Type&)");
+        static_assert(std::is_invocable_v<Func, const T&, TLS_Type&>, "Callback must be callable with (const T&, TLS_Type&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // Ensure the TLS has enough elements before proceeding.
         const size_t max_threads = policy == ForEachPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());
@@ -610,8 +776,8 @@ class FlatHashBitmapImpl {
         }
 
         // Setup a control-stop.
-        std::atomic<bool> atomic_stop = false;
-        bool stop;
+        std::atomic<ForEachSignal> atomic_signal = ForEachSignal::CONTINUE;
+        ForEachSignal signal = ForEachSignal::CONTINUE;
 
         // Process according to policy.
         if (policy == ForEachPolicy::SERIAL) {
@@ -646,7 +812,7 @@ class FlatHashBitmapImpl {
                 }
 
                 // Find the bitmap and connect an iterator.
-                roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
+                const roaring::Roaring& roaring_obj = _flat_map.find(prefix)->second;
                 roaring::api::roaring_uint32_iterator_t bitmap_iterator;
                 roaring::api::roaring_iterator_init(&roaring_obj.roaring, &bitmap_iterator);
 
@@ -658,13 +824,13 @@ class FlatHashBitmapImpl {
                     } else if constexpr(GMPIntegral<T>) {
                         mpz_add_ui(value.get_mpz_t(), shifted_prefix.get_mpz_t(), suffix);
                     }
-                    stop = callback(value, my_tls);
-                    if (stop) { break; }
+                    signal = callback(value, my_tls);
+                    if (signal == ForEachSignal::BREAK) { break; }
                     roaring::api::roaring_uint32_iterator_advance(&bitmap_iterator);
                 }
 
                 // If stopping, break from the prefix for() loop too.
-                if (stop) { break; }
+                if (signal == ForEachSignal::BREAK) { break; }
             }
         } else {
             // Parallel Path
@@ -676,7 +842,7 @@ class FlatHashBitmapImpl {
             // As such, this will read the internal high-low containers and iterate based on their type (array, bitmap, RLE).
 
             // Open the parallel region early and establish thread-locals.
-            #pragma omp parallel default(none) shared(tls, atomic_stop, callback)
+            #pragma omp parallel default(none) shared(tls, atomic_signal, callback)
             {
                 // Get a thread ID.
                 size_t my_thread_id = static_cast<size_t>(omp_get_thread_num());
@@ -685,7 +851,7 @@ class FlatHashBitmapImpl {
                 TLS_Type& my_tls = tls[my_thread_id];
 
                 // Track a local-stop.
-                bool local_stop = false;
+                ForEachSignal local_signal = ForEachSignal::CONTINUE;
 
                 // Hoist a few locals to avoid lots of potential alloc on GMP path.
                 T value;
@@ -694,9 +860,7 @@ class FlatHashBitmapImpl {
 
                 // Loop through prefixes.
                 for (size_t prefix_index = 0; prefix_index < _sorted_prefixes.size(); prefix_index++) {
-                    // Stop if needed.
-                    if (atomic_stop.load(std::memory_order_relaxed)) { continue; }
-
+                    // Do not test for atomic signal here.  Doing so before an OMP-for region is a race condition.
                     // Grab the prefix and then build a shifted_prefix so it isn't recomputed.
                     const prefix_t& prefix = _sorted_prefixes[prefix_index];
                     // Shift the prefix once instead of deeper inside the while()/for() loops.  For smaller types, set to 0.
@@ -726,7 +890,7 @@ class FlatHashBitmapImpl {
                     #pragma omp for schedule(dynamic)
                     for (int high_low_index = 0; high_low_index < high_low_container->size; high_low_index++) {
                         // Check for stop again at the chunk level.
-                        if (atomic_stop.load(std::memory_order_relaxed)) { continue; }
+                        if (atomic_signal.load(std::memory_order_relaxed) == ForEachSignal::BREAK) { continue; }
 
                         // Grab the roaring key, the container, and type code.
                         roaring_key_t suffix_key = high_low_container__keys[high_low_index];
@@ -756,9 +920,9 @@ class FlatHashBitmapImpl {
                                     } else if constexpr(GMPIntegral<T>) {
                                         mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                     }
-                                    local_stop = callback(value, my_tls);
-                                    if (local_stop) {
-                                        atomic_stop.store(true, std::memory_order_relaxed);
+                                    local_signal = callback(value, my_tls);
+                                    if (local_signal == ForEachSignal::BREAK) {
+                                        atomic_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                                         break;
                                     }
                                 }
@@ -780,9 +944,9 @@ class FlatHashBitmapImpl {
                                         } else if constexpr(GMPIntegral<T>) {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        local_stop = callback(value, my_tls);
-                                        if (local_stop) {
-                                            atomic_stop.store(true, std::memory_order_relaxed);
+                                        local_signal = callback(value, my_tls);
+                                        if (local_signal == ForEachSignal::BREAK) {
+                                            atomic_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                                             break;
                                         }
                                         // Now bitwise-AND the word minus one to wipe out the least-significant 1s place which was just processed.
@@ -804,9 +968,9 @@ class FlatHashBitmapImpl {
                                         } else if constexpr(GMPIntegral<T>) {
                                             mpz_add_ui(value.get_mpz_t(), shifted_prefix_and_key.get_mpz_t(), suffix_val);
                                         }
-                                        local_stop = callback(value, my_tls);
-                                        if (local_stop) {
-                                            atomic_stop.store(true, std::memory_order_relaxed);
+                                        local_signal = callback(value, my_tls);
+                                        if (local_signal == ForEachSignal::BREAK) {
+                                            atomic_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                                             break;
                                         }
                                     }

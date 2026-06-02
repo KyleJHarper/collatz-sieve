@@ -205,7 +205,7 @@ set(TESTS
     collatz
     equality_helper
     exponents
-    for_each_policy
+    for_each
     gmp
     int128
     node_bitmap_traits

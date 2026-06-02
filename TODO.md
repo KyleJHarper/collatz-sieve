@@ -1,19 +1,8 @@
 # Current Work
 
-## Memory Reduction (Again)
-* The FlatHashBitmapImpl is nice, but still ends up using 1GB @ level 40 and grows to 8-10GB by level 44/45.
-* We should analyze how much memory is being used by each type; heaptrack or similar.
-* * If it's CRoaring, are we building too-sparse bitmaps?
-* * If it's prefix count, can we reduce this with a non-vector type (so it doesn't double memory)?
-* * If it's absl::flat_hash_map, do we have options?
-* Consider other ways to represent positions without explicit tracking of ALL positions in a bitmap.
-* * Do NOT going down a rabbit hole of RLE/Delta/Etc.  Roaring already does this.
-* Maybe just translate the final set into a tighter object for iterating through?
-* There are 91,690,000 (91.7M) surviving positions at level 33.  There are 7.6B at level 40.
-
 ## Type Promotion and Demotion
 * Can we get type promotion of a tree, either at runtime or via save/load?
-* * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
+  * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
 * This should be doable if we emit a "typecode".  1+ == sizeof().  0 == mpz (or 255 == mpz, leaving room for 254 == some other arbitrary type).
 * Add type check to ensure target T can handle the number of levels.
 

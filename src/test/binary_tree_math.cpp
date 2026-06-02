@@ -499,7 +499,7 @@ void test_binary_tree_math_st_floor_log2() {
 
 
 template<AnySupportedIntegral T>
-void test_binary_tree_math_st_step() {
+void test_binary_tree_math_st_scaling_factor() {
     start_test(__func__);
 
     // Pick a max level by type.
@@ -508,9 +508,16 @@ void test_binary_tree_math_st_step() {
         max_levels = 256;
     }
 
-    // Test them.
-    for (level_t level = 1; level <= max_levels; level++) {
-        assert(BinaryTreeMath<T>::st_step(level) == (T(1) << (level - 1)));
+    // Test them.  Level 1 should fail.
+    try {
+        T junk = BinaryTreeMath<T>::st_scaling_factor(1);
+        assert(false);
+        junk++;
+    } catch (std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot request a scaling factor for levels below 2.") != std::string::npos);
+    }
+    for (level_t level = 2; level <= max_levels; level++) {
+        assert(BinaryTreeMath<T>::st_scaling_factor(level) == (T(1) << (level - 2)));
     }
 
     end_test();
@@ -536,7 +543,7 @@ void run_all() {
     test_binary_tree_math_st_node_position<T>();
     test_binary_tree_math_st_fg_chain_length<T>();
     test_binary_tree_math_st_floor_log2<T>();
-    test_binary_tree_math_st_step<T>();
+    test_binary_tree_math_st_scaling_factor<T>();
 }
 
 

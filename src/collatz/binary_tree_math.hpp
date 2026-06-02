@@ -693,25 +693,97 @@ class BinaryTreeMath {
 
 
     /**
-    * @brief The magnitude of value to add to a child based on its parent's level.
+    * @brief The magnitude (scaling factor `s_L`) between a parent's value and child values.
     *
-    * The binary tree used assigns child values by a scaling factor (step), not just `2n` and `2n+1` like a sequentially labeled
-    * tree.  This method helps compute that step value.
+    * The binary tree assigns child values by a scaling factor (step), not just `2n` and `2n+1` like a sequentially labeled tree.
+    * This method helps compute that scaled value to creata `parent + scaling_factor` and `parent + 2 * scaling_factor` for the
+    * children.  This also means siblings are separated by `s_L` too.
     *
     * \par Formula
-    * \f$ 2^{level-1} \f$
+    * \f$ 2^{(level-2)} \f$
     *
-    * @param level The parent level who will be building children.
-    * @return The scaled step value to apply to child values, typed to `T`.
+    * @param level The level of consideration.  When building children, it's the child's level, not the parent's.
+    * @return The scaled value (step) value to apply to child values, typed to `T`.
     */
-    static inline T st_step(level_t level) {
-        static thread_local T step;
-        if constexpr(FixedWidthIntegral<T>) {
-            step = T(1) << (level - 1);
-        } else if constexpr(GMPIntegral<T>) {
-            mpz_pow_ui(step.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 1));
+    static inline T st_scaling_factor(level_t level) {
+        if (level < 2) {
+            throw std::out_of_range("Cannot request a scaling factor for levels below 2.");
         }
-        return step;
+
+        if constexpr(FixedWidthIntegral<T>) {
+            return T(1) << (level - 2);
+        } else if constexpr(GMPIntegral<T>) {
+            static thread_local T scaling_factor;
+            mpz_pow_ui(scaling_factor.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (level - 2));
+            return scaling_factor;
+        }
+    }
+
+
+
+    /**
+    * @brief The cumulative magnitude required to scale a parent node `N` to its descendants on the target level.
+    *
+    * When a given node `N` is singled out, it creates a subtree.  To find all the leaf nodes on level `L` that are rooted by node
+    * `N`, three things are required:
+    *
+    * 1. The cumulative magnitude to reach the smallest leaf node.  This function provides that.
+    * 2. The scaling factor to iterate over leaf nodes in order.  The `st_scaling_factor()` provides that.
+    * 3. The number of leaf nodes, which is simply 2^(target_level - base_level)
+    *
+    * Therefore, this function let's you find all the first (smallest) values of the leaf nodes on a `target_level` of any position
+    * on `base_level`.  From there, you simply iterate by the scaling factor.
+    *
+    * \par Formula
+    * \f$ 2^{(target\_level - 1)} - 2^{(base\_level - 1)} \f$
+    *
+    * @note This function is used with node VALUES, not POSITIONS.  Position arithmetic differs.
+    * @param base_level The level to start from (where the parent node resides).
+    * @param target_level The level to end at, where leaf nodes reside.
+    * @return The cumulative scaling factor typed to `T`.
+    */
+    static inline T st_scaling_factor_cumulative(level_t base_level, level_t target_level) {
+        if (target_level <= base_level) {
+            throw std::out_of_range("Cannot scale a position negatively or to the same level.");
+        }
+
+        if constexpr(FixedWidthIntegral<T>) {
+            return (T(1) << (target_level - 1)) - (T(1) << (base_level - 1));
+        } else if constexpr(GMPIntegral<T>) {
+            static thread_local T scaling_factor;
+            static thread_local T base_scaling_factor;
+            mpz_pow_ui(scaling_factor.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (target_level - 1));
+            mpz_pow_ui(base_scaling_factor.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (base_level - 1));
+            mpz_sub(scaling_factor.get_mpz_t(), scaling_factor.get_mpz_t(), base_scaling_factor.get_mpz_t());
+            return scaling_factor;
+        }
+    }
+
+
+
+    /**
+    * @brief Calculate the number of nodes a parent node will have on a target level.
+    *
+    * \par Formula
+    * \f$ 2^{(target\_level - base_level)} \f$
+    *
+    * @note This is NOT the cumulative count of the subtree for a parent nodes.
+    * @param base_level The level to start from (where the parent node resides).
+    * @param target_level The level to end at, where leaf nodes reside.
+    * @return The number of nodes a parent will have on a target level.
+    */
+    static inline T st_child_count_at_target_level(level_t parent_level, level_t target_level) {
+        if (target_level <= parent_level) {
+            throw std::out_of_range("Cannot count children at a level equal to or higher than the parent.");
+        }
+
+        if constexpr(FixedWidthIntegral<T>) {
+            return T(1) << (target_level - parent_level);
+        } else if constexpr(GMPIntegral<T>) {
+            static thread_local T child_count;
+            mpz_pow_ui(child_count.get_mpz_t(), CollatzConstants::MPZ_TWO.get_mpz_t(), (target_level - 1));
+            return child_count;
+        }
     }
 
 };

@@ -9,7 +9,7 @@
 #include "binary_tree_options.hpp"
 #include "binary_tree_types.hpp"
 #include "node_bitmap.hpp"
-#include "node_bitmap_traits.hpp"
+#include "for_each.hpp"
 #include "equality_helper.hpp"
 #include "stream_helper.hpp"
 #include <tbb/parallel_sort.h>
@@ -42,6 +42,8 @@ class BinaryTreeImplicitImpl {
     level_t _level_count = 0;
     /// @brief Bitmap containing a list of all positions still not covered.
     NodeBitmap<T> _uncovered_positions;
+    /// @brief Bitmap containing a list of all values still not covered.
+    NodeBitmap<T> _uncovered_values;
     /// @brief Map of levels and their associated coverage.
     std::unordered_map<level_t, BinaryTreeCoverage<T>> _coverage_map;
     /// @brief Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree.
@@ -104,6 +106,7 @@ class BinaryTreeImplicitImpl {
         _is_initialized = false;
         _coverage_map.clear();
         _uncovered_positions.clear();
+        _uncovered_values.clear();
         _level_count = 0;
         for (Node<T>* ancestor : _ancestors) {
             delete ancestor;
@@ -194,6 +197,14 @@ class BinaryTreeImplicitImpl {
     /// @param value The true or false value to set.
     void set_is_initialized(bool value) { _is_initialized = value; }
 
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    const NodeBitmap<T>& get_uncovered_values() const { return _uncovered_values; }
+    /// @brief Get a read-write reference to the uncovered values map.
+    /// @warning This is intended for serialization/deserilization only.
+    NodeBitmap<T>& get_uncovered_values_rw() { return _uncovered_values; }
+    /// @brief Clears the value map.  Usually for debugging.
+    void clear_uncovered_values() { _uncovered_values.clear(); }
+
     /// @}
 
     /// @name Implicit-Only Accessors
@@ -215,8 +226,9 @@ class BinaryTreeImplicitImpl {
     size_t deep_size() const {
         size_t total = sizeof(*this);
 
-        // Account for _uncovered_positions.
+        // Account for _uncovered_positions and values.
         total += _uncovered_positions.deep_size();
+        total += _uncovered_values.deep_size();
 
         // Account for _coverage_map
         total += sizeof(_coverage_map);
@@ -373,12 +385,15 @@ class BinaryTreeImplicitImpl {
     * which includes its own `NodeBitmap` and vector of ancestors (if tracking them).  When all threading is finished, the results
     * are merged into `_uncovered_positions`, coverage is calculated via simple arithmetic, and this function ends.
     *
-    * Threading itself is handed off to `NodeBitmap::for_each_transformer()`, along with the aforementioned callback (TLS) storage.
+    * Threading itself is handed off to `NodeBitmap::for_each_value_with_tls()`, along with the aforementioned callback storage.
     * This is in contrast to the `BinaryTreeMaterializedImpl` which handles OMP directly inside the its own add level method.
     */
     void add_level() {
         // Ensure initialization is set.
         _is_initialized = true;
+
+        // Clear the value bitmap since it would otherwise be stale/incorrect.
+        _uncovered_values.clear();
 
         // When there are no levels, this simply crafts a 0- or 1-based root node and manually sets level map and coverage.
         if (_level_count == 0) {
@@ -402,7 +417,7 @@ class BinaryTreeImplicitImpl {
         }
 
         // Now loop.
-        _uncovered_positions.for_each_transformer(ForEachPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
+        _uncovered_positions.for_each_value_with_tls(ForEachPolicy::PARALLEL, callback_storage, [&](const T& cb_position, AddLevelTLS& tls) {
             // Scale the uncovered position to this level.  Make these TLS storage to avoid alloc() on GMP path.
             if constexpr(FixedWidthIntegral<T>) {
                 tls.left_position = (cb_position << 1) - 1;
@@ -459,8 +474,8 @@ class BinaryTreeImplicitImpl {
                 tls.uncovered_bitmap.add(tls.right_position);
             }
 
-            // Return false.  There is no stopping condition.
-            return false;
+            // Return continue.  There is no stopping condition.
+            return ForEachSignal::CONTINUE;
         });
 
         // Merge TLS data into the tree's trackers.
@@ -492,5 +507,55 @@ class BinaryTreeImplicitImpl {
         }
     }
 
+
+
+    /**
+    * @brief Builds a value map as a `NodeBitmap` for iteration later.
+    * @tparam BUFFER_SIZE Controls memory usage of temporary buffers.  Larger values can aid performance at the cost of more memory
+    * and vice-versa.
+    * @param policy The type of `ForEachPolicy` to build the value map.  Serial is slower but uses less temporary memory.  Parallel
+    * uses 3-5x more memory (or more depending on OMP thread count) for only ~2x speedup.  Default is `ForEachPolicy::SERIAL`.
+    */
+    template<size_t BUFFER_SIZE = 1 << 24>
+    void generate_value_map(ForEachPolicy policy = ForEachPolicy::SERIAL) {
+        _uncovered_values.clear();
+
+        if (policy == ForEachPolicy::SERIAL) {
+            std::vector<T> buffer;
+            buffer.reserve(BUFFER_SIZE);
+            _uncovered_positions.for_each_value(ForEachPolicy::SERIAL, [&](const T& position) {
+                buffer.push_back(BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count));
+                if (buffer.size() >= BUFFER_SIZE) {
+                    _uncovered_values.add_many(buffer.size(), buffer.data());
+                    buffer.clear();
+                }
+                return ForEachSignal::CONTINUE;
+            });
+            _uncovered_values.add_many(buffer.size(), buffer.data());
+        } else {
+            struct ValueMapTLS {
+                NodeBitmap<T> bitmap;
+                std::vector<T> buffer;
+            };
+            std::vector<ValueMapTLS> tls_vector;
+            _uncovered_positions.for_each_value_with_tls(ForEachPolicy::PARALLEL, tls_vector, [&](const T& position, ValueMapTLS& tls) {
+                tls.buffer.push_back(BinaryTreeMath<T>::st_node_value_by_position_and_level(position, _level_count));
+                if (tls.buffer.size() >= BUFFER_SIZE) {
+                    tls.bitmap.add_many(tls.buffer.size(), tls.buffer.data());
+                    tls.buffer.clear();
+                }
+                return ForEachSignal::CONTINUE;
+            });
+            // Now merge bitmaps and remaining buffers.
+            for (ValueMapTLS& callback_tls : tls_vector) {
+                _uncovered_values |= callback_tls.bitmap;
+                callback_tls.bitmap.clear();
+                _uncovered_values.add_many(callback_tls.buffer.size(), callback_tls.buffer.data());
+            }
+        }
+
+        // Optimize
+        _uncovered_values.optimize();
+    }
 
 };

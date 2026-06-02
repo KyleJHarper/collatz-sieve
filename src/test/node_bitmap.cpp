@@ -1,6 +1,7 @@
 #include <atomic>
 #include <cassert>
 #include <cstdint>
+#include <stdexcept>
 #include "../collatz/concepts.hpp"
 #include "helpers.hpp"
 #include "../collatz/node_bitmap.hpp"
@@ -248,6 +249,38 @@ void test_node_bitmap_add_range_closed() {
 
 
 template<AnySupportedIntegral T>
+void test_node_bitmap_add_many() {
+    start_test(__func__);
+
+    NodeBitmap<T> bitmap;
+    std::vector<T> values;
+    values.push_back(1);
+    values.push_back(2);
+    values.push_back(42);
+    values.push_back(32482374982);
+    // Include a value higher than the suffix size, so it spans multiple prefixes.
+    T big_value = T(42) << BitmapKeyTraits<T>::SUFFIX_BITS;
+    values.push_back(big_value);
+
+    // Confirm missing.
+    for (const T& value : values) {
+        assert(bitmap.contains(value) == false);
+    }
+
+    // Add them all at once.
+    bitmap.add_many(values.size(), values.data());
+
+    // Now they should all exist.
+    for (const T& value : values) {
+        assert(bitmap.contains(value) == true);
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void test_node_bitmap_contains() {
     start_test(__func__);
 
@@ -319,6 +352,106 @@ void test_node_bitmap_remove() {
 
 
 template<AnySupportedIntegral T>
+void test_node_bitmap_minimum() {
+    start_test(__func__);
+
+    NodeBitmap<T> bitmap;
+
+    // Empty bitmaps throw errors.
+    try {
+        T x = bitmap.minimum();
+        assert(false);
+        if (x > 0) { return; }
+    } catch (std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot request NodeBitmap minimum() when the bitmap is empty.") != std::string::npos);
+    }
+
+    // Single value should be okay.
+    bitmap.add(1);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.minimum() == 1);
+    bitmap.remove(1);
+    bitmap.add(42);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.minimum() == 42);
+    bitmap.remove(42);
+
+    // Single value in a prefix greater than 0 should be okay.
+    T big_value_over_prefix = T(42) + BitmapKeyTraits<T>::SUFFIX_MAX;
+    bitmap.add(big_value_over_prefix);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.minimum() == big_value_over_prefix);
+    bitmap.remove(big_value_over_prefix);
+
+    // Multiple values should return the lowest.
+    bitmap.add(1);
+    bitmap.add(2);
+    bitmap.add(3);
+    bitmap.add(big_value_over_prefix);
+    assert(bitmap.minimum() == 1);
+    bitmap.remove(1);
+    assert(bitmap.minimum() == 2);
+    bitmap.remove(2);
+    assert(bitmap.minimum() == 3);
+    bitmap.remove(3);
+    assert(bitmap.minimum() == big_value_over_prefix);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_node_bitmap_maximum() {
+    start_test(__func__);
+
+    NodeBitmap<T> bitmap;
+
+    // Empty bitmaps throw errors.
+    try {
+        T x = bitmap.maximum();
+        assert(false);
+        if (x > 0) { return; }
+    } catch (std::out_of_range& e) {
+        assert(std::string(e.what()).find("Cannot request NodeBitmap maximum() when the bitmap is empty.") != std::string::npos);
+    }
+
+    // Single value should be okay.
+    bitmap.add(1);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.maximum() == 1);
+    bitmap.remove(1);
+    bitmap.add(42);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.maximum() == 42);
+    bitmap.remove(42);
+
+    // Single value in a prefix greater than 0 should be okay.
+    T big_value_over_prefix = T(42) + BitmapKeyTraits<T>::SUFFIX_MAX;
+    bitmap.add(big_value_over_prefix);
+    assert(bitmap.cardinality() == 1);
+    assert(bitmap.maximum() == big_value_over_prefix);
+    bitmap.remove(big_value_over_prefix);
+
+    // Multiple values should return the lowest.
+    bitmap.add(1);
+    bitmap.add(2);
+    bitmap.add(3);
+    bitmap.add(big_value_over_prefix);
+    assert(bitmap.maximum() == big_value_over_prefix);
+    bitmap.remove(big_value_over_prefix);
+    assert(bitmap.maximum() == 3);
+    bitmap.remove(3);
+    assert(bitmap.maximum() == 2);
+    bitmap.remove(2);
+    assert(bitmap.maximum() == 1);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void test_node_bitmap_cardinality() {
     start_test(__func__);
 
@@ -341,6 +474,26 @@ void test_node_bitmap_cardinality() {
         bitmap.add_range(start, end);
         assert(bitmap.cardinality() == (end - start));
     }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_node_bitmap_empty() {
+    start_test(__func__);
+
+    NodeBitmap<T> bitmap;
+    assert(bitmap.empty() == true);
+    bitmap.add(42);
+    assert(bitmap.empty() == false);
+    bitmap.remove(42);
+    assert(bitmap.empty() == true);
+    bitmap.add(4242);
+    assert(bitmap.empty() == false);
+    bitmap.clear();
+    assert(bitmap.empty() == true);
 
     end_test();
 }
@@ -564,7 +717,7 @@ void test_node_bitmap_for_each_value() {
     bitmap.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
         tally++;
-        return false;
+        return ForEachSignal::CONTINUE;
     });
     assert(tally == count);
 
@@ -573,9 +726,33 @@ void test_node_bitmap_for_each_value() {
     bitmap.for_each_value(ForEachPolicy::PARALLEL, [&](const T& value) {
         assert(bitmap.contains(value));
         atomic_tally.fetch_add(1, std::memory_order_relaxed);
-        return false;
+        return ForEachSignal::CONTINUE;
     });
     assert(atomic_tally.load() == count);
+
+    // Serial Early Stop
+    tally = 0;
+    bitmap.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        assert(bitmap.contains(value));
+        tally++;
+        if (tally > (count / 2)) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(tally < count);
+
+    // Parallel Early Stop
+    atomic_tally.store(0);
+    bitmap.for_each_value(ForEachPolicy::PARALLEL, [&](const T& value) {
+        assert(bitmap.contains(value));
+        atomic_tally.fetch_add(1, std::memory_order_relaxed);
+        if (atomic_tally.load() > (count / 2)) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+    assert(atomic_tally.load() < count);
 
     end_test();
 }
@@ -583,7 +760,7 @@ void test_node_bitmap_for_each_value() {
 
 
 template<AnySupportedIntegral T>
-void test_node_bitmap_for_each_transformer() {
+void test_node_bitmap_for_each_value_with_tls() {
     start_test(__func__);
 
     NodeBitmap<T> bitmap;
@@ -595,22 +772,22 @@ void test_node_bitmap_for_each_transformer() {
     // Serial
     std::vector<NodeBitmap<T>> callback_storage;
     callback_storage.resize(1);
-    bitmap.for_each_transformer(ForEachPolicy::SERIAL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
+    bitmap.for_each_value_with_tls(ForEachPolicy::SERIAL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
         assert(bitmap.contains(value));
         tls.add(value);
-        return false;
+        return ForEachSignal::CONTINUE;
     });
     assert(bitmap.cardinality() == callback_storage[0].cardinality());
     callback_storage[0].for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
-        return false;
+        return ForEachSignal::CONTINUE;
     });
 
     // Parallel
-    bitmap.for_each_transformer(ForEachPolicy::PARALLEL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
+    bitmap.for_each_value_with_tls(ForEachPolicy::PARALLEL, callback_storage, [&](const T& value, NodeBitmap<T>& tls) {
         assert(bitmap.contains(value));
         tls.add(value);
-        return false;
+        return ForEachSignal::CONTINUE;
     });
     // Merge TLS into a single map.
     NodeBitmap<T> transformed_map;
@@ -620,7 +797,7 @@ void test_node_bitmap_for_each_transformer() {
     assert(bitmap.cardinality() == transformed_map.cardinality());
     transformed_map.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
-        return false;
+        return ForEachSignal::CONTINUE;
     });
 
     end_test();
@@ -639,9 +816,13 @@ void run_all() {
     test_node_bitmap_add<T>();
     test_node_bitmap_add_range<T>();
     test_node_bitmap_add_range_closed<T>();
+    test_node_bitmap_add_many<T>();
     test_node_bitmap_contains<T>();
     test_node_bitmap_remove<T>();
+    test_node_bitmap_minimum<T>();
+    test_node_bitmap_maximum<T>();
     test_node_bitmap_cardinality<T>();
+    test_node_bitmap_empty<T>();
     test_node_bitmap_merge<T>();
     test_node_bitmap_clone<T>();
     test_node_bitmap_optimize<T>();
@@ -650,7 +831,7 @@ void run_all() {
     test_node_bitmap_cloneable<T>();
     test_node_bitmap_equality<T>();
     test_node_bitmap_for_each_value<T>();
-    test_node_bitmap_for_each_transformer<T>();
+    test_node_bitmap_for_each_value_with_tls<T>();
 }
 
 

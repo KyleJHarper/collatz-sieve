@@ -196,6 +196,8 @@ namespace CollatzConstants {
 
         // The following are placeholders until they can be computed.
         // This is the highest value computed without hitting the next 2^k max IV.
+
+        // "70313669969081191"_u128,  // 109   Latest value from RTX5060 work.  Need to confirm before we push this out.
         "26453686357881703"_u128,  // 109
         "26453686357881703"_u128,  // 110
         "26453686357881703"_u128,  // 111
