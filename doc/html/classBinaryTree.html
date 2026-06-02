@@ -204,6 +204,13 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b
 <tr class="memitem:a501b4333691de390dbdf2c05011d194c" id="r_a501b4333691de390dbdf2c05011d194c"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a501b4333691de390dbdf2c05011d194c">node_count</a> () <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:a501b4333691de390dbdf2c05011d194c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of nodes for a tree of this size.  <br /></td></tr>
 <tr class="separator:a501b4333691de390dbdf2c05011d194c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a164d01c405d33264027aaf059b22104a" id="r_a164d01c405d33264027aaf059b22104a"><td class="memItemLeft" align="right" valign="top"><a id="a164d01c405d33264027aaf059b22104a" name="a164d01c405d33264027aaf059b22104a"></a>
+<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_uncovered_values</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a164d01c405d33264027aaf059b22104a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor. <br /></td></tr>
+<tr class="separator:a164d01c405d33264027aaf059b22104a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65410c6ccddecdcd4dc90b6c981154f8" id="r_a65410c6ccddecdcd4dc90b6c981154f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a65410c6ccddecdcd4dc90b6c981154f8">get_uncovered_values_rw</a> ()</td></tr>
+<tr class="memdesc:a65410c6ccddecdcd4dc90b6c981154f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the uncovered values map.  <br /></td></tr>
+<tr class="separator:a65410c6ccddecdcd4dc90b6c981154f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Materialized-Only Accessors</div></td></tr>
 <tr class="memitem:a50dadcccf0fa007fc9d89fbee2ecd9d7" id="r_a50dadcccf0fa007fc9d89fbee2ecd9d7"><td class="memItemLeft" align="right" valign="top"><a id="a50dadcccf0fa007fc9d89fbee2ecd9d7" name="a50dadcccf0fa007fc9d89fbee2ecd9d7"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_materialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
@@ -539,6 +546,36 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor. </p>
 <dl class="section note"><dt>Note</dt><dd>These are left-to-right positions, not node values. </dd></dl>
+
+</div>
+</div>
+<a id="a65410c6ccddecdcd4dc90b6c981154f8" name="a65410c6ccddecdcd4dc90b6c981154f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65410c6ccddecdcd4dc90b6c981154f8">&#9670;&#160;</a></span>get_uncovered_values_rw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">TreeType</a>  = BinaryTreeImplicitImpl&lt;T&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp; <a class="el" href="classBinaryTree.html">BinaryTree</a>&lt; T, <a class="el" href="classNode.html">TreeType</a> &gt;::get_uncovered_values_rw </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a read-write reference to the uncovered values map. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This is intended for serialization/deserilization only. </dd></dl>
 
 </div>
 </div>

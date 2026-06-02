@@ -206,6 +206,17 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b
 <tr class="memitem:a8e25fb5467791c52501ebc8063b0acc4" id="r_a8e25fb5467791c52501ebc8063b0acc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeImplicitImpl.html#a8e25fb5467791c52501ebc8063b0acc4">set_is_initialized</a> (<a class="el" href="classNode.html">bool</a> value)</td></tr>
 <tr class="memdesc:a8e25fb5467791c52501ebc8063b0acc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the flag for whether this tree is initialized.  <br /></td></tr>
 <tr class="separator:a8e25fb5467791c52501ebc8063b0acc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac154dca1c4d7a374b401b4311fcd3f7e" id="r_ac154dca1c4d7a374b401b4311fcd3f7e"><td class="memItemLeft" align="right" valign="top"><a id="ac154dca1c4d7a374b401b4311fcd3f7e" name="ac154dca1c4d7a374b401b4311fcd3f7e"></a>
+<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_uncovered_values</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:ac154dca1c4d7a374b401b4311fcd3f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor. <br /></td></tr>
+<tr class="separator:ac154dca1c4d7a374b401b4311fcd3f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae26aef2e4d20452fc50b1fc78de43fe2" id="r_ae26aef2e4d20452fc50b1fc78de43fe2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeImplicitImpl.html#ae26aef2e4d20452fc50b1fc78de43fe2">get_uncovered_values_rw</a> ()</td></tr>
+<tr class="memdesc:ae26aef2e4d20452fc50b1fc78de43fe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the uncovered values map.  <br /></td></tr>
+<tr class="separator:ae26aef2e4d20452fc50b1fc78de43fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d37fd55f1a855d50f45d6f5edba0e48" id="r_a5d37fd55f1a855d50f45d6f5edba0e48"><td class="memItemLeft" align="right" valign="top"><a id="a5d37fd55f1a855d50f45d6f5edba0e48" name="a5d37fd55f1a855d50f45d6f5edba0e48"></a>
+<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clear_uncovered_values</b> ()</td></tr>
+<tr class="memdesc:a5d37fd55f1a855d50f45d6f5edba0e48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the value map. Usually for debugging. <br /></td></tr>
+<tr class="separator:a5d37fd55f1a855d50f45d6f5edba0e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Implicit-Only Accessors</div></td></tr>
 <tr class="memitem:aad468411bcfef28b6df20d7bc1a16ed6" id="r_aad468411bcfef28b6df20d7bc1a16ed6"><td class="memItemLeft" align="right" valign="top"><a id="aad468411bcfef28b6df20d7bc1a16ed6" name="aad468411bcfef28b6df20d7bc1a16ed6"></a>
 <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_implicit</b> () <a class="el" href="classNode.html">const</a></td></tr>
@@ -234,6 +245,10 @@ level_t&#160;</td><td class="memItemRight" valign="bottom"><b>_level_count</b> =
 <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_uncovered_positions</b></td></tr>
 <tr class="memdesc:a64ca94e4e9cf5dbec2c35b22329728aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bitmap containing a list of all positions still not covered. <br /></td></tr>
 <tr class="separator:a64ca94e4e9cf5dbec2c35b22329728aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c54c41a6d536001b4b0204ec67cea73" id="r_a4c54c41a6d536001b4b0204ec67cea73"><td class="memItemLeft" align="right" valign="top"><a id="a4c54c41a6d536001b4b0204ec67cea73" name="a4c54c41a6d536001b4b0204ec67cea73"></a>
+<a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_uncovered_values</b></td></tr>
+<tr class="memdesc:a4c54c41a6d536001b4b0204ec67cea73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bitmap containing a list of all values still not covered. <br /></td></tr>
+<tr class="separator:a4c54c41a6d536001b4b0204ec67cea73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06db515ccdd03d2e4bfc49d80948ea3c" id="r_a06db515ccdd03d2e4bfc49d80948ea3c"><td class="memItemLeft" align="right" valign="top"><a id="a06db515ccdd03d2e4bfc49d80948ea3c" name="a06db515ccdd03d2e4bfc49d80948ea3c"></a>
 std::unordered_map&lt; level_t, <a class="el" href="classBinaryTreeCoverage.html">BinaryTreeCoverage</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>_coverage_map</b></td></tr>
 <tr class="memdesc:a06db515ccdd03d2e4bfc49d80948ea3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map of levels and their associated coverage. <br /></td></tr>
@@ -300,7 +315,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <p>Add a level to the tree. </p>
 <p>Implicit tree building happens by tracking the left-to-right positions (not values) of nodes which haven't been removed by a HWM node or ancestor. This is representatively identical to a materialized tree's last level of nodes: anything remaining in the <code>_uncovered_positions</code> are the parent nodes from the previous level whose children must be processed.</p>
 <p>To achieve any sort of threading performance, each thread will get thread-local storage (TLS) from an <code><a class="el" href="structBinaryTreeImplicitImpl_1_1AddLevelTLS.html" title="A thread-local cache structure for add_level().">AddLevelTLS</a></code> struct, which includes its own <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> and vector of ancestors (if tracking them). When all threading is finished, the results are merged into <code>_uncovered_positions</code>, coverage is calculated via simple arithmetic, and this function ends.</p>
-<p>Threading itself is handed off to <code><a class="el" href="classNodeBitmap.html#a0d1c20c8e1e514168196eb3745976c00" title="A for-each transformer allowing callbacks with thread-local storage for transformation.">NodeBitmap::for_each_transformer()</a></code>, along with the aforementioned callback (TLS) storage. This is in contrast to the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> which handles OMP directly inside the its own add level method. </p>
+<p>Threading itself is handed off to <code><a class="el" href="classNodeBitmap.html#a2243969818ba6ad34fef9e4e739eee04" title="A for-each iterator allowing callbacks with thread-local storage for transformation.">NodeBitmap::for_each_value_with_tls()</a></code>, along with the aforementioned callback storage. This is in contrast to the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> which handles OMP directly inside the its own add level method. </p>
 
 </div>
 </div>
@@ -523,6 +538,36 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor. </p>
 <dl class="section note"><dt>Note</dt><dd>These are left-to-right positions, not node values. </dd></dl>
+
+</div>
+</div>
+<a id="ae26aef2e4d20452fc50b1fc78de43fe2" name="ae26aef2e4d20452fc50b1fc78de43fe2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae26aef2e4d20452fc50b1fc78de43fe2">&#9670;&#160;</a></span>get_uncovered_values_rw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp; <a class="el" href="classBinaryTreeImplicitImpl.html">BinaryTreeImplicitImpl</a>&lt; T &gt;::get_uncovered_values_rw </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a read-write reference to the uncovered values map. </p>
+<dl class="section warning"><dt>Warning</dt><dd>This is intended for serialization/deserilization only. </dd></dl>
 
 </div>
 </div>

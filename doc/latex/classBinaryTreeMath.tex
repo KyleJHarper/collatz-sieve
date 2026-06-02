@@ -23,8 +23,12 @@ The core algorithms supporting tree building and navigation.
 \begin{DoxyCompactList}\small\item\em Returns the FG chain length of a node on any level. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classBinaryTreeMath_af7527ad5e677d9566236223921f17196}{st\+\_\+floor\+\_\+log2}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{val}})
 \begin{DoxyCompactList}\small\item\em A log base-\/2 for integers (most significant bit based). \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\+\_\+step}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
-\begin{DoxyCompactList}\small\item\em The magnitude of value to add to a child based on its parent\textquotesingle{}s level. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a910ad0174fe5fa88139e71cba7629bb1}{st\+\_\+scaling\+\_\+factor}} (level\+\_\+t \mbox{\hyperlink{classNode}{level}})
+\begin{DoxyCompactList}\small\item\em The magnitude (scaling factor {\ttfamily s\+\_\+L}) between a parent\textquotesingle{}s value and child values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_ac84591dc8a1a863e9ee595593f0cd221}{st\+\_\+scaling\+\_\+factor\+\_\+cumulative}} (level\+\_\+t \mbox{\hyperlink{classNode}{base\+\_\+level}}, level\+\_\+t \mbox{\hyperlink{classNode}{target\+\_\+level}})
+\begin{DoxyCompactList}\small\item\em The cumulative magnitude required to scale a parent node {\ttfamily N} to its descendants on the target level. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath_a60235bbddf5e0a322f0e34d0922714c7}{st\+\_\+child\+\_\+count\+\_\+at\+\_\+target\+\_\+level}} (level\+\_\+t \mbox{\hyperlink{classNode}{parent\+\_\+level}}, level\+\_\+t \mbox{\hyperlink{classNode}{target\+\_\+level}})
+\begin{DoxyCompactList}\small\item\em Calculate the number of nodes a parent node will have on a target level. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Accessors}\par
 \begin{DoxyCompactItemize}
 \item 
@@ -146,6 +150,33 @@ This class is not meant to be instantiated, and will throw an error if you try.
 
 
 \doxysubsection{Member Function Documentation}
+\Hypertarget{classBinaryTreeMath_a60235bbddf5e0a322f0e34d0922714c7}\label{classBinaryTreeMath_a60235bbddf5e0a322f0e34d0922714c7} 
+\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_child\_count\_at\_target\_level@{st\_child\_count\_at\_target\_level}}
+\index{st\_child\_count\_at\_target\_level@{st\_child\_count\_at\_target\_level}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_child\_count\_at\_target\_level()}{st\_child\_count\_at\_target\_level()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+child\+\_\+count\+\_\+at\+\_\+target\+\_\+level (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{parent\+\_\+level,  }\item[{level\+\_\+t}]{target\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Calculate the number of nodes a parent node will have on a target level. 
+
+\begin{DoxyParagraph}{Formula}
+$ 2^{(target\_level - base_level)} $
+\end{DoxyParagraph}
+\begin{DoxyNote}{Note}
+This is NOT the cumulative count of the subtree for a parent nodes. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em base\+\_\+level} & The level to start from (where the parent node resides). \\
+\hline
+{\em target\+\_\+level} & The level to end at, where leaf nodes reside. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of nodes a parent will have on a target level. 
+\end{DoxyReturn}
 \Hypertarget{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}\label{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef} 
 \index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_fg\_chain\_length@{st\_fg\_chain\_length}}
 \index{st\_fg\_chain\_length@{st\_fg\_chain\_length}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
@@ -593,29 +624,67 @@ The {\ttfamily S2} summation is mathematically negative, but {\ttfamily T} is us
 \begin{DoxyReturn}{Returns}
 The summation of the S2 series, returned as type {\ttfamily T}, and signed positively. 
 \end{DoxyReturn}
-\Hypertarget{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}\label{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98} 
-\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_step@{st\_step}}
-\index{st\_step@{st\_step}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{st\_step()}{st\_step()}}
+\Hypertarget{classBinaryTreeMath_a910ad0174fe5fa88139e71cba7629bb1}\label{classBinaryTreeMath_a910ad0174fe5fa88139e71cba7629bb1} 
+\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_scaling\_factor@{st\_scaling\_factor}}
+\index{st\_scaling\_factor@{st\_scaling\_factor}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_scaling\_factor()}{st\_scaling\_factor()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+step (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+scaling\+\_\+factor (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
-The magnitude of value to add to a child based on its parent\textquotesingle{}s level. 
+The magnitude (scaling factor {\ttfamily s\+\_\+L}) between a parent\textquotesingle{}s value and child values. 
 
-The binary tree used assigns child values by a scaling factor (step), not just {\ttfamily 2n} and {\ttfamily 2n+1} like a sequentially labeled tree. This method helps compute that step value.
+The binary tree assigns child values by a scaling factor (step), not just {\ttfamily 2n} and {\ttfamily 2n+1} like a sequentially labeled tree. This method helps compute that scaled value to creata {\ttfamily parent + scaling\+\_\+factor} and {\ttfamily parent + 2 \texorpdfstring{$\ast$}{*} scaling\+\_\+factor} for the children. This also means siblings are separated by {\ttfamily s\+\_\+L} too.
 
 \begin{DoxyParagraph}{Formula}
-$ 2^{level-1} $
+$ 2^{(level-2)} $
 \end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
-{\em level} & The parent level who will be building children. \\
+{\em level} & The level of consideration. When building children, it\textquotesingle{}s the child\textquotesingle{}s level, not the parent\textquotesingle{}s. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The scaled step value to apply to child values, typed to {\ttfamily T}. 
+The scaled value (step) value to apply to child values, typed to {\ttfamily T}. 
+\end{DoxyReturn}
+\Hypertarget{classBinaryTreeMath_ac84591dc8a1a863e9ee595593f0cd221}\label{classBinaryTreeMath_ac84591dc8a1a863e9ee595593f0cd221} 
+\index{BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}!st\_scaling\_factor\_cumulative@{st\_scaling\_factor\_cumulative}}
+\index{st\_scaling\_factor\_cumulative@{st\_scaling\_factor\_cumulative}!BinaryTreeMath$<$ T $>$@{BinaryTreeMath$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_scaling\_factor\_cumulative()}{st\_scaling\_factor\_cumulative()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{static}} T \mbox{\hyperlink{classBinaryTreeMath}{Binary\+Tree\+Math}}$<$ T $>$\+::st\+\_\+scaling\+\_\+factor\+\_\+cumulative (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{base\+\_\+level,  }\item[{level\+\_\+t}]{target\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+The cumulative magnitude required to scale a parent node {\ttfamily N} to its descendants on the target level. 
+
+When a given node {\ttfamily N} is singled out, it creates a subtree. To find all the leaf nodes on level {\ttfamily L} that are rooted by node {\ttfamily N}, three things are required\+:
+
+
+\begin{DoxyEnumerate}
+\item The cumulative magnitude to reach the smallest leaf node. This function provides that.
+\item The scaling factor to iterate over leaf nodes in order. The {\ttfamily \doxylink{classBinaryTreeMath_a910ad0174fe5fa88139e71cba7629bb1}{st\+\_\+scaling\+\_\+factor()}} provides that.
+\item The number of leaf nodes, which is simply 2\texorpdfstring{$^\wedge$}{\string^}(target\+\_\+level -\/ base\+\_\+level)
+\end{DoxyEnumerate}
+
+Therefore, this function let\textquotesingle{}s you find all the first (smallest) values of the leaf nodes on a {\ttfamily target\+\_\+level} of any position on {\ttfamily base\+\_\+level}. From there, you simply iterate by the scaling factor.
+
+\begin{DoxyParagraph}{Formula}
+$ 2^{(target\_level - 1)} - 2^{(base\_level - 1)} $
+\end{DoxyParagraph}
+\begin{DoxyNote}{Note}
+This function is used with node VALUES, not POSITIONS. Position arithmetic differs. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em base\+\_\+level} & The level to start from (where the parent node resides). \\
+\hline
+{\em target\+\_\+level} & The level to end at, where leaf nodes reside. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The cumulative scaling factor typed to {\ttfamily T}. 
 \end{DoxyReturn}
 
 

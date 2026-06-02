@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a691f785a69294f59a83edfbd4b7eda15" id="r_a691f785a69294f59a83edfbd4b7eda15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a691f785a69294f59a83edfbd4b7eda15">add_range_closed</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">start</a>, <a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">end</a>)</td></tr>
 <tr class="memdesc:a691f785a69294f59a83edfbd4b7eda15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a closed, contiguous range of values using the most optimized approach.  <br /></td></tr>
 <tr class="separator:a691f785a69294f59a83edfbd4b7eda15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add4a2fb879be9184cba189e6bf4ff0cd" id="r_add4a2fb879be9184cba189e6bf4ff0cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#add4a2fb879be9184cba189e6bf4ff0cd">add_many</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">count</a>, T *<a class="el" href="classNode.html">values</a>)</td></tr>
+<tr class="memdesc:add4a2fb879be9184cba189e6bf4ff0cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you.  <br /></td></tr>
+<tr class="separator:add4a2fb879be9184cba189e6bf4ff0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b1efdbf1d0cf2a23a2a63f6b6df6464" id="r_a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9b1efdbf1d0cf2a23a2a63f6b6df6464">contains</a> (<a class="el" href="classNode.html">const</a> T &amp;value) <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for a value to exist (be "on") in the bitmap.  <br /></td></tr>
 <tr class="separator:a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,9 +112,21 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
 <tr class="memdesc:a9aa43193285ec4154532c06c274d2d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an item from the bitmap. <br /></td></tr>
 <tr class="separator:a9aa43193285ec4154532c06c274d2d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a358bfdef4166d5e8a352b2f91104f4cf" id="r_a358bfdef4166d5e8a352b2f91104f4cf"><td class="memItemLeft" align="right" valign="top"><a id="a358bfdef4166d5e8a352b2f91104f4cf" name="a358bfdef4166d5e8a352b2f91104f4cf"></a>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>minimum</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a358bfdef4166d5e8a352b2f91104f4cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the smallest value in the <a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a>. <br /></td></tr>
+<tr class="separator:a358bfdef4166d5e8a352b2f91104f4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acae800834f3e98f2fe7902c2f312cf28" id="r_acae800834f3e98f2fe7902c2f312cf28"><td class="memItemLeft" align="right" valign="top"><a id="acae800834f3e98f2fe7902c2f312cf28" name="acae800834f3e98f2fe7902c2f312cf28"></a>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>maximum</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:acae800834f3e98f2fe7902c2f312cf28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the largest value in the <a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a>. <br /></td></tr>
+<tr class="separator:acae800834f3e98f2fe7902c2f312cf28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d79d48318af0f9523c77ab84cbfb85f" id="r_a9d79d48318af0f9523c77ab84cbfb85f"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9d79d48318af0f9523c77ab84cbfb85f">cardinality</a> () <a class="el" href="classNode.html">const</a></td></tr>
 <tr class="memdesc:a9d79d48318af0f9523c77ab84cbfb85f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the cardinality (count) of nodes turned "on".  <br /></td></tr>
 <tr class="separator:a9d79d48318af0f9523c77ab84cbfb85f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d073ff6521f0c8f42ac0a4b7520594a" id="r_a8d073ff6521f0c8f42ac0a4b7520594a"><td class="memItemLeft" align="right" valign="top"><a id="a8d073ff6521f0c8f42ac0a4b7520594a" name="a8d073ff6521f0c8f42ac0a4b7520594a"></a>
+<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a8d073ff6521f0c8f42ac0a4b7520594a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the bitmap is empty, false otherwise. <br /></td></tr>
+<tr class="separator:a8d073ff6521f0c8f42ac0a4b7520594a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a826307acc0967711fffd951ba9022b5b" id="r_a826307acc0967711fffd951ba9022b5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a826307acc0967711fffd951ba9022b5b">merge</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">src</a>)</td></tr>
 <tr class="memdesc:a826307acc0967711fffd951ba9022b5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge (bitwise OR) another <code>BackendType</code> into this one.  <br /></td></tr>
 <tr class="separator:a826307acc0967711fffd951ba9022b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,14 +156,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a666266bba700198551be03287f47ecd2" id="r_a666266bba700198551be03287f47ecd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a666266bba700198551be03287f47ecd2">deserialize</a> (std::istream &amp;<a class="el" href="classNode.html">in</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
 <tr class="memdesc:a666266bba700198551be03287f47ecd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classNodeBitmap.html#adda11ff23cc7d2f81452051c6b6134a6" title="Serialize the bitmap specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
 <tr class="separator:a666266bba700198551be03287f47ecd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cf300e296ad3d377b78f69cd000103e" id="r_a9cf300e296ad3d377b78f69cd000103e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:a9cf300e296ad3d377b78f69cd000103e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9cf300e296ad3d377b78f69cd000103e">for_each_value</a> (BitmapTransformerPolicy <a class="el" href="classNode.html">policy</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>)</td></tr>
-<tr class="memdesc:a9cf300e296ad3d377b78f69cd000103e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each wrapper returning each value in the bitmap to <code>callback</code>.  <br /></td></tr>
-<tr class="separator:a9cf300e296ad3d377b78f69cd000103e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d1c20c8e1e514168196eb3745976c00" id="r_a0d1c20c8e1e514168196eb3745976c00"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> , <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">TLS_Type</a> &gt; </td></tr>
-<tr class="memitem:a0d1c20c8e1e514168196eb3745976c00"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a0d1c20c8e1e514168196eb3745976c00">for_each_transformer</a> (BitmapTransformerPolicy <a class="el" href="classNode.html">policy</a>, std::vector&lt; <a class="el" href="classNode.html">TLS_Type</a> &gt; &amp;<a class="el" href="classNode.html">tls</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>)</td></tr>
-<tr class="memdesc:a0d1c20c8e1e514168196eb3745976c00"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each transformer allowing callbacks with thread-local storage for transformation.  <br /></td></tr>
-<tr class="separator:a0d1c20c8e1e514168196eb3745976c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90" id="r_a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
+<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a22db19fd10d7752887ddffc4dd9fbf90">for_each_value</a> (ForEachPolicy <a class="el" href="classNode.html">policy</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a22db19fd10d7752887ddffc4dd9fbf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each iterator returning each value in the bitmap to <code>callback</code>.  <br /></td></tr>
+<tr class="separator:a22db19fd10d7752887ddffc4dd9fbf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04" id="r_a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> , <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">TLS_Type</a> &gt; </td></tr>
+<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a2243969818ba6ad34fef9e4e739eee04">for_each_value_with_tls</a> (ForEachPolicy <a class="el" href="classNode.html">policy</a>, std::vector&lt; <a class="el" href="classNode.html">TLS_Type</a> &gt; &amp;<a class="el" href="classNode.html">tls</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memdesc:a2243969818ba6ad34fef9e4e739eee04"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each iterator allowing callbacks with thread-local storage for transformation.  <br /></td></tr>
+<tr class="separator:a2243969818ba6ad34fef9e4e739eee04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a7bca77d844b4cc84e6eac16ff034f0ae" id="r_a7bca77d844b4cc84e6eac16ff034f0ae"><td class="memItemLeft" align="right" valign="top"><a id="a7bca77d844b4cc84e6eac16ff034f0ae" name="a7bca77d844b4cc84e6eac16ff034f0ae"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> ()=<a class="el" href="classNode.html">default</a></td></tr>
@@ -208,6 +223,53 @@ class NodeBitmap&lt; T, BackendType &gt;</div><p>The <a class="el" href="classNo
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="add4a2fb879be9184cba189e6bf4ff0cd" name="add4a2fb879be9184cba189e6bf4ff0cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add4a2fb879be9184cba189e6bf4ff0cd">&#9670;&#160;</a></span>add_many()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::add_many </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramname"><em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">count</td><td>The number of elements of type <code>T</code> in <code>values</code>. </td></tr>
+    <tr><td class="paramname">values</td><td>The memory location with values to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a500fc6ba84aa64bd40bb59d1c761aaa3" name="a500fc6ba84aa64bd40bb59d1c761aaa3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a500fc6ba84aa64bd40bb59d1c761aaa3">&#9670;&#160;</a></span>add_range()</h2>
 
@@ -245,7 +307,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Add a contiguous range of values using the most optimized approach. </p>
-<dl class="section note"><dt>Note</dt><dd>This is the Half-Open range [star, end). Meaning, start is included but end isn't. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This is the Half-Open range [start, end). Meaning, start is included but end isn't. </dd></dl>
 
 </div>
 </div>
@@ -286,7 +348,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Add a closed, contiguous range of values using the most optimized approach. </p>
-<dl class="section note"><dt>Note</dt><dd>This is the Closed range [star, end]. Meaning, start and end are both included. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This is the Closed range [start, end]. Meaning, start and end are both included. </dd></dl>
 
 </div>
 </div>
@@ -487,8 +549,67 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a0d1c20c8e1e514168196eb3745976c00" name="a0d1c20c8e1e514168196eb3745976c00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d1c20c8e1e514168196eb3745976c00">&#9670;&#160;</a></span>for_each_transformer()</h2>
+<a id="a22db19fd10d7752887ddffc4dd9fbf90" name="a22db19fd10d7752887ddffc4dd9fbf90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22db19fd10d7752887ddffc4dd9fbf90">&#9670;&#160;</a></span>for_each_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_value </td>
+          <td>(</td>
+          <td class="paramtype">ForEachPolicy&#160;</td>
+          <td class="paramname"><em>policy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A for-each iterator returning each value in the bitmap to <code>callback</code>. </p>
+<p>This method uses <code>for_each_value_with_tls</code> when TLS storage isn't needed. It applies <code>callback</code> to all values.</p>
+<p>Callback must have this signature: <code>(const T&amp; value)</code> Return type must be <code>ForEachSignal</code>.</p>
+<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Func</td><td>A function signature defined to match <code>callback</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">for_each_policy.hpp</a>. </td></tr>
+    <tr><td class="paramname">callback</td><td>Method to invoke on each value. Must return a <code>ForEachSignal</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2243969818ba6ad34fef9e4e739eee04" name="a2243969818ba6ad34fef9e4e739eee04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2243969818ba6ad34fef9e4e739eee04">&#9670;&#160;</a></span>for_each_value_with_tls()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,9 +622,9 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_transformer </td>
+          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_value_with_tls </td>
           <td>(</td>
-          <td class="paramtype">BitmapTransformerPolicy&#160;</td>
+          <td class="paramtype">ForEachPolicy&#160;</td>
           <td class="paramname"><em>policy</em>, </td>
         </tr>
         <tr>
@@ -521,7 +642,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -531,9 +652,9 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 </table>
 </div><div class="memdoc">
 
-<p>A for-each transformer allowing callbacks with thread-local storage for transformation. </p>
-<p>Applies <code>callback</code> to all values according to the BitmapTransformerPolicy (serial or parallel) requested. When serial, order is guaranteed.</p>
-<p>Callback must have this signature: <code>(const T&amp; value, TLS_Type&amp; tls)</code></p>
+<p>A for-each iterator allowing callbacks with thread-local storage for transformation. </p>
+<p>Applies <code>callback</code> to all values according to the ForEachPolicy (serial or parallel) requested. When serial, order is guaranteed.</p>
+<p>Callback must have this signature: <code>(const T&amp; value, TLS_Type&amp; tls)</code>. Return type must be <code>ForEachSignal</code>.</p>
 <p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -545,68 +666,9 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">node_bitmap_traits.hpp</a>. </td></tr>
+    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">for_each_policy.hpp</a>. </td></tr>
     <tr><td class="paramname">tls</td><td>A vector to store thread-local data in during callbacks. This method WILL call <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">tls.resize()</a></code> if the number of available threads reported by <code>omp_get_max_threads()</code> exceeds <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">tls.capacity()</a></code>. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-will in caller's <code>callback</code>. </td></tr>
-    <tr><td class="paramname">callback</td><td>Method to invoke on each value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a9cf300e296ad3d377b78f69cd000103e" name="a9cf300e296ad3d377b78f69cd000103e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cf300e296ad3d377b78f69cd000103e">&#9670;&#160;</a></span>for_each_value()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
-<div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_value </td>
-          <td>(</td>
-          <td class="paramtype">BitmapTransformerPolicy&#160;</td>
-          <td class="paramname"><em>policy</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A for-each wrapper returning each value in the bitmap to <code>callback</code>. </p>
-<p>This method uses <code>for_each_transformer</code> when TLS storage isn't needed. It applies <code>callback</code> to all values.</p>
-<p>Callback must have this signature: <code>(const T&amp; value)</code></p>
-<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
-<dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Func</td><td>A function signature defined to match <code>callback</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">node_bitmap_traits.hpp</a>. </td></tr>
-    <tr><td class="paramname">callback</td><td>Method to invoke on each value. </td></tr>
+    <tr><td class="paramname">callback</td><td>Method to invoke on each value. Must return a <code>ForEachSignal</code>. </td></tr>
   </table>
   </dd>
 </dl>

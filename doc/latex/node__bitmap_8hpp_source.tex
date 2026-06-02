@@ -5,117 +5,138 @@
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}node\_bitmap\_flat\_hash.hpp"{}}}
-\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}for\_each.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}node\_bitmap\_flat\_hash.hpp"{}}}
 \DoxyCodeLine{00006\ }
 \DoxyCodeLine{00007\ }
 \DoxyCodeLine{00008\ }
-\DoxyCodeLine{00016\ \textcolor{keyword}{template}<AnySupportedIntegral\ T,\ \textcolor{keyword}{typename}\ BackendType\ =\ FlatHashBitmapImpl<T>>}
-\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\ \{}
-\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{classNode}{BackendType}}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}};}
-\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<AnySupportedIntegral\ T,\ \textcolor{keyword}{typename}\ BackendType\ =\ FlatHashBitmapImpl<T>>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{classNode}{BackendType}}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}};}
 \DoxyCodeLine{00022\ }
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae}{NodeBitmap}}()\ =\ \textcolor{keywordflow}{default};}
-\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a7bca77d844b4cc84e6eac16ff034f0ae}{NodeBitmap}}()\ =\ \textcolor{keywordflow}{default};}
 \DoxyCodeLine{00031\ }
 \DoxyCodeLine{00032\ }
-\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a23d5a6364e935bc311f1cd8e0d9c282d}{NodeBitmap}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\ \mbox{\hyperlink{classNodeBitmap_aa3efe8f1c7055d09889f1899b22de1cd}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&)\ =\ \textcolor{keyword}{delete};}
-\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a23d5a6364e935bc311f1cd8e0d9c282d}{NodeBitmap}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\ \mbox{\hyperlink{classNodeBitmap_aa3efe8f1c7055d09889f1899b22de1cd}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&)\ =\ \textcolor{keyword}{delete};}
 \DoxyCodeLine{00038\ }
 \DoxyCodeLine{00039\ }
-\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a92616da068db07eb6ce11f0424292f37}{NodeBitmap}}(\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
-\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\ \mbox{\hyperlink{classNode}{operator}}=(\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
-\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_a92616da068db07eb6ce11f0424292f37}{NodeBitmap}}(\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\ \mbox{\hyperlink{classNode}{operator}}=(\mbox{\hyperlink{classNodeBitmap}{NodeBitmap}}\&\&)\ \mbox{\hyperlink{classNode}{noexcept}}\ =\ \mbox{\hyperlink{classNode}{default}};}
 \DoxyCodeLine{00045\ }
 \DoxyCodeLine{00046\ }
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}{clear}}()\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.clear();\ \}}
-\DoxyCodeLine{00049\ }
-\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a4fadde7c7f89b0a425c292146740a3ea}{clear}}()\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.clear();\ \}}
+\DoxyCodeLine{00050\ }
 \DoxyCodeLine{00052\ }
-\DoxyCodeLine{00055\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{BackendType}}\&\ \mbox{\hyperlink{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8}{get\_impl}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}};\ \}}
-\DoxyCodeLine{00058\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}{get\_map}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.get\_map();\ \}}
-\DoxyCodeLine{00062\ }
-\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{BackendType}}\&\ \mbox{\hyperlink{classNodeBitmap_a130de0140e90adb85c2b26f12574c7a8}{get\_impl}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}};\ \}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ \mbox{\hyperlink{classNodeBitmap_a13927112bebae98e3670a9e5c826d7ef}{get\_map}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.get\_map();\ \}}
+\DoxyCodeLine{00063\ }
 \DoxyCodeLine{00065\ }
 \DoxyCodeLine{00066\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26}{add}}(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add(value);\ \}}
-\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a7b1aa301f1af14f2594a40825c215f26}{add}}(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add(value);\ \}}
 \DoxyCodeLine{00070\ }
 \DoxyCodeLine{00071\ }
-\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}{add\_range}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add\_range(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
-\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a500fc6ba84aa64bd40bb59d1c761aaa3}{add\_range}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add\_range(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
 \DoxyCodeLine{00078\ }
 \DoxyCodeLine{00079\ }
-\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}{add\_range\_closed}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add\_range\_closed(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
-\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a691f785a69294f59a83edfbd4b7eda15}{add\_range\_closed}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{end}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add\_range\_closed(\mbox{\hyperlink{classNode}{start}},\ \mbox{\hyperlink{classNode}{end}});\ \}}
 \DoxyCodeLine{00086\ }
 \DoxyCodeLine{00087\ }
-\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}{contains}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.contains(value);\ \}}
-\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_add4a2fb879be9184cba189e6bf4ff0cd}{add\_many}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{count}},\ T*\ \mbox{\hyperlink{classNode}{values}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.add\_many(\mbox{\hyperlink{classNode}{count}},\ \mbox{\hyperlink{classNode}{values}});\ \}}
 \DoxyCodeLine{00095\ }
 \DoxyCodeLine{00096\ }
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e}{remove}}(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.remove(value);\ \}}
-\DoxyCodeLine{00099\ }
-\DoxyCodeLine{00100\ }
-\DoxyCodeLine{00101\ }
-\DoxyCodeLine{00106\ \ \ \ \ T\ \mbox{\hyperlink{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}{cardinality}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.cardinality();\ \}}
-\DoxyCodeLine{00107\ }
-\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_a9b1efdbf1d0cf2a23a2a63f6b6df6464}{contains}}(\textcolor{keyword}{const}\ T\&\ value)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.contains(value);\ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a9aa43193285ec4154532c06c274d2d9e}{remove}}(\textcolor{keyword}{const}\ T\&\ value)\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.remove(value);\ \}}
 \DoxyCodeLine{00109\ }
-\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.merge(\mbox{\hyperlink{classNode}{src}}.\_impl);\ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00113\ \ \ \ \ T\ \mbox{\hyperlink{classNodeBitmap_a358bfdef4166d5e8a352b2f91104f4cf}{minimum}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.minimum();\ \}}
+\DoxyCodeLine{00114\ }
 \DoxyCodeLine{00115\ }
 \DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ }
-\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}{operator|=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}\ |=\ \mbox{\hyperlink{classNode}{src}}.\_impl;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
-\DoxyCodeLine{00124\ }
-\DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ }
-\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a}{clone}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.clone(\mbox{\hyperlink{classNode}{src}}.get\_impl());\ \}}
+\DoxyCodeLine{00118\ \ \ \ \ T\ \mbox{\hyperlink{classNodeBitmap_acae800834f3e98f2fe7902c2f312cf28}{maximum}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.maximum();\ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00126\ \ \ \ \ T\ \mbox{\hyperlink{classNodeBitmap_a9d79d48318af0f9523c77ab84cbfb85f}{cardinality}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.cardinality();\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ }
 \DoxyCodeLine{00129\ }
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ }
-\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d}{optimize}}()\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.optimize();\ \}}
-\DoxyCodeLine{00136\ }
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00138\ }
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}{shrink\_to\_fit}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.shrink\_to\_fit();\ \}}
-\DoxyCodeLine{00145\ }
-\DoxyCodeLine{00146\ }
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}{deep\_size}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\_size}}();\ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_a8d073ff6521f0c8f42ac0a4b7520594a}{empty}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.empty();\ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a826307acc0967711fffd951ba9022b5b}{merge}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.merge(\mbox{\hyperlink{classNode}{src}}.\_impl);\ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00148\ \ \ \ \ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNodeBitmap_a0690a73bae6c6ac6dd7f53b01dd122a5}{operator|=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}\ |=\ \mbox{\hyperlink{classNode}{src}}.\_impl;\ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a9eb591d8a8237427e75c0b93405d475a}{clone}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{src}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.clone(\mbox{\hyperlink{classNode}{src}}.get\_impl());\ \}}
 \DoxyCodeLine{00154\ }
 \DoxyCodeLine{00155\ }
 \DoxyCodeLine{00156\ }
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}{st\_equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{first}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{BackendType::st\_equal}}(\mbox{\hyperlink{classNode}{first}}.get\_impl(),\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_ac426cbc043c0fd9aec3c12a6e9e0be6d}{optimize}}()\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.optimize();\ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNodeBitmap_ac9e67e28960c8c6f10d39e1236048e63}{shrink\_to\_fit}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.shrink\_to\_fit();\ \}}
+\DoxyCodeLine{00170\ }
 \DoxyCodeLine{00171\ }
 \DoxyCodeLine{00172\ }
-\DoxyCodeLine{00173\ }
-\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}{equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{BackendType::st\_equal}}(\mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}},\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
-\DoxyCodeLine{00184\ }
-\DoxyCodeLine{00185\ }
-\DoxyCodeLine{00186\ }
-\DoxyCodeLine{00199\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}{serialize}}(std::ostream\&\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}}(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
-\DoxyCodeLine{00200\ }
-\DoxyCodeLine{00201\ }
-\DoxyCodeLine{00202\ }
-\DoxyCodeLine{00213\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_a666266bba700198551be03287f47ecd2}{deserialize}}(std::istream\&\ \mbox{\hyperlink{classNode}{in}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}}(\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
-\DoxyCodeLine{00214\ }
-\DoxyCodeLine{00215\ }
-\DoxyCodeLine{00216\ }
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a9cf300e296ad3d377b78f69cd000103e}{for\_each\_value}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.for\_each\_value(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{callback}});\ \}}
-\DoxyCodeLine{00236\ }
-\DoxyCodeLine{00237\ }
-\DoxyCodeLine{00238\ }
-\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func,\ \textcolor{keyword}{typename}\ TLS\_Type>}
-\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}{for\_each\_transformer}}(BitmapTransformerPolicy\ \mbox{\hyperlink{classNode}{policy}},\ std::vector<TLS\_Type>\&\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\ \{\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.for\_each\_transformer(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{callback}});\ \}}
-\DoxyCodeLine{00263\ \};}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNodeBitmap_a309ac31dd67a5f1201973110509bd25c}{deep\_size}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\_size}}();\ \}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_ad3bfa8a7cc79fc108ec01d055eeda0a3}{st\_equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{first}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{BackendType::st\_equal}}(\mbox{\hyperlink{classNode}{first}}.get\_impl(),\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_ae9b3cca229ffc00b046316cce96695a6}{equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{NodeBitmap<T,\ BackendType>}}\&\ \mbox{\hyperlink{classNode}{second}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{BackendType::st\_equal}}(\mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}},\ \mbox{\hyperlink{classNode}{second}}.get\_impl(),\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00224\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_adda11ff23cc7d2f81452051c6b6134a6}{serialize}}(std::ostream\&\ \mbox{\hyperlink{classNode}{out}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}}(\mbox{\hyperlink{classNode}{out}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00238\ \ \ \ \ [[\mbox{\hyperlink{classNode}{nodiscard}}]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNodeBitmap_a666266bba700198551be03287f47ecd2}{deserialize}}(std::istream\&\ \mbox{\hyperlink{classNode}{in}},\ std::string*\ \mbox{\hyperlink{classNode}{err}}\ =\ \textcolor{keyword}{nullptr})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.\mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}}(\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classNode}{err}});\ \}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a22db19fd10d7752887ddffc4dd9fbf90}{for\_each\_value}}(ForEachPolicy\ \mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.for\_each\_value(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{callback}});}
+\DoxyCodeLine{00262\ \ \ \ \ \}}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func,\ \textcolor{keyword}{typename}\ TLS\_Type>}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNodeBitmap_a2243969818ba6ad34fef9e4e739eee04}{for\_each\_value\_with\_tls}}(ForEachPolicy\ \mbox{\hyperlink{classNode}{policy}},\ std::vector<TLS\_Type>\&\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{Func}}\&\&\ \mbox{\hyperlink{classNode}{callback}})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNodeBitmap_abfe0b96e56303ac52257f1c02b97bc7d}{\_impl}}.for\_each\_value\_with\_tls(\mbox{\hyperlink{classNode}{policy}},\ \mbox{\hyperlink{classNode}{tls}},\ \mbox{\hyperlink{classNode}{callback}});}
+\DoxyCodeLine{00291\ \ \ \ \ \}}
+\DoxyCodeLine{00292\ \};}
 
 \end{DoxyCode}

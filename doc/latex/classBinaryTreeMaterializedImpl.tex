@@ -94,7 +94,15 @@ std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\a
 \mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6a50c3a15c9d6eb009d2cce27152a3a1}{set\+\_\+is\+\_\+initialized}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} value)
-\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48}\label{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a4f221baa450144c4ccb84acc4c799945}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c}\label{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clear\+\_\+uncovered\+\_\+values} ()
+\begin{DoxyCompactList}\small\item\em Clears the value map. Usually for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Materialized-\/\+Only Accessors}\par
 \begin{DoxyCompactItemize}
@@ -131,6 +139,9 @@ level\+\_\+t {\bfseries \+\_\+level\+\_\+count} = 0
 \Hypertarget{classBinaryTreeMaterializedImpl_aca7323d693d332da9c10c26dee2da58e}\label{classBinaryTreeMaterializedImpl_aca7323d693d332da9c10c26dee2da58e} 
 std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ {\bfseries \+\_\+level\+\_\+map}
 \begin{DoxyCompactList}\small\item\em The main storage for {\ttfamily \doxylink{classNode}{Node}} objects, placed in a map keyed by level. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_acc202668f7305c5d67ecbf0ee22e941a}\label{classBinaryTreeMaterializedImpl_acc202668f7305c5d67ecbf0ee22e941a} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ {\bfseries \+\_\+uncovered\+\_\+values}
+\begin{DoxyCompactList}\small\item\em Bitmap containing a list of all values still not covered. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_af01e19ef8fab1bb27868bbdc5c1eb351}\label{classBinaryTreeMaterializedImpl_af01e19ef8fab1bb27868bbdc5c1eb351} 
 std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ {\bfseries \+\_\+coverage\+\_\+map}
 \begin{DoxyCompactList}\small\item\em Map of levels and their associated coverage. \end{DoxyCompactList}\item 
@@ -297,6 +308,20 @@ Get a read-\/write reference to the pointer to the root node.
 \begin{DoxyNote}{Note}
 You get a ref to a pointer to allow manipulation of this member directly. 
 \end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
+\Hypertarget{classBinaryTreeMaterializedImpl_a4f221baa450144c4ccb84acc4c799945}\label{classBinaryTreeMaterializedImpl_a4f221baa450144c4ccb84acc4c799945} 
+\index{BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}!get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}}
+\index{get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_uncovered\_values\_rw()}{get\_uncovered\_values\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::get\+\_\+uncovered\+\_\+values\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the uncovered values map. 
+
 \begin{DoxyWarning}{Warning}
 This is intended for serialization/deserilization only. 
 \end{DoxyWarning}

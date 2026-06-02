@@ -98,7 +98,12 @@ level\+\_\+t {\bfseries get\+\_\+level\+\_\+count} () \mbox{\hyperlink{classNode
 \mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
 T \mbox{\hyperlink{classBinaryTree_a501b4333691de390dbdf2c05011d194c}{node\+\_\+count}} () \mbox{\hyperlink{classNode}{const}}
-\begin{DoxyCompactList}\small\item\em Get the number of nodes for a tree of this size. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get the number of nodes for a tree of this size. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a164d01c405d33264027aaf059b22104a}\label{classBinaryTree_a164d01c405d33264027aaf059b22104a} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTree_a65410c6ccddecdcd4dc90b6c981154f8}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Materialized-\/\+Only Accessors}\par
 \begin{DoxyCompactItemize}
@@ -303,6 +308,20 @@ Get a reference to the uncovered positions, which are the node positions not cov
 \begin{DoxyNote}{Note}
 These are left-\/to-\/right positions, not node values. 
 \end{DoxyNote}
+\Hypertarget{classBinaryTree_a65410c6ccddecdcd4dc90b6c981154f8}\label{classBinaryTree_a65410c6ccddecdcd4dc90b6c981154f8} 
+\index{BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}!get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}}
+\index{get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}!BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}}
+\doxysubsubsection{\texorpdfstring{get\_uncovered\_values\_rw()}{get\_uncovered\_values\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Tree\+Type}}  = Binary\+Tree\+Implicit\+Impl$<$\+T$>$$>$ \\
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, \mbox{\hyperlink{classNode}{Tree\+Type}} $>$\+::get\+\_\+uncovered\+\_\+values\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the uncovered values map. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
 \Hypertarget{classBinaryTree_a2eeaf4a7727c29a727d01845add1475b}\label{classBinaryTree_a2eeaf4a7727c29a727d01845add1475b} 
 \index{BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}!init@{init}}
 \index{init@{init}!BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}}

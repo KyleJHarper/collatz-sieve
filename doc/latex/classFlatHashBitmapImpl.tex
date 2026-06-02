@@ -12,6 +12,9 @@ An implementation of the roaring bitmap for our \doxylink{classNodeBitmap}{Node\
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\Hypertarget{classFlatHashBitmapImpl_adc337572016f8d469f8e8adea8695f63}\label{classFlatHashBitmapImpl_adc337572016f8d469f8e8adea8695f63} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries has\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Tests a key for presence. Returns true if found, false otherwise. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}\label{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
 \begin{DoxyCompactList}\small\item\em Add a value to the bitmap. \end{DoxyCompactList}\item 
@@ -19,13 +22,26 @@ An implementation of the roaring bitmap for our \doxylink{classNodeBitmap}{Node\
 \begin{DoxyCompactList}\small\item\em Add a contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}{add\+\_\+range\+\_\+closed}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
 \begin{DoxyCompactList}\small\item\em Add a closed, contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_adf3a18e64b3561f027308ffd20546436}{add\+\_\+many}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{count}}, T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{values}})
+\begin{DoxyCompactList}\small\item\em Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_aeb122440ba5ffc98268c6e6cd68fc6e0}{add\+\_\+many\+\_\+with\+\_\+prefix}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{count}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{suffixes}})
+\begin{DoxyCompactList}\small\item\em Adds all {\ttfamily suffixes} to the bitmap matching a given prefix. Will add the prefix if it\textquotesingle{}s missing. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}{contains}} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Check for a value to exist (be "{}on"{}) in the bitmap. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}\label{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86} 
 \mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
 \begin{DoxyCompactList}\small\item\em Removes an item from the bitmap. \end{DoxyCompactList}\item 
+\Hypertarget{classFlatHashBitmapImpl_a8c1a4fc3ce704e0f0b51b24de3b31358}\label{classFlatHashBitmapImpl_a8c1a4fc3ce704e0f0b51b24de3b31358} 
+T {\bfseries minimum} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Returns the smallest value in the \doxylink{classNodeBitmap}{Node\+Bitmap}. Throws exception if empty. \end{DoxyCompactList}\item 
+\Hypertarget{classFlatHashBitmapImpl_a03aca565988d398252a6a61749abfdb2}\label{classFlatHashBitmapImpl_a03aca565988d398252a6a61749abfdb2} 
+T {\bfseries maximum} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Returns the largest value in the \doxylink{classNodeBitmap}{Node\+Bitmap}. Throws exception if empty. \end{DoxyCompactList}\item 
 T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{cardinality}} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Calculate the cardinality (count) of nodes turned "{}on"{}. \end{DoxyCompactList}\item 
+\Hypertarget{classFlatHashBitmapImpl_a3774f986513e5a3ef07765d8fa2463f7}\label{classFlatHashBitmapImpl_a3774f986513e5a3ef07765d8fa2463f7} 
+\mbox{\hyperlink{classNode}{bool}} {\bfseries empty} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Returns true if the bitmap is empty, false otherwise. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
 \begin{DoxyCompactList}\small\item\em Merge (bitwise OR) another {\ttfamily \doxylink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} into this one. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& \mbox{\hyperlink{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}{operator\texorpdfstring{$\vert$}{|}=}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
@@ -45,10 +61,10 @@ T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{ca
 \begin{DoxyCompactList}\small\item\em Serialize the bitmap specifics of this object for export. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
 \begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize()}}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1}{for\+\_\+each\+\_\+value}} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\begin{DoxyCompactList}\small\item\em A for-\/each wrapper returning each value in the bitmap to {\ttfamily callback}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}{for\+\_\+each\+\_\+transformer}} (Bitmap\+Transformer\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}})
-\begin{DoxyCompactList}\small\item\em A for-\/each transformer allowing callbacks with thread-\/local storage for transformation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_add7db14c752746e25a60ccc7bf74c1f1}{for\+\_\+each\+\_\+value}} (For\+Each\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em A for-\/each iterator returning each value in the bitmap to {\ttfamily callback}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_aa5ec11e0417f6f478d2133d252eb3302}{for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls}} (For\+Each\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em A for-\/each iterator allowing callbacks with thread-\/local storage for transformation. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
@@ -168,6 +184,42 @@ The following categories apply\+:
 \end{DoxyEnumerate}
 
 \doxysubsection{Member Function Documentation}
+\Hypertarget{classFlatHashBitmapImpl_adf3a18e64b3561f027308ffd20546436}\label{classFlatHashBitmapImpl_adf3a18e64b3561f027308ffd20546436} 
+\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!add\_many@{add\_many}}
+\index{add\_many@{add\_many}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{add\_many()}{add\_many()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}}}]{count,  }\item[{T \texorpdfstring{$\ast$}{*}}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of elements of type {\ttfamily T} in {\ttfamily values}. \\
+\hline
+{\em values} & The memory location with values to add. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classFlatHashBitmapImpl_aeb122440ba5ffc98268c6e6cd68fc6e0}\label{classFlatHashBitmapImpl_aeb122440ba5ffc98268c6e6cd68fc6e0} 
+\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!add\_many\_with\_prefix@{add\_many\_with\_prefix}}
+\index{add\_many\_with\_prefix@{add\_many\_with\_prefix}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{add\_many\_with\_prefix()}{add\_many\_with\_prefix()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many\+\_\+with\+\_\+prefix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&}]{prefix,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}}}]{count,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{suffixes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds all {\ttfamily suffixes} to the bitmap matching a given prefix. Will add the prefix if it\textquotesingle{}s missing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prefix} & The prefix to look up a roaring map for insertion. \\
+\hline
+{\em suffixes} & A memory location of suffixes to add to the roaring bitmap. \\
+\hline
+\end{DoxyParams}
 \Hypertarget{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}\label{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98} 
 \index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!add\_range@{add\_range}}
 \index{add\_range@{add\_range}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
@@ -295,21 +347,54 @@ This is a member helper which simply forwards to {\ttfamily \doxylink{classFlatH
 \begin{DoxyReturn}{Returns}
 True if equal, false otherwise. 
 \end{DoxyReturn}
-\Hypertarget{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a}\label{classFlatHashBitmapImpl_a036b46e7896093bf66d937b3d792008a} 
-\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!for\_each\_transformer@{for\_each\_transformer}}
-\index{for\_each\_transformer@{for\_each\_transformer}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{for\_each\_transformer()}{for\_each\_transformer()}}
+\Hypertarget{classFlatHashBitmapImpl_add7db14c752746e25a60ccc7bf74c1f1}\label{classFlatHashBitmapImpl_add7db14c752746e25a60ccc7bf74c1f1} 
+\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!for\_each\_value@{for\_each\_value}}
+\index{for\_each\_value@{for\_each\_value}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{for\_each\_value()}{for\_each\_value()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+A for-\/each iterator returning each value in the bitmap to {\ttfamily callback}. 
+
+This method uses {\ttfamily for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls} when TLS storage isn\textquotesingle{}t needed. It applies {\ttfamily callback} to all values.
+
+Callback must have this signature\+: {\ttfamily (const T\& value)} Return type must be {\ttfamily For\+Each\+Signal}.
+
+The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+
+\begin{DoxyWarning}{Warning}
+Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
+\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Func} & A function signature defined to match {\ttfamily callback}. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{for\+\_\+each\+\_\+policy.\+hpp}. \\
+\hline
+{\em callback} & Method to invoke on each value. Must return a {\ttfamily For\+Each\+Signal}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classFlatHashBitmapImpl_aa5ec11e0417f6f478d2133d252eb3302}\label{classFlatHashBitmapImpl_aa5ec11e0417f6f478d2133d252eb3302} 
+\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!for\_each\_value\_with\_tls@{for\_each\_value\_with\_tls}}
+\index{for\_each\_value\_with\_tls@{for\_each\_value\_with\_tls}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{for\_each\_value\_with\_tls()}{for\_each\_value\_with\_tls()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
 template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+transformer (\begin{DoxyParamCaption}\item[{Bitmap\+Transformer\+Policy}]{policy,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&}]{tls,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&}]{tls,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
-A for-\/each transformer allowing callbacks with thread-\/local storage for transformation. 
+A for-\/each iterator allowing callbacks with thread-\/local storage for transformation. 
 
-Applies {\ttfamily callback} to all values according to the Bitmap\+Transformer\+Policy (serial or parallel) requested. When serial, order is guaranteed.
+Applies {\ttfamily callback} to all values according to the For\+Each\+Policy (serial or parallel) requested. When serial, order is guaranteed.
 
-Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}
+Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}. Return type must be {\ttfamily For\+Each\+Signal}.
 
 The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
 
@@ -325,44 +410,11 @@ Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquo
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
-{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \\
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{for\+\_\+each\+\_\+policy.\+hpp}. \\
 \hline
 {\em tls} & A vector to store thread-\/local data in during callbacks. This method WILL call {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+resize()}} if the number of available threads reported by {\ttfamily omp\+\_\+get\+\_\+max\+\_\+threads()} exceeds {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+capacity()}}. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-\/will in caller\textquotesingle{}s {\ttfamily callback}. \\
 \hline
-{\em callback} & Method to invoke on each value. \\
-\hline
-\end{DoxyParams}
-\Hypertarget{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1}\label{classFlatHashBitmapImpl_abbd0ac412a5cdb1e157d068ec1b0d8a1} 
-\index{FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}!for\_each\_value@{for\_each\_value}}
-\index{for\_each\_value@{for\_each\_value}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{for\_each\_value()}{for\_each\_value()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value (\begin{DoxyParamCaption}\item[{Bitmap\+Transformer\+Policy}]{policy,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-A for-\/each wrapper returning each value in the bitmap to {\ttfamily callback}. 
-
-This method uses {\ttfamily for\+\_\+each\+\_\+transformer} when TLS storage isn\textquotesingle{}t needed. It applies {\ttfamily callback} to all values.
-
-Callback must have this signature\+: {\ttfamily (const T\& value)}
-
-The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
-
-\begin{DoxyWarning}{Warning}
-Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
-\end{DoxyWarning}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em Func} & A function signature defined to match {\ttfamily callback}. \\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \\
-\hline
-{\em callback} & Method to invoke on each value. \\
+{\em callback} & Method to invoke on each value. Must return a {\ttfamily For\+Each\+Signal}. \\
 \hline
 \end{DoxyParams}
 \Hypertarget{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}\label{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc} 

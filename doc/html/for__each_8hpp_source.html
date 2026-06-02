@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Harper Sieve of Collatz: Class Members - Functions</title>
+<title>Harper Sieve of Collatz: src/collatz/for_each.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -53,7 +53,11 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -75,16 +79,31 @@ $(function() {
 </div>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c23f2149d695ec63c4229c6696a65b13.html">collatz</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">for_each.hpp</div></div>
+</div><!--header-->
 <div class="contents">
-<div class="textblock">Here is a list of all documented functions with links to the class documentation for each member:</div>
-
-<h3><a id="index_e" name="index_e"></a>- e -</h3><ul>
-<li>empty()&#160;:&#160;<a class="el" href="classFlatHashBitmapImpl.html#a3774f986513e5a3ef07765d8fa2463f7">FlatHashBitmapImpl&lt; T &gt;</a>, <a class="el" href="classNodeBitmap.html#a8d073ff6521f0c8f42ac0a4b7520594a">NodeBitmap&lt; T, BackendType &gt;</a></li>
-<li>enable_non_hwm_node_verification()&#160;:&#160;<a class="el" href="classBinaryTree.html#ac25d4b4510a44522433e9f7c195c7209">BinaryTree&lt; T, TreeType &gt;</a>, <a class="el" href="classBinaryTreeImplicitImpl.html#ad984431e1a470b0a098f7729632f57ef">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#ae00eeefd4ada83586a23d4f6c56a0216">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
-<li>equal()&#160;:&#160;<a class="el" href="classBinaryTree.html#af7620c39fb5aafd4483ef7e9e5c54f5c">BinaryTree&lt; T, TreeType &gt;</a>, <a class="el" href="classBinaryTreeCoverage.html#afc5bb45905dea56a330a1791cb947c27">BinaryTreeCoverage&lt; T &gt;</a>, <a class="el" href="classBinaryTreeImplicitImpl.html#a4b43e38cb59875f019179ae608703840">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#ab20855b4bc471ddb40bee98f21b12136">BinaryTreeMaterializedImpl&lt; T &gt;</a>, <a class="el" href="classEqualityHelper.html#aecd64fcc8ea0cf44b6afad4b3e6e0204">EqualityHelper</a>, <a class="el" href="classFlatHashBitmapImpl.html#a663b17bbbc4c7255650591a3fc1b37db">FlatHashBitmapImpl&lt; T &gt;</a>, <a class="el" href="classNode.html#a6fe2019d9fbed003fe9e04537c026bd3">Node&lt; T &gt;</a>, <a class="el" href="classNodeBitmap.html#ae9b3cca229ffc00b046316cce96695a6">NodeBitmap&lt; T, BackendType &gt;</a></li>
-<li>EqualityHelper()&#160;:&#160;<a class="el" href="classEqualityHelper.html#a909d5ed9fcabe5905343671ea8d6aa84">EqualityHelper</a></li>
-</ul>
-</div><!-- contents -->
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">enum class</span> ForEachPolicy {</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>    SERIAL = 1,</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    PARALLEL = 2,</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>};</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">enum class</span> ForEachSignal {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    CONTINUE = 1,</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    BREAK = 2,</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>};</div>
+</div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8

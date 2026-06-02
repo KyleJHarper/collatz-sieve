@@ -23,7 +23,7 @@ var searchData=
   ['_5fis_5fpreserving_5fancestors_20',['_is_preserving_ancestors',['../classBinaryTreeImplicitImpl.html#a47f6ff0f412c2c5d6d7b97649a7fa0ba',1,'BinaryTreeImplicitImpl::_is_preserving_ancestors'],['../classBinaryTreeMaterializedImpl.html#ad4887a4f457f633a03f1f0ab4eee9a75',1,'BinaryTreeMaterializedImpl::_is_preserving_ancestors']]],
   ['_5fis_5fpruning_5fhwm_5fnodes_21',['_is_pruning_hwm_nodes',['../classBinaryTreeMaterializedImpl.html#a01e489a91c4a593d905aedc1d2fc3228',1,'BinaryTreeMaterializedImpl']]],
   ['_5fis_5fpruning_5fparent_5flevels_22',['_is_pruning_parent_levels',['../classBinaryTreeMaterializedImpl.html#a1ed797dee4e9eed15efc8702483bc650',1,'BinaryTreeMaterializedImpl']]],
-  ['_5fis_5fverifying_5fnon_5fhwm_5fnodes_23',['_is_verifying_non_hwm_nodes',['../classBinaryTreeMaterializedImpl.html#a3b47fb7da377f83c19e503a32ad47ac5',1,'BinaryTreeMaterializedImpl::_is_verifying_non_hwm_nodes'],['../classBinaryTreeImplicitImpl.html#afe5f167744806dc96dcbe113871ed6d5',1,'BinaryTreeImplicitImpl::_is_verifying_non_hwm_nodes']]],
+  ['_5fis_5fverifying_5fnon_5fhwm_5fnodes_23',['_is_verifying_non_hwm_nodes',['../classBinaryTreeImplicitImpl.html#afe5f167744806dc96dcbe113871ed6d5',1,'BinaryTreeImplicitImpl::_is_verifying_non_hwm_nodes'],['../classBinaryTreeMaterializedImpl.html#a3b47fb7da377f83c19e503a32ad47ac5',1,'BinaryTreeMaterializedImpl::_is_verifying_non_hwm_nodes']]],
   ['_5flevel_5fcount_24',['_level_count',['../classBinaryTreeImplicitImpl.html#ac0ad88f2ae3a12baefc4df018f356caf',1,'BinaryTreeImplicitImpl::_level_count'],['../classBinaryTreeMaterializedImpl.html#a11a07b54a884519188cd92138022c067',1,'BinaryTreeMaterializedImpl::_level_count']]],
   ['_5flevel_5fmap_25',['_level_map',['../classBinaryTreeMaterializedImpl.html#aca7323d693d332da9c10c26dee2da58e',1,'BinaryTreeMaterializedImpl']]],
   ['_5fmonitor_5fthread_26',['_monitor_thread',['../classProgress.html#a940bb6a7698e40d9c93c13a4a099ea99',1,'Progress']]],
@@ -43,7 +43,8 @@ var searchData=
   ['_5ftree_5ftype_40',['_tree_type',['../classBinaryTreeImplicitImpl.html#a3954af07c4eceae610841b384f3368fd',1,'BinaryTreeImplicitImpl::_tree_type'],['../classBinaryTreeMaterializedImpl.html#a50c4bfac68b930b7a332383913f4c139',1,'BinaryTreeMaterializedImpl::_tree_type']]],
   ['_5ftwos_5fexp_41',['_twos_exp',['../classCollatzAffineMap.html#a2c3193e40728783386edb19e22a1e7ea',1,'CollatzAffineMap::_twos_exp'],['../classCollatzAffineMapShortcut.html#adc8181afe6d19abf493428d069fd4ae4',1,'CollatzAffineMapShortcut::_twos_exp']]],
   ['_5funcovered_5fpositions_42',['_uncovered_positions',['../classBinaryTreeImplicitImpl.html#a64ca94e4e9cf5dbec2c35b22329728aa',1,'BinaryTreeImplicitImpl']]],
-  ['_5fzstd_5fcstream_43',['_zstd_cstream',['../classzstd__ostreambuf.html#aeba09e776fddbe59b92a06a887ba49ae',1,'zstd_ostreambuf']]],
-  ['_5fzstd_5fdstream_44',['_zstd_dstream',['../classzstd__istreambuf.html#adfcd7ce090be935068f92c592a2fac1a',1,'zstd_istreambuf']]],
-  ['_5fzstd_5fend_5fdirective_45',['_zstd_end_directive',['../classzstd__ostreambuf.html#a5d72f72891c6a36da62e8c1aaf3f52ef',1,'zstd_ostreambuf']]]
+  ['_5funcovered_5fvalues_43',['_uncovered_values',['../classBinaryTreeImplicitImpl.html#a4c54c41a6d536001b4b0204ec67cea73',1,'BinaryTreeImplicitImpl::_uncovered_values'],['../classBinaryTreeMaterializedImpl.html#acc202668f7305c5d67ecbf0ee22e941a',1,'BinaryTreeMaterializedImpl::_uncovered_values']]],
+  ['_5fzstd_5fcstream_44',['_zstd_cstream',['../classzstd__ostreambuf.html#aeba09e776fddbe59b92a06a887ba49ae',1,'zstd_ostreambuf']]],
+  ['_5fzstd_5fdstream_45',['_zstd_dstream',['../classzstd__istreambuf.html#adfcd7ce090be935068f92c592a2fac1a',1,'zstd_istreambuf']]],
+  ['_5fzstd_5fend_5fdirective_46',['_zstd_end_directive',['../classzstd__ostreambuf.html#a5d72f72891c6a36da62e8c1aaf3f52ef',1,'zstd_ostreambuf']]]
 ];

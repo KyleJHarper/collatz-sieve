@@ -99,7 +99,15 @@ std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\a
 \mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0acc4}{set\+\_\+is\+\_\+initialized}} (\mbox{\hyperlink{classNode}{bool}} value)
-\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_ac154dca1c4d7a374b401b4311fcd3f7e}\label{classBinaryTreeImplicitImpl_ac154dca1c4d7a374b401b4311fcd3f7e} 
+\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () \mbox{\hyperlink{classNode}{const}}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae26aef2e4d20452fc50b1fc78de43fe2}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
+\begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a5d37fd55f1a855d50f45d6f5edba0e48}\label{classBinaryTreeImplicitImpl_a5d37fd55f1a855d50f45d6f5edba0e48} 
+\mbox{\hyperlink{classNode}{void}} {\bfseries clear\+\_\+uncovered\+\_\+values} ()
+\begin{DoxyCompactList}\small\item\em Clears the value map. Usually for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Implicit-\/\+Only Accessors}\par
 \begin{DoxyCompactItemize}
@@ -126,6 +134,9 @@ level\+\_\+t {\bfseries \+\_\+level\+\_\+count} = 0
 \Hypertarget{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa}\label{classBinaryTreeImplicitImpl_a64ca94e4e9cf5dbec2c35b22329728aa} 
 \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ {\bfseries \+\_\+uncovered\+\_\+positions}
 \begin{DoxyCompactList}\small\item\em Bitmap containing a list of all positions still not covered. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a4c54c41a6d536001b4b0204ec67cea73}\label{classBinaryTreeImplicitImpl_a4c54c41a6d536001b4b0204ec67cea73} 
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ {\bfseries \+\_\+uncovered\+\_\+values}
+\begin{DoxyCompactList}\small\item\em Bitmap containing a list of all values still not covered. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a06db515ccdd03d2e4bfc49d80948ea3c}\label{classBinaryTreeImplicitImpl_a06db515ccdd03d2e4bfc49d80948ea3c} 
 std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ {\bfseries \+\_\+coverage\+\_\+map}
 \begin{DoxyCompactList}\small\item\em Map of levels and their associated coverage. \end{DoxyCompactList}\item 
@@ -180,7 +191,7 @@ Implicit tree building happens by tracking the left-\/to-\/right positions (not 
 
 To achieve any sort of threading performance, each thread will get thread-\/local storage (TLS) from an {\ttfamily \doxylink{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{Add\+Level\+TLS}} struct, which includes its own {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} and vector of ancestors (if tracking them). When all threading is finished, the results are merged into {\ttfamily \+\_\+uncovered\+\_\+positions}, coverage is calculated via simple arithmetic, and this function ends.
 
-Threading itself is handed off to {\ttfamily \doxylink{classNodeBitmap_a0d1c20c8e1e514168196eb3745976c00}{Node\+Bitmap\+::for\+\_\+each\+\_\+transformer()}}, along with the aforementioned callback (TLS) storage. This is in contrast to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} which handles OMP directly inside the its own add level method. \Hypertarget{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}\label{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7} 
+Threading itself is handed off to {\ttfamily \doxylink{classNodeBitmap_a2243969818ba6ad34fef9e4e739eee04}{Node\+Bitmap\+::for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls()}}, along with the aforementioned callback storage. This is in contrast to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} which handles OMP directly inside the its own add level method. \Hypertarget{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7}\label{classBinaryTreeImplicitImpl_aecfa7613ef9e36c2e7f9da0f43d2dce7} 
 \index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!deserialize@{deserialize}}
 \index{deserialize@{deserialize}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
@@ -290,6 +301,20 @@ Get a reference to the uncovered positions, which are the node positions not cov
 \begin{DoxyNote}{Note}
 These are left-\/to-\/right positions, not node values. 
 \end{DoxyNote}
+\Hypertarget{classBinaryTreeImplicitImpl_ae26aef2e4d20452fc50b1fc78de43fe2}\label{classBinaryTreeImplicitImpl_ae26aef2e4d20452fc50b1fc78de43fe2} 
+\index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}}
+\index{get\_uncovered\_values\_rw@{get\_uncovered\_values\_rw}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_uncovered\_values\_rw()}{get\_uncovered\_values\_rw()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+\mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$\+::get\+\_\+uncovered\+\_\+values\+\_\+rw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a read-\/write reference to the uncovered values map. 
+
+\begin{DoxyWarning}{Warning}
+This is intended for serialization/deserilization only. 
+\end{DoxyWarning}
 \Hypertarget{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e}\label{classBinaryTreeImplicitImpl_ac805dbda69077ddecf1bb5c7dccc283e} 
 \index{BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}!init@{init}}
 \index{init@{init}!BinaryTreeImplicitImpl$<$ T $>$@{BinaryTreeImplicitImpl$<$ T $>$}}

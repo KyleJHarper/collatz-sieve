@@ -104,9 +104,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af7527ad5e677d9566236223921f17196" id="r_af7527ad5e677d9566236223921f17196"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af7527ad5e677d9566236223921f17196">st_floor_log2</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">val</a>)</td></tr>
 <tr class="memdesc:af7527ad5e677d9566236223921f17196"><td class="mdescLeft">&#160;</td><td class="mdescRight">A log base-2 for integers (most significant bit based).  <br /></td></tr>
 <tr class="separator:af7527ad5e677d9566236223921f17196"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45217fe6d30c203ee970c897f2057c98" id="r_a45217fe6d30c203ee970c897f2057c98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a45217fe6d30c203ee970c897f2057c98">st_step</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
-<tr class="memdesc:a45217fe6d30c203ee970c897f2057c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">The magnitude of value to add to a child based on its parent's level.  <br /></td></tr>
-<tr class="separator:a45217fe6d30c203ee970c897f2057c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a910ad0174fe5fa88139e71cba7629bb1" id="r_a910ad0174fe5fa88139e71cba7629bb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a910ad0174fe5fa88139e71cba7629bb1">st_scaling_factor</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memdesc:a910ad0174fe5fa88139e71cba7629bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The magnitude (scaling factor <code>s_L</code>) between a parent's value and child values.  <br /></td></tr>
+<tr class="separator:a910ad0174fe5fa88139e71cba7629bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84591dc8a1a863e9ee595593f0cd221" id="r_ac84591dc8a1a863e9ee595593f0cd221"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac84591dc8a1a863e9ee595593f0cd221">st_scaling_factor_cumulative</a> (level_t <a class="el" href="classNode.html">base_level</a>, level_t <a class="el" href="classNode.html">target_level</a>)</td></tr>
+<tr class="memdesc:ac84591dc8a1a863e9ee595593f0cd221"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cumulative magnitude required to scale a parent node <code>N</code> to its descendants on the target level.  <br /></td></tr>
+<tr class="separator:ac84591dc8a1a863e9ee595593f0cd221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60235bbddf5e0a322f0e34d0922714c7" id="r_a60235bbddf5e0a322f0e34d0922714c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a60235bbddf5e0a322f0e34d0922714c7">st_child_count_at_target_level</a> (level_t <a class="el" href="classNode.html">parent_level</a>, level_t <a class="el" href="classNode.html">target_level</a>)</td></tr>
+<tr class="memdesc:a60235bbddf5e0a322f0e34d0922714c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the number of nodes a parent node will have on a target level.  <br /></td></tr>
+<tr class="separator:a60235bbddf5e0a322f0e34d0922714c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:ac912afb53b0ee46bcb82255a5409a02e" id="r_ac912afb53b0ee46bcb82255a5409a02e"><td class="memItemLeft" align="right" valign="top"><a id="ac912afb53b0ee46bcb82255a5409a02e" name="ac912afb53b0ee46bcb82255a5409a02e"></a>
 <a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_default_root_value</b> ()</td></tr>
@@ -244,6 +250,56 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a60235bbddf5e0a322f0e34d0922714c7" name="a60235bbddf5e0a322f0e34d0922714c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60235bbddf5e0a322f0e34d0922714c7">&#9670;&#160;</a></span>st_child_count_at_target_level()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_child_count_at_target_level </td>
+          <td>(</td>
+          <td class="paramtype">level_t&#160;</td>
+          <td class="paramname"><em>parent_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">level_t&#160;</td>
+          <td class="paramname"><em>target_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the number of nodes a parent node will have on a target level. </p>
+<dl class="section user"><dt>Formula</dt><dd>\( 2^{(target\_level - base_level)} \)</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This is NOT the cumulative count of the subtree for a parent nodes. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">base_level</td><td>The level to start from (where the parent node resides). </td></tr>
+    <tr><td class="paramname">target_level</td><td>The level to end at, where leaf nodes reside. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of nodes a parent will have on a target level. </dd></dl>
+
+</div>
+</div>
 <a id="ac8139f556292fce4501e9010174bddef" name="ac8139f556292fce4501e9010174bddef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8139f556292fce4501e9010174bddef">&#9670;&#160;</a></span>st_fg_chain_length()</h2>
 
@@ -1002,8 +1058,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a45217fe6d30c203ee970c897f2057c98" name="a45217fe6d30c203ee970c897f2057c98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45217fe6d30c203ee970c897f2057c98">&#9670;&#160;</a></span>st_step()</h2>
+<a id="a910ad0174fe5fa88139e71cba7629bb1" name="a910ad0174fe5fa88139e71cba7629bb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a910ad0174fe5fa88139e71cba7629bb1">&#9670;&#160;</a></span>st_scaling_factor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1014,7 +1070,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_step </td>
+          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -1028,16 +1084,73 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>The magnitude of value to add to a child based on its parent's level. </p>
-<p>The binary tree used assigns child values by a scaling factor (step), not just <code>2n</code> and <code>2n+1</code> like a sequentially labeled tree. This method helps compute that step value.</p>
-<dl class="section user"><dt>Formula</dt><dd>\( 2^{level-1} \)</dd></dl>
+<p>The magnitude (scaling factor <code>s_L</code>) between a parent's value and child values. </p>
+<p>The binary tree assigns child values by a scaling factor (step), not just <code>2n</code> and <code>2n+1</code> like a sequentially labeled tree. This method helps compute that scaled value to creata <code>parent + scaling_factor</code> and <code>parent + 2 * scaling_factor</code> for the children. This also means siblings are separated by <code>s_L</code> too.</p>
+<dl class="section user"><dt>Formula</dt><dd>\( 2^{(level-2)} \)</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">level</td><td>The parent level who will be building children. </td></tr>
+    <tr><td class="paramname">level</td><td>The level of consideration. When building children, it's the child's level, not the parent's. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The scaled step value to apply to child values, typed to <code>T</code>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The scaled value (step) value to apply to child values, typed to <code>T</code>. </dd></dl>
+
+</div>
+</div>
+<a id="ac84591dc8a1a863e9ee595593f0cd221" name="ac84591dc8a1a863e9ee595593f0cd221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84591dc8a1a863e9ee595593f0cd221">&#9670;&#160;</a></span>st_scaling_factor_cumulative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor_cumulative </td>
+          <td>(</td>
+          <td class="paramtype">level_t&#160;</td>
+          <td class="paramname"><em>base_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">level_t&#160;</td>
+          <td class="paramname"><em>target_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The cumulative magnitude required to scale a parent node <code>N</code> to its descendants on the target level. </p>
+<p>When a given node <code>N</code> is singled out, it creates a subtree. To find all the leaf nodes on level <code>L</code> that are rooted by node <code>N</code>, three things are required:</p>
+<ol type="1">
+<li>The cumulative magnitude to reach the smallest leaf node. This function provides that.</li>
+<li>The scaling factor to iterate over leaf nodes in order. The <code><a class="el" href="classBinaryTreeMath.html#a910ad0174fe5fa88139e71cba7629bb1" title="The magnitude (scaling factor s_L) between a parent&#39;s value and child values.">st_scaling_factor()</a></code> provides that.</li>
+<li>The number of leaf nodes, which is simply 2^(target_level - base_level)</li>
+</ol>
+<p>Therefore, this function let's you find all the first (smallest) values of the leaf nodes on a <code>target_level</code> of any position on <code>base_level</code>. From there, you simply iterate by the scaling factor.</p>
+<dl class="section user"><dt>Formula</dt><dd>\( 2^{(target\_level - 1)} - 2^{(base\_level - 1)} \)</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This function is used with node VALUES, not POSITIONS. Position arithmetic differs. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">base_level</td><td>The level to start from (where the parent node resides). </td></tr>
+    <tr><td class="paramname">target_level</td><td>The level to end at, where leaf nodes reside. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cumulative scaling factor typed to <code>T</code>. </dd></dl>
 
 </div>
 </div>

@@ -413,16 +413,55 @@
 \DoxyCodeLine{00692\ }
 \DoxyCodeLine{00693\ }
 \DoxyCodeLine{00694\ }
-\DoxyCodeLine{00707\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a45217fe6d30c203ee970c897f2057c98}{st\_step}}(level\_t\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{step}};}
-\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{step}}\ =\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1);}
-\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{step}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 1));}
-\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{step}};}
-\DoxyCodeLine{00715\ \ \ \ \ \}}
-\DoxyCodeLine{00716\ }
-\DoxyCodeLine{00717\ \};}
+\DoxyCodeLine{00708\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a910ad0174fe5fa88139e71cba7629bb1}{st\_scaling\_factor}}(level\_t\ \mbox{\hyperlink{classNode}{level}})\ \{}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ <\ 2)\ \{}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Cannot\ request\ a\ scaling\ factor\ for\ levels\ below\ 2."{}});}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00712\ }
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2);}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scaling\_factor}};}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scaling\_factor}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{level}}\ -\/\ 2));}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{scaling\_factor}};}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00720\ \ \ \ \ \}}
+\DoxyCodeLine{00721\ }
+\DoxyCodeLine{00722\ }
+\DoxyCodeLine{00723\ }
+\DoxyCodeLine{00745\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_ac84591dc8a1a863e9ee595593f0cd221}{st\_scaling\_factor\_cumulative}}(level\_t\ \mbox{\hyperlink{classNode}{base\_level}},\ level\_t\ \mbox{\hyperlink{classNode}{target\_level}})\ \{}
+\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{target\_level}}\ <=\ \mbox{\hyperlink{classNode}{base\_level}})\ \{}
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Cannot\ scale\ a\ position\ negatively\ or\ to\ the\ same\ level."{}});}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00749\ }
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{target\_level}}\ -\/\ 1))\ -\/\ (T(1)\ <<\ (\mbox{\hyperlink{classNode}{base\_level}}\ -\/\ 1));}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{scaling\_factor}};}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{base\_scaling\_factor}};}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{scaling\_factor}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{target\_level}}\ -\/\ 1));}
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{base\_scaling\_factor}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{base\_level}}\ -\/\ 1));}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_sub}}(\mbox{\hyperlink{classNode}{scaling\_factor}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{scaling\_factor}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{base\_scaling\_factor}}.get\_mpz\_t());}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{scaling\_factor}};}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00760\ \ \ \ \ \}}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00775\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{classBinaryTreeMath_a60235bbddf5e0a322f0e34d0922714c7}{st\_child\_count\_at\_target\_level}}(level\_t\ \mbox{\hyperlink{classNode}{parent\_level}},\ level\_t\ \mbox{\hyperlink{classNode}{target\_level}})\ \{}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{target\_level}}\ <=\ \mbox{\hyperlink{classNode}{parent\_level}})\ \{}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Cannot\ count\ children\ at\ a\ level\ equal\ to\ or\ higher\ than\ the\ parent."{}});}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00779\ }
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ T(1)\ <<\ (\mbox{\hyperlink{classNode}{target\_level}}\ -\/\ \mbox{\hyperlink{classNode}{parent\_level}});}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ \mbox{\hyperlink{classNode}{child\_count}};}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_pow\_ui}}(\mbox{\hyperlink{classNode}{child\_count}}.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceCollatzConstants_a5da6da058cbae6ae099b0bd0227c3160}{CollatzConstants::MPZ\_TWO}}.get\_mpz\_t(),\ (\mbox{\hyperlink{classNode}{target\_level}}\ -\/\ 1));}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{child\_count}};}
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00787\ \ \ \ \ \}}
+\DoxyCodeLine{00788\ }
+\DoxyCodeLine{00789\ \};}
 
 \end{DoxyCode}
