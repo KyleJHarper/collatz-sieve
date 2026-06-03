@@ -778,8 +778,14 @@ void test_node_bitmap_for_each_value_with_tls() {
         return ForEachSignal::CONTINUE;
     });
     assert(bitmap.cardinality() == callback_storage[0].cardinality());
+    // Ensure all values are in the bitmap.
     callback_storage[0].for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
+        return ForEachSignal::CONTINUE;
+    });
+    // Perform the inverse: all values in the bitmap are in the TLS.
+    bitmap.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        assert(callback_storage[0].contains(value));
         return ForEachSignal::CONTINUE;
     });
 
@@ -795,8 +801,14 @@ void test_node_bitmap_for_each_value_with_tls() {
         transformed_map |= storage;
     }
     assert(bitmap.cardinality() == transformed_map.cardinality());
+    // Ensure all values are in the bitmap.
     transformed_map.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
         assert(bitmap.contains(value));
+        return ForEachSignal::CONTINUE;
+    });
+    // Perform the inverse: all values in the bitmap are in the TLS.
+    bitmap.for_each_value(ForEachPolicy::SERIAL, [&](const T& value) {
+        assert(transformed_map.contains(value));
         return ForEachSignal::CONTINUE;
     });
 
