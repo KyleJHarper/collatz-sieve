@@ -29,10 +29,11 @@ time by ~2x, sometimes it's even slower than serial.
 
 #### Iteration Is FAST
 
-The `tree.for_each_value()` is mostly a wrapper over the `NodeBitmap().for_each_value_with_tls()`.  As such, reads are blazingly
-fast and low-memory due to prefix hoisting, locality, and iterating over CRoaring's internal containers directly.  Note that the
-serial policy uses CRoaring's iterator, which is slower than the parallel policy codepath which iterates containers directly. As
-such, you should almost always use `ForEachPolicy::PARALLEL` even with just 1 thread, unless you truly need guaranteed order.
+The `tree.for_each_uncovered_value()` is mostly a wrapper over the `NodeBitmap().for_each_value_with_tls()`.  As such, reads are
+blazingly fast and low-memory due to prefix hoisting, locality, and iterating over CRoaring's internal containers directly.  Note
+that the serial policy uses CRoaring's native iterator, which is slower than the parallel policy codepath which iterates containers
+directly. As such, you should almost always use `ForEachPolicy::PARALLEL` even with just 1 thread, unless you truly need guaranteed
+order.
 
 The `NodeBitmap` approach was tested extensively.  It outperforms raw memory (`malloc`) because raw memory uses 4-8x time the RAM
 and hits memory bandwidth limits (and possibly pointer chasing) long before the CPU saturates.  Multithreading helped, but couldn't

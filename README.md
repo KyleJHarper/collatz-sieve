@@ -54,19 +54,155 @@ in the following areas:
 * Build and portability updates, especially for non-linux.
 * Improvements to test tooling.
 
-# API and Programs
-
-### Quick Start
+# Quick Start
 
 Literally this:
 
 ```
 #include "collatz/binary_tree.hpp"
+#include "collatz/collatz.hpp"
 
-BinaryTree<uint64_t> tree(3);
+
+int main() {
+
+    BinaryTree<uint64_t> tree(32);
+    tree.generate_value_map();
+    tree.for_each_uncovered_value(ForEachPolicy::PARALLEL, [&](const uint64_t& value) {
+        // Do whatever you want with "value" ... such as verify it.
+        Collatz<uint64_t>::st_verify(value);
+
+        // Let the iterator know it can continue.  Use ForEachSignal::BREAK to stop.
+        if (value > (1ULL << 34)) {
+            std::cout << "Reach a big enough value to be finished.  Value is: " << to_string_any(value) << std::endl;
+            // ^ Race condition on purpose.  See below.
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+
+}
 ```
 
-### Data Types and Cost Model
+### Tree Size
+
+Tree size is a time-memory trade-off.  Larger trees use more memory but the extra slivers of coverage improve verification speed.
+
+### Serial and Parallel Policies
+
+All iterators support a `ForEachPolicy` of `SERIAL` or `PARALLEL`.
+
+When `SERIAL`, order is guaranteed and threading is disabled.  OMP is bypassed, not just set to "1" thread.  You may reference and
+use variables willy-nilly outside your lambda/functor (i.e.: without guards).  However, this is slow and not recommended.
+
+When `PARALLEL`, order is random-ish but confined to the range of a `NodeBitmap` prefix (2^32) or node scaling factor, which is
+determined by your tree size and can be seen via `BinaryTreeMath<T>::st_scaling_factor(level)`.  It's faster, but requires the same
+safeguards as any parallel code.  See next section for TLS.
+
+### Thread-Local Storage  (AKA: Parallel Operation Demands Respect)
+
+The example above writes to `std::cout` without a guard.  It's a race condition.  Callers often need more sophisticated controls
+than simply writing to stdout.  To avoid barriers, there is a TLS-aware iterator which accepts a vector of whatever data type the
+caller needs.  Like so:
+
+```
+#include "collatz/binary_tree.hpp"
+#include "collatz/collatz.hpp"
+
+
+int main() {
+
+    struct CoolMetadata {
+        uint64_t total_processed = 0;
+        uint64_t skipped = 0;
+        SomeCacheSystem cache;
+    };
+    BinaryTree<uint64_t> tree(32);
+    tree.generate_value_map();
+    std::vector<CoolMetadata> tls;
+    tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, tls, [&](const uint64_t& value, CoolMetadata& my_tls) {
+        // Check the cache first.
+        if (my_tls.cache.contains(value)) {
+            my_tls.skipped++;
+        } else {
+            Collatz<uint64_t>::st_verify(value);
+            my_tls.cache.add(value);
+        }
+
+        // Bump count, even if it was skipped.
+        my_tls.total_processed++;
+
+        // Let the iterator know it can continue.  Use ForEachSignal::BREAK to stop.
+        if (value > (1ULL << 34)) {
+            return ForEachSignal::BREAK;
+        }
+        return ForEachSignal::CONTINUE;
+    });
+
+}
+```
+
+Notice, the vector will be resized (`.resize()`) automatically if it's too small for the thread count.  No other manipulation is
+made.
+
+### Iteration is FAST
+
+The `tree.for_each_uncovered_value()` and its TLS-aware variant are mostly wrappers over `NodeBitmap().for_each_value_with_tls()`.
+As such, reads are blazingly fast and low-memory due to prefix hoisting, locality, and iterating over CRoaring's internal
+containers directly.  Note that the serial policy uses CRoaring's native iterator, which is slower than the parallel policy
+codepath which iterates containers directly. As such, you should almost always use `ForEachPolicy::PARALLEL` even with just 1
+thread, unless you truly need guaranteed order.
+
+The `NodeBitmap` approach was tested extensively.  It outperforms raw memory (`malloc`) because raw memory uses 4-8x time the RAM
+and hits memory bandwidth limits (and possibly pointer chasing) long before the CPU saturates.  Multithreading helped, but couldn't
+outpace our `NodeBitmap`.  It also outperforms compressed memory.  The compressed memory was slightly smaller in size, and this
+might scale at higher tree levels, but the decompression time was so massive it killed the overall throughput.
+
+Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 1,117,834,900
+surviving positions/values.  Note, the c/ms (count per millisecond) is not a typo.  The system can provide billions of values per
+second.
+
+| Data Type | Policy   | Threads | Bitmap MB | Raw MB | Comp MB | Bitmap c/ms | Raw c/ms   | Comp c/ms |
+| :-------- | :------- | ------: |---------: | -----: | ------: | ----------: | ---------: | --------: |
+| uint64_t  | Serial   |       1 |     1,014 |  4,026 |     685 |     810,572 |  2,180,507 |   105,011 |
+| uint64_t  | Serial   |       2 |     1,014 |  4,026 |     685 |     794,702 |  2,085,702 |   104,657 |
+| uint64_t  | Serial   |       4 |     1,014 |  4,026 |     685 |     799,519 |  2,217,154 |   107,187 |
+| uint64_t  | Serial   |       8 |     1,014 |  4,026 |     685 |     780,595 |  2,102,321 |   106,130 |
+| uint64_t  | Serial   |      12 |     1,014 |  4,026 |     685 |     798,309 |  2,110,731 |   105,705 |
+| uint64_t  | Parallel |       1 |     1,014 |  4,026 |     685 |   2,867,841 |  2,110,731 |   106,088 |
+| uint64_t  | Parallel |       2 |     1,014 |  4,026 |     685 |   5,123,133 |  4,221,462 |   108,398 |
+| uint64_t  | Parallel |       4 |     1,014 |  4,026 |     685 |   8,118,196 |  7,130,848 |   108,242 |
+| uint64_t  | Parallel |       8 |     1,014 |  4,026 |     685 |  11,726,283 |  8,245,043 |   110,278 |
+| uint64_t  | Parallel |      12 |     1,014 |  4,026 |     685 |  12,563,875 |  9,422,906 |   109,750 |
+| uint128_t | Serial   |       1 |     1,014 |  8,052 |     687 |     725,835 |  1,319,206 |    80,219 |
+| uint128_t | Serial   |       2 |     1,014 |  8,052 |     687 |     715,987 |  1,159,742 |    81,181 |
+| uint128_t | Serial   |       4 |     1,014 |  8,052 |     687 |     719,894 |  1,296,517 |    79,006 |
+| uint128_t | Serial   |       8 |     1,014 |  8,052 |     687 |     742,169 |  1,342,704 |    79,350 |
+| uint128_t | Serial   |      12 |     1,014 |  8,052 |     687 |     709,251 |  1,188,474 |    84,052 |
+| uint128_t | Parallel |       1 |     1,014 |  8,052 |     687 |   2,029,549 |  1,191,157 |    81,570 |
+| uint128_t | Parallel |       2 |     1,014 |  8,052 |     687 |   3,404,404 |  2,145,051 |    82,360 |
+| uint128_t | Parallel |       4 |     1,014 |  8,052 |     687 |   5,996,394 |  3,614,265 |    87,742 |
+| uint128_t | Parallel |       8 |     1,014 |  8,052 |     687 |   8,245,043 |  4,510,109 |    87,524 |
+| uint128_t | Parallel |      12 |     1,014 |  8,052 |     687 |   9,956,278 |  4,978,139 |    84,632 |
+
+Note: `mpz_class` was not tested as extensively, but appears to iterate ~20x slower.  Roughly 180,000/ms.
+
+### Continuation
+
+The iterator supports an additional parameter for a `start` value, which allows continuation from a given point.  It isn't an exact
+value, but guarantees to be at or below the start.
+
+```
+    uint64_t start = 1234567890;
+    tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, tls, [&](const uint64_t& value, CoolMetadata& my_tls) {
+        ...stuff...
+    }, start);
+```
+
+### Alloc Choices
+
+The code should work with any stable allocator, but [jemalloc](https://jemalloc.net/) gave the best results.
+
+# Data Types and Cost Model
 
 The API accepts any native, fixed-width type up to 128 bits, such as `uint8_t`, `uint16_t`, etc.  GCC/Clang's 128-bit type has been
 typedef'd to `uint128_t` for convenience.  The API expects an unsigned type.
@@ -80,7 +216,7 @@ Overall, the design philosophy is built as a cost model: smaller types are faste
 testing.  As expected, types which align with your CPU's bit size are fastest (e.g.: `uint64_t` on a 64-bit CPU).  Larger types
 require more instructions (limbs, chunks, etc).
 
-### Classes & Facades
+# Classes & Facades
 
 `BinaryTree` A facade which builds a tree of type `BinaryTreeMaterializedImpl` or `BinaryTreeImplicitImpl`, removing nodes and
 subtrees meeting High-Water Mark.  You may build an implicit or materialized tree directly, but you probably shouldn't.  Once
@@ -98,7 +234,7 @@ representation of on/off or true/false flags for node positions in a tree.
 
 Other helpful tools exist in namespaces, such as `CollatzConstants`, `Exponents`, `AffineStride`, etc.
 
-### Programs
+# Programs
 
 Several programs are emitted (or are written in Python).
 
@@ -120,12 +256,12 @@ Several programs are emitted (or are written in Python).
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 | `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
 
-### Save and Load
+# Save and Load
 
 Several classes were given `serialize()` and `deserialize()` methods, and the `BinaryTree` facade was given a `save()` and `load()`
 method too.  A lot nuance is involved in this, so read the following sections carefully before using it.
 
-#### Portable
+### Portable
 
 The file emitted is a rudimentary, binary format.  It mostly serializes integrals and booleans, and the `CRoaring` bitmap objects
 as needed.  A `StreamHelper` class ensures endianness remains little, however I don't have access to a big-endian system to test
@@ -133,7 +269,7 @@ this. As for the `CRoaring` object, we invoke the portable version of their expo
 
 All-in-all, trees exported on different systems *should* work equally on any platform.
 
-#### Type Consistency and Promotion
+### Type Consistency and Promotion
 
 Currently, exported trees can only be imported to identically-sized types.  For example, if you build a `BinaryTree<uint64_t>` and
 export it, you cannot load it into a `BinaryTree<uint128_t>`.  This is due to `sizeof(T)` being an implicit assumption inside the
@@ -141,7 +277,7 @@ methods like `StreamHelper::serialize_integral()`, along with custom pathing for
 
 An item is on the TODO list for type promotion, but currently isn't available.
 
-#### Output and Compression
+### Output and Compression
 
 The `tree.save(...)` method accepts a `path`, which it expects to map to a file or file-like object (`std::ofstream` internally).
 Following the design of many GNU programs, you may specify a single hyphen to write to stdout: `tree.save("-")`.  Note, this will
@@ -153,11 +289,11 @@ maximum compression, equivalent to CLI: `zstd --ultra -22`.  To improve multithr
 `ZSTD_e_continue` and swtich to `ZSTD_e_flush` when `compression_level > 19`, because the window size simply gets too big to engage
 more threads at higher compression.
 
+If you don't want compression for whatever reason, you can specify zero: `tree.save(path, 0)`.  This will bypass ZStandard entirely
+and write in raw format to disk.
+
 If you dislike any of the compression choices, you can always write to stdout and pipe it into `zstd` CLI yourself, using whatever
 parameters you prefer.  The `save()` and `load()` methods create and read *any* correctly formatted ZStandard file.
-
-Finally, if you don't want compression for whatever reason, you can specify zero: `tree.save(path, 0)`.  This will bypass ZStandard
-entirely and write in raw format to disk.
 
 Both Materialized and Implicit trees compress well.  Above level ~32, compression tends toward ~2-3% (97-98% reduction).  So yeah,
 we REALLY REALLY recommend you use compression.
@@ -189,7 +325,7 @@ Compression Results Table (Implicit Tree, Level 40, 64-bit type 1GB Raw)
 |         21 |          1030 |             30 |  2.86% |
 |         22 |          1030 |             21 |  1.97% |
 
-#### Materialized Saving is a Bad Idea
+### Materialized Saving is a Bad Idea
 
 Saving and loading materialized trees is supported **but not encouraged**.  It's almost always faster to rebuild a tree than load
 an existing one.  However, the whole point of the `MaterializedBinaryTreeImpl` is to give a real, node-instantiated binary tree for
