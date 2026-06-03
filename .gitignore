@@ -16,5 +16,4 @@ tools/*.png
 perf.data*
 *.btree
 *.btree.zst
-src/junk.cpp
 

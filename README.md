@@ -252,9 +252,9 @@ Several programs are emitted (or are written in Python).
 | `pow2_under_pow3.py`  | Working    | Emits a copy/paste-friendly table for the `Exponent::MAX_POW2_UNDER_POW3[]` array. |
 | `s1_s2_separator.py`  | Working    | Breaks tree levels into S1 and S2 sets, showing patterns and deltas supporting tree behavior. |
 | `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
-| `sieve_stuff`         | Unfinished | Tool to measure effects of an LRU to aid in generic sieve. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 | `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
+| `verifier`            | Unfinished | Standalone Collatz verification as fast as possible. |
 
 # Save and Load
 

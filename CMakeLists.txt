@@ -148,8 +148,8 @@ set(CPU_PROGRAMS
     coverage
     junk
     performance_stats
-    sieve_stuff
     single_collatz
+    verifier
 )
 
 set(GPU_PROGRAMS
