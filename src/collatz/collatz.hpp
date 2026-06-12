@@ -1,5 +1,6 @@
 #pragma once
 
+#include <curand.h>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -13,7 +14,6 @@
 #include "bit.hpp"
 #include "typedefs.hpp"
 #include <vector>
-
 
 
 
@@ -291,6 +291,92 @@ class Collatz {
 
 
 
+
+
+
+    /// @brief Testing a high-performance method to get rid of clunky technique above.
+    template<AnySupportedIntegral U>
+    static inline bool st_verify_to_hwm(const U& initial_value) {
+        // Edge case when initial value is 1.
+        if (initial_value == 1) {
+            return true;
+        }
+
+        // If the value is even, it's automatically verified.
+        if ((initial_value & 1) == 0) {
+            return true;
+        }
+
+        // Select the correct type to upgrade to, if needed for overflow.
+        if constexpr(FixedWidthIntegral<U>) {
+            if constexpr(sizeof(U) * 8 < 64) {
+                // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
+                // Max initial value of 64 bit is 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
+                uint64_t safe_initial_value = initial_value;
+                return st_verify_to_hwm(safe_initial_value);
+            } else if constexpr (sizeof(U) * 8 == 64) {
+                // Dealing with U of exactly 64 bits.  If it'll overflow, use 128-bit.  Otherwise, pass through.
+                if (initial_value > CollatzConstants::get_max_initial_value_by_type<U>()) {
+                    uint128_t safe_initial_value = initial_value;
+                    return st_verify_to_hwm(safe_initial_value);
+                }
+            } else if constexpr (sizeof(U) * 8 == 128) {
+                // Dealing with 128 bits.  If it'll overflow, use mpz_class.
+                if (initial_value > CollatzConstants::get_max_initial_value_by_type<U>()) {
+                    // Extended will overflow, but mpz_class won't.  Assignment of 128 -> mpz_class uses helper.
+                    static thread_local mpz_class safe_initial_value;
+                    Int128::uint128_to_mpz(initial_value, safe_initial_value);
+                    return st_verify_to_hwm(safe_initial_value);
+                }
+            }
+        }
+
+        // If no overflow detected, simply test it.
+        if constexpr(FixedWidthIntegral<U>) {
+            // Use a stack variable for the temp.
+            U current_value = initial_value;
+            while (current_value >= initial_value) {
+                // Always odd at this point, so do the 3x+1.
+                current_value = (current_value << 1) + current_value + 1;
+                // Always even at this point, so shift by CTZ.
+                current_value >>= Bit::count_trailing_zeros(current_value);
+            }
+        } else if constexpr(GMPIntegral<U>) {
+            // Use a thread-local to avoid GMP allocs.
+            static thread_local U current_value;
+            current_value = initial_value;
+            // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
+            static thread_local CollatzAffineMap<U> af_map;
+            static thread_local U tls_out;
+            while (current_value >= initial_value) {
+                if ((current_value & 1) == 1) {
+                    af_map.reset();
+                    size_t trailing_ones = Bit::count_trailing_ones(current_value);
+                    for (size_t i = 0; i < trailing_ones; i++) {
+                        af_map.apply_F();
+                    }
+                    af_map.calculate(current_value, tls_out);
+                    current_value = tls_out;
+                }
+                // Always even at this point, so shift by CTZ.
+                current_value >>= Bit::count_trailing_zeros(current_value);
+            }
+        }
+
+        // Everything is okay.
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
     /**
     * @brief Verification implementation, which tests down to `sentinel_value`.
     * @param initial_value The starting value for a sequence.
@@ -376,8 +462,8 @@ class Collatz {
                 if (mpz_even_p(current_value.get_mpz_t())) {
                     mpz_tdiv_q_2exp(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);  // current_step >> 1   ==>  current_step /= 2
                 } else {
-                    mpz_mul(current_value.get_mpz_t(), current_value.get_mpz_t(), CollatzConstants::MPZ_THREE.get_mpz_t());  // current_step *= 3
-                    mpz_add(current_value.get_mpz_t(), current_value.get_mpz_t(), CollatzConstants::MPZ_ONE.get_mpz_t());    // current_step += 1
+                    mpz_mul_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 3);  // current_step *= 3
+                    mpz_add_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);    // current_step += 1
                 }
             }
             // Since the while-loop exits prematurely at 1, it needs one more callback before ending.

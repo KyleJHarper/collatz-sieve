@@ -209,7 +209,7 @@ int64_t value_map_iteration_per_ms(ImplicitBinaryTree<T>& tree, ForEachPolicy po
         // Serial test.  Can just loop until count hits target.
         uint64_t count = 0;
         start = high_resolution_clock::now();
-        tree.for_each_uncovered_value(policy, [&](const T& value) {
+        tree.for_each_uncovered_value(policy, [&](T& value) {
             // Comput something cheap-ish that can't be optimized-away at compile or runtime.
             if constexpr(FixedWidthIntegral<T>) {
                 if (value & 0) {
@@ -233,7 +233,7 @@ int64_t value_map_iteration_per_ms(ImplicitBinaryTree<T>& tree, ForEachPolicy po
         final_target /= omp_get_max_threads();
         std::vector<uint64_t> count_vec;
         start = high_resolution_clock::now();
-        tree.for_each_uncovered_value_with_tls(policy, count_vec, [&](const T& value, uint64_t& tls_count) {
+        tree.for_each_uncovered_value_with_tls(policy, count_vec, [&](T& value, uint64_t& tls_count) {
             // Comput something cheap-ish that can't be optimized-away at compile or runtime.
             if constexpr(FixedWidthIntegral<T>) {
                 if (value & 0) {

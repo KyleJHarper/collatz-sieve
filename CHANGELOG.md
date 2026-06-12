@@ -12,6 +12,19 @@ Note: when larger memory and/or high core count was required, the donor system w
 
 # Version History
 
+## 4.2.0
+
+### Mutable Iterator Functors
+
+The `NodeBitmap::for_each_value()` and `BinaryTree::for_each_uncovered_value()` and their with-TLS-variants no longer require the
+callback to be `(const T&)`, it can simply be `(T&)`.  These iterators already reconstruct values from parts and are not affected
+by mutations by the callee.  Since value reconstruction was already happening, this change has no performance impact.
+
+Callers may, of course, continue to specify `const` if desired.
+
+Note, the ref (&) is still required, to prevent `mpz_class` types from triggering alloc() calls with each callback.
+
+
 ## 4.1.0
 
 ### Value Iterator

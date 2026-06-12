@@ -85,6 +85,36 @@ namespace AffineStride {
     }
 
 
+
+
+
+    /// @brief TODO
+    template<typename StrideType, size_t max_run>
+    constexpr std::array<StrideType, max_run + 1> build_consecutive_ones_table() {
+        std::array<StrideType, max_run + 1> table{};
+
+        table[0].multiply = 1;
+        table[0].add = 0;
+        table[0].shift = 0;
+        table[0].f_steps = 0;
+
+        for (size_t k = 1; k <= max_run; ++k) {
+            auto& prev = table[k - 1];
+            auto& cur  = table[k];
+
+            cur.multiply = prev.multiply * 3;
+            cur.add      = prev.add * 3 + (uint64_t(1) << prev.shift);
+            cur.shift    = prev.shift + 1;
+            cur.f_steps  = prev.f_steps + 1;
+        }
+
+        return table;
+    }
+
+
+
+
+
     // Set stride size and build a mask and table using it.
     // Micro-testing shows 8 (256 permutations) is ideal.  Larger seems to spill out of cache (L1 I'd guess).  Smaller is worse.
     // These are constexpr, which explodes the compiler at a given limit, usually ~16. FYI.

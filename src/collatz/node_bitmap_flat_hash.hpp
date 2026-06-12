@@ -713,10 +713,11 @@ class FlatHashBitmapImpl {
     *
     * This method uses `for_each_value_with_tls` when TLS storage isn't needed.  It applies `callback` to all values.
     *
-    * Callback must have this signature: `(const T& value)`  Return type must be `ForEachSignal`.
+    * Callback must have this signature: `(T& value)`  Return type must be `ForEachSignal`.
     *
-    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
-    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    * The ref (`T&`) prevents GMP allocations when `T` is an `mpz_class` by hoisting the internals and reconstituting the value on
+    * each iteration.  This means the caller is free to modify the value at-will without affecting iteration or causing alloc()
+    * storms.
     *
     * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.
@@ -728,12 +729,12 @@ class FlatHashBitmapImpl {
     template<typename Func>
     void for_each_value(ForEachPolicy policy, Func&& callback) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        static_assert(std::is_invocable_v<Func, T&>, "Callback must be callable with (T&)");
         // Require ForEachSignal return type.
-        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&>, ForEachSignal>, "Callback must return ForEachSignal");
+        static_assert(std::is_same_v<std::invoke_result_t<Func, T&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         std::vector<uint8_t> dummy_tls;
-        for_each_value_with_tls(policy, dummy_tls, [&](const T& value, auto&) {
+        for_each_value_with_tls(policy, dummy_tls, [&](T& value, auto&) {
             return callback(value);
         });
     }
@@ -746,10 +747,11 @@ class FlatHashBitmapImpl {
     * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  When serial, order is
     * guaranteed.
     *
-    * Callback must have this signature: `(const T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
+    * Callback must have this signature: `(T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
     *
-    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
-    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    * The ref (`T&`) prevents GMP allocations when `T` is an `mpz_class` by hoisting the internals and reconstituting the value on
+    * each iteration.  This means the caller is free to modify the value at-will without affecting iteration or causing alloc()
+    * storms.
     *
     * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.
@@ -765,9 +767,9 @@ class FlatHashBitmapImpl {
     template<typename Func, typename TLS_Type>
     void for_each_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_v<Func, const T&, TLS_Type&>, "Callback must be callable with (const T&, TLS_Type&)");
+        static_assert(std::is_invocable_v<Func, T&, TLS_Type&>, "Callback must be callable with (T&, TLS_Type&)");
         // Require ForEachSignal return type.
-        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
+        static_assert(std::is_same_v<std::invoke_result_t<Func, T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // Ensure the TLS has enough elements before proceeding.
         const size_t max_threads = policy == ForEachPolicy::SERIAL ? 1 : static_cast<size_t>(omp_get_max_threads());

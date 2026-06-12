@@ -244,10 +244,11 @@ class NodeBitmap {
     *
     * This method uses `for_each_value_with_tls` when TLS storage isn't needed.  It applies `callback` to all values.
     *
-    * Callback must have this signature: `(const T& value)`  Return type must be `ForEachSignal`.
+    * Callback must have this signature: `(T& value)`.  Return type must be `ForEachSignal`.
     *
-    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
-    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    * The ref (`T&`) prevents GMP allocations when `T` is an `mpz_class` by hoisting the internals and reconstituting the value on
+    * each iteration.  This means the caller is free to modify the value at-will without affecting iteration or causing alloc()
+    * storms.
     *
     * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.
@@ -269,10 +270,11 @@ class NodeBitmap {
     * Applies `callback` to all values according to the ForEachPolicy (serial or parallel) requested.  When serial, order is
     * guaranteed.
     *
-    * Callback must have this signature: `(const T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
+    * Callback must have this signature: `(T& value, TLS_Type& tls)`.  Return type must be `ForEachSignal`.
     *
-    * The const and ref prevent GMP allocations when `T` is an `mpz_class`.  Whether caller actually reuses an object is up to
-    * them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+    * The ref (`T&`) prevents GMP allocations when `T` is an `mpz_class` by hoisting the internals and reconstituting the value on
+    * each iteration.  This means the caller is free to modify the value at-will without affecting iteration or causing alloc()
+    * storms.
     *
     * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.

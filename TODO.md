@@ -1,5 +1,15 @@
 # Current Work
 
+## Verifier
+* Write it.
+* Emit metrics.
+
+## ForEach in Collatz
+* Some of the st_for_each methods in Collatz don't use ForEachSignal, they still use bool.
+
+## Compare Affine Striding for Verify Method
+* Can the affine stride table speed up the Collatz::st_verify() ?
+
 ## Type Promotion and Demotion
 * Can we get type promotion of a tree, either at runtime or via save/load?
   * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
@@ -10,13 +20,6 @@
 * Re-verify GPU on Peak by Bit.  For my own sanity, re-run the peak by bit program up to 80-90 bits and make sure I didn't introduce a bug that's preventing us from finding 2^109 lately.
 * We are currently testing every number until it hits HWM, but if we used a forward-looking cache we could probably speed the program up.  Problem is I have no idea how to do that with CUDA...  Maybe there's a CRoaring that compiles on CUDA...?
 * Map Remainder of Peak by Bit.  We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get those last 19 places...
-
-## Sieve
-* Flesh this out so it's ironclad.
-* Fully implemented the forward-looking cache.
-* Switch to an implicit tree.
-* Leverage a GPU, if possible.
-* See if we can use a bitmap instead of an LRU cache.
 
 ## FLC
 * What are we even doing with the forward-looking-cache class?
@@ -29,11 +32,6 @@
 * All even nodes map to the previous level perfectly.
 * Some of the odd nodes become larger odds on the same level.
 * etc.
-
-## Affine F-Stride Table
-* Make a table of just consecutive F-steps into strides.
-  * Peak by bit can make use of this as long as it doesn't overflow.... hmm...
-  * st_verify can use it too since we're guaranteed to not dip below our sentinel value.
 
 ## Logs From 384-CPU System
 

@@ -85,9 +85,7 @@ class BinaryTree {
     /// @name Lifecycle Management
     /// @{
 
-    /**
-    * @brief Default constructor.  No levels added.
-    */
+    /// @brief Default constructor.  No levels added.
     BinaryTree() = default;
 
 
@@ -908,9 +906,9 @@ class BinaryTree {
     template<typename Func, typename TLS_Type>
     void for_each_uncovered_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback, const T start = 0) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_v<Func, const T&, TLS_Type&>, "Callback must be callable with (const T&, TLS_Type&)");
+        static_assert(std::is_invocable_v<Func, T&, TLS_Type&>, "Callback must be callable with (T&, TLS_Type&)");
         // Require ForEachSignal return type.
-        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
+        static_assert(std::is_same_v<std::invoke_result_t<Func, T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // NodeBitmap handles the tls resizing, so leave it alone here.
 
@@ -941,9 +939,10 @@ class BinaryTree {
         std::atomic<ForEachSignal> a_signal = ForEachSignal::CONTINUE;
         while(a_signal.load(std::memory_order_relaxed) == ForEachSignal::CONTINUE) {
             // Loop through each position, adjusting it with the total scaling factor before sending it back.
-            uncovered_values.for_each_value_with_tls(policy, tls, [&](const T& value, TLS_Type& my_tls) {
+            uncovered_values.for_each_value_with_tls(policy, tls, [&](T& value, TLS_Type& my_tls) {
                 if constexpr(FixedWidthIntegral<T>) {
-                    if (callback(total_scaling_factor + value, my_tls) == ForEachSignal::BREAK) {
+                    T total = total_scaling_factor + value;
+                    if (callback(total, my_tls) == ForEachSignal::BREAK) {
                         a_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                         return ForEachSignal::BREAK;
                     }
@@ -971,12 +970,12 @@ class BinaryTree {
     template<typename Func>
     void for_each_uncovered_value(ForEachPolicy policy, Func&& callback, const T start = 0) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        static_assert(std::is_invocable_v<Func, T&>, "Callback must be callable with (T&)");
         // Require ForEachSignal return type.
-        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&>, ForEachSignal>, "Callback must return ForEachSignal");
+        static_assert(std::is_same_v<std::invoke_result_t<Func, T&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         std::vector<uint8_t> dummy_tls;
-        for_each_uncovered_value_with_tls(policy, dummy_tls, [&](const T& value, auto&) {
+        for_each_uncovered_value_with_tls(policy, dummy_tls, [&](T& value, auto&) {
             return callback(value);
         }, start);
     }
