@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     verifier.start<false>();
     while (verifier.get_state() != VerifierState::STOPPED) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        // emit(verifier);
+        emit(verifier);
     }
 
     std::cout << "Done (No Detailed Metrics)" << std::endl;

@@ -1,5 +1,6 @@
 #pragma once
 #include <concepts>
+#include "bit.hpp"
 #include "concepts.hpp"
 #include <stdint.h>
 #include <stddef.h>
@@ -86,47 +87,56 @@ namespace AffineStride {
 
 
 
-
-
-    /// @brief TODO
-    template<typename StrideType, size_t max_run>
-    constexpr std::array<StrideType, max_run + 1> build_consecutive_ones_table() {
-        std::array<StrideType, max_run + 1> table{};
-
-        table[0].multiply = 1;
-        table[0].add = 0;
-        table[0].shift = 0;
-        table[0].f_steps = 0;
-
-        for (size_t k = 1; k <= max_run; ++k) {
-            auto& prev = table[k - 1];
-            auto& cur  = table[k];
-
-            cur.multiply = prev.multiply * 3;
-            cur.add      = prev.add * 3 + (uint64_t(1) << prev.shift);
-            cur.shift    = prev.shift + 1;
-            cur.f_steps  = prev.f_steps + 1;
+    /**
+    * @brief Build a stride table of only ones (..1111) at compile-time.  Used by `STRIDE_TABLE_ONLY_ONES`.
+    * @tparam StrideType The type of stride struct to use.
+    * @tparam bits The number of bits (steps) to build the table.  Since it's only ones, bits size == table size (+1).
+    * @return A constexpr array of `Stride` or `LongStride` covering all consecutive ones in bits.
+    */
+    template<typename StrideType, size_t bits>
+    constexpr std::array<StrideType, bits + 1> build_stride_table_of_ones() {
+        if constexpr (std::same_as<StrideType, Stride>) {
+            static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
+        } else if constexpr (std::same_as<StrideType, LongStride>) {
+            static_assert(bits <= MAX_LONG_STRIDE, "Stride bits exceed MAX_LONG_STRIDE");
         }
 
-        return table;
+        // Build the table.
+        std::array<StrideType, bits + 1> stride_table_of_ones{};
+
+        // Create the zero stride, which is no movement at all.
+        StrideType stride;
+        stride_table_of_ones[0] = stride;
+
+        // Now loop over consecutive ones, which is simply applying the F step to each previous stride.
+        for (size_t i = 1; i <= bits; i++) {
+            stride.multiply = stride.multiply * 3;
+            stride.add = stride.add * 3 + (uint64_t(1) << stride.shift);
+            stride.shift++;
+            stride.f_steps++;
+
+            stride_table_of_ones[i] = stride;
+        }
+
+        return stride_table_of_ones;
     }
 
 
 
-
-
-    // Set stride size and build a mask and table using it.
-    // Micro-testing shows 8 (256 permutations) is ideal.  Larger seems to spill out of cache (L1 I'd guess).  Smaller is worse.
-    // These are constexpr, which explodes the compiler at a given limit, usually ~16. FYI.
     /// @brief Size of steps in each stride for the global lookup table in this namespace.
     /// @note Micro-benchmarking shows 8 (256 permutations) is ideal.  Larger seems to spill out of L1 cache, possibly?
     static constexpr size_t STRIDE_SIZE = 8;
     /// @brief The derived stride mask from stride size.
     static constexpr uint64_t STRIDE_MASK = (1ULL << STRIDE_SIZE) - 1;
-    /// @brief The lookup table itself.
+    /// @brief A lookup table of `STRIDE_SIZE` bits for applying precomputed affine strides.
     /// @warning These are constexpr, which explodes the compiler at a given limit.  Observed ~16... fyi.
     static constexpr auto STRIDE_TABLE = build_stride_table<Stride, STRIDE_SIZE>();
 
+    /// @brief Size of steps in each consecutive-ones stride for the lookup table in this namespace.
+    /// @note Since 1 bit == 1 table entry, this can be larger without eating too much cache.  However, larger bits == lower probability.
+    static constexpr size_t STRIDE_SIZE_OF_ONES = MAX_STRIDE;
+    /// @brief A lookup table of `STRIDE_SIZE` bits for applying precomputed affine strides of consecutive ones only.
+    static constexpr auto STRIDE_TABLE_OF_ONES = build_stride_table_of_ones<Stride, STRIDE_SIZE_OF_ONES>();
 
 
     /// @name Stride Application
@@ -193,6 +203,33 @@ namespace AffineStride {
     static inline void apply_stride_8x(T& value) {
         apply_stride_4x(value);
         apply_stride_4x(value);
+    }
+
+
+
+    /**
+    * @brief Applies the correct strides from the `STRIDE_TABLE_OF_ONES` based on the count of trailing ones.
+    * @note The `value` variable will always be even at the end.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @param value The value to transform according to the `STRIDE_TABLE_OF_ONES`.
+    */
+    template<AnySupportedIntegral T>
+    static inline void apply_stride_of_ones(T& value) {
+        while (value & 1) {
+            size_t ones = Bit::count_trailing_ones(value);
+            if (ones > STRIDE_SIZE_OF_ONES) {
+                ones = STRIDE_SIZE_OF_ONES;
+            }
+
+            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE_OF_ONES[ones];
+            if constexpr(FixedWidthIntegral<T>) {
+                value = ((value * stride.multiply) + stride.add) >> stride.shift;
+            } else if constexpr(GMPIntegral<T>) {
+                mpz_mul_ui(value.get_mpz_t(), value.get_mpz_t(), stride.multiply);
+                mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), stride.add);
+                mpz_fdiv_q_2exp(value.get_mpz_t(), value.get_mpz_t(), stride.shift);
+            }
+        }
     }
 
     /// @}

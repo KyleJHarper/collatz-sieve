@@ -24,6 +24,9 @@ Callers may, of course, continue to specify `const` if desired.
 
 Note, the ref (&) is still required, to prevent `mpz_class` types from triggering alloc() calls with each callback.
 
+### Peak By Bit Bug Fix
+
+The `peak_by_bit` program had a bug which prevented it from promoting from 64-bit to 128-bit.  This was fixed.
 
 ## 4.1.0
 

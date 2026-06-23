@@ -336,10 +336,16 @@ class Collatz {
             // Use a stack variable for the temp.
             U current_value = initial_value;
             while (current_value >= initial_value) {
-                // Always odd at this point, so do the 3x+1.
+                // Always odd at this point.
                 current_value = (current_value << 1) + current_value + 1;
-                // Always even at this point, so shift by CTZ.
+                // Always even at this point.
                 current_value >>= Bit::count_trailing_zeros(current_value);
+
+                // // Always odd at this point, so do the preshifted 3x + 2 accelerated variant.
+                // current_value >>= 1;  // Trunate the tailing 1.
+                // current_value = (current_value << 1) + current_value + 2;  // 3x + 2 the stub value.
+                // // Possibly even at this point, so shift by CTZ.
+                // current_value >>= Bit::count_trailing_zeros(current_value);
             }
         } else if constexpr(GMPIntegral<U>) {
             // Use a thread-local to avoid GMP allocs.
@@ -550,28 +556,27 @@ class Collatz {
         out_peak = initial_value;
 
         if constexpr(FixedWidthIntegral<T>) {
-            // Native types are fast as-is.  Affine compression doesn't help, except bit-shifting CTZ.
-            T tmp = initial_value;
+            // Native types are fast as-is.  Affine compression of consecutive ones doesn't help, except bit-shifting CTZ.
+            T current_value = initial_value;
             T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
-            while (tmp > bailout_value) {
-                // Handle odd.
-                if ((tmp & 1) == 1) {
-                    if (tmp > CollatzConstants::get_max_3xp1<T>()) {
-                        throw std::out_of_range("Cannot process initial_value " + to_string_any(initial_value) + " any further in st_get_peak.");
-                    }
-                    tmp = (tmp << 1) + tmp + 1;
-                    if (tmp > out_peak) {
-                        out_peak = tmp;
-                    }
+            // Shift CTZ to ensure odd start.
+            current_value >>= Bit::count_trailing_zeros(current_value);
+            while (current_value > bailout_value) {
+                // Always odd here.  Check for overflow.
+                if (current_value > CollatzConstants::get_max_3xp1<T>()) {
+                    throw std::out_of_range("Cannot process initial_value " + to_string_any(initial_value) + " any further in st_get_peak.");
+                }
+                current_value = (current_value << 1) + current_value + 1;
+                if (current_value > out_peak) {
+                    out_peak = current_value;
                 }
                 // Always even at this point.  Shift zeros out.  Can't affect peak.
-                right_shifts = Bit::count_trailing_zeros(tmp);
-                tmp >>= right_shifts;
+                current_value >>= Bit::count_trailing_zeros(current_value);
             }
         } else if constexpr(GMPIntegral<T>) {
             // GMP types are significantly faster using an Affine map for CTZ and CTO, ergo it's worth the overhead.
-            static thread_local T tmp;
-            tmp = initial_value;
+            static thread_local T current_value;
+            current_value = initial_value;
             static thread_local T tmp_x_2;
             static thread_local T bailout_value;
             bailout_value = 1;
@@ -582,33 +587,33 @@ class Collatz {
             size_t trailing_ones = 0;
             constexpr size_t limit = Exponents::POW3_MPZ_ELEMENT_COUNT - 1;
             // See collatz_compression.cpp tests for details on how this works and why.
-            while (tmp > bailout_value) {
+            while (current_value > bailout_value) {
                 // Handle odd.
-                if (mpz_odd_p(tmp.get_mpz_t())) {
-                    trailing_ones = Bit::count_trailing_ones(tmp);
+                if (mpz_odd_p(current_value.get_mpz_t())) {
+                    trailing_ones = Bit::count_trailing_ones(current_value);
                     while (trailing_ones > limit) {
-                        mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
-                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), Exponents::POW3_MPZ[limit].get_mpz_t());
-                        mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), limit);
-                        mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
+                        mpz_add_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);
+                        mpz_mul(current_value.get_mpz_t(), current_value.get_mpz_t(), Exponents::POW3_MPZ[limit].get_mpz_t());
+                        mpz_tdiv_q_2exp(current_value.get_mpz_t(), current_value.get_mpz_t(), limit);
+                        mpz_sub_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);
                         trailing_ones -= limit;
                     }
                     if (trailing_ones > 0) {
-                        mpz_add_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
-                        mpz_mul(tmp.get_mpz_t(), tmp.get_mpz_t(), Exponents::POW3_MPZ[trailing_ones].get_mpz_t());
-                        mpz_tdiv_q_2exp(tmp.get_mpz_t(), tmp.get_mpz_t(), trailing_ones);
-                        mpz_sub_ui(tmp.get_mpz_t(), tmp.get_mpz_t(), 1);
+                        mpz_add_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);
+                        mpz_mul(current_value.get_mpz_t(), current_value.get_mpz_t(), Exponents::POW3_MPZ[trailing_ones].get_mpz_t());
+                        mpz_tdiv_q_2exp(current_value.get_mpz_t(), current_value.get_mpz_t(), trailing_ones);
+                        mpz_sub_ui(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);
                     }
                     // Now check peak.  However!  It applied an accelerated F(x):  (3x + 1) / 2
                     // Peak was actually tmp * 2.
-                    mpz_mul_2exp(tmp_x_2.get_mpz_t(), tmp.get_mpz_t(), 1);
+                    mpz_mul_2exp(tmp_x_2.get_mpz_t(), current_value.get_mpz_t(), 1);
                     if (mpz_cmp(tmp_x_2.get_mpz_t(), out_peak.get_mpz_t()) > 0) {
                         out_peak = tmp_x_2;
                     }
                 }
                 // Always even at this point.  Shift zeros out.
-                right_shifts = Bit::count_trailing_zeros(tmp);
-                tmp >>= right_shifts;
+                right_shifts = Bit::count_trailing_zeros(current_value);
+                current_value >>= right_shifts;
             }
         }
     }
