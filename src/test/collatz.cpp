@@ -186,7 +186,7 @@ void test_collatz_st_verify() {
 
     // Sentinel value must be > 1.
     try {
-        assert(Collatz<T>::st_verify(42, 0));
+        assert(Collatz<T>::st_verify(T(42), T(0)));
         assert(false);
     } catch (std::out_of_range& e) {
         assert(std::string(e.what()).find("You cannot send a sentinel value for st_verify below 1") != std::string::npos);
@@ -196,6 +196,26 @@ void test_collatz_st_verify() {
     if constexpr(FixedWidthIntegral<T>) {
         T value_that_overflows = std::numeric_limits<T>::max();
         assert(Collatz<T>::st_verify(value_that_overflows));
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_collatz_st_verify_to_hwm() {
+    start_test(__func__);
+
+    // Run through it.
+    for(T i = 1; i < 100000; i++) {
+        assert(Collatz<T>::st_verify_to_hwm(i));
+    }
+
+    // Values which overflow are okay.
+    if constexpr(FixedWidthIntegral<T>) {
+        T value_that_overflows = std::numeric_limits<T>::max();
+        assert(Collatz<T>::st_verify_to_hwm(value_that_overflows));
     }
 
     end_test();
@@ -419,6 +439,7 @@ void run_all() {
     test_collatz_reset<T>();
     test_collatz_get_sequence<T>();
     test_collatz_st_verify<T>();
+    test_collatz_st_verify_to_hwm<T>();
     test_collatz_st_for_each_sequence_step<T>();
     test_collatz_st_get_step_count<T>();
     test_collatz_st_get_peak<T>();
@@ -434,8 +455,6 @@ void run_all() {
 int main() {
     std::string name = "Collatz";
     preamble(name);
-    std::cout << "Need to change how we test for st_verify() ... things changed\n";
-    assert(false);
     run_all<uint64_t>();
     run_all<uint128_t>();
     run_all<mpz_class>();

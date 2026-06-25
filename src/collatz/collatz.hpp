@@ -10,7 +10,6 @@
 #include "concepts.hpp"
 #include "string.hpp"
 #include "exponents.hpp"
-#include "collatz_affine_map.hpp"
 #include "collatz_constants.hpp"
 #include "bit.hpp"
 #include "typedefs.hpp"
@@ -178,126 +177,23 @@ class Collatz {
     * @brief Verify any number down to 1 (or a custom value) as fast as possible.
     *
     * Takes any initial value and verifies the sequence reaches 1 or the sentinel value requested.  This method handles overflow
-    * detection and promotion by itself, and then calls the correctly typed implementation method.
+    * detection and promotion by itself.
     *
+    * @note There is a dedicated function for testing to high-water mark: `st_verify_to_hwm()`.
     * @note In the event a number is divergent (cyclic), this method will hang.
     * @param initial_value The starting value for a sequence.
     * @param sentinel_value The value to stop at.  Usually 1 or a High-Water Mark.
+    * @tparam U Required type to avoid overflow, which may exceed T.
     * @return True if the sequence reached the sentinel value, hangs otherwise.
     */
-    static inline bool st_verify(const T& initial_value, const T& sentinel_value = 1) {
+    template<AnySupportedIntegral U>
+    static inline bool st_verify(const U& initial_value, const U& sentinel_value = 1) {
         // Quick sanity check.  Sentinel value should be within the Collatz space (>=1) or it'll loop forever.
         // However, there are cases, such as a tree rooted at 0, where this might get tripped up.
         if (sentinel_value < 1) {
             throw std::out_of_range("You cannot send a sentinel value for st_verify below 1.  You sent: " + to_string_any(sentinel_value));
         }
 
-        // Select the correct type to upgrade to, if needed for overflow.
-        if constexpr(FixedWidthIntegral<T>) {
-            if constexpr(sizeof(T) * 8 < 64) {
-                // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
-                // Max initial value of 64 bit is 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
-                uint64_t safe_initial_value = initial_value;
-                uint64_t safe_sentinel_value = sentinel_value;
-                return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
-            } else if constexpr (sizeof(T) * 8 == 64) {
-                // Dealing with T of exactly 64 bits.  If it'll overflow, use 128-bit.  Otherwise, pass through.
-                if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(64)) {
-                    uint128_t safe_initial_value = initial_value;
-                    uint128_t safe_sentinel_value = sentinel_value;
-                    return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
-                }
-            } else if constexpr (sizeof(T) * 8 == 128) {
-                // Dealing with 128 bits.  If it'll overflow, use mpz_class.
-                if (initial_value > CollatzConstants::get_max_initial_value_by_bit<T>(128)) {
-                    // Extended will overflow, but mpz_class won't.  Assignment of 128 -> mpz_class uses helper.
-                    static thread_local mpz_class safe_initial_value;
-                    static thread_local mpz_class safe_sentinel_value;
-                    Int128::uint128_to_mpz(initial_value, safe_initial_value);
-                    Int128::uint128_to_mpz(sentinel_value, safe_sentinel_value);
-                    return st_call_verify_impl(safe_initial_value, safe_sentinel_value);
-                }
-            }
-        }
-
-        // If no overflow detected, simply send the call as type T.
-        return st_call_verify_impl(initial_value, sentinel_value);
-    }
-
-
-
-    /**
-    * @brief A method to help handle sentinel value juggling for `st_verify()`.
-    *
-    * This method exists to help with some unrolling/micro-optimizing in the `st_verify_impl()` methods.  You probably shouldn't
-    * call it manually.
-    *
-    * @note In the event a number is divergent (cyclic), this method will hang.
-    * @tparam U Required type to avoid overflow, which may exceed T.
-    * @param initial_value The starting value for a sequence.
-    * @param sentinel_value The value to stop at.  Usually 1 or a High-Water Mark.
-    * @return True if the sequence reached the sentinel value, hangs otherwise.
-    */
-    template<AnySupportedIntegral U>
-    static inline bool st_call_verify_impl(const U& initial_value, const U& sentinel_value) {
-        if (sentinel_value == 1) {
-            return Collatz<U>::st_verify_impl(initial_value);
-        } else {
-            return Collatz<U>::st_verify_impl(initial_value, sentinel_value);
-        }
-    }
-
-
-
-    /**
-    * @brief Verification implementation, which assumes down to `1`.
-    * @note This version saves a few clock cycles compared to the dynamic sentinel value version of this method.
-    * @param initial_value The starting value for a sequence.
-    * @return True if the sequence reached the sentinel value, hangs otherwise.
-    */
-    static inline bool st_verify_impl(const T& initial_value) {
-        // Use a copy in a TLS to avoid alloc on GMP type, and to avoid mangling caller's data.
-        static thread_local T tls_initial_value;
-        tls_initial_value = initial_value;
-        while (tls_initial_value > 1) {
-            if constexpr(FixedWidthIntegral<T>) {
-                // The key optimizations are shifting by CTZ and using modulo instead of bitwise check.
-                if (tls_initial_value % 2 == 1) {
-                    // Odd
-                    tls_initial_value = (tls_initial_value << 1) + tls_initial_value + 1;
-                }
-                // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
-            } else if constexpr(GMPIntegral<T>) {
-                // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
-                static thread_local CollatzAffineMap<T> af_map;
-                static thread_local T tls_out;
-                if ((tls_initial_value & 1) == 1) {
-                    // Odd
-                    af_map.reset();
-                    size_t trailing_ones = Bit::count_trailing_ones(tls_initial_value);
-                    for (size_t i = 0; i < trailing_ones; i++) {
-                        af_map.apply_F();
-                    }
-                    af_map.calculate(tls_initial_value, tls_out);
-                    tls_initial_value = tls_out;
-                }
-                // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
-            }
-        }
-
-        return true;
-    }
-
-
-
-
-
-
-    /// @brief Testing a high-performance method to get rid of clunky technique above.
-    template<AnySupportedIntegral U, size_t StrideSize = 12>
-    static inline bool st_verify_to_hwm(const U& initial_value) {
         // Edge case when initial value is 1.
         if (initial_value == 1) {
             return true;
@@ -308,10 +204,9 @@ class Collatz {
             return true;
         }
 
-        // If no overflow detected, simply test it.
         if constexpr(FixedWidthIntegral<U>) {
-            // Pick a steady stride table.  Twelve seems to be the sweet spot for this according to microbenchmarking.
-            using ChosenStride = AffineStride::Table<StrideSize>;
+            // Pick a steady stride table.
+            using StrideTable = AffineStride::VerifyFWTable;
 
             // Use a stack variable for the temp.
             U current_value = initial_value;
@@ -320,9 +215,9 @@ class Collatz {
             uint8_t headroom_bits = static_cast<uint8_t>(Bit::count_leading_zeros_positive(current_value));
 
             // Run the loop.
-            while (current_value >= initial_value) {
+            while (current_value > sentinel_value) {
                 // Pick the next stride.
-                const AffineStride::Stride& stride = ChosenStride::TABLE[current_value & ChosenStride::MASK];
+                const AffineStride::Stride& stride = StrideTable::get_stride(current_value);
 
                 // Check headroom to see if we need promotion.
                 if (headroom_bits < stride.bits_required) {
@@ -344,7 +239,7 @@ class Collatz {
                 }
 
                 // No promotion needed.  Apply the stride.
-                ChosenStride::apply_stride(current_value, stride);
+                StrideTable::apply_stride(current_value, stride);
 
                 // Adjust headroom according to Stride.
                 headroom_bits += stride.shift;
@@ -354,21 +249,19 @@ class Collatz {
             // Use a thread-local to avoid GMP allocs.
             static thread_local U current_value;
             current_value = initial_value;
-            // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
-            static thread_local CollatzAffineMap<U> af_map;
-            static thread_local U tls_out;
-            while (current_value >= initial_value) {
-                if ((current_value & 1) == 1) {
-                    af_map.reset();
-                    size_t trailing_ones = Bit::count_trailing_ones(current_value);
-                    for (size_t i = 0; i < trailing_ones; i++) {
-                        af_map.apply_F();
-                    }
-                    af_map.calculate(current_value, tls_out);
-                    current_value = tls_out;
-                }
-                // Always even at this point, so shift by CTZ.
-                current_value >>= Bit::count_trailing_zeros(current_value);
+
+            // GMP cannot overflow, so there's no need to track headroom_bits.
+
+            // Pick a steady stride table.  Twelve seems to be the sweet spot for this according to microbenchmarking.
+            using StrideTable = AffineStride::VerifyGMPTable;
+
+            // Run the loop.
+            while (current_value > sentinel_value) {
+                // Pick the next stride.
+                const AffineStride::Stride& stride = StrideTable::get_stride(current_value);
+
+                // Apply the stride.
+                StrideTable::apply_stride(current_value, stride);
             }
         }
 
@@ -378,52 +271,91 @@ class Collatz {
 
 
 
-
-
-
-
-
-
-
-
     /**
-    * @brief Verification implementation, which tests down to `sentinel_value`.
+    * @brief Verify any number down to itself (high-water mark) as fast as possible.
+    *
+    * Takes any initial value and verifies the sequence below its own initial value.  This method handles overflow detection and
+    * promotion by itself.
+    *
+    * @note In the event a number is divergent (cyclic), this method will hang.
     * @param initial_value The starting value for a sequence.
-    * @param sentinel_value The value to stop at.  Usually 1 or a High-Water Mark.
-    * @return True if the sequence reached the sentinel value, hangs otherwise.
+    * @tparam U Required type to avoid overflow, which may exceed T.
+    * @return True if the sequence reached the high-water mark (initial_value), hangs otherwise.
     */
-    static inline bool st_verify_impl(const T& initial_value, const T& sentinel_value) {
-        // Use a copy in a TLS to avoid alloc on GMP type, and to avoid mangling caller's data.
-        static thread_local T tls_initial_value;
-        tls_initial_value = initial_value;
-        while (tls_initial_value > sentinel_value) {
-            if constexpr(FixedWidthIntegral<T>) {
-                // The key optimizations are shifting by CTZ and using modulo instead of bitwise check.
-                if (tls_initial_value % 2 == 1) {
-                    // Odd
-                    tls_initial_value = (tls_initial_value << 1) + tls_initial_value + 1;
-                }
-                // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
-            } else {
-                // GMP optimizations are to use bitwise check, shift by CTZ, and leverage an affine map for consecutive ones.
-                static thread_local CollatzAffineMap<T> af_map;
-                static thread_local T tls_out;
-                if ((tls_initial_value & 1) == 1) {
-                    // Odd
-                    af_map.reset();
-                    size_t trailing_ones = Bit::count_trailing_ones(tls_initial_value);
-                    for (size_t i = 0; i < trailing_ones; i++) {
-                        af_map.apply_F();
+    template<AnySupportedIntegral U>
+    static inline bool st_verify_to_hwm(const U& initial_value) {
+        // Edge case when initial value is 1.
+        if (initial_value == 1) {
+            return true;
+        }
+
+        // If the value is even, it's automatically verified.
+        if ((initial_value & 1) == 0) {
+            return true;
+        }
+
+        if constexpr(FixedWidthIntegral<U>) {
+            // Pick a steady stride table.
+            using StrideTable = AffineStride::VerifyFWTable;
+
+            // Use a stack variable for the temp.
+            U current_value = initial_value;
+
+            // Track headroom and make adjustments from Stride to prevent overflow efficiently.
+            uint8_t headroom_bits = static_cast<uint8_t>(Bit::count_leading_zeros_positive(current_value));
+
+            // Run the loop.
+            while (current_value >= initial_value) {
+                // Pick the next stride.
+                const AffineStride::Stride& stride = StrideTable::get_stride(current_value);
+
+                // Check headroom to see if we need promotion.
+                if (headroom_bits < stride.bits_required) {
+                    if constexpr(sizeof(U) * 8 < 64) {
+                        // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
+                        // Max initial value of 64 bit is empirically shown to be 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
+                        uint64_t safe_current_value = current_value;
+                        return st_verify_to_hwm(safe_current_value);
+                    } else if constexpr (sizeof(U) * 8 == 64) {
+                        // Dealing with U of exactly 64 bits.  Uint128_t can handle it.
+                        uint128_t safe_current_value = current_value;
+                        return st_verify_to_hwm(safe_current_value);
+                    } else if constexpr (sizeof(U) * 8 == 128) {
+                        // Dealing with 128 bits.  Upgrade to mpz_class.
+                        static thread_local mpz_class safe_current_value;
+                        Int128::uint128_to_mpz(current_value, safe_current_value);
+                        return st_verify_to_hwm(safe_current_value);
                     }
-                    af_map.calculate(tls_initial_value, tls_out);
-                    tls_initial_value = tls_out;
                 }
-                // Always even at this point, so shift by CTZ.
-                tls_initial_value >>= Bit::count_trailing_zeros(tls_initial_value);
+
+                // No promotion needed.  Apply the stride.
+                StrideTable::apply_stride(current_value, stride);
+
+                // Adjust headroom according to Stride.
+                headroom_bits += stride.shift;
+                headroom_bits -= stride.bits_required;
+            }
+        } else if constexpr(GMPIntegral<U>) {
+            // Use a thread-local to avoid GMP allocs.
+            static thread_local U current_value;
+            current_value = initial_value;
+
+            // GMP cannot overflow, so there's no need to track headroom_bits.
+
+            // Pick a steady stride table.  Twelve seems to be the sweet spot for this according to microbenchmarking.
+            using StrideTable = AffineStride::VerifyGMPTable;
+
+            // Run the loop.
+            while (current_value >= initial_value) {
+                // Pick the next stride.
+                const AffineStride::Stride& stride = StrideTable::get_stride(current_value);
+
+                // Apply the stride.
+                StrideTable::apply_stride(current_value, stride);
             }
         }
 
+        // Everything is okay.
         return true;
     }
 

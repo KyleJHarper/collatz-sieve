@@ -4,11 +4,12 @@
 
 
 using my_t = uint64_t;
+// using my_t = mpz_class;
 
 
 
 void emit(Verifier<my_t>& verifier) {
-    VerifierMetric<my_t> metric = verifier.gather_metrics();
+    VerifierMetric metric = verifier.gather_metrics();
     std::cout << metric.emit_ilp() << std::endl;
 }
 
@@ -21,7 +22,7 @@ int main(int argc, char** argv) {
     BinaryTree<my_t> tree(32);
     tree.generate_value_map();
     Verifier<my_t> verifier(tree);
-    VerifierMetric<my_t> metric;
+    VerifierMetric metric;
     uint64_t nodes_per_ms = 0;
     uint64_t steps_per_ms = 0;
     my_t max = my_t(1) << atoll(argv[1]);

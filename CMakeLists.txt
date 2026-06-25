@@ -17,6 +17,18 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+# Setup and expose stride settings.
+set(COLLATZ_NODE_INIT_STRIDE_SIZE_FW   9 CACHE STRING "Stride size used while building a Node for Fixed-Width types")
+set(COLLATZ_NODE_INIT_STRIDE_SIZE_GMP 16 CACHE STRING "Stride size used while building a Node for GMP (mpz_class) type")
+set(COLLATZ_VERIFY_STRIDE_SIZE_FW     12 CACHE STRING "Stride size used while verifying fixed-width values")
+set(COLLATZ_VERIFY_STRIDE_SIZE_GMP    16 CACHE STRING "Stride size used while verifying GMP values")
+add_compile_definitions(
+    COLLATZ_NODE_INIT_STRIDE_SIZE_FW=${COLLATZ_NODE_INIT_STRIDE_SIZE_FW}
+    COLLATZ_NODE_INIT_STRIDE_SIZE_GMP=${COLLATZ_NODE_INIT_STRIDE_SIZE_GMP}
+    COLLATZ_VERIFY_STRIDE_SIZE_FW=${COLLATZ_VERIFY_STRIDE_SIZE_FW}
+    COLLATZ_VERIFY_STRIDE_SIZE_GMP=${COLLATZ_VERIFY_STRIDE_SIZE_GMP}
+)
+
 
 # --------------------------
 # FetchContent

@@ -43,7 +43,7 @@ void test_collatz_affine_stride_table() {
                 stride.shift++;
                 n >>= 1;
             }
-            stride.bits_required = std::bit_width(stride.multiply - 1);
+            stride.bits_required = std::bit_width(stride.multiply - 1) + 1;
         }
         // Now assert.
         assert(stride.add == ChosenStride::TABLE[i].add);
@@ -70,8 +70,6 @@ void run_all() {
 int main() {
     std::string name = "CollatzAffineStride";
     preamble(name);
-    std::cout << "Need to ensure the ceil(log2(multiply)) of a Stride matches the bits_required\n";
-    assert(false);
     run_all<uint64_t>();
     run_all<uint128_t>();
     run_all<mpz_class>();

@@ -126,6 +126,25 @@ void test_bit_count_trailing_zeros() {
 
 
 template<AnySupportedIntegral T>
+void test_bit_count_trailing_zeros_positive() {
+    start_test(__func__);
+
+    // Use 'int' because ctz() does, and Bit respects that.
+    int max_shifts = (sizeof(T) * 8) - 1;
+    if constexpr(GMPIntegral<T>) {
+        max_shifts = 255;
+    }
+    for(int shifts = 0; shifts <= max_shifts; shifts++) {
+        T value = T(1) << shifts;
+        assert(Bit::count_trailing_zeros_positive(value) == shifts);
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void test_bit_count_trailing_ones() {
     start_test(__func__);
 
@@ -143,6 +162,42 @@ void test_bit_count_trailing_ones() {
     // Zero is a special case, which is undefind/UB.  We assert it should be 0.
     T value = 0;
     assert(Bit::count_trailing_zeros(value) == 0);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_bit_count_leading_zeros() {
+    start_test(__func__);
+
+    if constexpr(FixedWidthIntegral<T>) {
+        // Use 'int' because ctz() does, and Bit respects that.
+        int max_shifts = (sizeof(T) * 8) - 1;
+        for(int shifts = 0; shifts <= max_shifts; shifts++) {
+            T value = T(1) << shifts;
+            assert(Bit::count_leading_zeros(value) == (max_shifts - shifts));
+        }
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
+void test_bit_count_leading_zeros_positive() {
+    start_test(__func__);
+
+    if constexpr(FixedWidthIntegral<T>) {
+        // Use 'int' because ctz() does, and Bit respects that.
+        int max_shifts = (sizeof(T) * 8) - 1;
+        for(int shifts = 0; shifts <= max_shifts; shifts++) {
+            T value = T(1) << shifts;
+            assert(Bit::count_leading_zeros_positive(value) == (max_shifts - shifts));
+        }
+    }
 
     end_test();
 }
@@ -190,7 +245,10 @@ void run_all() {
     test_bit_st_bit_reverse_full<T>();
     test_bit_st_reverse_low_bits<T>();
     test_bit_count_trailing_zeros<T>();
+    test_bit_count_trailing_zeros_positive<T>();
     test_bit_count_trailing_ones<T>();
+    test_bit_count_leading_zeros<T>();
+    test_bit_count_leading_zeros_positive<T>();
     test_bit_byteswap<T>();
 }
 
@@ -199,8 +257,6 @@ void run_all() {
 int main() {
     std::string name = "Bit";
     preamble(name);
-    std::cout << "Need to do count_leading_zeros and the nonzero variants\n";
-    assert(false);
     run_all<uint64_t>();
     run_all<uint128_t>();
     run_all<mpz_class>();

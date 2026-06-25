@@ -10,6 +10,7 @@
 #include <cmath>
 #include <limits>
 #include <string>
+#include <type_traits>
 #include "collatz_affine_stride.hpp"
 #include "stream_helper.hpp"
 #include "equality_helper.hpp"
@@ -160,7 +161,7 @@ class Node {
     * @brief Helper used exclusively by `init()` for type comparison when processing sequence for FG chain/HWM analysis.
     * @tparam U Any supported integral (see concepts.hpp).
     */
-    template<AnySupportedIntegral U, size_t StrideSize = 8>
+    template<AnySupportedIntegral U>
     inline void init_sequence_helper() {
         // Cache the FG chain length.
         const size_t fg_chain_length = get_fg_chain_length();
@@ -183,11 +184,15 @@ class Node {
         }
 
         // Now loop and stride.
-        using ChosenStride = AffineStride::Table<StrideSize>;
-        size_t strides = fg_chain_length / ChosenStride::STRIDE_SIZE;
-        size_t steps_taken = strides * ChosenStride::STRIDE_SIZE;
+        using StrideTable = std::conditional_t<
+            FixedWidthIntegral<U>
+            , AffineStride::NodeInitFWTable
+            , AffineStride::NodeInitGMPTable
+        >;
+        size_t strides = fg_chain_length / StrideTable::STRIDE_SIZE;
+        size_t steps_taken = strides * StrideTable::STRIDE_SIZE;
         while (strides > 0) {
-            ChosenStride::apply_stride(u_current_value);
+            StrideTable::apply_stride(u_current_value);
             strides -= 1;
         }
 

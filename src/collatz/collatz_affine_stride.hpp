@@ -13,6 +13,10 @@
 * Since affine maps remain affine under composition, "striding" maps can be built for any N whose least significant bits match the
 * composition which created the map.  When thrown into a table, a process can stride "k" steps at a time with a single application
 * of the accelerated map.
+*
+* @note Theoretically, larger strides should be better.  Practically, the best performance is achieved when the table fits within
+* the L1 cache.  Spilling into L2 destroys performance.  The defaults chosen are set in the CMakeLists.txt and can be overriden at
+* compile time.
 */
 namespace AffineStride {
     /// @brief Maximum stride length for the standard `Stride`.
@@ -35,10 +39,10 @@ namespace AffineStride {
     * @brief Builds a stride table at compile-time.
     * @tparam StrideType The type of stride struct to use.
     * @tparam bits The number of bits (steps) to build the table.  Final size is 2^bits.
-    * @return A constexpr array of `Stride` or `LongStride` covering all starting bit patterns.
+    * @return An array of `Stride` or `LongStride` covering all starting bit patterns.
     */
     template<size_t bits>
-    constexpr std::array<Stride, 1ULL << bits> build_stride_table() {
+    std::array<Stride, 1ULL << bits> build_stride_table() {
         static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
 
         // Build table.
@@ -78,10 +82,10 @@ namespace AffineStride {
     * @brief Build a stride table of only ones (..1111) at compile-time.
     * @tparam StrideType The type of stride struct to use.
     * @tparam bits The number of bits (steps) to build the table.  Since it's only ones, bits size == table size (+1).
-    * @return A constexpr array of `Stride` or `LongStride` covering all consecutive ones in bits.
+    * @return An array of `Stride` or `LongStride` covering all consecutive ones in bits.
     */
     template<size_t bits>
-    constexpr std::array<Stride, bits + 1> build_stride_table_of_ones() {
+    std::array<Stride, bits + 1> build_stride_table_of_ones() {
         static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
 
         // Build the table.
@@ -121,7 +125,7 @@ namespace AffineStride {
         /// @brief The mask used to filter against any value in `apply_stride()`.
         static constexpr uint64_t MASK = (1ULL << STRIDE_SIZE) - 1;
         /// @brief The table of `Stride` objects, all computed at compile time.
-        static constexpr auto TABLE = build_stride_table<STRIDE_SIZE>();
+        static const inline auto TABLE = build_stride_table<STRIDE_SIZE>();
 
 
 
@@ -184,4 +188,20 @@ namespace AffineStride {
         }
     };
 
+
+
+    /// @brief Stride size when node building in Node::init() (and its helper) for fixed-width types.
+    static constexpr size_t NODE_INIT_STRIDE_SIZE_FW = COLLATZ_NODE_INIT_STRIDE_SIZE_FW;
+    /// @brief Stride size when node building in Node::init() (and its helper) for GMP types.
+    static constexpr size_t NODE_INIT_STRIDE_SIZE_GMP = COLLATZ_NODE_INIT_STRIDE_SIZE_GMP;
+    /// @brief Stride size when performing verification in Collatz::st_verify_X() method(s) for fixed-width types.
+    static constexpr size_t VERIFY_STRIDE_SIZE_FW = COLLATZ_VERIFY_STRIDE_SIZE_FW;
+    /// @brief Stride size when performing verification in Collatz::st_verify_X() method(s) for fixed-GMP types.
+    static constexpr size_t VERIFY_STRIDE_SIZE_GMP = COLLATZ_VERIFY_STRIDE_SIZE_GMP;
+
+    /// @brief The table for node init when fixed-width.
+    using NodeInitFWTable = Table<NODE_INIT_STRIDE_SIZE_FW>;
+    using NodeInitGMPTable = Table<NODE_INIT_STRIDE_SIZE_FW>;
+    using VerifyFWTable = Table<VERIFY_STRIDE_SIZE_FW>;
+    using VerifyGMPTable = Table<VERIFY_STRIDE_SIZE_GMP>;
 }

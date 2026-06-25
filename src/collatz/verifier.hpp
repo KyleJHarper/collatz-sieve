@@ -35,7 +35,7 @@ class Verifier {
         /// @brief Number of state checks performed.
         size_t state_check_countdowns_reached = 100000;
         /// @brief Metrics gathered during a thread's execution.
-        VerifierMetric<T> metrics;
+        VerifierMetric metrics;
     };
 
     /// @brief The binary tree reference from the caller.
@@ -155,8 +155,8 @@ class Verifier {
     * @brief Gathers all the metrics from the workers.
     * @return A `VerifierMetric` object with all the thread-local values summarized.
     */
-    const VerifierMetric<T> gather_metrics() const {
-        VerifierMetric<T> metrics;
+    const VerifierMetric gather_metrics() const {
+        VerifierMetric metrics;
         for (const ThreadStorage& thread_storage : _tls) {
             metrics.merge(thread_storage.metrics);
         }

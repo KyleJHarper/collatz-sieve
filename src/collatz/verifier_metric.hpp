@@ -1,5 +1,5 @@
 #pragma once
-#include "concepts.hpp"
+#include "string.hpp"
 #include <chrono>
 
 
@@ -7,9 +7,7 @@
 /**
 * @struct VerifierMetric
 * @brief Basic metrics that can be gathered during verification.
-* @tparam T Any supported integral (see concepts.hpp).
 */
-template<AnySupportedIntegral T>
 struct VerifierMetric {
     private:
     std::string _ilp;
@@ -18,19 +16,19 @@ struct VerifierMetric {
 
     public:
     /// @brief Number of nodes verified.
-    T nodes_verified = 0;
+    uint64_t nodes_verified = 0;
     /// @brief Total number of steps taken
     /// @note Only available when `DetailedMetrics` are enabled.
-    T steps_total = 0;
+    uint64_t steps_total = 0;
     /// @brief Number of steps skipped (or would've been skipped) by hitting the High-Water Mark.
     /// @note Only available when `DetailedMetrics` are enabled.
-    T steps_skippable_by_hwm = 0;
+    uint64_t steps_skippable_by_hwm = 0;
     /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides alone.
     /// @note Only available when `DetailedMetrics` are enabled.
-    T steps_skippable_by_affine_stride = 0;
+    uint64_t steps_skippable_by_affine_stride = 0;
     /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting the HWM.
     /// @note Only available when `DetailedMetrics` are enabled.
-    T steps_skippable_by_affine_stride_before_hwm = 0;
+    uint64_t steps_skippable_by_affine_stride_before_hwm = 0;
     /// @brief Duration of execution.  Usually only tracked by a Verifier, not a thread worker.
     std::chrono::milliseconds duration_ms = std::chrono::milliseconds(0);
 
@@ -50,7 +48,7 @@ struct VerifierMetric {
         return (1.0 * steps_skippable_by_affine_stride_before_hwm) / steps_total;
     }
 
-    T steps_before_hwm() const {
+    uint64_t steps_before_hwm() const {
         return steps_total - steps_skippable_by_hwm;
     }
 
@@ -60,7 +58,7 @@ struct VerifierMetric {
     * @brief Merge the members of another `Metric` object into this one.
     * @param other The other metric whose values should be added to this one.
     */
-    void merge(const VerifierMetric<T>& other) {
+    void merge(const VerifierMetric& other) {
         nodes_verified += other.nodes_verified;
         steps_total += other.steps_total;
         steps_skippable_by_hwm += other.steps_skippable_by_hwm;
