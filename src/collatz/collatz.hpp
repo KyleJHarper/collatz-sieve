@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <string>
 #include <stdint.h>
+#include "collatz_affine_stride.hpp"
 #include "concepts.hpp"
 #include "string.hpp"
 #include "exponents.hpp"
@@ -295,7 +296,7 @@ class Collatz {
 
 
     /// @brief Testing a high-performance method to get rid of clunky technique above.
-    template<AnySupportedIntegral U>
+    template<AnySupportedIntegral U, size_t StrideSize = 12>
     static inline bool st_verify_to_hwm(const U& initial_value) {
         // Edge case when initial value is 1.
         if (initial_value == 1) {
@@ -307,45 +308,47 @@ class Collatz {
             return true;
         }
 
-        // Select the correct type to upgrade to, if needed for overflow.
-        if constexpr(FixedWidthIntegral<U>) {
-            if constexpr(sizeof(U) * 8 < 64) {
-                // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
-                // Max initial value of 64 bit is 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
-                uint64_t safe_initial_value = initial_value;
-                return st_verify_to_hwm(safe_initial_value);
-            } else if constexpr (sizeof(U) * 8 == 64) {
-                // Dealing with U of exactly 64 bits.  If it'll overflow, use 128-bit.  Otherwise, pass through.
-                if (initial_value > CollatzConstants::get_max_initial_value_by_type<U>()) {
-                    uint128_t safe_initial_value = initial_value;
-                    return st_verify_to_hwm(safe_initial_value);
-                }
-            } else if constexpr (sizeof(U) * 8 == 128) {
-                // Dealing with 128 bits.  If it'll overflow, use mpz_class.
-                if (initial_value > CollatzConstants::get_max_initial_value_by_type<U>()) {
-                    // Extended will overflow, but mpz_class won't.  Assignment of 128 -> mpz_class uses helper.
-                    static thread_local mpz_class safe_initial_value;
-                    Int128::uint128_to_mpz(initial_value, safe_initial_value);
-                    return st_verify_to_hwm(safe_initial_value);
-                }
-            }
-        }
-
         // If no overflow detected, simply test it.
         if constexpr(FixedWidthIntegral<U>) {
+            // Pick a steady stride table.  Twelve seems to be the sweet spot for this according to microbenchmarking.
+            using ChosenStride = AffineStride::Table<StrideSize>;
+
             // Use a stack variable for the temp.
             U current_value = initial_value;
-            while (current_value >= initial_value) {
-                // Always odd at this point.
-                current_value = (current_value << 1) + current_value + 1;
-                // Always even at this point.
-                current_value >>= Bit::count_trailing_zeros(current_value);
 
-                // // Always odd at this point, so do the preshifted 3x + 2 accelerated variant.
-                // current_value >>= 1;  // Trunate the tailing 1.
-                // current_value = (current_value << 1) + current_value + 2;  // 3x + 2 the stub value.
-                // // Possibly even at this point, so shift by CTZ.
-                // current_value >>= Bit::count_trailing_zeros(current_value);
+            // Track headroom and make adjustments from Stride to prevent overflow efficiently.
+            uint8_t headroom_bits = static_cast<uint8_t>(Bit::count_leading_zeros_positive(current_value));
+
+            // Run the loop.
+            while (current_value >= initial_value) {
+                // Pick the next stride.
+                const AffineStride::Stride& stride = ChosenStride::TABLE[current_value & ChosenStride::MASK];
+
+                // Check headroom to see if we need promotion.
+                if (headroom_bits < stride.bits_required) {
+                    if constexpr(sizeof(U) * 8 < 64) {
+                        // Type is less than 64 bits, just send it as a 64-bit.  Even uint32_t can't reach an overflow of 64-bit.
+                        // Max initial value of 64 bit is empirically shown to be 12,327,829,502 which is greater than 2^32 which is 4,294,967,296.
+                        uint64_t safe_current_value = current_value;
+                        return st_verify_to_hwm(safe_current_value);
+                    } else if constexpr (sizeof(U) * 8 == 64) {
+                        // Dealing with U of exactly 64 bits.  Uint128_t can handle it.
+                        uint128_t safe_current_value = current_value;
+                        return st_verify_to_hwm(safe_current_value);
+                    } else if constexpr (sizeof(U) * 8 == 128) {
+                        // Dealing with 128 bits.  Upgrade to mpz_class.
+                        static thread_local mpz_class safe_current_value;
+                        Int128::uint128_to_mpz(current_value, safe_current_value);
+                        return st_verify_to_hwm(safe_current_value);
+                    }
+                }
+
+                // No promotion needed.  Apply the stride.
+                ChosenStride::apply_stride(current_value, stride);
+
+                // Adjust headroom according to Stride.
+                headroom_bits += stride.shift;
+                headroom_bits -= stride.bits_required;
             }
         } else if constexpr(GMPIntegral<U>) {
             // Use a thread-local to avoid GMP allocs.

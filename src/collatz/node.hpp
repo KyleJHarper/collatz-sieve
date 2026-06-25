@@ -160,7 +160,7 @@ class Node {
     * @brief Helper used exclusively by `init()` for type comparison when processing sequence for FG chain/HWM analysis.
     * @tparam U Any supported integral (see concepts.hpp).
     */
-    template<AnySupportedIntegral U>
+    template<AnySupportedIntegral U, size_t StrideSize = 8>
     inline void init_sequence_helper() {
         // Cache the FG chain length.
         const size_t fg_chain_length = get_fg_chain_length();
@@ -183,10 +183,11 @@ class Node {
         }
 
         // Now loop and stride.
-        size_t strides = fg_chain_length / AffineStride::STRIDE_SIZE;
-        size_t steps_taken = strides * AffineStride::STRIDE_SIZE;
+        using ChosenStride = AffineStride::Table<StrideSize>;
+        size_t strides = fg_chain_length / ChosenStride::STRIDE_SIZE;
+        size_t steps_taken = strides * ChosenStride::STRIDE_SIZE;
         while (strides > 0) {
-            AffineStride::apply_stride(u_current_value);
+            ChosenStride::apply_stride(u_current_value);
             strides -= 1;
         }
 

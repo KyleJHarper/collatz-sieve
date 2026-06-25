@@ -203,6 +203,7 @@ class Verifier {
         // May now process value, guaranteed to not overflow.
         bool below_hwm = false;
         size_t steps = 0;
+        using ChosenStride = AffineStride::Table<8>;
         if constexpr(FixedWidthIntegral<U>) {
             U initial_value = value;
             while (value != 1) {
@@ -221,7 +222,7 @@ class Verifier {
                     if (value < initial_value) {
                         below_hwm = true;
                         // Affine stride is no longer effective.  Tally it by counting how many strides it would've taken.
-                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / AffineStride::STRIDE_SIZE)));
+                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / ChosenStride::STRIDE_SIZE)));
                     }
                 }
             }
@@ -246,7 +247,7 @@ class Verifier {
                     if (value < initial_value) {
                         below_hwm = true;
                         // Affine stride is no longer effective.  Tally it by counting how many strides it would've taken.
-                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / AffineStride::STRIDE_SIZE)));
+                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / ChosenStride::STRIDE_SIZE)));
                     }
                 }
             }
@@ -256,7 +257,7 @@ class Verifier {
 
         // Affine Stride Metric
         // This is simply the number of whole strides that could've been taken times the number of steps saved.
-        thread_storage.metrics.steps_skippable_by_affine_stride += ((steps / AffineStride::STRIDE_SIZE) * (AffineStride::STRIDE_SIZE - 1));
+        thread_storage.metrics.steps_skippable_by_affine_stride += ((steps / ChosenStride::STRIDE_SIZE) * (ChosenStride::STRIDE_SIZE - 1));
 
         // All done.  Return true.
         return true;

@@ -434,6 +434,8 @@ void run_all() {
 int main() {
     std::string name = "Collatz";
     preamble(name);
+    std::cout << "Need to change how we test for st_verify() ... things changed\n";
+    assert(false);
     run_all<uint64_t>();
     run_all<uint128_t>();
     run_all<mpz_class>();

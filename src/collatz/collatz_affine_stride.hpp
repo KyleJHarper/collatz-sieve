@@ -1,6 +1,4 @@
 #pragma once
-#include <concepts>
-#include "bit.hpp"
 #include "concepts.hpp"
 #include <stdint.h>
 #include <stddef.h>
@@ -19,58 +17,44 @@
 namespace AffineStride {
     /// @brief Maximum stride length for the standard `Stride`.
     constexpr size_t MAX_STRIDE = 20;
+
+
+
     /// @brief A lightweight, data-only struct for the stride factors.
     struct Stride {
-        uint32_t multiply = 1;  ///< Peak is all F's, which is ceil(log2(3^20)) == 32 bits.
-        uint16_t add = 0;       ///< Peak is all F's, which is ceil(log2(~3324)) == 12 bits.
-        uint8_t f_steps = 0;    ///< Can hold 255 steps.  More than enough.
-        uint8_t shift = 0;      ///< Can hold 255 steps.  More than enough.
+        uint32_t multiply = 1;       ///< Peak is all F's, which is ceil(log2(3^20)) == 32 bits.
+        uint16_t add = 0;            ///< Peak is all F's, which is ceil(log2(~3324)) == 12 bits.
+        uint8_t bits_required = 0;   ///< Number of bits required to apply this transformation (overflow risk).
+        uint8_t shift = 0;           ///< Can hold 255 steps.  More than enough.
     };
     static_assert(sizeof(Stride) == 8);
 
 
 
-    /// @brief Maximum stride length for the `LongStride`.
-    constexpr size_t MAX_LONG_STRIDE = 40;
-    /// @brief A heavier, data-only struct for longer strides.
-    struct LongStride {
-        uint64_t multiply = 1;  ///< Peak is all F's, which is ceil(log2(3^40)) == 64 bits.
-        uint32_t add = 0;       ///< Peak is all F's, which is ceil(log2(~11057331) ==24 bits.
-        uint8_t f_steps = 0;    ///< Can hold 255 steps.  More than enough.
-        uint8_t shift = 0;      ///< Can hold 255 steps.  More than enough.
-    };
-
-
-
     /**
-    * @brief Build a stride table at compile-time.  Used by `STRIDE_TABLE`.
+    * @brief Builds a stride table at compile-time.
     * @tparam StrideType The type of stride struct to use.
     * @tparam bits The number of bits (steps) to build the table.  Final size is 2^bits.
     * @return A constexpr array of `Stride` or `LongStride` covering all starting bit patterns.
     */
-    template<typename StrideType, size_t bits>
-    constexpr std::array<StrideType, 1ULL << bits> build_stride_table() {
-        if constexpr (std::same_as<StrideType, Stride>) {
-            static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
-        } else if constexpr (std::same_as<StrideType, LongStride>) {
-            static_assert(bits <= MAX_LONG_STRIDE, "Stride bits exceed MAX_LONG_STRIDE");
-        }
+    template<size_t bits>
+    constexpr std::array<Stride, 1ULL << bits> build_stride_table() {
+        static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
 
         // Build table.
         const uint64_t table_size = uint64_t(1) << bits;
-        std::array<StrideType, 1ULL << bits> stride_table{};
+        std::array<Stride, 1ULL << bits> stride_table{};
 
         // With the table preallocated, it can use index-based iteration.  Since it's looking at LSBs, we naturally get the order
         // and can simply loop through them sequentially.
         for (uint64_t i = 0; i < table_size; i++) {
             uint64_t n = i;
-            StrideType stride;
+            Stride stride;
             for (size_t step_count = 0; step_count < bits; step_count++) {
                 if (n & 1) {
                     stride.add = ((stride.add << 1) + stride.add) + (uint64_t(1) << stride.shift);
                     stride.multiply *= 3;
                     stride.shift++;
-                    stride.f_steps++;
                     // Mimic the effects on n now.
                     n = (3 * n + 1) >> 1;
                 } else {
@@ -79,6 +63,9 @@ namespace AffineStride {
                     n >>= 1;
                 }
             }
+            // Calculate the number of bits required to apply this stride to a fixed-width type.  Add one for the .add factor.
+            stride.bits_required = std::bit_width(stride.multiply - 1) + 1;
+            // Assign to the table.
             stride_table[i] = stride;
         }
 
@@ -88,24 +75,20 @@ namespace AffineStride {
 
 
     /**
-    * @brief Build a stride table of only ones (..1111) at compile-time.  Used by `STRIDE_TABLE_ONLY_ONES`.
+    * @brief Build a stride table of only ones (..1111) at compile-time.
     * @tparam StrideType The type of stride struct to use.
     * @tparam bits The number of bits (steps) to build the table.  Since it's only ones, bits size == table size (+1).
     * @return A constexpr array of `Stride` or `LongStride` covering all consecutive ones in bits.
     */
-    template<typename StrideType, size_t bits>
-    constexpr std::array<StrideType, bits + 1> build_stride_table_of_ones() {
-        if constexpr (std::same_as<StrideType, Stride>) {
-            static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
-        } else if constexpr (std::same_as<StrideType, LongStride>) {
-            static_assert(bits <= MAX_LONG_STRIDE, "Stride bits exceed MAX_LONG_STRIDE");
-        }
+    template<size_t bits>
+    constexpr std::array<Stride, bits + 1> build_stride_table_of_ones() {
+        static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
 
         // Build the table.
-        std::array<StrideType, bits + 1> stride_table_of_ones{};
+        std::array<Stride, bits + 1> stride_table_of_ones{};
 
         // Create the zero stride, which is no movement at all.
-        StrideType stride;
+        Stride stride;
         stride_table_of_ones[0] = stride;
 
         // Now loop over consecutive ones, which is simply applying the F step to each previous stride.
@@ -113,8 +96,10 @@ namespace AffineStride {
             stride.multiply = stride.multiply * 3;
             stride.add = stride.add * 3 + (uint64_t(1) << stride.shift);
             stride.shift++;
-            stride.f_steps++;
 
+            // Calculate the number of bits required to apply this stride to a fixed-width type.  Add one for the .add factor.
+            stride.bits_required = std::bit_width(stride.multiply - 1) + 1;
+            // Assign to the table.
             stride_table_of_ones[i] = stride;
         }
 
@@ -123,114 +108,80 @@ namespace AffineStride {
 
 
 
-    /// @brief Size of steps in each stride for the global lookup table in this namespace.
-    /// @note Micro-benchmarking shows 8 (256 permutations) is ideal.  Larger seems to spill out of L1 cache, possibly?
-    static constexpr size_t STRIDE_SIZE = 8;
-    /// @brief The derived stride mask from stride size.
-    static constexpr uint64_t STRIDE_MASK = (1ULL << STRIDE_SIZE) - 1;
-    /// @brief A lookup table of `STRIDE_SIZE` bits for applying precomputed affine strides.
-    /// @warning These are constexpr, which explodes the compiler at a given limit.  Observed ~16... fyi.
-    static constexpr auto STRIDE_TABLE = build_stride_table<Stride, STRIDE_SIZE>();
-
-    /// @brief Size of steps in each consecutive-ones stride for the lookup table in this namespace.
-    /// @note Since 1 bit == 1 table entry, this can be larger without eating too much cache.  However, larger bits == lower probability.
-    static constexpr size_t STRIDE_SIZE_OF_ONES = MAX_STRIDE;
-    /// @brief A lookup table of `STRIDE_SIZE` bits for applying precomputed affine strides of consecutive ones only.
-    static constexpr auto STRIDE_TABLE_OF_ONES = build_stride_table_of_ones<Stride, STRIDE_SIZE_OF_ONES>();
-
-
-    /// @name Stride Application
-    /// @{
-
     /**
-    * @brief Applies the correct stride from the `STRIDE_TABLE` based on the mask of `value` and transforms it.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @param value The value to transform according to the `STRIDE_TABLE`.
+    * @struct Table
+    * @brief A struct of constexpr stride data including a table, mask, and size based on `bits`.  Empirical testing shows that bit
+    * sizes between 8-12 are most optimal, but the real threshold is L1 cache.  When it spills over into L2, performance drops.
+    * @tparam bits The number of bits to build the table.  Final table size is 2^bits.  Blows up compilers ~16+.
     */
-    template<AnySupportedIntegral T>
-    static inline void apply_stride(T& value) {
-        if constexpr(FixedWidthIntegral<T>) {
-            // Basic arithemtic and masking is fine on this path.
-            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[value & AffineStride::STRIDE_MASK];
-            value = ((value * stride.multiply) + stride.add) >> stride.shift;
-        } else if constexpr(GMPIntegral<T>) {
-            // GMP needs the UI extracted and cleaner calls to avoid temps.
-            uint64_t u64_value = value.get_ui();
-            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE[u64_value & AffineStride::STRIDE_MASK];
-            mpz_mul_ui(value.get_mpz_t(), value.get_mpz_t(), stride.multiply);
-            mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), stride.add);
-            mpz_fdiv_q_2exp(value.get_mpz_t(), value.get_mpz_t(), stride.shift);
-        }
-    }
+    template<size_t bits>
+    struct Table {
+        /// @brief The size of the stride, meaning how many accelerated F and G steps are taken.
+        static constexpr size_t STRIDE_SIZE = bits;
+        /// @brief The mask used to filter against any value in `apply_stride()`.
+        static constexpr uint64_t MASK = (1ULL << STRIDE_SIZE) - 1;
+        /// @brief The table of `Stride` objects, all computed at compile time.
+        static constexpr auto TABLE = build_stride_table<STRIDE_SIZE>();
 
 
 
-    /**
-    * @brief Unroll 2 strides.
-    * @note Neither this nor manual unrolling added performance when tested.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @param value The value to transform according to the `STRIDE_TABLE`.
-    */
-    template<AnySupportedIntegral T>
-    static inline void apply_stride_2x(T& value) {
-        apply_stride(value);
-        apply_stride(value);
-    }
-
-
-
-    /**
-    * @brief Unroll 4 strides.
-    * @note Neither this nor manual unrolling added performance when tested.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @param value The value to transform according to the `STRIDE_TABLE`.
-    */
-    template<AnySupportedIntegral T>
-    static inline void apply_stride_4x(T& value) {
-        apply_stride_2x(value);
-        apply_stride_2x(value);
-    }
-
-
-
-    /**
-    * @brief Unroll 8 strides.
-    * @note Neither this nor manual unrolling added performance when tested.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @param value The value to transform according to the `STRIDE_TABLE`.
-    */
-    template<AnySupportedIntegral T>
-    static inline void apply_stride_8x(T& value) {
-        apply_stride_4x(value);
-        apply_stride_4x(value);
-    }
-
-
-
-    /**
-    * @brief Applies the correct strides from the `STRIDE_TABLE_OF_ONES` based on the count of trailing ones.
-    * @note The `value` variable will always be even at the end.
-    * @tparam T Any supported integral (see concepts.hpp).
-    * @param value The value to transform according to the `STRIDE_TABLE_OF_ONES`.
-    */
-    template<AnySupportedIntegral T>
-    static inline void apply_stride_of_ones(T& value) {
-        while (value & 1) {
-            size_t ones = Bit::count_trailing_ones(value);
-            if (ones > STRIDE_SIZE_OF_ONES) {
-                ones = STRIDE_SIZE_OF_ONES;
-            }
-
-            const AffineStride::Stride& stride = AffineStride::STRIDE_TABLE_OF_ONES[ones];
+        /**
+        * @brief Gets the correct stride from `TABLE` for the given `value`.
+        * @tparam T Any supported integral (see concepts.hpp).
+        * @param value The value to fetch the stride for.
+        */
+        template<AnySupportedIntegral T>
+        static inline const Stride& get_stride(const T& value) {
             if constexpr(FixedWidthIntegral<T>) {
+                return TABLE[value & MASK];
+            } else if constexpr(GMPIntegral<T>) {
+                uint64_t u64_value = value.get_ui();
+                return TABLE[u64_value & MASK];
+            }
+        }
+
+
+
+        /**
+        * @brief Applies a stride to `value`.  This version looks up the stride for you.  Next version requires you send it.
+        * @tparam T Any supported integral (see concepts.hpp).
+        * @param value The value to apply the stride to.
+        */
+        template<AnySupportedIntegral T>
+        static inline void apply_stride(T& value) {
+            if constexpr(FixedWidthIntegral<T>) {
+                // Basic arithemtic and masking is fine on this path.
+                const AffineStride::Stride& stride = get_stride(value);
                 value = ((value * stride.multiply) + stride.add) >> stride.shift;
             } else if constexpr(GMPIntegral<T>) {
+                // GMP needs the UI extracted and cleaner calls to avoid temps.
+                const AffineStride::Stride& stride = get_stride(value);
                 mpz_mul_ui(value.get_mpz_t(), value.get_mpz_t(), stride.multiply);
                 mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), stride.add);
                 mpz_fdiv_q_2exp(value.get_mpz_t(), value.get_mpz_t(), stride.shift);
             }
         }
-    }
 
-    /// @}
+
+
+        /**
+        * @brief Applies a stride to `value`.  This version requires you send the stride.  Previous version does it for you.
+        * @tparam T Any supported integral (see concepts.hpp).
+        * @param value The value to apply the stride to.
+        * @param stride The preselected stride to apply.
+        */
+        template<AnySupportedIntegral T>
+        static inline void apply_stride(T& value, const Stride& stride) {
+            if constexpr(FixedWidthIntegral<T>) {
+                // Basic arithemtic is fine on this path.
+                value = ((value * stride.multiply) + stride.add) >> stride.shift;
+            } else if constexpr(GMPIntegral<T>) {
+                // GMP needs the UI extracted and cleaner calls to avoid temps.
+                mpz_mul_ui(value.get_mpz_t(), value.get_mpz_t(), stride.multiply);
+                mpz_add_ui(value.get_mpz_t(), value.get_mpz_t(), stride.add);
+                mpz_fdiv_q_2exp(value.get_mpz_t(), value.get_mpz_t(), stride.shift);
+            }
+        }
+    };
+
 }

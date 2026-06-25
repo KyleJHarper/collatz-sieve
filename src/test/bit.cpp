@@ -199,6 +199,8 @@ void run_all() {
 int main() {
     std::string name = "Bit";
     preamble(name);
+    std::cout << "Need to do count_leading_zeros and the nonzero variants\n";
+    assert(false);
     run_all<uint64_t>();
     run_all<uint128_t>();
     run_all<mpz_class>();

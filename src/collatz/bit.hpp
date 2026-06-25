@@ -1,5 +1,6 @@
 #pragma once
 #include "concepts.hpp"
+#include <bit>
 #include <gmp.h>
 #include <limits>
 #include <stdint.h>
@@ -204,7 +205,7 @@ namespace Bit {
     */
     template<AnySupportedIntegral T>
     inline int count_trailing_zeros(const T& x) {
-        // Zero is a special and undefined case for builtins.  Return sizeof T in bits.
+        // Zero is a special and undefined case for builtins.  Return 0.
         if (x == 0) {
             return 0;
         }
@@ -212,7 +213,7 @@ namespace Bit {
         if constexpr(FixedWidthIntegral<T>) {
             // When it's below 64-bits (long long), we can use the builtin.
             if constexpr(sizeof(T) <= 8) {
-                return __builtin_ctzll(x);
+                return std::countr_zero(x);
             }
 
             // Larger fixed-widths require one-off handling.
@@ -220,18 +221,50 @@ namespace Bit {
                 uint64_t low_bits = uint64_t(x);
                 if (low_bits != 0) {
                     // There are ones in the lower bits.  Don't need high bits at all.
-                    return __builtin_ctzll(low_bits);
+                    return std::countr_zero(low_bits);
                 } else {
-                    // There are no ones in the lower bits.  Return all 64 zeros plus whatever zeros are in high, if allowed.
+                    // There are no ones in the lower bits.  Return all 64 zeros plus whatever zeros are in high.
+                    // High bits can't be all zeros because that would mean low+high == 0, which is guarded against.
                     uint64_t high_bits = uint64_t(x >> 64);
-                    if (high_bits == 0) {
-                        return 64;
-                    } else {
-                        return 64 + __builtin_ctzll(high_bits);
-                    }
+                    return 64 + std::countr_zero(high_bits);
                 }
             }
+        } else if constexpr(GMPIntegral<T>) {
+            // GMP has a scan1 function to find the first 1, so we can use it.
+            return mpz_scan1(x.get_mpz_t(), 0);
+        }
+    }
 
+
+
+    /**
+    * @brief Find the number of trailing zeros for any type `T`.  Avoids a branch for x == 0.
+    * @warning Value MUST be positive (x > 0).
+    * @param x Reference to the value to apply CTZ on.
+    * @tparam T Any supported integral (see concepts.hpp).
+    * @return An integer telling how many were found.  This follows `__builtin_ctzll()` behavior.
+    */
+    template<AnySupportedIntegral T>
+    inline int count_trailing_zeros_positive(const T& x) {
+        if constexpr(FixedWidthIntegral<T>) {
+            // When it's below 64-bits (long long), we can use the builtin.
+            if constexpr(sizeof(T) <= 8) {
+                return std::countr_zero(x);
+            }
+
+            // Larger fixed-widths require one-off handling.
+            if constexpr(Int128Integral<T>) {
+                uint64_t low_bits = uint64_t(x);
+                if (low_bits != 0) {
+                    // There are ones in the lower bits.  Don't need high bits at all.
+                    return std::countr_zero(low_bits);
+                } else {
+                    // There are no ones in the lower bits.  Return all 64 zeros plus whatever zeros are in high.
+                    // High bits can't be all zeros because that would mean low+high == 0, which is guarded against.
+                    uint64_t high_bits = uint64_t(x >> 64);
+                    return 64 + std::countr_zero(high_bits);
+                }
+            }
         } else if constexpr(GMPIntegral<T>) {
             // GMP has a scan1 function to find the first 1, so we can use it.
             return mpz_scan1(x.get_mpz_t(), 0);
@@ -257,6 +290,68 @@ namespace Bit {
             static thread_local mpz_class inverted_n = 0;
             inverted_n = ~n;
             return count_trailing_zeros(inverted_n);
+        }
+    }
+
+
+
+    /**
+    * @brief Find the number of leading zeros for any type `T`.
+    * @param n Reference to the value to apply CLZ.
+    * @tparam T Any fixed-width integral.  This function makes no sense for GMP types.
+    * @return An integer telling how many were found.
+    */
+    template<FixedWidthIntegral T>
+    inline int count_leading_zeros(const T& x) {
+        // Zero is a special case.  Return sizeof(T).
+        if (x == 0) {
+            return sizeof(T) * 8;
+        }
+
+        if constexpr(sizeof(T) <= 8) {
+            return std::countl_zero(x);
+        }
+
+        if constexpr(Int128Integral<T>) {
+            uint64_t high_bits = uint64_t(x >> 64);
+            if (high_bits != 0) {
+                // There are ones in the high bits.  Don't need low bits at all.
+                return std::countl_zero(high_bits);
+            } else {
+                // There are no ones in the higher bits.  Return all 64 plus whatever leading zeros exist in lower bits.
+                // Low bits can't be all zeros because that would mean low+high == 0, which is guarded against.
+                uint64_t low_bits = uint64_t(x);
+                return 64 + std::countl_zero(low_bits);
+            }
+        }
+    }
+
+
+
+    /**
+    * @brief Find the number of leading zeros for any type `T`.  Avoids a branch for x == 0.
+    * @warning Value MUST be positive (x > 0).
+    * @param n Reference to the value to apply CLZ.
+    * @tparam T Any fixed-width integral.  This function makes no sense for GMP types.
+    * @return An integer telling how many were found.
+    */
+    template<FixedWidthIntegral T>
+    inline int count_leading_zeros_positive(const T& x) {
+        if constexpr(sizeof(T) <= 8) {
+            return std::countl_zero(x);
+        }
+
+        if constexpr(Int128Integral<T>) {
+            uint64_t high_bits = uint64_t(x >> 64);
+            if (high_bits != 0) {
+                // There are ones in the high bits.  Don't need low bits at all.
+                return std::countl_zero(high_bits);
+            } else {
+                // There are no ones in the higher bits.  Return all 64 plus whatever leading zeros exist in lower bits.
+                // Low bits can't be all zeros because that would mean low+high == 0, which is guarded against.
+                uint64_t low_bits = uint64_t(x);
+                return 64 + std::countl_zero(low_bits);
+            }
         }
     }
 
