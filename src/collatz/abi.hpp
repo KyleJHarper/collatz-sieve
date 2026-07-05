@@ -41,4 +41,8 @@ namespace ABI {
         return demangle(typeid(T).name());
     }
 
+
+
+    /// @brief Use 64 bytes as the cache line size to avoid false sharing in TLS structs and similar.
+    constexpr size_t CACHE_LINE_SIZE = 64;
 }

@@ -1,7 +1,8 @@
 #pragma once
-#include "gmpxx.h"
-#include <array>
-#include "concepts.hpp"
+
+#include <cuda/std/array>
+#include <cstdio>
+#include <cassert>
 #include "udl.hpp"
 
 
@@ -14,29 +15,13 @@
 * @namespace CollatzConstants
 * @brief Constants and helpers for Collatz sequence processing.
 */
-namespace CollatzConstants {
-    /// @brief Highest known empircally tested level.  See [Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0).
-    static const level_t LARGEST_EMPIRICALLY_TESTED_LEVEL = 72;
-
-    // GMP will sometimes alloc() if you operate on a non-GMP (e.g.: ui) value.
-    static const mpz_class MPZ_ONE = 1;    ///< Constant `mpz_class(1)` to prevent allocs in some cases.
-    static const mpz_class MPZ_TWO = 2;    ///< Constant `mpz_class(2)` to prevent allocs in some cases.
-    static const mpz_class MPZ_THREE = 3;  ///< Constant `mpz_class(3)` to prevent allocs in some cases.
-
-    // GMP float-style values used in a lot of calculations.
-    static const mpf_class MPF_HALF = 0.5;  ///< Constant `mpf_class(0.5)` to prevent allocs in some cases.
-    static const mpf_class MPF_ONE = 1;     ///< Constant `mpf_class(1)` to prevent allocs in some cases.
-    static const mpf_class MPF_TWO = 2;     ///< Constant `mpf_class(2)` to prevent allocs in some cases.
-    static const mpf_class MPF_THREE = 3;   ///< Constant `mpf_class(3)` to prevent allocs in some cases.
-
-
-
+namespace CollatzConstantsCuda {
     /**
     * @brief Stores the highest integer which can take 3x + 1 without overflowing a given bit width.
     * @note This only supports 8, 16, 32, 64, and 128 bit widths.
     * @note This only supports unsigned types.
     */
-    constexpr std::array<uint128_t, 5> MAX_3XP1 = {
+    constexpr cuda::std::array<uint128_t, 5> MAX_3XP1 = {
         ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
         ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
         ((uint128_t(1) << 32) - 1 - 1) / 3,   // 32 bit
@@ -50,7 +35,7 @@ namespace CollatzConstants {
     * @brief Helper to return the correct `MAX_3XP1` for the type `T`.
     * @tparam T Any supported integral (see concepts.hpp).
     */
-    template<FixedWidthIntegral T>
+    template<typename T>
     inline constexpr uint128_t get_max_3xp1() {
         switch (sizeof(T) * 8) {
             case   8: return MAX_3XP1[0];
@@ -83,7 +68,7 @@ namespace CollatzConstants {
     *
     * \showinitializer
     */
-    constexpr std::array<uint128_t, 129> MAX_INITIAL_VALUE_BY_BIT = {
+    constexpr cuda::std::array<uint128_t, 129> MAX_INITIAL_VALUE_BY_BIT = {
         0,  // 0
         1,  // 1
         2,  // 2
@@ -230,14 +215,11 @@ namespace CollatzConstants {
     *
     * @tparam T Any supported integral (see concepts.hpp).
     */
-    template<AnySupportedIntegral T>
+    template<typename T>
+    __host__ __device__
     inline constexpr size_t get_max_bits_for_max_initial_value_by_type() {
-        if constexpr(FixedWidthIntegral<T>) {
-            if constexpr(sizeof(T) <= 16) {
-                return sizeof(T) * 8;
-            }
-        } else if constexpr(GMPIntegral<T>) {
-            return MAX_INITIAL_VALUE_BY_BIT.size() - 1;
+        if constexpr(sizeof(T) <= 16) {
+            return sizeof(T) * 8;
         }
     }
 
@@ -248,19 +230,17 @@ namespace CollatzConstants {
     * @tparam T Any supported integral (see concepts.hpp).
     * @param bit_size The number of bits in question to look up in the `MAX_INITIAL_VALUE_BY_BIT` table.
     */
-    template<AnySupportedIntegral T>
+    template<typename T>
+    __host__ __device__
     inline constexpr T get_max_initial_value_by_bit(size_t bit_size) {
         // Safety Check
         constexpr size_t max_bits = get_max_bits_for_max_initial_value_by_type<T>();
         if (bit_size > max_bits) {
-            throw std::out_of_range("Max initial value for bit size " + std::to_string(bit_size) + " not found because it exceeds max bits: " + std::to_string(max_bits) + ".");
+            printf("Max initial value for bit size %lu not found because it exceeds max bits: %lu.\n", bit_size, max_bits);
+            assert(false);
         }
 
-        if constexpr(FixedWidthIntegral<T>) {
-            return static_cast<T>(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
-        } else if constexpr(GMPIntegral<T>) {
-            return Int128::uint128_to_mpz(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
-        }
+        return static_cast<T>(MAX_INITIAL_VALUE_BY_BIT[bit_size]);
     }
 
 
@@ -269,9 +249,10 @@ namespace CollatzConstants {
     * @brief Return the max initial value from the precomputed table for the type `T` given.
     * @tparam T Any supported integral (see concepts.hpp).
     */
-    template<AnySupportedIntegral T>
+    template<typename T>
+    __host__ __device__
     inline constexpr T get_max_initial_value_by_type() {
-        constexpr size_t max_bits = GMPIntegral<T> ? 128 : sizeof(T) * 8;
+        constexpr size_t max_bits = sizeof(T) * 8;
         return get_max_initial_value_by_bit<T>(max_bits);
     }
 }

@@ -22,9 +22,22 @@ void test_abi_demangle() {
 
 
 template<AnySupportedIntegral T>
+void test_cache_line_size() {
+    start_test(__func__);
+
+    // It's hard coded to 64.
+    assert(ABI::CACHE_LINE_SIZE == 64);
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void run_all() {
     announce_run_all<T>();
     test_abi_demangle<T>();
+    test_cache_line_size<T>();
 }
 
 

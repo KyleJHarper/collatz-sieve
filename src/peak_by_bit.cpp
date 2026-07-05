@@ -7,19 +7,7 @@
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
 #include "collatz/peak_by_bit_gpu_interface.hpp"
-
-#ifdef HAVE_CUDA
-#include <cuda_runtime_api.h>
-bool can_use_gpu() {
-    int count = 0;
-    if (cudaGetDeviceCount(&count) != cudaSuccess || count == 0) {
-        return false;
-    }
-    return true;
-}
-#else
-bool can_use_gpu() { return false; }
-#endif
+#include "collatz/gpu_support.hpp"
 
 
 

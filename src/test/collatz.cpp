@@ -204,18 +204,12 @@ void test_collatz_st_verify() {
 
 
 template<AnySupportedIntegral T>
-void test_collatz_st_verify_to_hwm() {
+void test_collatz_st_verify_unsafe() {
     start_test(__func__);
 
-    // Run through it.
-    for(T i = 1; i < 100000; i++) {
-        assert(Collatz<T>::st_verify_to_hwm(i));
-    }
-
-    // Values which overflow are okay.
-    if constexpr(FixedWidthIntegral<T>) {
-        T value_that_overflows = std::numeric_limits<T>::max();
-        assert(Collatz<T>::st_verify_to_hwm(value_that_overflows));
+    // Run through it.  Requires sentinel value to be 3+.
+    for(T i = 3; i < 100000; i++) {
+        assert(Collatz<T>::st_verify_unsafe(i, i));
     }
 
     end_test();
@@ -439,7 +433,7 @@ void run_all() {
     test_collatz_reset<T>();
     test_collatz_get_sequence<T>();
     test_collatz_st_verify<T>();
-    test_collatz_st_verify_to_hwm<T>();
+    test_collatz_st_verify_unsafe<T>();
     test_collatz_st_for_each_sequence_step<T>();
     test_collatz_st_get_step_count<T>();
     test_collatz_st_get_peak<T>();

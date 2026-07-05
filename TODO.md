@@ -1,13 +1,23 @@
 # Current Work
 
+## O3
+* Enable -O3 and see if it speeds things up.
+
 ## Verifier
-* Write it.
-* Emit metrics.
+* GPU verifier needs written.
+* Clean up metric emitter.
+* Integrate precomputed safe initial values in st_verify().
+
+## ForEachSignal Boundary
+* Spell out in the README how parallel access is bounded to 2^32 (prefix) places.
 
 ## ForEach in Collatz
 * Some of the st_for_each methods in Collatz don't use ForEachSignal, they still use bool.
 
-## Type Promotion and Demotion
+## Concepts Typing Promotion
+* Can we make a generic `promote` function or struct to handle ->64 bit->128 bit->mpz_class ?
+
+## Tree Type Promotion and Demotion
 * Can we get type promotion of a tree, either at runtime or via save/load?
   * I guess if we made it work with "save/load" it would work with "serialize/deserialize" in-memory... hmm.
 * This should be doable if we emit a "typecode".  1+ == sizeof().  0 == mpz (or 255 == mpz, leaving room for 254 == some other arbitrary type).

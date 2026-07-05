@@ -7,6 +7,12 @@ project(Collatz LANGUAGES CXX)
 # Cuda is optional.
 find_package(CUDAToolkit QUIET)
 if(CUDAToolkit_FOUND)
+    if(CUDAToolkit_VERSION VERSION_LESS "11.6")
+        message(FATAL_ERROR
+            "CUDA Toolkit >= 11.6 is required for __int128 device support. "
+            "Found: ${CUDAToolkit_VERSION}"
+        )
+    endif()
     message(STATUS "CUDA found, enabling CUDA builds")
     add_definitions(-DHAVE_CUDA)
     enable_language(CUDA)
@@ -18,15 +24,17 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Setup and expose stride settings.
-set(COLLATZ_NODE_INIT_STRIDE_SIZE_FW   9 CACHE STRING "Stride size used while building a Node for Fixed-Width types")
-set(COLLATZ_NODE_INIT_STRIDE_SIZE_GMP 16 CACHE STRING "Stride size used while building a Node for GMP (mpz_class) type")
-set(COLLATZ_VERIFY_STRIDE_SIZE_FW     12 CACHE STRING "Stride size used while verifying fixed-width values")
-set(COLLATZ_VERIFY_STRIDE_SIZE_GMP    16 CACHE STRING "Stride size used while verifying GMP values")
+set(COLLATZ_NODE_INIT_STRIDE_SIZE_FW     9 CACHE STRING "Stride size used while building a Node for Fixed-Width types")
+set(COLLATZ_NODE_INIT_STRIDE_SIZE_GMP   16 CACHE STRING "Stride size used while building a Node for GMP (mpz_class) type")
+set(COLLATZ_VERIFY_STRIDE_SIZE_FW       12 CACHE STRING "Stride size used while verifying fixed-width values")
+set(COLLATZ_VERIFY_STRIDE_SIZE_GMP      16 CACHE STRING "Stride size used while verifying GMP values")
+set(COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA  12 CACHE STRING "Stride size used while verifying fixed-width values on cuda")
 add_compile_definitions(
     COLLATZ_NODE_INIT_STRIDE_SIZE_FW=${COLLATZ_NODE_INIT_STRIDE_SIZE_FW}
     COLLATZ_NODE_INIT_STRIDE_SIZE_GMP=${COLLATZ_NODE_INIT_STRIDE_SIZE_GMP}
     COLLATZ_VERIFY_STRIDE_SIZE_FW=${COLLATZ_VERIFY_STRIDE_SIZE_FW}
     COLLATZ_VERIFY_STRIDE_SIZE_GMP=${COLLATZ_VERIFY_STRIDE_SIZE_GMP}
+    COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA=${COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA}
 )
 
 
@@ -111,6 +119,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -fno-omit-frame-pointer -fno-inline -fno-elide-constructors" CACHE STRING "Flags used by the compiler during Debug builds." FORCE)
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g -march=native" CACHE STRING "Flags used by the compiler during Release builds." FORCE)
+set(CMAKE_CUDA_FLAGS_RELEASE "-O2")
 
 
 # Default build type = Release
@@ -150,7 +159,19 @@ set(PROJECT_LIBS
 add_library(logging STATIC src/logging.cpp)
 target_link_libraries(logging PUBLIC absl::hash spdlog::spdlog)
 
-
+# Create a single GPU object with our kernels.
+add_library(collatz_gpu OBJECT
+    src/collatz/peak_by_bit.cu
+    src/collatz/step_counter.cu
+    src/collatz/verifier_gpu_kernel.cu
+)
+# Set the properties on the GPU object.
+set_target_properties(collatz_gpu PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_STANDARD 20
+    CUDA_STANDARD_REQUIRED ON
+    CUDA_ARCHITECTURES "89;90"
+)
 
 # --------------------------
 # Programs
@@ -161,39 +182,33 @@ set(CPU_PROGRAMS
     junk
     performance_stats
     single_collatz
-    verifier
 )
 
 set(GPU_PROGRAMS
     peak_by_bit
     step_counter
+    verifier
 )
 
-# CPU-only programs
+# CPU-only programs.  Just a simple loop.
 foreach(prog ${CPU_PROGRAMS})
-    # add_executable(${prog} src/${prog}.cpp $<TARGET_OBJECTS:logging>)
     add_executable(${prog} src/${prog}.cpp)
     target_link_libraries(${prog} PRIVATE logging)
     target_link_libraries(${prog} PRIVATE ${PROJECT_LIBS})
 endforeach()
 
-# GPU programs
+# GPU programs.  Also a simple loop now that we're using an object.
 if(CUDAToolkit_FOUND)
     foreach(prog ${GPU_PROGRAMS})
-        set(GPU_SRC src/collatz/${prog}.cu)
-        if(EXISTS ${CMAKE_SOURCE_DIR}/${GPU_SRC})
-            add_executable(${prog} src/${prog}.cpp ${GPU_SRC} $<TARGET_OBJECTS:logging>)
-            set_target_properties(${prog} PROPERTIES
-                CUDA_SEPARABLE_COMPILATION ON
-                CUDA_STANDARD 20
-                CUDA_STANDARD_REQUIRED ON
-                CUDA_ARCHITECTURES "89;90"
-            )
-            target_link_libraries(${prog} PRIVATE logging)
-            target_link_libraries(${prog} PRIVATE ${PROJECT_LIBS})
-        else()
-            message(WARNING "GPU source file ${GPU_SRC} not found for program ${prog}")
-        endif()
+        add_executable(${prog} src/${prog}.cpp $<TARGET_OBJECTS:collatz_gpu>)
+        set_target_properties(${prog} PROPERTIES
+            CUDA_SEPARABLE_COMPILATION ON
+            CUDA_STANDARD 20
+            CUDA_STANDARD_REQUIRED ON
+            CUDA_ARCHITECTURES "89;90"
+        )
+        target_link_libraries(${prog} PRIVATE logging)
+        target_link_libraries(${prog} PRIVATE ${PROJECT_LIBS})
     endforeach()
 endif()
 
@@ -232,7 +247,7 @@ set(TESTS
 
 enable_testing()
 foreach(test ${TESTS})
-    add_executable(test__${test} src/test/${test}.cpp $<TARGET_OBJECTS:logging>)
+    add_executable(test__${test} src/test/${test}.cpp)
     target_link_libraries(test__${test} PRIVATE logging)
     target_link_libraries(test__${test} PRIVATE ${PROJECT_LIBS})
     add_test(NAME ${test} COMMAND test__${test})

@@ -28,7 +28,7 @@
 * @note This only supports unsigned types.
 * @note Copied from `CollatzConstants`
 */
-__host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
+constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
     ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
     ((uint128_t(1) << 32) - 1 - 1) / 3,   // 32 bit

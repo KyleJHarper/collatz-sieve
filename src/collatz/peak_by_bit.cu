@@ -22,7 +22,7 @@
 * @note This only supports unsigned types.
 * @note Copied from `CollatzConstants`
 */
-__host__ __device__ constexpr uint128_t MAX_3XP1[5] = {
+constexpr uint128_t MAX_3XP1[5] = {
     ((uint128_t(1) <<  8) - 1 - 1) / 3,   // 8 bit
     ((uint128_t(1) << 16) - 1 - 1) / 3,   // 16 bit
     ((uint128_t(1) << 32) - 1 - 1) / 3,   // 32 bit
@@ -291,16 +291,16 @@ void find_max_iv_for_bit_gpu(CollatzPeakRunner<T>* runner, size_t bit) {
 /// @brief Explicit declaration of 64-bit runner.
 template class CollatzPeakRunner<uint64_t>;
 /// @brief Explicit declaration of 128-bit runner.
-template class CollatzPeakRunner<__uint128_t>;
+template class CollatzPeakRunner<uint128_t>;
 /// @brief Explicit declaration of 64-bit create_runner method.
 template CollatzPeakRunner<uint64_t>* create_runner(uint64_t*, size_t, uint64_t*, int*, int*);
 /// @brief Explicit declaration of 128-bit create_runner method.
-template CollatzPeakRunner<__uint128_t>* create_runner(__uint128_t*, size_t, uint128_t*, int*, int*);
+template CollatzPeakRunner<uint128_t>* create_runner(uint128_t*, size_t, uint128_t*, int*, int*);
 /// @brief Explicit declaration of 64-bit destroy_runner method.
 template void destroy_runner(CollatzPeakRunner<uint64_t>*);
 /// @brief Explicit declaration of 128-bit destroy_runner method.
-template void destroy_runner(CollatzPeakRunner<__uint128_t>*);
+template void destroy_runner(CollatzPeakRunner<uint128_t>*);
 /// @brief Explicit declaration of 64-bit find_max_iv_for_bit_gpu method.
 template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint64_t>*, size_t);
 /// @brief Explicit declaration of 128-bit find_max_iv_for_bit_gpu method.
-template void find_max_iv_for_bit_gpu(CollatzPeakRunner<__uint128_t>*, size_t);
+template void find_max_iv_for_bit_gpu(CollatzPeakRunner<uint128_t>*, size_t);

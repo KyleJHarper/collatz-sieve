@@ -28,6 +28,11 @@ Note, the ref (&) is still required, to prevent `mpz_class` types from triggerin
 
 The `peak_by_bit` program had a bug which prevented it from promoting from 64-bit to 128-bit.  This was fixed.
 
+## Cache Line Optimization (False Sharing)
+
+Some thread-local structs were false sharing.  Specifically the implicit tree building and CPUVerifier loop.  This was fixed and
+performance jumped considerably.  Implicit tree building of a level 40 tree went from 37s to 28s.
+
 ## 4.1.0
 
 ### Value Iterator

@@ -12,6 +12,6 @@ touch build/Release/compile_commands.json
 
 
 # Build
-#cmake --build build/Debug || exit 1
-cmake --build build/Debug --parallel || exit 1
+cmake --build build/Debug || exit 1
+#cmake --build build/Debug --parallel || exit 1
 cmake --build build/Release --parallel

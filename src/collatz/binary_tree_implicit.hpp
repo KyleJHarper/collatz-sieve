@@ -1,5 +1,6 @@
 #pragma once
 
+#include "abi.hpp"
 #include "concepts.hpp"
 #include "string.hpp"
 #include "node.hpp"
@@ -352,8 +353,9 @@ class BinaryTreeImplicitImpl {
     * a level.  This struct creates safety and scratch space for that.
     *
     * @warning This is not meant to be used anywhere else.
+    * @warning Struct should be given alignas(...) to avoid false sharing.
     */
-    struct AddLevelTLS {
+    struct alignas(ABI::CACHE_LINE_SIZE) AddLevelTLS {
         /// @brief Dedicated `NodeBitmap` for the thread to use without guards.  Is merged later.
         NodeBitmap<T> uncovered_bitmap;
         /// @brief Dedicated pool of newly-found ancestors (HWM nodes).
