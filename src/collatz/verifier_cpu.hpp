@@ -223,7 +223,7 @@ class CPUVerifier : public Verifier<T> {
             }
 
             // Synchronize state and metrics if necessary.
-            if (thread_storage.synchronization_countdown-- == 0) {
+            if (--thread_storage.synchronization_countdown == 0) {
                 // Reset the countdown for next time.  Bump the counter for metrics.
                 thread_storage.synchronization_countdown = this->_synchronization_countdown;
                 thread_storage.synchronizations_performed++;

@@ -10,6 +10,7 @@
 #include "cuda_stream_buffer.hpp"
 #include <atomic>
 #include <chrono>
+#include <omp.h>
 #include <stdexcept>
 #include "gpu_support.hpp"
 
@@ -120,15 +121,15 @@ class GPUVerifier : public Verifier<T> {
     template<bool UseIVTable>
     void run_executor_impl() {
         // Build buffers.
-        CudaStreamBuffer<T, GPUVerifierResultData> buffer(1ULL << 22);
+        CudaStreamBuffer<T, GPUVerifierResultData> buffer(1ULL << 28);
         T* host_data_buffer = buffer.get_host_data_ptr();
         GPUVerifierResultData* host_results = buffer.get_host_results_ptr();
 
         // Process all the uncovered values.
+        // Use SERIAL (or OMP num threads = 1) for now because parallel creates AB-BA race conditions.
         this->_tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, _tls, [&](T& value, ThreadStorage& thread_storage) {
-            // Stop if done.
+            // Stop if done.  Edge-value handling is clearly documented to callers.
             if (this->_end_value > 0 && value > this->_end_value) {
-                thread_storage.metrics.flush(this->_published_metrics, true);
                 return ForEachSignal::BREAK;
             }
 
@@ -137,57 +138,48 @@ class GPUVerifier : public Verifier<T> {
                 // Return the chunk.  Let's buffer know we're done with it.
                 buffer.return_chunk(thread_storage.chunk);
 
-                // Try to get a next chunk.  Upon failure, check conditions and then try again later.
+                // If the buffer is full, process it.
                 while (buffer.get_next_chunk(thread_storage.chunk) == false) {
-                    if (omp_get_thread_num() == 0) {
-                        // This is the main thread.  It should wait for the buffer to be FILLED status.
-                        buffer.wait_until_state(CudaStreamBufferState::FILLED);
+                    // Buffer is full.  The return_chunk() set it to FILLED. Send it.
+                    // Mark buffer READY.
+                    buffer.set_state(CudaStreamBufferState::READY);
 
-                        // Mark buffer READY.
-                        buffer.set_state(CudaStreamBufferState::READY);
+                    // Send the buffer to the kernel for processing
+                    buffer.launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
 
-                        // Send the buffer to the kernel for processing
-                        buffer.launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
+                    // Wait for the buffer to be processed.
+                    buffer.wait_until_state(CudaStreamBufferState::PROCESSED);
 
-                        // Wait for the buffer to be processed.
-                        buffer.wait_until_state(CudaStreamBufferState::PROCESSED);
-
-                        // Process result data.
-                        if (host_results->overflow_count > 0) {
-                            // Had at least one overflow.  Check if we contained them.
-                            if (host_results->overflow_exceeded) {
-                                // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
-                                for (uint64_t i = 0; i < buffer.get_element_count(); i++) {
-                                    T value = *(host_data_buffer + i);
-                                    if (! Collatz<T>::st_verify(value, value)) {
-                                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                                    }
+                    // Process result data.
+                    if (host_results->overflow_count > 0) {
+                        // Had at least one overflow.  Check if we contained them.
+                        if (host_results->overflow_exceeded) {
+                            // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
+                            for (uint64_t i = 0; i < buffer.get_element_count(); i++) {
+                                T value = *(host_data_buffer + i);
+                                if (! Collatz<T>::st_verify(value, value)) {
+                                    throw std::logic_error("Failed to verify value: " + to_string_any(value));
                                 }
-                            } else {
-                                // Contained the overflow.  Process them by themselves on CPU.
-                                for (uint64_t i = 0; i < host_results->overflow_count; i++) {
-                                    T value = *(host_data_buffer + host_results->overflow_indexes[i]);
-                                    if (!Collatz<T>::st_verify(value, value)) {
-                                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                                    }
+                            }
+                        } else {
+                            // Contained the overflow.  Process them by themselves on CPU.
+                            for (uint64_t i = 0; i < host_results->overflow_count; i++) {
+                                T value = *(host_data_buffer + host_results->overflow_indexes[i]);
+                                if (!Collatz<T>::st_verify(value, value)) {
+                                    throw std::logic_error("Failed to verify value: " + to_string_any(value));
                                 }
                             }
                         }
-                        // At this point there was either no overflow or the overflowed values were verified.
-                        // Reset the results.
-                        host_results->reset();
-
-                        // Update metrics.
-                        thread_storage.metrics.nodes_verified += buffer.get_element_count();
-
-                        // Recycle the buffer.
-                        buffer.recycle();
                     }
 
-                    // Wait for the buffer to be empty again.
-                    buffer.wait_until_state(CudaStreamBufferState::EMPTY);
+                    // Reset the results.
+                    host_results->reset();
 
-                    // Loop to try to get a new chunk now.
+                    // Update metrics.
+                    this->_published_metrics.nodes_verified_atomic.fetch_add(buffer.get_element_count());
+
+                    // Recycle the buffer.  This resets counters and sets state to EMPTY for worker threads.
+                    buffer.recycle();
                 }
             }
 
@@ -195,7 +187,7 @@ class GPUVerifier : public Verifier<T> {
             host_data_buffer[thread_storage.chunk.buffer_index++] = value;
 
             // Synchronize state and metrics if necessary.
-            if (thread_storage.synchronization_countdown-- == 0) {
+            if (--thread_storage.synchronization_countdown == 0) {
                 // Reset the countdown for next time.  Bump the counter for metrics.
                 thread_storage.synchronization_countdown = this->_synchronization_countdown;
                 thread_storage.synchronizations_performed++;
