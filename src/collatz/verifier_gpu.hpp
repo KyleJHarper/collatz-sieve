@@ -157,11 +157,8 @@ class GPUVerifier : public Verifier<T> {
 
             // If the buffer is full, send it to the GPU for processing.
             if (thread_storage.buffer_ptr->is_full()) {
-                // Mark the buffer READY.
-                thread_storage.buffer_ptr->set_state(CudaStreamBufferState::READY);
-
-                // Launch the kernel for the GPU to execute when it's able to.
-                thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
+                // Call helper to process on the GPU.
+                process_buffer<UseIVTable>(thread_storage);
 
                 // This is a natual point to check for pausing, stopping, etc.
                 while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
@@ -169,42 +166,6 @@ class GPUVerifier : public Verifier<T> {
                 }
                 if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
                     return ForEachSignal::BREAK;
-                }
-
-                // Wait for the GPU to mark the buffer PROCESSED.
-                thread_storage.buffer_ptr->wait_until_state(CudaStreamBufferState::PROCESSED);
-
-                // Process the results.  Check for overflows and handle them.
-                GPUVerifierResultData* host_results_ptr = thread_storage.buffer_ptr->get_host_results_ptr();
-                T* host_data_ptr = thread_storage.buffer_ptr->get_host_data_ptr();
-                if (host_results_ptr->overflow_count > 0) {
-                    // Had at least one overflow.  Check if we contained them.
-                    if (host_results_ptr->overflow_exceeded) {
-                        // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
-                        for (uint64_t i = 0; i < thread_storage.buffer_ptr->get_next_index(); i++) {
-                            T value = *(host_data_ptr + i);
-                            if (! Collatz<T>::st_verify(value, value)) {
-                                throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                            }
-                        }
-                    } else {
-                        // Contained the overflow.  Process only the offenders on CPU.
-                        for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
-                            T value = *(host_data_ptr + host_results_ptr->overflow_indexes[i]);
-                            if (!Collatz<T>::st_verify(value, value)) {
-                                throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                            }
-                        }
-                    }
-
-                    // Reset the results.  They'll be sync'd as-such to the device.
-                    host_results_ptr->reset();
-
-                    // Update metrics.
-                    this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index());
-
-                    // Recycle the buffer.  This resets counters and sets state to FILLING.
-                    thread_storage.buffer_ptr->recycle();
                 }
             }
 
@@ -215,11 +176,66 @@ class GPUVerifier : public Verifier<T> {
             return ForEachSignal::CONTINUE;
         }, this->_start_value);
 
+        // Finalize any pending buffers.
+        for (ThreadStorage& thread_storage : _tls) {
+            if (thread_storage.buffer_ptr->get_next_index() > 0) {
+                process_buffer<UseIVTable>(thread_storage);
+            }
+        }
+
         // Set state to STOPPED.  Only this thread may do that.
         this->_state.store(VerifierState::STOPPED);
 
         // Synchronize the timer since it's done doing any work.
         this->sync_timer();
+    }
+
+
+
+    /// @brief Helper to process a full buffer.
+    template<bool UseIVTable>
+    void process_buffer(ThreadStorage& thread_storage) {
+        // Mark the buffer READY.
+        thread_storage.buffer_ptr->set_state(CudaStreamBufferState::READY);
+
+        // Launch the kernel for the GPU to execute when it's able to.
+        thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
+
+        // Wait for the GPU to mark the buffer PROCESSED.
+        thread_storage.buffer_ptr->wait_until_state(CudaStreamBufferState::PROCESSED);
+
+        // Process the results.  Check for overflows and handle them.
+        GPUVerifierResultData* host_results_ptr = thread_storage.buffer_ptr->get_host_results_ptr();
+        T* host_data_ptr = thread_storage.buffer_ptr->get_host_data_ptr();
+        if (host_results_ptr->overflow_count > 0) {
+            // Had at least one overflow.  Check if we contained them.
+            if (host_results_ptr->overflow_exceeded) {
+                // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
+                for (uint64_t i = 0; i < thread_storage.buffer_ptr->get_next_index(); i++) {
+                    T value = *(host_data_ptr + i);
+                    if (! Collatz<T>::st_verify(value, value)) {
+                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
+                    }
+                }
+            } else {
+                // Contained the overflow.  Process only the offenders on CPU.
+                for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
+                    T value = *(host_data_ptr + host_results_ptr->overflow_indexes[i]);
+                    if (!Collatz<T>::st_verify(value, value)) {
+                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
+                    }
+                }
+            }
+        }
+
+        // Reset the results.  They'll be sync'd as-such to the device.
+        host_results_ptr->reset();
+
+        // Update metrics.
+        this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index());
+
+        // Recycle the buffer.  This resets counters and sets state to FILLING.
+        thread_storage.buffer_ptr->recycle();
     }
 
 };

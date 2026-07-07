@@ -1,6 +1,6 @@
 #include "collatz/binary_tree.hpp"
 #include "collatz/verifier_gpu.hpp"
-// #include "collatz/verifier_cpu.hpp"
+#include "collatz/verifier_cpu.hpp"
 #include "collatz/verifier_executor_policy.hpp"
 
 
@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 
     VerifierExecutorPolicy policy;
     policy.detailed_metrics = false;
+    // policy.enable_max_iv_table = true;
     policy.enable_max_iv_table = false;
     verifier.start(policy);
     while (verifier.get_state() != VerifierState::STOPPED) {
