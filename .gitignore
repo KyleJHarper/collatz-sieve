@@ -16,4 +16,5 @@ tools/*.png
 perf.data*
 *.btree
 *.btree.zst
+.clangd
 

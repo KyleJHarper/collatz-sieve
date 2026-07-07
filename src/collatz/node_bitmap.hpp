@@ -279,6 +279,11 @@ class NodeBitmap {
     * @warning Caller may NOT modify this bitmap while iterating!  It relies on CRoaring's iterators and internal structures, which
     * are invalidated upon changes.
     *
+    * @note Despite its parallel nature, this iterator makes a strong guarantee that all threads will synchronize within a 2^32
+    * space (roughly 4 billion range).  The `OMP for` loop operates over the high-low containers within a single prefix.  OMP has
+    * an implicit barrier at the end of each loop.  No thread may begin working on the next prefix until the current one is fully
+    * exhausted.
+    *
     * @tparam Func A function signature defined to match `callback`.
     * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
     * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.

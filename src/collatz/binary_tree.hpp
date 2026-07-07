@@ -877,7 +877,12 @@ class BinaryTree {
     * caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting
     * values for processing and passing them back.
     *
-    * Callback must return `ForEachSignal::GO` or `ForEachSignal::STOP` to continue or abort processing.
+    * Callback must return `ForEachSignal::CONTINUE` or `ForEachSignal::BREAK` to continue or abort processing.
+    *
+    * This method does NOT stop at the last value in the leaf nodes.  It increments a multiplier and applies it to the correct
+    * scaling factor to continue iterating the children (subtrees) of the surviving values.  If all you want is iteration of the
+    * suriving values and then to stop, you should just call the `get_uncovered_values()` method to access the `NodeBitmap`
+    * directly and call its own `for_each_value_with_tls()`.
     *
     * \par Serial and Parallel Processing
     * When serial, order is guaranteed, and iteration happens sequentially through a CRoaring iterator object.  This is slower than

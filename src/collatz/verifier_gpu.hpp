@@ -10,6 +10,7 @@
 #include "cuda_stream_buffer.hpp"
 #include <atomic>
 #include <chrono>
+#include <memory>
 #include <omp.h>
 #include <stdexcept>
 #include "gpu_support.hpp"
@@ -41,8 +42,8 @@ class GPUVerifier : public Verifier<T> {
         /// @brief Metrics gathered during a thread's execution.
         VerifierTLSMetric metrics;
 
-        /// @brief A chunk tracker for iteration and filling of the CudaStreamBuffer later.
-        CudaStreamBufferChunk chunk;
+        /// @brief A pointer for a full CudaStreamBuffer object.  Avoids ABA / AB-BA problems.
+        std::unique_ptr<CudaStreamBuffer<T, GPUVerifierResultData>> buffer_ptr;
     };
 
     /// @brief Thread-local storage for the main workers.  Should NOT be modified by anything other than the worker thread and sub-threads.
@@ -119,92 +120,96 @@ class GPUVerifier : public Verifier<T> {
     * @tparam DetailedMetrics Uses `verify_with_detailed_metrics()` in this implementation instead of `Collatz<T>::st_verify()`.
     */
     template<bool UseIVTable>
-    void run_executor_impl() {
-        // Build buffers.
-        CudaStreamBuffer<T, GPUVerifierResultData> buffer(1ULL << 28);
-        T* host_data_buffer = buffer.get_host_data_ptr();
-        GPUVerifierResultData* host_results = buffer.get_host_results_ptr();
+    void run_executor_impl(size_t gpu_buffer_limit = 0) {
+        // Find out how much memory is available for the GPU.  Start by assuming the caller sent a fixed byte amount.
+        size_t total_buffer_limit = gpu_buffer_limit;
 
-        // Process all the uncovered values.
-        // Use SERIAL (or OMP num threads = 1) for now because parallel creates AB-BA race conditions.
+        // If unsent, aim for 80% of the free bytes.
+        if (gpu_buffer_limit == 0) {
+            size_t free_bytes = 0;
+            size_t total_bytes = 0;
+            cudaError_t status = cudaMemGetInfo(&free_bytes, &total_bytes);
+            if (status != cudaSuccess) {
+                throw std::runtime_error(std::string("CUDA Error: ") + cudaGetErrorString(status));
+            }
+            total_buffer_limit = free_bytes * 4 / 5;  // 80%
+        }
+
+        // Use the total buffer limit to decide how large each thread's buffer can be.
+        const size_t thread_count = static_cast<size_t>(omp_get_max_threads());
+        const size_t buffer_limit_per_thread = total_buffer_limit / thread_count;
+
+        // Use size_of to determine how many elements that works out to be.  It'll be used by the buffer's constructor.
+        const uint64_t elements_per_thread = buffer_limit_per_thread / sizeof(T);
+
+        // Build the TLS objects so element count can be sent.  Otherwise NodeBitmap will default-initialiaze and fail.
+        _tls.resize(thread_count);
+        for (ThreadStorage& tls : _tls) {
+            tls.buffer_ptr = std::make_unique<CudaStreamBuffer<T, GPUVerifierResultData>>(elements_per_thread);
+        }
+
+        // Loop through all the values, slamming them into per-thread buffers and sending them to the GPU for processing.
         this->_tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, _tls, [&](T& value, ThreadStorage& thread_storage) {
             // Stop if done.  Edge-value handling is clearly documented to callers.
             if (this->_end_value > 0 && value > this->_end_value) {
                 return ForEachSignal::BREAK;
             }
 
-            // When this chunk is finished, return it and try to get another one.
-            if (thread_storage.chunk.finished()) {
-                // Return the chunk.  Let's buffer know we're done with it.
-                buffer.return_chunk(thread_storage.chunk);
+            // If the buffer is full, send it to the GPU for processing.
+            if (thread_storage.buffer_ptr->is_full()) {
+                // Mark the buffer READY.
+                thread_storage.buffer_ptr->set_state(CudaStreamBufferState::READY);
 
-                // If the buffer is full, process it.
-                while (buffer.get_next_chunk(thread_storage.chunk) == false) {
-                    // Buffer is full.  The return_chunk() set it to FILLED. Send it.
-                    // Mark buffer READY.
-                    buffer.set_state(CudaStreamBufferState::READY);
+                // Launch the kernel for the GPU to execute when it's able to.
+                thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
 
-                    // Send the buffer to the kernel for processing
-                    buffer.launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
+                // This is a natual point to check for pausing, stopping, etc.
+                while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(this->_paused_check_ms));
+                }
+                if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
+                    return ForEachSignal::BREAK;
+                }
 
-                    // Wait for the buffer to be processed.
-                    buffer.wait_until_state(CudaStreamBufferState::PROCESSED);
+                // Wait for the GPU to mark the buffer PROCESSED.
+                thread_storage.buffer_ptr->wait_until_state(CudaStreamBufferState::PROCESSED);
 
-                    // Process result data.
-                    if (host_results->overflow_count > 0) {
-                        // Had at least one overflow.  Check if we contained them.
-                        if (host_results->overflow_exceeded) {
-                            // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
-                            for (uint64_t i = 0; i < buffer.get_element_count(); i++) {
-                                T value = *(host_data_buffer + i);
-                                if (! Collatz<T>::st_verify(value, value)) {
-                                    throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                                }
+                // Process the results.  Check for overflows and handle them.
+                GPUVerifierResultData* host_results_ptr = thread_storage.buffer_ptr->get_host_results_ptr();
+                T* host_data_ptr = thread_storage.buffer_ptr->get_host_data_ptr();
+                if (host_results_ptr->overflow_count > 0) {
+                    // Had at least one overflow.  Check if we contained them.
+                    if (host_results_ptr->overflow_exceeded) {
+                        // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
+                        for (uint64_t i = 0; i < thread_storage.buffer_ptr->get_next_index(); i++) {
+                            T value = *(host_data_ptr + i);
+                            if (! Collatz<T>::st_verify(value, value)) {
+                                throw std::logic_error("Failed to verify value: " + to_string_any(value));
                             }
-                        } else {
-                            // Contained the overflow.  Process them by themselves on CPU.
-                            for (uint64_t i = 0; i < host_results->overflow_count; i++) {
-                                T value = *(host_data_buffer + host_results->overflow_indexes[i]);
-                                if (!Collatz<T>::st_verify(value, value)) {
-                                    throw std::logic_error("Failed to verify value: " + to_string_any(value));
-                                }
+                        }
+                    } else {
+                        // Contained the overflow.  Process only the offenders on CPU.
+                        for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
+                            T value = *(host_data_ptr + host_results_ptr->overflow_indexes[i]);
+                            if (!Collatz<T>::st_verify(value, value)) {
+                                throw std::logic_error("Failed to verify value: " + to_string_any(value));
                             }
                         }
                     }
 
-                    // Reset the results.
-                    host_results->reset();
+                    // Reset the results.  They'll be sync'd as-such to the device.
+                    host_results_ptr->reset();
 
                     // Update metrics.
-                    this->_published_metrics.nodes_verified_atomic.fetch_add(buffer.get_element_count());
+                    this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index());
 
-                    // Recycle the buffer.  This resets counters and sets state to EMPTY for worker threads.
-                    buffer.recycle();
+                    // Recycle the buffer.  This resets counters and sets state to FILLING.
+                    thread_storage.buffer_ptr->recycle();
                 }
             }
 
-            // With a valid chunk, add the value to the correct region in the buffer.
-            host_data_buffer[thread_storage.chunk.buffer_index++] = value;
-
-            // Synchronize state and metrics if necessary.
-            if (--thread_storage.synchronization_countdown == 0) {
-                // Reset the countdown for next time.  Bump the counter for metrics.
-                thread_storage.synchronization_countdown = this->_synchronization_countdown;
-                thread_storage.synchronizations_performed++;
-
-                // Flush metrics.
-                thread_storage.metrics.flush(this->_published_metrics, true);
-
-                // Wait when paused.
-                while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(this->_paused_check_ms));
-                }
-
-                // Quit if necessary.
-                if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
-                    return ForEachSignal::BREAK;
-                }
-            }
+            // Buffer has space.  Add the current value to the next index, incrementing it too.
+            thread_storage.buffer_ptr->get_host_data_ptr()[thread_storage.buffer_ptr->use_next_index()] = value;
 
             // Continue
             return ForEachSignal::CONTINUE;

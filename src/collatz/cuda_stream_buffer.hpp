@@ -1,56 +1,32 @@
 #pragma once
-#include "abi.hpp"
 #include "concepts.hpp"
 #include <cuda_runtime.h>
 #include <cstdint>
 #include <features.h>
 #include <stdexcept>
-#include <variant>
 #include <atomic>
 
 
 
 /// @brief States of a buffer for the `CudaStreamBuffer` class below.
 enum class CudaStreamBufferState : uint32_t {
-    EMPTY = 0,       ///< Buffer is empty (new).  CPU or similar should fill it.
-    FILLING = 1,     ///< Buffer is filling up.  One or more threads may be held waiting for it to finish.
-    FILLED = 2,      ///< Buffer is full and awaiting a coordinator to change it to READY.
-    READY = 3,       ///< Buffer is ready.  CPU has filled it.  GPU may process it.
-    PROCESSED = 4,   ///< Buffer is processed.  GPU is done.  CPU may read/reuse/refill/etc.
-};
-
-
-
-struct alignas(ABI::CACHE_LINE_SIZE) CudaStreamBufferChunk {
-    /// @brief The index of the chunk inside a buffer, used when considering if all chunks have been filled or not.
-    uint64_t index = 0;
-
-    /// @brief The start index within the buffer managed by this chunk, inclusive/half-open-range: [start - end).
-    uint64_t buffer_start = 0;
-
-    /// @brief The current index within the buffer managed by this chunk that a thread is filling.
-    uint64_t buffer_index = 0;
-
-    /// @brief The end index within the buffer managed by this chunk, exclusive/half-open-range: [start - end).
-    uint64_t buffer_end = 0;
-
-    /// @brief Compares the `buffer_index` to the `buffer_end` to decide if this chunk is finished.
-    inline bool finished() const { return buffer_index >= buffer_end; }
-
-    /// @brief Returns true if the chunk has at least one element: end - start.
-    inline bool empty() const { return buffer_end == buffer_start; }
+    FILLING = 1,     ///< Buffer is filling up.
+    READY = 2,       ///< Buffer is ready.  CPU has filled it.  GPU may process it.
+    PROCESSED = 3,   ///< Buffer is processed.  GPU is done.  CPU may read/reuse/refill/etc.
 };
 
 
 
 
-template<FixedWidthIntegral T, typename ResultData = std::monostate>
+template<FixedWidthIntegral T, typename ResultData>
 class CudaStreamBuffer {
     private:
-    /// @brief Number of elements in each buffer.
-    const uint64_t _element_count;
+    /// @brief Number of elements in each buffer, max.
+    const uint64_t _element_limit;
     /// @brief Bytes occupied by each buffer.
     const uint64_t _bytes;
+    /// @brief The next element index.
+    uint64_t _next_index = 0;
 
     /// @brief The host buffer.
     T* _host_data = nullptr;
@@ -63,25 +39,10 @@ class CudaStreamBuffer {
     ResultData* _device_results = nullptr;
 
     /// @brief The current state of the buffer.  Only the host code modifies this, by help of `cudaLaunchHostFunc`.
-    std::atomic<CudaStreamBufferState> _state = CudaStreamBufferState::EMPTY;
+    std::atomic<CudaStreamBufferState> _state = CudaStreamBufferState::FILLING;
 
     /// @brief Dedicated CUDA stream for synchronizing.
     cudaStream_t _stream = nullptr;
-
-    /// @brief Chunk size for callers who want to chunk the data, usually for parallel access to buffered memory.  This only
-    /// controls how many values threads load into a buffer before requesting another chunk.  The primary advantage is taking
-    /// pressure of the `std:atomic` feeding the `chunk` by reducing `fetch_add()` calls.  These calls are already cheap, so this
-    /// value doesn't need to be huge.
-    const uint64_t _chunk_size;
-
-    /// @brief The next chunk to issue.  This is an index to create a base value for chunks.
-    std::atomic<uint64_t> _next_chunk_index = 0;
-
-    /// @brief The number of chunks filled thus far.
-    std::atomic<uint64_t> _chunks_filled = 0;
-
-    /// @brief The number of chunks expected for the buffer based on element count and chunk size.
-    const uint64_t _chunks_expected;
 
 
 
@@ -94,11 +55,9 @@ class CudaStreamBuffer {
 
 
     /// @brief Constructor takes element count and deduces bytes required.
-    explicit CudaStreamBuffer(uint64_t element_count, uint64_t chunk_size = 4096)
-        : _element_count(element_count)
+    explicit CudaStreamBuffer(uint64_t element_count)
+        : _element_limit(element_count)
         , _bytes(element_count * sizeof(T))
-        , _chunk_size(chunk_size)
-        , _chunks_expected((element_count + chunk_size - 1) / chunk_size)
     {
         // Allocate the pinned host memory buffer.
         if (cudaMallocHost((void**)&_host_data, _bytes) != cudaSuccess) {
@@ -172,7 +131,19 @@ class CudaStreamBuffer {
 
 
     /// @brief Get the number of elements in the buffer.
-    uint64_t get_element_count() const { return _element_count; }
+    uint64_t get_element_count() const { return _element_limit; }
+
+
+
+    /// @brief Syntatic sugar to return if the buffer is "full", meaning the elements buffered count matches the element limit.
+    bool is_full() const { return _next_index >= _element_limit; }
+
+
+
+    /// @brief Returns the next available index in the buffer without changing or incrementing it.
+    uint64_t get_next_index() const { return _next_index; }
+    /// @brief Returns the next available index in the buffer, and increments internal counters.
+    uint64_t use_next_index() { return _next_index++; }
 
 
 
@@ -191,66 +162,13 @@ class CudaStreamBuffer {
 
 
 
-    /// @name Chunking
-    /// @{
-
-    /// Updates caller's chunk with the next available.  Could be out of bounds.  Caller must verify from return.
-    /// Returns true if valid.  False otherwise.
-    bool get_next_chunk(CudaStreamBufferChunk& chunk) {
-        chunk.index = _next_chunk_index.fetch_add(1, std::memory_order_relaxed);
-        chunk.buffer_start = chunk.index * _chunk_size;
-        chunk.buffer_index = chunk.buffer_start;
-        chunk.buffer_end = chunk.buffer_index + _chunk_size;
-        if (chunk.buffer_end > _element_count) {
-            chunk.buffer_end = _element_count;
-        }
-
-        // If it's a valid chunk of the buffer, ensure the state is set to FILLING and return true.
-        if (chunk.index < _chunks_expected) {
-            CudaStreamBufferState expected = CudaStreamBufferState::EMPTY;
-            _state.compare_exchange_strong(expected, CudaStreamBufferState::FILLING, std::memory_order_release);
-            return true;
-        }
-
-        // Chunk index was too large.  Not a real space.  Return false.
-        return false;
-    }
-
-
-
-    /// @brief Returns a chunk from a worker, updating necessary internal trackers.
-    void return_chunk(const CudaStreamBufferChunk& chunk) {
-        // Increment the chunks filled counter if the chunk was real (aka: non-zero).
-        if (chunk.empty() == false) {
-            uint64_t filled = _chunks_filled.fetch_add(1, std::memory_order_release);
-            if (filled + 1 == _chunks_expected) {
-                set_state(CudaStreamBufferState::FILLED);
-            }
-        }
-    }
-
-
-
-    /// @brief Return the current number of chunks filled.
-    uint64_t get_chunks_filled() const {
-        return _chunks_filled.load(std::memory_order_acquire);
-    }
-
-
-
-    /// @brief Resets the counters related to chunking.  Pushing index to 0 and "filled" to 0.  Then sets state to `EMPTY`.
+    /// @brief Resets the counters and sets the buffer to FILLING state.
     void recycle() {
-        _next_chunk_index.store(0, std::memory_order_relaxed);
-        _chunks_filled.store(0, std::memory_order_relaxed);
-        set_state(CudaStreamBufferState::EMPTY);
+        _next_index = 0;
+        set_state(CudaStreamBufferState::FILLING);
     }
 
-    /// @}
 
-
-
-    /// @name State Handling
-    /// @{
 
     /// @brief Waits until the buffer enters a given state.
     void wait_until_state(CudaStreamBufferState desired_state) {
@@ -262,8 +180,6 @@ class CudaStreamBuffer {
             _state.wait(current_state, std::memory_order_acquire);
         }
     }
-
-    /// @}
 
 
 
@@ -296,7 +212,7 @@ class CudaStreamBuffer {
 
 
     /**
-    * @brief Takes a kernel call reference (ptr), synchronizes buffers from host-to-device, and then executes the kernel.
+    * @brief Takes a kernel call reference, synchronizes buffers from host-to-device, and then executes the kernel.
     *
     * The kernel passed in MUST have this signature: `(T*, ResultData*, size_t, cudaStream_t)`
     *
@@ -320,7 +236,7 @@ class CudaStreamBuffer {
         sync_host_results_to_device();
 
         // Launch the user-provided kernel wrapper.
-        kernel_func(_device_data, _device_results, _element_count, _stream);
+        kernel_func(_device_data, _device_results, _next_index, _stream);
 
         // Sync the results back.  Don't need the device buffer (data).
         sync_device_results_to_host();

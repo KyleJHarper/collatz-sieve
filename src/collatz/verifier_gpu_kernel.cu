@@ -1,8 +1,7 @@
+#include <cuda_runtime.h>
 #include <cuda_runtime_api.h>
 #include "verifier_gpu_result_data.hpp"
 #include "concepts_for_cuda.hpp"
-#include <cstdio>
-#include <cuda_runtime.h>
 #include <cassert>
 #include "collatz_affine_stride_cuda.cuh"
 #include "collatz_constants_cuda.cuh"
