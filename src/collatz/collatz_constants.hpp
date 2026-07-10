@@ -7,9 +7,6 @@
 
 
 
-//
-// Constants and helpers for our sequences.
-//
 /**
 * @namespace CollatzConstants
 * @brief Constants and helpers for Collatz sequence processing.

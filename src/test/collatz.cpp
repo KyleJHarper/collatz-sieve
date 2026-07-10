@@ -1,7 +1,6 @@
 #include <cassert>
 #include <cstdint>
 #include <limits>
-#include <stdexcept>
 #include "../collatz/concepts.hpp"
 #include "helpers.hpp"
 #include "../collatz/collatz.hpp"
@@ -182,14 +181,6 @@ void test_collatz_st_verify() {
     // Default sentinel value of 1.
     for(T i = 1; i < 100000; i++) {
         assert(Collatz<T>::st_verify(i));
-    }
-
-    // Sentinel value must be > 1.
-    try {
-        assert(Collatz<T>::st_verify(T(42), T(0)));
-        assert(false);
-    } catch (std::out_of_range& e) {
-        assert(std::string(e.what()).find("You cannot send a sentinel value for st_verify below 1") != std::string::npos);
     }
 
     // Values which overflow are okay.

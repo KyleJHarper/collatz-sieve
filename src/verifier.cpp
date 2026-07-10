@@ -1,5 +1,6 @@
 #include "collatz/binary_tree.hpp"
 #include "collatz/verifier_gpu.hpp"
+#include "collatz/verifier_gpu_old.hpp"
 #include "collatz/verifier_cpu.hpp"
 #include "collatz/verifier_executor_policy.hpp"
 
@@ -20,6 +21,7 @@ int main(int argc, char** argv) {
     BinaryTree<my_t> tree(levels);
     tree.generate_value_map();
     GPUVerifier<my_t> verifier(tree);
+    // GPUVerifier__Old<my_t> verifier(tree);
     // CPUVerifier<my_t> verifier(tree);
     uint64_t effective_nodes = 0;
     uint64_t effective_nodes_per_ms =  0;

@@ -184,6 +184,31 @@ void test_binary_tree_get_level_count() {
 
 
 template<AnySupportedIntegral T>
+void test_binary_tree_get_scaling_factor() {
+    start_test(__func__);
+
+    level_t max_level = 16;
+    for (level_t level = 1; level <= max_level; level++) {
+        if (level < 2) {
+            try {
+                T x = BinaryTreeMath<T>::st_scaling_factor(level);
+                assert(false);
+                x++;
+            } catch (std::out_of_range& e) {
+                assert(std::string(e.what()).find("Cannot request a scaling factor for levels below 2.") != std::string::npos);
+            }
+            continue;
+        }
+        T scaling_factor = T{1} << (level - 2);
+        assert(scaling_factor == BinaryTreeMath<T>::st_scaling_factor(level));
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void test_binary_tree_get_root_node() {
     start_test(__func__);
 
@@ -1485,6 +1510,7 @@ void run_all(size_t root_value) {
     test_binary_tree_get_impl<T>();
     test_binary_tree_get_tree_type<T>();
     test_binary_tree_get_level_count<T>();
+    test_binary_tree_get_scaling_factor<T>();
     test_binary_tree_get_root_node<T>();
     test_binary_tree_get_coverage_map<T>();
     test_binary_tree_get_ancestors<T>();

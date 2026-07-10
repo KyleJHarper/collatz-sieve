@@ -79,6 +79,9 @@ class BinaryTree {
     /// @brief The static implementation object.  See `init()` for reuse.
     TreeType _impl;
 
+    /// @brief The scaling factor is used when trying to iterate survivors' subtrees (descendant nodes).  Updated at `add_level()`.
+    T _scaling_factor = 0;
+
 
 
     public:
@@ -137,6 +140,7 @@ class BinaryTree {
         // Sanity check.  T must support requested tree size.
         assert_level_will_fit(levels);
         _impl.init(levels, opts);
+        _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
     }
 
 
@@ -163,6 +167,9 @@ class BinaryTree {
 
     /// @brief Get the level count.
     level_t get_level_count() const { return _impl.get_level_count(); }
+
+    /// @brief Get the scaling factor of this tree.
+    T get_scaling_factor() const { return _scaling_factor; }
 
     /// @brief Get a readonly pointer to the root node.
     Node<T>* get_root_node() const { return _impl.get_root_node(); }
@@ -312,6 +319,7 @@ class BinaryTree {
         assert_level_will_fit(next_level);
         assert_level_verification(next_level, _impl.is_verifying_non_hwm_nodes());
         _impl.add_level();
+        _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
     }
 
 
@@ -925,20 +933,17 @@ class BinaryTree {
             throw std::runtime_error("Value map not generated.  Must call generate_value_map() before iterating this.");
         }
 
-        // Get the correct scaling factor for the next levels, which is always level_count + 1.
-        const T scaling_factor = BinaryTreeMath<T>::st_scaling_factor(get_level_count() + 1);
-
         // Create the multiplier to use with the scaling factor, which grows by one with each loop.
         T multiplier = 1;
 
         // Bump the multiplier if a start value requires it.  Take the maximum value of the tree and subtract it from the start
         // value requested, then divide it by the scaling factor to get the mutliplier.
         if (start > uncovered_values.maximum()) {
-            multiplier += ((start - uncovered_values.maximum()) / scaling_factor);
+            multiplier += ((start - uncovered_values.maximum()) / _scaling_factor);
         }
 
         // Hoist the total scaling value.
-        T total_scaling_factor = scaling_factor * multiplier;
+        T total_scaling_factor = _scaling_factor * multiplier;
 
         // Loop until the caller is done.
         std::atomic<ForEachSignal> a_signal = ForEachSignal::CONTINUE;
@@ -965,7 +970,7 @@ class BinaryTree {
 
             // Bump the multiplier and scaling factor for the next range of future nodes.
             multiplier++;
-            total_scaling_factor = scaling_factor * multiplier;
+            total_scaling_factor = _scaling_factor * multiplier;
         }
     }
 

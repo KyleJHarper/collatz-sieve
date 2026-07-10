@@ -41,6 +41,7 @@ __device__ void print_uint128_decimal(unsigned __int128 val) {
 
 
 
+/// @brief Performs a count of leading zeros on any supported type T.
 template <typename T>
 __device__ inline int clz(T val) {
     static_assert(is_device_integral_v<T> , "clz only supports integral and 128-bit types.");
@@ -66,6 +67,7 @@ __device__ inline int clz(T val) {
 
 
 
+/// @brief Performs a count of trailing zeros on any supported type T.
 template <typename T>
 __device__ inline int ctz(T val) {
     static_assert(is_device_integral_v<T>, "ctz only supports integral and 128-bit types.");
@@ -213,57 +215,92 @@ __device__ inline bool verify(const T& initial_value, const T& sentinel_value, b
 
 
 
+/// @brief Verifies all items in the `values` param and updates `results` for caller to mop up (overflows, mostly).
 template<typename T, bool UseIVTable>
-__global__ void gpu_verify_kernel(const T* values, GPUVerifierResultData* results, uint64_t count) {
-    // Get our index and calculate a stride so we can loop here instead of relaunching.
+__global__ void gpu_verify_kernel(
+        const T* values
+        , GPUVerifierResultData* results
+        , uint64_t element_count
+        , size_t base_multiplier = 1
+        , size_t max_multiplier = 1
+        , T scaling_factor = 0
+    ) {
+    // Get this thread's index and calculate a stride so we can loop here instead of relaunching.
     uint64_t base_index = blockIdx.x * blockDim.x + threadIdx.x;
     uint64_t stride = gridDim.x * blockDim.x;
-    if (base_index >= count) { return; }
+    if (base_index >= element_count) { return; }
 
-    for (uint64_t index = base_index; index < count; index += stride) {
-        // Assume no overflow until detected.
-        bool overflow = false;
-
+    // Loop over every index assigned to this thread.  Extract the base value and loop, if needed, for scaling runs.
+    for (uint64_t index = base_index; index < element_count; index += stride) {
         // Get the value from the buffer.
-        T initial_value = *(values + index);
+        T base_initial_value = *(values + index);
 
-        // Verify it using a templated helper.
-        bool verified = verify<T, UseIVTable>(initial_value, initial_value, overflow);
+        // Loop over the initial value according to the multiplier range.
+        for (size_t multiplier = base_multiplier; multiplier <= max_multiplier; multiplier++) {
+            // Assume no overflow until detected.
+            bool overflow = false;
 
-        if (overflow) {
-            uint32_t overflow_index = atomicAdd(&(results->overflow_count), 1);
-            if (overflow_index >= results->MAX_OVERFLOW) {
-                results->overflow_exceeded = true;
-            } else {
-                results->overflow_indexes[overflow_index] = index;
+            // Compute the true initial value using the scaling factor and multiplier, if any.
+            T initial_value = base_initial_value + (scaling_factor * multiplier);
+
+            // Verify it using a templated helper.
+            bool verified = verify<T, UseIVTable>(initial_value, initial_value, overflow);
+
+            // Upon overflow, store the necessary data for the CPU to re-verify this value.
+            if (overflow) {
+                uint32_t overflow_index = atomicAdd(&(results->overflow_count), 1);
+                if (overflow_index >= results->MAX_OVERFLOW) {
+                    // Ran out of space to store indexes.  Flag the `overflow_exceeded` and move on.
+                    results->overflow_exceeded = true;
+                } else {
+                    // Assign the index to the overflow_indexs.  CPU is responsible for re-verfifying all scaling factors, if any.
+                    results->overflow_indexes[overflow_index] = index;
+                }
+
+                // Break here.  The CPU must reverify all scales of this base initial value, so leave.
+                break;
             }
-        }
-        if (!overflow && !verified) {
-            if constexpr(sizeof(T) * 8 == 64) {
-                printf("Unable to verify value %lu\n", initial_value);
-            } else if constexpr(sizeof(T) * 8 == 128) {
-                printf("Unable to verify value ");
-                print_uint128_decimal(initial_value);
+
+            // Check for divergence ... although the verify() function will probably hang.
+            if (!overflow && !verified) {
+                if constexpr(sizeof(T) * 8 == 64) {
+                    printf("Unable to verify value %lu\n", initial_value);
+                } else if constexpr(sizeof(T) * 8 == 128) {
+                    printf("Unable to verify value ");
+                    print_uint128_decimal(initial_value);
+                }
+                assert(false);
             }
-            assert(false);
         }
     }
 }
 
 
 
+/// @brief Verifies all items in the `values` param and updates `results` for caller to mop up (overflows, mostly).
 template<typename T, bool UseIVTable>
-void launch_gpu_verify_kernel(T* device_values, GPUVerifierResultData* device_results, uint64_t count, cudaStream_t stream) {
+void launch_gpu_verify_kernel(
+        T* values
+        , GPUVerifierResultData* results
+        , uint64_t element_count
+        , cudaStream_t stream
+        , size_t base_multiplier = 1
+        , size_t max_multiplier = 1
+        , T scaling_factor = 0
+    ) {
     // Define threads and blocks to send to the kernel.
     constexpr int threads_per_block = 128;
-    int blocks = static_cast<int>((count + threads_per_block - 1) / threads_per_block);
+    int blocks = static_cast<int>((element_count + threads_per_block - 1) / threads_per_block);
 
     // Launch the kernel.
     gpu_verify_kernel<T, UseIVTable>
         <<<blocks, threads_per_block, 0, stream>>> (
-        device_values
-        , device_results
-        , count
+        values
+        , results
+        , element_count
+        , base_multiplier
+        , max_multiplier
+        , scaling_factor
     );
 }
 
@@ -271,10 +308,10 @@ void launch_gpu_verify_kernel(T* device_values, GPUVerifierResultData* device_re
 
 // Explicit instantiations
 /// @brief Explicit instantiation of 64-bit verifier without table lookups.
-template void launch_gpu_verify_kernel<uint64_t, false>(uint64_t*, GPUVerifierResultData*, uint64_t, cudaStream_t);
+template void launch_gpu_verify_kernel<uint64_t, false>(uint64_t*, GPUVerifierResultData*, uint64_t, cudaStream_t, size_t, size_t, uint64_t);
 /// @brief Explicit instantiation of 64-bit verifier with table lookups.
-template void launch_gpu_verify_kernel<uint64_t, true>(uint64_t*, GPUVerifierResultData*, uint64_t, cudaStream_t);
+template void launch_gpu_verify_kernel<uint64_t, true>(uint64_t*, GPUVerifierResultData*, uint64_t, cudaStream_t, size_t, size_t, uint64_t);
 /// @brief Explicit instantiation of 128-bit verifier without table lookups.
-template void launch_gpu_verify_kernel<uint128_t, false>(uint128_t*, GPUVerifierResultData*, uint64_t, cudaStream_t);
+template void launch_gpu_verify_kernel<uint128_t, false>(uint128_t*, GPUVerifierResultData*, uint64_t, cudaStream_t, size_t, size_t, uint128_t);
 /// @brief Explicit instantiation of 128-bit verifier with table lookups.
-template void launch_gpu_verify_kernel<uint128_t, true>(uint128_t*, GPUVerifierResultData*, uint64_t, cudaStream_t);
+template void launch_gpu_verify_kernel<uint128_t, true>(uint128_t*, GPUVerifierResultData*, uint64_t, cudaStream_t, size_t, size_t, uint128_t);

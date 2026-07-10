@@ -1,6 +1,7 @@
 #pragma once
 
 #include "concepts.hpp"
+#include "for_each.hpp"
 #include "verifier_state.hpp"
 #include "verifier.hpp"
 #include "verifier_executor_policy.hpp"
@@ -24,13 +25,20 @@
 template<FixedWidthIntegral T>
 class GPUVerifier : public Verifier<T> {
     private:
+    const T _scaling_factor;
+    size_t _base_multiplier = 0;
+    size_t _max_multiplier = 0;
+
+
+
     /**
     * @struct ThreadStorage
     * @brief Thread-Local storage, mostly for wake-up call tracking and metrics.
     *
-    * For GPUs, this also includes `CHUNK` parameters.  The `NodeBitmap` behind the `tree` is leveraged to feed values to the GPU
-    * via buffers (`CudaStreamBuffer`).  Since OMP is asynchronous, each thread is given chunk trackers to ensure they can operate
-    * and fill the buffers independently without overlapping memory.  This avoids barriers and guards.
+    * For GPUs, this also includes a `CudaStreamBuffer` object.  Since OMP has implicit barriers which were intentionally leveraged
+    * at the prefix level in the parallel iterator, AB-BA deadlocks can occur if ANY blocking synchronization technique attempts to
+    * coordinate threads within a for_each iterator.  For this reason, each thread gets its own buffer to fill, submit, and wait on
+    * without barriers from others.
     *
     * @warning Data tends to spill cache lines and cause false sharing.  Do NOT remove alignas(64).
     */
@@ -61,7 +69,7 @@ class GPUVerifier : public Verifier<T> {
 
 
     /// @brief Constructor taking a tree.
-    explicit GPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {
+    explicit GPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree), _scaling_factor(tree.get_scaling_factor()) {
         if (!can_use_gpu()) {
             throw std::logic_error("No GPU detected.  Cannot build a GPUVerifier.");
         }
@@ -95,14 +103,12 @@ class GPUVerifier : public Verifier<T> {
     /**
     * @brief Entry point for the `Verifier` base class to begin actual execution of number verification.
     *
-    * In this CPU implementation, this is actually just a dispatcher.  It takes the runtime policy choices and makes a single call
-    * to the `run_executor_impl()` with the neccessary compile-time constants.  This avoids if/else blocks inside hot loops which
-    * adds anywhere from 1-2% up to 10-20% performance in testing.
+    * In this GPU implementation, it's largely useless.
     *
     * @param policy A verification policy to follow.  (see verifier_executor_policy.hpp)
     */
     void run_executor(const VerifierExecutorPolicy& policy) override {
-        // Dispatch runtime selection to Impl
+        // Dispatch runtime selection to Impl.
         if (policy.enable_max_iv_table) {
             run_executor_impl<true>();
         } else {
@@ -114,17 +120,44 @@ class GPUVerifier : public Verifier<T> {
 
     /**
     * @brief The actual implementation of verification steps, with necessary template params/constexpr values sent.
+    *
+    * Unlike the `GPUVerifier__Old`, this method does not use the tree iterator whatosever.  It loops over the surviving values and
+    * sends them to the GPU along with a `BinaryTree<T>::st_scaling_factor()` and an internal multiplier, allowing the both the CPU
+    * and GPU to mimic the `BinaryTree<T>::for_each_uncovered_value_with_tls()` infinite iteration.
+    *
+    * Why?  Because it allows this method to send larger work sets to the GPU by asking it to scale all survivor root-values on its
+    * own in a loop.  This takes pressure off the CPU iterator and PCIe bus, amortizing the cost of host-device synchronization.
+    *
+    * @note The `NodeBitmap` assures all values sent in a `ForEachPolicy::PARALLEL` mode will never skip more than one prefix's
+    * worth of range if one or more threads issues a premature `ForEachSignal::BREAK`.  This method would normally violate that
+    * contract by allowing that range to expand due to the `scales_per_run` factor.  To protect against this, this method will
+    * simply issue a `ForEachSignal::CONTINUE` when the `_end_value` is reached, guaranteeing ALL survivor values are buffered.
+    * The only downside is the `scales_per_run` will mean verification can go beyond the `_end_value`.  All of this will be
+    * accurately reflected in the metrics.
+    *
+    * @param scales_per_run Controls the number of times a scaling factor is applied to a surviving value on the GPU side.  During
+    * a normal `tree.for_each_uncovered_value()` an internal `multiplier` is incremented and applied to a `scaling_factor`, which
+    * results in value-ordered enumeration of suviving values using simple arithmetic.  Unfortunately, this requires the CPU to
+    * read, store, and then transmit values to the GPU, which also overloads the PCIe bus.  This method skips the tree iterator and
+    * iterates over the surviving root values ONLY and tracks multipliers and the scaling factor directly.  By passing these to the
+    * GPU, it can do large "runs" of a surviving value's subtree nodes.  This amortizes the CPU work (buffering root values) and
+    * the PCIe load.  The only downside is that extremely large `scales_per_run` will keep the GPU busier for longer inside an
+    * uninterruptable operation, which means pausing, stopping, or other tear-down might take extra time.
     * @tparam UseIVTable Whether or not to use the max initial value table from `CollatzConstants` to protect from overflow instead
     * of tracking headroom bits in realtime.  Note: when the table is exhausted, the system falls back to headroom bits, making
     * this always safe to send as `true`.
-    * @tparam DetailedMetrics Uses `verify_with_detailed_metrics()` in this implementation instead of `Collatz<T>::st_verify()`.
     */
     template<bool UseIVTable>
-    void run_executor_impl(size_t gpu_buffer_limit = 0) {
+    void run_executor_impl(size_t scales_per_run = 10, size_t gpu_buffer_limit = 0) {
+        // Sanity check the scaling runs is 1+.
+        if (scales_per_run < 1) {
+            throw std::invalid_argument("Cannot send a scales-per-run of zero.  Must be 1+.");
+        }
+
         // Find out how much memory is available for the GPU.  Start by assuming the caller sent a fixed byte amount.
         size_t total_buffer_limit = gpu_buffer_limit;
 
-        // If unsent, aim for 80% of the free bytes.
+        // If unsent, aim for 80% of the free bytes or total needed (if lesser).
         if (gpu_buffer_limit == 0) {
             size_t free_bytes = 0;
             size_t total_bytes = 0;
@@ -133,11 +166,19 @@ class GPUVerifier : public Verifier<T> {
                 throw std::runtime_error(std::string("CUDA Error: ") + cudaGetErrorString(status));
             }
             total_buffer_limit = free_bytes * 4 / 5;  // 80%
+
+            // If the survivor set is smaller than the available buffer space on the GPU, reduce the allocation size needed.
+            const size_t uncovered_values_size = this->_tree.get_uncovered_values().cardinality() * sizeof(T);
+            if (uncovered_values_size < total_buffer_limit) {
+                total_buffer_limit = uncovered_values_size;
+            }
         }
 
         // Use the total buffer limit to decide how large each thread's buffer can be.
+        // Add 1-2 elements worth of buffer in case the full survivor set fits in VRAM.  Otherwise, integer truncation might cause
+        // edge-cases where a handful are excluded and require a whole round-trip.  It's unlikely, but why risk it?
         const size_t thread_count = static_cast<size_t>(omp_get_max_threads());
-        const size_t buffer_limit_per_thread = total_buffer_limit / thread_count;
+        const size_t buffer_limit_per_thread = (total_buffer_limit / thread_count) + (sizeof(T) * 2);
 
         // Use size_of to determine how many elements that works out to be.  It'll be used by the buffer's constructor.
         const uint64_t elements_per_thread = buffer_limit_per_thread / sizeof(T);
@@ -148,39 +189,70 @@ class GPUVerifier : public Verifier<T> {
             tls.buffer_ptr = std::make_unique<CudaStreamBuffer<T, GPUVerifierResultData>>(elements_per_thread);
         }
 
-        // Loop through all the values, slamming them into per-thread buffers and sending them to the GPU for processing.
-        this->_tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, _tls, [&](T& value, ThreadStorage& thread_storage) {
-            // Stop if done.  Edge-value handling is clearly documented to callers.
-            if (this->_end_value > 0 && value > this->_end_value) {
-                return ForEachSignal::BREAK;
-            }
+        // Link to to the uncovered values (root survivors).
+        const NodeBitmap<T>& uncovered_values = this->_tree.get_uncovered_values();
 
-            // If the buffer is full, send it to the GPU for processing.
-            if (thread_storage.buffer_ptr->is_full()) {
-                // Call helper to process on the GPU.
-                process_buffer<UseIVTable>(thread_storage);
+        // Update the multiplier to use with the scaling factor, which grows by scales_per_run with each loop.
+        _base_multiplier = 1;
 
-                // This is a natual point to check for pausing, stopping, etc.
-                while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(this->_paused_check_ms));
+        // Bump the multiplier if a start value requires it.  Take the maximum value of the tree and subtract it from the start
+        // value requested, then divide it by the scaling factor to get the mutliplier.
+        if (this->_start_value > uncovered_values.maximum()) {
+            _base_multiplier += ((this->_start_value - uncovered_values.maximum()) / _scaling_factor);
+        }
+
+        // Create a max multiplier which is the highest (inclusive) multiplier based on the scales_per_run.
+        _max_multiplier = _base_multiplier + scales_per_run - 1;
+
+        // Hoist a total scaling factor based on the maximum multiplier the GPU will receive.
+        T max_scaling_factor = _scaling_factor * _max_multiplier;
+
+        // Loop through all survivors forever, or until end_value is reached.
+        std::atomic<ForEachSignal> a_signal = ForEachSignal::CONTINUE;
+        while(a_signal.load(std::memory_order_relaxed) == ForEachSignal::CONTINUE) {
+            uncovered_values.for_each_value_with_tls(ForEachPolicy::PARALLEL, _tls, [&](T& root_survivor_value, ThreadStorage& thread_storage) {
+                // Stop if done.  Since a multiplier range is in effect, it breaks the contract of always working within one prefix
+                // of a NodeBitmap (2^32 range).  Therefore, don't return BREAK, just flag the atomic and CONTINUE.
+                if (this->_end_value > 0 && (max_scaling_factor + root_survivor_value) > this->_end_value) {
+                    a_signal.store(ForEachSignal::BREAK);
+                    return ForEachSignal::CONTINUE;
                 }
-                if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
-                    return ForEachSignal::BREAK;
+
+                // If the buffer is full, send it to the GPU for processing.
+                if (thread_storage.buffer_ptr->is_full()) {
+                    // Call helper to process on the GPU.
+                    process_buffer<UseIVTable>(thread_storage);
+
+                    // This is a natual point to check for pausing, stopping, etc.
+                    while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(this->_paused_check_ms));
+                    }
+                    if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
+                        return ForEachSignal::BREAK;
+                    }
+                    thread_storage.synchronizations_performed++;
+                }
+
+                // Buffer has space.  Add the current value to the next index, incrementing it too.
+                thread_storage.buffer_ptr->get_host_data_ptr()[thread_storage.buffer_ptr->use_next_index()] = root_survivor_value;
+
+                // Continue
+                return ForEachSignal::CONTINUE;
+            });
+
+            // Flush any pending buffers.
+            for (ThreadStorage& thread_storage : _tls) {
+                if (thread_storage.buffer_ptr->get_next_index() > 0) {
+                    process_buffer<UseIVTable>(thread_storage);
                 }
             }
 
-            // Buffer has space.  Add the current value to the next index, incrementing it too.
-            thread_storage.buffer_ptr->get_host_data_ptr()[thread_storage.buffer_ptr->use_next_index()] = value;
+            // Bump the multipliers.
+            _base_multiplier += scales_per_run;
+            _max_multiplier += scales_per_run;
 
-            // Continue
-            return ForEachSignal::CONTINUE;
-        }, this->_start_value);
-
-        // Finalize any pending buffers.
-        for (ThreadStorage& thread_storage : _tls) {
-            if (thread_storage.buffer_ptr->get_next_index() > 0) {
-                process_buffer<UseIVTable>(thread_storage);
-            }
+            // Recompute the max scaling factor.
+            max_scaling_factor = _scaling_factor * _max_multiplier;
         }
 
         // Set state to STOPPED.  Only this thread may do that.
@@ -199,7 +271,7 @@ class GPUVerifier : public Verifier<T> {
         thread_storage.buffer_ptr->set_state(CudaStreamBufferState::READY);
 
         // Launch the kernel for the GPU to execute when it's able to.
-        thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>);
+        thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, UseIVTable>, _base_multiplier, _max_multiplier, _scaling_factor);
 
         // Wait for the GPU to mark the buffer PROCESSED.
         thread_storage.buffer_ptr->wait_until_state(CudaStreamBufferState::PROCESSED);
@@ -212,17 +284,23 @@ class GPUVerifier : public Verifier<T> {
             if (host_results_ptr->overflow_exceeded) {
                 // Ran out of overflow slots.  Must reprocess the whole batch on CPU.
                 for (uint64_t i = 0; i < thread_storage.buffer_ptr->get_next_index(); i++) {
-                    T value = *(host_data_ptr + i);
-                    if (! Collatz<T>::st_verify(value, value)) {
-                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
+                    T base_value = *(host_data_ptr + i);
+                    for (size_t multiplier = _base_multiplier; multiplier <= _max_multiplier; multiplier++) {
+                        T initial_value = base_value + (multiplier * _scaling_factor);
+                        if (! Collatz<T>::st_verify(initial_value, initial_value)) {
+                            throw std::logic_error("Failed to verify value: " + to_string_any(initial_value));
+                        }
                     }
                 }
             } else {
                 // Contained the overflow.  Process only the offenders on CPU.
                 for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
-                    T value = *(host_data_ptr + host_results_ptr->overflow_indexes[i]);
-                    if (!Collatz<T>::st_verify(value, value)) {
-                        throw std::logic_error("Failed to verify value: " + to_string_any(value));
+                    T base_value = *(host_data_ptr + host_results_ptr->overflow_indexes[i]);
+                    for (size_t multiplier = _base_multiplier; multiplier <= _max_multiplier; multiplier++) {
+                        T initial_value = base_value + (multiplier * _scaling_factor);
+                        if (!Collatz<T>::st_verify(initial_value, initial_value)) {
+                            throw std::logic_error("Failed to verify value: " + to_string_any(initial_value));
+                        }
                     }
                 }
             }
@@ -232,7 +310,8 @@ class GPUVerifier : public Verifier<T> {
         host_results_ptr->reset();
 
         // Update metrics.
-        this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index());
+        size_t scales_ran = _max_multiplier - _base_multiplier + 1;
+        this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index() * scales_ran);
 
         // Recycle the buffer.  This resets counters and sets state to FILLING.
         thread_storage.buffer_ptr->recycle();

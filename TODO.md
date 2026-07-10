@@ -7,6 +7,8 @@
 * GPU verifier needs written.
 * Clean up metric emitter.
 * Integrate precomputed safe initial values in st_verify().
+* Write tests for all the new verifier classes.
+* Update docs and run doxygen.
 
 ## ForEachSignal Boundary
 * Spell out in the README how parallel access is bounded to 2^32 (prefix) places.

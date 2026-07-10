@@ -225,7 +225,7 @@ class CudaStreamBuffer {
     * @note This method injects a state change after the kernel.  Caller should NOT set state directly.
     */
     template<typename Kernel>
-    void launch_kernel(Kernel&& kernel_func) {
+    void launch_kernel(Kernel&& kernel_func, size_t base_multiplier = 1, size_t max_multiplier = 1, T scaling_factor = 0) {
         // Make sure this buffer is READY.  Otherwise, error.
         if (get_state() != CudaStreamBufferState::READY) {
             throw std::runtime_error("A buffer must be in the READY state before launching a kernel.");
@@ -236,7 +236,7 @@ class CudaStreamBuffer {
         sync_host_results_to_device();
 
         // Launch the user-provided kernel wrapper.
-        kernel_func(_device_data, _device_results, _next_index, _stream);
+        kernel_func(_device_data, _device_results, _next_index, _stream, base_multiplier, max_multiplier, scaling_factor);
 
         // Sync the results back.  Don't need the device buffer (data).
         sync_device_results_to_host();
