@@ -9,7 +9,7 @@
 #include "collatz/collatz.hpp"
 #include "collatz/progress.hpp"
 #include "collatz/step_counter_gpu_interface.hpp"
-#include "collatz/gpu_support.hpp"
+#include "collatz/gpu.hpp"
 
 
 
@@ -54,7 +54,7 @@ template<AnySupportedIntegral T>
 StepResults run_it(size_t start_bit, size_t max_bit) {
     StepResults results;
     size_t bit_limit = CollatzConstants::get_max_bits_for_max_initial_value_by_type<T>();
-    bool has_gpu = can_use_gpu();
+    bool has_gpu = GPU::can_use_gpu();
     T* unified_start_value_ptr = nullptr;
     T max_value = 0;
     size_t level;
@@ -105,7 +105,7 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
         }
 
         // Process the level.
-        if (can_use_gpu()) {
+        if (GPU::can_use_gpu()) {
             process_level_gpu(gpu_runner, max_value, level, &results);
         } else {
             process_level(unified_start_value_ptr, max_value, level, &results);

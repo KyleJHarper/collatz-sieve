@@ -140,7 +140,9 @@ class BinaryTree {
         // Sanity check.  T must support requested tree size.
         assert_level_will_fit(levels);
         _impl.init(levels, opts);
-        _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
+        if (_impl.get_level_count() >= 2) {
+            _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
+        }
     }
 
 
@@ -319,7 +321,9 @@ class BinaryTree {
         assert_level_will_fit(next_level);
         assert_level_verification(next_level, _impl.is_verifying_non_hwm_nodes());
         _impl.add_level();
-        _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
+        if (_impl.get_level_count() >= 2) {
+            _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
+        }
     }
 
 

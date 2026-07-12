@@ -198,10 +198,13 @@ namespace AffineStride {
     static constexpr size_t VERIFY_STRIDE_SIZE_FW = COLLATZ_VERIFY_STRIDE_SIZE_FW;
     /// @brief Stride size when performing verification in Collatz::st_verify_X() method(s) for fixed-GMP types.
     static constexpr size_t VERIFY_STRIDE_SIZE_GMP = COLLATZ_VERIFY_STRIDE_SIZE_GMP;
+    /// @brief Stride size when performing verification on a GPU.  Only applies to fixed-width types.
+    static constexpr size_t VERIFY_STRIDE_SIZE_FW_CUDA = COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA;
 
     /// @brief The table for node init when fixed-width.
     using NodeInitFWTable = Table<NODE_INIT_STRIDE_SIZE_FW>;
     using NodeInitGMPTable = Table<NODE_INIT_STRIDE_SIZE_FW>;
     using VerifyFWTable = Table<VERIFY_STRIDE_SIZE_FW>;
     using VerifyGMPTable = Table<VERIFY_STRIDE_SIZE_GMP>;
+    using VerifyFWCudaTable = Table<VERIFY_STRIDE_SIZE_FW_CUDA>;
 }

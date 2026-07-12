@@ -87,7 +87,7 @@ class BinaryTreeCoverage {
     * @param as_percent Multiplies the result by 100 such that 0.972 becomes 97.2.
     * @return The ratio as an `mpf_class`.
     */
-    const mpf_class get_ratio(bool as_percent = false) {
+    mpf_class get_ratio(bool as_percent = false) const {
         if (_total < 1) {
             throw std::out_of_range("You cannot call get_ratio() when 'total' is 0 or less.");
         }

@@ -13,7 +13,7 @@
 #include <memory>
 #include <omp.h>
 #include <stdexcept>
-#include "gpu_support.hpp"
+#include "gpu.hpp"
 
 
 
@@ -65,9 +65,10 @@ class GPUVerifier__Old : public Verifier<T> {
 
     /// @brief Constructor taking a tree.
     explicit GPUVerifier__Old(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {
-        if (!can_use_gpu()) {
+        if (!GPU::can_use_gpu()) {
             throw std::logic_error("No GPU detected.  Cannot build a GPUVerifier.");
         }
+        GPU::initialize_stride_table();
     }
 
 
@@ -124,7 +125,7 @@ class GPUVerifier__Old : public Verifier<T> {
         // Find out how much memory is available for the GPU.  Start by assuming the caller sent a fixed byte amount.
         size_t total_buffer_limit = gpu_buffer_limit;
 
-        // If unsent, aim for 80% of the free bytes.
+        // If unsent, aim for 90% of the free bytes.
         if (gpu_buffer_limit == 0) {
             size_t free_bytes = 0;
             size_t total_bytes = 0;
@@ -132,7 +133,7 @@ class GPUVerifier__Old : public Verifier<T> {
             if (status != cudaSuccess) {
                 throw std::runtime_error(std::string("CUDA Error: ") + cudaGetErrorString(status));
             }
-            total_buffer_limit = free_bytes * 4 / 5;  // 80%
+            total_buffer_limit = free_bytes * 9 / 10;  // 90%
         }
 
         // Use the total buffer limit to decide how large each thread's buffer can be.
@@ -218,6 +219,9 @@ class GPUVerifier__Old : public Verifier<T> {
                         throw std::logic_error("Failed to verify value: " + to_string_any(value));
                     }
                 }
+                // Update the metrics for this, including the overflow-exceeded counter.
+                this->_published_metrics.gpu_overflow_buffer_exceeded.fetch_add(1);
+                this->_published_metrics.gpu_overflows_processed.fetch_add(thread_storage.buffer_ptr->get_next_index() + 1);
             } else {
                 // Contained the overflow.  Process only the offenders on CPU.
                 for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
@@ -226,6 +230,8 @@ class GPUVerifier__Old : public Verifier<T> {
                         throw std::logic_error("Failed to verify value: " + to_string_any(value));
                     }
                 }
+                // Update the metrics for this.
+                this->_published_metrics.gpu_overflows_processed.fetch_add(host_results_ptr->overflow_count);
             }
         }
 
@@ -234,6 +240,7 @@ class GPUVerifier__Old : public Verifier<T> {
 
         // Update metrics.
         this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index());
+        this->_published_metrics.gpu_kernel_launches.fetch_add(1);
 
         // Recycle the buffer.  This resets counters and sets state to FILLING.
         thread_storage.buffer_ptr->recycle();

@@ -58,7 +58,7 @@ class Verifier {
 
     /// @brief How many verifications a thread should do before synchronizing: checking for state changes and updating metrics.
     /// @note Benchmarking showed almost no difference between 1,000 - 100,000,000 on the `CPUVerifier`.  It's set lower to favor
-    /// responsiveness.
+    /// responsiveness.  Also, the GPU version uses kernel launches as its synchronization point, not this.
     size_t _synchronization_countdown = 100'000;
 
 
@@ -110,7 +110,10 @@ class Verifier {
 
 
     /// @brief Constructor taking a tree (and actually assigning it).  This class owns the tree.
-    explicit Verifier(TreeType& tree) : _tree(tree) {}
+    explicit Verifier(TreeType& tree) : _tree(tree) {
+        const BinaryTreeCoverage<T>& final_coverage = tree.get_coverage_map().at(tree.get_level_count());
+        _published_metrics.coverage_ratio = final_coverage.get_ratio().get_d();
+    }
 
 
 

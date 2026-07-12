@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cuda/std/bit>
+#include <stdexcept>
 
 
 
@@ -16,16 +17,6 @@
 * @note This is a stripped-down version of `AffineStride` for Cuda to use.
 */
 namespace AffineStrideCuda {
-    /// @brief Maximum stride length for the standard `Stride`.
-    constexpr size_t MAX_STRIDE = 20;
-
-
-
-    /// @brief Stride size when performing verification in Collatz::st_verify_X() method(s) for fixed-width types.
-    static constexpr size_t VERIFY_STRIDE_SIZE_FW_CUDA = 12;
-
-
-
     /// @brief A lightweight, data-only struct for the stride factors.
     struct Stride {
         uint32_t multiply = 1;       ///< Peak is all F's, which is ceil(log2(3^20)) == 32 bits.
@@ -37,53 +28,9 @@ namespace AffineStrideCuda {
 
 
 
-    /**
-    * @brief Builds a stride table at compile-time.
-    * @tparam StrideType The type of stride struct to use.
-    * @tparam bits The number of bits (steps) to build the table.  Final size is 2^bits.
-    * @return An array of `Stride` or `LongStride` covering all starting bit patterns.
-    */
-    template<size_t bits>
-    __host__ __device__
-    constexpr cuda::std::array<Stride, 1ULL << bits> build_stride_table() {
-        static_assert(bits <= MAX_STRIDE, "Stride bits exceed MAX_STRIDE");
-
-        // Build table.
-        const uint64_t table_size = uint64_t(1) << bits;
-        cuda::std::array<Stride, 1ULL << bits> stride_table{};
-
-        // With the table preallocated, it can use index-based iteration.  Since it's looking at LSBs, we naturally get the order
-        // and can simply loop through them sequentially.
-        for (uint64_t i = 0; i < table_size; i++) {
-            uint64_t n = i;
-            Stride stride;
-            for (size_t step_count = 0; step_count < bits; step_count++) {
-                if (n & 1) {
-                    stride.add = ((stride.add << 1) + stride.add) + (uint64_t(1) << stride.shift);
-                    stride.multiply *= 3;
-                    stride.shift++;
-                    // Mimic the effects on n now.
-                    n = (3 * n + 1) >> 1;
-                } else {
-                    stride.shift++;
-                    // Mimic the effects on n now.
-                    n >>= 1;
-                }
-            }
-            // Calculate the number of bits required to apply this stride to a fixed-width type.  Add one for the .add factor.
-            stride.bits_required = cuda::std::bit_width(stride.multiply - 1) + 1;
-            // Assign to the table.
-            stride_table[i] = stride;
-        }
-
-        return stride_table;
-    }
-
-
-
     /// @brief Build the compile-time, constant, device-only table of `Bits` size.
     template<size_t Bits>
-    __device__ constexpr auto device_stride_table = build_stride_table<Bits>();
+    __device__ Stride device_stride_table[1ULL << Bits];
 
 
 
@@ -98,8 +45,7 @@ namespace AffineStrideCuda {
         static constexpr size_t STRIDE_SIZE = Bits;
         static constexpr uint64_t MASK = (1ULL << STRIDE_SIZE) - 1;
 
-        /// @brief This will build a host-only table, which is probably never going to be used, but it costs virtually nothing.
-        static constexpr auto TABLE = build_stride_table<STRIDE_SIZE>();
+
 
         /**
         * @brief Gets the correct stride from `TABLE` for the given `value`.
@@ -107,42 +53,44 @@ namespace AffineStrideCuda {
         * @param value The value to fetch the stride for.
         */
         template<typename T>
-        __host__ __device__
+        __device__
         static inline const Stride& get_stride(T value) {
-            #if defined(__CUDA_ARCH__)
-                return device_stride_table<Bits>.data()[value & MASK];
-            #else
-                return TABLE.data()[value & MASK];
-            #endif
+            return device_stride_table<Bits>[value & MASK];
         }
 
 
-        /**
-        * @brief Applies a stride to `value`.  This version looks up the stride for you.  Next version requires you send it.
-        * @tparam T Any supported integral (see concepts.hpp).
-        * @param value The value to apply the stride to.
-        */
-        template<typename T>
-        __host__ __device__
-        static inline void apply_stride(T& value) {
-            const Stride& stride = get_stride(value);
-            value = ((value * stride.multiply) + stride.add) >> stride.shift;
-        }
-
 
         /**
-        * @brief Applies a stride to `value`.  This version requires you send the stride.  Previous version does it for you.
+        * @brief Applies a stride to `value`.  Requires you send the stride.  Previous version does it for you.
         * @tparam T Any supported integral (see concepts.hpp).
         * @param value The value to apply the stride to.
         * @param stride The preselected stride to apply.
         */
         template<typename T>
-        __host__ __device__
+        __device__
         static inline void apply_stride(T& value, const Stride& stride) {
             value = ((value * stride.multiply) + stride.add) >> stride.shift;
         }
     };
 
 
-    using VerifyFWCudaTable = Table<VERIFY_STRIDE_SIZE_FW_CUDA>;
+
+    /// @brief Uploads the host-computed table into device memory. Call exactly once, before any
+    /// kernel that uses get_stride() launches.
+    template<size_t Bits>
+    void upload_stride_table_to_device() {
+        constexpr auto& host_table = Table<Bits>::TABLE;
+        cudaError_t status = cudaMemcpyToSymbol(
+            device_stride_table<Bits>
+            , host_table.data()
+            , sizeof(Stride) * (1ULL << Bits)
+            , 0
+            , cudaMemcpyHostToDevice
+        );
+        if (status != cudaSuccess) {
+            throw std::runtime_error(std::string("Failed to upload stride table: ") + cudaGetErrorString(status));
+        }
+    }
+
+    using VerifyFWCudaTable = Table<COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA>;
 }

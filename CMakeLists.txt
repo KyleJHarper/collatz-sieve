@@ -28,7 +28,7 @@ set(COLLATZ_NODE_INIT_STRIDE_SIZE_FW     9 CACHE STRING "Stride size used while 
 set(COLLATZ_NODE_INIT_STRIDE_SIZE_GMP   16 CACHE STRING "Stride size used while building a Node for GMP (mpz_class) type")
 set(COLLATZ_VERIFY_STRIDE_SIZE_FW       12 CACHE STRING "Stride size used while verifying fixed-width values")
 set(COLLATZ_VERIFY_STRIDE_SIZE_GMP      16 CACHE STRING "Stride size used while verifying GMP values")
-set(COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA  12 CACHE STRING "Stride size used while verifying fixed-width values on cuda")
+set(COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA  13 CACHE STRING "Stride size used while verifying fixed-width values on cuda")
 add_compile_definitions(
     COLLATZ_NODE_INIT_STRIDE_SIZE_FW=${COLLATZ_NODE_INIT_STRIDE_SIZE_FW}
     COLLATZ_NODE_INIT_STRIDE_SIZE_GMP=${COLLATZ_NODE_INIT_STRIDE_SIZE_GMP}

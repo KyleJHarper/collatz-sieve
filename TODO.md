@@ -1,12 +1,6 @@
 # Current Work
 
-## O3
-* Enable -O3 and see if it speeds things up.
-
 ## Verifier
-* GPU verifier needs written.
-* Clean up metric emitter.
-* Integrate precomputed safe initial values in st_verify().
 * Write tests for all the new verifier classes.
 * Update docs and run doxygen.
 

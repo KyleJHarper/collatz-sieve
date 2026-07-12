@@ -270,12 +270,18 @@ class Collatz {
                         uint128_t promoted_effective_sentinel_value = effective_sentinel_value;
                         return st_verify(promoted_current_value, promoted_effective_sentinel_value);
                     } else if constexpr (sizeof(U) * 8 == 128) {
-                        // Dealing with 128 bits.  Upgrade to mpz_class.
-                        static thread_local mpz_class promoted_current_value_tls;
-                        static thread_local mpz_class promoted_effective_sentinel_value_tls;
-                        Int128::uint128_to_mpz(current_value, promoted_current_value_tls);
-                        Int128::uint128_to_mpz(effective_sentinel_value, promoted_effective_sentinel_value_tls);
-                        return st_verify(promoted_current_value_tls, promoted_effective_sentinel_value_tls);
+                        // Dealing with 128 bits.  Upgrade to mpz_class if needed.
+                        // Headroom is conservative because Stride.bits_required is pessimistic.  It's worth a quick clz() to re-chec headroom before giving up on the GPU entirely.
+                        headroom_bits = static_cast<uint8_t>(Bit::count_leading_zeros_positive(current_value));
+                        if (headroom_bits < stride.bits_required) {
+                            // It's truly too low to handle this value.  Upgrade to GMP.
+                            static thread_local mpz_class promoted_current_value_tls;
+                            static thread_local mpz_class promoted_effective_sentinel_value_tls;
+                            Int128::uint128_to_mpz(current_value, promoted_current_value_tls);
+                            Int128::uint128_to_mpz(effective_sentinel_value, promoted_effective_sentinel_value_tls);
+                            return st_verify(promoted_current_value_tls, promoted_effective_sentinel_value_tls);
+                        }
+                        // The updated headroom from clz() says it's okay.  Fall out of this block and keep going.
                     }
                 }
 

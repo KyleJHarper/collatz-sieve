@@ -21,7 +21,7 @@
 
 /// @brief AI-slop for printing a 128-bit.
 __device__ void print_uint128_decimal(unsigned __int128 val) {
-    if (val == 0) { printf("0\n"); return; }
+    if (val == 0) { printf("0"); return; }
 
     char buffer[40]; // Max 39 digits + null terminator
     int i = 0;
@@ -36,7 +36,6 @@ __device__ void print_uint128_decimal(unsigned __int128 val) {
     while (i > 0) {
         printf("%c", buffer[--i]);
     }
-    printf("\n");
 }
 
 
@@ -195,9 +194,15 @@ __device__ inline bool verify(const T& initial_value, const T& sentinel_value, b
                 uint128_t promoted_effective_sentinel_value = effective_sentinel_value;
                 return verify<uint128_t, UseIVTable>(promoted_current_value, promoted_effective_sentinel_value, overflow);
             } else if constexpr (sizeof(T) * 8 == 128) {
-                // Dealing with 128 bits.  Can't go any further.  Flag overflow and return.
-                overflow = true;
-                return false;
+                // Dealing with 128 bits.  Can't go any further.  Might need to overflow and return.
+                // Headroom is conservative because Stride.bits_required is pessimistic.  It's worth a quick clz() to re-chec headroom before giving up on the GPU entirely.
+                headroom_bits = static_cast<uint8_t>(clz(current_value));
+                if (headroom_bits < stride.bits_required) {
+                    // It's truly too low to handle this value.  Flag it for CPU verification with a larger type.
+                    overflow = true;
+                    return false;
+                }
+                // The updated headroom from clz() says it's okay.  Fall out of this block and keep going.
             }
         }
 

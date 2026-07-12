@@ -7,7 +7,7 @@
 #include "collatz/binary_tree_math.hpp"
 #include "collatz/progress.hpp"
 #include "collatz/peak_by_bit_gpu_interface.hpp"
-#include "collatz/gpu_support.hpp"
+#include "collatz/gpu.hpp"
 
 
 
@@ -142,7 +142,7 @@ class PeakIVScanner {
         int* unified_failing_index_ptr = nullptr;
 
         // Flags.
-        bool has_gpu = can_use_gpu();
+        bool has_gpu = GPU::can_use_gpu();
         bool used_gpu = false;
         bool promote_test = false;
 
@@ -379,7 +379,7 @@ int main(int argc, char **argv) {
     }
 
     // Build the tester and run it.
-    if (can_use_gpu()) {
+    if (GPU::can_use_gpu()) {
         logger->info("GPU was detected.  Will use it.");
     } else {
         logger->info("GPU not found.  Falling back to CPU processing.");
