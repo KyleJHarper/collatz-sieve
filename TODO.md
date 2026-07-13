@@ -23,12 +23,6 @@
 * We are currently testing every number until it hits HWM, but if we used a forward-looking cache we could probably speed the program up.  Problem is I have no idea how to do that with CUDA...  Maybe there's a CRoaring that compiles on CUDA...?
 * Map Remainder of Peak by Bit.  We are stuck at 2^109 for peak-by-bit.  I burned an RTX-5060 at 100% for 4 months getting to that point.  Not sure how we'll get those last 19 places...
 
-## FLC
-* What are we even doing with the forward-looking-cache class?
-
-## Scan for Ancestor Resolution
-* We know that descendents end up with a sequence which solves an ancestor.  Can we find a pattern that describes it?
-
 ## Level Containment
 * Start considering coverage implications since a single F or G can only change 1 level and covers the rest.
 * All even nodes map to the previous level perfectly.

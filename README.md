@@ -20,12 +20,11 @@ The following table shows coverage and performance when building a tree using `u
 |          20 |   97.14% |         <1 |        <1 |
 |          30 |   98.81% |         <1 |         3 |
 |          35 |   99.12% |          2 |        52 |
-|          40 |   99.34% |         50 |      1100 |
+|          40 |   99.34% |         27 |      1100 |
 
 The `BinaryTree` at the core Harper's Sieve is a sieve in the truest sense: it filters out entire classes of integers from needing
 verification.  The _coverage_ listed above is achieved by the sieve alone.  That said, it does not preclude other techniques to
-further reduce space or accelerate verification steps.  Mod-3 tables, stride tables, stopping-time (High-Water Mark) shortcuts, and
-other techniques can (and should) be leveraged during the verification phase.
+further reduce space or accelerate verification steps.
 
 This implementation is written in C++ and supports fixed-widths up to 128 bits, as well as arbitrary precision via
 [GMP](https://gmplib.org/).  It assumes your system is capable of 64-bit support, especially `uint64_t`, and `__int128` found in
@@ -67,13 +66,13 @@ int main() {
 
     BinaryTree<uint64_t> tree(32);
     tree.generate_value_map();
-    tree.for_each_uncovered_value(ForEachPolicy::PARALLEL, [&](const uint64_t& value) {
+    tree.for_each_uncovered_value(ForEachPolicy::PARALLEL, [&](uint64_t& value) {
         // Do whatever you want with "value" ... such as verify it.
         Collatz<uint64_t>::st_verify(value);
 
         // Let the iterator know it can continue.  Use ForEachSignal::BREAK to stop.
         if (value > (1ULL << 34)) {
-            std::cout << "Reach a big enough value to be finished.  Value is: " << to_string_any(value) << std::endl;
+            std::cout << "Reached a big enough value to be finished.  Value is: " << to_string_any(value) << std::endl;
             // ^ Race condition on purpose.  See below.
             return ForEachSignal::BREAK;
         }
@@ -94,9 +93,11 @@ All iterators support a `ForEachPolicy` of `SERIAL` or `PARALLEL`.
 When `SERIAL`, order is guaranteed and threading is disabled.  OMP is bypassed, not just set to "1" thread.  You may reference and
 use variables willy-nilly outside your lambda/functor (i.e.: without guards).  However, this is slow and not recommended.
 
-When `PARALLEL`, order is random-ish but confined to the range of a `NodeBitmap` prefix (2^32) or node scaling factor, which is
-determined by your tree size and can be seen via `BinaryTreeMath<T>::st_scaling_factor(level)`.  It's faster, but requires the same
-safeguards as any parallel code.  See next section for TLS.
+When `PARALLEL`, order is random-ish but confined to the range of a `NodeBitmap` prefix (2^32).  This is a guarantee from how the
+OMP regions are arranged.  The actual `#pragma omp for` executes on CRoaring's `high-low` containers, which has an implicit barrier
+at the end of the OMP region.  This is largely why we chose to use the 32-bit CRoaring object instead of their 64-bit version.  The
+`PARALLEL` version is not only confined but significantly faster, but you must employ safeguards in your lambda or functor, as with
+any parallel code.  See next section for TLS.
 
 ### Thread-Local Storage  (AKA: Parallel Operation Demands Respect)
 
@@ -119,7 +120,7 @@ int main() {
     BinaryTree<uint64_t> tree(32);
     tree.generate_value_map();
     std::vector<CoolMetadata> tls;
-    tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, tls, [&](const uint64_t& value, CoolMetadata& my_tls) {
+    tree.for_each_uncovered_value_with_tls(ForEachPolicy::PARALLEL, tls, [&](uint64_t& value, CoolMetadata& my_tls) {
         // Check the cache first.
         if (my_tls.cache.contains(value)) {
             my_tls.skipped++;
@@ -202,6 +203,118 @@ value, but guarantees to be at or below the start.
 
 The code should work with any stable allocator, but [jemalloc](https://jemalloc.net/) gave the best results.
 
+# I Just Want To Verify!
+
+Okay then, you can use a `CPUVerifier` or a `GPUVerifier` (NVidia/cuda only).
+
+```
+#include "collatz/binary_tree.hpp"
+// #include "collatz/verifier_gpu.hpp"  Uncomment if using GPU
+#include "collatz/verifier_cpu.hpp"
+#include "collatz/verifier_executor_policy.hpp"
+#include <thread>
+
+
+int main() {
+    // Pick a type.
+    using my_t = uint64_t;
+    // using my_t = mpz_class;  // Only on the CPU path.  GPU can't do GMP.
+
+    // Make the tree and generate the value map.  Or load one from save.
+    level_t levels = 32;
+    BinaryTree<my_t> tree(levels);
+    tree.generate_value_map();
+
+    // Pick a verifier.
+    CPUVerifier<my_t> verifier(tree);
+    // GPUVerifier<my_t> verifier(tree);  // Use the GPU Verifier if you have a compatible RTX card.
+
+    // Set a max value to test do.  In this case, we'll stop at 2^40 since the tree stopped at 2^32.
+    my_t max = my_t(1) << 40;
+    verifier.set_end_value(max);
+
+    // Execution policy decides things like whether detailed metrics should be calculated for debugging (CPU only).
+    VerifierExecutorPolicy policy;
+    policy.detailed_metrics = false;
+    // For CPU, the IV table is faster.  For GPU, it isn't.
+    policy.enable_max_iv_table = true;
+    // If using GPU, the scales_per_run is a powerful amortization feature.  Values of 100-10,000 are common.
+    policy.scales_per_run = 1000;
+
+    // Start the verifier and wait for it to finish, checking metrics and emitting them in Influx Line Protocol format.
+    verifier.start(policy);
+    while (verifier.get_state() != VerifierState::STOPPED) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::cout << verifier.get_metrics().emit_ilp() << std::endl;
+    }
+
+    // Pull the latest metrics and spit it all out.
+    const VerifierMetric& metric = verifier.get_metrics();
+    std::cout << "  Nodes Verified: " << to_string_any(metric.nodes_verified_atomic.load()) << std::endl;
+    std::cout << "  Total Steps: " << to_string_any(metric.steps_total_atomic.load()) << std::endl;
+    std::cout << "  Steps Skippable by High-Water Mark: " << to_string_any(metric.steps_skippable_by_hwm_atomic.load()) << "  (rate: " << metric.skip_rate_of_hwm() << ")" << std::endl;
+    std::cout << "  Steps Skippable by Affine Striding: " << to_string_any(metric.steps_skippable_by_affine_stride_atomic.load()) << "  (rate: " << metric.skip_rate_of_affine_stride() << ")" << std::endl;
+    std::cout << "  Steps Skippable by Affine Striding before HWM: " << to_string_any(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load()) << "  (rate: " << metric.skip_rate_of_affine_stride_before_hwm() << ")" << "  (rate of required steps:" << ((1.0 * metric.steps_skippable_by_affine_stride_before_hwm_atomic.load()) / metric.steps_before_hwm()) << ")" << std::endl;
+    std::cout << "  Duration: " << metric.duration_ms.count() << "ms" << std::endl;
+    std::cout << "  Nodes Per ms: " << metric.nodes_per_ms() << std::endl;
+    std::cout << "  Steps Per ms: " << metric.steps_per_ms() << std::endl;
+    std::cout << "  Effective Nodes Verified: " << metric.effective_nodes_verified() << std::endl;
+    std::cout << "  Effective Nodes Per ms: " << metric.effective_nodes_per_ms() << std::endl;
+}
+```
+
+### Caveats
+
+Detailed metrics for step counts, strides, and so forth are only available when the execution policy asks for it, and only the
+`CPUVerifier` can do this.
+
+### Tuning
+
+The `CPUVerifier` is basically tuned out-of-the-box.  It uses OMP to control thread counts.  Using the Initial-Value table makes it
+run much faster, but that table has a limit.  As of 2026-07-12, the largest table value is 74,409,568,399,815,527 (~2^56).
+
+The `GPUVerifier` has been tailored to hide all overhead by amortizing it behind `scales_per_run` in the `VerifierExeuctorPolicy`.
+Normally, the `tree.for_each_value(...)` iterates surviving values, but this is actually just iterating the `NodeBitmap` over and
+over with a scaling factor and multiplier to bump values forward in the subtrees of each surviving leaf node.  Doing this would
+hammer the CPU and overload the PCIe bus--the GPU would be starved.  Therefore, the GPUVerifier handles scaling and multipliers in
+lock-step with the GPU kernel(s).  This allows the GPU to perform hundreds or thousands of verifications in a single call.  The
+`scales_per_run` specifies how many subtree elements of each surviving leaf node should be tested in a single kernel launch.
+Bigger scaling runs equate to better GPU engagement, but reduce responsiveness of metrics (they're only updated once per finished
+kernel).
+
+In microbenchmarking, the follow rates were observed using a level 32 tree with 98.8991% filtration and testing up to 2^46:
+
+| Hardware        | Use IV Table | Surviving Values per sec | Effective Space per sec |
+| :-------------- | -----------: | -----------------------: | ----------------------: |
+| Intel i5-14600K |        false |          700,000,000 c/s |      63,584,340,085 c/s |
+| Intel i5-14600K |         true |        4,000,000,000 c/s |     363,339,086,202 c/s |
+| NVidia RTX-5060 |        false |       11,140,000,000 c/s |   1,011,899,355,073 c/s |
+
+Using larger trees increases the filtration (sieve) rate, which drastically improves the effective space performance.  In other
+words, trading a little bit of iteration slowdown from a larger survivor set on the host is often outpaced by the better sieve
+performance.
+
+### Affine Striding
+
+Both the CPU and GPU verifiers use affine stride tables.  These compress multiple Collatz steps into a single function.  Larger
+steps equate to faster verification, but ONLY when the table remains resident in L1 cache.  Once it spills into L2, performance
+degrades.  The following table gives some insight into the stride sizes for different situations:
+
+| Variable                           | Default | Details                                                |
+| :--------------------------------- | ------: | :----------------------------------------------------- |
+| COLLATZ_NODE_INIT_STRIDE_SIZE_FW   |       9 | Used when building a Node for Fixed-Width types.       |
+| COLLATZ_NODE_INIT_STRIDE_SIZE_GMP  |      16 | Used when building a Node for GMP (mpz_class) types.   |
+| COLLATZ_VERIFY_STRIDE_SIZE_FW      |      12 | Used when verifying Fixed-Witdth values.               |
+| COLLATZ_VERIFY_STRIDE_SIZE_GMP     |      16 | Used when verifying GMP (mpz_class) values.            |
+| COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA |      13 | Used when verifying Fixed-Witdth values on a Cuda GPU. |
+
+These values work well for modern CPUs with ~64KB of L1 cache per core, or ~128KB in a GPU core (SM unit).  Your hardware may be
+different.  The goal is always to make it fit in L1 cache.  You can set this value with `cmake -D [NAME]=[VALUE]` (be sure to clean
+your build directory first).
+
+Note: if you're using GMP extensively, you may find larger stride sizes (18-20) better.  This is because the heap-allocated
+overhead of GMP is huge, and avoiding it gives more performance back than the slightly slower L2 cache penalty for a larger table.
+
 # Data Types and Cost Model
 
 The API accepts any native, fixed-width type up to 128 bits, such as `uint8_t`, `uint16_t`, etc.  GCC/Clang's 128-bit type has been
@@ -232,6 +345,10 @@ efficiently processing steps, finding metadata, and so forth.
 [CRoaring Bitmap](https://github.com/RoaringBitmap/CRoaring) to support >64 bits.  This class is extremely useful for compact
 representation of on/off or true/false flags for node positions in a tree.
 
+`Verifier` A superclass behind the `CPUVerifier` and `GPUVerifier` subclasses.  They conveniently verify ranges of values using a
+`BinaryTree` you provide, and offer pausing/resuming/etc.  They also populate metrics, which you can emit to
+[ILP](https://docs.influxdata.com/influxdb/v2/reference/syntax/line-protocol/) format.
+
 Other helpful tools exist in namespaces, such as `CollatzConstants`, `Exponents`, `AffineStride`, etc.
 
 # Programs
@@ -254,7 +371,7 @@ Several programs are emitted (or are written in Python).
 | `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 | `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
-| `verifier`            | Unfinished | Standalone Collatz verification as fast as possible. |
+| `verifier`            | Working    | Demonstration of how to use the verifier classes (CPU and GPU). |
 
 # Save and Load
 

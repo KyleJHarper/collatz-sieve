@@ -33,12 +33,12 @@ int main(int argc, char** argv) {
 
     VerifierExecutorPolicy policy;
     policy.detailed_metrics = false;
-    // policy.enable_max_iv_table = true;
-    policy.enable_max_iv_table = false;
+    policy.enable_max_iv_table = true;
+    // policy.enable_max_iv_table = false;
     policy.scales_per_run = atoll(argv[2]);
     verifier.start(policy);
     while (verifier.get_state() != VerifierState::STOPPED) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << verifier.get_metrics().emit_ilp() << std::endl;
     }
 

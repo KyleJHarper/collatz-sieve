@@ -28,10 +28,25 @@ Note, the ref (&) is still required, to prevent `mpz_class` types from triggerin
 
 The `peak_by_bit` program had a bug which prevented it from promoting from 64-bit to 128-bit.  This was fixed.
 
-## Cache Line Optimization (False Sharing)
+### Cache Line Optimization (False Sharing)
 
 Some thread-local structs were false sharing.  Specifically the implicit tree building and CPUVerifier loop.  This was fixed and
 performance jumped considerably.  Implicit tree building of a level 40 tree went from 37s to 28s.
+
+### CPU and GPU Verifiers
+
+A `Verifier` superclass was built to take a `BinaryTree<T>` and begin verifying surviving values via the `CPUVerifier` or the
+`GPUVerifier` implementations.
+
+The `CPUVerifier` uses OMP under the hood (by virtue of `NodeBitmap`) and is therefore controllable as such.  Using a 64-bit tree,
+32 levels deep with 98.8991% sieving, the verifier was able to verify ~750,000 surviving values per millisecond (750M/sec) while
+safely tracking overflows and upgrading types as needed.  By leveraging the initial-value table from `CollatzConstants` (to avoid
+overflow checking), the rate jumps to ~4,000,000 surviving values per millisecond (4B/sec).
+
+The `GPUVerifier` uses Cuda and therefore only works with NVidia currently.  It uses a tree and therefore `NodeBitmap` under the
+hood as well.  Using a 64-bit tree, 32 levels deep with 98.8991% sieving, the verifier was able to verify ~11,000,000 surviving
+values per millisecond (11B/sec).  Overflow checking and handling is included.  The initial-value table actually made performance
+worse on the GPU.
 
 ## 4.1.0
 
