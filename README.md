@@ -235,7 +235,8 @@ which means even small gains in sieve performance have significant gains on over
 
 Space was tested up to 2^46 for these benchmarks.  The data type was `uint64_t`, which often overflows into 128-bit space (the API
 handles this transparently).  No values touch GMP (`mpz_class`).  Rates do not include the time building the tree or its value map,
-because these are reusable objects across runs via `tree.save()` and `tree.load()`.
+because these are reusable objects across runs via `tree.save()` and `tree.load()`.  For the `GPUVerifier` (RTX-5060 Hardware),
+`scaling_runs` was set between 100 and 500 (need longer scales for smaller trees such as level-32).
 
 | Hardware        | Use IV Table | Level | Sieve    | Surviving Values per sec | Effective Range per sec |
 | :-------------- | -----------: | ----: | -------: | -----------------------: | ----------------------: |
@@ -245,12 +246,17 @@ because these are reusable objects across runs via `tree.save()` and `tree.load(
 |                 |         true |    32 | 98.8991% |       ~3,933,000,000 c/s |     357,228,594,000 c/s |
 |                 |              |    38 | 99.2961% |       ~3,935,187,000 c/s |     559,086,270,000 c/s |
 |                 |              |    40 | 99.3431% |       ~3,938,114,000 c/s |     599,468,319,000 c/s |
-| NVidia RTX-5060 |        false |    32 | 98.8991% |   ~TODO c/s |   TODO c/s |
-|                 |              |    38 | 99.2961% |   ~TODO c/s |   TODO c/s |
+| NVidia RTX-5060 |        false |    32 | 98.8991% |      ~10,540,097,000 c/s |     957,389,935,000 c/s |
+|                 |              |    38 | 99.2961% |       ~8,980,241,000 c/s |   1,275,855,234,000 c/s |
 |                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
-|                 |         true |    32 | 98.8991% |   ~TODO c/s |   TODO c/s |
-|                 |              |    38 | 99.2961% |   ~TODO c/s |   TODO c/s |
+|                 |         true |    32 | 98.8991% |       ~1,685,702,000 c/s |     153,117,597,000 c/s |
+|                 |              |    38 | 99.2961% |       ~1,500,404,000 c/s |     213,167,924,000 c/s |
 |                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
+
+Maybe we should just stride in the verify_unsafe()?  Raw arithmetic has proven to be slower.
+
+Again, the `CPUVerifier` is much faster using the Initial-Value table.  The `GPUVerifier` is much slower.  Hence, it is enabled by
+default for the CPU, but disabled for the GPU.
 
 ### Affine Striding
 

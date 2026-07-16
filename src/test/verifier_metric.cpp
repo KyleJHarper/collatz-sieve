@@ -1,7 +1,6 @@
 #include <cassert>
 #include <chrono>
 #include <cstdint>
-#include <stdexcept>
 #include "../collatz/concepts.hpp"
 #include "../collatz/verifier_metric.hpp"
 #include "helpers.hpp"
@@ -40,14 +39,9 @@ void test_verifier_metric_nodes_per_ms() {
     metric.duration_ms = std::chrono::milliseconds(20);
     assert(metric.nodes_per_ms() == 50);
 
-    // When ms is zero, it should throw out_of_range.
+    // When ms is zero, it should return 0.
     metric.duration_ms = std::chrono::milliseconds(0);
-    try {
-        assert(metric.nodes_per_ms() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request nodes_per_ms when ms is zero") != std::string::npos);
-    }
+    assert(metric.nodes_per_ms() == 0);
 
     end_test();
 }
@@ -80,14 +74,9 @@ void test_verifier_metric_effective_nodes_per_ms() {
     assert(metric.nodes_per_ms() == 50);
     assert(metric.effective_nodes_per_ms() > 500);
 
-    // When ms is zero, it should throw out_of_range.
+    // When ms is zero, it should return 0
     metric.duration_ms = std::chrono::milliseconds(0);
-    try {
-        assert(metric.effective_nodes_per_ms() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request effective_nodes_per_ms when ms is zero") != std::string::npos);
-    }
+    assert(metric.effective_nodes_per_ms() == 0);
 
     end_test();
 }
@@ -103,14 +92,9 @@ void test_verifier_metric_steps_per_ms() {
     metric.duration_ms = std::chrono::milliseconds(20);
     assert(metric.steps_per_ms() == 50);
 
-    // When ms is zero, it should throw out_of_range.
+    // When ms is zero, it should return 0.
     metric.duration_ms = std::chrono::milliseconds(0);
-    try {
-        assert(metric.steps_per_ms() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request steps_per_ms when ms is zero") != std::string::npos);
-    }
+    assert(metric.steps_per_ms() == 0);
 
     end_test();
 }
@@ -127,14 +111,9 @@ void test_verifier_metric_skip_rate_of_hwm() {
     metric.duration_ms = std::chrono::milliseconds(20);
     assert(metric.skip_rate_of_hwm() > double(0.5));
 
-    // When step total is zero, it should throw out_of_range.
+    // When step total is zero, it should return 0.
     metric.steps_total_atomic.store(0);
-    try {
-        assert(metric.skip_rate_of_hwm() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request skip_rate_of_hwm when steps_total_atomic is zero") != std::string::npos);
-    }
+    assert(metric.skip_rate_of_hwm() == 0);
 
     end_test();
 }
@@ -151,14 +130,9 @@ void test_verifier_metric_skip_rate_of_affine_stride() {
     metric.duration_ms = std::chrono::milliseconds(20);
     assert(metric.skip_rate_of_affine_stride() > double(0.5));
 
-    // When step total is zero, it should throw out_of_range.
+    // When step total is zero, it should return 0.
     metric.steps_total_atomic.store(0);
-    try {
-        assert(metric.skip_rate_of_affine_stride() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request skip_rate_of_affine_stride when steps_total_atomic is zero") != std::string::npos);
-    }
+    assert(metric.skip_rate_of_affine_stride() == 0);
 
     end_test();
 }
@@ -175,14 +149,9 @@ void test_verifier_metric_skip_rate_of_affine_stride_before_hwm() {
     metric.duration_ms = std::chrono::milliseconds(20);
     assert(metric.skip_rate_of_affine_stride_before_hwm() > double(0.5));
 
-    // When step total is zero, it should throw out_of_range.
+    // When step total is zero, it should return 0.
     metric.steps_total_atomic.store(0);
-    try {
-        assert(metric.skip_rate_of_affine_stride_before_hwm() == 50);
-        assert(false);
-    } catch (std::out_of_range& ex) {
-        assert(std::string(ex.what()).find("Cannot request skip_rate_of_affine_stride_before_hwm when steps_total_atomic is zero") != std::string::npos);
-    }
+    assert(metric.skip_rate_of_affine_stride_before_hwm() == 0);
 
     end_test();
 }

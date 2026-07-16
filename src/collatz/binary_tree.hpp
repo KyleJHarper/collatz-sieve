@@ -370,6 +370,11 @@ class BinaryTree {
             return eq.fail("Level counts differ");
         }
 
+        // Scaling factor
+        if (! eq.equal(first.get_scaling_factor(), second.get_scaling_factor())) {
+            return eq.fail("Scaling factors differ");
+        }
+
         // Flags
         if (! eq.equal(first.is_preserving_ancestors(), second.is_preserving_ancestors())) {
             return eq.fail("Is preserving ancestors mismatch");
@@ -466,7 +471,7 @@ class BinaryTree {
 
         // Common Metadata
         uint8_t tree_type = IsImplicitTree<TreeType> ? TreeTypeEnum::IMPLICIT : TreeTypeEnum::MATERIALIZED;
-        uint32_t level_count = get_level_count();
+        level_t level_count = get_level_count();
         bool b_is_preserving_ancestors = is_preserving_ancestors();
         bool b_is_verifying_non_hwm_nodes = is_verifying_non_hwm_nodes();
         if (! sh.serialize_integral(tree_type)) {
@@ -474,6 +479,9 @@ class BinaryTree {
         }
         if (! sh.serialize_integral(level_count)) {
             return sh.fail("level_count==" + to_string_any(level_count));
+        }
+        if (! sh.serialize_integral(_scaling_factor)) {
+            return sh.fail("scaling_factor==" + to_string_any(_scaling_factor));
         }
         if (! sh.serialize_bool(b_is_preserving_ancestors)) {
             return sh.fail("b_is_preserving_ancestors==" + std::to_string(b_is_preserving_ancestors));
@@ -588,7 +596,7 @@ class BinaryTree {
 
         // Common Metadata
         uint8_t tree_type;
-        uint32_t level_count;
+        level_t level_count;
         bool b_is_preserving_ancestors;
         bool b_is_verifying_non_hwm_nodes;
         // Tree type.  Has to match.
@@ -613,6 +621,10 @@ class BinaryTree {
             return sh.fail(msg);
         }
         _impl.set_level_count(level_count);
+        // Scaling factor.
+        if (! sh.deserialize_integral(_scaling_factor)) {
+            return sh.fail("couldn't read scaling_factor");
+        }
         // Is preserving ancestors
         if (! sh.deserialize_bool(b_is_preserving_ancestors)) {
             return sh.fail("couldn't read is_preserving_ancestors");
@@ -720,7 +732,7 @@ class BinaryTree {
     /**
     * @brief Writes data from `serialize()` to the path specified.
     * @param path The string path to write to.  When path is "-", will write to stdout.  Throws error if stdout is a terminal.
-    * @param compression_level The Zstd compression level to apply.  Options are:
+    * @param compression_level The Zstd compression level to apply.  Default is 22.  Options are:
     *          * 0) No compression.  A raw file.
     *          * 1-19) Zstd compression with normal range and end-directives (see Zstd internal.h).
     *          * 20-22) Zstd compression with long distance matching enabled and end-directive set to "flush" for better threading.
