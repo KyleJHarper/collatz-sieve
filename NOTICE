@@ -1,0 +1,41 @@
+Harper's Sieve of Collatz
+Copyright 2026 Kyle J Harper
+
+This product includes software developed independently by
+Kyle J Harper (https://github.com/KyleJHarper | https://www.linkedin.com/in/kylejharper/).
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+A copy of the License is included in this repository as LICENSE,
+and is also available at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+---
+
+Attribution notice:
+
+This software implements an original algorithm and data structure
+first described by [YOUR FULL NAME] in:
+
+    [PAPER TITLE], [YEAR], arXiv:[ARXIV ID WHEN AVAILABLE]
+
+If you use, adapt, or build upon this software or the algorithm it
+implements — in research, in another codebase, or in a product —
+please retain this notice and cite the original work (see CITATION
+file). Attribution is a condition of the associated research license
+(CC BY 4.0) and is requested, as a matter of courtesy and academic
+integrity, for reuse of this codebase as well.
+
+---
+
+Patent notice:
+
+This Work is distributed under the Apache License, Version 2.0, which
+includes an express patent grant (Section 3) from the Licensor to all
+users, and a patent-retaliation clause that terminates the patent
+license of any party that initiates patent litigation over the Work.
+The Licensor's intent in choosing this license is that this algorithm,
+its data structure, and this implementation remain freely usable by
+all, and are not subject to independent patent claims by downstream
+users or third parties.

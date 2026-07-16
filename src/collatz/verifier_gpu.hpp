@@ -4,7 +4,6 @@
 #include "for_each.hpp"
 #include "verifier_state.hpp"
 #include "verifier.hpp"
-#include "verifier_executor_policy.hpp"
 #include "verifier_tls_metric.hpp"
 #include "verifier_gpu_result_data.hpp"
 #include "verifier_gpu_interface.hpp"
@@ -26,9 +25,20 @@
 template<FixedWidthIntegral T>
 class GPUVerifier : public Verifier<T> {
     private:
+    /// @brief The scaling factor for growing nodes from a parent leaf node.  Comes from `BinaryTreeMath`.
     const T _scaling_factor;
+
+    /// @brief The base multiplier to leverage for scaling on GPU runs.  Used by kernel launch.
     size_t _base_multiplier = 0;
+
+    /// @brief The max multiplier to leverage for scaling on GPU runs.  Used by kernel launch.
     size_t _max_multiplier = 0;
+
+    /// @brief Controls the number of bytes to use on the GPU.  When 0, `GPUVerifier` targets 90%.
+    size_t _gpu_buffer_limit = 0;
+
+    /// @brief Determines how many scaling factors will apply on each GPU run.  See `run_executor()` for details.
+    size_t _scales_per_run = 10;
 
 
 
@@ -75,6 +85,8 @@ class GPUVerifier : public Verifier<T> {
             throw std::logic_error("No GPU detected.  Cannot build a GPUVerifier.");
         }
         GPU::initialize_stride_table();
+        // Make sure IV table is disabled by default.  It's enabled on CPU.
+        this->_enable_max_iv_table = false;
     }
 
 
@@ -99,6 +111,19 @@ class GPUVerifier : public Verifier<T> {
 
     /// @}
 
+
+
+    /// @brief Get the GPU memory limit.  When zero, 90% of free memory will be targeted.
+    size_t get_gpu_buffer_limit() const { return _gpu_buffer_limit; }
+
+    /// @brief Set the GPU memory limit, in bytes.  If zero, 90% of free memory will be targeted.
+    void set_gpu_buffer_limit(size_t value) { _gpu_buffer_limit = value; }
+
+    /// @brief Get the GPU scales-per-run value.  See `run_executor()` for details about this.
+    size_t get_scales_per_run() const { return _scales_per_run; }
+
+    /// @brief Set the GPU's scales-per-run value.  See `run_executor()` for details about this.
+    void set_scales_per_run(size_t value) { _scales_per_run = value; }
 
 
 
@@ -131,17 +156,17 @@ class GPUVerifier : public Verifier<T> {
     * of tracking headroom bits in realtime.  Note: when the table is exhausted, the system falls back to headroom bits, making
     * this always safe to send as `true`.
     */
-    void run_executor(const VerifierExecutorPolicy& policy) {
+    void run_executor() {
         // Sanity check the scaling runs is 1+.
-        if (policy.scales_per_run < 1) {
+        if (_scales_per_run < 1) {
             throw std::invalid_argument("Cannot send a scales-per-run of zero.  Must be 1+.");
         }
 
         // Find out how much memory is available for the GPU.  Start by assuming the caller sent a fixed byte amount.
-        size_t total_buffer_limit = policy.gpu_buffer_limit;
+        size_t total_buffer_limit = _gpu_buffer_limit;
 
         // If unsent, aim for 90% of the free bytes or total needed (if lesser).
-        if (policy.gpu_buffer_limit == 0) {
+        if (_gpu_buffer_limit == 0) {
             size_t free_bytes = 0;
             size_t total_bytes = 0;
             cudaError_t status = cudaMemGetInfo(&free_bytes, &total_bytes);
@@ -185,7 +210,7 @@ class GPUVerifier : public Verifier<T> {
         }
 
         // Create a max multiplier which is the highest (inclusive) multiplier based on the scales_per_run.
-        _max_multiplier = _base_multiplier + policy.scales_per_run - 1;
+        _max_multiplier = _base_multiplier + _scales_per_run - 1;
 
         // Hoist a total scaling factor based on the maximum multiplier the GPU will receive.
         T max_scaling_factor = _scaling_factor * _max_multiplier;
@@ -204,7 +229,7 @@ class GPUVerifier : public Verifier<T> {
                 // If the buffer is full, send it to the GPU for processing.
                 if (thread_storage.buffer_ptr->is_full()) {
                     // Call helper to process on the GPU.
-                    process_buffer(thread_storage, policy);
+                    process_buffer(thread_storage);
 
                     // This is a natual point to check for pausing, stopping, etc.
                     while (this->_state.load(std::memory_order_relaxed) == VerifierState::PAUSED) {
@@ -226,13 +251,13 @@ class GPUVerifier : public Verifier<T> {
             // Flush any pending buffers.
             for (ThreadStorage& thread_storage : _tls) {
                 if (thread_storage.buffer_ptr->get_next_index() > 0) {
-                    process_buffer(thread_storage, policy);
+                    process_buffer(thread_storage);
                 }
             }
 
             // Bump the multipliers.
-            _base_multiplier += policy.scales_per_run;
-            _max_multiplier += policy.scales_per_run;
+            _base_multiplier += _scales_per_run;
+            _max_multiplier += _scales_per_run;
 
             // Recompute the max scaling factor.
             max_scaling_factor = _scaling_factor * _max_multiplier;
@@ -248,12 +273,12 @@ class GPUVerifier : public Verifier<T> {
 
 
     /// @brief Helper to process a full buffer.
-    void process_buffer(ThreadStorage& thread_storage, const VerifierExecutorPolicy& policy) {
+    void process_buffer(ThreadStorage& thread_storage) {
         // Mark the buffer READY.
         thread_storage.buffer_ptr->set_state(CudaStreamBufferState::READY);
 
         // Launch the kernel for the GPU to execute when it's able to.
-        if (policy.enable_max_iv_table) {
+        if (this->_enable_max_iv_table) {
             thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, true>, _base_multiplier, _max_multiplier, _scaling_factor);
         } else {
             thread_storage.buffer_ptr->launch_kernel(launch_gpu_verify_kernel<T, false>, _base_multiplier, _max_multiplier, _scaling_factor);

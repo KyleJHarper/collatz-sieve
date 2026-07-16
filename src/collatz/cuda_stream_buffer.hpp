@@ -54,6 +54,7 @@ class CudaStreamBuffer {
     CudaStreamBuffer() = delete;
 
 
+
     /// @brief Constructor takes element count and deduces bytes required.
     explicit CudaStreamBuffer(uint64_t element_count)
         : _element_limit(element_count)

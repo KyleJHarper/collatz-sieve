@@ -242,6 +242,11 @@ set(TESTS
     string
     typedefs
     udl
+    verifier_cpu
+    verifier_gpu_result_data
+    verifier_metric
+    verifier_state
+    verifier_tls_metric
     zstandard
 )
 

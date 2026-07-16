@@ -1,7 +1,6 @@
 #pragma once
 #include "verifier_state.hpp"
 #include "verifier_metric.hpp"
-#include "verifier_executor_policy.hpp"
 #include "concepts.hpp"
 #include "binary_tree.hpp"
 #include <atomic>
@@ -37,6 +36,14 @@ class Verifier {
 
 
 
+    /// @brief Enables the lookup of max initial values inside `CollatzConstants` to prevent type overflows instead of tracking
+    /// headroom bits.
+    /// @note The verifier will switch to headroom bits when the table is exhausted.
+    /// @warning This is faster on CPU but slower on GPU.  YMMV.
+    bool _enable_max_iv_table = true;
+
+
+
     /// @brief Starting value when beginning iteration.  If zero (or lower than the tree's size), it bumps forward.
     T _start_value = 0;
 
@@ -64,7 +71,7 @@ class Verifier {
 
 
     /// @brief Controls how often paused loops check for updates.  This is a guaranteed minimum, not maximum.
-    size_t _paused_check_ms = 100;
+    size_t _paused_check_ms = 10;
 
 
 
@@ -96,7 +103,7 @@ class Verifier {
 
     /// @brief The actual execution function for the subclass to implement (CPU, GPU, etc).
     /// @param policy The execution policy for the executor to follow.  See verifier_executor_policy.hpp.
-    virtual void run_executor(const VerifierExecutorPolicy& policy) = 0;
+    virtual void run_executor() = 0;
 
 
 
@@ -111,6 +118,12 @@ class Verifier {
 
     /// @brief Constructor taking a tree (and actually assigning it).  This class owns the tree.
     explicit Verifier(TreeType& tree) : _tree(tree) {
+        // Ensure the value map has been generated.
+        if (tree.get_uncovered_values().cardinality() == 0) {
+            throw std::runtime_error("You must generate the tree's value-map via generate_value_map() before building a verifier.");
+        }
+
+        // Set the coverage ratio.
         const BinaryTreeCoverage<T>& final_coverage = tree.get_coverage_map().at(tree.get_level_count());
         _published_metrics.coverage_ratio = final_coverage.get_ratio().get_d();
     }
@@ -173,6 +186,33 @@ class Verifier {
 
 
 
+    /// @brief Enables the use of the Max IV table to help avoid overflows with a precomputed table.
+    /// @note Enabling this makes the `CPUVerifier` faster but the `GPUVerifier` slower.  YMMV.
+    void enable_max_iv_table() { _enable_max_iv_table = true; }
+
+
+
+    /// @brief Disables the use of the Max IV table, requiring "headroom bits" tracking internally for overflows.
+    /// @note Enabling this makes the `CPUVerifier` faster but the `GPUVerifier` slower.  YMMV.
+    void disable_max_iv_table() { _enable_max_iv_table = false; }
+
+
+
+    /// @brief Return the status of whether the IV table is used.
+    bool is_iv_table_enabled() const { return _enable_max_iv_table; }
+
+
+
+    /// @brief Get the synchronization countdown.  Usually not something you should care about.
+    size_t get_synchronization_countdown() const { return _synchronization_countdown; }
+
+
+
+    /// @brief Set the synchronization countdown.  Usually not something you should tune.
+    void set_synchronization_countdown(size_t value) { _synchronization_countdown = value; }
+
+
+
     /// @brief Get the latest metrics published by the threads.
     const VerifierMetric& get_metrics() {
         sync_timer();
@@ -190,7 +230,7 @@ class Verifier {
     * @brief Starts the verifier.  Clears any previous state/data.  Puts the work into a sub-thread and then returns.
     * @param policy A set of flags for the executor to respect when processing values.
     */
-    void start(VerifierExecutorPolicy policy) {
+    void start() {
         // Need to check if the worker has already been started.
         if (_state.load(std::memory_order_relaxed) == VerifierState::RUNNING) {
             return;
@@ -213,7 +253,7 @@ class Verifier {
         _state.store(VerifierState::RUNNING);
 
         // Fire up the executor in a thread.
-        _executor_thread = std::thread([this, policy] { run_executor(policy); });
+        _executor_thread = std::thread([this] { run_executor(); });
 
         // Start the timer.
         start_timer();

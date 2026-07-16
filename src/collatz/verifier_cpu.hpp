@@ -5,7 +5,6 @@
 #include "verifier_tls_metric.hpp"
 #include "verifier_state.hpp"
 #include "verifier.hpp"
-#include "verifier_executor_policy.hpp"
 #include <atomic>
 
 
@@ -36,6 +35,12 @@ class CPUVerifier : public Verifier<T> {
 
 
 
+    /// @brief Enables detailed metrics for step counts, striding, High-Water Mark stopping, etc.
+    /// @note Only available on `CPUVerifier`
+    bool _detailed_metrics = false;
+
+
+
     public:
     /// @name Lifecycle Management
     /// @{
@@ -46,7 +51,10 @@ class CPUVerifier : public Verifier<T> {
 
 
     /// @brief Constructor taking a tree.
-    explicit CPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {}
+    explicit CPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {
+        // Make sure IV table is enabled by default.  It's disabled on GPU.
+        this->_enable_max_iv_table = true;
+    }
 
 
 
@@ -69,6 +77,21 @@ class CPUVerifier : public Verifier<T> {
     }
 
     /// @}
+
+
+
+    /// @brief Enables detailed metrics.  Slows down verification but offers a little extra context about HWM/Affine Striding/Etc.
+    void enable_detailed_metrics() { _detailed_metrics = true; }
+
+
+
+    /// @brief Disables detailed metrics.
+    void disable_detailed_metrics() { _detailed_metrics = false; }
+
+
+
+    /// @brief Return the status of detailed metrics.
+    bool is_detailed_metrics_enabled() const { return _detailed_metrics; }
 
 
 
@@ -180,19 +203,17 @@ class CPUVerifier : public Verifier<T> {
     * In this CPU implementation, this is actually just a dispatcher.  It takes the runtime policy choices and makes a single call
     * to the `run_executor_impl()` with the neccessary compile-time constants.  This avoids if/else blocks inside hot loops which
     * adds anywhere from 1-2% up to 10-20% performance in testing.
-    *
-    * @param policy A verification policy to follow.  (see verifier_executor_policy.hpp)
     */
-    void run_executor(const VerifierExecutorPolicy& policy) override {
+    void run_executor() override {
         // Dispatch runtime selection to Impl
-        if (policy.enable_max_iv_table) {
-            if (policy.detailed_metrics) {
+        if (this->_enable_max_iv_table) {
+            if (_detailed_metrics) {
                 run_executor_impl<true, true>();
             } else {
                 run_executor_impl<true, false>();
             }
         } else {
-            if (policy.detailed_metrics) {
+            if (_detailed_metrics) {
                 run_executor_impl<false, true>();
             } else {
                 run_executor_impl<false, false>();

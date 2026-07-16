@@ -1,0 +1,31 @@
+HOW TO CITE THIS WORK
+======================
+
+Software:
+
+  [YOUR FULL NAME]. ([YEAR]). [PROJECT / REPOSITORY NAME] (Version [VERSION])
+  [Computer software]. [REPO URL]
+
+Paper (preferred citation for the algorithm itself):
+
+  [YOUR FULL NAME]. ([YEAR]). [PAPER TITLE]. arXiv:[ARXIV ID]
+
+BibTeX
+------
+
+@software{[your_lastname_year_software],
+  author  = {[Your Last Name], [Your First Name]},
+  title   = {[PROJECT / REPOSITORY NAME]},
+  year    = {[YEAR]},
+  version = {[VERSION]},
+  url     = {[REPO URL]}
+}
+
+@misc{[your_lastname_year_paper],
+  author       = {[Your Last Name], [Your First Name]},
+  title        = {[PAPER TITLE]},
+  year         = {[YEAR]},
+  eprint       = {[ARXIV ID]},
+  archivePrefix= {arXiv},
+  primaryClass = {[ARXIV CATEGORY, e.g. math.NT or cs.DM]}
+}

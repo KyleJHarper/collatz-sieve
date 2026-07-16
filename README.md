@@ -205,94 +205,52 @@ The code should work with any stable allocator, but [jemalloc](https://jemalloc.
 
 # I Just Want To Verify!
 
-Okay then, you can use a `CPUVerifier` or a `GPUVerifier` (NVidia/cuda only).
+Okay then, you can use a `CPUVerifier` or a `GPUVerifier` (NVidia/Cuda only).
 
-```
-#include "collatz/binary_tree.hpp"
-// #include "collatz/verifier_gpu.hpp"  Uncomment if using GPU
-#include "collatz/verifier_cpu.hpp"
-#include "collatz/verifier_executor_policy.hpp"
-#include <thread>
-
-
-int main() {
-    // Pick a type.
-    using my_t = uint64_t;
-    // using my_t = mpz_class;  // Only on the CPU path.  GPU can't do GMP.
-
-    // Make the tree and generate the value map.  Or load one from save.
-    level_t levels = 32;
-    BinaryTree<my_t> tree(levels);
-    tree.generate_value_map();
-
-    // Pick a verifier.
-    CPUVerifier<my_t> verifier(tree);
-    // GPUVerifier<my_t> verifier(tree);  // Use the GPU Verifier if you have a compatible RTX card.
-
-    // Set a max value to test do.  In this case, we'll stop at 2^40 since the tree stopped at 2^32.
-    my_t max = my_t(1) << 40;
-    verifier.set_end_value(max);
-
-    // Execution policy decides things like whether detailed metrics should be calculated for debugging (CPU only).
-    VerifierExecutorPolicy policy;
-    policy.detailed_metrics = false;
-    // For CPU, the IV table is faster.  For GPU, it isn't.
-    policy.enable_max_iv_table = true;
-    // If using GPU, the scales_per_run is a powerful amortization feature.  Values of 100-10,000 are common.
-    policy.scales_per_run = 1000;
-
-    // Start the verifier and wait for it to finish, checking metrics and emitting them in Influx Line Protocol format.
-    verifier.start(policy);
-    while (verifier.get_state() != VerifierState::STOPPED) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::cout << verifier.get_metrics().emit_ilp() << std::endl;
-    }
-
-    // Pull the latest metrics and spit it all out.
-    const VerifierMetric& metric = verifier.get_metrics();
-    std::cout << "  Nodes Verified: " << to_string_any(metric.nodes_verified_atomic.load()) << std::endl;
-    std::cout << "  Total Steps: " << to_string_any(metric.steps_total_atomic.load()) << std::endl;
-    std::cout << "  Steps Skippable by High-Water Mark: " << to_string_any(metric.steps_skippable_by_hwm_atomic.load()) << "  (rate: " << metric.skip_rate_of_hwm() << ")" << std::endl;
-    std::cout << "  Steps Skippable by Affine Striding: " << to_string_any(metric.steps_skippable_by_affine_stride_atomic.load()) << "  (rate: " << metric.skip_rate_of_affine_stride() << ")" << std::endl;
-    std::cout << "  Steps Skippable by Affine Striding before HWM: " << to_string_any(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load()) << "  (rate: " << metric.skip_rate_of_affine_stride_before_hwm() << ")" << "  (rate of required steps:" << ((1.0 * metric.steps_skippable_by_affine_stride_before_hwm_atomic.load()) / metric.steps_before_hwm()) << ")" << std::endl;
-    std::cout << "  Duration: " << metric.duration_ms.count() << "ms" << std::endl;
-    std::cout << "  Nodes Per ms: " << metric.nodes_per_ms() << std::endl;
-    std::cout << "  Steps Per ms: " << metric.steps_per_ms() << std::endl;
-    std::cout << "  Effective Nodes Verified: " << metric.effective_nodes_verified() << std::endl;
-    std::cout << "  Effective Nodes Per ms: " << metric.effective_nodes_per_ms() << std::endl;
-}
-```
+An implementation has been written in the `src/verifier.cpp` program file.
 
 ### Caveats
 
-Detailed metrics for step counts, strides, and so forth are only available when the execution policy asks for it, and only the
-`CPUVerifier` can do this.
+Detailed metrics for step counts, strides, and so forth are only available when enabled and only for the `CPUVerifier`.
 
 ### Tuning
 
 The `CPUVerifier` is basically tuned out-of-the-box.  It uses OMP to control thread counts.  Using the Initial-Value table makes it
 run much faster, but that table has a limit.  As of 2026-07-12, the largest table value is 74,409,568,399,815,527 (~2^56).
 
-The `GPUVerifier` has been tailored to hide all overhead by amortizing it behind `scales_per_run` in the `VerifierExeuctorPolicy`.
-Normally, the `tree.for_each_value(...)` iterates surviving values, but this is actually just iterating the `NodeBitmap` over and
-over with a scaling factor and multiplier to bump values forward in the subtrees of each surviving leaf node.  Doing this would
-hammer the CPU and overload the PCIe bus--the GPU would be starved.  Therefore, the GPUVerifier handles scaling and multipliers in
-lock-step with the GPU kernel(s).  This allows the GPU to perform hundreds or thousands of verifications in a single call.  The
-`scales_per_run` specifies how many subtree elements of each surviving leaf node should be tested in a single kernel launch.
-Bigger scaling runs equate to better GPU engagement, but reduce responsiveness of metrics (they're only updated once per finished
-kernel).
+The `GPUVerifier` has been tailored to hide all overhead by amortizing it behind the `scales_per_run` property.  Normally, the
+`tree.for_each_value(...)` iterates surviving values, but this is actually just iterating the `NodeBitmap` over and over with a
+scaling factor and multiplier to bump values forward in the subtrees of each surviving leaf node.  Doing this for the `GPUVerifier`
+would hammer the CPU and overload the PCIe bus--the GPU would be starved.  Therefore, the `GPUVerifier` handles scaling and
+multipliers in lock-step with the GPU kernel(s).  This allows the GPU to perform hundreds or thousands of verifications in a single
+call per surviving value.  The `scales_per_run` specifies how many subtree elements of each surviving leaf node should be tested in
+a single kernel launch.  Bigger scaling runs equate to better GPU engagement, but reduce the responsiveness of metrics (they're
+only updated once per finished kernel).
 
-In microbenchmarking, the follow rates were observed using a level 32 tree with 98.8991% filtration and testing up to 2^46:
+### Performance Rates
 
-| Hardware        | Use IV Table | Surviving Values per sec | Effective Space per sec |
-| :-------------- | -----------: | -----------------------: | ----------------------: |
-| Intel i5-14600K |        false |          700,000,000 c/s |      63,584,340,085 c/s |
-| Intel i5-14600K |         true |        4,000,000,000 c/s |     363,339,086,202 c/s |
-| NVidia RTX-5060 |        false |       11,140,000,000 c/s |   1,011,899,355,073 c/s |
+In microbenchmarking, the following rates were observed.  Using larger trees increases the filtration (sieve) rate, which
+drastically improves the effective range covered.  Surviving value iteration speed is generally stable regardless of the tree size,
+which means even small gains in sieve performance have significant gains on overall effective range speed too.
 
-Using larger trees increases the filtration (sieve) rate, which drastically improves the effective space performance.  In other
-words, trading a little bit of iteration slowdown from a larger survivor set on the host is often outpaced by the better sieve
-performance.
+Space was tested up to 2^46 for these benchmarks.  The data type was `uint64_t`, which often overflows into 128-bit space (the API
+handles this transparently).  No values touch GMP (`mpz_class`).  Rates do not include the time building the tree or its value map,
+because these are reusable objects across runs via `tree.save()` and `tree.load()`.
+
+| Hardware        | Use IV Table | Level | Sieve    | Surviving Values per sec | Effective Range per sec |
+| :-------------- | -----------: | ----: | -------: | -----------------------: | ----------------------: |
+| Intel i5-14600K |        false |    32 | 98.8991% |         ~816,000,000 c/s |      74,148,090,000 c/s |
+|                 |              |    38 | 99.2961% |         ~849,081,000 c/s |     120,632,096,000 c/s |
+|                 |              |    40 | 99.3431% |         ~844,876,000 c/s |     128,608,922,000 c/s |
+|                 |         true |    32 | 98.8991% |       ~3,933,000,000 c/s |     357,228,594,000 c/s |
+|                 |              |    38 | 99.2961% |       ~3,935,187,000 c/s |     559,086,270,000 c/s |
+|                 |              |    40 | 99.3431% |       ~3,938,114,000 c/s |     599,468,319,000 c/s |
+| NVidia RTX-5060 |        false |    32 | 98.8991% |   ~TODO c/s |   TODO c/s |
+|                 |              |    38 | 99.2961% |   ~TODO c/s |   TODO c/s |
+|                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
+|                 |         true |    32 | 98.8991% |   ~TODO c/s |   TODO c/s |
+|                 |              |    38 | 99.2961% |   ~TODO c/s |   TODO c/s |
+|                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
 
 ### Affine Striding
 
