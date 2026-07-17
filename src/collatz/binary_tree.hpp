@@ -47,7 +47,7 @@ struct BinaryTreeFileHeader {
     /// @brief Magic bytes.
     const char magic[MAGIC_SIZE] = {'H', 'a', 'r', 'p', 'e', 'r', 'T', 'r', 'e', 'e'}; // "HarperTree"
     /// @brief Version number.  Must change whenever serialization/deserialization changes happen.
-    const uint32_t version = 2;
+    const uint32_t version = 3;
 };
 
 
