@@ -20,15 +20,31 @@ int main(int argc, char** argv) {
         std::cerr << "Must pass GPU scales_per_run to test to as arg2." << std::endl;
         return 1;
     }
+    if (argc < 4) {
+        std::cerr << "Must pass tree file with precomputed value map as arg3." << std::endl;
+        return 1;
+    }
 
-    level_t levels = 40;
-    BinaryTree<my_t> tree(levels);
-    tree.generate_value_map();
-    // GPUVerifier<my_t> verifier(tree);
-    CPUVerifier<my_t> verifier(tree);
+    // level_t levels = 38;
+    // BinaryTree<my_t> tree(levels);
+    // tree.generate_value_map();
+
+    BinaryTree<my_t> tree;
+    std::cout << "Loading tree" << std::endl;
+    tree.load(argv[3]);
+
+    std::cout << "Tree built.  I see cardinality=" << to_string_any(tree.get_uncovered_values().cardinality()) << std::endl;
+    GPUVerifier<my_t> verifier(tree);
+    // CPUVerifier<my_t> verifier(tree);
     my_t max = my_t(1) << atoll(argv[1]);
+    my_t effective_to_do = max - (uint64_t(1) << tree.get_level_count());
+    std::cout << "Effective todo=" << std::to_string(effective_to_do) << std::endl;
     verifier.set_end_value(max);
-    // verifier.disable_max_iv_table();
+    verifier.disable_max_iv_table();
+    // verifier.enable_max_iv_table();
+    verifier.set_gpu_buffer_limit(1'000'000'000);
+    verifier.set_scales_per_run(atoll(argv[2]));
+    tree.get_uncovered_values_rw().optimize();
 
     verifier.start();
     while (verifier.get_state() != VerifierState::STOPPED) {

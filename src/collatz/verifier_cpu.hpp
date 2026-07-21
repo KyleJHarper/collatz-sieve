@@ -51,10 +51,7 @@ class CPUVerifier : public Verifier<T> {
 
 
     /// @brief Constructor taking a tree.
-    explicit CPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {
-        // Make sure IV table is enabled by default.  It's disabled on GPU.
-        this->_enable_max_iv_table = true;
-    }
+    explicit CPUVerifier(Verifier<T>::TreeType& tree) : Verifier<T>(tree) {}
 
 
 

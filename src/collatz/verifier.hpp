@@ -39,7 +39,6 @@ class Verifier {
     /// @brief Enables the lookup of max initial values inside `CollatzConstants` to prevent type overflows instead of tracking
     /// headroom bits.
     /// @note The verifier will switch to headroom bits when the table is exhausted.
-    /// @warning This is faster on CPU but slower on GPU.  YMMV.
     bool _enable_max_iv_table = true;
 
 

@@ -131,10 +131,10 @@ class PeakIVScanner {
     // Runs the scanner and returns results.  Tries to use a GPU if available.
     //
     PeakIVScannerResults run(bool use_table = false) {
-        // Setup the vector for result storage.  Reserve the space to avoid realloc() messing with the cuda memcpy later.
+        // Setup the vector for result storage.  Resize the space to avoid realloc() messing with the cuda memcpy later.
         _collatz_peaks.clear();
         _collatz_peaks.shrink_to_fit();
-        _collatz_peaks.reserve(BUFFER_SIZE);
+        _collatz_peaks.resize(BUFFER_SIZE);
 
         // Setup the failing_index and overflow_index, which are checked in our main loop.  Add pointers for GPU too.
         T* unified_base_initial_value_ptr = nullptr;

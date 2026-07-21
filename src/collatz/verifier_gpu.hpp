@@ -85,8 +85,6 @@ class GPUVerifier : public Verifier<T> {
             throw std::logic_error("No GPU detected.  Cannot build a GPUVerifier.");
         }
         GPU::initialize_stride_table();
-        // Make sure IV table is disabled by default.  It's enabled on CPU.
-        this->_enable_max_iv_table = false;
     }
 
 
@@ -174,12 +172,11 @@ class GPUVerifier : public Verifier<T> {
                 throw std::runtime_error(std::string("CUDA Error: ") + cudaGetErrorString(status));
             }
             total_buffer_limit = free_bytes * 9 / 10;  // 90%
-
-            // If the survivor set is smaller than the available buffer space on the GPU, reduce the allocation size needed.
-            const size_t uncovered_values_size = this->_tree.get_uncovered_values().cardinality() * sizeof(T);
-            if (uncovered_values_size < total_buffer_limit) {
-                total_buffer_limit = uncovered_values_size;
-            }
+        }
+        // If the survivor set is smaller than the available buffer space on the GPU, reduce the allocation size needed.
+        const size_t uncovered_values_size = this->_tree.get_uncovered_values().cardinality() * sizeof(T);
+        if (uncovered_values_size < total_buffer_limit) {
+            total_buffer_limit = uncovered_values_size;
         }
 
         // Use the total buffer limit to decide how large each thread's buffer can be.
@@ -236,7 +233,7 @@ class GPUVerifier : public Verifier<T> {
                         std::this_thread::sleep_for(std::chrono::milliseconds(this->_paused_check_ms));
                     }
                     if (this->_state.load(std::memory_order_relaxed) == VerifierState::STOPPING) {
-                        return ForEachSignal::BREAK;
+                        last_loop = true;
                     }
                     thread_storage.synchronizations_performed++;
                 }
@@ -305,8 +302,8 @@ class GPUVerifier : public Verifier<T> {
                     }
                 }
                 // Update the metrics for this, including the overflow-exceeded counter.
-                this->_published_metrics.gpu_overflow_buffer_exceeded.fetch_add(1);
-                this->_published_metrics.gpu_overflows_processed.fetch_add(((thread_storage.buffer_ptr->get_next_index() + 1) * scales_ran));
+                this->_published_metrics.gpu_overflow_buffer_exceeded_atomic.fetch_add(1);
+                this->_published_metrics.gpu_overflows_processed_atomic.fetch_add(((thread_storage.buffer_ptr->get_next_index() + 1) * scales_ran));
             } else {
                 // Contained the overflow.  Process only the offenders on CPU.
                 for (uint64_t i = 0; i < host_results_ptr->overflow_count; i++) {
@@ -319,7 +316,7 @@ class GPUVerifier : public Verifier<T> {
                     }
                 }
                 // Update the metrics for this.
-                this->_published_metrics.gpu_overflows_processed.fetch_add(host_results_ptr->overflow_count * scales_ran);
+                this->_published_metrics.gpu_overflows_processed_atomic.fetch_add(host_results_ptr->overflow_count * scales_ran);
             }
         }
 
@@ -328,7 +325,7 @@ class GPUVerifier : public Verifier<T> {
 
         // Update metrics.
         this->_published_metrics.nodes_verified_atomic.fetch_add(thread_storage.buffer_ptr->get_next_index() * scales_ran);
-        this->_published_metrics.gpu_kernel_launches.fetch_add(1);
+        this->_published_metrics.gpu_kernel_launches_atomic.fetch_add(1);
 
         // Recycle the buffer.  This resets counters and sets state to FILLING.
         thread_storage.buffer_ptr->recycle();
