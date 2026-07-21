@@ -22,7 +22,7 @@ The following table shows coverage and performance when building a tree using `u
 |          35 |   99.12% |          2 |        52 |
 |          40 |   99.34% |         27 |      1100 |
 
-The `BinaryTree` at the core Harper's Sieve is a sieve in the truest sense: it filters out entire classes of integers from needing
+The `BinaryTree` at the core of Harper's Sieve is a sieve in the truest sense: it filters entire classes of integers from needing
 verification.  The _coverage_ listed above is achieved by the sieve alone.  That said, it does not preclude other techniques to
 further reduce space or accelerate verification steps.
 
@@ -158,7 +158,7 @@ and hits memory bandwidth limits (and possibly pointer chasing) long before the 
 outpace our `NodeBitmap`.  It also outperforms compressed memory.  The compressed memory was slightly smaller in size, and this
 might scale at higher tree levels, but the decompression time was so massive it killed the overall throughput.
 
-Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 1,117,834,900
+Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 1,117,834,900 (1.1B)
 surviving positions/values.  Note, the c/ms (count per millisecond) is not a typo.  The system can provide billions of values per
 second.
 
@@ -209,34 +209,51 @@ Okay then, you can use a `CPUVerifier` or a `GPUVerifier` (NVidia/Cuda only).
 
 An implementation has been written in the `src/verifier.cpp` program file.
 
-### Caveats
-
-Detailed metrics for step counts, strides, and so forth are only available when enabled and only for the `CPUVerifier`.
-
 ### Tuning
 
-The `CPUVerifier` is basically tuned out-of-the-box.  It uses OMP to control thread counts.  Using the Initial-Value table makes it
-run much faster, but that table has a limit.  As of 2026-07-12, the largest table value is 74,409,568,399,815,527 (~2^56).
+The `CPUVerifier` is basically tuned out-of-the-box.  It uses OMP to control thread counts.
 
-The `GPUVerifier` has been tailored to hide all overhead by amortizing it behind the `scales_per_run` property.  Normally, the
-`tree.for_each_value(...)` iterates surviving values, but this is actually just iterating the `NodeBitmap` over and over with a
-scaling factor and multiplier to bump values forward in the subtrees of each surviving leaf node.  Doing this for the `GPUVerifier`
-would hammer the CPU and overload the PCIe bus--the GPU would be starved.  Therefore, the `GPUVerifier` handles scaling and
-multipliers in lock-step with the GPU kernel(s).  This allows the GPU to perform hundreds or thousands of verifications in a single
-call per surviving value.  The `scales_per_run` specifies how many subtree elements of each surviving leaf node should be tested in
-a single kernel launch.  Bigger scaling runs equate to better GPU engagement, but reduce the responsiveness of metrics (they're
-only updated once per finished kernel).
+The `GPUVerifier` has been tailored to mask all overhead by amortizing it behind the `scales_per_run` property.  Theoretically, the
+`tree.for_each_value(...)` could iterate all surviving values and feed them to the GPU, but this creates a producer-consumer
+relationship between the CPU and GPU with a 1:1 ratio.  This hammers the CPU and overloads the PCIe bus.  The GPU becomes starved.
+In reality, the tree's for-each method is just iterating over a `NodeBitmap` repeatedly with a scaling factor and a multiplier in
+the background, bumping values forward in the subtrees of each surviving leaf node.  Therefore, the `GPUVerifier` fetches the
+`NodeBitmap` directly from the tree, iterates it repeatedly, and handles the scaling factors and multipliers in lock-step with the
+GPU kernel(s).  Essentially, this lets you change the ratio from `1:1` to `1:scaling_factor`, garnering more work done per kernel
+lauch, PCIe transfer, etc.  Bigger scaling runs equate to better GPU engagement, but reduce the responsiveness of metrics (they're
+only updated once per finished kernel).  Here are some notes specific to the `GPUVerifier`:
+
+* GPU Memory
+  * Is pinned by the host.  If you target 20GB of VRAM, you'll need 20GB of free host memory for Cuda to pin. (see next)
+  * Uses only the memory needed, up to 90% of free VRAM, or you can set a hard byte limit.
+* Scaling Runs
+  * Target hundreds or even thousands for best throughput.  You want the GPU slammed.
+  * Larger runs can overshoot your end-value the higher you set them.
+  * Larger runs allows you to reduce VRAM usage (because both limit kernel launches).
+  * If you're clever, you can set scaling runs to a power-of-two that will limit overshooting end-value by much.
+* CPU
+  * Must still iterate surviving values (leaf roots) and ship them to the GPU.  A super slow CPU will kill GPU performance.
+
+Both the CPU and GPU versions use an Initial-Value table by default.  The IV Table is a precomputed set of known starting values of
+Collatz sequences that fit within a given bit size.  This allows the verifiers to skip overflow checking safely.  When the table is
+exhausted, they switch to a "headroom bits" tracking system transparently.  They also promote transparently.  Even the GPU verifier
+will identify 128-bit overflows and ship them back to the host for CPU verification using GMP.  You can disable the IV table if
+desired by calling `verifier.disable_max_iv_table()`.
+
+Quick Note: Using [jemalloc](https://jemalloc.net/) helped in every benchmark (CPU and GPU).  YMMV.
 
 ### Performance Rates
 
 In microbenchmarking, the following rates were observed.  Using larger trees increases the filtration (sieve) rate, which
-drastically improves the effective range covered.  Surviving value iteration speed is generally stable regardless of the tree size,
-which means even small gains in sieve performance have significant gains on overall effective range speed too.
+drastically improves the effective range covered.  Surviving value iteration speed is generally stable regardless of the tree size
+as long as the CPU side can keep up, which means even small gains in sieve performance have significant gains on overall effective
+range speed too.
 
-Space was tested up to 2^46 for these benchmarks.  The data type was `uint64_t`, which often overflows into 128-bit space (the API
+Space was tested up to 2^50 for these benchmarks.  The data type was `uint64_t`, which often overflows into 128-bit space (the API
 handles this transparently).  No values touch GMP (`mpz_class`).  Rates do not include the time building the tree or its value map,
 because these are reusable objects across runs via `tree.save()` and `tree.load()`.  For the `GPUVerifier` (RTX-5060 Hardware),
-`scaling_runs` was set between 100 and 500 (need longer scales for smaller trees such as level-32).
+`scaling_runs` was set between 250 and 500 to compensate for a slow i3-4160 CPU feeding the root values.  This gave the best
+representation of ideal/saturated conditions for the GPU.
 
 | Hardware        | Use IV Table | Level | Sieve    | Surviving Values per sec | Effective Range per sec |
 | :-------------- | -----------: | ----: | -------: | -----------------------: | ----------------------: |
@@ -247,16 +264,11 @@ because these are reusable objects across runs via `tree.save()` and `tree.load(
 |                 |              |    38 | 99.2961% |       ~3,935,187,000 c/s |     559,086,270,000 c/s |
 |                 |              |    40 | 99.3431% |       ~3,938,114,000 c/s |     599,468,319,000 c/s |
 | NVidia RTX-5060 |        false |    32 | 98.8991% |      ~10,540,097,000 c/s |     957,389,935,000 c/s |
-|                 |              |    38 | 99.2961% |       ~8,980,241,000 c/s |   1,275,855,234,000 c/s |
-|                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
-|                 |         true |    32 | 98.8991% |       ~1,685,702,000 c/s |     153,117,597,000 c/s |
-|                 |              |    38 | 99.2961% |       ~1,500,404,000 c/s |     213,167,924,000 c/s |
-|                 |              |    40 | 99.3431% |   ~TODO c/s |   TODO c/s |
-
-Maybe we should just stride in the verify_unsafe()?  Raw arithmetic has proven to be slower.
-
-Again, the `CPUVerifier` is much faster using the Initial-Value table.  The `GPUVerifier` is much slower.  Hence, it is enabled by
-default for the CPU, but disabled for the GPU.
+|                 |              |    38 | 99.2961% |      ~10,536,056,000 c/s |   1,496,895,459,000 c/s |
+|                 |              |    40 | 99.3431% |      ~10,233,055,000 c/s |   1,557,697,861,000 c/s |
+|                 |         true |    32 | 98.8991% |      ~14,366,261,000 c/s |   1,304,932,336,000 c/s |
+|                 |              |    38 | 99.2961% |      ~14,568,154,000 c/s |   2,069,750,074,000 c/s |
+|                 |              |    40 | 99.3431% |      ~14,514,672,000 c/s |   2,209,454,828,000 c/s |
 
 ### Affine Striding
 
@@ -278,6 +290,17 @@ your build directory first).
 
 Note: if you're using GMP extensively, you may find larger stride sizes (18-20) better.  This is because the heap-allocated
 overhead of GMP is huge, and avoiding it gives more performance back than the slightly slower L2 cache penalty for a larger table.
+
+### Metrics
+
+Both the CPU and GPU verifiers track some basic metrics.  These are updated and available via `verifier.get_metrics()`.  They are
+safe to read at any time.  If a value is zero (e.g.: duration) and would cause a division-by-zero error, it will instead return 0.
+Metrics can be emitted as [Influx Line Protocol](https://docs.influxdata.com/influxdb/v2/reference/syntax/line-protocol/) by
+calling `verifier.emit_ilp()`.
+
+For purely analytical reasons, detailed metrics are available on the `CPUVerifier` by calling `verifier.enable_detailed_metrics()`.
+This drastically slows down verification, but can give some insight to the effects of stopping at High-Water Mark, affine striding,
+and step counts.
 
 # Data Types and Cost Model
 

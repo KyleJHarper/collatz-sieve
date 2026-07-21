@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     tree.generate_value_map();
     std::cout << "I see cardinality=" << to_string_any(tree.get_uncovered_values().cardinality()) << std::endl;
     std::cout << "Saving\n";
-    tree.save(filename, 10);
+    tree.save(filename, 16);
     // i == implicit
     // 40 == level 40 tree
     // ivm == includes value map
