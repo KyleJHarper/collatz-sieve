@@ -101,6 +101,9 @@ __device__ inline int ctz(T val) {
 *     * ensure type `U` will not overflow.
 *     * ensure `sentinel_value` is greater than 2, to avoid entering a 2-1-2 loop (mostly for GMP affine striding).
 *
+* @note This technique does NOT perform direct arithmetic the way the CPU version does.  General CPUs handle raw arithmetic faster
+* than affine striding in empirical testing, but GPUs do not.  There's probably something like predictors, pipelining, instruction
+* compression, or whatever else happening... but for now, I trust the empirical testing.
 * @note In the event a number is divergent (cyclic), this method will hang.
 * @param initial_value The starting value for a sequence.
 * @param sentinel_value The value to stop at.  Must be greater than 2.
@@ -110,11 +113,27 @@ template<typename T>
 __device__ inline bool verify_unsafe(const T& initial_value, const T& sentinel_value) {
     // Caller has checked for (or disregarded) overflow potential already.  Just blaze through the loop.  Make CPU happy.
     T current_value = initial_value;
+
+    // OLD technique which is valid on CPU but slower GPU.
+    // while (current_value >= sentinel_value) {
+    //     // Must be odd here.
+    //     current_value = (current_value << 1) + current_value + 1;
+    //     // Must be even here.
+    //     current_value >>= ctz(current_value);
+    // }
+
+    // Instead, use the striding technique similar to verify() but without headroom tracking.
+
+    // Pick a steady stride table.
+    using StrideTable = AffineStrideCuda::VerifyFWCudaTable;
+
+    // Run the loop.
     while (current_value >= sentinel_value) {
-        // Must be odd here.
-        current_value = (current_value << 1) + current_value + 1;
-        // Must be even here.
-        current_value >>= ctz(current_value);
+        // Pick the next stride.
+        const AffineStrideCuda::Stride& stride = StrideTable::get_stride(current_value);
+
+        // Apply the stride.
+        StrideTable::apply_stride(current_value, stride);
     }
 
     return true;
@@ -157,9 +176,8 @@ __device__ inline bool verify(const T& initial_value, const T& sentinel_value, b
                 uint128_t promoted_effective_sentinel_value = effective_sentinel_value;
                 return verify_unsafe(promoted_initial_value, promoted_effective_sentinel_value);
             } else if constexpr (sizeof(T) * 8 == 128) {
-                // Dealing with 128 bits.  Must flag as overflow.
-                overflow = true;
-                return false;
+                // Dealing with 128 bits.  Cannot promomte higher.
+                // Drop out of this block and let the headroom-tracking logic work on it below.
             }
         }
         //

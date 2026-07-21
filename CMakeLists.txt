@@ -250,6 +250,10 @@ set(TESTS
     zstandard
 )
 
+set(TESTS_GPU
+    verifier_gpu
+)
+
 enable_testing()
 foreach(test ${TESTS})
     add_executable(test__${test} src/test/${test}.cpp)
@@ -257,3 +261,16 @@ foreach(test ${TESTS})
     target_link_libraries(test__${test} PRIVATE ${PROJECT_LIBS})
     add_test(NAME ${test} COMMAND test__${test})
 endforeach()
+if(CUDAToolkit_FOUND)
+    foreach(test ${TESTS_GPU})
+        add_executable(test__${test} src/test/${test}.cpp $<TARGET_OBJECTS:collatz_gpu>)
+        set_target_properties(test__${test} PROPERTIES
+            CUDA_SEPARABLE_COMPILATION ON
+            CUDA_STANDARD 20
+            CUDA_STANDARD_REQUIRED ON
+            CUDA_ARCHITECTURES "89;90"
+        )
+        target_link_libraries(test__${test} PRIVATE logging)
+        target_link_libraries(test__${test} PRIVATE ${PROJECT_LIBS})
+    endforeach()
+endif()

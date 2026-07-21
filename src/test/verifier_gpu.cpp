@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include "../collatz/concepts.hpp"
 #include "../collatz/binary_tree.hpp"
-#include "../collatz/verifier_cpu.hpp"
+#include "../collatz/verifier_gpu.hpp"
 #include "helpers.hpp"
 
 
@@ -12,19 +12,19 @@
 // Use a global for level count on the tree.
 const level_t levels = 16;
 
-template<AnySupportedIntegral T>
+template<FixedWidthIntegral T>
 void test_verifier_gpu_basics() {
     start_test(__func__);
 
     // The default constructor has been deleted.  No runtime check for that.
-    static_assert(!std::is_default_constructible_v<CPUVerifier<T>>, "CPUVerifier should not be default constructible.");
+    static_assert(!std::is_default_constructible_v<GPUVerifier<T>>, "GPUVerifier should not be default constructible.");
 
     // Build the tree.
     ImplicitBinaryTree<T> tree(levels);
 
     // Build the verifier.  This should throw because the value map isn't generated.
     try {
-        CPUVerifier<T> verifier_should_fail(tree);
+        GPUVerifier<T> verifier_should_fail(tree);
         assert(false);
     } catch (std::runtime_error& ex) {
         assert(std::string(ex.what()).find("You must generate the tree's value-map via generate_value_map() before building a verifier.") != std::string::npos);
@@ -32,21 +32,16 @@ void test_verifier_gpu_basics() {
 
     // Build the verifier with a value map properly generated.
     tree.generate_value_map();
-    CPUVerifier<T> verifier(tree);
+    GPUVerifier<T> verifier(tree);
 
     // Assert defaults.
     assert(verifier.is_iv_table_enabled() == true);
-    assert(verifier.is_detailed_metrics_enabled() == false);
     assert(verifier.get_start_value() == 0);
     assert(verifier.get_end_value() == 0);
     assert(verifier.get_state() == VerifierState::STOPPED);
     assert(verifier.get_synchronization_countdown() == 100'000);
 
     // Changes to attributes should persist.
-    verifier.enable_detailed_metrics();
-    assert(verifier.is_detailed_metrics_enabled() == true);
-    verifier.disable_detailed_metrics();
-    assert(verifier.is_detailed_metrics_enabled() == false);
     verifier.disable_max_iv_table();
     assert(verifier.is_iv_table_enabled() == false);
     verifier.enable_max_iv_table();
@@ -63,13 +58,13 @@ void test_verifier_gpu_basics() {
 
 
 
-template<AnySupportedIntegral T>
+template<FixedWidthIntegral T>
 void test_verifier_gpu_run_a_range() {
     start_test(__func__);
 
     ImplicitBinaryTree<T> tree(levels);
     tree.generate_value_map();
-    CPUVerifier<T> verifier(tree);
+    GPUVerifier<T> verifier(tree);
     verifier.set_synchronization_countdown(100);
 
     verifier.set_end_value(T(1) << (levels + 4));
@@ -96,11 +91,11 @@ void test_verifier_gpu_run_a_range() {
     assert(metrics.steps_skippable_by_affine_stride_atomic.load() == 0);
     // steps_skippable_by_affine_stride_before_hwm (detailed metric only)
     assert(metrics.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 0);
-    // gpu_kernel_launches (n/a on cpu verifier)
-    assert(metrics.gpu_kernel_launches_atomic.load() == 0);
-    // gpu_overflows_processed (n/a on cpu verifier)
+    // gpu_kernel_launches (only on gpu verifier)
+    assert(metrics.gpu_kernel_launches_atomic.load() > 0);
+    // gpu_overflows_processed (shouldn't be any for this range)
     assert(metrics.gpu_overflows_processed_atomic.load() == 0);
-    // gpu_overflow_buffer_exceeded (n/a on cpu verifier)
+    // gpu_overflow_buffer_exceeded (shouldn't be any for this range)
     assert(metrics.gpu_overflow_buffer_exceeded_atomic.load() == 0);
     // duration
     assert(metrics.duration_ms.count() > 0);
@@ -110,13 +105,13 @@ void test_verifier_gpu_run_a_range() {
 
 
 
-template<AnySupportedIntegral T>
+template<FixedWidthIntegral T>
 void test_verifier_gpu_job_control() {
     start_test(__func__);
 
     ImplicitBinaryTree<T> tree(levels);
     tree.generate_value_map();
-    CPUVerifier<T> verifier(tree);
+    GPUVerifier<T> verifier(tree);
     verifier.set_synchronization_countdown(100);
     const VerifierMetric& metrics = verifier.get_metrics();
 
@@ -202,71 +197,26 @@ void test_verifier_gpu_job_control() {
 
 
 
-template<AnySupportedIntegral T>
-void test_verifier_gpu_detailed_metrics() {
-    start_test(__func__);
-
-    ImplicitBinaryTree<T> tree(levels);
-    tree.generate_value_map();
-    CPUVerifier<T> verifier(tree);
-    verifier.set_synchronization_countdown(100);
-    verifier.enable_detailed_metrics();
-    verifier.set_end_value(T(1) << (levels + 4));
-    verifier.start();
-    while(verifier.get_state() != VerifierState::STOPPED) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-    const VerifierMetric& metrics = verifier.get_metrics();
-
-    // nodes_verified
-    assert(metrics.nodes_verified_atomic.load() > 0);
-    // coverage_ratio and residue_ratio
-    assert(metrics.coverage_ratio > 0 && metrics.coverage_ratio < 1);
-    assert(metrics.residue_ratio() > 0 && metrics.residue_ratio() < 1);
-    assert(metrics.coverage_ratio + metrics.residue_ratio() > 0.99);
-    // effective_nodes_verified
-    assert(metrics.effective_nodes_verified() > 0);
-    assert(metrics.effective_nodes_verified() > metrics.nodes_verified_atomic.load());
-    // steps_total (detailed metric only)
-    assert(metrics.steps_total_atomic.load() > 0);
-    // steps_skippable_by_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_hwm_atomic.load() > 0);
-    // steps_skippable_by_affine_stride (detailed metric only)
-    assert(metrics.steps_skippable_by_affine_stride_atomic.load() > 0);
-    // steps_skippable_by_affine_stride_before_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_affine_stride_before_hwm_atomic.load() > 0);
-    // gpu_kernel_launches (n/a on cpu verifier)
-    assert(metrics.gpu_kernel_launches_atomic.load() == 0);
-    // gpu_overflows_processed (n/a on cpu verifier)
-    assert(metrics.gpu_overflows_processed_atomic.load() == 0);
-    // gpu_overflow_buffer_exceeded (n/a on cpu verifier)
-    assert(metrics.gpu_overflow_buffer_exceeded_atomic.load() == 0);
-    // duration
-    assert(metrics.duration_ms.count() > 0);
-
-    end_test();
-}
-
-
-
-template<AnySupportedIntegral T>
+template<FixedWidthIntegral T>
 void run_all() {
     announce_run_all<T>();
 
     test_verifier_gpu_basics<T>();
     test_verifier_gpu_run_a_range<T>();
     test_verifier_gpu_job_control<T>();
-    test_verifier_gpu_detailed_metrics<T>();
 }
 
 
 
 int main() {
-    std::string name = "VerifierCPU";
+    std::string name = "VerifierGPU";
     preamble(name);
-    run_all<uint64_t>();
-    run_all<uint128_t>();
-    run_all<mpz_class>();
+    if (GPU::can_use_gpu()) {
+        run_all<uint64_t>();
+        run_all<uint128_t>();
+    } else {
+        std::cout << "No GPU present.  Cannot run tests." << std::endl;
+    }
     done(name);
 
     return 0;
