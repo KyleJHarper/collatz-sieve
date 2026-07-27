@@ -17,313 +17,314 @@
 \DoxyCodeLine{00013\ }
 \DoxyCodeLine{00015\ \textcolor{keyword}{extern}\ std::shared\_ptr<spdlog::logger>\ logger;}
 \DoxyCodeLine{00016\ }
-\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ init\_logger();}
-\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ init\_logger(\textcolor{keyword}{const}\ std::string);}
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ init\_logger(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*);}
 \DoxyCodeLine{00020\ }
 \DoxyCodeLine{00021\ }
 \DoxyCodeLine{00022\ }
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00028\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00029\ \textcolor{keyword}{struct\ }fmt::formatter<\mbox{\hyperlink{classNode}{int128\_t}}>\ :\ fmt::formatter<std::string>\ \{}
-\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{int128\_t}}\&\ value,\ \mbox{\hyperlink{classNode}{format\_context}}\&\ \mbox{\hyperlink{classNode}{ctx}})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::formatter<std::string>::format(\mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{Int128::int128\_to\_string}}(value),\ \mbox{\hyperlink{classNode}{ctx}});}
-\DoxyCodeLine{00032\ \ \ \ \ \}}
-\DoxyCodeLine{00033\ \};}
-\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00030\ \textcolor{keyword}{struct\ }fmt::formatter<int128\_t>\ :\ fmt::formatter<std::string>\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ int128\_t\&\ value,\ format\_context\&\ ctx)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::formatter<std::string>::format(\mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{Int128::int128\_to\_string}}(value),\ ctx);}
+\DoxyCodeLine{00033\ \ \ \ \ \}}
+\DoxyCodeLine{00034\ \};}
 \DoxyCodeLine{00035\ }
 \DoxyCodeLine{00036\ }
-\DoxyCodeLine{00041\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00042\ \textcolor{keyword}{struct\ }fmt::formatter<\mbox{\hyperlink{classNode}{uint128\_t}}>\ :\ fmt::formatter<std::string>\ \{}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{uint128\_t}}\&\ value,\ \mbox{\hyperlink{classNode}{format\_context}}\&\ \mbox{\hyperlink{classNode}{ctx}})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::formatter<std::string>::format(\mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{Int128::uint128\_to\_string}}(value),\ \mbox{\hyperlink{classNode}{ctx}});}
-\DoxyCodeLine{00045\ \ \ \ \ \}}
-\DoxyCodeLine{00046\ \};}
-\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00043\ \textcolor{keyword}{struct\ }fmt::formatter<uint128\_t>\ :\ fmt::formatter<std::string>\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ uint128\_t\&\ value,\ format\_context\&\ ctx)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::formatter<std::string>::format(\mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{Int128::uint128\_to\_string}}(value),\ ctx);}
+\DoxyCodeLine{00046\ \ \ \ \ \}}
+\DoxyCodeLine{00047\ \};}
 \DoxyCodeLine{00048\ }
 \DoxyCodeLine{00049\ }
-\DoxyCodeLine{00055\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00056\ \textcolor{keyword}{struct\ }fmt::formatter<\mbox{\hyperlink{classNode}{mpz\_class}}>\ \{}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ store\ the\ raw\ spec\ (the\ characters\ between\ ':'\ and\ '\}')}}
-\DoxyCodeLine{00058\ \ \ \ \ std::string\_view\ spec\_;}
-\DoxyCodeLine{00059\ }
-\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ parse(fmt::format\_parse\_context\&\ \mbox{\hyperlink{classNode}{ctx}})\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classNode}{ctx}}.begin();}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{end}}\ =\ \mbox{\hyperlink{classNode}{ctx}}.end();}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{start}}\ =\ \mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ collect\ everything\ up\ to\ '\}'\ (don't\ validate\ here)}}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classNode}{end}}\ \&\&\ *\mbox{\hyperlink{classNode}{it}}\ !=\ \textcolor{charliteral}{'\}'})\ ++\mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ spec\_\ =\ std::string\_view(\&*\mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{it}}\ -\/\ \mbox{\hyperlink{classNode}{start}}));}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00068\ \ \ \ \ \}}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ FormatContext>}
-\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpz\_class}}\&\ value,\ \mbox{\hyperlink{classNode}{FormatContext}}\&\ \mbox{\hyperlink{classNode}{ctx}})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Simple\ parse\ of\ relevant\ flags\ from\ spec\_\ -\/-\/-\/}}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{grouping}}\ =\ (spec\_.find(\textcolor{charliteral}{'\(\backslash\)''})\ !=\ std::string\_view::npos);}
-\DoxyCodeLine{00074\ }
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ width:\ first\ run\ of\ digits\ not\ after\ '.'\ (precision)}}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{width}}\ =\ 0;}
-\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{in\_precision}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ spec\_.size();\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}];}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'.'})\ \{\ \mbox{\hyperlink{classNode}{in\_precision}}\ =\ \textcolor{keyword}{true};\ \textcolor{keywordflow}{continue};\ \}}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{in\_precision}})\ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{c}})))\ \{}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{val}}\ =\ 0;}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{j}}\ =\ \mbox{\hyperlink{classNode}{i}};}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{j}}\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[\mbox{\hyperlink{classNode}{j}}])))\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{val}}\ =\ \mbox{\hyperlink{classNode}{val}}\ *\ 10\ +\ (spec\_[\mbox{\hyperlink{classNode}{j}}]\ -\/\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classNode}{j}};}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{width}}\ =\ \mbox{\hyperlink{classNode}{val}};}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00093\ }
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ alignment\ and\ fill\ (simple\ heuristic:\ if\ a\ '<',\ '>'\ or\ '\string^'\ exists,\ previous\ char\ is\ fill)}}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{align}}\ =\ \textcolor{charliteral}{'>'};\ \textcolor{comment}{//\ default\ numeric\ alignment:\ right}}
-\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{fill}}\ =\ \textcolor{charliteral}{'\ '};}
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ spec\_.size();\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}];}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'<'}\ ||\ \mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'>'}\ ||\ \mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{align}}\ =\ \mbox{\hyperlink{classNode}{c}};}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{i}}\ >=\ 1)\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}\ -\/\ 1];}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ treat\ as\ fill\ if\ it's\ not\ a\ digit\ or\ '.'\ (heuristic)}}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{maybe\_fill}}))\ \&\&\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ !=\ \textcolor{charliteral}{'.'}\ \&\&\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ !=\ \textcolor{charliteral}{':'})}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{fill}}\ =\ \mbox{\hyperlink{classNode}{maybe\_fill}};}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00110\ }
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ type\ char:\ last\ alphabetic\ char\ in\ spec\_\ (if\ any)}}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{type}}\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ spec\_.rbegin();\ \mbox{\hyperlink{classNode}{it}}\ !=\ spec\_.rend();\ ++\mbox{\hyperlink{classNode}{it}})\ \{}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isalpha(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(*\mbox{\hyperlink{classNode}{it}})))\ \{\ \mbox{\hyperlink{classNode}{type}}\ =\ *\mbox{\hyperlink{classNode}{it}};\ \textcolor{keywordflow}{break};\ \}}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00116\ }
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Convert\ mpz\_class\ to\ a\ digits\ string\ for\ requested\ base\ -\/-\/-\/}}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{neg}}\ =\ value\ <\ 0;}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{absval}}\ =\ \mbox{\hyperlink{classNode}{neg}}\ ?\ -\/value\ :\ value;}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{digits}};}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'x'}\ ||\ \mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'X'})\ \mbox{\hyperlink{classNode}{digits}}\ =\ \mbox{\hyperlink{classNode}{absval}}.get\_str(16);}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'o'})\ \mbox{\hyperlink{classNode}{digits}}\ =\ \mbox{\hyperlink{classNode}{absval}}.get\_str(8);}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'b'})\ \mbox{\hyperlink{classNode}{digits}}\ =\ \mbox{\hyperlink{classNode}{absval}}.get\_str(2);}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \mbox{\hyperlink{classNode}{digits}}\ =\ \mbox{\hyperlink{classNode}{absval}}.get\_str(10);}
-\DoxyCodeLine{00125\ }
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'X'})\ \textcolor{comment}{//\ uppercase\ hex}}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ std::transform(\mbox{\hyperlink{classNode}{digits}}.begin(),\ \mbox{\hyperlink{classNode}{digits}}.end(),\ \mbox{\hyperlink{classNode}{digits}}.begin(),\ [](\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}})\{\ return\ std::toupper(c);\ \});}
-\DoxyCodeLine{00128\ }
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Grouping\ (only\ apply\ sensible\ grouping\ for\ decimal)\ -\/-\/-\/}}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{core}};}
-\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((\mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'\(\backslash\)0'}\ ||\ \mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'d'}\ ||\ \mbox{\hyperlink{classNode}{type}}\ ==\ \textcolor{charliteral}{'n'})\ \&\&\ \mbox{\hyperlink{classNode}{grouping}})\ \{}
-\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ commas\ every\ 3\ digits\ from\ the\ right}}
-\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{n}}\ =\ (\mbox{\hyperlink{classNode}{int}})\mbox{\hyperlink{classNode}{digits}}.size();}
-\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{first}}\ =\ \mbox{\hyperlink{classNode}{n}}\ \%\ 3;}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{first}}\ ==\ 0)\ \mbox{\hyperlink{classNode}{first}}\ =\ 3;}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{out}};}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{first}}\ \&\&\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{n}};\ ++\mbox{\hyperlink{classNode}{i}})\ \mbox{\hyperlink{classNode}{out}}.push\_back(\mbox{\hyperlink{classNode}{digits}}[\mbox{\hyperlink{classNode}{i}}]);}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{n}};\ \mbox{\hyperlink{classNode}{i}}\ +=\ 3)\ \{}
-\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classNode}{out}}.empty())\ \mbox{\hyperlink{classNode}{out}}.push\_back(\textcolor{charliteral}{','});}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.append(\mbox{\hyperlink{classNode}{digits}}.substr(\mbox{\hyperlink{classNode}{i}},\ 3));}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}\ =\ std::move(\mbox{\hyperlink{classNode}{out}});}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}\ =\ \mbox{\hyperlink{classNode}{digits}};}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00147\ }
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{neg}})\ \mbox{\hyperlink{classNode}{core}}.insert(\mbox{\hyperlink{classNode}{core}}.begin(),\ \textcolor{charliteral}{'-\/'});}
-\DoxyCodeLine{00149\ }
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ width/alignment/fill\ (basic)\ -\/-\/-\/}}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{width}}\ >\ (\textcolor{keywordtype}{int})\mbox{\hyperlink{classNode}{core}}.size())\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{pad}}\ =\ \mbox{\hyperlink{classNode}{width}}\ -\/\ (\mbox{\hyperlink{classNode}{int}})\mbox{\hyperlink{classNode}{core}}.size();}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{align}}\ ==\ \textcolor{charliteral}{'<'})\ \{}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}.append(\mbox{\hyperlink{classNode}{pad}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{align}}\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{left}}\ =\ \mbox{\hyperlink{classNode}{pad}}\ /\ 2;}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{right}}\ =\ \mbox{\hyperlink{classNode}{pad}}\ -\/\ \mbox{\hyperlink{classNode}{left}};}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}.insert(\mbox{\hyperlink{classNode}{core}}.begin(),\ \mbox{\hyperlink{classNode}{left}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}.append(\mbox{\hyperlink{classNode}{right}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ '>'\ or\ default}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{core}}.insert(\mbox{\hyperlink{classNode}{core}}.begin(),\ \mbox{\hyperlink{classNode}{pad}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00164\ }
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::format\_to(\mbox{\hyperlink{classNode}{ctx}}.out(),\ \textcolor{stringliteral}{"{}\{\}"{}},\ \mbox{\hyperlink{classNode}{core}});}
-\DoxyCodeLine{00166\ \ \ \ \ \}}
-\DoxyCodeLine{00167\ \};}
-\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00057\ \textcolor{keyword}{struct\ }fmt::formatter<mpz\_class>\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ store\ the\ raw\ spec\ (the\ characters\ between\ ':'\ and\ '\}')}}
+\DoxyCodeLine{00059\ \ \ \ \ std::string\_view\ spec\_;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ parse(fmt::format\_parse\_context\&\ ctx)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ ctx.begin();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ end\ =\ ctx.end();}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ start\ =\ it;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ collect\ everything\ up\ to\ '\}'\ (don't\ validate\ here)}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (it\ !=\ end\ \&\&\ *it\ !=\ \textcolor{charliteral}{'\}'})\ ++it;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ spec\_\ =\ std::string\_view(\&*start,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(it\ -\/\ start));}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it;}
+\DoxyCodeLine{00069\ \ \ \ \ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ FormatContext>}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ mpz\_class\&\ value,\ FormatContext\&\ ctx)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Simple\ parse\ of\ relevant\ flags\ from\ spec\_\ -\/-\/-\/}}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ grouping\ =\ (spec\_.find(\textcolor{charliteral}{'\(\backslash\)''})\ !=\ std::string\_view::npos);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ width:\ first\ run\ of\ digits\ not\ after\ '.'\ (precision)}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ width\ =\ 0;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ in\_precision\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ spec\_.size();\ ++i)\ \{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ spec\_[i];}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'.'})\ \{\ in\_precision\ =\ \textcolor{keyword}{true};\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_precision)\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c)))\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ val\ =\ 0;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ j\ =\ i;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (j\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[j])))\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ val\ *\ 10\ +\ (spec\_[j]\ -\/\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++j;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ width\ =\ val;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ alignment\ and\ fill\ (simple\ heuristic:\ if\ a\ '<',\ '>'\ or\ '\string^'\ exists,\ previous\ char\ is\ fill)}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ align\ =\ \textcolor{charliteral}{'>'};\ \textcolor{comment}{//\ default\ numeric\ alignment:\ right}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ fill\ =\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ spec\_.size();\ ++i)\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ spec\_[i];}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'<'}\ ||\ c\ ==\ \textcolor{charliteral}{'>'}\ ||\ c\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ align\ =\ c;}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ >=\ 1)\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ maybe\_fill\ =\ spec\_[i\ -\/\ 1];}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ treat\ as\ fill\ if\ it's\ not\ a\ digit\ or\ '.'\ (heuristic)}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(maybe\_fill))\ \&\&\ maybe\_fill\ !=\ \textcolor{charliteral}{'.'}\ \&\&\ maybe\_fill\ !=\ \textcolor{charliteral}{':'})}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fill\ =\ maybe\_fill;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ type\ char:\ last\ alphabetic\ char\ in\ spec\_\ (if\ any)}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ type\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ spec\_.rbegin();\ it\ !=\ spec\_.rend();\ ++it)\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isalpha(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(*it)))\ \{\ type\ =\ *it;\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Convert\ mpz\_class\ to\ a\ digits\ string\ for\ requested\ base\ -\/-\/-\/}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ neg\ =\ value\ <\ 0;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ mpz\_class\ absval\ =\ neg\ ?\ -\/value\ :\ value;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ std::string\ digits;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (type\ ==\ \textcolor{charliteral}{'x'}\ ||\ type\ ==\ \textcolor{charliteral}{'X'})\ digits\ =\ absval.get\_str(16);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (type\ ==\ \textcolor{charliteral}{'o'})\ digits\ =\ absval.get\_str(8);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (type\ ==\ \textcolor{charliteral}{'b'})\ digits\ =\ absval.get\_str(2);}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ digits\ =\ absval.get\_str(10);}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (type\ ==\ \textcolor{charliteral}{'X'})\ \textcolor{comment}{//\ uppercase\ hex}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ std::transform(digits.begin(),\ digits.end(),\ digits.begin(),\ [](\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ c)\{\ return\ std::toupper(c);\ \});}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ Grouping\ (only\ apply\ sensible\ grouping\ for\ decimal)\ -\/-\/-\/}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ std::string\ core;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((type\ ==\ \textcolor{charliteral}{'\(\backslash\)0'}\ ||\ type\ ==\ \textcolor{charliteral}{'d'}\ ||\ type\ ==\ \textcolor{charliteral}{'n'})\ \&\&\ grouping)\ \{}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ commas\ every\ 3\ digits\ from\ the\ right}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ (int)digits.size();}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ first\ =\ n\ \%\ 3;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (first\ ==\ 0)\ first\ =\ 3;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ out;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ first\ \&\&\ i\ <\ n;\ ++i)\ out.push\_back(digits[i]);}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ n;\ i\ +=\ 3)\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!out.empty())\ out.push\_back(\textcolor{charliteral}{','});}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out.append(digits.substr(i,\ 3));}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ core\ =\ std::move(out);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ core\ =\ digits;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (neg)\ core.insert(core.begin(),\ \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ width/alignment/fill\ (basic)\ -\/-\/-\/}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ (\textcolor{keywordtype}{int})core.size())\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ pad\ =\ width\ -\/\ (int)core.size();}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (align\ ==\ \textcolor{charliteral}{'<'})\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ core.append(pad,\ fill);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (align\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ left\ =\ pad\ /\ 2;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ right\ =\ pad\ -\/\ left;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ core.insert(core.begin(),\ left,\ fill);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ core.append(right,\ fill);}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{//\ '>'\ or\ default}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ core.insert(core.begin(),\ pad,\ fill);}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::format\_to(ctx.out(),\ \textcolor{stringliteral}{"{}\{\}"{}},\ core);}
+\DoxyCodeLine{00167\ \ \ \ \ \}}
+\DoxyCodeLine{00168\ \};}
 \DoxyCodeLine{00169\ }
 \DoxyCodeLine{00170\ }
-\DoxyCodeLine{00176\ \textcolor{keyword}{template}\ <>}
-\DoxyCodeLine{00177\ \textcolor{keyword}{struct\ }fmt::formatter<\mbox{\hyperlink{classNode}{mpf\_class}}>\ \{}
-\DoxyCodeLine{00178\ \ \ \ \ std::string\_view\ spec\_;}
-\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keywordtype}{int}\ precision\_\ =\ -\/1;\ \textcolor{comment}{//\ -\/1\ ==\ default}}
-\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{char}\ type\_\ =\ \textcolor{charliteral}{'g'};\ \ \ \ \textcolor{comment}{//\ default:\ general}}
-\DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ parse(fmt::format\_parse\_context\&\ \mbox{\hyperlink{classNode}{ctx}})\ \{}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ capture\ whole\ spec\ first}}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \mbox{\hyperlink{classNode}{ctx}}.begin();}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{end}}\ =\ \mbox{\hyperlink{classNode}{ctx}}.end();}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{start}}\ =\ \mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{it}}\ !=\ \mbox{\hyperlink{classNode}{end}}\ \&\&\ *\mbox{\hyperlink{classNode}{it}}\ !=\ \textcolor{charliteral}{'\}'})\ ++\mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ spec\_\ =\ std::string\_view(\&*\mbox{\hyperlink{classNode}{start}},\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{it}}\ -\/\ \mbox{\hyperlink{classNode}{start}}));}
-\DoxyCodeLine{00189\ }
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ extract\ precision\ (.N)\ and\ type\ char\ (f/e/g)}}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ spec\_.size();\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}];}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'.'})\ \{}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ parse\ precision\ digits}}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{v}}\ =\ 0;}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{j}}\ =\ \mbox{\hyperlink{classNode}{i}}\ +\ 1;}
-\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{has}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{j}}\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[\mbox{\hyperlink{classNode}{j}}])))\ \{}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{has}}\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{v}}\ =\ \mbox{\hyperlink{classNode}{v}}\ *\ 10\ +\ (spec\_[\mbox{\hyperlink{classNode}{j}}]\ -\/\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classNode}{j}};}
-\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{has}})\ precision\_\ =\ \mbox{\hyperlink{classNode}{v}};}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ last\ alphabetic\ char\ is\ type}}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it2}}\ =\ spec\_.rbegin();\ \mbox{\hyperlink{classNode}{it2}}\ !=\ spec\_.rend();\ ++\mbox{\hyperlink{classNode}{it2}})\ \{}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isalpha(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(*\mbox{\hyperlink{classNode}{it2}})))\ \{\ type\_\ =\ *\mbox{\hyperlink{classNode}{it2}};\ \textcolor{keywordflow}{break};\ \}}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{it}};}
-\DoxyCodeLine{00211\ \ \ \ \ \}}
-\DoxyCodeLine{00212\ }
-\DoxyCodeLine{00213\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ FormatContext>}
-\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{mpf\_class}}\&\ value,\ \mbox{\hyperlink{classNode}{FormatContext}}\&\ \mbox{\hyperlink{classNode}{ctx}})\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pick\ significant\ digits\ for\ GMP's\ get\_str}}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{sig\_digits}}\ =\ (precision\_\ >=\ 0)\ ?\ (precision\_\ +\ 1)\ :\ 6;}
-\DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mp\_exp\_t}}\ \mbox{\hyperlink{classNode}{exp}};}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{mant}}\ =\ value.get\_str(\mbox{\hyperlink{classNode}{exp}},\ 10,\ \mbox{\hyperlink{classNode}{sig\_digits}});}
-\DoxyCodeLine{00220\ }
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (type\_)\ \{}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'f'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'F'}:\ \{}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{exp}}\ <=\ 0)\ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \textcolor{stringliteral}{"{}0."{}}\ +\ std::string(-\/\mbox{\hyperlink{classNode}{exp}},\ \textcolor{charliteral}{'0'})\ +\ \mbox{\hyperlink{classNode}{mant}};}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{exp}})\ >=\ \mbox{\hyperlink{classNode}{mant}}.size())\ \{}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}\ +\ std::string(\mbox{\hyperlink{classNode}{exp}}\ -\/\ \mbox{\hyperlink{classNode}{mant}}.size(),\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ \mbox{\hyperlink{classNode}{result}}\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}.substr(0,\ \mbox{\hyperlink{classNode}{exp}})\ +\ \textcolor{stringliteral}{"{}."{}}\ +\ \mbox{\hyperlink{classNode}{mant}}.substr(\mbox{\hyperlink{classNode}{exp}});}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'e'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'E'}:\ \{}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}.substr(0,\ 1);}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mant}}.size()\ >\ 1)\ \mbox{\hyperlink{classNode}{result}}\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ \mbox{\hyperlink{classNode}{mant}}.substr(1);}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ (type\_\ ==\ \textcolor{charliteral}{'E'}\ ?\ \textcolor{stringliteral}{"{}E"{}}\ :\ \textcolor{stringliteral}{"{}e"{}});}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ (\mbox{\hyperlink{classNode}{exp}}\ -\/\ 1\ >=\ 0\ ?\ \textcolor{stringliteral}{"{}+"{}}\ :\ \textcolor{stringliteral}{"{}"{}});}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ std::to\_string(\mbox{\hyperlink{classNode}{exp}}\ -\/\ 1);}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'g'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'G'}:}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \{}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{exp}}\ -\/\ 1\ >=\ 6\ ||\ \mbox{\hyperlink{classNode}{exp}}\ -\/\ 1\ <=\ -\/4)\ \{}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ scientific}}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}.substr(0,\ 1);}
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mant}}.size()\ >\ 1)\ \mbox{\hyperlink{classNode}{result}}\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ \mbox{\hyperlink{classNode}{mant}}.substr(1);}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ (type\_\ ==\ \textcolor{charliteral}{'G'}\ ?\ \textcolor{stringliteral}{"{}E"{}}\ :\ \textcolor{stringliteral}{"{}e"{}});}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ (\mbox{\hyperlink{classNode}{exp}}\ -\/\ 1\ >=\ 0\ ?\ \textcolor{stringliteral}{"{}+"{}}\ :\ \textcolor{stringliteral}{"{}"{}});}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ +=\ std::to\_string(\mbox{\hyperlink{classNode}{exp}}\ -\/\ 1);}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{exp}}\ <=\ 0)\ \{}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \textcolor{stringliteral}{"{}0."{}}\ +\ std::string(-\/\mbox{\hyperlink{classNode}{exp}},\ \textcolor{charliteral}{'0'})\ +\ \mbox{\hyperlink{classNode}{mant}};}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{exp}})\ >=\ \mbox{\hyperlink{classNode}{mant}}.size())\ \{}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}\ +\ std::string(\mbox{\hyperlink{classNode}{exp}}\ -\/\ \mbox{\hyperlink{classNode}{mant}}.size(),\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ \mbox{\hyperlink{classNode}{result}}\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{mant}}.substr(0,\ \mbox{\hyperlink{classNode}{exp}})\ +\ \textcolor{stringliteral}{"{}."{}}\ +\ \mbox{\hyperlink{classNode}{mant}}.substr(\mbox{\hyperlink{classNode}{exp}});}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ precision\ specified\ for\ fixed-\/style\ types,\ enforce\ number\ of\ digits\ after\ dot}}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >=\ 0\ \&\&\ type\_\ !=\ \textcolor{charliteral}{'g'}\ \&\&\ type\_\ !=\ \textcolor{charliteral}{'G'})\ \{}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{dot}}\ =\ \mbox{\hyperlink{classNode}{result}}.find(\textcolor{charliteral}{'.'});}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{dot}}\ ==\ std::string::npos)\ \{}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ \mbox{\hyperlink{classNode}{result}}\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{after}}\ =\ \mbox{\hyperlink{classNode}{result}}.size()\ -\/\ \mbox{\hyperlink{classNode}{dot}}\ -\/\ 1;}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{after}}\ <\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(precision\_))\ \mbox{\hyperlink{classNode}{result}}\ +=\ std::string(precision\_\ -\/\ \mbox{\hyperlink{classNode}{after}},\ \textcolor{charliteral}{'0'});}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{after}}\ >\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(precision\_))\ \mbox{\hyperlink{classNode}{result}}.resize(\mbox{\hyperlink{classNode}{dot}}\ +\ 1\ +\ precision\_);}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00276\ }
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ grouping\ (apostrophe)\ detection\ and\ simple\ insertion\ (only\ for\ decimal-\/style\ outputs)}}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{grouping}}\ =\ (spec\_.find(\textcolor{charliteral}{'\(\backslash\)''})\ !=\ std::string\_view::npos);}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{grouping}})\ \{}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ integer\ part\ and\ fractional\ part}}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{dot}}\ =\ \mbox{\hyperlink{classNode}{result}}.find(\textcolor{charliteral}{'.'});}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{intpart}}\ =\ (\mbox{\hyperlink{classNode}{dot}}\ ==\ std::string::npos)\ ?\ \mbox{\hyperlink{classNode}{result}}\ :\ \mbox{\hyperlink{classNode}{result}}.substr(0,\ \mbox{\hyperlink{classNode}{dot}});}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{fracpart}}\ =\ (\mbox{\hyperlink{classNode}{dot}}\ ==\ std::string::npos)\ ?\ std::string()\ :\ \mbox{\hyperlink{classNode}{result}}.substr(\mbox{\hyperlink{classNode}{dot}});\ \textcolor{comment}{//\ include\ dot}}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{neg}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classNode}{intpart}}.empty()\ \&\&\ \mbox{\hyperlink{classNode}{intpart}}[0]\ ==\ \textcolor{charliteral}{'-\/'})\ \{\ \mbox{\hyperlink{classNode}{neg}}\ =\ \textcolor{keyword}{true};\ \mbox{\hyperlink{classNode}{intpart}}.erase(\mbox{\hyperlink{classNode}{intpart}}.begin());\ \}}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ group\ integer\ digits}}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classNode}{out}};}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{n}}\ =\ (\mbox{\hyperlink{classNode}{int}})\mbox{\hyperlink{classNode}{intpart}}.size();}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{first}}\ =\ \mbox{\hyperlink{classNode}{n}}\ \%\ 3;}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{first}}\ ==\ 0)\ \mbox{\hyperlink{classNode}{first}}\ =\ 3;}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{first}}\ \&\&\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{n}};\ ++\mbox{\hyperlink{classNode}{i}})\ \mbox{\hyperlink{classNode}{out}}.push\_back(\mbox{\hyperlink{classNode}{intpart}}[\mbox{\hyperlink{classNode}{i}}]);}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ \mbox{\hyperlink{classNode}{i}}\ <\ \mbox{\hyperlink{classNode}{n}};\ \mbox{\hyperlink{classNode}{i}}\ +=\ 3)\ \{}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classNode}{out}}.empty())\ \mbox{\hyperlink{classNode}{out}}.push\_back(\textcolor{charliteral}{','});}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}.append(\mbox{\hyperlink{classNode}{intpart}}.substr(\mbox{\hyperlink{classNode}{i}},\ 3));}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{neg}})\ \mbox{\hyperlink{classNode}{out}}.insert(\mbox{\hyperlink{classNode}{out}}.begin(),\ \textcolor{charliteral}{'-\/'});}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{classNode}{out}}\ +\ \mbox{\hyperlink{classNode}{fracpart}};}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00300\ }
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ width/alignment/fill\ (basic)\ by\ reusing\ the\ same\ small\ logic\ as\ integer\ formatter.}}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ width/alignment\ parsing\ (reuse\ small\ logic)}}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{width}}\ =\ 0;}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{align}}\ =\ \textcolor{charliteral}{'>'};\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{fill}}\ =\ \textcolor{charliteral}{'\ '};}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{in\_precision\_flag}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ spec\_.size();\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}];}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'.'})\ \{\ \mbox{\hyperlink{classNode}{in\_precision\_flag}}\ =\ \textcolor{keyword}{true};\ \textcolor{keywordflow}{continue};\ \}}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{in\_precision\_flag}})\ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{c}})))\ \{}
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{val}}\ =\ 0;\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{j}}\ =\ \mbox{\hyperlink{classNode}{i}};}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{j}}\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[\mbox{\hyperlink{classNode}{j}}])))\ \{\ \mbox{\hyperlink{classNode}{val}}\ =\ \mbox{\hyperlink{classNode}{val}}*10\ +\ (spec\_[\mbox{\hyperlink{classNode}{j}}]-\/\textcolor{charliteral}{'0'});\ ++\mbox{\hyperlink{classNode}{j}};\ \}}
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{width}}\ =\ \mbox{\hyperlink{classNode}{val}};}
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ spec\_.size();\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{c}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}];}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'<'}\ ||\ \mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'>'}\ ||\ \mbox{\hyperlink{classNode}{c}}\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{align}}\ =\ \mbox{\hyperlink{classNode}{c}};}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{i}}\ >=\ 1)\ \{}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ =\ spec\_[\mbox{\hyperlink{classNode}{i}}-\/1];}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{maybe\_fill}}))\ \&\&\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ !=\ \textcolor{charliteral}{'.'}\ \&\&\ \mbox{\hyperlink{classNode}{maybe\_fill}}\ !=\ \textcolor{charliteral}{':'})}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{fill}}\ =\ \mbox{\hyperlink{classNode}{maybe\_fill}};}
-\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00329\ }
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{width}}\ >\ (\textcolor{keywordtype}{int})\mbox{\hyperlink{classNode}{result}}.size())\ \{}
-\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{pad}}\ =\ \mbox{\hyperlink{classNode}{width}}\ -\/\ (\mbox{\hyperlink{classNode}{int}})\mbox{\hyperlink{classNode}{result}}.size();}
-\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{align}}\ ==\ \textcolor{charliteral}{'<'})\ \mbox{\hyperlink{classNode}{result}}.append(\mbox{\hyperlink{classNode}{pad}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{align}}\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
-\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{left}}\ =\ \mbox{\hyperlink{classNode}{pad}}\ /\ 2;}
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{right}}\ =\ \mbox{\hyperlink{classNode}{pad}}\ -\/\ \mbox{\hyperlink{classNode}{left}};}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}.insert(\mbox{\hyperlink{classNode}{result}}.begin(),\ \mbox{\hyperlink{classNode}{left}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}.append(\mbox{\hyperlink{classNode}{right}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \mbox{\hyperlink{classNode}{result}}.insert(\mbox{\hyperlink{classNode}{result}}.begin(),\ \mbox{\hyperlink{classNode}{pad}},\ \mbox{\hyperlink{classNode}{fill}});}
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00340\ }
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::format\_to(\mbox{\hyperlink{classNode}{ctx}}.out(),\ \textcolor{stringliteral}{"{}\{\}"{}},\ \mbox{\hyperlink{classNode}{result}});}
-\DoxyCodeLine{00342\ \ \ \ \ \}}
-\DoxyCodeLine{00343\ \};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00177\ \textcolor{keyword}{template}\ <>}
+\DoxyCodeLine{00178\ \textcolor{keyword}{struct\ }fmt::formatter<mpf\_class>\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ std::string\_view\ spec\_;}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordtype}{int}\ precision\_\ =\ -\/1;\ \textcolor{comment}{//\ -\/1\ ==\ default}}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{char}\ type\_\ =\ \textcolor{charliteral}{'g'};\ \ \ \ \textcolor{comment}{//\ default:\ general}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ parse(fmt::format\_parse\_context\&\ ctx)\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ capture\ whole\ spec\ first}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ ctx.begin();}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ end\ =\ ctx.end();}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ start\ =\ it;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (it\ !=\ end\ \&\&\ *it\ !=\ \textcolor{charliteral}{'\}'})\ ++it;}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ spec\_\ =\ std::string\_view(\&*start,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(it\ -\/\ start));}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ extract\ precision\ (.N)\ and\ type\ char\ (f/e/g)}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ spec\_.size();\ ++i)\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ spec\_[i];}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'.'})\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ parse\ precision\ digits}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ v\ =\ 0;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ j\ =\ i\ +\ 1;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ has\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (j\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[j])))\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ has\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ v\ =\ v\ *\ 10\ +\ (spec\_[j]\ -\/\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++j;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (has)\ precision\_\ =\ v;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ last\ alphabetic\ char\ is\ type}}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it2\ =\ spec\_.rbegin();\ it2\ !=\ spec\_.rend();\ ++it2)\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isalpha(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(*it2)))\ \{\ type\_\ =\ *it2;\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it;}
+\DoxyCodeLine{00212\ \ \ \ \ \}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ FormatContext>}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{auto}\ format(\textcolor{keyword}{const}\ mpf\_class\&\ value,\ FormatContext\&\ ctx)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pick\ significant\ digits\ for\ GMP's\ get\_str}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ sig\_digits\ =\ (precision\_\ >=\ 0)\ ?\ (precision\_\ +\ 1)\ :\ 6;}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ mp\_exp\_t\ exp;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ std::string\ mant\ =\ value.get\_str(exp,\ 10,\ sig\_digits);}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ std::string\ result;}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (type\_)\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'f'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'F'}:\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (exp\ <=\ 0)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ \textcolor{stringliteral}{"{}0."{}}\ +\ std::string(-\/exp,\ \textcolor{charliteral}{'0'})\ +\ mant;}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(exp)\ >=\ mant.size())\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant\ +\ std::string(exp\ -\/\ mant.size(),\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ result\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant.substr(0,\ exp)\ +\ \textcolor{stringliteral}{"{}."{}}\ +\ mant.substr(exp);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'e'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'E'}:\ \{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant.substr(0,\ 1);}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mant.size()\ >\ 1)\ result\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ mant.substr(1);}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (type\_\ ==\ \textcolor{charliteral}{'E'}\ ?\ \textcolor{stringliteral}{"{}E"{}}\ :\ \textcolor{stringliteral}{"{}e"{}});}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (exp\ -\/\ 1\ >=\ 0\ ?\ \textcolor{stringliteral}{"{}+"{}}\ :\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ std::to\_string(exp\ -\/\ 1);}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'g'}:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'G'}:}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (exp\ -\/\ 1\ >=\ 6\ ||\ exp\ -\/\ 1\ <=\ -\/4)\ \{}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ scientific}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant.substr(0,\ 1);}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mant.size()\ >\ 1)\ result\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ mant.substr(1);}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (type\_\ ==\ \textcolor{charliteral}{'G'}\ ?\ \textcolor{stringliteral}{"{}E"{}}\ :\ \textcolor{stringliteral}{"{}e"{}});}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (exp\ -\/\ 1\ >=\ 0\ ?\ \textcolor{stringliteral}{"{}+"{}}\ :\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ std::to\_string(exp\ -\/\ 1);}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (exp\ <=\ 0)\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ \textcolor{stringliteral}{"{}0."{}}\ +\ std::string(-\/exp,\ \textcolor{charliteral}{'0'})\ +\ mant;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(exp)\ >=\ mant.size())\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant\ +\ std::string(exp\ -\/\ mant.size(),\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ result\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ mant.substr(0,\ exp)\ +\ \textcolor{stringliteral}{"{}."{}}\ +\ mant.substr(exp);}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ precision\ specified\ for\ fixed-\/style\ types,\ enforce\ number\ of\ digits\ after\ dot}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >=\ 0\ \&\&\ type\_\ !=\ \textcolor{charliteral}{'g'}\ \&\&\ type\_\ !=\ \textcolor{charliteral}{'G'})\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ dot\ =\ result.find(\textcolor{charliteral}{'.'});}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dot\ ==\ std::string::npos)\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (precision\_\ >\ 0)\ result\ +=\ \textcolor{stringliteral}{"{}."{}}\ +\ std::string(precision\_,\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ after\ =\ result.size()\ -\/\ dot\ -\/\ 1;}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (after\ <\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(precision\_))\ result\ +=\ std::string(precision\_\ -\/\ after,\ \textcolor{charliteral}{'0'});}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (after\ >\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(precision\_))\ result.resize(dot\ +\ 1\ +\ precision\_);}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ grouping\ (apostrophe)\ detection\ and\ simple\ insertion\ (only\ for\ decimal-\/style\ outputs)}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ grouping\ =\ (spec\_.find(\textcolor{charliteral}{'\(\backslash\)''})\ !=\ std::string\_view::npos);}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (grouping)\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ integer\ part\ and\ fractional\ part}}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ dot\ =\ result.find(\textcolor{charliteral}{'.'});}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ intpart\ =\ (dot\ ==\ std::string::npos)\ ?\ result\ :\ result.substr(0,\ dot);}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ fracpart\ =\ (dot\ ==\ std::string::npos)\ ?\ std::string()\ :\ result.substr(dot);\ \textcolor{comment}{//\ include\ dot}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ neg\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!intpart.empty()\ \&\&\ intpart[0]\ ==\ \textcolor{charliteral}{'-\/'})\ \{\ neg\ =\ \textcolor{keyword}{true};\ intpart.erase(intpart.begin());\ \}}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ group\ integer\ digits}}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ out;}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ (int)intpart.size();}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ first\ =\ n\ \%\ 3;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (first\ ==\ 0)\ first\ =\ 3;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ first\ \&\&\ i\ <\ n;\ ++i)\ out.push\_back(intpart[i]);}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ n;\ i\ +=\ 3)\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!out.empty())\ out.push\_back(\textcolor{charliteral}{','});}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out.append(intpart.substr(i,\ 3));}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (neg)\ out.insert(out.begin(),\ \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ out\ +\ fracpart;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ width/alignment/fill\ (basic)\ by\ reusing\ the\ same\ small\ logic\ as\ integer\ formatter.}}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ width/alignment\ parsing\ (reuse\ small\ logic)}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ width\ =\ 0;}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ align\ =\ \textcolor{charliteral}{'>'};\ \textcolor{keywordtype}{char}\ fill\ =\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ in\_precision\_flag\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ spec\_.size();\ ++i)\ \{}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ spec\_[i];}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'.'})\ \{\ in\_precision\_flag\ =\ \textcolor{keyword}{true};\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_precision\_flag)\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c)))\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ val\ =\ 0;\ \textcolor{keywordtype}{size\_t}\ j\ =\ i;}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (j\ <\ spec\_.size()\ \&\&\ std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(spec\_[j])))\ \{\ val\ =\ val*10\ +\ (spec\_[j]-\/\textcolor{charliteral}{'0'});\ ++j;\ \}}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ width\ =\ val;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ spec\_.size();\ ++i)\ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ spec\_[i];}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'<'}\ ||\ c\ ==\ \textcolor{charliteral}{'>'}\ ||\ c\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ align\ =\ c;}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ >=\ 1)\ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ maybe\_fill\ =\ spec\_[i-\/1];}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!std::isdigit(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\textcolor{keyword}{>}(maybe\_fill))\ \&\&\ maybe\_fill\ !=\ \textcolor{charliteral}{'.'}\ \&\&\ maybe\_fill\ !=\ \textcolor{charliteral}{':'})}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fill\ =\ maybe\_fill;}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ (\textcolor{keywordtype}{int})result.size())\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ pad\ =\ width\ -\/\ (int)result.size();}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (align\ ==\ \textcolor{charliteral}{'<'})\ result.append(pad,\ fill);}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (align\ ==\ \textcolor{charliteral}{'\string^'})\ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ left\ =\ pad\ /\ 2;}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ right\ =\ pad\ -\/\ left;}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result.insert(result.begin(),\ left,\ fill);}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ result.append(right,\ fill);}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ result.insert(result.begin(),\ pad,\ fill);}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ fmt::format\_to(ctx.out(),\ \textcolor{stringliteral}{"{}\{\}"{}},\ result);}
+\DoxyCodeLine{00343\ \ \ \ \ \}}
+\DoxyCodeLine{00344\ \};}
 
 \end{DoxyCode}

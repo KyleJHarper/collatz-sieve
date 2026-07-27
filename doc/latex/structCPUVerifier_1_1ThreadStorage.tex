@@ -1,0 +1,44 @@
+\doxysection{CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Thread\+Storage Struct Reference}
+\hypertarget{structCPUVerifier_1_1ThreadStorage}{}\label{structCPUVerifier_1_1ThreadStorage}\index{CPUVerifier$<$ T $>$::ThreadStorage@{CPUVerifier$<$ T $>$::ThreadStorage}}
+
+
+Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics.  
+
+
+
+
+Collaboration diagram for CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Thread\+Storage\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{structCPUVerifier_1_1ThreadStorage__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structCPUVerifier_1_1ThreadStorage_a10c21a7f5bb17dda5cca03bd9fd212ce}\label{structCPUVerifier_1_1ThreadStorage_a10c21a7f5bb17dda5cca03bd9fd212ce} 
+size\+\_\+t {\bfseries synchronization\+\_\+countdown} = 1
+\begin{DoxyCompactList}\small\item\em How many more numbers can be checked (verified) before checking for a new state. \end{DoxyCompactList}\item 
+\Hypertarget{structCPUVerifier_1_1ThreadStorage_a66da63d9a4ea1d0fa1c4c12c9a10fa70}\label{structCPUVerifier_1_1ThreadStorage_a66da63d9a4ea1d0fa1c4c12c9a10fa70} 
+size\+\_\+t {\bfseries synchronizations\+\_\+performed} = 0
+\begin{DoxyCompactList}\small\item\em Number of state checks performed. \end{DoxyCompactList}\item 
+\Hypertarget{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}\label{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9} 
+\mbox{\hyperlink{structVerifierTLSMetric}{Verifier\+TLSMetric}} {\bfseries metrics}
+\begin{DoxyCompactList}\small\item\em Metrics gathered during a thread\textquotesingle{}s execution. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+struct CPUVerifier$<$ T $>$\+::\+Thread\+Storage}
+Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics. 
+
+\begin{DoxyWarning}{Warning}
+Data tends to spill cache lines and cause false sharing. Do NOT remove alignas(64). 
+\end{DoxyWarning}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+cpu.\+hpp\end{DoxyCompactItemize}

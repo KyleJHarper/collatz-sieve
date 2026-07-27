@@ -1,0 +1,247 @@
+\doxysection{GPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classGPUVerifier}{}\label{classGPUVerifier}\index{GPUVerifier$<$ T $>$@{GPUVerifier$<$ T $>$}}
+
+
+An implementation of the {\ttfamily \doxylink{classVerifier}{Verifier}} class which uses local GPUs to verfy survivors.  
+
+
+
+
+{\ttfamily \#include $<$verifier\+\_\+gpu.\+hpp$>$}
+
+
+
+Inheritance diagram for GPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classGPUVerifier__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for GPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classGPUVerifier__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{Thread\+Storage}}
+\begin{DoxyCompactList}\small\item\em Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classGPUVerifier_a691fa4824f5fd5364225686da3cba7ca}\label{classGPUVerifier_a691fa4824f5fd5364225686da3cba7ca} 
+size\+\_\+t {\bfseries get\+\_\+gpu\+\_\+buffer\+\_\+limit} () const
+\begin{DoxyCompactList}\small\item\em Get the \doxylink{namespaceGPU}{GPU} memory limit. When zero, 90\% of free memory will be targeted. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a28373406a95055b6f87506c4eea9a6d4}\label{classGPUVerifier_a28373406a95055b6f87506c4eea9a6d4} 
+void {\bfseries set\+\_\+gpu\+\_\+buffer\+\_\+limit} (size\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Set the \doxylink{namespaceGPU}{GPU} memory limit, in bytes. If zero, 90\% of free memory will be targeted. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_ab1c727b66c61fb5497152c11abd4417f}\label{classGPUVerifier_ab1c727b66c61fb5497152c11abd4417f} 
+size\+\_\+t {\bfseries get\+\_\+gpu\+\_\+buffer\+\_\+used} () const
+\begin{DoxyCompactList}\small\item\em Get the \doxylink{namespaceGPU}{GPU} memory actually used. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_addb218b7907fe789167fe8a502190aee}\label{classGPUVerifier_addb218b7907fe789167fe8a502190aee} 
+size\+\_\+t {\bfseries get\+\_\+scales\+\_\+per\+\_\+run} () const
+\begin{DoxyCompactList}\small\item\em Get the \doxylink{namespaceGPU}{GPU} scales-\/per-\/run value. See {\ttfamily \doxylink{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}{run\+\_\+executor()}} for details about this. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_ab14c082aa99a029ec6951f940227809e}\label{classGPUVerifier_ab14c082aa99a029ec6951f940227809e} 
+void {\bfseries set\+\_\+scales\+\_\+per\+\_\+run} (size\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Set the \doxylink{namespaceGPU}{GPU}\textquotesingle{}s scales-\/per-\/run value. See {\ttfamily \doxylink{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}{run\+\_\+executor()}} for details about this. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}{run\+\_\+executor}} ()
+\begin{DoxyCompactList}\small\item\em The actual implementation of verification steps, with necessary template params/constexpr values sent. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a56f197875a251781fb7b59193adb36f0}\label{classGPUVerifier_a56f197875a251781fb7b59193adb36f0} 
+void {\bfseries process\+\_\+buffer} (\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{Thread\+Storage}} \&thread\+\_\+storage)
+\begin{DoxyCompactList}\small\item\em Helper to process a full buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classGPUVerifier_aca9f478eb6abe324f7f57c717a0b747f}\label{classGPUVerifier_aca9f478eb6abe324f7f57c717a0b747f} 
+{\bfseries GPUVerifier} ()=delete
+\begin{DoxyCompactList}\small\item\em Default constructor, not allowed. Must give a tree reference. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_aa86746b4ebcd83b581f29167aa707a61}\label{classGPUVerifier_aa86746b4ebcd83b581f29167aa707a61} 
+{\bfseries GPUVerifier} (\mbox{\hyperlink{classVerifier}{Verifier}}$<$ T $>$\+::\+Tree\+Type \&tree)
+\begin{DoxyCompactList}\small\item\em Constructor taking a tree. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_aa0aa3f7d60206428652f5fc227ed6b2f}\label{classGPUVerifier_aa0aa3f7d60206428652f5fc227ed6b2f} 
+{\bfseries GPUVerifier} (const \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a079596faea87789e64d61c578d195acc}\label{classGPUVerifier_a079596faea87789e64d61c578d195acc} 
+\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \& {\bfseries operator=} (const \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a315cfbe79e6554bc56ed6fe715079ec4}\label{classGPUVerifier_a315cfbe79e6554bc56ed6fe715079ec4} 
+{\bfseries GPUVerifier} (\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_ab4d83f903ec5ef39c0b030cef336445e}\label{classGPUVerifier_ab4d83f903ec5ef39c0b030cef336445e} 
+\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \& {\bfseries operator=} (\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a93fe5c83e8674a9f703303cea7131d3f}\label{classGPUVerifier_a93fe5c83e8674a9f703303cea7131d3f} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+GPUVerifier} ()
+\begin{DoxyCompactList}\small\item\em Destruction is default for now. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Verifier} ()=delete
+\begin{DoxyCompactList}\small\item\em Default constructor, not allowed. Must send a tree. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (\mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \&tree)
+\begin{DoxyCompactList}\small\item\em Constructor taking a tree (and actually assigning it). This class owns the tree. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (const \mbox{\hyperlink{classVerifier}{Verifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVerifier}{Verifier}} \& {\bfseries operator=} (const \mbox{\hyperlink{classVerifier}{Verifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (\mbox{\hyperlink{classVerifier}{Verifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVerifier}{Verifier}} \& {\bfseries operator=} (\mbox{\hyperlink{classVerifier}{Verifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Verifier} ()
+\begin{DoxyCompactList}\small\item\em When destroyed, call stop to flag STOPPING, and then join the executor thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \& {\bfseries get\+\_\+tree} () const
+\begin{DoxyCompactList}\small\item\em Get the assigned tree. Read only. \end{DoxyCompactList}\item 
+const T \& {\bfseries get\+\_\+start\+\_\+value} () const
+\begin{DoxyCompactList}\small\item\em Get the start value. \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+start\+\_\+value} (const T \&x)
+\begin{DoxyCompactList}\small\item\em Set the start value. When higher than the tree\textquotesingle{}s largest value, will skip forward within a range. See {\ttfamily Binary\+Tree.\+hpp}. \end{DoxyCompactList}\item 
+const T \& {\bfseries get\+\_\+end\+\_\+value} () const
+\begin{DoxyCompactList}\small\item\em Get the end value. When zero, it\textquotesingle{}s considered infinite (no end). \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+end\+\_\+value} (const T \&x)
+\begin{DoxyCompactList}\small\item\em Set the end value. Useful for testing in batches or ranges. \end{DoxyCompactList}\item 
+Verifier\+State {\bfseries get\+\_\+state} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Get the current state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVerifier_a015af34ae35da7f68945821866145de4}{enable\+\_\+max\+\_\+iv\+\_\+table}} ()
+\begin{DoxyCompactList}\small\item\em Enables the use of the Max IV table to help avoid overflows with a precomputed table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVerifier_a5912b774eb7d9d9af691be8f67c847b2}{disable\+\_\+max\+\_\+iv\+\_\+table}} ()
+\begin{DoxyCompactList}\small\item\em Disables the use of the Max IV table, requiring "{}headroom bits"{} tracking internally for overflows. \end{DoxyCompactList}\item 
+bool {\bfseries is\+\_\+iv\+\_\+table\+\_\+enabled} () const
+\begin{DoxyCompactList}\small\item\em Return the status of whether the IV table is used. \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries get\+\_\+synchronization\+\_\+countdown} () const
+\begin{DoxyCompactList}\small\item\em Get the synchronization countdown. Usually not something you should care about. \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+synchronization\+\_\+countdown} (size\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Set the synchronization countdown. Usually not something you should tune. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} \& {\bfseries get\+\_\+metrics} ()
+\begin{DoxyCompactList}\small\item\em Get the latest metrics published by the threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classVerifier_ae185c2d35a707de8d1c12e6f5d3e57ae}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the verifier. Clears any previous state/data. Puts the work into a sub-\/thread and then returns. \end{DoxyCompactList}\item 
+void {\bfseries stop} ()
+\begin{DoxyCompactList}\small\item\em Stops verification, killing off threads. Verification cannot be resumed via {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}}. \end{DoxyCompactList}\item 
+void {\bfseries pause} ()
+\begin{DoxyCompactList}\small\item\em Pauses verification, putting threads to sleep. Verification may continue via {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}}. \end{DoxyCompactList}\item 
+void {\bfseries resume} ()
+\begin{DoxyCompactList}\small\item\em Wakes threads from sleep following a {\ttfamily \doxylink{classVerifier_a4f57bcbea79c49492e4ce82abe5efcbb}{pause()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}\label{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b} 
+const T {\bfseries \+\_\+scaling\+\_\+factor}
+\begin{DoxyCompactList}\small\item\em The scaling factor for growing nodes from a parent leaf node. Comes from {\ttfamily \doxylink{classBinaryTreeMath}{Binary\+Tree\+Math}}. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}\label{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810} 
+size\+\_\+t {\bfseries \+\_\+base\+\_\+multiplier} = 0
+\begin{DoxyCompactList}\small\item\em The base multiplier to leverage for scaling on \doxylink{namespaceGPU}{GPU} runs. Used by kernel launch. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}\label{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa} 
+size\+\_\+t {\bfseries \+\_\+max\+\_\+multiplier} = 0
+\begin{DoxyCompactList}\small\item\em The max multiplier to leverage for scaling on \doxylink{namespaceGPU}{GPU} runs. Used by kernel launch. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}\label{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27} 
+size\+\_\+t {\bfseries \+\_\+gpu\+\_\+buffer\+\_\+limit} = 0
+\begin{DoxyCompactList}\small\item\em Controls the number of bytes to use on the \doxylink{namespaceGPU}{GPU}. When 0, {\ttfamily \doxylink{classGPUVerifier}{GPUVerifier}} targets 90\%. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}\label{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3} 
+size\+\_\+t {\bfseries \+\_\+gpu\+\_\+buffer\+\_\+used} = 0
+\begin{DoxyCompactList}\small\item\em Amount of \doxylink{namespaceGPU}{GPU} memory actually in use when running. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}\label{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad} 
+size\+\_\+t {\bfseries \+\_\+scales\+\_\+per\+\_\+run} = 100
+\begin{DoxyCompactList}\small\item\em Determines how many scaling factors will apply on each \doxylink{namespaceGPU}{GPU} run. See {\ttfamily \doxylink{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}{run\+\_\+executor()}} for details. \end{DoxyCompactList}\item 
+\Hypertarget{classGPUVerifier_aace87bfdccf59285f382888aef356018}\label{classGPUVerifier_aace87bfdccf59285f382888aef356018} 
+std\+::vector$<$ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{Thread\+Storage}} $>$ {\bfseries \+\_\+tls}
+\begin{DoxyCompactList}\small\item\em Thread-\/local storage for the main workers. Should NOT be modified by anything other than the worker thread and sub-\/threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Types inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Tree\+Type} = \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries start\+\_\+timer} ()
+\begin{DoxyCompactList}\small\item\em Starts the timer by setting it to now. \end{DoxyCompactList}\item 
+void {\bfseries sync\+\_\+timer} ()
+\begin{DoxyCompactList}\small\item\em Synchronizes the current duration stored in \+\_\+published\+\_\+metrics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \& {\bfseries \+\_\+tree}
+\begin{DoxyCompactList}\small\item\em The binary tree reference from the caller. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\+\_\+enable\+\_\+max\+\_\+iv\+\_\+table}} = true
+\begin{DoxyCompactList}\small\item\em Enables the lookup of max initial values inside {\ttfamily \doxylink{namespaceCollatzConstants}{Collatz\+Constants}} to prevent type overflows instead of tracking headroom bits. \end{DoxyCompactList}\item 
+T {\bfseries \+\_\+start\+\_\+value} = 0
+\begin{DoxyCompactList}\small\item\em Starting value when beginning iteration. If zero (or lower than the tree\textquotesingle{}s size), it bumps forward. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\+\_\+end\+\_\+value}} = 0
+\begin{DoxyCompactList}\small\item\em Optional stopping value. When zero, never stops. \end{DoxyCompactList}\item 
+std\+::atomic$<$ Verifier\+State $>$ {\bfseries \+\_\+state} = Verifier\+State\+::\+STOPPED
+\begin{DoxyCompactList}\small\item\em The state of the system. See {\ttfamily Verifier\+State} for options. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classVerifier_a3899943de03d220d4b479218c5555d32}{\+\_\+synchronization\+\_\+countdown}} = 100\textquotesingle{}000
+\begin{DoxyCompactList}\small\item\em How many verifications a thread should do before synchronizing\+: checking for state changes and updating metrics. \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries \+\_\+paused\+\_\+check\+\_\+ms} = 10
+\begin{DoxyCompactList}\small\item\em Controls how often paused loops check for updates. This is a guaranteed minimum, not maximum. \end{DoxyCompactList}\item 
+std\+::chrono\+::time\+\_\+point$<$ std\+::chrono\+::steady\+\_\+clock $>$ {\bfseries \+\_\+timer\+\_\+start} = std\+::chrono\+::steady\+\_\+clock\+::now()
+\begin{DoxyCompactList}\small\item\em The last time {\ttfamily \doxylink{classVerifier_ae185c2d35a707de8d1c12e6f5d3e57ae}{start()}} or {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}} was called. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} {\bfseries \+\_\+published\+\_\+metrics}
+\begin{DoxyCompactList}\small\item\em A metric object, to be updated by executors when {\ttfamily \+\_\+synchronization\+\_\+countdown} is reached. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$\newline
+class GPUVerifier$<$ T $>$}
+An implementation of the {\ttfamily \doxylink{classVerifier}{Verifier}} class which uses local GPUs to verfy survivors. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any fixed-\/width type (up to 128-\/bit). \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}\label{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db} 
+\index{GPUVerifier$<$ T $>$@{GPUVerifier$<$ T $>$}!run\_executor@{run\_executor}}
+\index{run\_executor@{run\_executor}!GPUVerifier$<$ T $>$@{GPUVerifier$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{run\_executor()}{run\_executor()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$ \\
+void \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}$<$ T $>$\+::run\+\_\+executor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+The actual implementation of verification steps, with necessary template params/constexpr values sent. 
+
+Unlike the {\ttfamily GPUVerifier\+\_\+\+\_\+\+Old}, this method does not use the tree iterator whatosever. It loops over the surviving values and sends them to the \doxylink{namespaceGPU}{GPU} along with a {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}\texorpdfstring{$<$}{<}T\texorpdfstring{$>$}{>}::st\+\_\+scaling\+\_\+factor()} and an internal multiplier, allowing the both the CPU and \doxylink{namespaceGPU}{GPU} to mimic the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}\texorpdfstring{$<$}{<}T\texorpdfstring{$>$}{>}::for\+\_\+each\+\_\+uncovered\+\_\+value\+\_\+with\+\_\+tls()} infinite iteration.
+
+Why? Because it allows this method to send larger work sets to the \doxylink{namespaceGPU}{GPU} by asking it to scale all survivor root-\/values on its own in a loop. This takes pressure off the CPU iterator and PCIe bus, amortizing the cost of host-\/device synchronization.
+
+\begin{DoxyNote}{Note}
+The {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} assures all values sent in a {\ttfamily For\+Each\+Policy\+::\+PARALLEL} mode will never skip more than one prefix\textquotesingle{}s worth of range if one or more threads issues a premature {\ttfamily For\+Each\+Signal\+::\+BREAK}. This method would normally violate that contract by allowing that range to expand due to the {\ttfamily scales\+\_\+per\+\_\+run} factor. To protect against this, this method will simply issue a {\ttfamily For\+Each\+Signal\+::\+CONTINUE} when the {\ttfamily \+\_\+end\+\_\+value} is reached, guaranteeing ALL survivor values are buffered. The only downside is the {\ttfamily scales\+\_\+per\+\_\+run} will mean verification can go beyond the {\ttfamily \+\_\+end\+\_\+value}. All of this will be accurately reflected in the metrics.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em scales\+\_\+per\+\_\+run} & Controls the number of times a scaling factor is applied to a surviving value on the \doxylink{namespaceGPU}{GPU} side. During a normal {\ttfamily tree.\+for\+\_\+each\+\_\+uncovered\+\_\+value()} an internal {\ttfamily multiplier} is incremented and applied to a {\ttfamily scaling\+\_\+factor}, which results in value-\/ordered enumeration of suviving values using simple arithmetic. Unfortunately, this requires the CPU to read, store, and then transmit values to the \doxylink{namespaceGPU}{GPU}, which also overloads the PCIe bus. This method skips the tree iterator and iterates over the surviving root values ONLY and tracks multipliers and the scaling factor directly. By passing these to the \doxylink{namespaceGPU}{GPU}, it can do large "{}runs"{} of a surviving value\textquotesingle{}s subtree nodes. This amortizes the CPU work (buffering root values) and the PCIe load. The only downside is that extremely large {\ttfamily scales\+\_\+per\+\_\+run} will keep the \doxylink{namespaceGPU}{GPU} busier for longer inside an uninterruptable operation, which means pausing, stopping, or other tear-\/down might take extra time. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Use\+IVTable} & Whether or not to use the max initial value table from {\ttfamily \doxylink{namespaceCollatzConstants}{Collatz\+Constants}} to protect from overflow instead of tracking headroom bits in realtime. Note\+: when the table is exhausted, the system falls back to headroom bits, making this always safe to send as {\ttfamily true}. \\
+\hline
+\end{DoxyTemplParams}
+
+
+Implements \mbox{\hyperlink{classVerifier_a76a2dc13fc257c2765b108c7b0b06a0f}{Verifier$<$ T $>$}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+gpu.\+hpp\end{DoxyCompactItemize}

@@ -56,6 +56,8 @@ The {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} has a multithreading (O
 
 \begin{DoxyWarning}{Warning}
 This is not meant to be used anywhere else. 
+
+Struct should be given alignas(...) to avoid false sharing. 
 \end{DoxyWarning}
 
 

@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['zstd_5fistream_0',['zstd_istream',['../classzstd__istream.html',1,'']]],
-  ['zstd_5fistreambuf_1',['zstd_istreambuf',['../classzstd__istreambuf.html',1,'']]],
-  ['zstd_5fostream_2',['zstd_ostream',['../classzstd__ostream.html',1,'']]],
-  ['zstd_5fostreambuf_3',['zstd_ostreambuf',['../classzstd__ostreambuf.html',1,'']]]
+  ['verifier_0',['Verifier',['../classVerifier.html',1,'']]],
+  ['verifiermetric_1',['VerifierMetric',['../structVerifierMetric.html',1,'']]],
+  ['verifiermetrics_2',['VerifierMetrics',['../structVerifierMetrics.html',1,'']]],
+  ['verifiertlsmetric_3',['VerifierTLSMetric',['../structVerifierTLSMetric.html',1,'']]],
+  ['verifiertlsmetrics_4',['VerifierTLSMetrics',['../structVerifierTLSMetrics.html',1,'']]]
 ];

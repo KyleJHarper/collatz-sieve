@@ -94,16 +94,16 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad1680680fd46fd7eb08169eef4c1304b" id="r_ad1680680fd46fd7eb08169eef4c1304b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#ad1680680fd46fd7eb08169eef4c1304b">deep_sizeof</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_class</a> &amp;<a class="el" href="classNode.html">obj</a>)</td></tr>
+<tr class="memitem:ad1680680fd46fd7eb08169eef4c1304b" id="r_ad1680680fd46fd7eb08169eef4c1304b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#ad1680680fd46fd7eb08169eef4c1304b">deep_sizeof</a> (const mpz_class &amp;obj)</td></tr>
 <tr class="memdesc:ad1680680fd46fd7eb08169eef4c1304b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to calculate the true (heap) size of an <code>mpz_class</code> object.  <br /></td></tr>
 <tr class="separator:ad1680680fd46fd7eb08169eef4c1304b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a707b7d213952d319e12d8152d8607916" id="r_a707b7d213952d319e12d8152d8607916"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a707b7d213952d319e12d8152d8607916">deep_sizeof</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpf_class</a> &amp;<a class="el" href="classNode.html">obj</a>)</td></tr>
+<tr class="memitem:a707b7d213952d319e12d8152d8607916" id="r_a707b7d213952d319e12d8152d8607916"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a707b7d213952d319e12d8152d8607916">deep_sizeof</a> (const mpf_class &amp;obj)</td></tr>
 <tr class="memdesc:a707b7d213952d319e12d8152d8607916"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to calculate the true (heap) size of an <code>mpf_class</code> object.  <br /></td></tr>
 <tr class="separator:a707b7d213952d319e12d8152d8607916"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73213abec6ff18bd1e8d59843ed050df" id="r_a73213abec6ff18bd1e8d59843ed050df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">uint64_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a73213abec6ff18bd1e8d59843ed050df">mpz_get_ui64</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_t</a> <a class="el" href="classNode.html">obj</a>)</td></tr>
+<tr class="memitem:a73213abec6ff18bd1e8d59843ed050df" id="r_a73213abec6ff18bd1e8d59843ed050df"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a73213abec6ff18bd1e8d59843ed050df">mpz_get_ui64</a> (const mpz_t obj)</td></tr>
 <tr class="memdesc:a73213abec6ff18bd1e8d59843ed050df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve exactly 64 bits from an <code>mpz_t</code>.  <br /></td></tr>
 <tr class="separator:a73213abec6ff18bd1e8d59843ed050df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07297412a60efc96a3e175fb548bf2ab" id="r_a07297412a60efc96a3e175fb548bf2ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">mpz_class</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a07297412a60efc96a3e175fb548bf2ab">parse_mpz</a> (std::string_view <a class="el" href="classNode.html">view</a>)</td></tr>
+<tr class="memitem:a07297412a60efc96a3e175fb548bf2ab" id="r_a07297412a60efc96a3e175fb548bf2ab"><td class="memItemLeft" align="right" valign="top">mpz_class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGMP.html#a07297412a60efc96a3e175fb548bf2ab">parse_mpz</a> (std::string_view view)</td></tr>
 <tr class="memdesc:a07297412a60efc96a3e175fb548bf2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string view to an <code>mpz_class</code>. Uses <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a>'s <code>mpz_set_string()</code> internally.  <br /></td></tr>
 <tr class="separator:a07297412a60efc96a3e175fb548bf2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -120,9 +120,9 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">size_t</a> GMP::deep_sizeof </td>
+          <td class="memname">size_t GMP::deep_sizeof </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpf_class</a> &amp;&#160;</td>
+          <td class="paramtype">const mpf_class &amp;&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
         </tr>
@@ -155,9 +155,9 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">size_t</a> GMP::deep_sizeof </td>
+          <td class="memname">size_t GMP::deep_sizeof </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_class</a> &amp;&#160;</td>
+          <td class="paramtype">const mpz_class &amp;&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
         </tr>
@@ -190,9 +190,9 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">uint64_t</a> GMP::mpz_get_ui64 </td>
+          <td class="memname">uint64_t GMP::mpz_get_ui64 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_t</a>&#160;</td>
+          <td class="paramtype">const mpz_t&#160;</td>
           <td class="paramname"><em>obj</em></td><td>)</td>
           <td></td>
         </tr>
@@ -225,7 +225,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">mpz_class</a> GMP::parse_mpz </td>
+          <td class="memname">mpz_class GMP::parse_mpz </td>
           <td>(</td>
           <td class="paramtype">std::string_view&#160;</td>
           <td class="paramname"><em>view</em></td><td>)</td>

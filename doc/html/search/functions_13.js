@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['zstd_5fistream_0',['zstd_istream',['../classzstd__istream.html#aa2c1f8f4bc817d0d00fcf8853d709948',1,'zstd_istream::zstd_istream(const zstd_istream &amp;)=delete'],['../classzstd__istream.html#aa7e604deaacf88449170b8debcefa47c',1,'zstd_istream::zstd_istream(std::istream &amp;underlying)']]],
-  ['zstd_5fistreambuf_1',['zstd_istreambuf',['../classzstd__istreambuf.html#a777a1f725474596c6f5850ecba0d79b2',1,'zstd_istreambuf::zstd_istreambuf(const zstd_istreambuf &amp;)=delete'],['../classzstd__istreambuf.html#a8095f2e6091178288dede8c36185ec13',1,'zstd_istreambuf::zstd_istreambuf(std::streambuf *src)']]],
-  ['zstd_5fostream_2',['zstd_ostream',['../classzstd__ostream.html#ae6f6cf96594a22e916d18c5f1c9c3a4b',1,'zstd_ostream::zstd_ostream(const zstd_ostream &amp;)=delete'],['../classzstd__ostream.html#adf50c5b10a0a43b3e74e0401207de392',1,'zstd_ostream::zstd_ostream(std::ostream &amp;underlying, int level)']]],
-  ['zstd_5fostreambuf_3',['zstd_ostreambuf',['../classzstd__ostreambuf.html#a0b6ffb53b6e82c233e7670d56cd4f88f',1,'zstd_ostreambuf::zstd_ostreambuf(const zstd_ostreambuf &amp;)=delete'],['../classzstd__ostreambuf.html#a7a1ba303dc0998247b8dfce9aaba7b96',1,'zstd_ostreambuf::zstd_ostreambuf(std::streambuf *dest, int level=ZSTD_CLEVEL_DEFAULT)']]]
+  ['verifier_0',['verifier',['../classVerifier.html#aa95a7cdd14744139f75488bc90a5100c',1,'Verifier::Verifier()=delete'],['../classVerifier.html#a9325f973e0d34d8853d77be60e20b7cb',1,'Verifier::Verifier(TreeType &amp;tree)'],['../classVerifier.html#a204418dd5d8703bf0cb6f859c01ec0e2',1,'Verifier::Verifier(const Verifier &amp;)=delete'],['../classVerifier.html#a61178cf0f751579f41f21fe4d25cbbbd',1,'Verifier::Verifier(Verifier &amp;&amp;) noexcept=default']]],
+  ['verify_5fwith_5fdetailed_5fmetrics_1',['verify_with_detailed_metrics',['../classCPUVerifier.html#a6bc10dac6e08ee6a86e8975027eeef1d',1,'CPUVerifier']]]
 ];

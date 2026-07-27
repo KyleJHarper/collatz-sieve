@@ -13,44 +13,44 @@ Assists with serializing data, deserializing data, and providing feedback when f
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a}\label{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries set\+\_\+category} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{category}})
+void {\bfseries set\+\_\+category} (const std\+::string \&category)
 \begin{DoxyCompactList}\small\item\em Specify a category name to help disinguish where you\textquotesingle{}re calling from. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{msg}})
+bool \mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}} (const std\+::string \&msg)
 \begin{DoxyCompactList}\small\item\em Early-\/exit helper. Emits a message and returns false for caller\textquotesingle{}s flow-\/control. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4}{Stream\+Helper}} (std\+::istream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{in}}, std\+::ostream \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+\mbox{\hyperlink{classStreamHelper_a230aeec34408c3d89d975984f3f5b7e4}{Stream\+Helper}} (std\+::istream \texorpdfstring{$\ast$}{*}in, std\+::ostream \texorpdfstring{$\ast$}{*}out, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Basic constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Integral Serialization}\par
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\+\_\+integral}} (\mbox{\hyperlink{classNode}{const}} T \&value)
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\bool \mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\+\_\+integral}} (const T \&value)
 \begin{DoxyCompactList}\small\item\em Serialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\+\_\+integral}} (T \&\mbox{\hyperlink{classNode}{rv}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\bool \mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\+\_\+integral}} (T \&rv)
 \begin{DoxyCompactList}\small\item\em Deserialize any supported integral of type {\ttfamily T}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Binary Serialization}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd}{write\+\_\+bytes}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{data}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classNode}{size}})
+bool \mbox{\hyperlink{classStreamHelper_a54d51dafd1d31decba126bd1f44b1ecd}{write\+\_\+bytes}} (const void \texorpdfstring{$\ast$}{*}data, const uint64\+\_\+t size)
 \begin{DoxyCompactList}\small\item\em Generic helper to write bytes from any pointer location up to {\ttfamily size} bytes. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0}{read\+\_\+bytes}} (\mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{data}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classNode}{size}})
+bool \mbox{\hyperlink{classStreamHelper_afa0e0c53d4a2669cef847fd3c305f6e0}{read\+\_\+bytes}} (void \texorpdfstring{$\ast$}{*}data, const uint64\+\_\+t size)
 \begin{DoxyCompactList}\small\item\em Generic helper to read bytes from any pointer location up to {\ttfamily size} bytes. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Boolean Serialization}\par
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\+\_\+bool}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} \&value)
+bool \mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\+\_\+bool}} (const bool \&value)
 \begin{DoxyCompactList}\small\item\em Serialize boolean values. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\+\_\+bool}} (\mbox{\hyperlink{classNode}{bool}} \&\mbox{\hyperlink{classNode}{rv}})
+bool \mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\+\_\+bool}} (bool \&rv)
 \begin{DoxyCompactList}\small\item\em Deserialize boolean values. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{classStreamHelper_a13c0ed516aa5177c61f19082208b9d87}{READ\+\_\+\+WRITE\+\_\+\+LIMIT}} = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30
+static constexpr uint64\+\_\+t \mbox{\hyperlink{classStreamHelper_a13c0ed516aa5177c61f19082208b9d87}{READ\+\_\+\+WRITE\+\_\+\+LIMIT}} = 1ULL $<$$<$ 30
 \begin{DoxyCompactList}\small\item\em 
 \begin{DoxyItemize}
 \item 
@@ -68,13 +68,13 @@ std\+::istream \& {\bfseries get\+\_\+in} ()
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classStreamHelper_a7134f614d391b81d5f34282d38449680}\label{classStreamHelper_a7134f614d391b81d5f34282d38449680} 
-std\+::istream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+in\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+std\+::istream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+in\+\_\+ptr} = nullptr
 \begin{DoxyCompactList}\small\item\em Pointer to the input stream from reading data. \end{DoxyCompactList}\item 
 \Hypertarget{classStreamHelper_ac5640e8fb652b80991275c237ab5e268}\label{classStreamHelper_ac5640e8fb652b80991275c237ab5e268} 
-std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+out\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+std\+::ostream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+out\+\_\+ptr} = nullptr
 \begin{DoxyCompactList}\small\item\em Pointer to the output stream when writing data. \end{DoxyCompactList}\item 
 \Hypertarget{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e}\label{classStreamHelper_a9f7dd3b2fcad5d86cb50bd43ce77637e} 
-std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = nullptr
 \begin{DoxyCompactList}\small\item\em Pointer to an error string, where problems can be stored if found. \end{DoxyCompactList}\item 
 \Hypertarget{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41}\label{classStreamHelper_a6ebdc930f6b9cf0aac7bab4a54336a41} 
 std\+::string {\bfseries \+\_\+category} = "{}Uncategorized"{}
@@ -94,7 +94,7 @@ This class only writes in little-\/endian (it\textquotesingle{}ll {\ttfamily bws
 \index{StreamHelper@{StreamHelper}!StreamHelper@{StreamHelper}}
 \index{StreamHelper@{StreamHelper}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{StreamHelper()}{StreamHelper()}}
-{\footnotesize\ttfamily Stream\+Helper\+::\+Stream\+Helper (\begin{DoxyParamCaption}\item[{std\+::istream \texorpdfstring{$\ast$}{*}}]{in,  }\item[{std\+::ostream \texorpdfstring{$\ast$}{*}}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily Stream\+Helper\+::\+Stream\+Helper (\begin{DoxyParamCaption}\item[{std\+::istream \texorpdfstring{$\ast$}{*}}]{in,  }\item[{std\+::ostream \texorpdfstring{$\ast$}{*}}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -116,7 +116,7 @@ Basic constructor.
 \index{StreamHelper@{StreamHelper}!deserialize\_bool@{deserialize\_bool}}
 \index{deserialize\_bool@{deserialize\_bool}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{deserialize\_bool()}{deserialize\_bool()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::deserialize\+\_\+bool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{bool}} \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Stream\+Helper\+::deserialize\+\_\+bool (\begin{DoxyParamCaption}\item[{bool \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -140,7 +140,7 @@ True if successful, false otherwise.
 \index{deserialize\_integral@{deserialize\_integral}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{deserialize\_integral()}{deserialize\_integral()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::deserialize\+\_\+integral (\begin{DoxyParamCaption}\item[{T \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool Stream\+Helper\+::deserialize\+\_\+integral (\begin{DoxyParamCaption}\item[{T \&}]{rv }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -161,7 +161,7 @@ When using fixed-\/width, caller must use an explicit-\/width integral. Things l
 \end{DoxyParams}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyReturn}{Returns}
@@ -171,7 +171,7 @@ True if successful, false otherwise.
 \index{StreamHelper@{StreamHelper}!fail@{fail}}
 \index{fail@{fail}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{fail()}{fail()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::fail (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Stream\+Helper\+::fail (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -192,7 +192,7 @@ False, always.
 \index{StreamHelper@{StreamHelper}!read\_bytes@{read\_bytes}}
 \index{read\_bytes@{read\_bytes}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{read\_bytes()}{read\_bytes()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::read\+\_\+bytes (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}}]{data,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}}}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Stream\+Helper\+::read\+\_\+bytes (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{data,  }\item[{const uint64\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -215,7 +215,7 @@ True if successful, false otherwise.
 \index{StreamHelper@{StreamHelper}!serialize\_bool@{serialize\_bool}}
 \index{serialize\_bool@{serialize\_bool}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{serialize\_bool()}{serialize\_bool()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+bool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Stream\+Helper\+::serialize\+\_\+bool (\begin{DoxyParamCaption}\item[{const bool \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -239,7 +239,7 @@ True if successful, false otherwise.
 \index{serialize\_integral@{serialize\_integral}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{serialize\_integral()}{serialize\_integral()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool Stream\+Helper\+::serialize\+\_\+integral (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -260,7 +260,7 @@ When using fixed-\/width, caller must use an explicit-\/width integral. Things l
 \end{DoxyParams}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyReturn}{Returns}
@@ -270,7 +270,7 @@ True if successful, false otherwise.
 \index{StreamHelper@{StreamHelper}!write\_bytes@{write\_bytes}}
 \index{write\_bytes@{write\_bytes}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{write\_bytes()}{write\_bytes()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Stream\+Helper\+::write\+\_\+bytes (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{void}} \texorpdfstring{$\ast$}{*}}]{data,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}}}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Stream\+Helper\+::write\+\_\+bytes (\begin{DoxyParamCaption}\item[{const void \texorpdfstring{$\ast$}{*}}]{data,  }\item[{const uint64\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -296,7 +296,7 @@ True if successful, false otherwise.
 \index{StreamHelper@{StreamHelper}!READ\_WRITE\_LIMIT@{READ\_WRITE\_LIMIT}}
 \index{READ\_WRITE\_LIMIT@{READ\_WRITE\_LIMIT}!StreamHelper@{StreamHelper}}
 \doxysubsubsection{\texorpdfstring{READ\_WRITE\_LIMIT}{READ\_WRITE\_LIMIT}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} Stream\+Helper\+::\+READ\+\_\+\+WRITE\+\_\+\+LIMIT = 1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ 30\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+{\footnotesize\ttfamily constexpr uint64\+\_\+t Stream\+Helper\+::\+READ\+\_\+\+WRITE\+\_\+\+LIMIT = 1ULL $<$$<$ 30\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
 
 
 

@@ -93,131 +93,131 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7b1aa301f1af14f2594a40825c215f26" id="r_a7b1aa301f1af14f2594a40825c215f26"><td class="memItemLeft" align="right" valign="top"><a id="a7b1aa301f1af14f2594a40825c215f26" name="a7b1aa301f1af14f2594a40825c215f26"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const T &amp;value)</td></tr>
 <tr class="memdesc:a7b1aa301f1af14f2594a40825c215f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a value to the bitmap. <br /></td></tr>
 <tr class="separator:a7b1aa301f1af14f2594a40825c215f26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a500fc6ba84aa64bd40bb59d1c761aaa3" id="r_a500fc6ba84aa64bd40bb59d1c761aaa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a500fc6ba84aa64bd40bb59d1c761aaa3">add_range</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">start</a>, <a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">end</a>)</td></tr>
+<tr class="memitem:a500fc6ba84aa64bd40bb59d1c761aaa3" id="r_a500fc6ba84aa64bd40bb59d1c761aaa3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a500fc6ba84aa64bd40bb59d1c761aaa3">add_range</a> (const T &amp;start, const T &amp;end)</td></tr>
 <tr class="memdesc:a500fc6ba84aa64bd40bb59d1c761aaa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a contiguous range of values using the most optimized approach.  <br /></td></tr>
 <tr class="separator:a500fc6ba84aa64bd40bb59d1c761aaa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a691f785a69294f59a83edfbd4b7eda15" id="r_a691f785a69294f59a83edfbd4b7eda15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a691f785a69294f59a83edfbd4b7eda15">add_range_closed</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">start</a>, <a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">end</a>)</td></tr>
+<tr class="memitem:a691f785a69294f59a83edfbd4b7eda15" id="r_a691f785a69294f59a83edfbd4b7eda15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a691f785a69294f59a83edfbd4b7eda15">add_range_closed</a> (const T &amp;start, const T &amp;end)</td></tr>
 <tr class="memdesc:a691f785a69294f59a83edfbd4b7eda15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a closed, contiguous range of values using the most optimized approach.  <br /></td></tr>
 <tr class="separator:a691f785a69294f59a83edfbd4b7eda15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add4a2fb879be9184cba189e6bf4ff0cd" id="r_add4a2fb879be9184cba189e6bf4ff0cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#add4a2fb879be9184cba189e6bf4ff0cd">add_many</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">count</a>, T *<a class="el" href="classNode.html">values</a>)</td></tr>
+<tr class="memitem:add4a2fb879be9184cba189e6bf4ff0cd" id="r_add4a2fb879be9184cba189e6bf4ff0cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#add4a2fb879be9184cba189e6bf4ff0cd">add_many</a> (const size_t count, T *values)</td></tr>
 <tr class="memdesc:add4a2fb879be9184cba189e6bf4ff0cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you.  <br /></td></tr>
 <tr class="separator:add4a2fb879be9184cba189e6bf4ff0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b1efdbf1d0cf2a23a2a63f6b6df6464" id="r_a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9b1efdbf1d0cf2a23a2a63f6b6df6464">contains</a> (<a class="el" href="classNode.html">const</a> T &amp;value) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a9b1efdbf1d0cf2a23a2a63f6b6df6464" id="r_a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9b1efdbf1d0cf2a23a2a63f6b6df6464">contains</a> (const T &amp;value) const</td></tr>
 <tr class="memdesc:a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for a value to exist (be "on") in the bitmap.  <br /></td></tr>
 <tr class="separator:a9b1efdbf1d0cf2a23a2a63f6b6df6464"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9aa43193285ec4154532c06c274d2d9e" id="r_a9aa43193285ec4154532c06c274d2d9e"><td class="memItemLeft" align="right" valign="top"><a id="a9aa43193285ec4154532c06c274d2d9e" name="a9aa43193285ec4154532c06c274d2d9e"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (const T &amp;value)</td></tr>
 <tr class="memdesc:a9aa43193285ec4154532c06c274d2d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an item from the bitmap. <br /></td></tr>
 <tr class="separator:a9aa43193285ec4154532c06c274d2d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a358bfdef4166d5e8a352b2f91104f4cf" id="r_a358bfdef4166d5e8a352b2f91104f4cf"><td class="memItemLeft" align="right" valign="top"><a id="a358bfdef4166d5e8a352b2f91104f4cf" name="a358bfdef4166d5e8a352b2f91104f4cf"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>minimum</b> () <a class="el" href="classNode.html">const</a></td></tr>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>minimum</b> () const</td></tr>
 <tr class="memdesc:a358bfdef4166d5e8a352b2f91104f4cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the smallest value in the <a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a>. <br /></td></tr>
 <tr class="separator:a358bfdef4166d5e8a352b2f91104f4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acae800834f3e98f2fe7902c2f312cf28" id="r_acae800834f3e98f2fe7902c2f312cf28"><td class="memItemLeft" align="right" valign="top"><a id="acae800834f3e98f2fe7902c2f312cf28" name="acae800834f3e98f2fe7902c2f312cf28"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>maximum</b> () <a class="el" href="classNode.html">const</a></td></tr>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>maximum</b> () const</td></tr>
 <tr class="memdesc:acae800834f3e98f2fe7902c2f312cf28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the largest value in the <a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a>. <br /></td></tr>
 <tr class="separator:acae800834f3e98f2fe7902c2f312cf28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d79d48318af0f9523c77ab84cbfb85f" id="r_a9d79d48318af0f9523c77ab84cbfb85f"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9d79d48318af0f9523c77ab84cbfb85f">cardinality</a> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a9d79d48318af0f9523c77ab84cbfb85f" id="r_a9d79d48318af0f9523c77ab84cbfb85f"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a9d79d48318af0f9523c77ab84cbfb85f">cardinality</a> () const</td></tr>
 <tr class="memdesc:a9d79d48318af0f9523c77ab84cbfb85f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the cardinality (count) of nodes turned "on".  <br /></td></tr>
 <tr class="separator:a9d79d48318af0f9523c77ab84cbfb85f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d073ff6521f0c8f42ac0a4b7520594a" id="r_a8d073ff6521f0c8f42ac0a4b7520594a"><td class="memItemLeft" align="right" valign="top"><a id="a8d073ff6521f0c8f42ac0a4b7520594a" name="a8d073ff6521f0c8f42ac0a4b7520594a"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const</td></tr>
 <tr class="memdesc:a8d073ff6521f0c8f42ac0a4b7520594a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the bitmap is empty, false otherwise. <br /></td></tr>
 <tr class="separator:a8d073ff6521f0c8f42ac0a4b7520594a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a826307acc0967711fffd951ba9022b5b" id="r_a826307acc0967711fffd951ba9022b5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a826307acc0967711fffd951ba9022b5b">merge</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">src</a>)</td></tr>
+<tr class="memitem:a826307acc0967711fffd951ba9022b5b" id="r_a826307acc0967711fffd951ba9022b5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a826307acc0967711fffd951ba9022b5b">merge</a> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;src)</td></tr>
 <tr class="memdesc:a826307acc0967711fffd951ba9022b5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge (bitwise OR) another <code>BackendType</code> into this one.  <br /></td></tr>
 <tr class="separator:a826307acc0967711fffd951ba9022b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0690a73bae6c6ac6dd7f53b01dd122a5" id="r_a0690a73bae6c6ac6dd7f53b01dd122a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a0690a73bae6c6ac6dd7f53b01dd122a5">operator|=</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">src</a>)</td></tr>
+<tr class="memitem:a0690a73bae6c6ac6dd7f53b01dd122a5" id="r_a0690a73bae6c6ac6dd7f53b01dd122a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a0690a73bae6c6ac6dd7f53b01dd122a5">operator|=</a> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;src)</td></tr>
 <tr class="memdesc:a0690a73bae6c6ac6dd7f53b01dd122a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">An opertor which calls <code><a class="el" href="classNodeBitmap.html#a826307acc0967711fffd951ba9022b5b" title="Merge (bitwise OR) another BackendType into this one.">merge()</a></code>. This is a convenience to do: <code>my_bitmap |= another_bitmap</code>.  <br /></td></tr>
 <tr class="separator:a0690a73bae6c6ac6dd7f53b01dd122a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eb591d8a8237427e75c0b93405d475a" id="r_a9eb591d8a8237427e75c0b93405d475a"><td class="memItemLeft" align="right" valign="top"><a id="a9eb591d8a8237427e75c0b93405d475a" name="a9eb591d8a8237427e75c0b93405d475a"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clone</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">src</a>)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clone</b> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;src)</td></tr>
 <tr class="memdesc:a9eb591d8a8237427e75c0b93405d475a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy source bitmap and metadata into self, making an exact copy. <br /></td></tr>
 <tr class="separator:a9eb591d8a8237427e75c0b93405d475a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac426cbc043c0fd9aec3c12a6e9e0be6d" id="r_ac426cbc043c0fd9aec3c12a6e9e0be6d"><td class="memItemLeft" align="right" valign="top"><a id="ac426cbc043c0fd9aec3c12a6e9e0be6d" name="ac426cbc043c0fd9aec3c12a6e9e0be6d"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>optimize</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>optimize</b> ()</td></tr>
 <tr class="memdesc:ac426cbc043c0fd9aec3c12a6e9e0be6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls any available optimization functions on internal members to free up wasted memory. <br /></td></tr>
 <tr class="separator:ac426cbc043c0fd9aec3c12a6e9e0be6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9e67e28960c8c6f10d39e1236048e63" id="r_ac9e67e28960c8c6f10d39e1236048e63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ac9e67e28960c8c6f10d39e1236048e63">shrink_to_fit</a> ()</td></tr>
+<tr class="memitem:ac9e67e28960c8c6f10d39e1236048e63" id="r_ac9e67e28960c8c6f10d39e1236048e63"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ac9e67e28960c8c6f10d39e1236048e63">shrink_to_fit</a> ()</td></tr>
 <tr class="memdesc:ac9e67e28960c8c6f10d39e1236048e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the shrinkToFit() method for each bitmap and sums them.  <br /></td></tr>
 <tr class="separator:ac9e67e28960c8c6f10d39e1236048e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a309ac31dd67a5f1201973110509bd25c" id="r_a309ac31dd67a5f1201973110509bd25c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a309ac31dd67a5f1201973110509bd25c">deep_size</a> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a309ac31dd67a5f1201973110509bd25c" id="r_a309ac31dd67a5f1201973110509bd25c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a309ac31dd67a5f1201973110509bd25c">deep_size</a> () const</td></tr>
 <tr class="memdesc:a309ac31dd67a5f1201973110509bd25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the size of this data structure as closely as possible.  <br /></td></tr>
 <tr class="separator:a309ac31dd67a5f1201973110509bd25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9b3cca229ffc00b046316cce96695a6" id="r_ae9b3cca229ffc00b046316cce96695a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ae9b3cca229ffc00b046316cce96695a6">equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:ae9b3cca229ffc00b046316cce96695a6" id="r_ae9b3cca229ffc00b046316cce96695a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ae9b3cca229ffc00b046316cce96695a6">equal</a> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;second, std::string *err=nullptr) const</td></tr>
 <tr class="memdesc:ae9b3cca229ffc00b046316cce96695a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another bitmap of <code>BackendType</code> to this one.  <br /></td></tr>
 <tr class="separator:ae9b3cca229ffc00b046316cce96695a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adda11ff23cc7d2f81452051c6b6134a6" id="r_adda11ff23cc7d2f81452051c6b6134a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#adda11ff23cc7d2f81452051c6b6134a6">serialize</a> (std::ostream &amp;<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:adda11ff23cc7d2f81452051c6b6134a6" id="r_adda11ff23cc7d2f81452051c6b6134a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#adda11ff23cc7d2f81452051c6b6134a6">serialize</a> (std::ostream &amp;out, std::string *err=nullptr) const</td></tr>
 <tr class="memdesc:adda11ff23cc7d2f81452051c6b6134a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the bitmap specifics of this object for export.  <br /></td></tr>
 <tr class="separator:adda11ff23cc7d2f81452051c6b6134a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a666266bba700198551be03287f47ecd2" id="r_a666266bba700198551be03287f47ecd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a666266bba700198551be03287f47ecd2">deserialize</a> (std::istream &amp;<a class="el" href="classNode.html">in</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:a666266bba700198551be03287f47ecd2" id="r_a666266bba700198551be03287f47ecd2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a666266bba700198551be03287f47ecd2">deserialize</a> (std::istream &amp;in, std::string *err=nullptr)</td></tr>
 <tr class="memdesc:a666266bba700198551be03287f47ecd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classNodeBitmap.html#adda11ff23cc7d2f81452051c6b6134a6" title="Serialize the bitmap specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
 <tr class="separator:a666266bba700198551be03287f47ecd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90" id="r_a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a22db19fd10d7752887ddffc4dd9fbf90">for_each_value</a> (ForEachPolicy <a class="el" href="classNode.html">policy</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90" id="r_a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplParams" colspan="2">template&lt;typename Func &gt; </td></tr>
+<tr class="memitem:a22db19fd10d7752887ddffc4dd9fbf90"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a22db19fd10d7752887ddffc4dd9fbf90">for_each_value</a> (ForEachPolicy policy, Func &amp;&amp;callback) const</td></tr>
 <tr class="memdesc:a22db19fd10d7752887ddffc4dd9fbf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each iterator returning each value in the bitmap to <code>callback</code>.  <br /></td></tr>
 <tr class="separator:a22db19fd10d7752887ddffc4dd9fbf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04" id="r_a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> , <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">TLS_Type</a> &gt; </td></tr>
-<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a2243969818ba6ad34fef9e4e739eee04">for_each_value_with_tls</a> (ForEachPolicy <a class="el" href="classNode.html">policy</a>, std::vector&lt; <a class="el" href="classNode.html">TLS_Type</a> &gt; &amp;<a class="el" href="classNode.html">tls</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04" id="r_a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplParams" colspan="2">template&lt;typename Func , typename TLS_Type &gt; </td></tr>
+<tr class="memitem:a2243969818ba6ad34fef9e4e739eee04"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a2243969818ba6ad34fef9e4e739eee04">for_each_value_with_tls</a> (ForEachPolicy policy, std::vector&lt; TLS_Type &gt; &amp;tls, Func &amp;&amp;callback) const</td></tr>
 <tr class="memdesc:a2243969818ba6ad34fef9e4e739eee04"><td class="mdescLeft">&#160;</td><td class="mdescRight">A for-each iterator allowing callbacks with thread-local storage for transformation.  <br /></td></tr>
 <tr class="separator:a2243969818ba6ad34fef9e4e739eee04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a7bca77d844b4cc84e6eac16ff034f0ae" id="r_a7bca77d844b4cc84e6eac16ff034f0ae"><td class="memItemLeft" align="right" valign="top"><a id="a7bca77d844b4cc84e6eac16ff034f0ae" name="a7bca77d844b4cc84e6eac16ff034f0ae"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> ()=<a class="el" href="classNode.html">default</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> ()=default</td></tr>
 <tr class="memdesc:a7bca77d844b4cc84e6eac16ff034f0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
 <tr class="separator:a7bca77d844b4cc84e6eac16ff034f0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23d5a6364e935bc311f1cd8e0d9c282d" id="r_a23d5a6364e935bc311f1cd8e0d9c282d"><td class="memItemLeft" align="right" valign="top"><a id="a23d5a6364e935bc311f1cd8e0d9c282d" name="a23d5a6364e935bc311f1cd8e0d9c282d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a23d5a6364e935bc311f1cd8e0d9c282d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
 <tr class="separator:a23d5a6364e935bc311f1cd8e0d9c282d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3efe8f1c7055d09889f1899b22de1cd" id="r_aa3efe8f1c7055d09889f1899b22de1cd"><td class="memItemLeft" align="right" valign="top"><a id="aa3efe8f1c7055d09889f1899b22de1cd" name="aa3efe8f1c7055d09889f1899b22de1cd"></a>
-<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;)=delete</td></tr>
 <tr class="memdesc:aa3efe8f1c7055d09889f1899b22de1cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
 <tr class="separator:aa3efe8f1c7055d09889f1899b22de1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92616da068db07eb6ce11f0424292f37" id="r_a92616da068db07eb6ce11f0424292f37"><td class="memItemLeft" align="right" valign="top"><a id="a92616da068db07eb6ce11f0424292f37" name="a92616da068db07eb6ce11f0424292f37"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NodeBitmap</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) noexcept=default</td></tr>
 <tr class="memdesc:a92616da068db07eb6ce11f0424292f37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
 <tr class="separator:a92616da068db07eb6ce11f0424292f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaec97a82cf9856ee4e85aa254f9ec716" id="r_aaec97a82cf9856ee4e85aa254f9ec716"><td class="memItemLeft" align="right" valign="top"><a id="aaec97a82cf9856ee4e85aa254f9ec716" name="aaec97a82cf9856ee4e85aa254f9ec716"></a>
-<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNodeBitmap.html">NodeBitmap</a> &amp;&amp;) noexcept=default</td></tr>
 <tr class="memdesc:aaec97a82cf9856ee4e85aa254f9ec716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
 <tr class="separator:aaec97a82cf9856ee4e85aa254f9ec716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fadde7c7f89b0a425c292146740a3ea" id="r_a4fadde7c7f89b0a425c292146740a3ea"><td class="memItemLeft" align="right" valign="top"><a id="a4fadde7c7f89b0a425c292146740a3ea" name="a4fadde7c7f89b0a425c292146740a3ea"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="memdesc:a4fadde7c7f89b0a425c292146740a3ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invoke the implementation's clear method, wiping it out and freeing memory. <br /></td></tr>
 <tr class="separator:a4fadde7c7f89b0a425c292146740a3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:a130de0140e90adb85c2b26f12574c7a8" id="r_a130de0140e90adb85c2b26f12574c7a8"><td class="memItemLeft" align="right" valign="top"><a id="a130de0140e90adb85c2b26f12574c7a8" name="a130de0140e90adb85c2b26f12574c7a8"></a>
-<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">BackendType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_impl</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const BackendType &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_impl</b> () const</td></tr>
 <tr class="memdesc:a130de0140e90adb85c2b26f12574c7a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly reference to the implementation object. <br /></td></tr>
 <tr class="separator:a130de0140e90adb85c2b26f12574c7a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13927112bebae98e3670a9e5c826d7ef" id="r_a13927112bebae98e3670a9e5c826d7ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">auto</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a13927112bebae98e3670a9e5c826d7ef">get_map</a> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a13927112bebae98e3670a9e5c826d7ef" id="r_a13927112bebae98e3670a9e5c826d7ef"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#a13927112bebae98e3670a9e5c826d7ef">get_map</a> () const</td></tr>
 <tr class="memdesc:a13927112bebae98e3670a9e5c826d7ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly reference to the implementation's map.  <br /></td></tr>
 <tr class="separator:a13927112bebae98e3670a9e5c826d7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3bfa8a7cc79fc108ec01d055eeda0a3" id="r_ad3bfa8a7cc79fc108ec01d055eeda0a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ad3bfa8a7cc79fc108ec01d055eeda0a3">st_equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:ad3bfa8a7cc79fc108ec01d055eeda0a3" id="r_ad3bfa8a7cc79fc108ec01d055eeda0a3"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeBitmap.html#ad3bfa8a7cc79fc108ec01d055eeda0a3">st_equal</a> (const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;first, const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;second, std::string *err=nullptr)</td></tr>
 <tr class="memdesc:ad3bfa8a7cc79fc108ec01d055eeda0a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two BackendTypes' internals and return true if identical.  <br /></td></tr>
 <tr class="separator:ad3bfa8a7cc79fc108ec01d055eeda0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:abfe0b96e56303ac52257f1c02b97bc7d" id="r_abfe0b96e56303ac52257f1c02b97bc7d"><td class="memItemLeft" align="right" valign="top"><a id="abfe0b96e56303ac52257f1c02b97bc7d" name="abfe0b96e56303ac52257f1c02b97bc7d"></a>
-<a class="el" href="classNode.html">BackendType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_impl</b></td></tr>
+BackendType&#160;</td><td class="memItemRight" valign="bottom"><b>_impl</b></td></tr>
 <tr class="memdesc:abfe0b96e56303ac52257f1c02b97bc7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The static implementation object for this facade. <br /></td></tr>
 <tr class="separator:abfe0b96e56303ac52257f1c02b97bc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a> = FlatHashBitmapImpl&lt;T&gt;&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType = FlatHashBitmapImpl&lt;T&gt;&gt;<br />
 class NodeBitmap&lt; T, BackendType &gt;</div><p>The <a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a> facade. Currently, only one implementation exists and is the default. </p>
 <dl class="section note"><dt>Note</dt><dd>This class follows CRoaring techniques, including half-open vs closed variants and such. Pay attention. </dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
     <tr><td class="paramname">BackendType</td><td>The implementation to use. Currently only <code><a class="el" href="classFlatHashBitmapImpl.html" title="An implementation of the roaring bitmap for our NodeBitmap, using an Asbeil flat hashmap.">FlatHashBitmapImpl</a></code> exists and is the default. </td></tr>
   </table>
   </dd>
@@ -229,15 +229,15 @@ class NodeBitmap&lt; T, BackendType &gt;</div><p>The <a class="el" href="classNo
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::add_many </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::add_many </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">size_t</a>&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>count</em>, </td>
         </tr>
         <tr>
@@ -276,21 +276,21 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::add_range </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::add_range </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>end</em>&#160;</td>
         </tr>
         <tr>
@@ -317,21 +317,21 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::add_range_closed </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::add_range_closed </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>end</em>&#160;</td>
         </tr>
         <tr>
@@ -358,13 +358,13 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::cardinality </td>
+          <td class="memname">T <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::cardinality </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -388,15 +388,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::contains </td>
+          <td class="memname">bool <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::contains </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -425,13 +425,13 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">size_t</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::deep_size </td>
+          <td class="memname">size_t <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::deep_size </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -456,13 +456,13 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::deserialize </td>
+          <td class="memname">bool <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::deserialize </td>
           <td>(</td>
           <td class="paramtype">std::istream &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -471,7 +471,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -506,22 +506,22 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::equal </td>
+          <td class="memname">bool <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -537,7 +537,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare another bitmap of <code>BackendType</code> to this one. </p>
-<p>This is a member helper which simply forwards to <code><a class="el" href="classNode.html#a17282dcd2faed3e704e04be5c08dbaf3" title="Compare two Nodes&#39; specific internals and return true if identical.">BackendType::st_equal()</a></code>.</p>
+<p>This is a member helper which simply forwards to <code>BackendType::st_equal()</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">second</td><td>The second bitmap to compare against this. </td></tr>
@@ -555,15 +555,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
+template&lt;typename Func &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_value </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::for_each_value </td>
           <td>(</td>
           <td class="paramtype">ForEachPolicy&#160;</td>
           <td class="paramname"><em>policy</em>, </td>
@@ -571,7 +571,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
+          <td class="paramtype">Func &amp;&amp;&#160;</td>
           <td class="paramname"><em>callback</em>&#160;</td>
         </tr>
         <tr>
@@ -589,8 +589,8 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 
 <p>A for-each iterator returning each value in the bitmap to <code>callback</code>. </p>
 <p>This method uses <code>for_each_value_with_tls</code> when TLS storage isn't needed. It applies <code>callback</code> to all values.</p>
-<p>Callback must have this signature: <code>(const T&amp; value)</code> Return type must be <code>ForEachSignal</code>.</p>
-<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>Callback must have this signature: <code>(T&amp; value)</code>. Return type must be <code>ForEachSignal</code>.</p>
+<p>The ref (<code>T&amp;</code>) prevents <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code> by hoisting the internals and reconstituting the value on each iteration. This means the caller is free to modify the value at-will without affecting iteration or causing alloc() storms.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -600,7 +600,7 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">for_each_policy.hpp</a>. </td></tr>
+    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See for_each_policy.hpp. </td></tr>
     <tr><td class="paramname">callback</td><td>Method to invoke on each value. Must return a <code>ForEachSignal</code>. </td></tr>
   </table>
   </dd>
@@ -614,15 +614,15 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> , <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">TLS_Type</a> &gt; </div>
+template&lt;typename Func , typename TLS_Type &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::for_each_value_with_tls </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::for_each_value_with_tls </td>
           <td>(</td>
           <td class="paramtype">ForEachPolicy&#160;</td>
           <td class="paramname"><em>policy</em>, </td>
@@ -630,13 +630,13 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classNode.html">TLS_Type</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; TLS_Type &gt; &amp;&#160;</td>
           <td class="paramname"><em>tls</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
+          <td class="paramtype">Func &amp;&amp;&#160;</td>
           <td class="paramname"><em>callback</em>&#160;</td>
         </tr>
         <tr>
@@ -654,9 +654,10 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 
 <p>A for-each iterator allowing callbacks with thread-local storage for transformation. </p>
 <p>Applies <code>callback</code> to all values according to the ForEachPolicy (serial or parallel) requested. When serial, order is guaranteed.</p>
-<p>Callback must have this signature: <code>(const T&amp; value, TLS_Type&amp; tls)</code>. Return type must be <code>ForEachSignal</code>.</p>
-<p>The const and ref prevent <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code>. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.</p>
+<p>Callback must have this signature: <code>(T&amp; value, TLS_Type&amp; tls)</code>. Return type must be <code>ForEachSignal</code>.</p>
+<p>The ref (<code>T&amp;</code>) prevents <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> allocations when <code>T</code> is an <code>mpz_class</code> by hoisting the internals and reconstituting the value on each iteration. This means the caller is free to modify the value at-will without affecting iteration or causing alloc() storms.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Caller may NOT modify this bitmap while iterating! It relies on CRoaring's iterators and internal structures, which are invalidated upon changes.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Despite its parallel nature, this iterator makes a strong guarantee that all threads will synchronize within a 2^32 space (roughly 4 billion range). The <code>OMP for</code> loop operates over the high-low containers within a single prefix. OMP has an implicit barrier at the end of each loop. No thread may begin working on the next prefix until the current one is fully exhausted.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Func</td><td>A function signature defined to match <code>callback</code>. </td></tr>
@@ -666,8 +667,8 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">for_each_policy.hpp</a>. </td></tr>
-    <tr><td class="paramname">tls</td><td>A vector to store thread-local data in during callbacks. This method WILL call <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">tls.resize()</a></code> if the number of available threads reported by <code>omp_get_max_threads()</code> exceeds <code><a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">tls.capacity()</a></code>. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-will in caller's <code>callback</code>. </td></tr>
+    <tr><td class="paramname">policy</td><td>The desired policy (currently either Serial or Parallel) for processing. See for_each_policy.hpp. </td></tr>
+    <tr><td class="paramname">tls</td><td>A vector to store thread-local data in during callbacks. This method WILL call <code>tls.resize()</code> if the number of available threads reported by <code>omp_get_max_threads()</code> exceeds <code>tls.capacity()</code>. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-will in caller's <code>callback</code>. </td></tr>
     <tr><td class="paramname">callback</td><td>Method to invoke on each value. Must return a <code>ForEachSignal</code>. </td></tr>
   </table>
   </dd>
@@ -681,13 +682,13 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">auto</a> &amp; <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::get_map </td>
+          <td class="memname">const auto &amp; <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::get_map </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -711,15 +712,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::merge </td>
+          <td class="memname">void <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::merge </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td>
           <td class="paramname"><em>src</em></td><td>)</td>
           <td></td>
         </tr>
@@ -747,15 +748,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp; <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;<a class="el" href="classNode.html">::operator</a>|= </td>
+          <td class="memname"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp; <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::operator|= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td>
           <td class="paramname"><em>src</em></td><td>)</td>
           <td></td>
         </tr>
@@ -779,13 +780,13 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::serialize </td>
+          <td class="memname">bool <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::serialize </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
           <td class="paramname"><em>out</em>, </td>
@@ -794,7 +795,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -813,7 +814,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <p>Serialization happens in this order:</p><ol type="1">
 <li>Implementation-specific items.</li>
 </ol>
-<dl class="section note"><dt>Note</dt><dd>Since only one implemention exists, all work is handed off to it. <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">I.e</a>.: there's no generalized data to control. </dd>
+<dl class="section note"><dt>Note</dt><dd>Since only one implemention exists, all work is handed off to it. I.e.: there's no generalized data to control. </dd>
 <dd>
 This method does not throw. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -833,13 +834,13 @@ This method does not throw. </dd></dl>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">size_t</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::shrink_to_fit </td>
+          <td class="memname">size_t <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::shrink_to_fit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -864,28 +865,28 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, <a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">BackendType</a>  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename BackendType  = FlatHashBitmapImpl&lt;T&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt;::st_equal </td>
+          <td class="memname">static bool <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt;::st_equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td>
           <td class="paramname"><em>first</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, <a class="el" href="classNode.html">BackendType</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T, BackendType &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

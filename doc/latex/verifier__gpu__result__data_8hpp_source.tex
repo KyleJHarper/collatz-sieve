@@ -1,0 +1,23 @@
+\doxysection{verifier\+\_\+gpu\+\_\+result\+\_\+data.\+hpp}
+\hypertarget{verifier__gpu__result__data_8hpp_source}{}\label{verifier__gpu__result__data_8hpp_source}\index{src/collatz/verifier\_gpu\_result\_data.hpp@{src/collatz/verifier\_gpu\_result\_data.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}abi.hpp"{}}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{struct\ }\textcolor{keyword}{alignas}(ABI::CACHE\_LINE\_SIZE)\ \mbox{\hyperlink{structGPUVerifierResultData}{GPUVerifierResultData}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ uint32\_t\ \mbox{\hyperlink{structGPUVerifierResultData_a1eeb5a993cbeb15b3dd830174b85cb59}{MAX\_OVERFLOW}}\ =\ 4096;\ \ \ }
+\DoxyCodeLine{00013\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}{overflow\_count}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00014\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structGPUVerifierResultData_a5fe2daa1198f0b0a671071b87f9a5eab}{overflow\_indexes}}[\mbox{\hyperlink{structGPUVerifierResultData_a1eeb5a993cbeb15b3dd830174b85cb59}{MAX\_OVERFLOW}}]\ =\ \{\};\ \ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structGPUVerifierResultData_a4bc7cffaf8622c2b9c5479263abc5569}{overflow\_exceeded}}\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structGPUVerifierResultData_a5121379f77a29fc889997c2b54bcf907}{reset}}()\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}{overflow\_count}}\ =\ 0;}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structGPUVerifierResultData_a4bc7cffaf8622c2b9c5479263abc5569}{overflow\_exceeded}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \};}
+
+\end{DoxyCode}

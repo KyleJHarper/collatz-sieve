@@ -58,6 +58,24 @@ in the following areas:
 Literally this:
 
 ```
+<run cmake to build programs, or use rebuild.sh>
+
+# Build a level 32 tree.
+bin/tree_builder -l 32
+
+# Execute the verifier using the tree.  Verify up to 2^50 using the cpu (-c).
+bin/verifier -t data/implicit_l32_64bit_ivm.htree.zstd -c -e 1125899906842624
+
+# Use -d if you want to see detailed metrics.
+bin/verifier -t data/implicit_l32_64bit_ivm.htree.zstd -c -e 1125899906842624 -d
+
+# Use -g instead of -c if you want to use a supported NVidia GPU.
+bin/verifier -t data/implicit_l32_64bit_ivm.htree.zstd -g -e 1125899906842624
+```
+
+Or, if you want to leverage the API in your own program, it's as easy as this:
+
+```
 #include "collatz/binary_tree.hpp"
 #include "collatz/collatz.hpp"
 
@@ -219,18 +237,18 @@ relationship between the CPU and GPU with a 1:1 ratio.  This hammers the CPU and
 In reality, the tree's for-each method is just iterating over a `NodeBitmap` repeatedly with a scaling factor and a multiplier in
 the background, bumping values forward in the subtrees of each surviving leaf node.  Therefore, the `GPUVerifier` fetches the
 `NodeBitmap` directly from the tree, iterates it repeatedly, and handles the scaling factors and multipliers in lock-step with the
-GPU kernel(s).  Essentially, this lets you change the ratio from `1:1` to `1:scaling_factor`, garnering more work done per kernel
+GPU kernel(s).  Essentially, this lets you change the ratio from `1:1` to `1:scales_per_run`, garnering more work done per kernel
 lauch, PCIe transfer, etc.  Bigger scaling runs equate to better GPU engagement, but reduce the responsiveness of metrics (they're
 only updated once per finished kernel).  Here are some notes specific to the `GPUVerifier`:
 
 * GPU Memory
   * Is pinned by the host.  If you target 20GB of VRAM, you'll need 20GB of free host memory for Cuda to pin. (see next)
   * Uses only the memory needed, up to 90% of free VRAM, or you can set a hard byte limit.
-* Scaling Runs
-  * Target hundreds or even thousands for best throughput.  You want the GPU slammed.
+* Scales Per Run
+  * Target hundreds, or even thousands if needed, for best throughput.  You want the GPU slammed.
   * Larger runs can overshoot your end-value the higher you set them.
   * Larger runs allows you to reduce VRAM usage (because both limit kernel launches).
-  * If you're clever, you can set scaling runs to a power-of-two that will limit overshooting end-value by much.
+  * If you're clever, you can set scales per run to a power-of-two that will limit overshooting end-value by much.
 * CPU
   * Must still iterate surviving values (leaf roots) and ship them to the GPU.  A super slow CPU will kill GPU performance.
 
@@ -252,7 +270,7 @@ range speed too.
 Space was tested up to 2^50 for these benchmarks.  The data type was `uint64_t`, which often overflows into 128-bit space (the API
 handles this transparently).  No values touch GMP (`mpz_class`).  Rates do not include the time building the tree or its value map,
 because these are reusable objects across runs via `tree.save()` and `tree.load()`.  For the `GPUVerifier` (RTX-5060 Hardware),
-`scaling_runs` was set between 250 and 500 to compensate for a slow i3-4160 CPU feeding the root values.  This gave the best
+`scales_per_run` was set between 250 and 500 to compensate for a slow i3-4160 CPU feeding the root values.  This gave the best
 representation of ideal/saturated conditions for the GPU.
 
 | Hardware        | Use IV Table | Level | Sieve    | Surviving Values per sec | Effective Range per sec |
@@ -319,9 +337,8 @@ require more instructions (limbs, chunks, etc).
 # Classes & Facades
 
 `BinaryTree` A facade which builds a tree of type `BinaryTreeMaterializedImpl` or `BinaryTreeImplicitImpl`, removing nodes and
-subtrees meeting High-Water Mark.  You may build an implicit or materialized tree directly, but you probably shouldn't.  Once
-built, the uncovered positions are provided in a vector of `Node` objects (Materialized) or a `NodeBitmap` bitmap (Implicit). As of
-version 4.0.0, the Implicit tree is the default, and you should use it.
+subtrees meeting High-Water Mark.  Once built, the uncovered positions are provided in a vector of `Node` objects (Materialized) or
+a `NodeBitmap` bitmap (Implicit). As of version 4.0.0, the Implicit tree is the default, and you should use it.
 
 `Collatz` A class which can build a sequence and give you warm-fuzzy OOP feels, but its real value is in the static members for
 efficiently processing steps, finding metadata, and so forth.
@@ -359,7 +376,7 @@ Several programs are emitted (or are written in Python).
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 | `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
 | `tree_builder`        | Working    | Builds and exports trees for easy sharing. |
-| `verifier`            | Working    | Demonstration of how to use the verifier classes (CPU and GPU). |
+| `verifier`            | Working    | Fully functional CPU and GPU verification engine with realtime stats. |
 
 # Save and Load
 

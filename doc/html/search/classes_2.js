@@ -5,5 +5,7 @@ var searchData=
   ['collatzaffinemapshortcut_2',['CollatzAffineMapShortcut',['../classCollatzAffineMapShortcut.html',1,'']]],
   ['collatzpeakrunner_3',['CollatzPeakRunner',['../classCollatzPeakRunner.html',1,'']]],
   ['collatzsequenceoverflow_4',['CollatzSequenceOverflow',['../classCollatzSequenceOverflow.html',1,'']]],
-  ['collatzsteprunner_5',['CollatzStepRunner',['../classCollatzStepRunner.html',1,'']]]
+  ['collatzsteprunner_5',['CollatzStepRunner',['../classCollatzStepRunner.html',1,'']]],
+  ['cpuverifier_6',['CPUVerifier',['../classCPUVerifier.html',1,'']]],
+  ['cudastreambuffer_7',['CudaStreamBuffer',['../classCudaStreamBuffer.html',1,'']]]
 ];

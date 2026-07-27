@@ -1,0 +1,26 @@
+\doxysection{GPU Namespace Reference}
+\hypertarget{namespaceGPU}{}\label{namespaceGPU}\index{GPU@{GPU}}
+
+
+Helper functions for \doxylink{namespaceGPU}{GPU} operations. Largely Cuda, but whatever.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceGPU_a68f1ae194ae20297066d511e43fdb9ec}\label{namespaceGPU_a68f1ae194ae20297066d511e43fdb9ec} 
+static bool {\bfseries can\+\_\+use\+\_\+gpu} ()
+\begin{DoxyCompactList}\small\item\em Simple flag to tell programs if a device is available. True if found, false otherwise. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceGPU_affa307b654eb5885f7313e245b673c7c}\label{namespaceGPU_affa307b654eb5885f7313e245b673c7c} 
+static void {\bfseries initialize\+\_\+stride\+\_\+table} ()
+\begin{DoxyCompactList}\small\item\em Initializes the affine stride table for the \doxylink{namespaceGPU}{GPU}. Safe to repeatedly call. Only one upload happens. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceGPU_aa3520daf311f42d95d0e6eac1aaa348c}\label{namespaceGPU_aa3520daf311f42d95d0e6eac1aaa348c} 
+static std\+::once\+\_\+flag {\bfseries initialize\+\_\+stride\+\_\+table\+\_\+flag}
+\begin{DoxyCompactList}\small\item\em Tracker for the affine table initialization. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Helper functions for \doxylink{namespaceGPU}{GPU} operations. Largely Cuda, but whatever. 

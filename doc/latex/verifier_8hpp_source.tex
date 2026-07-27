@@ -1,0 +1,270 @@
+\doxysection{verifier.\+hpp}
+\hypertarget{verifier_8hpp_source}{}\label{verifier_8hpp_source}\index{src/collatz/verifier.hpp@{src/collatz/verifier.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}verifier\_state.hpp"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}verifier\_metric.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}binary\_tree.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classVerifier}{Verifier}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ std::thread\ \mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classBinaryTree}{TreeType}}\ =\ \mbox{\hyperlink{classBinaryTree}{BinaryTree<T,\ BinaryTreeImplicitImpl<T>}}>;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classBinaryTree}{TreeType}}\&\ \mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00047\ \ \ \ \ T\ \mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}}\ =\ 0;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00056\ \ \ \ \ T\ \mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}}\ =\ 0;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00061\ \ \ \ \ std::atomic<VerifierState>\ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}\ =\ VerifierState::STOPPED;}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classVerifier_a3899943de03d220d4b479218c5555d32}{\_synchronization\_countdown}}\ =\ 100'000;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classVerifier_af75be4c7c25be7f3b4d46ee7a60ba51b}{\_paused\_check\_ms}}\ =\ 10;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00078\ \ \ \ \ std::chrono::time\_point<std::chrono::steady\_clock>\ \mbox{\hyperlink{classVerifier_a494b2c42b1c0897d01774a79932b058c}{\_timer\_start}}\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{structVerifierMetric}{VerifierMetric}}\ \mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_adaf48bbebfd4310100d660c7de207d77}{start\_timer}}()\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a494b2c42b1c0897d01774a79932b058c}{\_timer\_start}}\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a249becc585c1f3c80b6122b73e88d7e2}{sync\_timer}}()\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ std::chrono::time\_point<std::chrono::steady\_clock>\ now\ =\ std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}\ +=\ std::chrono::duration\_cast<std::chrono::milliseconds>(now\ -\/\ \mbox{\hyperlink{classVerifier_a494b2c42b1c0897d01774a79932b058c}{\_timer\_start}});}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a494b2c42b1c0897d01774a79932b058c}{\_timer\_start}}\ =\ now;}
+\DoxyCodeLine{00099\ \ \ \ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a76a2dc13fc257c2765b108c7b0b06a0f}{run\_executor}}()\ =\ 0;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{classVerifier_aa95a7cdd14744139f75488bc90a5100c}{Verifier}}()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classVerifier_a9325f973e0d34d8853d77be60e20b7cb}{Verifier}}(\mbox{\hyperlink{classBinaryTree}{TreeType}}\&\ tree)\ :\ \mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}}(tree)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ the\ value\ map\ has\ been\ generated.}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tree.\mbox{\hyperlink{classBinaryTree_a164d01c405d33264027aaf059b22104a}{get\_uncovered\_values}}().cardinality()\ ==\ 0)\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}You\ must\ generate\ the\ tree's\ value-\/map\ via\ generate\_value\_map()\ before\ building\ a\ verifier."{}});}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ coverage\ ratio.}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classBinaryTreeCoverage}{BinaryTreeCoverage<T>}}\&\ final\_coverage\ =\ tree.\mbox{\hyperlink{classBinaryTree_a2d79511075a9f24975969e68515be041}{get\_coverage\_map}}().at(tree.\mbox{\hyperlink{classBinaryTree_a8dafafd77fe1caa4522d79be0ed99919}{get\_level\_count}}());}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}{coverage\_ratio}}\ =\ final\_coverage.\mbox{\hyperlink{classBinaryTreeCoverage_ad9281bb08734062d12743beeb02fd334}{get\_ratio}}().get\_d();}
+\DoxyCodeLine{00128\ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{classVerifier_a204418dd5d8703bf0cb6f859c01ec0e2}{Verifier}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classVerifier}{Verifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{classVerifier}{Verifier}}\&\ \mbox{\hyperlink{classVerifier_a4c066977b8d01dbed5ea1751107eb56b}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classVerifier}{Verifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00140\ \ \ \ \ \mbox{\hyperlink{classVerifier_a61178cf0f751579f41f21fe4d25cbbbd}{Verifier}}(\mbox{\hyperlink{classVerifier}{Verifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00142\ \ \ \ \ \mbox{\hyperlink{classVerifier}{Verifier}}\&\ operator=(\mbox{\hyperlink{classVerifier}{Verifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00147\ \ \ \ \ virtual\ \string~\mbox{\hyperlink{classVerifier}{Verifier}}()\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_acquire)\ !=\ VerifierState::STOPPED)\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_ab566b25c21b52929a0e909d9a9ff4365}{stop}}();}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.joinable())\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.join();}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classBinaryTree}{TreeType}}\&\ \mbox{\hyperlink{classVerifier_ad8c7bc1ed7f7bca8b5677bb9f4d56694}{get\_tree}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}};\ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classVerifier_a6bea68a6f6f56d5797a0107b4ab981f6}{get\_start\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}};\ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_ae08412027e74ac74ab72cb4e5ea97f2d}{set\_start\_value}}(\textcolor{keyword}{const}\ T\&\ x)\ \{\ \mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}}\ =\ x;\ \}}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00179\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classVerifier_a823ac368db612eeda4a41748fd7e94d7}{get\_end\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}};\ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a3f1402a653cb4866412f1b267cc9143b}{set\_end\_value}}(\textcolor{keyword}{const}\ T\&\ x)\ \{\ \mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}}\ =\ x;\ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00189\ \ \ \ \ VerifierState\ \mbox{\hyperlink{classVerifier_a7b81ce6463ed65e8923ac8feb45dc869}{get\_state}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(m);\ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a015af34ae35da7f68945821866145de4}{enable\_max\_iv\_table}}()\ \{\ \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}}\ =\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a5912b774eb7d9d9af691be8f67c847b2}{disable\_max\_iv\_table}}()\ \{\ \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}}\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classVerifier_a4c7e4a3531fe3c0d3812e4ff4531dd6d}{is\_iv\_table\_enabled}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}};\ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classVerifier_a0eb283961e6d1eed41e98d4e6fd08616}{get\_synchronization\_countdown}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a3899943de03d220d4b479218c5555d32}{\_synchronization\_countdown}};\ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a3cbf8142364be304f6cecb6822440d45}{set\_synchronization\_countdown}}(\textcolor{keywordtype}{size\_t}\ value)\ \{\ \mbox{\hyperlink{classVerifier_a3899943de03d220d4b479218c5555d32}{\_synchronization\_countdown}}\ =\ value;\ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structVerifierMetric}{VerifierMetric}}\&\ \mbox{\hyperlink{classVerifier_ab79a281e52a02d5fc25a97eb48ac9059}{get\_metrics}}()\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a249becc585c1f3c80b6122b73e88d7e2}{sync\_timer}}();}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}};}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_ae185c2d35a707de8d1c12e6f5d3e57ae}{start}}()\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Need\ to\ check\ if\ the\ worker\ has\ already\ been\ started.}}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::RUNNING)\ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Cannot\ start\ running\ when\ the\ state\ is\ anything\ other\ than\ STOPPED.}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ !=\ VerifierState::STOPPED)\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Cannot\ call\ start()\ unless\ the\ job\ is\ in\ the\ STOPPED\ state."{}});}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Join\ the\ previous\ executor\ thread\ (if\ any)\ to\ make\ this\ re-\/entrant\ safe-\/ish.}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.joinable())\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.join();}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ metrics\ and\ time\ tracking.}}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a503d32bca1c12f637aa771fc4a882391}{reset}}();}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Change\ the\ state.}}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::RUNNING);}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fire\ up\ the\ executor\ in\ a\ thread.}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}\ =\ std::thread([\textcolor{keyword}{this}]\ \{\ \mbox{\hyperlink{classVerifier_a76a2dc13fc257c2765b108c7b0b06a0f}{run\_executor}}();\ \});}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Start\ the\ timer.}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_adaf48bbebfd4310100d660c7de207d77}{start\_timer}}();}
+\DoxyCodeLine{00264\ \ \ \ \ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00269\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_ab566b25c21b52929a0e909d9a9ff4365}{stop}}()\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ stopped\ or\ stopping,\ the\ state\ is\ already\ correct.}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPED\ ||\ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPING)\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ STOPPING\ (not\ stopped;\ only\ the\ \_worker\ can\ flag\ STOPPED).}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::STOPPING);}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ sync\ or\ stop\ the\ timer\ here.\ \ Executor\ thread\ will\ do\ that\ when\ all\ the\ child\ threads\ are\ done.}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Join\ the\ executor\ thread.\ \ Both\ \`{}start()`\ and\ the\ destructor\ have\ added\ protection\ for\ this,\ fyi.}}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.joinable())\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a64c6ac72bee4319444135a0b4b4f2fc7}{\_executor\_thread}}.join();}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a4f57bcbea79c49492e4ce82abe5efcbb}{pause}}()\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ already\ paused,\ do\ nothing.}}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::PAUSED)\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ stopped,\ exception.\ \ Cannot\ pause\ a\ stopped\ worker.}}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPED\ ||\ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPING)\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Cannot\ call\ pause()\ when\ a\ worker\ is\ STOPPED\ or\ STOPPING."{}});}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ PAUSED.\ \ Worker\ will\ read\ this\ and\ go\ to\ sleep\ eventually.}}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::PAUSED);}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sync\ the\ timer.\ \ The\ \`{}resume()`\ method\ will\ call\ \`{}start\_timer()`\ to\ reset\ it.}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a249becc585c1f3c80b6122b73e88d7e2}{sync\_timer}}();}
+\DoxyCodeLine{00305\ \ \ \ \ \}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume}}()\ \{}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ already\ running,\ do\ nothing.}}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::RUNNING)\ \{}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ stopped,\ exception.\ \ Cannot\ resume\ a\ stopped\ worker.}}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPED\ ||\ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPING)\ \{}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Cannot\ call\ resume()\ when\ a\ worker\ is\ STOPPED\ or\ STOPPING."{}});}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ RUNNING.\ \ Worker\ will\ read\ this\ and\ resume\ operation.}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::RUNNING);}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Start\ the\ timer\ again.}}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classVerifier_adaf48bbebfd4310100d660c7de207d77}{start\_timer}}();}
+\DoxyCodeLine{00326\ \ \ \ \ \}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \};}
+
+\end{DoxyCode}

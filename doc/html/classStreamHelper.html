@@ -94,43 +94,43 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0d592bc6aac52699b61768979fc8a44a" id="r_a0d592bc6aac52699b61768979fc8a44a"><td class="memItemLeft" align="right" valign="top"><a id="a0d592bc6aac52699b61768979fc8a44a" name="a0d592bc6aac52699b61768979fc8a44a"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>set_category</b> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">category</a>)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_category</b> (const std::string &amp;category)</td></tr>
 <tr class="memdesc:a0d592bc6aac52699b61768979fc8a44a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify a category name to help disinguish where you're calling from. <br /></td></tr>
 <tr class="separator:a0d592bc6aac52699b61768979fc8a44a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c88f91f30a684e8718cf3ecfca66613" id="r_a5c88f91f30a684e8718cf3ecfca66613"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a5c88f91f30a684e8718cf3ecfca66613">fail</a> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">msg</a>)</td></tr>
+<tr class="memitem:a5c88f91f30a684e8718cf3ecfca66613" id="r_a5c88f91f30a684e8718cf3ecfca66613"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a5c88f91f30a684e8718cf3ecfca66613">fail</a> (const std::string &amp;msg)</td></tr>
 <tr class="memdesc:a5c88f91f30a684e8718cf3ecfca66613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Early-exit helper. Emits a message and returns false for caller's flow-control.  <br /></td></tr>
 <tr class="separator:a5c88f91f30a684e8718cf3ecfca66613"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
-<tr class="memitem:a230aeec34408c3d89d975984f3f5b7e4" id="r_a230aeec34408c3d89d975984f3f5b7e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a230aeec34408c3d89d975984f3f5b7e4">StreamHelper</a> (std::istream *<a class="el" href="classNode.html">in</a>, std::ostream *<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:a230aeec34408c3d89d975984f3f5b7e4" id="r_a230aeec34408c3d89d975984f3f5b7e4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a230aeec34408c3d89d975984f3f5b7e4">StreamHelper</a> (std::istream *in, std::ostream *out, std::string *err=nullptr)</td></tr>
 <tr class="memdesc:a230aeec34408c3d89d975984f3f5b7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic constructor.  <br /></td></tr>
 <tr class="separator:a230aeec34408c3d89d975984f3f5b7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Integral Serialization</div></td></tr>
 <tr class="memitem:abfc9679f40161822a20dd8734af8ba20" id="r_abfc9679f40161822a20dd8734af8ba20"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:abfc9679f40161822a20dd8734af8ba20"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#abfc9679f40161822a20dd8734af8ba20">serialize_integral</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memitem:abfc9679f40161822a20dd8734af8ba20"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#abfc9679f40161822a20dd8734af8ba20">serialize_integral</a> (const T &amp;value)</td></tr>
 <tr class="memdesc:abfc9679f40161822a20dd8734af8ba20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize any supported integral of type <code>T</code>.  <br /></td></tr>
 <tr class="separator:abfc9679f40161822a20dd8734af8ba20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bef7f72a2603c25a4424a167015a2cc" id="r_a1bef7f72a2603c25a4424a167015a2cc"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:a1bef7f72a2603c25a4424a167015a2cc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a1bef7f72a2603c25a4424a167015a2cc">deserialize_integral</a> (T &amp;<a class="el" href="classNode.html">rv</a>)</td></tr>
+<tr class="memitem:a1bef7f72a2603c25a4424a167015a2cc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a1bef7f72a2603c25a4424a167015a2cc">deserialize_integral</a> (T &amp;rv)</td></tr>
 <tr class="memdesc:a1bef7f72a2603c25a4424a167015a2cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize any supported integral of type <code>T</code>.  <br /></td></tr>
 <tr class="separator:a1bef7f72a2603c25a4424a167015a2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Binary Serialization</div></td></tr>
-<tr class="memitem:a54d51dafd1d31decba126bd1f44b1ecd" id="r_a54d51dafd1d31decba126bd1f44b1ecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a54d51dafd1d31decba126bd1f44b1ecd">write_bytes</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">void</a> *<a class="el" href="classNode.html">data</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> <a class="el" href="classNode.html">size</a>)</td></tr>
+<tr class="memitem:a54d51dafd1d31decba126bd1f44b1ecd" id="r_a54d51dafd1d31decba126bd1f44b1ecd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a54d51dafd1d31decba126bd1f44b1ecd">write_bytes</a> (const void *data, const uint64_t size)</td></tr>
 <tr class="memdesc:a54d51dafd1d31decba126bd1f44b1ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic helper to write bytes from any pointer location up to <code>size</code> bytes.  <br /></td></tr>
 <tr class="separator:a54d51dafd1d31decba126bd1f44b1ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa0e0c53d4a2669cef847fd3c305f6e0" id="r_afa0e0c53d4a2669cef847fd3c305f6e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#afa0e0c53d4a2669cef847fd3c305f6e0">read_bytes</a> (<a class="el" href="classNode.html">void</a> *<a class="el" href="classNode.html">data</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a> <a class="el" href="classNode.html">size</a>)</td></tr>
+<tr class="memitem:afa0e0c53d4a2669cef847fd3c305f6e0" id="r_afa0e0c53d4a2669cef847fd3c305f6e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#afa0e0c53d4a2669cef847fd3c305f6e0">read_bytes</a> (void *data, const uint64_t size)</td></tr>
 <tr class="memdesc:afa0e0c53d4a2669cef847fd3c305f6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic helper to read bytes from any pointer location up to <code>size</code> bytes.  <br /></td></tr>
 <tr class="separator:afa0e0c53d4a2669cef847fd3c305f6e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Boolean Serialization</div></td></tr>
-<tr class="memitem:a3ecb10b3639c7ad20d1d4f92425fffd1" id="r_a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a3ecb10b3639c7ad20d1d4f92425fffd1">serialize_bool</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a> &amp;value)</td></tr>
+<tr class="memitem:a3ecb10b3639c7ad20d1d4f92425fffd1" id="r_a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a3ecb10b3639c7ad20d1d4f92425fffd1">serialize_bool</a> (const bool &amp;value)</td></tr>
 <tr class="memdesc:a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize boolean values.  <br /></td></tr>
 <tr class="separator:a3ecb10b3639c7ad20d1d4f92425fffd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85200b98bc03c8c403a2f606c82d064a" id="r_a85200b98bc03c8c403a2f606c82d064a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a85200b98bc03c8c403a2f606c82d064a">deserialize_bool</a> (<a class="el" href="classNode.html">bool</a> &amp;<a class="el" href="classNode.html">rv</a>)</td></tr>
+<tr class="memitem:a85200b98bc03c8c403a2f606c82d064a" id="r_a85200b98bc03c8c403a2f606c82d064a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a85200b98bc03c8c403a2f606c82d064a">deserialize_bool</a> (bool &amp;rv)</td></tr>
 <tr class="memdesc:a85200b98bc03c8c403a2f606c82d064a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize boolean values.  <br /></td></tr>
 <tr class="separator:a85200b98bc03c8c403a2f606c82d064a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a13c0ed516aa5177c61f19082208b9d87" id="r_a13c0ed516aa5177c61f19082208b9d87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">uint64_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a13c0ed516aa5177c61f19082208b9d87">READ_WRITE_LIMIT</a> = 1<a class="el" href="classNode.html">ULL</a> &lt;&lt; 30</td></tr>
+<tr class="memitem:a13c0ed516aa5177c61f19082208b9d87" id="r_a13c0ed516aa5177c61f19082208b9d87"><td class="memItemLeft" align="right" valign="top">static constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStreamHelper.html#a13c0ed516aa5177c61f19082208b9d87">READ_WRITE_LIMIT</a> = 1ULL &lt;&lt; 30</td></tr>
 <tr class="memdesc:a13c0ed516aa5177c61f19082208b9d87"><td class="mdescLeft">&#160;</td><td class="mdescRight"><ul>
 <li></li>
 </ul>
@@ -151,15 +151,15 @@ std::istream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_in<
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a7134f614d391b81d5f34282d38449680" id="r_a7134f614d391b81d5f34282d38449680"><td class="memItemLeft" align="right" valign="top"><a id="a7134f614d391b81d5f34282d38449680" name="a7134f614d391b81d5f34282d38449680"></a>
-std::istream *&#160;</td><td class="memItemRight" valign="bottom"><b>_in_ptr</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
+std::istream *&#160;</td><td class="memItemRight" valign="bottom"><b>_in_ptr</b> = nullptr</td></tr>
 <tr class="memdesc:a7134f614d391b81d5f34282d38449680"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the input stream from reading data. <br /></td></tr>
 <tr class="separator:a7134f614d391b81d5f34282d38449680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5640e8fb652b80991275c237ab5e268" id="r_ac5640e8fb652b80991275c237ab5e268"><td class="memItemLeft" align="right" valign="top"><a id="ac5640e8fb652b80991275c237ab5e268" name="ac5640e8fb652b80991275c237ab5e268"></a>
-std::ostream *&#160;</td><td class="memItemRight" valign="bottom"><b>_out_ptr</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
+std::ostream *&#160;</td><td class="memItemRight" valign="bottom"><b>_out_ptr</b> = nullptr</td></tr>
 <tr class="memdesc:ac5640e8fb652b80991275c237ab5e268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to the output stream when writing data. <br /></td></tr>
 <tr class="separator:ac5640e8fb652b80991275c237ab5e268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f7dd3b2fcad5d86cb50bd43ce77637e" id="r_a9f7dd3b2fcad5d86cb50bd43ce77637e"><td class="memItemLeft" align="right" valign="top"><a id="a9f7dd3b2fcad5d86cb50bd43ce77637e" name="a9f7dd3b2fcad5d86cb50bd43ce77637e"></a>
-std::string *&#160;</td><td class="memItemRight" valign="bottom"><b>_err_ptr</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
+std::string *&#160;</td><td class="memItemRight" valign="bottom"><b>_err_ptr</b> = nullptr</td></tr>
 <tr class="memdesc:a9f7dd3b2fcad5d86cb50bd43ce77637e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to an error string, where problems can be stored if found. <br /></td></tr>
 <tr class="separator:a9f7dd3b2fcad5d86cb50bd43ce77637e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ebdc930f6b9cf0aac7bab4a54336a41" id="r_a6ebdc930f6b9cf0aac7bab4a54336a41"><td class="memItemLeft" align="right" valign="top"><a id="a6ebdc930f6b9cf0aac7bab4a54336a41" name="a6ebdc930f6b9cf0aac7bab4a54336a41"></a>
@@ -196,7 +196,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_category</b> 
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -234,9 +234,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>_category</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::deserialize_bool </td>
+          <td class="memname">bool StreamHelper::deserialize_bool </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">bool</a> &amp;&#160;</td>
+          <td class="paramtype">bool &amp;&#160;</td>
           <td class="paramname"><em>rv</em></td><td>)</td>
           <td></td>
         </tr>
@@ -273,7 +273,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::deserialize_integral </td>
+          <td class="memname">bool StreamHelper::deserialize_integral </td>
           <td>(</td>
           <td class="paramtype">T &amp;&#160;</td>
           <td class="paramname"><em>rv</em></td><td>)</td>
@@ -299,7 +299,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -317,9 +317,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::fail </td>
+          <td class="memname">bool StreamHelper::fail </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>msg</em></td><td>)</td>
           <td></td>
         </tr>
@@ -353,15 +353,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::read_bytes </td>
+          <td class="memname">bool StreamHelper::read_bytes </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">void</a> *&#160;</td>
+          <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a>&#160;</td>
+          <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
@@ -400,9 +400,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_bool </td>
+          <td class="memname">bool StreamHelper::serialize_bool </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a> &amp;&#160;</td>
+          <td class="paramtype">const bool &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -439,9 +439,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::serialize_integral </td>
+          <td class="memname">bool StreamHelper::serialize_integral </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -465,7 +465,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -483,15 +483,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> StreamHelper::write_bytes </td>
+          <td class="memname">bool StreamHelper::write_bytes </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">void</a> *&#160;</td>
+          <td class="paramtype">const void *&#160;</td>
           <td class="paramname"><em>data</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">uint64_t</a>&#160;</td>
+          <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
@@ -531,7 +531,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">uint64_t</a> StreamHelper::READ_WRITE_LIMIT = 1<a class="el" href="classNode.html">ULL</a> &lt;&lt; 30</td>
+          <td class="memname">constexpr uint64_t StreamHelper::READ_WRITE_LIMIT = 1ULL &lt;&lt; 30</td>
         </tr>
       </table>
   </td>

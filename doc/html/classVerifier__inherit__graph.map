@@ -1,0 +1,7 @@
+<map id="Verifier&lt; T &gt;" name="Verifier&lt; T &gt;">
+<area shape="rect" id="Node000001" title="A base class behind the verification implementation classes. Provides the start, stop,..." alt="" coords="97,5,204,31"/>
+<area shape="rect" id="Node000002" href="$classCPUVerifier.html" title="An implementation of the Verifier class which uses local CPUs to process values." alt="" coords="5,79,139,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,42,87,80,83,76,126,38"/>
+<area shape="rect" id="Node000003" href="$classGPUVerifier.html" title="An implementation of the Verifier class which uses local GPUs to verfy survivors." alt="" coords="163,79,298,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,38,219,76,216,80,172,42"/>
+</map>

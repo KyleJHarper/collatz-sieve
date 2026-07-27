@@ -12,34 +12,34 @@ Compares integrals, booleans, and other data types, and reports differences to {
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classEqualityHelper_ace9842161b1ea58a96623ddf4a965b4a}{set\+\_\+category}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{category}})
+void \mbox{\hyperlink{classEqualityHelper_ace9842161b1ea58a96623ddf4a965b4a}{set\+\_\+category}} (const std\+::string \&category)
 \begin{DoxyCompactList}\small\item\em Specify a category name to help disinguish where you\textquotesingle{}re calling from. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{msg}})
+bool \mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}} (const std\+::string \&msg)
 \begin{DoxyCompactList}\small\item\em Early-\/exit helper. Emits a message and returns false for caller\textquotesingle{}s flow-\/control. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\+\_\+null\+\_\+agree}} (\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{b}})
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\+\_\+null\+\_\+agree}} (const T \texorpdfstring{$\ast$}{*}a, const T \texorpdfstring{$\ast$}{*}b)
 \begin{DoxyCompactList}\small\item\em Compares two pointers to ensure they either both are null or both aren\textquotesingle{}t. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_adcc98704b3d3a491b1b0878037f11db6}{integrals\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{b}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\bool \mbox{\hyperlink{classEqualityHelper_adcc98704b3d3a491b1b0878037f11db6}{integrals\+\_\+equal}} (const T \&a, const T \&b)
 \begin{DoxyCompactList}\small\item\em Compares two integrals of type {\ttfamily T}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_ab054df866a778a5a6b2344ec436cf6dd}{booleans\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{b}})
+bool \mbox{\hyperlink{classEqualityHelper_ab054df866a778a5a6b2344ec436cf6dd}{booleans\+\_\+equal}} (const bool a, const bool b)
 \begin{DoxyCompactList}\small\item\em Compares two booleans. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_a011440cc5d056668b5ae741f28f5c61e}{strings\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{b}})
+bool \mbox{\hyperlink{classEqualityHelper_a011440cc5d056668b5ae741f28f5c61e}{strings\+\_\+equal}} (const std\+::string \&a, const std\+::string \&b)
 \begin{DoxyCompactList}\small\item\em Compares two strings. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_ab7f7e02d5dbda05bf8f01db09a3a370a}{same\+\_\+address}} (\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{b}})
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{classEqualityHelper_ab7f7e02d5dbda05bf8f01db09a3a370a}{same\+\_\+address}} (const T \texorpdfstring{$\ast$}{*}a, const T \texorpdfstring{$\ast$}{*}b)
 \begin{DoxyCompactList}\small\item\em Compares two pointers to see if they point to the same address. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ }\\\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{a}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{b}})
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}} (const T \&a, const T \&b)
 \begin{DoxyCompactList}\small\item\em Generic equality comparison. Will attempt to deduce type T to perform the correct function from above. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classEqualityHelper_a909d5ed9fcabe5905343671ea8d6aa84}\label{classEqualityHelper_a909d5ed9fcabe5905343671ea8d6aa84} 
-{\bfseries Equality\+Helper} (std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+{\bfseries Equality\+Helper} (std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Constructor simply connects caller\textquotesingle{}s error string to this member, if any. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a}\label{classEqualityHelper_a7cec008ddd3c1572115e987056a7ba1a} 
-std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = \mbox{\hyperlink{classNode}{nullptr}}
+std\+::string \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+err\+\_\+ptr} = nullptr
 \begin{DoxyCompactList}\small\item\em The error pointer to write errors to. Optional. \end{DoxyCompactList}\item 
 \Hypertarget{classEqualityHelper_ae25fb0d3123c33444a667c880945bf27}\label{classEqualityHelper_ae25fb0d3123c33444a667c880945bf27} 
 std\+::string {\bfseries \+\_\+category} = "{}Uncategorized"{}
@@ -56,7 +56,7 @@ This class exists to help compare two pieces of data and expects them to be iden
 \index{EqualityHelper@{EqualityHelper}!booleans\_equal@{booleans\_equal}}
 \index{booleans\_equal@{booleans\_equal}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{booleans\_equal()}{booleans\_equal()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::booleans\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}}}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Equality\+Helper\+::booleans\+\_\+equal (\begin{DoxyParamCaption}\item[{const bool}]{a,  }\item[{const bool}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -76,8 +76,8 @@ A boolean indicating success or failure. Do not discard.
 \index{EqualityHelper@{EqualityHelper}!equal@{equal}}
 \index{equal@{equal}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{equal()}{equal()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ \\
-\mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Equality\+Helper\+::equal (\begin{DoxyParamCaption}\item[{const T \&}]{a,  }\item[{const T \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -105,7 +105,7 @@ A boolean indicating success or failure. Do not discard.
 \index{EqualityHelper@{EqualityHelper}!fail@{fail}}
 \index{fail@{fail}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{fail()}{fail()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::fail (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Equality\+Helper\+::fail (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{msg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -124,7 +124,7 @@ Always false. Do not discard.
 \index{integrals\_equal@{integrals\_equal}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{integrals\_equal()}{integrals\_equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::integrals\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool Equality\+Helper\+::integrals\+\_\+equal (\begin{DoxyParamCaption}\item[{const T \&}]{a,  }\item[{const T \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -139,7 +139,7 @@ Compares two integrals of type {\ttfamily T}.
 \end{DoxyParams}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyReturn}{Returns}
@@ -149,8 +149,8 @@ A boolean indicating success or failure. Do not discard.
 \index{EqualityHelper@{EqualityHelper}!pointers\_null\_agree@{pointers\_null\_agree}}
 \index{pointers\_null\_agree@{pointers\_null\_agree}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{pointers\_null\_agree()}{pointers\_null\_agree()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ \\
-\mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::pointers\+\_\+null\+\_\+agree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Equality\+Helper\+::pointers\+\_\+null\+\_\+agree (\begin{DoxyParamCaption}\item[{const T \texorpdfstring{$\ast$}{*}}]{a,  }\item[{const T \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -175,8 +175,8 @@ A boolean indicating success or failure. Do not discard.
 \index{EqualityHelper@{EqualityHelper}!same\_address@{same\_address}}
 \index{same\_address@{same\_address}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{same\_address()}{same\_address()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ \\
-\mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::same\+\_\+address (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} T \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Equality\+Helper\+::same\+\_\+address (\begin{DoxyParamCaption}\item[{const T \texorpdfstring{$\ast$}{*}}]{a,  }\item[{const T \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -201,7 +201,7 @@ A boolean indicating success or failure. Do not discard.
 \index{EqualityHelper@{EqualityHelper}!set\_category@{set\_category}}
 \index{set\_category@{set\_category}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{set\_category()}{set\_category()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{void}} Equality\+Helper\+::set\+\_\+category (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{category }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void Equality\+Helper\+::set\+\_\+category (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{category }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -216,7 +216,7 @@ Specify a category name to help disinguish where you\textquotesingle{}re calling
 \index{EqualityHelper@{EqualityHelper}!strings\_equal@{strings\_equal}}
 \index{strings\_equal@{strings\_equal}!EqualityHelper@{EqualityHelper}}
 \doxysubsubsection{\texorpdfstring{strings\_equal()}{strings\_equal()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{bool}} Equality\+Helper\+::strings\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{a,  }\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily bool Equality\+Helper\+::strings\+\_\+equal (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{a,  }\item[{const std\+::string \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 

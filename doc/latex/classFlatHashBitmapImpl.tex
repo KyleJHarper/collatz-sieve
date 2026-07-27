@@ -13,136 +13,136 @@ An implementation of the roaring bitmap for our \doxylink{classNodeBitmap}{Node\
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_adc337572016f8d469f8e8adea8695f63}\label{classFlatHashBitmapImpl_adc337572016f8d469f8e8adea8695f63} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries has\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}}) \mbox{\hyperlink{classNode}{const}}
+void {\bfseries has\+\_\+prefix\+\_\+key} (const \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&prefix) const
 \begin{DoxyCompactList}\small\item\em Tests a key for presence. Returns true if found, false otherwise. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3}\label{classFlatHashBitmapImpl_a675c7dbc81e008f378536f9809fd9ae3} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add} (\mbox{\hyperlink{classNode}{const}} T \&value)
+void {\bfseries add} (const T \&value)
 \begin{DoxyCompactList}\small\item\em Add a value to the bitmap. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\+\_\+range}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+void \mbox{\hyperlink{classFlatHashBitmapImpl_ad4b1c9a289023fbb3eebda065bf31d98}{add\+\_\+range}} (const T \&start, const T \&end)
 \begin{DoxyCompactList}\small\item\em Add a contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}{add\+\_\+range\+\_\+closed}} (\mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{start}}, \mbox{\hyperlink{classNode}{const}} T \&\mbox{\hyperlink{classNode}{end}})
+void \mbox{\hyperlink{classFlatHashBitmapImpl_a3618ab7ecddee39508dfa5e0fa85ed3a}{add\+\_\+range\+\_\+closed}} (const T \&start, const T \&end)
 \begin{DoxyCompactList}\small\item\em Add a closed, contiguous range of values using the most optimized approach. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_adf3a18e64b3561f027308ffd20546436}{add\+\_\+many}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{count}}, T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{values}})
+void \mbox{\hyperlink{classFlatHashBitmapImpl_adf3a18e64b3561f027308ffd20546436}{add\+\_\+many}} (const size\+\_\+t count, T \texorpdfstring{$\ast$}{*}values)
 \begin{DoxyCompactList}\small\item\em Adds many sparse values at once. May span prefixes. Order not required. Impl will sort for you. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_aeb122440ba5ffc98268c6e6cd68fc6e0}{add\+\_\+many\+\_\+with\+\_\+prefix}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{count}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{suffixes}})
+void \mbox{\hyperlink{classFlatHashBitmapImpl_aeb122440ba5ffc98268c6e6cd68fc6e0}{add\+\_\+many\+\_\+with\+\_\+prefix}} (const \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&prefix, const size\+\_\+t count, const \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}suffixes)
 \begin{DoxyCompactList}\small\item\em Adds all {\ttfamily suffixes} to the bitmap matching a given prefix. Will add the prefix if it\textquotesingle{}s missing. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}{contains}} (\mbox{\hyperlink{classNode}{const}} T \&value) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl_a1c51b9c133a5a0f12c280c254021b6bc}{contains}} (const T \&value) const
 \begin{DoxyCompactList}\small\item\em Check for a value to exist (be "{}on"{}) in the bitmap. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}\label{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries remove} (\mbox{\hyperlink{classNode}{const}} T \&value)
+void {\bfseries remove} (const T \&value)
 \begin{DoxyCompactList}\small\item\em Removes an item from the bitmap. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a8c1a4fc3ce704e0f0b51b24de3b31358}\label{classFlatHashBitmapImpl_a8c1a4fc3ce704e0f0b51b24de3b31358} 
-T {\bfseries minimum} () \mbox{\hyperlink{classNode}{const}}
+T {\bfseries minimum} () const
 \begin{DoxyCompactList}\small\item\em Returns the smallest value in the \doxylink{classNodeBitmap}{Node\+Bitmap}. Throws exception if empty. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a03aca565988d398252a6a61749abfdb2}\label{classFlatHashBitmapImpl_a03aca565988d398252a6a61749abfdb2} 
-T {\bfseries maximum} () \mbox{\hyperlink{classNode}{const}}
+T {\bfseries maximum} () const
 \begin{DoxyCompactList}\small\item\em Returns the largest value in the \doxylink{classNodeBitmap}{Node\+Bitmap}. Throws exception if empty. \end{DoxyCompactList}\item 
-T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{cardinality}} () \mbox{\hyperlink{classNode}{const}}
+T \mbox{\hyperlink{classFlatHashBitmapImpl_ac510d9024acc4c870faeafead009a4a0}{cardinality}} () const
 \begin{DoxyCompactList}\small\item\em Calculate the cardinality (count) of nodes turned "{}on"{}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a3774f986513e5a3ef07765d8fa2463f7}\label{classFlatHashBitmapImpl_a3774f986513e5a3ef07765d8fa2463f7} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries empty} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries empty} () const
 \begin{DoxyCompactList}\small\item\em Returns true if the bitmap is empty, false otherwise. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+void \mbox{\hyperlink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge}} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&src)
 \begin{DoxyCompactList}\small\item\em Merge (bitwise OR) another {\ttfamily \doxylink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} into this one. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& \mbox{\hyperlink{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}{operator\texorpdfstring{$\vert$}{|}=}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& \mbox{\hyperlink{classFlatHashBitmapImpl_a6d17b722dad3ff9425d385864b0f6ea9}{operator\texorpdfstring{$\vert$}{|}=}} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&src)
 \begin{DoxyCompactList}\small\item\em An opertor which calls {\ttfamily \doxylink{classFlatHashBitmapImpl_a635f6a5d2c6ceb6ad7dfbf15674d10dc}{merge()}}. This is a convenience to do\+: {\ttfamily my\+\_\+bitmap \texorpdfstring{$\vert$}{|}= another\+\_\+bitmap}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de}\label{classFlatHashBitmapImpl_a7b5ac0521d4bf72a45a0292bfdcd83de} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries clone} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{src}})
+void {\bfseries clone} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&src)
 \begin{DoxyCompactList}\small\item\em Copy source bitmap and metadata into self, making an exact copy. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d}{optimize}} ()
+void \mbox{\hyperlink{classFlatHashBitmapImpl_aaab501acf3cc8a5e4abf2c1986a8ab5d}{optimize}} ()
 \begin{DoxyCompactList}\small\item\em Calls the internal run\+Optimize() for each roaring map, which is an RLE analysis and/or compaction task. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96}{shrink\+\_\+to\+\_\+fit}} ()
+size\+\_\+t \mbox{\hyperlink{classFlatHashBitmapImpl_aeae44b9364578be243caf55b8b97af96}{shrink\+\_\+to\+\_\+fit}} ()
 \begin{DoxyCompactList}\small\item\em Calls the shrink\+To\+Fit() method for each bitmap and sums them. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff}{deep\+\_\+size}} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t \mbox{\hyperlink{classFlatHashBitmapImpl_adff19f68d7a0515dd5c3e8a904f6f4ff}{deep\+\_\+size}} () const
 \begin{DoxyCompactList}\small\item\em Calculate the size of this data structure as closely as possible. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl_a663b17bbbc4c7255650591a3fc1b37db}{equal}} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Compare another bitmap to this one. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize}} (std\+::ostream \&out, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Serialize the bitmap specifics of this object for export. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+bool \mbox{\hyperlink{classFlatHashBitmapImpl_aaa3c1d42b7639e6bc6eb68fcd1906c2c}{deserialize}} (std\+::istream \&in, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classFlatHashBitmapImpl_af9f219fb1eb8102edc1434c6f2b75bb8}{serialize()}}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_add7db14c752746e25a60ccc7bf74c1f1}{for\+\_\+each\+\_\+value}} (For\+Each\+Policy \mbox{\hyperlink{classNode}{policy}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
+{\footnotesize template$<$typename Func $>$ }\\void \mbox{\hyperlink{classFlatHashBitmapImpl_add7db14c752746e25a60ccc7bf74c1f1}{for\+\_\+each\+\_\+value}} (For\+Each\+Policy policy, Func \&\&callback) const
 \begin{DoxyCompactList}\small\item\em A for-\/each iterator returning each value in the bitmap to {\ttfamily callback}. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl_aa5ec11e0417f6f478d2133d252eb3302}{for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls}} (For\+Each\+Policy \mbox{\hyperlink{classNode}{policy}}, std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&\mbox{\hyperlink{classNode}{tls}}, \mbox{\hyperlink{classNode}{Func}} \&\&\mbox{\hyperlink{classNode}{callback}}) \mbox{\hyperlink{classNode}{const}}
+{\footnotesize template$<$typename Func , typename TLS\+\_\+\+Type $>$ }\\void \mbox{\hyperlink{classFlatHashBitmapImpl_aa5ec11e0417f6f478d2133d252eb3302}{for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls}} (For\+Each\+Policy policy, std\+::vector$<$ TLS\+\_\+\+Type $>$ \&tls, Func \&\&callback) const
 \begin{DoxyCompactList}\small\item\em A for-\/each iterator allowing callbacks with thread-\/local storage for transformation. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_ad351442d4426f23b4795eee8eb817005}\label{classFlatHashBitmapImpl_ad351442d4426f23b4795eee8eb817005} 
-{\bfseries Flat\+Hash\+Bitmap\+Impl} ()=\mbox{\hyperlink{classNode}{default}}
+{\bfseries Flat\+Hash\+Bitmap\+Impl} ()=default
 \begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a9ddb1fd61784b5914c261b678f91a947}\label{classFlatHashBitmapImpl_a9ddb1fd61784b5914c261b678f91a947} 
-{\bfseries Flat\+Hash\+Bitmap\+Impl} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+{\bfseries Flat\+Hash\+Bitmap\+Impl} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_ac4c310c676e1fc6b3f0f1ca8bfbb0de5}\label{classFlatHashBitmapImpl_ac4c310c676e1fc6b3f0f1ca8bfbb0de5} 
-\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \& {\bfseries operator=} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a704953f1babccee6ac3ce50783038822}\label{classFlatHashBitmapImpl_a704953f1babccee6ac3ce50783038822} 
-{\bfseries Flat\+Hash\+Bitmap\+Impl} (\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+{\bfseries Flat\+Hash\+Bitmap\+Impl} (\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a21e8803974f51ebea62bc86a61ae772a}\label{classFlatHashBitmapImpl_a21e8803974f51ebea62bc86a61ae772a} 
-\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26}\label{classFlatHashBitmapImpl_a83a230b4a005c8d503d586459548ec26} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries clear} ()
+void {\bfseries clear} ()
 \begin{DoxyCompactList}\small\item\em Removes all items from all bitmaps by clearing the entire hash object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Accessors}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be}\label{classFlatHashBitmapImpl_aa05e67f6ac161821bb4ebafb8c69c4be} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} \& {\bfseries get\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+const \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} \& {\bfseries get\+\_\+map} () const
 \begin{DoxyCompactList}\small\item\em Get a readonly reference to the internal flat map (the Abseil object). \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933}\label{classFlatHashBitmapImpl_afd7d8ba5e735cc04a8b8e84d528ae933} 
-\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$ \& {\bfseries get\+\_\+sorted\+\_\+prefixes} () \mbox{\hyperlink{classNode}{const}}
+const std\+::vector$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$ \& {\bfseries get\+\_\+sorted\+\_\+prefixes} () const
 \begin{DoxyCompactList}\small\item\em Return the underlying sorted prefixes vector. Read-\/only. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+static bool \mbox{\hyperlink{classFlatHashBitmapImpl_af327c295f2ab3ff4a95ea934126a6f2d}{st\+\_\+equal}} (const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&first, const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Compare two flat hash bitmaps\textquotesingle{} specific internals and return true if identical. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Types}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_a60172530dd984c365624dcc11fe9373d}\label{classFlatHashBitmapImpl_a60172530dd984c365624dcc11fe9373d} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries Traits} = \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries Traits} = \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}\label{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries prefix\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{Traits\+::prefix\+\_\+t}}
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries prefix\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{Traits\+::prefix\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}\label{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries suffix\+\_\+t} = Traits\+::suffix\+\_\+t
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries suffix\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{Traits\+::suffix\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81}\label{classFlatHashBitmapImpl_afb52819f6a6b186fea619b29c8815c81} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+key\+\_\+t} = Traits\+::roaring\+\_\+key\+\_\+t
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries roaring\+\_\+key\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_a24ed0ea22179b5ee2f846108591ef5de}{Traits\+::roaring\+\_\+key\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc}\label{classFlatHashBitmapImpl_a4f877e5ed15236c51ea3e1247147a5cc} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+value\+\_\+t} = Traits\+::roaring\+\_\+value\+\_\+t
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries roaring\+\_\+value\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_ae5cdfa11ee6ab20dcf940b8813229ba4}{Traits\+::roaring\+\_\+value\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac}\label{classFlatHashBitmapImpl_ae07eca3444953be2c505c0dadcc03dac} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+typecode\+\_\+t} = Traits\+::roaring\+\_\+typecode\+\_\+t
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using {\bfseries roaring\+\_\+typecode\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_a423e043154d5cd52b2be40bc63830469}{Traits\+::roaring\+\_\+typecode\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a}\label{classFlatHashBitmapImpl_aa561591eefe440a94f7467131f802b0a} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+word\+\_\+t} = Traits\+::roaring\+\_\+word\+\_\+t
-\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} = std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$ T $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}} $>$, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}} $>$ $>$
-\begin{DoxyCompactList}\small\item\em Defines a map type to help cover all necessary components of an {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+using {\bfseries roaring\+\_\+word\+\_\+t} = \mbox{\hyperlink{structBitmapKeyTraits_adb4854df15b4e1325a4bac7e28e70876}{Traits\+::roaring\+\_\+word\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Taken from {\ttfamily \doxylink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}. See \doxylink{node__bitmap__traits_8hpp_source}{node\+\_\+bitmap\+\_\+traits.\+hpp}. \end{DoxyCompactList}\item 
+using \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} = std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$ T $>$, absl\+::flat\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, roaring\+::\+Roaring $>$, absl\+::flat\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, roaring\+::\+Roaring, absl\+::\+Hash$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}} $>$ $>$
+\begin{DoxyCompactList}\small\item\em Defines a map type to help cover all necessary components of an {\ttfamily absl\+::flat\+\_\+hash\+\_\+map}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f}\label{classFlatHashBitmapImpl_ade31d22704d76417d71392c091e3a41f} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries add\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}})
+void {\bfseries add\+\_\+prefix\+\_\+key} (const \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&prefix)
 \begin{DoxyCompactList}\small\item\em Adds a prefix key to the private vector and sorts it. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f}\label{classFlatHashBitmapImpl_ad53b0568e5499c82f4ac5aac830b9d0f} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries remove\+\_\+prefix\+\_\+key} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{prefix}})
+void {\bfseries remove\+\_\+prefix\+\_\+key} (const \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&prefix)
 \begin{DoxyCompactList}\small\item\em Removes a prefix key when the associated bitmap is empty after a \doxylink{classFlatHashBitmapImpl_aca445472b059eabf40bd134c3e9d7a86}{remove()} call. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9}\label{classFlatHashBitmapImpl_a5f440cb32e17015df5550132626de4a9} 
 \mbox{\hyperlink{classFlatHashBitmapImpl_a4b5fcf5161367f41636763e14e09d2f8}{map\+\_\+t}} {\bfseries \+\_\+flat\+\_\+map}
-\begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}} typed to {\ttfamily prefix\+\_\+t} and a {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}} bitmap. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em The {\ttfamily absl\+::flat\+\_\+hash\+\_\+map} typed to {\ttfamily prefix\+\_\+t} and a {\ttfamily roaring\+::\+Roaring} bitmap. \end{DoxyCompactList}\item 
 \Hypertarget{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41}\label{classFlatHashBitmapImpl_a616e9adfdff042f600723fc0d21e1d41} 
 std\+::vector$<$ \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} $>$ {\bfseries \+\_\+sorted\+\_\+prefixes}
 \begin{DoxyCompactList}\small\item\em A synchronized list of prefixes. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -160,7 +160,7 @@ This class is an Impl, and not meant to be used directly. Use the {\ttfamily \do
 \end{DoxyNote}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -171,16 +171,16 @@ This class is an Impl, and not meant to be used directly. Use the {\ttfamily \do
 \index{map\_t@{map\_t}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{map\_t}{map\_t}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::map\+\_\+t =  std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$T$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}$>$ , \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{roaring\+::\+Roaring}}, \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}}$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}$>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}}$>$ $>$\hspace{0.3cm}{\ttfamily [private]}}
+using \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::map\+\_\+t =  std\+::conditional\+\_\+t$<$ \mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}}$<$T$>$ , absl\+::flat\+\_\+hash\+\_\+map$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, roaring\+::\+Roaring$>$ , absl\+::flat\+\_\+hash\+\_\+map$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}, roaring\+::\+Roaring, absl\+::\+Hash$<$\mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}}$>$, \mbox{\hyperlink{structGMP_1_1MpzEq}{GMP\+::\+Mpz\+Eq}}$>$ $>$\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Defines a map type to help cover all necessary components of an {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}. 
+Defines a map type to help cover all necessary components of an {\ttfamily absl\+::flat\+\_\+hash\+\_\+map}. 
 
 The following categories apply\+:
 \begin{DoxyEnumerate}
 \item When {\ttfamily T} is a fixed-\/width integral, Absl can hash it directly, so nothing special is required.
-\item When {\ttfamily T} is anything else, it\textquotesingle{}s assumed to be {\ttfamily mpz\+\_\+class}, and both {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::\+Hash}\texorpdfstring{$<$}{<}prefix\+\_\+t\texorpdfstring{$>$}{>}} and {\ttfamily Mpz\+Eq} are needed. 
+\item When {\ttfamily T} is anything else, it\textquotesingle{}s assumed to be {\ttfamily mpz\+\_\+class}, and both {\ttfamily absl\+::\+Hash\texorpdfstring{$<$}{<}prefix\+\_\+t\texorpdfstring{$>$}{>}} and {\ttfamily Mpz\+Eq} are needed. 
 \end{DoxyEnumerate}
 
 \doxysubsection{Member Function Documentation}
@@ -189,7 +189,7 @@ The following categories apply\+:
 \index{add\_many@{add\_many}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{add\_many()}{add\_many()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}}}]{count,  }\item[{T \texorpdfstring{$\ast$}{*}}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many (\begin{DoxyParamCaption}\item[{const size\+\_\+t}]{count,  }\item[{T \texorpdfstring{$\ast$}{*}}]{values }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -207,7 +207,7 @@ Adds many sparse values at once. May span prefixes. Order not required. Impl wil
 \index{add\_many\_with\_prefix@{add\_many\_with\_prefix}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{add\_many\_with\_prefix()}{add\_many\_with\_prefix()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many\+\_\+with\+\_\+prefix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&}]{prefix,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{size\+\_\+t}}}]{count,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{suffixes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+many\+\_\+with\+\_\+prefix (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl_a95225c12a859fab216043e8d06ab6269}{prefix\+\_\+t}} \&}]{prefix,  }\item[{const size\+\_\+t}]{count,  }\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl_a526bf9672fefd52a0f77021b825a6347}{suffix\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{suffixes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -225,7 +225,7 @@ Adds all {\ttfamily suffixes} to the bitmap matching a given prefix. Will add th
 \index{add\_range@{add\_range}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{add\_range()}{add\_range()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{start,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+range (\begin{DoxyParamCaption}\item[{const T \&}]{start,  }\item[{const T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -239,7 +239,7 @@ This is the Half-\/\+Open range \mbox{[}star, end). Meaning, start is included b
 \index{add\_range\_closed@{add\_range\_closed}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{add\_range\_closed()}{add\_range\_closed()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+range\+\_\+closed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{start,  }\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::add\+\_\+range\+\_\+closed (\begin{DoxyParamCaption}\item[{const T \&}]{start,  }\item[{const T \&}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -267,7 +267,7 @@ The count of "{}on"{} nodes, typed to caller\textquotesingle{}s {\ttfamily T}.
 \index{contains@{contains}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{contains()}{contains()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::contains (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::contains (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -286,7 +286,7 @@ True if present ("{}on"{}), false otherwise.
 \index{deep\_size@{deep\_size}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deep\_size()}{deep\_size()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::deep\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+size\+\_\+t \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::deep\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -303,7 +303,7 @@ The size in bytes of the object.
 \index{deserialize@{deserialize}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -329,7 +329,7 @@ A boolean indicating success or failure. Do not discard.
 \index{equal@{equal}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{equal()}{equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -352,8 +352,8 @@ True if equal, false otherwise.
 \index{for\_each\_value@{for\_each\_value}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{for\_each\_value()}{for\_each\_value()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} $>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+template$<$typename Func $>$ \\
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{Func \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -361,9 +361,9 @@ A for-\/each iterator returning each value in the bitmap to {\ttfamily callback}
 
 This method uses {\ttfamily for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls} when TLS storage isn\textquotesingle{}t needed. It applies {\ttfamily callback} to all values.
 
-Callback must have this signature\+: {\ttfamily (const T\& value)} Return type must be {\ttfamily For\+Each\+Signal}.
+Callback must have this signature\+: {\ttfamily (T\& value)} Return type must be {\ttfamily For\+Each\+Signal}.
 
-The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The ref ({\ttfamily T\&}) prevents \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class} by hoisting the internals and reconstituting the value on each iteration. This means the caller is free to modify the value at-\/will without affecting iteration or causing alloc() storms.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
@@ -375,7 +375,7 @@ Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquo
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
-{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{for\+\_\+each\+\_\+policy.\+hpp}. \\
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See for\+\_\+each\+\_\+policy.\+hpp. \\
 \hline
 {\em callback} & Method to invoke on each value. Must return a {\ttfamily For\+Each\+Signal}. \\
 \hline
@@ -385,8 +385,8 @@ Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquo
 \index{for\_each\_value\_with\_tls@{for\_each\_value\_with\_tls}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{for\_each\_value\_with\_tls()}{for\_each\_value\_with\_tls()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Func}} , \mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classNode}{TLS\+\_\+\+Type}} $>$ \&}]{tls,  }\item[{\mbox{\hyperlink{classNode}{Func}} \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+template$<$typename Func , typename TLS\+\_\+\+Type $>$ \\
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::for\+\_\+each\+\_\+value\+\_\+with\+\_\+tls (\begin{DoxyParamCaption}\item[{For\+Each\+Policy}]{policy,  }\item[{std\+::vector$<$ TLS\+\_\+\+Type $>$ \&}]{tls,  }\item[{Func \&\&}]{callback }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -394,13 +394,16 @@ A for-\/each iterator allowing callbacks with thread-\/local storage for transfo
 
 Applies {\ttfamily callback} to all values according to the For\+Each\+Policy (serial or parallel) requested. When serial, order is guaranteed.
 
-Callback must have this signature\+: {\ttfamily (const T\& value, TLS\+\_\+\+Type\& tls)}. Return type must be {\ttfamily For\+Each\+Signal}.
+Callback must have this signature\+: {\ttfamily (T\& value, TLS\+\_\+\+Type\& tls)}. Return type must be {\ttfamily For\+Each\+Signal}.
 
-The const and ref prevent \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class}. Whether caller actually reuses an object is up to them, but this method at least tries to avoid alloc() storms when reconstituting values for processing and passing them back.
+The ref ({\ttfamily T\&}) prevents \doxylink{namespaceGMP}{GMP} allocations when {\ttfamily T} is an {\ttfamily mpz\+\_\+class} by hoisting the internals and reconstituting the value on each iteration. This means the caller is free to modify the value at-\/will without affecting iteration or causing alloc() storms.
 
 \begin{DoxyWarning}{Warning}
 Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquotesingle{}s iterators and internal structures, which are invalidated upon changes.
 \end{DoxyWarning}
+\begin{DoxyNote}{Note}
+Despite its parallel nature, this iterator makes a strong guarantee that all threads will synchronize within a 2\texorpdfstring{$^\wedge$}{\string^}32 space (roughly 4 billion range). The {\ttfamily OMP for} loop operates over the high-\/low containers within a single prefix. OMP has an implicit barrier at the end of each loop. No thread may begin working on the next prefix until the current one is fully exhausted.
+\end{DoxyNote}
 
 \begin{DoxyTemplParams}{Template Parameters}
 {\em Func} & A function signature defined to match {\ttfamily callback}. \\
@@ -410,9 +413,9 @@ Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquo
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
-{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{for\+\_\+each\+\_\+policy.\+hpp}. \\
+{\em policy} & The desired policy (currently either Serial or Parallel) for processing. See for\+\_\+each\+\_\+policy.\+hpp. \\
 \hline
-{\em tls} & A vector to store thread-\/local data in during callbacks. This method WILL call {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+resize()}} if the number of available threads reported by {\ttfamily omp\+\_\+get\+\_\+max\+\_\+threads()} exceeds {\ttfamily \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{tls.\+capacity()}}. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-\/will in caller\textquotesingle{}s {\ttfamily callback}. \\
+{\em tls} & A vector to store thread-\/local data in during callbacks. This method WILL call {\ttfamily tls.\+resize()} if the number of available threads reported by {\ttfamily omp\+\_\+get\+\_\+max\+\_\+threads()} exceeds {\ttfamily tls.\+capacity()}. From there, each thread is given a slice (indexed element) of that vector. This storage may be modified at-\/will in caller\textquotesingle{}s {\ttfamily callback}. \\
 \hline
 {\em callback} & Method to invoke on each value. Must return a {\ttfamily For\+Each\+Signal}. \\
 \hline
@@ -422,7 +425,7 @@ Caller may NOT modify this bitmap while iterating! It relies on CRoaring\textquo
 \index{merge@{merge}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{merge()}{merge()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::merge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::merge (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -438,7 +441,7 @@ Merge (bitwise OR) another {\ttfamily \doxylink{classFlatHashBitmapImpl}{Flat\+H
 \index{operator\texttt{"|}=@{operator\texttt{"|}=}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator\texttt{"|}=()}{operator|=()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\mbox{\hyperlink{classNode}{\+::operator}}\texorpdfstring{$\vert$}{|}= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \& \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::operator\texorpdfstring{$\vert$}{|}= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{src }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -455,7 +458,7 @@ This object, as required by {\ttfamily operator\texorpdfstring{$\vert$}{|}=}.
 \index{optimize@{optimize}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{optimize()}{optimize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::optimize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::optimize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -469,7 +472,7 @@ Empty sets are already checked for in {\ttfamily \doxylink{classFlatHashBitmapIm
 \index{serialize@{serialize}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -501,7 +504,7 @@ A boolean indicating success or failure. Do not discard.
 \index{shrink\_to\_fit@{shrink\_to\_fit}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{shrink\_to\_fit()}{shrink\_to\_fit()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::shrink\+\_\+to\+\_\+fit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+size\+\_\+t \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::shrink\+\_\+to\+\_\+fit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -515,7 +518,7 @@ The amount of space reclaimed, because that\textquotesingle{}s what CRoaring\tex
 \index{st\_equal@{st\_equal}!FlatHashBitmapImpl$<$ T $>$@{FlatHashBitmapImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static bool \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{first,  }\item[{const \mbox{\hyperlink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 

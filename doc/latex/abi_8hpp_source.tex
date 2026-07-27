@@ -4,27 +4,47 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ }
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cxxabi.h>}}
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
-\DoxyCodeLine{00005\ }
-\DoxyCodeLine{00006\ }
-\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceABI}{ABI}}\ \{}
-\DoxyCodeLine{00012\ }
-\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ \{}
-\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ status\ =\ 0;}
-\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ demangled\ =\ abi::\_\_cxa\_demangle(name,\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ \&status);}
-\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ std::string\ result\ =\ (status\ ==\ 0\ \&\&\ demangled)\ ?\ demangled\ :\ name;}
-\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ free(demangled);}
-\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00027\ \ \ \ \ \}}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cxxabi.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceABI}{ABI}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ status\ =\ 0;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}*\ demangled\ =\ abi::\_\_cxa\_demangle(name,\ \textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr},\ \&status);}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ std::string\ result\ =\ (status\ ==\ 0\ \&\&\ demangled)\ ?\ demangled\ :\ name;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ free(demangled);}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
 \DoxyCodeLine{00030\ }
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}()\ \{}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}(\textcolor{keyword}{typeid}(T).name());}
-\DoxyCodeLine{00042\ \ \ \ \ \}}
-\DoxyCodeLine{00043\ }
-\DoxyCodeLine{00044\ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{inline}\ std::string\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}()\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}}(\textcolor{keyword}{typeid}(T).name());}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{namespaceABI_a3f380a3ac230e171fe1245b278d69a7c}{CACHE\_LINE\_SIZE}}\ =\ 64;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{constexpr}\ uint16\_t\ \mbox{\hyperlink{namespaceABI_aa5b042ab2e22f69dae0b93c7943dc04b}{MPZ\_CLASS\_BIT\_WIDTH\_ID}}\ =\ 0;}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ uint16\_t\ \mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{get\_bit\_width\_id}}()\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceABI_aa5b042ab2e22f69dae0b93c7943dc04b}{MPZ\_CLASS\_BIT\_WIDTH\_ID}};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \ \ \ \ \}}
+\DoxyCodeLine{00067\ \}}
 
 \end{DoxyCode}

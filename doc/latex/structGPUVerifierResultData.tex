@@ -1,0 +1,43 @@
+\doxysection{GPUVerifier\+Result\+Data Struct Reference}
+\hypertarget{structGPUVerifierResultData}{}\label{structGPUVerifierResultData}\index{GPUVerifierResultData@{GPUVerifierResultData}}
+
+
+Holds the result data, which is mostly overflow values/indexes for CPU verification using a larger type (e.\+g. mpz\+\_\+class).  
+
+
+
+
+{\ttfamily \#include $<$verifier\+\_\+gpu\+\_\+result\+\_\+data.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structGPUVerifierResultData_a5121379f77a29fc889997c2b54bcf907}\label{structGPUVerifierResultData_a5121379f77a29fc889997c2b54bcf907} 
+void {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Reset the counters so this can be reused. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}\label{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da} 
+uint32\+\_\+t {\bfseries overflow\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em How many items overflowed beyond the \doxylink{namespaceGPU}{GPU}\textquotesingle{}s capability. \end{DoxyCompactList}\item 
+\Hypertarget{structGPUVerifierResultData_a5fe2daa1198f0b0a671071b87f9a5eab}\label{structGPUVerifierResultData_a5fe2daa1198f0b0a671071b87f9a5eab} 
+uint32\+\_\+t {\bfseries overflow\+\_\+indexes} \mbox{[}\mbox{\hyperlink{structGPUVerifierResultData_a1eeb5a993cbeb15b3dd830174b85cb59}{MAX\+\_\+\+OVERFLOW}}\mbox{]} = \{\}
+\begin{DoxyCompactList}\small\item\em The indexes which overflowed, which are available in the host memory too. \end{DoxyCompactList}\item 
+\Hypertarget{structGPUVerifierResultData_a4bc7cffaf8622c2b9c5479263abc5569}\label{structGPUVerifierResultData_a4bc7cffaf8622c2b9c5479263abc5569} 
+bool {\bfseries overflow\+\_\+exceeded} = false
+\begin{DoxyCompactList}\small\item\em If the \doxylink{namespaceGPU}{GPU} ran out of slots, the CPU should verify the whole block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structGPUVerifierResultData_a1eeb5a993cbeb15b3dd830174b85cb59}\label{structGPUVerifierResultData_a1eeb5a993cbeb15b3dd830174b85cb59} 
+static constexpr uint32\+\_\+t {\bfseries MAX\+\_\+\+OVERFLOW} = 4096
+\begin{DoxyCompactList}\small\item\em Maximum size of the overflow table. Keeping this small reduces PCIe traffic. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Holds the result data, which is mostly overflow values/indexes for CPU verification using a larger type (e.\+g. mpz\+\_\+class). 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+gpu\+\_\+result\+\_\+data.\+hpp\end{DoxyCompactItemize}

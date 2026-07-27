@@ -13,54 +13,54 @@ Helpers to handle prefix and suffix keys for the hash map.
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}\label{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries suffix\+\_\+t} = \mbox{\hyperlink{classNode}{uint32\+\_\+t}}
+using {\bfseries suffix\+\_\+t} = uint32\+\_\+t
 \begin{DoxyCompactList}\small\item\em Suffix can be anything, potentially, but CRoaring recommends 32 bits. Hard code that. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} = std\+::conditional\+\_\+t$<$ std\+::same\+\_\+as$<$ \mbox{\hyperlink{classNode}{mpz\+\_\+class}}, T $>$, \mbox{\hyperlink{classNode}{mpz\+\_\+class}}, std\+::conditional\+\_\+t$<$(\mbox{\hyperlink{classNode}{sizeof}}(T)$<$=8), \mbox{\hyperlink{classNode}{uint32\+\_\+t}}, \mbox{\hyperlink{classNode}{uint128\+\_\+t}} $>$ $>$
+using \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} = std\+::conditional\+\_\+t$<$ std\+::same\+\_\+as$<$ mpz\+\_\+class, T $>$, mpz\+\_\+class, std\+::conditional\+\_\+t$<$(sizeof(T)$<$=8), uint32\+\_\+t, uint128\+\_\+t $>$ $>$
 \begin{DoxyCompactList}\small\item\em Prefix for a {\ttfamily \doxylink{classFlatHashBitmapImpl}{Flat\+Hash\+Bitmap\+Impl}}. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_a24ed0ea22179b5ee2f846108591ef5de}\label{structBitmapKeyTraits_a24ed0ea22179b5ee2f846108591ef5de} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+key\+\_\+t} = \mbox{\hyperlink{classNode}{uint16\+\_\+t}}
+using {\bfseries roaring\+\_\+key\+\_\+t} = uint16\+\_\+t
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s key type size is 16 bits. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_ae5cdfa11ee6ab20dcf940b8813229ba4}\label{structBitmapKeyTraits_ae5cdfa11ee6ab20dcf940b8813229ba4} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+value\+\_\+t} = \mbox{\hyperlink{classNode}{uint16\+\_\+t}}
+using {\bfseries roaring\+\_\+value\+\_\+t} = uint16\+\_\+t
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s value type size is 16 bits. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_a423e043154d5cd52b2be40bc63830469}\label{structBitmapKeyTraits_a423e043154d5cd52b2be40bc63830469} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+typecode\+\_\+t} = \mbox{\hyperlink{classNode}{uint8\+\_\+t}}
+using {\bfseries roaring\+\_\+typecode\+\_\+t} = uint8\+\_\+t
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s typecode type size is 16 bits. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_adb4854df15b4e1325a4bac7e28e70876}\label{structBitmapKeyTraits_adb4854df15b4e1325a4bac7e28e70876} 
-\mbox{\hyperlink{classNode}{using}} {\bfseries roaring\+\_\+word\+\_\+t} = \mbox{\hyperlink{classNode}{uint64\+\_\+t}}
+using {\bfseries roaring\+\_\+word\+\_\+t} = uint64\+\_\+t
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s word type size is 64 bits. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits_a2ab5ac93ce33c8011f76fc8cab231893}{get\+\_\+prefix}} (\mbox{\hyperlink{classNode}{const}} T \&value)
+static \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits_a2ab5ac93ce33c8011f76fc8cab231893}{get\+\_\+prefix}} (const T \&value)
 \begin{DoxyCompactList}\small\item\em Return the prefix for any type T. When mpz\+\_\+class, TLS. See selection for prefix\+\_\+t above. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{structBitmapKeyTraits_a8c7e17a23d2e41f2838d527e24edbd43}{get\+\_\+prefix}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \&\mbox{\hyperlink{classNode}{out}})
+static void \mbox{\hyperlink{structBitmapKeyTraits_a8c7e17a23d2e41f2838d527e24edbd43}{get\+\_\+prefix}} (const T \&value, \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \&out)
 \begin{DoxyCompactList}\small\item\em Return the prefix for any type T. When mpz\+\_\+class, TLS. See selection for prefix\+\_\+t above. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits_a0e15a1b65daf2ac4fa63e0d3deaf3a9b}{get\+\_\+suffix}} (\mbox{\hyperlink{classNode}{const}} T \&value)
+static \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits_a0e15a1b65daf2ac4fa63e0d3deaf3a9b}{get\+\_\+suffix}} (const T \&value)
 \begin{DoxyCompactList}\small\item\em Return the suffix for any type {\ttfamily T}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{structBitmapKeyTraits_a6520ffa13b6aeb1fb7ca2f1c0c1ea142}\label{structBitmapKeyTraits_a6520ffa13b6aeb1fb7ca2f1c0c1ea142} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries SUFFIX\+\_\+\+BYTES} = \mbox{\hyperlink{classNode}{sizeof}}(\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}})
+static constexpr size\+\_\+t {\bfseries SUFFIX\+\_\+\+BYTES} = sizeof(\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}})
 \begin{DoxyCompactList}\small\item\em Number of bytes in {\ttfamily suffix\+\_\+t}. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_a319eba2d881b3133e3621f3ce1a0218a}\label{structBitmapKeyTraits_a319eba2d881b3133e3621f3ce1a0218a} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries SUFFIX\+\_\+\+BITS} = \mbox{\hyperlink{classNode}{sizeof}}(\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}) \texorpdfstring{$\ast$}{*} 8
+static constexpr size\+\_\+t {\bfseries SUFFIX\+\_\+\+BITS} = sizeof(\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}) \texorpdfstring{$\ast$}{*} 8
 \begin{DoxyCompactList}\small\item\em Number of bits in {\ttfamily suffix\+\_\+t}. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_af6280e805a4eb7fe52a680bb87074a7c}\label{structBitmapKeyTraits_af6280e805a4eb7fe52a680bb87074a7c} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} {\bfseries SUFFIX\+\_\+\+MASK} = std\+::numeric\+\_\+limits$<$\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}$>$\mbox{\hyperlink{classNode}{\+::max}}()
+static constexpr \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} {\bfseries SUFFIX\+\_\+\+MASK} = std\+::numeric\+\_\+limits$<$\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}$>$\+::max()
 \begin{DoxyCompactList}\small\item\em The bitmask for {\ttfamily suffix\+\_\+t}. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_af8f3482cb20cfcd2444ac2772b9cfcb2}\label{structBitmapKeyTraits_af8f3482cb20cfcd2444ac2772b9cfcb2} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} {\bfseries SUFFIX\+\_\+\+MAX} = std\+::numeric\+\_\+limits$<$\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}$>$\mbox{\hyperlink{classNode}{\+::max}}()
+static constexpr \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} {\bfseries SUFFIX\+\_\+\+MAX} = std\+::numeric\+\_\+limits$<$\mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}}$>$\+::max()
 \begin{DoxyCompactList}\small\item\em Maximum value for {\ttfamily suffix\+\_\+t}. \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_ae6a6c2a92f61a8054e6646e12b9d46d3}\label{structBitmapKeyTraits_ae6a6c2a92f61a8054e6646e12b9d46d3} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries ROARING\+\_\+\+KEY\+\_\+\+BITS} = 16
+static constexpr size\+\_\+t {\bfseries ROARING\+\_\+\+KEY\+\_\+\+BITS} = 16
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s bit size for keys (32-\/bit version). \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_abd7ac7a0a09f35d6e7d6ef33a8fa17de}\label{structBitmapKeyTraits_abd7ac7a0a09f35d6e7d6ef33a8fa17de} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries ROARING\+\_\+\+VALUE\+\_\+\+BITS} = 16
+static constexpr size\+\_\+t {\bfseries ROARING\+\_\+\+VALUE\+\_\+\+BITS} = 16
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s bit size for values (32-\/bit version). \end{DoxyCompactList}\item 
 \Hypertarget{structBitmapKeyTraits_a1d6c0f043dfdd6dfaa57ee8b7ed5c471}\label{structBitmapKeyTraits_a1d6c0f043dfdd6dfaa57ee8b7ed5c471} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries ROARING\+\_\+\+WORD\+\_\+\+BITS} = 64
+static constexpr size\+\_\+t {\bfseries ROARING\+\_\+\+WORD\+\_\+\+BITS} = 64
 \begin{DoxyCompactList}\small\item\em CRoaring\textquotesingle{}s bit size for words. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -75,7 +75,7 @@ Helpers to handle prefix and suffix keys for the hash map.
 \index{prefix\_t@{prefix\_t}!BitmapKeyTraits$<$ T $>$@{BitmapKeyTraits$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{prefix\_t}{prefix\_t}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{using}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::prefix\+\_\+t =  std\+::conditional\+\_\+t$<$ std\+::same\+\_\+as$<$\mbox{\hyperlink{classNode}{mpz\+\_\+class}}, T$>$ , \mbox{\hyperlink{classNode}{mpz\+\_\+class}} , std\+::conditional\+\_\+t$<$ (\mbox{\hyperlink{classNode}{sizeof}}(T) $<$= 8) , \mbox{\hyperlink{classNode}{uint32\+\_\+t}} , \mbox{\hyperlink{classNode}{uint128\+\_\+t}} $>$ $>$}
+using \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::prefix\+\_\+t =  std\+::conditional\+\_\+t$<$ std\+::same\+\_\+as$<$mpz\+\_\+class, T$>$ , mpz\+\_\+class , std\+::conditional\+\_\+t$<$ (sizeof(T) $<$= 8) , uint32\+\_\+t , uint128\+\_\+t $>$ $>$}
 
 
 
@@ -94,7 +94,7 @@ Prefixes fall into these categories\+:
 \index{get\_prefix@{get\_prefix}!BitmapKeyTraits$<$ T $>$@{BitmapKeyTraits$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{get\_prefix()}{get\_prefix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+prefix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static \mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+prefix (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -113,7 +113,7 @@ The prefix for {\ttfamily value}, as a {\ttfamily prefix\+\_\+t} type.
 \index{get\_prefix@{get\_prefix}!BitmapKeyTraits$<$ T $>$@{BitmapKeyTraits$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{get\_prefix()}{get\_prefix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+prefix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static void \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+prefix (\begin{DoxyParamCaption}\item[{const T \&}]{value,  }\item[{\mbox{\hyperlink{structBitmapKeyTraits_a2a5e7e1fb6c24a2b0a61d6644f5c5b6e}{prefix\+\_\+t}} \&}]{out }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -131,7 +131,7 @@ Return the prefix for any type T. When mpz\+\_\+class, TLS. See selection for pr
 \index{get\_suffix@{get\_suffix}!BitmapKeyTraits$<$ T $>$@{BitmapKeyTraits$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{get\_suffix()}{get\_suffix()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+suffix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static \mbox{\hyperlink{structBitmapKeyTraits_ae9de767304b495420f30027f3fc78dd9}{suffix\+\_\+t}} \mbox{\hyperlink{structBitmapKeyTraits}{Bitmap\+Key\+Traits}}$<$ T $>$\+::get\+\_\+suffix (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 

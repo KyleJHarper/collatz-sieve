@@ -93,40 +93,40 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a95b32f74900f02dc8cd8ad389c0b3332" id="r_a95b32f74900f02dc8cd8ad389c0b3332"><td class="memItemLeft" align="right" valign="top"><a id="a95b32f74900f02dc8cd8ad389c0b3332" name="a95b32f74900f02dc8cd8ad389c0b3332"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deep_size</b> () <a class="el" href="classNode.html">const</a></td></tr>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>deep_size</b> () const</td></tr>
 <tr class="memdesc:a95b32f74900f02dc8cd8ad389c0b3332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply scan the object and report its size. <br /></td></tr>
 <tr class="separator:a95b32f74900f02dc8cd8ad389c0b3332"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab20855b4bc471ddb40bee98f21b12136" id="r_ab20855b4bc471ddb40bee98f21b12136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#ab20855b4bc471ddb40bee98f21b12136">equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:ab20855b4bc471ddb40bee98f21b12136" id="r_ab20855b4bc471ddb40bee98f21b12136"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#ab20855b4bc471ddb40bee98f21b12136">equal</a> (const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;second, std::string *err=nullptr) const</td></tr>
 <tr class="memdesc:ab20855b4bc471ddb40bee98f21b12136"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare another materialized tree to this one.  <br /></td></tr>
 <tr class="separator:ab20855b4bc471ddb40bee98f21b12136"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a590929d8ce4da68af03e359570f6730a" id="r_a590929d8ce4da68af03e359570f6730a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a590929d8ce4da68af03e359570f6730a">serialize</a> (std::ostream &amp;<a class="el" href="classNode.html">out</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>) <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:a590929d8ce4da68af03e359570f6730a" id="r_a590929d8ce4da68af03e359570f6730a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a590929d8ce4da68af03e359570f6730a">serialize</a> (std::ostream &amp;out, std::string *err=nullptr) const</td></tr>
 <tr class="memdesc:a590929d8ce4da68af03e359570f6730a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the materialized tree specifics of this object for export.  <br /></td></tr>
 <tr class="separator:a590929d8ce4da68af03e359570f6730a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d7c5d9d4a3626fb564bb8f16a4ab4b2" id="r_a6d7c5d9d4a3626fb564bb8f16a4ab4b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6d7c5d9d4a3626fb564bb8f16a4ab4b2">deserialize</a> (std::istream &amp;<a class="el" href="classNode.html">in</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:a6d7c5d9d4a3626fb564bb8f16a4ab4b2" id="r_a6d7c5d9d4a3626fb564bb8f16a4ab4b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6d7c5d9d4a3626fb564bb8f16a4ab4b2">deserialize</a> (std::istream &amp;in, std::string *err=nullptr)</td></tr>
 <tr class="memdesc:a6d7c5d9d4a3626fb564bb8f16a4ab4b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classBinaryTreeMaterializedImpl.html#a590929d8ce4da68af03e359570f6730a" title="Serialize the materialized tree specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
 <tr class="separator:a6d7c5d9d4a3626fb564bb8f16a4ab4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02c33923c98dafafaa8d411fced46954" id="r_a02c33923c98dafafaa8d411fced46954"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a02c33923c98dafafaa8d411fced46954">add_level</a> ()</td></tr>
+<tr class="memitem:a02c33923c98dafafaa8d411fced46954" id="r_a02c33923c98dafafaa8d411fced46954"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a02c33923c98dafafaa8d411fced46954">add_level</a> ()</td></tr>
 <tr class="memdesc:a02c33923c98dafafaa8d411fced46954"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a level to the tree.  <br /></td></tr>
 <tr class="separator:a02c33923c98dafafaa8d411fced46954"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:aaf2222a8b9879d8524b5307ef7bc92c0" id="r_aaf2222a8b9879d8524b5307ef7bc92c0"><td class="memItemLeft" align="right" valign="top"><a id="aaf2222a8b9879d8524b5307ef7bc92c0" name="aaf2222a8b9879d8524b5307ef7bc92c0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> ()=<a class="el" href="classNode.html">default</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> ()=default</td></tr>
 <tr class="memdesc:aaf2222a8b9879d8524b5307ef7bc92c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
 <tr class="separator:aaf2222a8b9879d8524b5307ef7bc92c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d5eee83ca6dfaa910d5478db8418705" id="r_a3d5eee83ca6dfaa910d5478db8418705"><td class="memItemLeft" align="right" valign="top"><a id="a3d5eee83ca6dfaa910d5478db8418705" name="a3d5eee83ca6dfaa910d5478db8418705"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> (const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a3d5eee83ca6dfaa910d5478db8418705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
 <tr class="separator:a3d5eee83ca6dfaa910d5478db8418705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabc777d2b5f116f830233dd1bd3c8be3" id="r_aabc777d2b5f116f830233dd1bd3c8be3"><td class="memItemLeft" align="right" valign="top"><a id="aabc777d2b5f116f830233dd1bd3c8be3" name="aabc777d2b5f116f830233dd1bd3c8be3"></a>
-<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;)=<a class="el" href="classNode.html">delete</a></td></tr>
+<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;)=delete</td></tr>
 <tr class="memdesc:aabc777d2b5f116f830233dd1bd3c8be3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disallow copying. <br /></td></tr>
 <tr class="separator:aabc777d2b5f116f830233dd1bd3c8be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a212839e1c0cb5f6319fce9a73568ab1d" id="r_a212839e1c0cb5f6319fce9a73568ab1d"><td class="memItemLeft" align="right" valign="top"><a id="a212839e1c0cb5f6319fce9a73568ab1d" name="a212839e1c0cb5f6319fce9a73568ab1d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> (<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryTreeMaterializedImpl</b> (<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&amp;) noexcept=default</td></tr>
 <tr class="memdesc:a212839e1c0cb5f6319fce9a73568ab1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
 <tr class="separator:a212839e1c0cb5f6319fce9a73568ab1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e458d970761d52b5df18d47e9669dcb" id="r_a7e458d970761d52b5df18d47e9669dcb"><td class="memItemLeft" align="right" valign="top"><a id="a7e458d970761d52b5df18d47e9669dcb" name="a7e458d970761d52b5df18d47e9669dcb"></a>
-<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&amp;) <a class="el" href="classNode.html">noexcept</a>=<a class="el" href="classNode.html">default</a></td></tr>
+<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a> &amp;&amp;) noexcept=default</td></tr>
 <tr class="memdesc:a7e458d970761d52b5df18d47e9669dcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moving is okay. <br /></td></tr>
 <tr class="separator:a7e458d970761d52b5df18d47e9669dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04160de8e70f8ea032add1d949611d07" id="r_a04160de8e70f8ea032add1d949611d07"><td class="memItemLeft" align="right" valign="top"><a id="a04160de8e70f8ea032add1d949611d07" name="a04160de8e70f8ea032add1d949611d07"></a>
@@ -134,113 +134,113 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a04160de8e70f8ea032add1d949611d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor will remove any ancestors and clear the level map. <br /></td></tr>
 <tr class="separator:a04160de8e70f8ea032add1d949611d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1174d6fc3a05e2a16197e6d6ebaea1e" id="r_ab1174d6fc3a05e2a16197e6d6ebaea1e"><td class="memItemLeft" align="right" valign="top"><a id="ab1174d6fc3a05e2a16197e6d6ebaea1e" name="ab1174d6fc3a05e2a16197e6d6ebaea1e"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
 <tr class="memdesc:ab1174d6fc3a05e2a16197e6d6ebaea1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset members to make this act like a new object. Mostly for <code><a class="el" href="classBinaryTreeMaterializedImpl.html#a168760c5343b669c130d033b3bc8a260" title="Initializes the object, calling reset() if already initialized.">init()</a></code>. <br /></td></tr>
 <tr class="separator:ab1174d6fc3a05e2a16197e6d6ebaea1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168760c5343b669c130d033b3bc8a260" id="r_a168760c5343b669c130d033b3bc8a260"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a168760c5343b669c130d033b3bc8a260">init</a> (level_t <a class="el" href="classNode.html">levels</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a> <a class="el" href="classNode.html">opts</a>=<a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{})</td></tr>
+<tr class="memitem:a168760c5343b669c130d033b3bc8a260" id="r_a168760c5343b669c130d033b3bc8a260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a168760c5343b669c130d033b3bc8a260">init</a> (level_t levels, const <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a> opts=<a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{})</td></tr>
 <tr class="memdesc:a168760c5343b669c130d033b3bc8a260"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the object, calling <code><a class="el" href="classBinaryTreeMaterializedImpl.html#ab1174d6fc3a05e2a16197e6d6ebaea1e" title="Reset members to make this act like a new object. Mostly for init().">reset()</a></code> if already initialized.  <br /></td></tr>
 <tr class="separator:a168760c5343b669c130d033b3bc8a260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors Common to All Trees</div></td></tr>
 <tr class="memitem:a58d626e36e2685ca316d2212fc1685db" id="r_a58d626e36e2685ca316d2212fc1685db"><td class="memItemLeft" align="right" valign="top"><a id="a58d626e36e2685ca316d2212fc1685db" name="a58d626e36e2685ca316d2212fc1685db"></a>
-TreeTypeEnum&#160;</td><td class="memItemRight" valign="bottom"><b>get_tree_type</b> () <a class="el" href="classNode.html">const</a></td></tr>
+TreeTypeEnum&#160;</td><td class="memItemRight" valign="bottom"><b>get_tree_type</b> () const</td></tr>
 <tr class="memdesc:a58d626e36e2685ca316d2212fc1685db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the tree type of this instance. <br /></td></tr>
 <tr class="separator:a58d626e36e2685ca316d2212fc1685db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa20fa5738170a49c469a8ca60833c0a8" id="r_aa20fa5738170a49c469a8ca60833c0a8"><td class="memItemLeft" align="right" valign="top"><a id="aa20fa5738170a49c469a8ca60833c0a8" name="aa20fa5738170a49c469a8ca60833c0a8"></a>
-level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+level_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_level_count</b> () const</td></tr>
 <tr class="memdesc:aa20fa5738170a49c469a8ca60833c0a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the level count. <br /></td></tr>
 <tr class="separator:aa20fa5738170a49c469a8ca60833c0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fd6088a932d4e7d9a2fd7e9c5306714" id="r_a7fd6088a932d4e7d9a2fd7e9c5306714"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a7fd6088a932d4e7d9a2fd7e9c5306714">set_level_count</a> (level_t <a class="el" href="classNode.html">level_count</a>)</td></tr>
+<tr class="memitem:a7fd6088a932d4e7d9a2fd7e9c5306714" id="r_a7fd6088a932d4e7d9a2fd7e9c5306714"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a7fd6088a932d4e7d9a2fd7e9c5306714">set_level_count</a> (level_t level_count)</td></tr>
 <tr class="memdesc:a7fd6088a932d4e7d9a2fd7e9c5306714"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the level count explicitly.  <br /></td></tr>
 <tr class="separator:a7fd6088a932d4e7d9a2fd7e9c5306714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed100575423466cc8da939decf6a4db8" id="r_aed100575423466cc8da939decf6a4db8"><td class="memItemLeft" align="right" valign="top"><a id="aed100575423466cc8da939decf6a4db8" name="aed100575423466cc8da939decf6a4db8"></a>
-<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_root_node</b> () <a class="el" href="classNode.html">const</a></td></tr>
+<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_root_node</b> () const</td></tr>
 <tr class="memdesc:aed100575423466cc8da939decf6a4db8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly pointer to the root node. <br /></td></tr>
 <tr class="separator:aed100575423466cc8da939decf6a4db8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac471a99a5ea0e22664b476f3d35c3a29" id="r_ac471a99a5ea0e22664b476f3d35c3a29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">Node</a>&lt; T &gt; *&amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#ac471a99a5ea0e22664b476f3d35c3a29">get_root_node_rw</a> ()</td></tr>
 <tr class="memdesc:ac471a99a5ea0e22664b476f3d35c3a29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the pointer to the root node.  <br /></td></tr>
 <tr class="separator:ac471a99a5ea0e22664b476f3d35c3a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a581b430bfba0bd70284ccf4b8bd21c3d" id="r_a581b430bfba0bd70284ccf4b8bd21c3d"><td class="memItemLeft" align="right" valign="top"><a id="a581b430bfba0bd70284ccf4b8bd21c3d" name="a581b430bfba0bd70284ccf4b8bd21c3d"></a>
-<a class="el" href="classNode.html">const</a> std::unordered_map&lt; level_t, <a class="el" href="classBinaryTreeCoverage.html">BinaryTreeCoverage</a>&lt; T &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_coverage_map</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const std::unordered_map&lt; level_t, <a class="el" href="classBinaryTreeCoverage.html">BinaryTreeCoverage</a>&lt; T &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_coverage_map</b> () const</td></tr>
 <tr class="memdesc:a581b430bfba0bd70284ccf4b8bd21c3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly reference to the coverage map. <br /></td></tr>
 <tr class="separator:a581b430bfba0bd70284ccf4b8bd21c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af001f547cd87327c7c68b7851bee2924" id="r_af001f547cd87327c7c68b7851bee2924"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; level_t, <a class="el" href="classBinaryTreeCoverage.html">BinaryTreeCoverage</a>&lt; T &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#af001f547cd87327c7c68b7851bee2924">get_coverage_map_rw</a> ()</td></tr>
 <tr class="memdesc:af001f547cd87327c7c68b7851bee2924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the coverage map.  <br /></td></tr>
 <tr class="separator:af001f547cd87327c7c68b7851bee2924"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afed49997977de40d9edf06e5d8d732c8" id="r_afed49997977de40d9edf06e5d8d732c8"><td class="memItemLeft" align="right" valign="top"><a id="afed49997977de40d9edf06e5d8d732c8" name="afed49997977de40d9edf06e5d8d732c8"></a>
-<a class="el" href="classNode.html">const</a> std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_ancestors</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_ancestors</b> () const</td></tr>
 <tr class="memdesc:afed49997977de40d9edf06e5d8d732c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a readonly reference to the ancestors. <br /></td></tr>
 <tr class="separator:afed49997977de40d9edf06e5d8d732c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac079b76dc0a902bfd11a0dcd386043d0" id="r_ac079b76dc0a902bfd11a0dcd386043d0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#ac079b76dc0a902bfd11a0dcd386043d0">get_ancestors_rw</a> ()</td></tr>
 <tr class="memdesc:ac079b76dc0a902bfd11a0dcd386043d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the ancestors.  <br /></td></tr>
 <tr class="separator:ac079b76dc0a902bfd11a0dcd386043d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3a1f197f8bb3e6e2cc6e69c9348b49e" id="r_ac3a1f197f8bb3e6e2cc6e69c9348b49e"><td class="memItemLeft" align="right" valign="top"><a id="ac3a1f197f8bb3e6e2cc6e69c9348b49e" name="ac3a1f197f8bb3e6e2cc6e69c9348b49e"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_preserving_ancestors</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_preserving_ancestors</b> () const</td></tr>
 <tr class="memdesc:ac3a1f197f8bb3e6e2cc6e69c9348b49e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is preserving ancestors. <br /></td></tr>
 <tr class="separator:ac3a1f197f8bb3e6e2cc6e69c9348b49e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e8ecb2d4a5cb43b3d6da051756957a1" id="r_a6e8ecb2d4a5cb43b3d6da051756957a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6e8ecb2d4a5cb43b3d6da051756957a1">set_is_preserving_ancestors</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a> value)</td></tr>
+<tr class="memitem:a6e8ecb2d4a5cb43b3d6da051756957a1" id="r_a6e8ecb2d4a5cb43b3d6da051756957a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6e8ecb2d4a5cb43b3d6da051756957a1">set_is_preserving_ancestors</a> (const bool value)</td></tr>
 <tr class="memdesc:a6e8ecb2d4a5cb43b3d6da051756957a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the flag for whether this tree is preserving ancestors.  <br /></td></tr>
 <tr class="separator:a6e8ecb2d4a5cb43b3d6da051756957a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab484f0dd4284c27a1279adcda9b7896a" id="r_ab484f0dd4284c27a1279adcda9b7896a"><td class="memItemLeft" align="right" valign="top"><a id="ab484f0dd4284c27a1279adcda9b7896a" name="ab484f0dd4284c27a1279adcda9b7896a"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_verifying_non_hwm_nodes</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_verifying_non_hwm_nodes</b> () const</td></tr>
 <tr class="memdesc:ab484f0dd4284c27a1279adcda9b7896a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is verifying non-HWM nodes. <br /></td></tr>
 <tr class="separator:ab484f0dd4284c27a1279adcda9b7896a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addb5aa85e495c5553f4c14bf80c1de14" id="r_addb5aa85e495c5553f4c14bf80c1de14"><td class="memItemLeft" align="right" valign="top"><a id="addb5aa85e495c5553f4c14bf80c1de14" name="addb5aa85e495c5553f4c14bf80c1de14"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>disable_non_hwm_node_verification</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>disable_non_hwm_node_verification</b> ()</td></tr>
 <tr class="memdesc:addb5aa85e495c5553f4c14bf80c1de14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly disable non-HWM node verification. <br /></td></tr>
 <tr class="separator:addb5aa85e495c5553f4c14bf80c1de14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae00eeefd4ada83586a23d4f6c56a0216" id="r_ae00eeefd4ada83586a23d4f6c56a0216"><td class="memItemLeft" align="right" valign="top"><a id="ae00eeefd4ada83586a23d4f6c56a0216" name="ae00eeefd4ada83586a23d4f6c56a0216"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>enable_non_hwm_node_verification</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>enable_non_hwm_node_verification</b> ()</td></tr>
 <tr class="memdesc:ae00eeefd4ada83586a23d4f6c56a0216"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly enable non-HWM node verification. <br /></td></tr>
 <tr class="separator:ae00eeefd4ada83586a23d4f6c56a0216"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a002443b7b09f817c56774ea6f33e9" id="r_ad3a002443b7b09f817c56774ea6f33e9"><td class="memItemLeft" align="right" valign="top"><a id="ad3a002443b7b09f817c56774ea6f33e9" name="ad3a002443b7b09f817c56774ea6f33e9"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () const</td></tr>
 <tr class="memdesc:ad3a002443b7b09f817c56774ea6f33e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is initialized. <br /></td></tr>
 <tr class="separator:ad3a002443b7b09f817c56774ea6f33e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a50c3a15c9d6eb009d2cce27152a3a1" id="r_a6a50c3a15c9d6eb009d2cce27152a3a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6a50c3a15c9d6eb009d2cce27152a3a1">set_is_initialized</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a> value)</td></tr>
+<tr class="memitem:a6a50c3a15c9d6eb009d2cce27152a3a1" id="r_a6a50c3a15c9d6eb009d2cce27152a3a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a6a50c3a15c9d6eb009d2cce27152a3a1">set_is_initialized</a> (const bool value)</td></tr>
 <tr class="memdesc:a6a50c3a15c9d6eb009d2cce27152a3a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the flag for whether this tree is initialized.  <br /></td></tr>
 <tr class="separator:a6a50c3a15c9d6eb009d2cce27152a3a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86e43472cb44b33e47f9e71c14a6f48" id="r_ab86e43472cb44b33e47f9e71c14a6f48"><td class="memItemLeft" align="right" valign="top"><a id="ab86e43472cb44b33e47f9e71c14a6f48" name="ab86e43472cb44b33e47f9e71c14a6f48"></a>
-<a class="el" href="classNode.html">const</a> <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_uncovered_values</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_uncovered_values</b> () const</td></tr>
 <tr class="memdesc:ab86e43472cb44b33e47f9e71c14a6f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor. <br /></td></tr>
 <tr class="separator:ab86e43472cb44b33e47f9e71c14a6f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f221baa450144c4ccb84acc4c799945" id="r_a4f221baa450144c4ccb84acc4c799945"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a4f221baa450144c4ccb84acc4c799945">get_uncovered_values_rw</a> ()</td></tr>
 <tr class="memdesc:a4f221baa450144c4ccb84acc4c799945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the uncovered values map.  <br /></td></tr>
 <tr class="separator:a4f221baa450144c4ccb84acc4c799945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa14871ccac1875447ed3a33b21ead55c" id="r_aa14871ccac1875447ed3a33b21ead55c"><td class="memItemLeft" align="right" valign="top"><a id="aa14871ccac1875447ed3a33b21ead55c" name="aa14871ccac1875447ed3a33b21ead55c"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clear_uncovered_values</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_uncovered_values</b> ()</td></tr>
 <tr class="memdesc:aa14871ccac1875447ed3a33b21ead55c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the value map. Usually for debugging. <br /></td></tr>
 <tr class="separator:aa14871ccac1875447ed3a33b21ead55c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Materialized-Only Accessors</div></td></tr>
 <tr class="memitem:a9be81844a8872159277d9ff2dac05f8c" id="r_a9be81844a8872159277d9ff2dac05f8c"><td class="memItemLeft" align="right" valign="top"><a id="a9be81844a8872159277d9ff2dac05f8c" name="a9be81844a8872159277d9ff2dac05f8c"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_materialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_materialized</b> () const</td></tr>
 <tr class="memdesc:a9be81844a8872159277d9ff2dac05f8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Responds true to <code><a class="el" href="classBinaryTreeMaterializedImpl.html#a9be81844a8872159277d9ff2dac05f8c" title="Responds true to is_materialized(), mostly for the BinaryTree facade.">is_materialized()</a></code>, mostly for the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade. <br /></td></tr>
 <tr class="separator:a9be81844a8872159277d9ff2dac05f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adde8aa871f0c8b733935a47e725acd35" id="r_adde8aa871f0c8b733935a47e725acd35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">const</a> std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#adde8aa871f0c8b733935a47e725acd35">get_level_map</a> () <a class="el" href="classNode.html">const</a></td></tr>
+<tr class="memitem:adde8aa871f0c8b733935a47e725acd35" id="r_adde8aa871f0c8b733935a47e725acd35"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#adde8aa871f0c8b733935a47e725acd35">get_level_map</a> () const</td></tr>
 <tr class="memdesc:adde8aa871f0c8b733935a47e725acd35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects.  <br /></td></tr>
 <tr class="separator:adde8aa871f0c8b733935a47e725acd35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7e90237d4579290c94581a474d8f0be" id="r_ae7e90237d4579290c94581a474d8f0be"><td class="memItemLeft" align="right" valign="top"><a id="ae7e90237d4579290c94581a474d8f0be" name="ae7e90237d4579290c94581a474d8f0be"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_hwm_nodes</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_hwm_nodes</b> () const</td></tr>
 <tr class="memdesc:ae7e90237d4579290c94581a474d8f0be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is pruning High-Water Mark nodes. <br /></td></tr>
 <tr class="separator:ae7e90237d4579290c94581a474d8f0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af04c2f128cea6d1884a43d933ddf00d8" id="r_af04c2f128cea6d1884a43d933ddf00d8"><td class="memItemLeft" align="right" valign="top"><a id="af04c2f128cea6d1884a43d933ddf00d8" name="af04c2f128cea6d1884a43d933ddf00d8"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_parent_levels</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_parent_levels</b> () const</td></tr>
 <tr class="memdesc:af04c2f128cea6d1884a43d933ddf00d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes). <br /></td></tr>
 <tr class="separator:af04c2f128cea6d1884a43d933ddf00d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae69d739f99aeaf1c526a50779304501f" id="r_ae69d739f99aeaf1c526a50779304501f"><td class="memItemLeft" align="right" valign="top"><a id="ae69d739f99aeaf1c526a50779304501f" name="ae69d739f99aeaf1c526a50779304501f"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>real_node_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>real_node_count</b> () const</td></tr>
 <tr class="memdesc:ae69d739f99aeaf1c526a50779304501f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the REAL node count in the _level_map. <br /></td></tr>
 <tr class="separator:ae69d739f99aeaf1c526a50779304501f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4995b44bd43deb21c6776122f953a578" id="r_a4995b44bd43deb21c6776122f953a578"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a4995b44bd43deb21c6776122f953a578">st_equal</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">first</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;<a class="el" href="classNode.html">second</a>, std::string *<a class="el" href="classNode.html">err</a>=<a class="el" href="classNode.html">nullptr</a>)</td></tr>
+<tr class="memitem:a4995b44bd43deb21c6776122f953a578" id="r_a4995b44bd43deb21c6776122f953a578"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMaterializedImpl.html#a4995b44bd43deb21c6776122f953a578">st_equal</a> (const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;first, const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;second, std::string *err=nullptr)</td></tr>
 <tr class="memdesc:a4995b44bd43deb21c6776122f953a578"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two materialized trees' specific internals and return true if identical.  <br /></td></tr>
 <tr class="separator:a4995b44bd43deb21c6776122f953a578"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a993b02b95481388c87b5135099b9feb9" id="r_a993b02b95481388c87b5135099b9feb9"><td class="memItemLeft" align="right" valign="top"><a id="a993b02b95481388c87b5135099b9feb9" name="a993b02b95481388c87b5135099b9feb9"></a>
-<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>_root_node</b> = <a class="el" href="classNode.html">nullptr</a></td></tr>
+<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>_root_node</b> = nullptr</td></tr>
 <tr class="memdesc:a993b02b95481388c87b5135099b9feb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The root of a tree. Navigable in this tree type. <br /></td></tr>
 <tr class="separator:a993b02b95481388c87b5135099b9feb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11a07b54a884519188cd92138022c067" id="r_a11a07b54a884519188cd92138022c067"><td class="memItemLeft" align="right" valign="top"><a id="a11a07b54a884519188cd92138022c067" name="a11a07b54a884519188cd92138022c067"></a>
@@ -264,27 +264,27 @@ std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt;&#
 <tr class="memdesc:a23bb1d9e457d94421b667b6fea65012f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree. <br /></td></tr>
 <tr class="separator:a23bb1d9e457d94421b667b6fea65012f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a57a9411ff1d314a3f50517328afe13" id="r_a6a57a9411ff1d314a3f50517328afe13"><td class="memItemLeft" align="right" valign="top"><a id="a6a57a9411ff1d314a3f50517328afe13" name="a6a57a9411ff1d314a3f50517328afe13"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b> = <a class="el" href="classNode.html">false</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b> = false</td></tr>
 <tr class="memdesc:a6a57a9411ff1d314a3f50517328afe13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this tree is initialized, meaning it's had at least one level added. <br /></td></tr>
 <tr class="separator:a6a57a9411ff1d314a3f50517328afe13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01e489a91c4a593d905aedc1d2fc3228" id="r_a01e489a91c4a593d905aedc1d2fc3228"><td class="memItemLeft" align="right" valign="top"><a id="a01e489a91c4a593d905aedc1d2fc3228" name="a01e489a91c4a593d905aedc1d2fc3228"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_pruning_hwm_nodes</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.prune_hwm_nodes</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_pruning_hwm_nodes</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.prune_hwm_nodes</td></tr>
 <tr class="memdesc:a01e489a91c4a593d905aedc1d2fc3228"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if the tree should prune HWM nodes, carving out subtress, turning this into a DAG. <br /></td></tr>
 <tr class="separator:a01e489a91c4a593d905aedc1d2fc3228"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ed797dee4e9eed15efc8702483bc650" id="r_a1ed797dee4e9eed15efc8702483bc650"><td class="memItemLeft" align="right" valign="top"><a id="a1ed797dee4e9eed15efc8702483bc650" name="a1ed797dee4e9eed15efc8702483bc650"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_pruning_parent_levels</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.prune_parent_levels</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_pruning_parent_levels</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.prune_parent_levels</td></tr>
 <tr class="memdesc:a1ed797dee4e9eed15efc8702483bc650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if the tree should prune parent levels. AKA, only keep the last level (leaf nodes). <br /></td></tr>
 <tr class="separator:a1ed797dee4e9eed15efc8702483bc650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4887a4f457f633a03f1f0ab4eee9a75" id="r_ad4887a4f457f633a03f1f0ab4eee9a75"><td class="memItemLeft" align="right" valign="top"><a id="ad4887a4f457f633a03f1f0ab4eee9a75" name="ad4887a4f457f633a03f1f0ab4eee9a75"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_preserving_ancestors</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.preserve_ancestors</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_preserving_ancestors</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.preserve_ancestors</td></tr>
 <tr class="memdesc:ad4887a4f457f633a03f1f0ab4eee9a75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if HWM ancestors should be added to our vector or simply discarded. <br /></td></tr>
 <tr class="separator:ad4887a4f457f633a03f1f0ab4eee9a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b47fb7da377f83c19e503a32ad47ac5" id="r_a3b47fb7da377f83c19e503a32ad47ac5"><td class="memItemLeft" align="right" valign="top"><a id="a3b47fb7da377f83c19e503a32ad47ac5" name="a3b47fb7da377f83c19e503a32ad47ac5"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_verifying_non_hwm_nodes</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.verify_non_hwm_nodes</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_verifying_non_hwm_nodes</b> = <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}.verify_non_hwm_nodes</td></tr>
 <tr class="memdesc:a3b47fb7da377f83c19e503a32ad47ac5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if verification of non-HWM nodes should happen. See <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> or CHANGELOG 3.4.0 for details. <br /></td></tr>
 <tr class="separator:a3b47fb7da377f83c19e503a32ad47ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50c4bfac68b930b7a332383913f4c139" id="r_a50c4bfac68b930b7a332383913f4c139"><td class="memItemLeft" align="right" valign="top"><a id="a50c4bfac68b930b7a332383913f4c139" name="a50c4bfac68b930b7a332383913f4c139"></a>
-<a class="el" href="classNode.html">const</a> TreeTypeEnum&#160;</td><td class="memItemRight" valign="bottom"><b>_tree_type</b> = TreeTypeEnum::MATERIALIZED</td></tr>
+const TreeTypeEnum&#160;</td><td class="memItemRight" valign="bottom"><b>_tree_type</b> = TreeTypeEnum::MATERIALIZED</td></tr>
 <tr class="memdesc:a50c4bfac68b930b7a332383913f4c139"><td class="mdescLeft">&#160;</td><td class="mdescRight">Track the type of this tree for external comparison later. <br /></td></tr>
 <tr class="separator:a50c4bfac68b930b7a332383913f4c139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -295,7 +295,7 @@ class BinaryTreeMaterializedImpl&lt; T &gt;</div><p>An implementation of the <co
 <dl class="section note"><dt>Note</dt><dd>This was a first-principles implementation when starting out. It's great for in-memory inspection of true <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects, or when you want to walk an actual tree, but RAM explodes quickly. If you need to work with larger trees, consider using the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> instead.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -312,7 +312,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::add_level </td>
+          <td class="memname">void <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::add_level </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -344,7 +344,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::deserialize </td>
+          <td class="memname">bool <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::deserialize </td>
           <td>(</td>
           <td class="paramtype">std::istream &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -353,7 +353,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -396,16 +396,16 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::equal </td>
+          <td class="memname">bool <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -505,7 +505,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">const</a> std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp; <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::get_level_map </td>
+          <td class="memname">const std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp; <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::get_level_map </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -596,7 +596,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::init </td>
+          <td class="memname">void <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::init </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>levels</em>, </td>
@@ -604,7 +604,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>&#160;</td>
           <td class="paramname"><em>opts</em> = <code><a class="el" href="structBinaryTreeOptions.html">BinaryTreeOptions</a>{}</code>&#160;</td>
         </tr>
         <tr>
@@ -643,7 +643,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">bool</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::serialize </td>
+          <td class="memname">bool <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::serialize </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
           <td class="paramname"><em>out</em>, </td>
@@ -652,7 +652,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -700,9 +700,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_is_initialized </td>
+          <td class="memname">void <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_is_initialized </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a>&#160;</td>
+          <td class="paramtype">const bool&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -737,9 +737,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_is_preserving_ancestors </td>
+          <td class="memname">void <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_is_preserving_ancestors </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">bool</a>&#160;</td>
+          <td class="paramtype">const bool&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -774,7 +774,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_level_count </td>
+          <td class="memname">void <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::set_level_count </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level_count</em></td><td>)</td>
@@ -811,22 +811,22 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::st_equal </td>
+          <td class="memname">static bool <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt;::st_equal </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>first</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classBinaryTreeMaterializedImpl.html">BinaryTreeMaterializedImpl</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>second</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string *&#160;</td>
-          <td class="paramname"><em>err</em> = <code><a class="el" href="classNode.html">nullptr</a></code>&#160;</td>
+          <td class="paramname"><em>err</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -842,7 +842,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </div><div class="memdoc">
 
 <p>Compare two materialized trees' specific internals and return true if identical. </p>
-<p>This method only tests materialized tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (<a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">e.g</a>.: level count).</p>
+<p>This method only tests materialized tree specifics. Most equality happens via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade since they share common members between implementations (e.g.: level count).</p>
 <p>This function checks:</p><ol type="1">
 <li>The is_pruning_hwm_nodes flag.</li>
 <li>The is_pruning_parent_levels flag.</li>

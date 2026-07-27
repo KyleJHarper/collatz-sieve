@@ -1,0 +1,54 @@
+\doxysection{Progress\+Report Class Reference}
+\hypertarget{classProgressReport}{}\label{classProgressReport}\index{ProgressReport@{ProgressReport}}
+
+
+Writes single or multi-\/line output to an ANSI-\/compliant terminal and erases it, assuming no wrapping.  
+
+
+
+
+{\ttfamily \#include $<$progress\+\_\+report.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgressReport_a62b1a1c63e2d3c368334445ff04af83d}\label{classProgressReport_a62b1a1c63e2d3c368334445ff04af83d} 
+{\bfseries Progress\+Report} (std\+::ostream \&out=std\+::cout)
+\begin{DoxyCompactList}\small\item\em Basic constructor. Just needs a place to write to. \end{DoxyCompactList}\item 
+\Hypertarget{classProgressReport_a19141b909cfb7024f2720592bf7f9eff}\label{classProgressReport_a19141b909cfb7024f2720592bf7f9eff} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Progress\+Report} ()
+\begin{DoxyCompactList}\small\item\em Basic destructor. Could call \doxylink{classProgressReport_afd22f85873b1ef03dd3561659b54c305}{clear()} here, but don\textquotesingle{}t for now. \end{DoxyCompactList}\item 
+\Hypertarget{classProgressReport_afd22f85873b1ef03dd3561659b54c305}\label{classProgressReport_afd22f85873b1ef03dd3561659b54c305} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Erases all lines written by {\ttfamily \doxylink{classProgressReport_ae1d7505fe296834515b589071096088a}{report()}}. Safe to call repeatedly. \end{DoxyCompactList}\item 
+\Hypertarget{classProgressReport_ae1d7505fe296834515b589071096088a}\label{classProgressReport_ae1d7505fe296834515b589071096088a} 
+void {\bfseries report} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Clears previously written text and then emits {\ttfamily text}. Single or multi line is valid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgressReport_a0caa2c8e8b4e10abcca0d701683de6d8}\label{classProgressReport_a0caa2c8e8b4e10abcca0d701683de6d8} 
+static size\+\_\+t {\bfseries count\+\_\+lines} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Counts the number of lines in text. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}\label{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129} 
+std\+::ostream \& {\bfseries \+\_\+out}
+\begin{DoxyCompactList}\small\item\em Output stream to write to. Defaults to {\ttfamily std\+::cout} via the constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}\label{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e} 
+size\+\_\+t {\bfseries \+\_\+line\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em Number of lines from the previous write. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Writes single or multi-\/line output to an ANSI-\/compliant terminal and erases it, assuming no wrapping. 
+
+\begin{DoxyNote}{Note}
+This is not thread safe and writes to stdout by default. 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/progress\+\_\+report.\+hpp\end{DoxyCompactItemize}

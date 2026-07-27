@@ -13,7 +13,7 @@ A truthful concept when the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ TreeType>}
-\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptIsMaterializedTree}{IsMaterializedTree}}\ =\ \ \textcolor{keyword}{requires}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{TreeType}}\&\ \mbox{\hyperlink{classNode}{tree\_type}})\ \{\ \mbox{\hyperlink{classNode}{tree\_type}}.is\_materialized();\ \}}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptIsMaterializedTree}{IsMaterializedTree}}\ =\ \ \textcolor{keyword}{requires}(\textcolor{keyword}{const}\ TreeType\&\ tree\_type)\ \{\ tree\_type.is\_materialized();\ \}}
 
 \end{DoxyCode}
 

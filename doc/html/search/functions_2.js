@@ -1,15 +1,16 @@
 var searchData=
 [
-  ['calculate_0',['calculate',['../classCollatzAffineMap.html#a020aa847fd591925b4540d338c9ee1d1',1,'CollatzAffineMap::calculate(const T &amp;value, T &amp;out) const'],['../classCollatzAffineMap.html#ac737364955ef326c9559cbe25e85d90a',1,'CollatzAffineMap::calculate(const T &amp;value) const']]],
-  ['cardinality_1',['cardinality',['../classNodeBitmap.html#a9d79d48318af0f9523c77ab84cbfb85f',1,'NodeBitmap::cardinality()'],['../classFlatHashBitmapImpl.html#ac510d9024acc4c870faeafead009a4a0',1,'FlatHashBitmapImpl::cardinality()']]],
-  ['check_2',['check',['../classzstd__ostreambuf.html#a90dfa115cacce1a0ad12adee5c6cab03',1,'zstd_ostreambuf::check()'],['../classzstd__istreambuf.html#aead03fbc3fb158fa52c9811a1e441e47',1,'zstd_istreambuf::check()']]],
-  ['clear_3',['clear',['../classNodeBitmap.html#a4fadde7c7f89b0a425c292146740a3ea',1,'NodeBitmap::clear()'],['../classFlatHashBitmapImpl.html#a83a230b4a005c8d503d586459548ec26',1,'FlatHashBitmapImpl::clear()']]],
-  ['clear_5funcovered_5fvalues_4',['clear_uncovered_values',['../classBinaryTreeImplicitImpl.html#a5d37fd55f1a855d50f45d6f5edba0e48',1,'BinaryTreeImplicitImpl::clear_uncovered_values()'],['../classBinaryTreeMaterializedImpl.html#aa14871ccac1875447ed3a33b21ead55c',1,'BinaryTreeMaterializedImpl::clear_uncovered_values()']]],
-  ['clone_5',['clone',['../classNodeBitmap.html#a9eb591d8a8237427e75c0b93405d475a',1,'NodeBitmap::clone()'],['../classFlatHashBitmapImpl.html#a7b5ac0521d4bf72a45a0292bfdcd83de',1,'FlatHashBitmapImpl::clone()']]],
-  ['collatz_6',['collatz',['../classCollatz.html#a072e85b7c6db2e7dffd401fcf7e04521',1,'Collatz::Collatz()'],['../classCollatz.html#afa6f01d7f6e4ebccd3086250660406e1',1,'Collatz::Collatz(const T &amp;initial_value)']]],
-  ['collatzaffinemap_7',['CollatzAffineMap',['../classCollatzAffineMap.html#a5d492e65b0ec78a2038f38b3352c680d',1,'CollatzAffineMap']]],
-  ['collatzaffinemapshortcut_8',['CollatzAffineMapShortcut',['../classCollatzAffineMapShortcut.html#a9cda8da3db98d87737d5b3ef4162521c',1,'CollatzAffineMapShortcut']]],
-  ['contains_9',['contains',['../classNodeBitmap.html#a9b1efdbf1d0cf2a23a2a63f6b6df6464',1,'NodeBitmap::contains()'],['../classFlatHashBitmapImpl.html#a1c51b9c133a5a0f12c280c254021b6bc',1,'FlatHashBitmapImpl::contains()']]],
-  ['count_5ftrailing_5fones_10',['count_trailing_ones',['../namespaceBit.html#a714bf2865e70558aacfdb18709972f2d',1,'Bit']]],
-  ['count_5ftrailing_5fzeros_11',['count_trailing_zeros',['../namespaceBit.html#a2a02bc3e6af5232afe3b72fae6d8c90d',1,'Bit']]]
+  ['binarytree_0',['binarytree',['../classBinaryTree.html#afac59a30a1f62f8cf802b9c4fdd5e751',1,'BinaryTree::BinaryTree(level_t levels, const BinaryTreeOptions &amp;opts=BinaryTreeOptions{})'],['../classBinaryTree.html#a839b5bff7567f72aacb6d318e2283b3c',1,'BinaryTree::BinaryTree(const BinaryTree &amp;)=delete'],['../classBinaryTree.html#aaf79a5c1ff02239db05fc436dd4d847a',1,'BinaryTree::BinaryTree(BinaryTree &amp;&amp;) noexcept=default'],['../classBinaryTree.html#a9ada207ef17977869a34dc89c3829555',1,'BinaryTree::BinaryTree()=default']]],
+  ['binarytreecoverage_1',['binarytreecoverage',['../classBinaryTreeCoverage.html#a6ace14fac5768ba75462477e7a9b60b4',1,'BinaryTreeCoverage::BinaryTreeCoverage()=default'],['../classBinaryTreeCoverage.html#aaa57a613018a293d3be3ac842e61a4e4',1,'BinaryTreeCoverage::BinaryTreeCoverage(T covered, T total)']]],
+  ['binarytreeimplicitimpl_2',['binarytreeimplicitimpl',['../classBinaryTreeImplicitImpl.html#aa6d9b93bba379bc42747e64663c78a64',1,'BinaryTreeImplicitImpl::BinaryTreeImplicitImpl()=default'],['../classBinaryTreeImplicitImpl.html#a4f3de4f23bf7a057f05930cf7578b8e9',1,'BinaryTreeImplicitImpl::BinaryTreeImplicitImpl(const BinaryTreeImplicitImpl &amp;)=delete'],['../classBinaryTreeImplicitImpl.html#a0f4434d2adffe61e9e47c378363da23d',1,'BinaryTreeImplicitImpl::BinaryTreeImplicitImpl(BinaryTreeImplicitImpl &amp;&amp;) noexcept=default']]],
+  ['binarytreematerializedimpl_3',['binarytreematerializedimpl',['../classBinaryTreeMaterializedImpl.html#a3d5eee83ca6dfaa910d5478db8418705',1,'BinaryTreeMaterializedImpl::BinaryTreeMaterializedImpl(const BinaryTreeMaterializedImpl &amp;)=delete'],['../classBinaryTreeMaterializedImpl.html#a212839e1c0cb5f6319fce9a73568ab1d',1,'BinaryTreeMaterializedImpl::BinaryTreeMaterializedImpl(BinaryTreeMaterializedImpl &amp;&amp;) noexcept=default'],['../classBinaryTreeMaterializedImpl.html#aaf2222a8b9879d8524b5307ef7bc92c0',1,'BinaryTreeMaterializedImpl::BinaryTreeMaterializedImpl()=default']]],
+  ['binarytreemath_4',['BinaryTreeMath',['../classBinaryTreeMath.html#a57cea2bbffc530a34f8df8c5cfc3c714',1,'BinaryTreeMath']]],
+  ['bitreverse16_5',['bitreverse16',['../namespaceBit.html#a294cb0b8604fedd1f0c442481965410f',1,'Bit']]],
+  ['bitreverse32_6',['bitreverse32',['../namespaceBit.html#afaf387fe5a15973f7a6aa007ed04442a',1,'Bit']]],
+  ['bitreverse64_7',['bitreverse64',['../namespaceBit.html#ae5d745bd7263fa684d3d2d5566723bb4',1,'Bit']]],
+  ['bitreverse8_8',['bitreverse8',['../namespaceBit.html#a12741c85ac515c7522899adf0b8a9737',1,'Bit']]],
+  ['booleans_5fequal_9',['booleans_equal',['../classEqualityHelper.html#ab054df866a778a5a6b2344ec436cf6dd',1,'EqualityHelper']]],
+  ['build_5fstride_5ftable_10',['build_stride_table',['../namespaceAffineStride.html#a189318a0d9fb8d0ae3d9f93e6120dc00',1,'AffineStride']]],
+  ['build_5fstride_5ftable_5fof_5fones_11',['build_stride_table_of_ones',['../namespaceAffineStride.html#a2defd27aadb87402ac1ba76fe26866fc',1,'AffineStride']]],
+  ['byteswap_12',['byteswap',['../namespaceBit.html#ab5a8975fcf5cda4d39941d651ddf8ede',1,'Bit']]]
 ];

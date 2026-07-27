@@ -8,19 +8,19 @@ Collection of methods for managing 128-\/bit integer data types.
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{constexpr}} uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_ae0d66f6030e335adee2080056112035b}{parse\+\_\+u128}} (std\+::string\+\_\+view \mbox{\hyperlink{classNode}{view}})
+constexpr uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_ae0d66f6030e335adee2080056112035b}{parse\+\_\+u128}} (std\+::string\+\_\+view view)
 \begin{DoxyCompactList}\small\item\em Convert a string view to a {\ttfamily uint128\+\_\+t}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}}, \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&\mbox{\hyperlink{classNode}{dest}})
+void \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t v, mpz\+\_\+class \&dest)
 \begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} type to an {\ttfamily mpz\+\_\+class}, storing it in caller\textquotesingle{}s memory. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceInt128_aa435d62c7a2873f6caf6cc78c2513f4d}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}})
+mpz\+\_\+class \mbox{\hyperlink{namespaceInt128_aa435d62c7a2873f6caf6cc78c2513f4d}{uint128\+\_\+to\+\_\+mpz}} (uint128\+\_\+t v)
 \begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpz\+\_\+class}, returning new memory. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{mpf\+\_\+class}} \mbox{\hyperlink{namespaceInt128_af45eda82ffe223c719787f65ff92deba}{uint128\+\_\+to\+\_\+mpf}} (uint128\+\_\+t \mbox{\hyperlink{classNode}{v}})
+mpf\+\_\+class \mbox{\hyperlink{namespaceInt128_af45eda82ffe223c719787f65ff92deba}{uint128\+\_\+to\+\_\+mpf}} (uint128\+\_\+t v)
 \begin{DoxyCompactList}\small\item\em Convert a {\ttfamily uint128\+\_\+t} to an {\ttfamily mpf\+\_\+class}, returning new memory. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{int128\+\_\+to\+\_\+string}} (\mbox{\hyperlink{classNode}{int128\+\_\+t}} value)
+std\+::string \mbox{\hyperlink{namespaceInt128_af43ab9717154d6f64be361c73286a4c9}{int128\+\_\+to\+\_\+string}} (int128\+\_\+t value)
 \begin{DoxyCompactList}\small\item\em Convert a signed {\ttfamily int128\+\_\+t} value to string. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{uint128\+\_\+to\+\_\+string}} (uint128\+\_\+t value)
 \begin{DoxyCompactList}\small\item\em Convert an unsigned {\ttfamily uint128\+\_\+t} value to string. \end{DoxyCompactList}\item 
-uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_a76b639637831fc36c57f6dc0463a8936}{str\+\_\+to\+\_\+uint128}} (\mbox{\hyperlink{classNode}{const}} std\+::string \&\mbox{\hyperlink{classNode}{s}})
+uint128\+\_\+t \mbox{\hyperlink{namespaceInt128_a76b639637831fc36c57f6dc0463a8936}{str\+\_\+to\+\_\+uint128}} (const std\+::string \&s)
 \begin{DoxyCompactList}\small\item\em Convert a string to a {\ttfamily uint128\+\_\+t}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -32,7 +32,7 @@ Collection of methods for managing 128-\/bit integer data types.
 \index{Int128@{Int128}!int128\_to\_string@{int128\_to\_string}}
 \index{int128\_to\_string@{int128\_to\_string}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{int128\_to\_string()}{int128\_to\_string()}}
-{\footnotesize\ttfamily std\+::string Int128\+::int128\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{int128\+\_\+t}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::string Int128\+::int128\+\_\+to\+\_\+string (\begin{DoxyParamCaption}\item[{int128\+\_\+t}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -50,7 +50,7 @@ New string with the digits represented by the value, including a negative sign "
 \index{Int128@{Int128}!parse\_u128@{parse\_u128}}
 \index{parse\_u128@{parse\_u128}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{parse\_u128()}{parse\_u128()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} uint128\+\_\+t Int128\+::parse\+\_\+u128 (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+{\footnotesize\ttfamily constexpr uint128\+\_\+t Int128\+::parse\+\_\+u128 (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
 
 
 
@@ -68,7 +68,7 @@ The uint128\+\_\+t representation of the string digits sent, if valid.
 \index{Int128@{Int128}!str\_to\_uint128@{str\_to\_uint128}}
 \index{str\_to\_uint128@{str\_to\_uint128}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{str\_to\_uint128()}{str\_to\_uint128()}}
-{\footnotesize\ttfamily uint128\+\_\+t Int128\+::str\+\_\+to\+\_\+uint128 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily uint128\+\_\+t Int128\+::str\+\_\+to\+\_\+uint128 (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -86,7 +86,7 @@ A {\ttfamily uint128\+\_\+t} representing the digits converted to an integral.
 \index{Int128@{Int128}!uint128\_to\_mpf@{uint128\_to\_mpf}}
 \index{uint128\_to\_mpf@{uint128\_to\_mpf}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{uint128\_to\_mpf()}{uint128\_to\_mpf()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpf\+\_\+class}} Int128\+::uint128\+\_\+to\+\_\+mpf (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily mpf\+\_\+class Int128\+::uint128\+\_\+to\+\_\+mpf (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -104,7 +104,7 @@ The same value in an {\ttfamily mpf\+\_\+class} object.
 \index{Int128@{Int128}!uint128\_to\_mpz@{uint128\_to\_mpz}}
 \index{uint128\_to\_mpz@{uint128\_to\_mpz}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{uint128\_to\_mpz()}{uint128\_to\_mpz()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily mpz\+\_\+class Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -122,7 +122,7 @@ The same value in an {\ttfamily mpz\+\_\+class} object.
 \index{Int128@{Int128}!uint128\_to\_mpz@{uint128\_to\_mpz}}
 \index{uint128\_to\_mpz@{uint128\_to\_mpz}!Int128@{Int128}}
 \doxysubsubsection{\texorpdfstring{uint128\_to\_mpz()}{uint128\_to\_mpz()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{void}} Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v,  }\item[{\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{dest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void Int128\+::uint128\+\_\+to\+\_\+mpz (\begin{DoxyParamCaption}\item[{uint128\+\_\+t}]{v,  }\item[{mpz\+\_\+class \&}]{dest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 

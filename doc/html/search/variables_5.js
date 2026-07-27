@@ -1,22 +1,6 @@
 var searchData=
 [
-  ['magic_0',['magic',['../structBinaryTreeFileHeader.html#a8da08ec82eeac0fe54f3a49056ee036f',1,'BinaryTreeFileHeader']]],
-  ['magic_5fsize_1',['MAGIC_SIZE',['../structBinaryTreeFileHeader.html#a24e80366368a7ceeef1cbad2c0f360ca',1,'BinaryTreeFileHeader']]],
-  ['max_5f3xp1_2',['MAX_3XP1',['../namespaceCollatzConstants.html#afa7c008a6d843de3c9b5363785151192',1,'CollatzConstants']]],
-  ['max_5fchildren_3',['MAX_CHILDREN',['../classNode.html#ab204ebe45f832d60ecc0a69bc07dc39f',1,'Node']]],
-  ['max_5finitial_5fvalue_5fby_5fbit_4',['MAX_INITIAL_VALUE_BY_BIT',['../namespaceCollatzConstants.html#ae4bb1d3844419388a44932d7b60e5ebe',1,'CollatzConstants']]],
-  ['max_5fknown_5fcoverage_5flevel_5',['MAX_KNOWN_COVERAGE_LEVEL',['../namespaceBinaryTreeCoverageConstants.html#a44a1561648ce635a3bef2e5b840aa73c',1,'BinaryTreeCoverageConstants']]],
-  ['max_5flong_5fstride_6',['MAX_LONG_STRIDE',['../namespaceAffineStride.html#ac30c6d06cb14406044f7dd12c8e8d8d4',1,'AffineStride']]],
-  ['max_5fpow2_5funder_5fpow3_7',['MAX_POW2_UNDER_POW3',['../namespaceExponents.html#afea47f1ca156afda94cc2283405fd0ba',1,'Exponents']]],
-  ['max_5fpow2_5funder_5fpow3_5fcount_8',['MAX_POW2_UNDER_POW3_COUNT',['../namespaceExponents.html#accbaded6f43ce579264a5c9a760e9083',1,'Exponents']]],
-  ['max_5fserial_5ff_5ftested_9',['MAX_SERIAL_F_TESTED',['../classCollatzAffineMapShortcut.html#a51afd30227ff944dde8dfd9b4ebe02b8',1,'CollatzAffineMapShortcut']]],
-  ['max_5fstride_10',['MAX_STRIDE',['../namespaceAffineStride.html#a204bfdf108dca7309f209f5dea043f5f',1,'AffineStride']]],
-  ['mpf_5fhalf_11',['MPF_HALF',['../namespaceCollatzConstants.html#a566fb8aeba1b31baf99adf97df84d63c',1,'CollatzConstants']]],
-  ['mpf_5fone_12',['MPF_ONE',['../namespaceCollatzConstants.html#ac14e461da19846c6933b1d128278645b',1,'CollatzConstants']]],
-  ['mpf_5fthree_13',['MPF_THREE',['../namespaceCollatzConstants.html#ac09ff047f60ce086a8154f88ada4fd9b',1,'CollatzConstants']]],
-  ['mpf_5ftwo_14',['MPF_TWO',['../namespaceCollatzConstants.html#a9c1bbce94fca6865e6ed920d2725eccb',1,'CollatzConstants']]],
-  ['mpz_5fone_15',['MPZ_ONE',['../namespaceCollatzConstants.html#a5cbdd281ee8db74e5565c417f537a72f',1,'CollatzConstants']]],
-  ['mpz_5fthree_16',['MPZ_THREE',['../namespaceCollatzConstants.html#a5077c6a9e79cbd44ba9645648d4d705f',1,'CollatzConstants']]],
-  ['mpz_5ftwo_17',['MPZ_TWO',['../namespaceCollatzConstants.html#a5da6da058cbae6ae099b0bd0227c3160',1,'CollatzConstants']]],
-  ['multiply_18',['multiply',['../structAffineStride_1_1LongStride.html#acc29b42d638bc1e73373d1a60c97c8cd',1,'AffineStride::LongStride::multiply'],['../structAffineStride_1_1Stride.html#ab08d60def9e2ca8cc792d3f68ad81386',1,'AffineStride::Stride::multiply']]]
+  ['gpu_5fkernel_5flaunches_5fatomic_0',['gpu_kernel_launches_atomic',['../structVerifierMetric.html#a308d37dbf817e265e32ce5fd20d30523',1,'VerifierMetric']]],
+  ['gpu_5foverflow_5fbuffer_5fexceeded_5fatomic_1',['gpu_overflow_buffer_exceeded_atomic',['../structVerifierMetric.html#aa34070ebddc7f9181a20e276832efc42',1,'VerifierMetric']]],
+  ['gpu_5foverflows_5fprocessed_5fatomic_2',['gpu_overflows_processed_atomic',['../structVerifierMetric.html#a8382430c6a05649b6abe0b5aa821f050',1,'VerifierMetric']]]
 ];

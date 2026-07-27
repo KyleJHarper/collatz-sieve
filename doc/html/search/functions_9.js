@@ -1,4 +1,22 @@
 var searchData=
 [
-  ['join_0',['join',['../classProgress.html#a403ac17bf9336d034b2891ac7f16d199',1,'Progress']]]
+  ['init_0',['init',['../classBinaryTreeImplicitImpl.html#ac805dbda69077ddecf1bb5c7dccc283e',1,'BinaryTreeImplicitImpl::init()'],['../classBinaryTree.html#a2eeaf4a7727c29a727d01845add1475b',1,'BinaryTree::init()'],['../classNode.html#a9094a9dcdb0d8d02db467549cda22da2',1,'Node::init()'],['../classCollatz.html#a33c0998331a6f9e2b655bed17e85e873',1,'Collatz::init()'],['../classBinaryTreeMaterializedImpl.html#a168760c5343b669c130d033b3bc8a260',1,'BinaryTreeMaterializedImpl::init()']]],
+  ['init_5fsequence_5fhelper_1',['init_sequence_helper',['../classNode.html#a4fde89f0ec750262d4f326276007a5f4',1,'Node']]],
+  ['initialize_5fstride_5ftable_2',['initialize_stride_table',['../namespaceGPU.html#affa307b654eb5885f7313e245b673c7c',1,'GPU']]],
+  ['int128_5fto_5fstring_3',['int128_to_string',['../namespaceInt128.html#af43ab9717154d6f64be361c73286a4c9',1,'Int128']]],
+  ['integrals_5fequal_4',['integrals_equal',['../classEqualityHelper.html#adcc98704b3d3a491b1b0878037f11db6',1,'EqualityHelper']]],
+  ['is_5fbelow_5',['is_below',['../classCollatzAffineMap.html#acbd278053c30c294bc628bdc5a951142',1,'CollatzAffineMap::is_below()'],['../classCollatzAffineMapShortcut.html#a9060f7f774374ee830a1e316be1dcdc4',1,'CollatzAffineMapShortcut::is_below()']]],
+  ['is_5fbelow_5fhigh_5fwater_5fmark_6',['is_below_high_water_mark',['../classNode.html#a384e4c5c02c237f1dad0aba304872cfc',1,'Node']]],
+  ['is_5fbig_5fendian_7',['is_big_endian',['../namespaceEndian.html#a4cc85df2d37aa35eebd91f11fdfb810b',1,'Endian']]],
+  ['is_5fdetailed_5fmetrics_5fenabled_8',['is_detailed_metrics_enabled',['../classCPUVerifier.html#aa569321329626668895203a19e7c55a4',1,'CPUVerifier']]],
+  ['is_5ffull_9',['is_full',['../classCudaStreamBuffer.html#aad54e3aaa868f4c881c52cef0f831a3e',1,'CudaStreamBuffer']]],
+  ['is_5fimplicit_10',['is_implicit',['../classBinaryTree.html#abfaf68f6800afca2a033c9b64b74cbec',1,'BinaryTree::is_implicit()'],['../classBinaryTreeImplicitImpl.html#aad468411bcfef28b6df20d7bc1a16ed6',1,'BinaryTreeImplicitImpl::is_implicit()']]],
+  ['is_5finitialized_11',['is_initialized',['../classNode.html#a1e26152bd714bdbcb997fd946731a650',1,'Node::is_initialized()'],['../classCollatz.html#a987bc9af0d6e9800a86819f8af0079e7',1,'Collatz::is_initialized()'],['../classBinaryTree.html#a5ab4c5f9a887dd776450281b8af8ef8e',1,'BinaryTree::is_initialized()'],['../classBinaryTreeImplicitImpl.html#aa43f0b6e858543a08816a2f81098f803',1,'BinaryTreeImplicitImpl::is_initialized()'],['../classBinaryTreeMaterializedImpl.html#ad3a002443b7b09f817c56774ea6f33e9',1,'BinaryTreeMaterializedImpl::is_initialized()']]],
+  ['is_5fiv_5ftable_5fenabled_12',['is_iv_table_enabled',['../classVerifier.html#a4c7e4a3531fe3c0d3812e4ff4531dd6d',1,'Verifier']]],
+  ['is_5flittle_5fendian_13',['is_little_endian',['../namespaceEndian.html#a74f5f139fbc7a5be0cc01f5c69baaed7',1,'Endian']]],
+  ['is_5fmaterialized_14',['is_materialized',['../classBinaryTreeMaterializedImpl.html#a9be81844a8872159277d9ff2dac05f8c',1,'BinaryTreeMaterializedImpl::is_materialized()'],['../classBinaryTree.html#a50dadcccf0fa007fc9d89fbee2ecd9d7',1,'BinaryTree::is_materialized()']]],
+  ['is_5fpreserving_5fancestors_15',['is_preserving_ancestors',['../classBinaryTreeMaterializedImpl.html#ac3a1f197f8bb3e6e2cc6e69c9348b49e',1,'BinaryTreeMaterializedImpl::is_preserving_ancestors()'],['../classBinaryTreeImplicitImpl.html#a731956e4e72bebbce1593c9cf3f95554',1,'BinaryTreeImplicitImpl::is_preserving_ancestors()'],['../classBinaryTree.html#ade92d714e72a07e5052dda23a87b102a',1,'BinaryTree::is_preserving_ancestors() const']]],
+  ['is_5fpruning_5fhwm_5fnodes_16',['is_pruning_hwm_nodes',['../classBinaryTree.html#a028f3dc27a7db896d94c5ced6f5b59f6',1,'BinaryTree::is_pruning_hwm_nodes()'],['../classBinaryTreeMaterializedImpl.html#ae7e90237d4579290c94581a474d8f0be',1,'BinaryTreeMaterializedImpl::is_pruning_hwm_nodes()']]],
+  ['is_5fpruning_5fparent_5flevels_17',['is_pruning_parent_levels',['../classBinaryTree.html#aa141a0f8fe4b89379eb8976bb983bdaf',1,'BinaryTree::is_pruning_parent_levels()'],['../classBinaryTreeMaterializedImpl.html#af04c2f128cea6d1884a43d933ddf00d8',1,'BinaryTreeMaterializedImpl::is_pruning_parent_levels()']]],
+  ['is_5fverifying_5fnon_5fhwm_5fnodes_18',['is_verifying_non_hwm_nodes',['../classBinaryTree.html#a81330d96418ecd89407487de742810f1',1,'BinaryTree::is_verifying_non_hwm_nodes()'],['../classBinaryTreeImplicitImpl.html#a71412ef41cf3e053549b3d234370dd45',1,'BinaryTreeImplicitImpl::is_verifying_non_hwm_nodes()'],['../classBinaryTreeMaterializedImpl.html#ab484f0dd4284c27a1279adcda9b7896a',1,'BinaryTreeMaterializedImpl::is_verifying_non_hwm_nodes()']]]
 ];

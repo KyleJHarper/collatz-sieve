@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['new_5fancestors_0',['new_ancestors',['../structBinaryTreeImplicitImpl_1_1AddLevelTLS.html#a7f528f44681da439c411ad13b46db56e',1,'BinaryTreeImplicitImpl::AddLevelTLS']]]
+  ['initialize_5fstride_5ftable_5fflag_0',['initialize_stride_table_flag',['../namespaceGPU.html#aa3520daf311f42d95d0e6eac1aaa348c',1,'GPU']]]
 ];

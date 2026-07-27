@@ -1,0 +1,43 @@
+\doxysection{gpu.\+hpp}
+\hypertarget{gpu_8hpp_source}{}\label{gpu_8hpp_source}\index{src/collatz/gpu.hpp@{src/collatz/gpu.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cuda\_runtime\_api.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}collatz\_affine\_stride.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}collatz\_affine\_stride\_cuda.cuh"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceGPU}{GPU}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ HAVE\_CUDA}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespaceGPU_a68f1ae194ae20297066d511e43fdb9ec}{can\_use\_gpu}}()\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ count\ =\ 0;}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaGetDeviceCount(\&count)\ !=\ cudaSuccess\ ||\ count\ ==\ 0)\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00020\ \ \ \ \ \}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespaceGPU_a68f1ae194ae20297066d511e43fdb9ec}{can\_use\_gpu}}()\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{static}\ std::once\_flag\ \mbox{\hyperlink{namespaceGPU_aa3520daf311f42d95d0e6eac1aaa348c}{initialize\_stride\_table\_flag}};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceGPU_affa307b654eb5885f7313e245b673c7c}{initialize\_stride\_table}}()\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ and\ upload\ the\ stride\ table\ to\ the\ GPU.}}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ std::once\_flag\ g\_stride\_table\_uploaded;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ std::call\_once(g\_stride\_table\_uploaded,\ []\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ cudaMemcpyToSymbol(}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AffineStrideCuda::device\_stride\_table<AffineStride::VERIFY\_STRIDE\_SIZE\_FW\_CUDA>}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{structAffineStride_1_1Table_abdc12f841f0bf70a6b26a7df34d81ea7}{AffineStride::VerifyFWCudaTable::TABLE}}.data()}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{structAffineStride_1_1Table_abdc12f841f0bf70a6b26a7df34d81ea7}{AffineStride::VerifyFWCudaTable::TABLE}}.size()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}})}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \}}
+
+\end{DoxyCode}

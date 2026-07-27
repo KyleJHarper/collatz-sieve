@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['load_0',['load',['../classBinaryTree.html#ac384237a30029bd1aba32b69ed952749',1,'BinaryTree']]]
+  ['join_0',['join',['../classProgress.html#a403ac17bf9336d034b2891ac7f16d199',1,'Progress']]]
 ];

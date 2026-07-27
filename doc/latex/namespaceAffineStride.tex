@@ -8,154 +8,79 @@ A multi-\/step (stride) of accelerated \doxylink{classCollatz}{Collatz} function
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{structAffineStride_1_1LongStride}{Long\+Stride}}
-\begin{DoxyCompactList}\small\item\em A heavier, data-\/only struct for longer strides. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}
-\begin{DoxyCompactList}\small\item\em A lightweight, data-\/only struct for the stride factors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em A lightweight, data-\/only struct for the stride factors. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}
+\begin{DoxyCompactList}\small\item\em A struct of constexpr stride data including a table, mask, and size based on {\ttfamily bits}. Empirical testing shows that bit sizes between 8-\/12 are most optimal, but the real threshold is L1 cache. When it spills over into L2, performance drops. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceAffineStride_a0733d71b60d6cf6a18459a9190d17465}\label{namespaceAffineStride_a0733d71b60d6cf6a18459a9190d17465} 
+using {\bfseries Node\+Init\+FWTable} = \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}$<$ \mbox{\hyperlink{namespaceAffineStride_a8200fb5d421ad645a7c674058e921028}{NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW}} $>$
+\begin{DoxyCompactList}\small\item\em The table for node init when fixed-\/width. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceAffineStride_a0deb1bfd51a16b078b458957865b7539}\label{namespaceAffineStride_a0deb1bfd51a16b078b458957865b7539} 
+using {\bfseries Node\+Init\+GMPTable} = \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}$<$ \mbox{\hyperlink{namespaceAffineStride_a8200fb5d421ad645a7c674058e921028}{NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW}} $>$
+\item 
+\Hypertarget{namespaceAffineStride_af49698bbb2981b6d9402e9fde1a4cae8}\label{namespaceAffineStride_af49698bbb2981b6d9402e9fde1a4cae8} 
+using {\bfseries Verify\+FWTable} = \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}$<$ \mbox{\hyperlink{namespaceAffineStride_a58b8d0470a6122b7d112ae2cccd68aa8}{VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW}} $>$
+\item 
+\Hypertarget{namespaceAffineStride_a8e81e8ec068ef2a8fd6c4e40a89b78a5}\label{namespaceAffineStride_a8e81e8ec068ef2a8fd6c4e40a89b78a5} 
+using {\bfseries Verify\+GMPTable} = \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}$<$ \mbox{\hyperlink{namespaceAffineStride_ac2e54d2fa3ea66b9d3c90e45ecdf0762}{VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+GMP}} $>$
+\item 
+\Hypertarget{namespaceAffineStride_a76d6444953c970cd9bf7f92cefb37eb7}\label{namespaceAffineStride_a76d6444953c970cd9bf7f92cefb37eb7} 
+using {\bfseries Verify\+FWCuda\+Table} = \mbox{\hyperlink{structAffineStride_1_1Table}{Table}}$<$ \mbox{\hyperlink{namespaceAffineStride_a3a94ba5b139fb23a2110903ee208bc23}{VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW\+\_\+\+CUDA}} $>$
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Stride\+Type}} , \mbox{\hyperlink{classNode}{size\+\_\+t}} bits$>$ }\\\mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$ \mbox{\hyperlink{classNode}{Stride\+Type}}, 1\mbox{\hyperlink{classNode}{ULL}}$<$$<$ \mbox{\hyperlink{classNode}{bits}} $>$ \mbox{\hyperlink{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f}{build\+\_\+stride\+\_\+table}} ()
-\begin{DoxyCompactList}\small\item\em Build a stride table at compile-\/time. Used by {\ttfamily STRIDE\+\_\+\+TABLE}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\begin{Indent}\textbf{ Stride Application}\par
-\begin{DoxyCompactItemize}
-\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}{apply\+\_\+stride}} (T \&value)
-\begin{DoxyCompactList}\small\item\em Applies the correct stride from the {\ttfamily STRIDE\+\_\+\+TABLE} based on the mask of {\ttfamily value} and transforms it. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51}{apply\+\_\+stride\+\_\+2x}} (T \&value)
-\begin{DoxyCompactList}\small\item\em Unroll 2 strides. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb}{apply\+\_\+stride\+\_\+4x}} (T \&value)
-\begin{DoxyCompactList}\small\item\em Unroll 4 strides. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{namespaceAffineStride_ae3fee91d30d86b467b7e9a4cdd01bd7e}{apply\+\_\+stride\+\_\+8x}} (T \&value)
-\begin{DoxyCompactList}\small\item\em Unroll 8 strides. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\end{Indent}
+{\footnotesize template$<$size\+\_\+t bits$>$ }\\std\+::array$<$ \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, 1ULL$<$$<$ bits $>$ \mbox{\hyperlink{namespaceAffineStride_a189318a0d9fb8d0ae3d9f93e6120dc00}{build\+\_\+stride\+\_\+table}} ()
+\begin{DoxyCompactList}\small\item\em Builds a stride table at compile-\/time. \end{DoxyCompactList}\item 
+{\footnotesize template$<$size\+\_\+t bits$>$ }\\std\+::array$<$ \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, bits+1 $>$ \mbox{\hyperlink{namespaceAffineStride_a2defd27aadb87402ac1ba76fe26866fc}{build\+\_\+stride\+\_\+table\+\_\+of\+\_\+ones}} ()
+\begin{DoxyCompactList}\small\item\em Build a stride table of only ones (..1111) at compile-\/time. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{namespaceAffineStride_a204bfdf108dca7309f209f5dea043f5f}\label{namespaceAffineStride_a204bfdf108dca7309f209f5dea043f5f} 
-\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+STRIDE} = 20
+constexpr size\+\_\+t {\bfseries MAX\+\_\+\+STRIDE} = 20
 \begin{DoxyCompactList}\small\item\em Maximum stride length for the standard {\ttfamily \doxylink{structAffineStride_1_1Stride}{Stride}}. \end{DoxyCompactList}\item 
-\Hypertarget{namespaceAffineStride_ac30c6d06cb14406044f7dd12c8e8d8d4}\label{namespaceAffineStride_ac30c6d06cb14406044f7dd12c8e8d8d4} 
-\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+LONG\+\_\+\+STRIDE} = 40
-\begin{DoxyCompactList}\small\item\em Maximum stride length for the {\ttfamily \doxylink{structAffineStride_1_1LongStride}{Long\+Stride}}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\+\_\+\+SIZE}} = 8
-\begin{DoxyCompactList}\small\item\em Size of steps in each stride for the global lookup table in this namespace. \end{DoxyCompactList}\item 
-\Hypertarget{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f}\label{namespaceAffineStride_aa27709e87630361007e5ffbe06726b0f} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{uint64\+\_\+t}} {\bfseries STRIDE\+\_\+\+MASK} = (1\mbox{\hyperlink{classNode}{ULL}} $<$$<$ \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\+\_\+\+SIZE}}) -\/ 1
-\begin{DoxyCompactList}\small\item\em The derived stride mask from stride size. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{auto}} \mbox{\hyperlink{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}{STRIDE\+\_\+\+TABLE}} = \mbox{\hyperlink{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f}{build\+\_\+stride\+\_\+table}}$<$\mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\+\_\+\+SIZE}}$>$()
-\begin{DoxyCompactList}\small\item\em The lookup table itself. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\Hypertarget{namespaceAffineStride_a8200fb5d421ad645a7c674058e921028}\label{namespaceAffineStride_a8200fb5d421ad645a7c674058e921028} 
+static constexpr size\+\_\+t {\bfseries NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW} = COLLATZ\+\_\+\+NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW
+\begin{DoxyCompactList}\small\item\em \doxylink{structAffineStride_1_1Stride}{Stride} size when node building in \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{Node\+::init()} (and its helper) for fixed-\/width types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceAffineStride_abcdfc6d46772dea576b4c4d81f9a7089}\label{namespaceAffineStride_abcdfc6d46772dea576b4c4d81f9a7089} 
+static constexpr size\+\_\+t {\bfseries NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+GMP} = COLLATZ\+\_\+\+NODE\+\_\+\+INIT\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+GMP
+\begin{DoxyCompactList}\small\item\em \doxylink{structAffineStride_1_1Stride}{Stride} size when node building in \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{Node\+::init()} (and its helper) for \doxylink{namespaceGMP}{GMP} types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceAffineStride_a58b8d0470a6122b7d112ae2cccd68aa8}\label{namespaceAffineStride_a58b8d0470a6122b7d112ae2cccd68aa8} 
+static constexpr size\+\_\+t {\bfseries VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW} = COLLATZ\+\_\+\+VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW
+\begin{DoxyCompactList}\small\item\em \doxylink{structAffineStride_1_1Stride}{Stride} size when performing verification in Collatz\+::st\+\_\+verify\+\_\+\+X() method(s) for fixed-\/width types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceAffineStride_ac2e54d2fa3ea66b9d3c90e45ecdf0762}\label{namespaceAffineStride_ac2e54d2fa3ea66b9d3c90e45ecdf0762} 
+static constexpr size\+\_\+t {\bfseries VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+GMP} = COLLATZ\+\_\+\+VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+GMP
+\begin{DoxyCompactList}\small\item\em \doxylink{structAffineStride_1_1Stride}{Stride} size when performing verification in Collatz\+::st\+\_\+verify\+\_\+\+X() method(s) for fixed-\/\+GMP types. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceAffineStride_a3a94ba5b139fb23a2110903ee208bc23}\label{namespaceAffineStride_a3a94ba5b139fb23a2110903ee208bc23} 
+static constexpr size\+\_\+t {\bfseries VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW\+\_\+\+CUDA} = COLLATZ\+\_\+\+VERIFY\+\_\+\+STRIDE\+\_\+\+SIZE\+\_\+\+FW\+\_\+\+CUDA
+\begin{DoxyCompactList}\small\item\em \doxylink{structAffineStride_1_1Stride}{Stride} size when performing verification on a \doxylink{namespaceGPU}{GPU}. Only applies to fixed-\/width types. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 A multi-\/step (stride) of accelerated \doxylink{classCollatz}{Collatz} functions {\ttfamily F} and {\ttfamily G} stored as an affine map. 
 
-Since affine maps remain affine under composition, "{}striding"{} maps can be built for any N whose least significant bits match the composition which created the map. When thrown into a table, a process can stride "{}k"{} steps at a time with a single application of the accelerated map. 
+Since affine maps remain affine under composition, "{}striding"{} maps can be built for any N whose least significant bits match the composition which created the map. When thrown into a table, a process can stride "{}k"{} steps at a time with a single application of the accelerated map.
+
+\begin{DoxyNote}{Note}
+Theoretically, larger strides should be better. Practically, the best performance is achieved when the table fits within the L1 cache. Spilling into L2 destroys performance. The defaults chosen are set in the CMake\+Lists.\+txt and can be overriden at compile time. 
+\end{DoxyNote}
+
 
 \doxysubsection{Function Documentation}
-\Hypertarget{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5}\label{namespaceAffineStride_acca45ffaea831b52d436d571b36086e5} 
-\index{AffineStride@{AffineStride}!apply\_stride@{apply\_stride}}
-\index{apply\_stride@{apply\_stride}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{apply\_stride()}{apply\_stride()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} Affine\+Stride\+::apply\+\_\+stride (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Applies the correct stride from the {\ttfamily STRIDE\+\_\+\+TABLE} based on the mask of {\ttfamily value} and transforms it. 
-
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to transform according to the {\ttfamily STRIDE\+\_\+\+TABLE}. \\
-\hline
-\end{DoxyParams}
-\Hypertarget{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51}\label{namespaceAffineStride_a5b69c888485800e509d4b5251bc8db51} 
-\index{AffineStride@{AffineStride}!apply\_stride\_2x@{apply\_stride\_2x}}
-\index{apply\_stride\_2x@{apply\_stride\_2x}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{apply\_stride\_2x()}{apply\_stride\_2x()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} Affine\+Stride\+::apply\+\_\+stride\+\_\+2x (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Unroll 2 strides. 
-
-\begin{DoxyNote}{Note}
-Neither this nor manual unrolling added performance when tested. 
-\end{DoxyNote}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to transform according to the {\ttfamily STRIDE\+\_\+\+TABLE}. \\
-\hline
-\end{DoxyParams}
-\Hypertarget{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb}\label{namespaceAffineStride_a515c44e2e1c1e6807719160fc16839fb} 
-\index{AffineStride@{AffineStride}!apply\_stride\_4x@{apply\_stride\_4x}}
-\index{apply\_stride\_4x@{apply\_stride\_4x}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{apply\_stride\_4x()}{apply\_stride\_4x()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} Affine\+Stride\+::apply\+\_\+stride\+\_\+4x (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Unroll 4 strides. 
-
-\begin{DoxyNote}{Note}
-Neither this nor manual unrolling added performance when tested. 
-\end{DoxyNote}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to transform according to the {\ttfamily STRIDE\+\_\+\+TABLE}. \\
-\hline
-\end{DoxyParams}
-\Hypertarget{namespaceAffineStride_ae3fee91d30d86b467b7e9a4cdd01bd7e}\label{namespaceAffineStride_ae3fee91d30d86b467b7e9a4cdd01bd7e} 
-\index{AffineStride@{AffineStride}!apply\_stride\_8x@{apply\_stride\_8x}}
-\index{apply\_stride\_8x@{apply\_stride\_8x}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{apply\_stride\_8x()}{apply\_stride\_8x()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} Affine\+Stride\+::apply\+\_\+stride\+\_\+8x (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-
-
-Unroll 8 strides. 
-
-\begin{DoxyNote}{Note}
-Neither this nor manual unrolling added performance when tested. 
-\end{DoxyNote}
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em value} & The value to transform according to the {\ttfamily STRIDE\+\_\+\+TABLE}. \\
-\hline
-\end{DoxyParams}
-\Hypertarget{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f}\label{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f} 
+\Hypertarget{namespaceAffineStride_a189318a0d9fb8d0ae3d9f93e6120dc00}\label{namespaceAffineStride_a189318a0d9fb8d0ae3d9f93e6120dc00} 
 \index{AffineStride@{AffineStride}!build\_stride\_table@{build\_stride\_table}}
 \index{build\_stride\_table@{build\_stride\_table}!AffineStride@{AffineStride}}
 \doxysubsubsection{\texorpdfstring{build\_stride\_table()}{build\_stride\_table()}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{Stride\+Type}} , \mbox{\hyperlink{classNode}{size\+\_\+t}} bits$>$ \\
-\mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$ \mbox{\hyperlink{classNode}{Stride\+Type}}, 1\mbox{\hyperlink{classNode}{ULL}}$<$$<$ \mbox{\hyperlink{classNode}{bits}} $>$ Affine\+Stride\+::build\+\_\+stride\+\_\+table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+{\footnotesize\ttfamily template$<$size\+\_\+t bits$>$ \\
+std\+::array$<$ \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, 1ULL$<$$<$ bits $>$ Affine\+Stride\+::build\+\_\+stride\+\_\+table (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-Build a stride table at compile-\/time. Used by {\ttfamily STRIDE\+\_\+\+TABLE}. 
+Builds a stride table at compile-\/time. 
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -165,34 +90,26 @@ Build a stride table at compile-\/time. Used by {\ttfamily STRIDE\+\_\+\+TABLE}.
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyReturn}{Returns}
-A constexpr array of {\ttfamily \doxylink{structAffineStride_1_1Stride}{Stride}} or {\ttfamily \doxylink{structAffineStride_1_1LongStride}{Long\+Stride}} covering all starting bit patterns. 
+An array of {\ttfamily \doxylink{structAffineStride_1_1Stride}{Stride}} or {\ttfamily Long\+Stride} covering all starting bit patterns. 
 \end{DoxyReturn}
-
-
-\doxysubsection{Variable Documentation}
-\Hypertarget{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}\label{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c} 
-\index{AffineStride@{AffineStride}!STRIDE\_SIZE@{STRIDE\_SIZE}}
-\index{STRIDE\_SIZE@{STRIDE\_SIZE}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{STRIDE\_SIZE}{STRIDE\_SIZE}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} Affine\+Stride\+::\+STRIDE\+\_\+\+SIZE = 8\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
-
-
-
-Size of steps in each stride for the global lookup table in this namespace. 
-
-\begin{DoxyNote}{Note}
-Micro-\/benchmarking shows 8 (256 permutations) is ideal. Larger seems to spill out of L1 cache, possibly? 
-\end{DoxyNote}
-\Hypertarget{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509}\label{namespaceAffineStride_a050135d83bccbe061f23275de4c0c509} 
-\index{AffineStride@{AffineStride}!STRIDE\_TABLE@{STRIDE\_TABLE}}
-\index{STRIDE\_TABLE@{STRIDE\_TABLE}!AffineStride@{AffineStride}}
-\doxysubsubsection{\texorpdfstring{STRIDE\_TABLE}{STRIDE\_TABLE}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{auto}} Affine\+Stride\+::\+STRIDE\+\_\+\+TABLE = \mbox{\hyperlink{namespaceAffineStride_a160accf58af0ecba2ec46f72ab0f649f}{build\+\_\+stride\+\_\+table}}$<$\mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, \mbox{\hyperlink{namespaceAffineStride_ae93385a83983d90af392024b43d3b14c}{STRIDE\+\_\+\+SIZE}}$>$()\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+\Hypertarget{namespaceAffineStride_a2defd27aadb87402ac1ba76fe26866fc}\label{namespaceAffineStride_a2defd27aadb87402ac1ba76fe26866fc} 
+\index{AffineStride@{AffineStride}!build\_stride\_table\_of\_ones@{build\_stride\_table\_of\_ones}}
+\index{build\_stride\_table\_of\_ones@{build\_stride\_table\_of\_ones}!AffineStride@{AffineStride}}
+\doxysubsubsection{\texorpdfstring{build\_stride\_table\_of\_ones()}{build\_stride\_table\_of\_ones()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t bits$>$ \\
+std\+::array$<$ \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}}, bits+1 $>$ Affine\+Stride\+::build\+\_\+stride\+\_\+table\+\_\+of\+\_\+ones (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-The lookup table itself. 
+Build a stride table of only ones (..1111) at compile-\/time. 
 
-\begin{DoxyWarning}{Warning}
-These are constexpr, which explodes the compiler at a given limit. Observed \texorpdfstring{$\sim$}{\string~}16... fyi. 
-\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Stride\+Type} & The type of stride struct to use. \\
+\hline
+{\em bits} & The number of bits (steps) to build the table. Since it\textquotesingle{}s only ones, bits size == table size (+1). \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+An array of {\ttfamily \doxylink{structAffineStride_1_1Stride}{Stride}} or {\ttfamily Long\+Stride} covering all consecutive ones in bits. 
+\end{DoxyReturn}

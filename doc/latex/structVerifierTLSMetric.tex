@@ -1,0 +1,104 @@
+\doxysection{Verifier\+TLSMetric Struct Reference}
+\hypertarget{structVerifierTLSMetric}{}\label{structVerifierTLSMetric}\index{VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{structVerifierTLSMetric_a8dcb0b8897c0a7af8868734cdd5362f2}{flush}} (\mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} \&metrics, bool do\+\_\+reset)
+\begin{DoxyCompactList}\small\item\em Write the TLS accumulated values to a {\ttfamily \doxylink{structVerifierMetric}{Verifier\+Metric}} object. Then zero out this object\textquotesingle{}s counters. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierTLSMetric_a14529ac91f3ffa065083b6fbbba8458f}\label{structVerifierTLSMetric_a14529ac91f3ffa065083b6fbbba8458f} 
+void {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Simple reset to set all values to zero. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structVerifierTLSMetric_abc094adbaacacf8a31e5439532746e07}\label{structVerifierTLSMetric_abc094adbaacacf8a31e5439532746e07} 
+uint64\+\_\+t {\bfseries nodes\+\_\+verified} = 0
+\begin{DoxyCompactList}\small\item\em True nodes (values) verified. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}{steps\+\_\+total}} = 0
+\begin{DoxyCompactList}\small\item\em Total number of steps taken. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\+\_\+skippable\+\_\+by\+\_\+hwm}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides alone. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structVerifierTLSMetric_a8dcb0b8897c0a7af8868734cdd5362f2}\label{structVerifierTLSMetric_a8dcb0b8897c0a7af8868734cdd5362f2} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!flush@{flush}}
+\index{flush@{flush}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{flush()}{flush()}}
+{\footnotesize\ttfamily void Verifier\+TLSMetric\+::flush (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} \&}]{metrics,  }\item[{bool}]{do\+\_\+reset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Write the TLS accumulated values to a {\ttfamily \doxylink{structVerifierMetric}{Verifier\+Metric}} object. Then zero out this object\textquotesingle{}s counters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em metrics} & An instance of {\ttfamily \doxylink{structVerifierMetric}{Verifier\+Metric}} whose atomic counters will be updated via {\ttfamily fetch\+\_\+add()}. \\
+\hline
+{\em do\+\_\+reset} & Controls whether counters are reset after flushing. Default true. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}\label{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_affine\_stride@{steps\_skippable\_by\_affine\_stride}}
+\index{steps\_skippable\_by\_affine\_stride@{steps\_skippable\_by\_affine\_stride}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride}{steps\_skippable\_by\_affine\_stride}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides alone. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}\label{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_affine\_stride\_before\_hwm@{steps\_skippable\_by\_affine\_stride\_before\_hwm}}
+\index{steps\_skippable\_by\_affine\_stride\_before\_hwm@{steps\_skippable\_by\_affine\_stride\_before\_hwm}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_before\_hwm}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}\label{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_hwm@{steps\_skippable\_by\_hwm}}
+\index{steps\_skippable\_by\_hwm@{steps\_skippable\_by\_hwm}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_hwm}{steps\_skippable\_by\_hwm}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+hwm = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}\label{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_total@{steps\_total}}
+\index{steps\_total@{steps\_total}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_total}{steps\_total}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+total = 0}
+
+
+
+Total number of steps taken. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+tls\+\_\+metric.\+hpp\end{DoxyCompactItemize}

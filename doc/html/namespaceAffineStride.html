@@ -78,6 +78,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">AffineStride Namespace Reference</div></div>
@@ -89,259 +90,93 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structAffineStride_1_1LongStride.html">LongStride</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A heavier, data-only struct for longer strides.  <a href="structAffineStride_1_1LongStride.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structAffineStride_1_1Stride.html">Stride</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A lightweight, data-only struct for the stride factors.  <a href="structAffineStride_1_1Stride.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structAffineStride_1_1Table.html">Table</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A struct of constexpr stride data including a table, mask, and size based on <code>bits</code>. Empirical testing shows that bit sizes between 8-12 are most optimal, but the real threshold is L1 cache. When it spills over into L2, performance drops.  <a href="structAffineStride_1_1Table.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a0733d71b60d6cf6a18459a9190d17465" id="r_a0733d71b60d6cf6a18459a9190d17465"><td class="memItemLeft" align="right" valign="top"><a id="a0733d71b60d6cf6a18459a9190d17465" name="a0733d71b60d6cf6a18459a9190d17465"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>NodeInitFWTable</b> = <a class="el" href="structAffineStride_1_1Table.html">Table</a>&lt; <a class="el" href="namespaceAffineStride.html#a8200fb5d421ad645a7c674058e921028">NODE_INIT_STRIDE_SIZE_FW</a> &gt;</td></tr>
+<tr class="memdesc:a0733d71b60d6cf6a18459a9190d17465"><td class="mdescLeft">&#160;</td><td class="mdescRight">The table for node init when fixed-width. <br /></td></tr>
+<tr class="separator:a0733d71b60d6cf6a18459a9190d17465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0deb1bfd51a16b078b458957865b7539" id="r_a0deb1bfd51a16b078b458957865b7539"><td class="memItemLeft" align="right" valign="top"><a id="a0deb1bfd51a16b078b458957865b7539" name="a0deb1bfd51a16b078b458957865b7539"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>NodeInitGMPTable</b> = <a class="el" href="structAffineStride_1_1Table.html">Table</a>&lt; <a class="el" href="namespaceAffineStride.html#a8200fb5d421ad645a7c674058e921028">NODE_INIT_STRIDE_SIZE_FW</a> &gt;</td></tr>
+<tr class="separator:a0deb1bfd51a16b078b458957865b7539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af49698bbb2981b6d9402e9fde1a4cae8" id="r_af49698bbb2981b6d9402e9fde1a4cae8"><td class="memItemLeft" align="right" valign="top"><a id="af49698bbb2981b6d9402e9fde1a4cae8" name="af49698bbb2981b6d9402e9fde1a4cae8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>VerifyFWTable</b> = <a class="el" href="structAffineStride_1_1Table.html">Table</a>&lt; <a class="el" href="namespaceAffineStride.html#a58b8d0470a6122b7d112ae2cccd68aa8">VERIFY_STRIDE_SIZE_FW</a> &gt;</td></tr>
+<tr class="separator:af49698bbb2981b6d9402e9fde1a4cae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e81e8ec068ef2a8fd6c4e40a89b78a5" id="r_a8e81e8ec068ef2a8fd6c4e40a89b78a5"><td class="memItemLeft" align="right" valign="top"><a id="a8e81e8ec068ef2a8fd6c4e40a89b78a5" name="a8e81e8ec068ef2a8fd6c4e40a89b78a5"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>VerifyGMPTable</b> = <a class="el" href="structAffineStride_1_1Table.html">Table</a>&lt; <a class="el" href="namespaceAffineStride.html#ac2e54d2fa3ea66b9d3c90e45ecdf0762">VERIFY_STRIDE_SIZE_GMP</a> &gt;</td></tr>
+<tr class="separator:a8e81e8ec068ef2a8fd6c4e40a89b78a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d6444953c970cd9bf7f92cefb37eb7" id="r_a76d6444953c970cd9bf7f92cefb37eb7"><td class="memItemLeft" align="right" valign="top"><a id="a76d6444953c970cd9bf7f92cefb37eb7" name="a76d6444953c970cd9bf7f92cefb37eb7"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>VerifyFWCudaTable</b> = <a class="el" href="structAffineStride_1_1Table.html">Table</a>&lt; <a class="el" href="namespaceAffineStride.html#a3a94ba5b139fb23a2110903ee208bc23">VERIFY_STRIDE_SIZE_FW_CUDA</a> &gt;</td></tr>
+<tr class="separator:a76d6444953c970cd9bf7f92cefb37eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a160accf58af0ecba2ec46f72ab0f649f" id="r_a160accf58af0ecba2ec46f72ab0f649f"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">StrideType</a> , <a class="el" href="classNode.html">size_t</a> bits&gt; </td></tr>
-<tr class="memitem:a160accf58af0ecba2ec46f72ab0f649f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">constexpr</a> std::array&lt; <a class="el" href="classNode.html">StrideType</a>, 1<a class="el" href="classNode.html">ULL</a>&lt;&lt; <a class="el" href="classNode.html">bits</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f">build_stride_table</a> ()</td></tr>
-<tr class="memdesc:a160accf58af0ecba2ec46f72ab0f649f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a stride table at compile-time. Used by <code>STRIDE_TABLE</code>.  <br /></td></tr>
-<tr class="separator:a160accf58af0ecba2ec46f72ab0f649f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Stride Application</div></td></tr>
-<tr class="memitem:acca45ffaea831b52d436d571b36086e5" id="r_acca45ffaea831b52d436d571b36086e5"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:acca45ffaea831b52d436d571b36086e5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#acca45ffaea831b52d436d571b36086e5">apply_stride</a> (T &amp;value)</td></tr>
-<tr class="memdesc:acca45ffaea831b52d436d571b36086e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the correct stride from the <code>STRIDE_TABLE</code> based on the mask of <code>value</code> and transforms it.  <br /></td></tr>
-<tr class="separator:acca45ffaea831b52d436d571b36086e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b69c888485800e509d4b5251bc8db51" id="r_a5b69c888485800e509d4b5251bc8db51"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:a5b69c888485800e509d4b5251bc8db51"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a5b69c888485800e509d4b5251bc8db51">apply_stride_2x</a> (T &amp;value)</td></tr>
-<tr class="memdesc:a5b69c888485800e509d4b5251bc8db51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unroll 2 strides.  <br /></td></tr>
-<tr class="separator:a5b69c888485800e509d4b5251bc8db51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a515c44e2e1c1e6807719160fc16839fb" id="r_a515c44e2e1c1e6807719160fc16839fb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:a515c44e2e1c1e6807719160fc16839fb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a515c44e2e1c1e6807719160fc16839fb">apply_stride_4x</a> (T &amp;value)</td></tr>
-<tr class="memdesc:a515c44e2e1c1e6807719160fc16839fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unroll 4 strides.  <br /></td></tr>
-<tr class="separator:a515c44e2e1c1e6807719160fc16839fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3fee91d30d86b467b7e9a4cdd01bd7e" id="r_ae3fee91d30d86b467b7e9a4cdd01bd7e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </td></tr>
-<tr class="memitem:ae3fee91d30d86b467b7e9a4cdd01bd7e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#ae3fee91d30d86b467b7e9a4cdd01bd7e">apply_stride_8x</a> (T &amp;value)</td></tr>
-<tr class="memdesc:ae3fee91d30d86b467b7e9a4cdd01bd7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unroll 8 strides.  <br /></td></tr>
-<tr class="separator:ae3fee91d30d86b467b7e9a4cdd01bd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189318a0d9fb8d0ae3d9f93e6120dc00" id="r_a189318a0d9fb8d0ae3d9f93e6120dc00"><td class="memTemplParams" colspan="2">template&lt;size_t bits&gt; </td></tr>
+<tr class="memitem:a189318a0d9fb8d0ae3d9f93e6120dc00"><td class="memTemplItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, 1ULL&lt;&lt; bits &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a189318a0d9fb8d0ae3d9f93e6120dc00">build_stride_table</a> ()</td></tr>
+<tr class="memdesc:a189318a0d9fb8d0ae3d9f93e6120dc00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a stride table at compile-time.  <br /></td></tr>
+<tr class="separator:a189318a0d9fb8d0ae3d9f93e6120dc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2defd27aadb87402ac1ba76fe26866fc" id="r_a2defd27aadb87402ac1ba76fe26866fc"><td class="memTemplParams" colspan="2">template&lt;size_t bits&gt; </td></tr>
+<tr class="memitem:a2defd27aadb87402ac1ba76fe26866fc"><td class="memTemplItemLeft" align="right" valign="top">std::array&lt; <a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, bits+1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a2defd27aadb87402ac1ba76fe26866fc">build_stride_table_of_ones</a> ()</td></tr>
+<tr class="memdesc:a2defd27aadb87402ac1ba76fe26866fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a stride table of only ones (..1111) at compile-time.  <br /></td></tr>
+<tr class="separator:a2defd27aadb87402ac1ba76fe26866fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a204bfdf108dca7309f209f5dea043f5f" id="r_a204bfdf108dca7309f209f5dea043f5f"><td class="memItemLeft" align="right" valign="top"><a id="a204bfdf108dca7309f209f5dea043f5f" name="a204bfdf108dca7309f209f5dea043f5f"></a>
-<a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_STRIDE</b> = 20</td></tr>
+constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_STRIDE</b> = 20</td></tr>
 <tr class="memdesc:a204bfdf108dca7309f209f5dea043f5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum stride length for the standard <code><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a></code>. <br /></td></tr>
 <tr class="separator:a204bfdf108dca7309f209f5dea043f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac30c6d06cb14406044f7dd12c8e8d8d4" id="r_ac30c6d06cb14406044f7dd12c8e8d8d4"><td class="memItemLeft" align="right" valign="top"><a id="ac30c6d06cb14406044f7dd12c8e8d8d4" name="ac30c6d06cb14406044f7dd12c8e8d8d4"></a>
-<a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_LONG_STRIDE</b> = 40</td></tr>
-<tr class="memdesc:ac30c6d06cb14406044f7dd12c8e8d8d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum stride length for the <code><a class="el" href="structAffineStride_1_1LongStride.html" title="A heavier, data-only struct for longer strides.">LongStride</a></code>. <br /></td></tr>
-<tr class="separator:ac30c6d06cb14406044f7dd12c8e8d8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae93385a83983d90af392024b43d3b14c" id="r_ae93385a83983d90af392024b43d3b14c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#ae93385a83983d90af392024b43d3b14c">STRIDE_SIZE</a> = 8</td></tr>
-<tr class="memdesc:ae93385a83983d90af392024b43d3b14c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of steps in each stride for the global lookup table in this namespace.  <br /></td></tr>
-<tr class="separator:ae93385a83983d90af392024b43d3b14c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa27709e87630361007e5ffbe06726b0f" id="r_aa27709e87630361007e5ffbe06726b0f"><td class="memItemLeft" align="right" valign="top"><a id="aa27709e87630361007e5ffbe06726b0f" name="aa27709e87630361007e5ffbe06726b0f"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">uint64_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>STRIDE_MASK</b> = (1<a class="el" href="classNode.html">ULL</a> &lt;&lt; <a class="el" href="namespaceAffineStride.html#ae93385a83983d90af392024b43d3b14c">STRIDE_SIZE</a>) - 1</td></tr>
-<tr class="memdesc:aa27709e87630361007e5ffbe06726b0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The derived stride mask from stride size. <br /></td></tr>
-<tr class="separator:aa27709e87630361007e5ffbe06726b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a050135d83bccbe061f23275de4c0c509" id="r_a050135d83bccbe061f23275de4c0c509"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceAffineStride.html#a050135d83bccbe061f23275de4c0c509">STRIDE_TABLE</a> = <a class="el" href="namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f">build_stride_table</a>&lt;<a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, <a class="el" href="namespaceAffineStride.html#ae93385a83983d90af392024b43d3b14c">STRIDE_SIZE</a>&gt;()</td></tr>
-<tr class="memdesc:a050135d83bccbe061f23275de4c0c509"><td class="mdescLeft">&#160;</td><td class="mdescRight">The lookup table itself.  <br /></td></tr>
-<tr class="separator:a050135d83bccbe061f23275de4c0c509"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8200fb5d421ad645a7c674058e921028" id="r_a8200fb5d421ad645a7c674058e921028"><td class="memItemLeft" align="right" valign="top"><a id="a8200fb5d421ad645a7c674058e921028" name="a8200fb5d421ad645a7c674058e921028"></a>
+static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>NODE_INIT_STRIDE_SIZE_FW</b> = COLLATZ_NODE_INIT_STRIDE_SIZE_FW</td></tr>
+<tr class="memdesc:a8200fb5d421ad645a7c674058e921028"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a> size when node building in <a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">Node::init()</a> (and its helper) for fixed-width types. <br /></td></tr>
+<tr class="separator:a8200fb5d421ad645a7c674058e921028"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcdfc6d46772dea576b4c4d81f9a7089" id="r_abcdfc6d46772dea576b4c4d81f9a7089"><td class="memItemLeft" align="right" valign="top"><a id="abcdfc6d46772dea576b4c4d81f9a7089" name="abcdfc6d46772dea576b4c4d81f9a7089"></a>
+static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>NODE_INIT_STRIDE_SIZE_GMP</b> = COLLATZ_NODE_INIT_STRIDE_SIZE_GMP</td></tr>
+<tr class="memdesc:abcdfc6d46772dea576b4c4d81f9a7089"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a> size when node building in <a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">Node::init()</a> (and its helper) for <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> types. <br /></td></tr>
+<tr class="separator:abcdfc6d46772dea576b4c4d81f9a7089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58b8d0470a6122b7d112ae2cccd68aa8" id="r_a58b8d0470a6122b7d112ae2cccd68aa8"><td class="memItemLeft" align="right" valign="top"><a id="a58b8d0470a6122b7d112ae2cccd68aa8" name="a58b8d0470a6122b7d112ae2cccd68aa8"></a>
+static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>VERIFY_STRIDE_SIZE_FW</b> = COLLATZ_VERIFY_STRIDE_SIZE_FW</td></tr>
+<tr class="memdesc:a58b8d0470a6122b7d112ae2cccd68aa8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a> size when performing verification in Collatz::st_verify_X() method(s) for fixed-width types. <br /></td></tr>
+<tr class="separator:a58b8d0470a6122b7d112ae2cccd68aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2e54d2fa3ea66b9d3c90e45ecdf0762" id="r_ac2e54d2fa3ea66b9d3c90e45ecdf0762"><td class="memItemLeft" align="right" valign="top"><a id="ac2e54d2fa3ea66b9d3c90e45ecdf0762" name="ac2e54d2fa3ea66b9d3c90e45ecdf0762"></a>
+static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>VERIFY_STRIDE_SIZE_GMP</b> = COLLATZ_VERIFY_STRIDE_SIZE_GMP</td></tr>
+<tr class="memdesc:ac2e54d2fa3ea66b9d3c90e45ecdf0762"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a> size when performing verification in Collatz::st_verify_X() method(s) for fixed-GMP types. <br /></td></tr>
+<tr class="separator:ac2e54d2fa3ea66b9d3c90e45ecdf0762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a94ba5b139fb23a2110903ee208bc23" id="r_a3a94ba5b139fb23a2110903ee208bc23"><td class="memItemLeft" align="right" valign="top"><a id="a3a94ba5b139fb23a2110903ee208bc23" name="a3a94ba5b139fb23a2110903ee208bc23"></a>
+static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>VERIFY_STRIDE_SIZE_FW_CUDA</b> = COLLATZ_VERIFY_STRIDE_SIZE_FW_CUDA</td></tr>
+<tr class="memdesc:a3a94ba5b139fb23a2110903ee208bc23"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a> size when performing verification on a <a class="el" href="namespaceGPU.html" title="Helper functions for GPU operations. Largely Cuda, but whatever.">GPU</a>. Only applies to fixed-width types. <br /></td></tr>
+<tr class="separator:a3a94ba5b139fb23a2110903ee208bc23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A multi-step (stride) of accelerated <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> functions <code>F</code> and <code>G</code> stored as an affine map. </p>
-<p>Since affine maps remain affine under composition, "striding" maps can be built for any N whose least significant bits match the composition which created the map. When thrown into a table, a process can stride "k" steps at a time with a single application of the accelerated map. </p>
+<p>Since affine maps remain affine under composition, "striding" maps can be built for any N whose least significant bits match the composition which created the map. When thrown into a table, a process can stride "k" steps at a time with a single application of the accelerated map.</p>
+<dl class="section note"><dt>Note</dt><dd>Theoretically, larger strides should be better. Practically, the best performance is achieved when the table fits within the L1 cache. Spilling into L2 destroys performance. The defaults chosen are set in the CMakeLists.txt and can be overriden at compile time. </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="acca45ffaea831b52d436d571b36086e5" name="acca45ffaea831b52d436d571b36086e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acca45ffaea831b52d436d571b36086e5">&#9670;&#160;</a></span>apply_stride()</h2>
+<a id="a189318a0d9fb8d0ae3d9f93e6120dc00" name="a189318a0d9fb8d0ae3d9f93e6120dc00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a189318a0d9fb8d0ae3d9f93e6120dc00">&#9670;&#160;</a></span>build_stride_table()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
+template&lt;size_t bits&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> AffineStride::apply_stride </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Applies the correct stride from the <code>STRIDE_TABLE</code> based on the mask of <code>value</code> and transforms it. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>The value to transform according to the <code>STRIDE_TABLE</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a5b69c888485800e509d4b5251bc8db51" name="a5b69c888485800e509d4b5251bc8db51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b69c888485800e509d4b5251bc8db51">&#9670;&#160;</a></span>apply_stride_2x()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> AffineStride::apply_stride_2x </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Unroll 2 strides. </p>
-<dl class="section note"><dt>Note</dt><dd>Neither this nor manual unrolling added performance when tested. </dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>The value to transform according to the <code>STRIDE_TABLE</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a515c44e2e1c1e6807719160fc16839fb" name="a515c44e2e1c1e6807719160fc16839fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a515c44e2e1c1e6807719160fc16839fb">&#9670;&#160;</a></span>apply_stride_4x()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> AffineStride::apply_stride_4x </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Unroll 4 strides. </p>
-<dl class="section note"><dt>Note</dt><dd>Neither this nor manual unrolling added performance when tested. </dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>The value to transform according to the <code>STRIDE_TABLE</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae3fee91d30d86b467b7e9a4cdd01bd7e" name="ae3fee91d30d86b467b7e9a4cdd01bd7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3fee91d30d86b467b7e9a4cdd01bd7e">&#9670;&#160;</a></span>apply_stride_8x()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> AffineStride::apply_stride_8x </td>
-          <td>(</td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Unroll 8 strides. </p>
-<dl class="section note"><dt>Note</dt><dd>Neither this nor manual unrolling added performance when tested. </dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>The value to transform according to the <code>STRIDE_TABLE</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a160accf58af0ecba2ec46f72ab0f649f" name="a160accf58af0ecba2ec46f72ab0f649f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a160accf58af0ecba2ec46f72ab0f649f">&#9670;&#160;</a></span>build_stride_table()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">StrideType</a> , <a class="el" href="classNode.html">size_t</a> bits&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">constexpr</a> std::array&lt; <a class="el" href="classNode.html">StrideType</a>, 1<a class="el" href="classNode.html">ULL</a>&lt;&lt; <a class="el" href="classNode.html">bits</a> &gt; AffineStride::build_stride_table </td>
+          <td class="memname">std::array&lt; <a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, 1ULL&lt;&lt; bits &gt; AffineStride::build_stride_table </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Build a stride table at compile-time. Used by <code>STRIDE_TABLE</code>. </p>
+<p>Builds a stride table at compile-time. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">StrideType</td><td>The type of stride struct to use. </td></tr>
@@ -349,58 +184,36 @@ template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href=
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A constexpr array of <code><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a></code> or <code><a class="el" href="structAffineStride_1_1LongStride.html" title="A heavier, data-only struct for longer strides.">LongStride</a></code> covering all starting bit patterns. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An array of <code><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a></code> or <code>LongStride</code> covering all starting bit patterns. </dd></dl>
 
 </div>
 </div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="ae93385a83983d90af392024b43d3b14c" name="ae93385a83983d90af392024b43d3b14c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae93385a83983d90af392024b43d3b14c">&#9670;&#160;</a></span>STRIDE_SIZE</h2>
+<a id="a2defd27aadb87402ac1ba76fe26866fc" name="a2defd27aadb87402ac1ba76fe26866fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2defd27aadb87402ac1ba76fe26866fc">&#9670;&#160;</a></span>build_stride_table_of_ones()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
+<div class="memtemplate">
+template&lt;size_t bits&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">size_t</a> AffineStride::STRIDE_SIZE = 8</td>
+          <td class="memname">std::array&lt; <a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, bits+1 &gt; AffineStride::build_stride_table_of_ones </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Size of steps in each stride for the global lookup table in this namespace. </p>
-<dl class="section note"><dt>Note</dt><dd>Micro-benchmarking shows 8 (256 permutations) is ideal. Larger seems to spill out of L1 cache, possibly? </dd></dl>
-
-</div>
-</div>
-<a id="a050135d83bccbe061f23275de4c0c509" name="a050135d83bccbe061f23275de4c0c509"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a050135d83bccbe061f23275de4c0c509">&#9670;&#160;</a></span>STRIDE_TABLE</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">constexpr</a> <a class="el" href="classNode.html">auto</a> AffineStride::STRIDE_TABLE = <a class="el" href="namespaceAffineStride.html#a160accf58af0ecba2ec46f72ab0f649f">build_stride_table</a>&lt;<a class="el" href="structAffineStride_1_1Stride.html">Stride</a>, <a class="el" href="namespaceAffineStride.html#ae93385a83983d90af392024b43d3b14c">STRIDE_SIZE</a>&gt;()</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The lookup table itself. </p>
-<dl class="section warning"><dt>Warning</dt><dd>These are constexpr, which explodes the compiler at a given limit. Observed ~16... fyi. </dd></dl>
+<p>Build a stride table of only ones (..1111) at compile-time. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">StrideType</td><td>The type of stride struct to use. </td></tr>
+    <tr><td class="paramname">bits</td><td>The number of bits (steps) to build the table. Since it's only ones, bits size == table size (+1). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An array of <code><a class="el" href="structAffineStride_1_1Stride.html" title="A lightweight, data-only struct for the stride factors.">Stride</a></code> or <code>LongStride</code> covering all consecutive ones in bits. </dd></dl>
 
 </div>
 </div>

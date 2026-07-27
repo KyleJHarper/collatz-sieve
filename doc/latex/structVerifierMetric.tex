@@ -1,0 +1,458 @@
+\doxysection{Verifier\+Metric Struct Reference}
+\hypertarget{structVerifierMetric}{}\label{structVerifierMetric}\index{VerifierMetric@{VerifierMetric}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structVerifierMetric_a503d32bca1c12f637aa771fc4a882391}\label{structVerifierMetric_a503d32bca1c12f637aa771fc4a882391} 
+void {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Simple reset to set all values to zero. \end{DoxyCompactList}\item 
+const std\+::string \mbox{\hyperlink{structVerifierMetric_ae00dac165a014b0d8b0f60640c3c4c78}{emit\+\_\+ilp}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Returns all metrics as Influx Line Protocol. It does NOT emit a trailing newline. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Per-\/\+Time Methods}\par
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a1ff321b568d8492ce5dd8b84a25559c3}{nodes\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of nodes verified per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a2de5c2461e2e02628891e43ccf990a54}{nodes\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of nodes verified per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_ace491de3ca482cc338b9c2886215acfd}{effective\+\_\+nodes\+\_\+per\+\_\+ms}} () const
+\begin{DoxyCompactList}\small\item\em Number of effective nodes verified per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a1b1872c1ee35d0753dfa1fb98c8d6b95}{effective\+\_\+nodes\+\_\+per\+\_\+s}} () const
+\begin{DoxyCompactList}\small\item\em Number of effective nodes verified per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_ae2379f9e885da4dd29a4c2548f8ec54c}{steps\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps taken per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_ac71b972ee4d4ee511a34528afb50cfe7}{steps\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps taken per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a80cd3e9cdcfb4511d38d4e38ae20f1e3}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps skipped by affine striding per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a4744906bea5bfccdc2df848abdda6d6c}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps skipped by affine striding per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_aeaa24bce0d644b10bd014793e82b2e2a}{steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps skipped by High-\/\+Water Mark per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a3d6c22a615bed91e0192f8d563567ccd}{steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps skipped by High-\/\+Water Mark per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a58e152cd61fe7b00952407ce00f080d5}{gpu\+\_\+kernel\+\_\+launches\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of \doxylink{namespaceGPU}{GPU} kernel launches per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_aec231dfbf72fb486b24b40b2a9bb0856}{gpu\+\_\+kernel\+\_\+launches\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of \doxylink{namespaceGPU}{GPU} kernel launches per second. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a76ea946ca1563e7ca070c353b64667c7}{gpu\+\_\+overflows\+\_\+per\+\_\+ms}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of \doxylink{namespaceGPU}{GPU} node overflows per millisecond. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_ae121fe10aa821b163effd08c555017e8}{gpu\+\_\+overflows\+\_\+per\+\_\+s}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of \doxylink{namespaceGPU}{GPU} node overflows per second. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Skip Rates}\par
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{structVerifierMetric_ad97def12d8a8b54a701191ef4c16b464}{skip\+\_\+rate\+\_\+of\+\_\+hwm}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Rate of steps skipped by using High-\/\+Water Mark stopping. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structVerifierMetric_a53a0edb674600b19c9b53c195a596fce}{skip\+\_\+rate\+\_\+of\+\_\+affine\+\_\+stride}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Rate of steps skipped by using {\ttfamily \doxylink{namespaceAffineStride}{Affine\+Stride}} tables without using High-\/\+Water Mark stopping. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structVerifierMetric_a6a59926b59e4533fb84cb3de65372390}{skip\+\_\+rate\+\_\+of\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Rate of steps skipped by using {\ttfamily \doxylink{namespaceAffineStride}{Affine\+Stride}} tables while using High-\/\+Water Mark stopping. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Counters}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structVerifierMetric_a8da09c14055235411ee13019daba1a93}\label{structVerifierMetric_a8da09c14055235411ee13019daba1a93} 
+std\+::atomic$<$ uint64\+\_\+t $>$ {\bfseries nodes\+\_\+verified\+\_\+atomic} = 0
+\begin{DoxyCompactList}\small\item\em Number of nodes verified. \end{DoxyCompactList}\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\+\_\+total\+\_\+atomic}} = 0
+\begin{DoxyCompactList}\small\item\em Total number of steps taken. \end{DoxyCompactList}\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+atomic}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. \end{DoxyCompactList}\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+atomic}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides alone. \end{DoxyCompactList}\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm\+\_\+atomic}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}\label{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523} 
+std\+::atomic$<$ uint64\+\_\+t $>$ {\bfseries gpu\+\_\+kernel\+\_\+launches\+\_\+atomic} = 0
+\begin{DoxyCompactList}\small\item\em Number of \doxylink{namespaceGPU}{GPU} kernel launches. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}\label{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050} 
+std\+::atomic$<$ uint64\+\_\+t $>$ {\bfseries gpu\+\_\+overflows\+\_\+processed\+\_\+atomic} = 0
+\begin{DoxyCompactList}\small\item\em Number of values which triggered overflow on the \doxylink{namespaceGPU}{GPU} and required follow-\/up CPU verification. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}\label{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42} 
+std\+::atomic$<$ uint64\+\_\+t $>$ {\bfseries gpu\+\_\+overflow\+\_\+buffer\+\_\+exceeded\+\_\+atomic} = 0
+\begin{DoxyCompactList}\small\item\em Number of times overflows became so high they exceeded the {\ttfamily \doxylink{structGPUVerifierResultData}{GPUVerifier\+Result\+Data}} overflow indexes buffer. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}\label{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541} 
+double {\bfseries coverage\+\_\+ratio} = 0
+\begin{DoxyCompactList}\small\item\em User-\/supplied coverage ratio, usually provided by the {\ttfamily tree}. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}\label{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2} 
+std\+::chrono\+::milliseconds {\bfseries duration\+\_\+ms} = std\+::chrono\+::milliseconds(0)
+\begin{DoxyCompactList}\small\item\em The cumulative duration in milliseconds this verifier has ran. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a1112fc67938542be0242d88103345303}\label{structVerifierMetric_a1112fc67938542be0242d88103345303} 
+uint64\+\_\+t {\bfseries effective\+\_\+nodes\+\_\+verified} () const
+\begin{DoxyCompactList}\small\item\em Returns the effective nodes processed processed, which is true nodes divided by (1 -\/ coverage ratio). \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierMetric_a3b9f08655f353a3a065260c101b4da66}{steps\+\_\+before\+\_\+hwm}} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Number of steps required to reach High-\/\+Water Mark. \end{DoxyCompactList}\item 
+\Hypertarget{structVerifierMetric_a9a20e4af03b76e41f9585c13a4bfc306}\label{structVerifierMetric_a9a20e4af03b76e41f9585c13a4bfc306} 
+double {\bfseries residue\+\_\+ratio} () const
+\begin{DoxyCompactList}\small\item\em Returns the residue ratio, which is (1 -\/ coverage\+\_\+ratio). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structVerifierMetric_ace491de3ca482cc338b9c2886215acfd}\label{structVerifierMetric_ace491de3ca482cc338b9c2886215acfd} 
+\index{VerifierMetric@{VerifierMetric}!effective\_nodes\_per\_ms@{effective\_nodes\_per\_ms}}
+\index{effective\_nodes\_per\_ms@{effective\_nodes\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{effective\_nodes\_per\_ms()}{effective\_nodes\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::effective\+\_\+nodes\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of effective nodes verified per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a1b1872c1ee35d0753dfa1fb98c8d6b95}\label{structVerifierMetric_a1b1872c1ee35d0753dfa1fb98c8d6b95} 
+\index{VerifierMetric@{VerifierMetric}!effective\_nodes\_per\_s@{effective\_nodes\_per\_s}}
+\index{effective\_nodes\_per\_s@{effective\_nodes\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{effective\_nodes\_per\_s()}{effective\_nodes\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::effective\+\_\+nodes\+\_\+per\+\_\+s (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of effective nodes verified per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_ae00dac165a014b0d8b0f60640c3c4c78}\label{structVerifierMetric_ae00dac165a014b0d8b0f60640c3c4c78} 
+\index{VerifierMetric@{VerifierMetric}!emit\_ilp@{emit\_ilp}}
+\index{emit\_ilp@{emit\_ilp}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{emit\_ilp()}{emit\_ilp()}}
+{\footnotesize\ttfamily const std\+::string Verifier\+Metric\+::emit\+\_\+ilp (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns all metrics as Influx Line Protocol. It does NOT emit a trailing newline. 
+
+\begin{DoxyReturn}{Returns}
+String of all metrics. 
+\end{DoxyReturn}
+\Hypertarget{structVerifierMetric_a58e152cd61fe7b00952407ce00f080d5}\label{structVerifierMetric_a58e152cd61fe7b00952407ce00f080d5} 
+\index{VerifierMetric@{VerifierMetric}!gpu\_kernel\_launches\_per\_ms@{gpu\_kernel\_launches\_per\_ms}}
+\index{gpu\_kernel\_launches\_per\_ms@{gpu\_kernel\_launches\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{gpu\_kernel\_launches\_per\_ms()}{gpu\_kernel\_launches\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::gpu\+\_\+kernel\+\_\+launches\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of \doxylink{namespaceGPU}{GPU} kernel launches per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_aec231dfbf72fb486b24b40b2a9bb0856}\label{structVerifierMetric_aec231dfbf72fb486b24b40b2a9bb0856} 
+\index{VerifierMetric@{VerifierMetric}!gpu\_kernel\_launches\_per\_s@{gpu\_kernel\_launches\_per\_s}}
+\index{gpu\_kernel\_launches\_per\_s@{gpu\_kernel\_launches\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{gpu\_kernel\_launches\_per\_s()}{gpu\_kernel\_launches\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::gpu\+\_\+kernel\+\_\+launches\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of \doxylink{namespaceGPU}{GPU} kernel launches per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a76ea946ca1563e7ca070c353b64667c7}\label{structVerifierMetric_a76ea946ca1563e7ca070c353b64667c7} 
+\index{VerifierMetric@{VerifierMetric}!gpu\_overflows\_per\_ms@{gpu\_overflows\_per\_ms}}
+\index{gpu\_overflows\_per\_ms@{gpu\_overflows\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{gpu\_overflows\_per\_ms()}{gpu\_overflows\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::gpu\+\_\+overflows\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of \doxylink{namespaceGPU}{GPU} node overflows per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_ae121fe10aa821b163effd08c555017e8}\label{structVerifierMetric_ae121fe10aa821b163effd08c555017e8} 
+\index{VerifierMetric@{VerifierMetric}!gpu\_overflows\_per\_s@{gpu\_overflows\_per\_s}}
+\index{gpu\_overflows\_per\_s@{gpu\_overflows\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{gpu\_overflows\_per\_s()}{gpu\_overflows\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::gpu\+\_\+overflows\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of \doxylink{namespaceGPU}{GPU} node overflows per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a1ff321b568d8492ce5dd8b84a25559c3}\label{structVerifierMetric_a1ff321b568d8492ce5dd8b84a25559c3} 
+\index{VerifierMetric@{VerifierMetric}!nodes\_per\_ms@{nodes\_per\_ms}}
+\index{nodes\_per\_ms@{nodes\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{nodes\_per\_ms()}{nodes\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::nodes\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of nodes verified per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a2de5c2461e2e02628891e43ccf990a54}\label{structVerifierMetric_a2de5c2461e2e02628891e43ccf990a54} 
+\index{VerifierMetric@{VerifierMetric}!nodes\_per\_s@{nodes\_per\_s}}
+\index{nodes\_per\_s@{nodes\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{nodes\_per\_s()}{nodes\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::nodes\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of nodes verified per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a53a0edb674600b19c9b53c195a596fce}\label{structVerifierMetric_a53a0edb674600b19c9b53c195a596fce} 
+\index{VerifierMetric@{VerifierMetric}!skip\_rate\_of\_affine\_stride@{skip\_rate\_of\_affine\_stride}}
+\index{skip\_rate\_of\_affine\_stride@{skip\_rate\_of\_affine\_stride}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{skip\_rate\_of\_affine\_stride()}{skip\_rate\_of\_affine\_stride()}}
+{\footnotesize\ttfamily double Verifier\+Metric\+::skip\+\_\+rate\+\_\+of\+\_\+affine\+\_\+stride (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Rate of steps skipped by using {\ttfamily \doxylink{namespaceAffineStride}{Affine\+Stride}} tables without using High-\/\+Water Mark stopping. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when steps\+\_\+total\+\_\+atomic is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a6a59926b59e4533fb84cb3de65372390}\label{structVerifierMetric_a6a59926b59e4533fb84cb3de65372390} 
+\index{VerifierMetric@{VerifierMetric}!skip\_rate\_of\_affine\_stride\_before\_hwm@{skip\_rate\_of\_affine\_stride\_before\_hwm}}
+\index{skip\_rate\_of\_affine\_stride\_before\_hwm@{skip\_rate\_of\_affine\_stride\_before\_hwm}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{skip\_rate\_of\_affine\_stride\_before\_hwm()}{skip\_rate\_of\_affine\_stride\_before\_hwm()}}
+{\footnotesize\ttfamily double Verifier\+Metric\+::skip\+\_\+rate\+\_\+of\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Rate of steps skipped by using {\ttfamily \doxylink{namespaceAffineStride}{Affine\+Stride}} tables while using High-\/\+Water Mark stopping. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when steps\+\_\+total\+\_\+atomic is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_ad97def12d8a8b54a701191ef4c16b464}\label{structVerifierMetric_ad97def12d8a8b54a701191ef4c16b464} 
+\index{VerifierMetric@{VerifierMetric}!skip\_rate\_of\_hwm@{skip\_rate\_of\_hwm}}
+\index{skip\_rate\_of\_hwm@{skip\_rate\_of\_hwm}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{skip\_rate\_of\_hwm()}{skip\_rate\_of\_hwm()}}
+{\footnotesize\ttfamily double Verifier\+Metric\+::skip\+\_\+rate\+\_\+of\+\_\+hwm (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Rate of steps skipped by using High-\/\+Water Mark stopping. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when steps\+\_\+total\+\_\+atomic is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a3b9f08655f353a3a065260c101b4da66}\label{structVerifierMetric_a3b9f08655f353a3a065260c101b4da66} 
+\index{VerifierMetric@{VerifierMetric}!steps\_before\_hwm@{steps\_before\_hwm}}
+\index{steps\_before\_hwm@{steps\_before\_hwm}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_before\_hwm()}{steps\_before\_hwm()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+before\+\_\+hwm (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps required to reach High-\/\+Water Mark. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierMetric_ae2379f9e885da4dd29a4c2548f8ec54c}\label{structVerifierMetric_ae2379f9e885da4dd29a4c2548f8ec54c} 
+\index{VerifierMetric@{VerifierMetric}!steps\_per\_ms@{steps\_per\_ms}}
+\index{steps\_per\_ms@{steps\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_per\_ms()}{steps\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps taken per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_ac71b972ee4d4ee511a34528afb50cfe7}\label{structVerifierMetric_ac71b972ee4d4ee511a34528afb50cfe7} 
+\index{VerifierMetric@{VerifierMetric}!steps\_per\_s@{steps\_per\_s}}
+\index{steps\_per\_s@{steps\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_per\_s()}{steps\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps taken per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a80cd3e9cdcfb4511d38d4e38ae20f1e3}\label{structVerifierMetric_a80cd3e9cdcfb4511d38d4e38ae20f1e3} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_affine\_stride\_per\_ms@{steps\_skippable\_by\_affine\_stride\_per\_ms}}
+\index{steps\_skippable\_by\_affine\_stride\_per\_ms@{steps\_skippable\_by\_affine\_stride\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_per\_ms()}{steps\_skippable\_by\_affine\_stride\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps skipped by affine striding per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a4744906bea5bfccdc2df848abdda6d6c}\label{structVerifierMetric_a4744906bea5bfccdc2df848abdda6d6c} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_affine\_stride\_per\_s@{steps\_skippable\_by\_affine\_stride\_per\_s}}
+\index{steps\_skippable\_by\_affine\_stride\_per\_s@{steps\_skippable\_by\_affine\_stride\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_per\_s()}{steps\_skippable\_by\_affine\_stride\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps skipped by affine striding per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_aeaa24bce0d644b10bd014793e82b2e2a}\label{structVerifierMetric_aeaa24bce0d644b10bd014793e82b2e2a} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_hwm\_per\_ms@{steps\_skippable\_by\_hwm\_per\_ms}}
+\index{steps\_skippable\_by\_hwm\_per\_ms@{steps\_skippable\_by\_hwm\_per\_ms}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_hwm\_per\_ms()}{steps\_skippable\_by\_hwm\_per\_ms()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+per\+\_\+ms (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps skipped by High-\/\+Water Mark per millisecond. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+\Hypertarget{structVerifierMetric_a3d6c22a615bed91e0192f8d563567ccd}\label{structVerifierMetric_a3d6c22a615bed91e0192f8d563567ccd} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_hwm\_per\_s@{steps\_skippable\_by\_hwm\_per\_s}}
+\index{steps\_skippable\_by\_hwm\_per\_s@{steps\_skippable\_by\_hwm\_per\_s}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_hwm\_per\_s()}{steps\_skippable\_by\_hwm\_per\_s()}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+per\+\_\+s (\begin{DoxyParamCaption}\item[{std\+::memory\+\_\+order}]{m = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+relaxed} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Number of steps skipped by High-\/\+Water Mark per second. 
+
+\begin{DoxyNote}{Note}
+Data is only updated every {\ttfamily \doxylink{classVerifier_a3899943de03d220d4b479218c5555d32}{Verifier\+::\+\_\+synchronization\+\_\+countdown}} iterations. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Returns 0 when duration is zero, instead of throwing an overflow error. 
+\end{DoxyWarning}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}\label{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_affine\_stride\_atomic@{steps\_skippable\_by\_affine\_stride\_atomic}}
+\index{steps\_skippable\_by\_affine\_stride\_atomic@{steps\_skippable\_by\_affine\_stride\_atomic}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_atomic}{steps\_skippable\_by\_affine\_stride\_atomic}}
+{\footnotesize\ttfamily std\+::atomic$<$uint64\+\_\+t$>$ Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+atomic = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides alone. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}\label{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic@{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}
+\index{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic@{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}
+{\footnotesize\ttfamily std\+::atomic$<$uint64\+\_\+t$>$ Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm\+\_\+atomic = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}\label{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9} 
+\index{VerifierMetric@{VerifierMetric}!steps\_skippable\_by\_hwm\_atomic@{steps\_skippable\_by\_hwm\_atomic}}
+\index{steps\_skippable\_by\_hwm\_atomic@{steps\_skippable\_by\_hwm\_atomic}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_hwm\_atomic}{steps\_skippable\_by\_hwm\_atomic}}
+{\footnotesize\ttfamily std\+::atomic$<$uint64\+\_\+t$>$ Verifier\+Metric\+::steps\+\_\+skippable\+\_\+by\+\_\+hwm\+\_\+atomic = 0}
+
+
+
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+\Hypertarget{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}\label{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3} 
+\index{VerifierMetric@{VerifierMetric}!steps\_total\_atomic@{steps\_total\_atomic}}
+\index{steps\_total\_atomic@{steps\_total\_atomic}!VerifierMetric@{VerifierMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_total\_atomic}{steps\_total\_atomic}}
+{\footnotesize\ttfamily std\+::atomic$<$uint64\+\_\+t$>$ Verifier\+Metric\+::steps\+\_\+total\+\_\+atomic = 0}
+
+
+
+Total number of steps taken. 
+
+\begin{DoxyNote}{Note}
+Only available when {\ttfamily Detailed\+Metrics} are enabled. 
+\end{DoxyNote}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+metric.\+hpp\end{DoxyCompactItemize}

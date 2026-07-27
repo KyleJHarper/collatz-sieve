@@ -103,110 +103,61 @@ Collaboration diagram for Collatz&lt; T &gt;:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4fb36272dff7d0e4d543e42226615588" id="r_a4fb36272dff7d0e4d543e42226615588"><td class="memItemLeft" align="right" valign="top"><a id="a4fb36272dff7d0e4d543e42226615588" name="a4fb36272dff7d0e4d543e42226615588"></a>
-<a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deep_size</b> () <a class="el" href="classNode.html">const</a></td></tr>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>deep_size</b> () const</td></tr>
 <tr class="memdesc:a4fb36272dff7d0e4d543e42226615588"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deeply scan the object and report its size. <br /></td></tr>
 <tr class="separator:a4fb36272dff7d0e4d543e42226615588"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5121ff5bda5fd8a4526b7d6a40dd947d" id="r_a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="memTemplParams" colspan="2"><a id="a5121ff5bda5fd8a4526b7d6a40dd947d" name="a5121ff5bda5fd8a4526b7d6a40dd947d"></a>
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>for_each_sequence_step</b> (<a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run through all the steps of a sequence. Uses <code><a class="el" href="classCollatz.html#a09bd6ec43c83b8fd6e7bffb4721a547d" title="Run through the sequence with a callback each step, including the initial value.">st_for_each_sequence_step()</a></code> under the hood. <br /></td></tr>
-<tr class="separator:a5121ff5bda5fd8a4526b7d6a40dd947d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67ee1cceacfb714f7d6b2359c23cd6e9" id="r_a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="memItemLeft" align="right" valign="top"><a id="a67ee1cceacfb714f7d6b2359c23cd6e9" name="a67ee1cceacfb714f7d6b2359c23cd6e9"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_fg_chain_string</b> (<a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>()) <a class="el" href="classNode.html">const</a></td></tr>
-<tr class="memdesc:a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the F-G chain as a string for a sequence with some initial value. Uses <code><a class="el" href="classCollatz.html#a8ee1f8a061bedb3e82c4c80fe36d4f17" title="Generate the F-G chain as a string for a sequence with some initial value.">st_get_fg_chain_string()</a></code>. <br /></td></tr>
-<tr class="separator:a67ee1cceacfb714f7d6b2359c23cd6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3793586a6af869c0330cdbe769a9bad" id="r_ad3793586a6af869c0330cdbe769a9bad"><td class="memItemLeft" align="right" valign="top"><a id="ad3793586a6af869c0330cdbe769a9bad" name="ad3793586a6af869c0330cdbe769a9bad"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>get_oe_pattern_string</b> (<a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>())</td></tr>
-<tr class="memdesc:ad3793586a6af869c0330cdbe769a9bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the O-E chain as a string for a sequence with some initial value. Uses <code><a class="el" href="classCollatz.html#aff36ffade9c7d284d27de9147c0f15c9" title="Generate the O-E (odd-even) chain as a string for a sequence with some initial value.">st_get_oe_pattern_string()</a></code>. <br /></td></tr>
-<tr class="separator:ad3793586a6af869c0330cdbe769a9bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a072e85b7c6db2e7dffd401fcf7e04521" id="r_a072e85b7c6db2e7dffd401fcf7e04521"><td class="memItemLeft" align="right" valign="top"><a id="a072e85b7c6db2e7dffd401fcf7e04521" name="a072e85b7c6db2e7dffd401fcf7e04521"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Collatz</b> ()</td></tr>
 <tr class="memdesc:a072e85b7c6db2e7dffd401fcf7e04521"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
 <tr class="separator:a072e85b7c6db2e7dffd401fcf7e04521"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6f01d7f6e4ebccd3086250660406e1" id="r_afa6f01d7f6e4ebccd3086250660406e1"><td class="memItemLeft" align="right" valign="top"><a id="afa6f01d7f6e4ebccd3086250660406e1" name="afa6f01d7f6e4ebccd3086250660406e1"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Collatz</b> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Collatz</b> (const T &amp;initial_value)</td></tr>
 <tr class="memdesc:afa6f01d7f6e4ebccd3086250660406e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor which calls <code><a class="el" href="classCollatz.html#a33c0998331a6f9e2b655bed17e85e873" title="Runs the sequence and builds the metadata, reusing the object if needed.">init()</a></code> right away. <br /></td></tr>
 <tr class="separator:afa6f01d7f6e4ebccd3086250660406e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33c0998331a6f9e2b655bed17e85e873" id="r_a33c0998331a6f9e2b655bed17e85e873"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a33c0998331a6f9e2b655bed17e85e873">init</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>)</td></tr>
+<tr class="memitem:a33c0998331a6f9e2b655bed17e85e873" id="r_a33c0998331a6f9e2b655bed17e85e873"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a33c0998331a6f9e2b655bed17e85e873">init</a> (const T &amp;initial_value)</td></tr>
 <tr class="memdesc:a33c0998331a6f9e2b655bed17e85e873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the sequence and builds the metadata, reusing the object if needed.  <br /></td></tr>
 <tr class="separator:a33c0998331a6f9e2b655bed17e85e873"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ab8266174ef0f4f6ea93f397e23a889" id="r_a5ab8266174ef0f4f6ea93f397e23a889"><td class="memItemLeft" align="right" valign="top"><a id="a5ab8266174ef0f4f6ea93f397e23a889" name="a5ab8266174ef0f4f6ea93f397e23a889"></a>
-<a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
 <tr class="memdesc:a5ab8266174ef0f4f6ea93f397e23a889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset members to make this act like a new() object. <br /></td></tr>
 <tr class="separator:a5ab8266174ef0f4f6ea93f397e23a889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:a7220372a1109186c701506d15129314a" id="r_a7220372a1109186c701506d15129314a"><td class="memItemLeft" align="right" valign="top"><a id="a7220372a1109186c701506d15129314a" name="a7220372a1109186c701506d15129314a"></a>
-<a class="el" href="classNode.html">const</a> T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_initial_value</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_initial_value</b> () const</td></tr>
 <tr class="memdesc:a7220372a1109186c701506d15129314a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the initial value set when created or when last <code><a class="el" href="classCollatz.html#a33c0998331a6f9e2b655bed17e85e873" title="Runs the sequence and builds the metadata, reusing the object if needed.">init()</a></code> was called. <br /></td></tr>
 <tr class="separator:a7220372a1109186c701506d15129314a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a336d8fa59234cdaf9b91866f03df2b0b" id="r_a336d8fa59234cdaf9b91866f03df2b0b"><td class="memItemLeft" align="right" valign="top"><a id="a336d8fa59234cdaf9b91866f03df2b0b" name="a336d8fa59234cdaf9b91866f03df2b0b"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>has_overflowed</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_overflowed</b> () const</td></tr>
 <tr class="memdesc:a336d8fa59234cdaf9b91866f03df2b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the sequence overflowed. <br /></td></tr>
 <tr class="separator:a336d8fa59234cdaf9b91866f03df2b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a987bc9af0d6e9800a86819f8af0079e7" id="r_a987bc9af0d6e9800a86819f8af0079e7"><td class="memItemLeft" align="right" valign="top"><a id="a987bc9af0d6e9800a86819f8af0079e7" name="a987bc9af0d6e9800a86819f8af0079e7"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () <a class="el" href="classNode.html">const</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () const</td></tr>
 <tr class="memdesc:a987bc9af0d6e9800a86819f8af0079e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the object has been initialized and is ready for use. <br /></td></tr>
 <tr class="separator:a987bc9af0d6e9800a86819f8af0079e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada4600f08f862724804bb54d22291130" id="r_ada4600f08f862724804bb54d22291130"><td class="memItemLeft" align="right" valign="top"><a id="ada4600f08f862724804bb54d22291130" name="ada4600f08f862724804bb54d22291130"></a>
-<a class="el" href="classNode.html">const</a> T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_peak_value</b> () <a class="el" href="classNode.html">const</a></td></tr>
+const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_peak_value</b> () const</td></tr>
 <tr class="memdesc:ada4600f08f862724804bb54d22291130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the peak value found for the initial value sent. <br /></td></tr>
 <tr class="separator:ada4600f08f862724804bb54d22291130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0478fad7960232858b0a5ea852ce638e" id="r_a0478fad7960232858b0a5ea852ce638e"><td class="memItemLeft" align="right" valign="top"><a id="a0478fad7960232858b0a5ea852ce638e" name="a0478fad7960232858b0a5ea852ce638e"></a>
-<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () <a class="el" href="classNode.html">const</a></td></tr>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () const</td></tr>
 <tr class="memdesc:a0478fad7960232858b0a5ea852ce638e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the index of the sequence where the High-Water Mark was found for initial value sent. <br /></td></tr>
 <tr class="separator:a0478fad7960232858b0a5ea852ce638e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf1d94aee87d3d45bd5269d9c9d606a" id="r_a6cf1d94aee87d3d45bd5269d9c9d606a"><td class="memItemLeft" align="right" valign="top"><a id="a6cf1d94aee87d3d45bd5269d9c9d606a" name="a6cf1d94aee87d3d45bd5269d9c9d606a"></a>
-<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_step_count</b> () <a class="el" href="classNode.html">const</a></td></tr>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_step_count</b> () const</td></tr>
 <tr class="memdesc:a6cf1d94aee87d3d45bd5269d9c9d606a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the step count of the sequence (stopping time) for initial value sent. <br /></td></tr>
 <tr class="separator:a6cf1d94aee87d3d45bd5269d9c9d606a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3273d5a80a00f0f0b63e3ac1c4318fb5" id="r_a3273d5a80a00f0f0b63e3ac1c4318fb5"><td class="memItemLeft" align="right" valign="top"><a id="a3273d5a80a00f0f0b63e3ac1c4318fb5" name="a3273d5a80a00f0f0b63e3ac1c4318fb5"></a>
-std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_sequence</b> () <a class="el" href="classNode.html">const</a></td></tr>
+std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_sequence</b> () const</td></tr>
 <tr class="memdesc:a3273d5a80a00f0f0b63e3ac1c4318fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sequence as a vector of <code>T</code>. <br /></td></tr>
 <tr class="separator:a3273d5a80a00f0f0b63e3ac1c4318fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a15694b9ef93d9c23f72cfaacf6a5faa8" id="r_a15694b9ef93d9c23f72cfaacf6a5faa8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a15694b9ef93d9c23f72cfaacf6a5faa8">st_verify</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">sentinel_value</a>=1)</td></tr>
-<tr class="memdesc:a15694b9ef93d9c23f72cfaacf6a5faa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify any number down to 1 (or a custom value) as fast as possible.  <br /></td></tr>
-<tr class="separator:a15694b9ef93d9c23f72cfaacf6a5faa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa41e509262fa95764bb4372f614a6507" id="r_aa41e509262fa95764bb4372f614a6507"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </td></tr>
-<tr class="memitem:aa41e509262fa95764bb4372f614a6507"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCollatz.html#aa41e509262fa95764bb4372f614a6507">st_call_verify_impl</a> (<a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">U</a> &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">U</a> &amp;<a class="el" href="classNode.html">sentinel_value</a>)</td></tr>
-<tr class="memdesc:aa41e509262fa95764bb4372f614a6507"><td class="mdescLeft">&#160;</td><td class="mdescRight">A method to help handle sentinel value juggling for <code><a class="el" href="classCollatz.html#a15694b9ef93d9c23f72cfaacf6a5faa8" title="Verify any number down to 1 (or a custom value) as fast as possible.">st_verify()</a></code>.  <br /></td></tr>
-<tr class="separator:aa41e509262fa95764bb4372f614a6507"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af387e39dd5dfd93e43d71063e88b279b" id="r_af387e39dd5dfd93e43d71063e88b279b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#af387e39dd5dfd93e43d71063e88b279b">st_verify_impl</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>)</td></tr>
-<tr class="memdesc:af387e39dd5dfd93e43d71063e88b279b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verification implementation, which assumes down to <code>1</code>.  <br /></td></tr>
-<tr class="separator:af387e39dd5dfd93e43d71063e88b279b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2898cd1432847ddcb794c178139d9f5" id="r_af2898cd1432847ddcb794c178139d9f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#af2898cd1432847ddcb794c178139d9f5">st_verify_impl</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">sentinel_value</a>)</td></tr>
-<tr class="memdesc:af2898cd1432847ddcb794c178139d9f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verification implementation, which tests down to <code>sentinel_value</code>.  <br /></td></tr>
-<tr class="separator:af2898cd1432847ddcb794c178139d9f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09bd6ec43c83b8fd6e7bffb4721a547d" id="r_a09bd6ec43c83b8fd6e7bffb4721a547d"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:a09bd6ec43c83b8fd6e7bffb4721a547d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCollatz.html#a09bd6ec43c83b8fd6e7bffb4721a547d">st_for_each_sequence_step</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>)</td></tr>
-<tr class="memdesc:a09bd6ec43c83b8fd6e7bffb4721a547d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run through the sequence with a callback each step, including the initial value.  <br /></td></tr>
-<tr class="separator:a09bd6ec43c83b8fd6e7bffb4721a547d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5668b843a0498f67564a6ac30c158e8b" id="r_a5668b843a0498f67564a6ac30c158e8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a5668b843a0498f67564a6ac30c158e8b">st_get_step_count</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>)</td></tr>
-<tr class="memdesc:a5668b843a0498f67564a6ac30c158e8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of steps (stopping time) for any initial value.  <br /></td></tr>
-<tr class="separator:a5668b843a0498f67564a6ac30c158e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e4d0a8077e81835117eb51b5a29985b" id="r_a4e4d0a8077e81835117eb51b5a29985b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a4e4d0a8077e81835117eb51b5a29985b">st_get_peak</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, T &amp;<a class="el" href="classNode.html">out_peak</a>, <a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">stop_at_hwm</a>=<a class="el" href="classNode.html">false</a>)</td></tr>
-<tr class="memdesc:a4e4d0a8077e81835117eb51b5a29985b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the peak value of a sequence, optionally stopping at High-Water Mark.  <br /></td></tr>
-<tr class="separator:a4e4d0a8077e81835117eb51b5a29985b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc2ae32ebbf8d1e0a0f633a3fe7b3c98" id="r_adc2ae32ebbf8d1e0a0f633a3fe7b3c98"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:adc2ae32ebbf8d1e0a0f633a3fe7b3c98"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCollatz.html#adc2ae32ebbf8d1e0a0f633a3fe7b3c98">st_for_each_fg_chain_link</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>)</td></tr>
-<tr class="memdesc:adc2ae32ebbf8d1e0a0f633a3fe7b3c98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate an FG chain on-the-fly and return the link (F or G) to a callback.  <br /></td></tr>
-<tr class="separator:adc2ae32ebbf8d1e0a0f633a3fe7b3c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ee874dc22231287e333d0b64dd1aee6" id="r_a2ee874dc22231287e333d0b64dd1aee6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </td></tr>
-<tr class="memitem:a2ee874dc22231287e333d0b64dd1aee6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCollatz.html#a2ee874dc22231287e333d0b64dd1aee6">st_for_each_fg_step</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">Func</a> &amp;&amp;<a class="el" href="classNode.html">callback</a>)</td></tr>
-<tr class="memdesc:a2ee874dc22231287e333d0b64dd1aee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Steps through a <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> sequence using F and G steps instead of normal ones.  <br /></td></tr>
-<tr class="separator:a2ee874dc22231287e333d0b64dd1aee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ee1f8a061bedb3e82c4c80fe36d4f17" id="r_a8ee1f8a061bedb3e82c4c80fe36d4f17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#a8ee1f8a061bedb3e82c4c80fe36d4f17">st_get_fg_chain_string</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>())</td></tr>
-<tr class="memdesc:a8ee1f8a061bedb3e82c4c80fe36d4f17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the F-G chain as a string for a sequence with some initial value.  <br /></td></tr>
-<tr class="separator:a8ee1f8a061bedb3e82c4c80fe36d4f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff36ffade9c7d284d27de9147c0f15c9" id="r_aff36ffade9c7d284d27de9147c0f15c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#aff36ffade9c7d284d27de9147c0f15c9">st_get_oe_pattern_string</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">initial_value</a>, <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classNode.html">max_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">seq_size_t</a> &gt;<a class="el" href="classNode.html">::max</a>())</td></tr>
-<tr class="memdesc:aff36ffade9c7d284d27de9147c0f15c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the O-E (odd-even) chain as a string for a sequence with some initial value.  <br /></td></tr>
-<tr class="separator:aff36ffade9c7d284d27de9147c0f15c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadf7f177a7c2123bec4ebbf5e5694195" id="r_aadf7f177a7c2123bec4ebbf5e5694195"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCollatz.html#aadf7f177a7c2123bec4ebbf5e5694195">st_fg_to_oe</a> (<a class="el" href="classNode.html">const</a> std::string &amp;<a class="el" href="classNode.html">fg_pattern</a>, <a class="el" href="classNode.html">size_t</a> <a class="el" href="classNode.html">max_oe_chars</a>=std::numeric_limits&lt; <a class="el" href="classNode.html">size_t</a> &gt;<a class="el" href="classNode.html">::max</a>(), <a class="el" href="classNode.html">bool</a> <a class="el" href="classNode.html">strip_last_e</a>=<a class="el" href="classNode.html">true</a>)</td></tr>
-<tr class="memdesc:aadf7f177a7c2123bec4ebbf5e5694195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an FG chain (string) to an OE pattern/chain (string).  <br /></td></tr>
-<tr class="separator:aadf7f177a7c2123bec4ebbf5e5694195"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a53b917a3a681c400ed37b68ac024bc" id="r_a5a53b917a3a681c400ed37b68ac024bc"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U, bool UseIVTable = true&gt; </td></tr>
+<tr class="memitem:a5a53b917a3a681c400ed37b68ac024bc"><td class="memTemplItemLeft" align="right" valign="top">static&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classCollatz.html#a5a53b917a3a681c400ed37b68ac024bc">__attribute__</a> ((always_inline)) bool st_verify(const U &amp;initial_value</td></tr>
+<tr class="memdesc:a5a53b917a3a681c400ed37b68ac024bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify any number down to 1 (or a custom value) as fast as possible.  <br /></td></tr>
+<tr class="separator:a5a53b917a3a681c400ed37b68ac024bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -217,16 +168,16 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_initial_value</b> = 0</
 T&#160;</td><td class="memItemRight" valign="bottom"><b>_peak_value</b> = 0</td></tr>
 <tr class="separator:adabddfd8f0d3729a41b6e118c95afcf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a694850331dfcd7afb99f936c16c290c8" id="r_a694850331dfcd7afb99f936c16c290c8"><td class="memItemLeft" align="right" valign="top"><a id="a694850331dfcd7afb99f936c16c290c8" name="a694850331dfcd7afb99f936c16c290c8"></a>
-<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_hwm_index</b> = 0</td></tr>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_hwm_index</b> = 0</td></tr>
 <tr class="separator:a694850331dfcd7afb99f936c16c290c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c1fba7d69ae0406f1a1a3e91d1e7444" id="r_a0c1fba7d69ae0406f1a1a3e91d1e7444"><td class="memItemLeft" align="right" valign="top"><a id="a0c1fba7d69ae0406f1a1a3e91d1e7444" name="a0c1fba7d69ae0406f1a1a3e91d1e7444"></a>
-<a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_step_count</b> = 0</td></tr>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_step_count</b> = 0</td></tr>
 <tr class="separator:a0c1fba7d69ae0406f1a1a3e91d1e7444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25030b782bce62642dd8879b6ee49c48" id="r_a25030b782bce62642dd8879b6ee49c48"><td class="memItemLeft" align="right" valign="top"><a id="a25030b782bce62642dd8879b6ee49c48" name="a25030b782bce62642dd8879b6ee49c48"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b>: 1 = <a class="el" href="classNode.html">false</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b>: 1 = false</td></tr>
 <tr class="separator:a25030b782bce62642dd8879b6ee49c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ab1abf698d1a7816a2cdbf9828d7929" id="r_a9ab1abf698d1a7816a2cdbf9828d7929"><td class="memItemLeft" align="right" valign="top"><a id="a9ab1abf698d1a7816a2cdbf9828d7929" name="a9ab1abf698d1a7816a2cdbf9828d7929"></a>
-<a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_sequence_overflows</b>: 1 = <a class="el" href="classNode.html">false</a></td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_sequence_overflows</b>: 1 = false</td></tr>
 <tr class="separator:a9ab1abf698d1a7816a2cdbf9828d7929"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -236,11 +187,61 @@ class Collatz&lt; T &gt;</div><p>A small object with metadata for a <a class="el
 <p>Originally, sequences were stored in-memory, but this blows out cache lines, and is generally useless. The for_each iterators are so fast it's almost never useful to cache them. If callers want them cached, they must do so externally, with a vector or similar.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5a53b917a3a681c400ed37b68ac024bc" name="a5a53b917a3a681c400ed37b68ac024bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a53b917a3a681c400ed37b68ac024bc">&#9670;&#160;</a></span>__attribute__()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U, bool UseIVTable = true&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::__attribute__ </td>
+          <td>(</td>
+          <td class="paramtype">(always_inline)&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const &amp;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Verify any number down to 1 (or a custom value) as fast as possible. </p>
+<p>Takes any initial value and verifies the sequence reaches 1 or the sentinel value requested. This method handles overflow detection and promotion by itself.</p>
+<dl class="section note"><dt>Note</dt><dd>The forced inlining is due to the <code>virtual</code> method in <code><a class="el" href="classVerifier.html" title="A base class behind the verification implementation classes. Provides the start, stop,...">Verifier</a></code> creating an optimization boundary which refused to inline this method. </dd>
+<dd>
+In the event a number is divergent (cyclic), this method will hang. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
+    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or a High-Water Mark. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Required type to avoid overflow, which may exceed T. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the sequence reached the sentinel value, hangs otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="a33c0998331a6f9e2b655bed17e85e873" name="a33c0998331a6f9e2b655bed17e85e873"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a33c0998331a6f9e2b655bed17e85e873">&#9670;&#160;</a></span>init()</h2>
 
@@ -253,9 +254,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">void</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::init </td>
+          <td class="memname">void <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>initial_value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -274,607 +275,6 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="aa41e509262fa95764bb4372f614a6507" name="aa41e509262fa95764bb4372f614a6507"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa41e509262fa95764bb4372f614a6507">&#9670;&#160;</a></span>st_call_verify_impl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_call_verify_impl </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">U</a> &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">U</a> &amp;&#160;</td>
-          <td class="paramname"><em>sentinel_value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A method to help handle sentinel value juggling for <code><a class="el" href="classCollatz.html#a15694b9ef93d9c23f72cfaacf6a5faa8" title="Verify any number down to 1 (or a custom value) as fast as possible.">st_verify()</a></code>. </p>
-<p>This method exists to help with some unrolling/micro-optimizing in the <code><a class="el" href="classCollatz.html#af387e39dd5dfd93e43d71063e88b279b" title="Verification implementation, which assumes down to 1.">st_verify_impl()</a></code> methods. You probably shouldn't call it manually.</p>
-<dl class="section note"><dt>Note</dt><dd>In the event a number is divergent (cyclic), this method will hang. </dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">U</td><td>Required type to avoid overflow, which may exceed T. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
-    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or a High-Water Mark. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the sequence reached the sentinel value, hangs otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="aadf7f177a7c2123bec4ebbf5e5694195" name="aadf7f177a7c2123bec4ebbf5e5694195"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aadf7f177a7c2123bec4ebbf5e5694195">&#9670;&#160;</a></span>st_fg_to_oe()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> std::string <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_fg_to_oe </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> std::string &amp;&#160;</td>
-          <td class="paramname"><em>fg_pattern</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">size_t</a>&#160;</td>
-          <td class="paramname"><em>max_oe_chars</em> = <code>std::numeric_limits&lt;<a class="el" href="classNode.html">size_t</a>&gt;<a class="el" href="classNode.html">::max</a>()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">bool</a>&#160;</td>
-          <td class="paramname"><em>strip_last_e</em> = <code><a class="el" href="classNode.html">true</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Convert an FG chain (string) to an OE pattern/chain (string). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fg_pattern</td><td>The FG chain to convert. </td></tr>
-    <tr><td class="paramname">max_oe_chars</td><td>The maximum number of O and E characters (steps) to accumulate before quitting prematurely. </td></tr>
-    <tr><td class="paramname">strip_last_e</td><td>Remove the last E. This is necessary when going down to 1, for example. Because 'F' =&gt; OE, which would send the value back to 4 and make the OE chain wrong. If stopping at a value other than 1, this might need to be false. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A string representation of the OE chain. </dd></dl>
-
-</div>
-</div>
-<a id="adc2ae32ebbf8d1e0a0f633a3fe7b3c98" name="adc2ae32ebbf8d1e0a0f633a3fe7b3c98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc2ae32ebbf8d1e0a0f633a3fe7b3c98">&#9670;&#160;</a></span>st_for_each_fg_chain_link()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_for_each_fg_chain_link </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Generate an FG chain on-the-fly and return the link (F or G) to a callback. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Func</td><td>Caller's function type. Must be: <code>bool(bool)</code> </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of the sequence. </td></tr>
-    <tr><td class="paramname">callback</td><td>The method to invoke with each F or G step. When F, true. When G, false. Caller may return false to stop execution at any time. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a2ee874dc22231287e333d0b64dd1aee6" name="a2ee874dc22231287e333d0b64dd1aee6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ee874dc22231287e333d0b64dd1aee6">&#9670;&#160;</a></span>st_for_each_fg_step()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_for_each_fg_step </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Steps through a <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> sequence using F and G steps instead of normal ones. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Func</td><td>Caller's function type. Must be: <code>const T&amp;</code> </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of the sequence. </td></tr>
-    <tr><td class="paramname">callback</td><td>The method to invoke with each F or G step's value. Caller may return false to stop execution at any time. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a09bd6ec43c83b8fd6e7bffb4721a547d" name="a09bd6ec43c83b8fd6e7bffb4721a547d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09bd6ec43c83b8fd6e7bffb4721a547d">&#9670;&#160;</a></span>st_for_each_sequence_step()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<div class="memtemplate">
-template&lt;<a class="el" href="classNode.html">typename</a> <a class="el" href="classNode.html">Func</a> &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_for_each_sequence_step </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">Func</a> &amp;&amp;&#160;</td>
-          <td class="paramname"><em>callback</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Run through the sequence with a callback each step, including the initial value. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Func</td><td>A callback function type. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of a sequence to process. Will be returned as the first step. </td></tr>
-    <tr><td class="paramname">callback</td><td>Caller's callback. Must be callable as <code>const T&amp;</code> to prevent alloc on <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> path. Must return true to stop early, false otherwise. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a8ee1f8a061bedb3e82c4c80fe36d4f17" name="a8ee1f8a061bedb3e82c4c80fe36d4f17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ee1f8a061bedb3e82c4c80fe36d4f17">&#9670;&#160;</a></span>st_get_fg_chain_string()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> std::string <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_get_fg_chain_string </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">seq_size_t</a>&#160;</td>
-          <td class="paramname"><em>max_chars</em> = <code>std::numeric_limits&lt;<a class="el" href="classNode.html">seq_size_t</a>&gt;<a class="el" href="classNode.html">::max</a>()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Generate the F-G chain as a string for a sequence with some initial value. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of the sequence to calculate. </td></tr>
-    <tr><td class="paramname">max_chars</td><td>The maximum number of F and G characters (steps) to accumulate before quitting prematurely. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The string representation of the full FG chain. </dd></dl>
-
-</div>
-</div>
-<a id="aff36ffade9c7d284d27de9147c0f15c9" name="aff36ffade9c7d284d27de9147c0f15c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff36ffade9c7d284d27de9147c0f15c9">&#9670;&#160;</a></span>st_get_oe_pattern_string()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> std::string <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_get_oe_pattern_string </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">seq_size_t</a>&#160;</td>
-          <td class="paramname"><em>max_chars</em> = <code>std::numeric_limits&lt;<a class="el" href="classNode.html">seq_size_t</a>&gt;<a class="el" href="classNode.html">::max</a>()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Generate the O-E (odd-even) chain as a string for a sequence with some initial value. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of the sequence to calculate. </td></tr>
-    <tr><td class="paramname">max_chars</td><td>The maximum number of O and E characters (steps) to accumulate before quitting prematurely. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The string representation of the full OE chain. </dd></dl>
-
-</div>
-</div>
-<a id="a4e4d0a8077e81835117eb51b5a29985b" name="a4e4d0a8077e81835117eb51b5a29985b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e4d0a8077e81835117eb51b5a29985b">&#9670;&#160;</a></span>st_get_peak()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_get_peak </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>out_peak</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">bool</a>&#160;</td>
-          <td class="paramname"><em>stop_at_hwm</em> = <code><a class="el" href="classNode.html">false</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Finds the peak value of a sequence, optionally stopping at High-Water Mark. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of a sequence to calculate. </td></tr>
-    <tr><td class="paramname">out_peak</td><td>Caller's memory to store peak value. </td></tr>
-    <tr><td class="paramname">stop_at_hwm</td><td>Flag to stop at High-Water Mark when testing peaks, mostly for the peak-by-bit program. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a5668b843a0498f67564a6ac30c158e8b" name="a5668b843a0498f67564a6ac30c158e8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5668b843a0498f67564a6ac30c158e8b">&#9670;&#160;</a></span>st_get_step_count()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_get_step_count </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the number of steps (stopping time) for any initial value. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The first value of a sequence to calculate. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Number of steps (stopping time) to reach 1. </dd></dl>
-
-</div>
-</div>
-<a id="a15694b9ef93d9c23f72cfaacf6a5faa8" name="a15694b9ef93d9c23f72cfaacf6a5faa8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15694b9ef93d9c23f72cfaacf6a5faa8">&#9670;&#160;</a></span>st_verify()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_verify </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>sentinel_value</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Verify any number down to 1 (or a custom value) as fast as possible. </p>
-<p>Takes any initial value and verifies the sequence reaches 1 or the sentinel value requested. This method handles overflow detection and promotion by itself, and then calls the correctly typed implementation method.</p>
-<dl class="section note"><dt>Note</dt><dd>In the event a number is divergent (cyclic), this method will hang. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
-    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or a High-Water Mark. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the sequence reached the sentinel value, hangs otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="af387e39dd5dfd93e43d71063e88b279b" name="af387e39dd5dfd93e43d71063e88b279b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af387e39dd5dfd93e43d71063e88b279b">&#9670;&#160;</a></span>st_verify_impl() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_verify_impl </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Verification implementation, which assumes down to <code>1</code>. </p>
-<dl class="section note"><dt>Note</dt><dd>This version saves a few clock cycles compared to the dynamic sentinel value version of this method. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the sequence reached the sentinel value, hangs otherwise. </dd></dl>
-
-</div>
-</div>
-<a id="af2898cd1432847ddcb794c178139d9f5" name="af2898cd1432847ddcb794c178139d9f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2898cd1432847ddcb794c178139d9f5">&#9670;&#160;</a></span>st_verify_impl() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classCollatz.html">Collatz</a>&lt; T &gt;::st_verify_impl </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>initial_value</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
-          <td class="paramname"><em>sentinel_value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Verification implementation, which tests down to <code>sentinel_value</code>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
-    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or a High-Water Mark. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the sequence reached the sentinel value, hangs otherwise. </dd></dl>
 
 </div>
 </div>

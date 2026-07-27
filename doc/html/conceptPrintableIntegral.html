@@ -86,10 +86,9 @@ $(function() {
 <p><code>#include &lt;<a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptPrintableIntegral.html">PrintableIntegral</a> =  std::integral&lt;T&gt; &amp;&amp; <span class="keyword">requires</span>(std::ostream&amp; <a class="code hl_class" href="classNode.html">os</a>, T <a class="code hl_class" href="classNode.html">val</a>) {</div>
-<div class="line">    { <a class="code hl_class" href="classNode.html">os</a> &lt;&lt; <a class="code hl_class" href="classNode.html">val</a> } -&gt; std::same_as&lt;std::ostream&amp;&gt;;</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptPrintableIntegral.html">PrintableIntegral</a> =  std::integral&lt;T&gt; &amp;&amp; <span class="keyword">requires</span>(std::ostream&amp; os, T val) {</div>
+<div class="line">    { os &lt;&lt; val } -&gt; std::same_as&lt;std::ostream&amp;&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassNode_html"><div class="ttname"><a href="classNode.html">Node</a></div><div class="ttdoc">The value and metadata for a node inside of a BinaryTree.</div><div class="ttdef"><b>Definition</b> node.hpp:29</div></div>
 <div class="ttc" id="aconceptPrintableIntegral_html"><div class="ttname"><a href="conceptPrintableIntegral.html">PrintableIntegral</a></div><div class="ttdoc">Concept to detect which integrals will respond to operator&lt;&lt; for printing.</div><div class="ttdef"><b>Definition</b> concepts.hpp:38</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concept to detect which integrals will respond to operator&lt;&lt; for printing. </p>

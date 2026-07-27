@@ -13,125 +13,125 @@ An implementation of the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} wh
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a95b32f74900f02dc8cd8ad389c0b3332}\label{classBinaryTreeMaterializedImpl_a95b32f74900f02dc8cd8ad389c0b3332} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries deep\+\_\+size} () const
 \begin{DoxyCompactList}\small\item\em Deeply scan the object and report its size. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_ab20855b4bc471ddb40bee98f21b12136}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl_ab20855b4bc471ddb40bee98f21b12136}{equal}} (const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Compare another materialized tree to this one. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a590929d8ce4da68af03e359570f6730a}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a590929d8ce4da68af03e359570f6730a}{serialize}} (std\+::ostream \&out, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Serialize the materialized tree specifics of this object for export. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6d7c5d9d4a3626fb564bb8f16a4ab4b2}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6d7c5d9d4a3626fb564bb8f16a4ab4b2}{deserialize}} (std\+::istream \&in, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classBinaryTreeMaterializedImpl_a590929d8ce4da68af03e359570f6730a}{serialize()}}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a02c33923c98dafafaa8d411fced46954}{add\+\_\+level}} ()
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a02c33923c98dafafaa8d411fced46954}{add\+\_\+level}} ()
 \begin{DoxyCompactList}\small\item\em Add a level to the tree. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aaf2222a8b9879d8524b5307ef7bc92c0}\label{classBinaryTreeMaterializedImpl_aaf2222a8b9879d8524b5307ef7bc92c0} 
-{\bfseries Binary\+Tree\+Materialized\+Impl} ()=\mbox{\hyperlink{classNode}{default}}
+{\bfseries Binary\+Tree\+Materialized\+Impl} ()=default
 \begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a3d5eee83ca6dfaa910d5478db8418705}\label{classBinaryTreeMaterializedImpl_a3d5eee83ca6dfaa910d5478db8418705} 
-{\bfseries Binary\+Tree\+Materialized\+Impl} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+{\bfseries Binary\+Tree\+Materialized\+Impl} (const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aabc777d2b5f116f830233dd1bd3c8be3}\label{classBinaryTreeMaterializedImpl_aabc777d2b5f116f830233dd1bd3c8be3} 
-\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a212839e1c0cb5f6319fce9a73568ab1d}\label{classBinaryTreeMaterializedImpl_a212839e1c0cb5f6319fce9a73568ab1d} 
-{\bfseries Binary\+Tree\+Materialized\+Impl} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+{\bfseries Binary\+Tree\+Materialized\+Impl} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a7e458d970761d52b5df18d47e9669dcb}\label{classBinaryTreeMaterializedImpl_a7e458d970761d52b5df18d47e9669dcb} 
-\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \& {\bfseries operator=} (\mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a04160de8e70f8ea032add1d949611d07}\label{classBinaryTreeMaterializedImpl_a04160de8e70f8ea032add1d949611d07} 
 {\bfseries \texorpdfstring{$\sim$}{\string~}\+Binary\+Tree\+Materialized\+Impl} ()
 \begin{DoxyCompactList}\small\item\em Destructor will remove any ancestors and clear the level map. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ab1174d6fc3a05e2a16197e6d6ebaea1e}\label{classBinaryTreeMaterializedImpl_ab1174d6fc3a05e2a16197e6d6ebaea1e} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
+void {\bfseries reset} ()
 \begin{DoxyCompactList}\small\item\em Reset members to make this act like a new object. Mostly for {\ttfamily \doxylink{classBinaryTreeMaterializedImpl_a168760c5343b669c130d033b3bc8a260}{init()}}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a168760c5343b669c130d033b3bc8a260}{init}} (level\+\_\+t \mbox{\hyperlink{classNode}{levels}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}} \mbox{\hyperlink{classNode}{opts}}=\mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\})
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a168760c5343b669c130d033b3bc8a260}{init}} (level\+\_\+t levels, const \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}} opts=\mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\})
 \begin{DoxyCompactList}\small\item\em Initializes the object, calling {\ttfamily \doxylink{classBinaryTreeMaterializedImpl_ab1174d6fc3a05e2a16197e6d6ebaea1e}{reset()}} if already initialized. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Accessors Common to All Trees}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a58d626e36e2685ca316d2212fc1685db}\label{classBinaryTreeMaterializedImpl_a58d626e36e2685ca316d2212fc1685db} 
-Tree\+Type\+Enum {\bfseries get\+\_\+tree\+\_\+type} () \mbox{\hyperlink{classNode}{const}}
+Tree\+Type\+Enum {\bfseries get\+\_\+tree\+\_\+type} () const
 \begin{DoxyCompactList}\small\item\em Get the tree type of this instance. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aa20fa5738170a49c469a8ca60833c0a8}\label{classBinaryTreeMaterializedImpl_aa20fa5738170a49c469a8ca60833c0a8} 
-level\+\_\+t {\bfseries get\+\_\+level\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+level\+\_\+t {\bfseries get\+\_\+level\+\_\+count} () const
 \begin{DoxyCompactList}\small\item\em Get the level count. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a7fd6088a932d4e7d9a2fd7e9c5306714}{set\+\_\+level\+\_\+count}} (level\+\_\+t \mbox{\hyperlink{classNode}{level\+\_\+count}})
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a7fd6088a932d4e7d9a2fd7e9c5306714}{set\+\_\+level\+\_\+count}} (level\+\_\+t level\+\_\+count)
 \begin{DoxyCompactList}\small\item\em Set the level count explicitly. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aed100575423466cc8da939decf6a4db8}\label{classBinaryTreeMaterializedImpl_aed100575423466cc8da939decf6a4db8} 
-\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+root\+\_\+node} () \mbox{\hyperlink{classNode}{const}}
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+root\+\_\+node} () const
 \begin{DoxyCompactList}\small\item\em Get a readonly pointer to the root node. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_ac471a99a5ea0e22664b476f3d35c3a29}{get\+\_\+root\+\_\+node\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the pointer to the root node. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a581b430bfba0bd70284ccf4b8bd21c3d}\label{classBinaryTreeMaterializedImpl_a581b430bfba0bd70284ccf4b8bd21c3d} 
-\mbox{\hyperlink{classNode}{const}} std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& {\bfseries get\+\_\+coverage\+\_\+map} () \mbox{\hyperlink{classNode}{const}}
+const std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& {\bfseries get\+\_\+coverage\+\_\+map} () const
 \begin{DoxyCompactList}\small\item\em Get a readonly reference to the coverage map. \end{DoxyCompactList}\item 
 std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCoverage}{Binary\+Tree\+Coverage}}$<$ T $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_af001f547cd87327c7c68b7851bee2924}{get\+\_\+coverage\+\_\+map\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the coverage map. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_afed49997977de40d9edf06e5d8d732c8}\label{classBinaryTreeMaterializedImpl_afed49997977de40d9edf06e5d8d732c8} 
-\mbox{\hyperlink{classNode}{const}} std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+ancestors} () \mbox{\hyperlink{classNode}{const}}
+const std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& {\bfseries get\+\_\+ancestors} () const
 \begin{DoxyCompactList}\small\item\em Get a readonly reference to the ancestors. \end{DoxyCompactList}\item 
 std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_ac079b76dc0a902bfd11a0dcd386043d0}{get\+\_\+ancestors\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the ancestors. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ac3a1f197f8bb3e6e2cc6e69c9348b49e}\label{classBinaryTreeMaterializedImpl_ac3a1f197f8bb3e6e2cc6e69c9348b49e} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+preserving\+\_\+ancestors} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+preserving\+\_\+ancestors} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6e8ecb2d4a5cb43b3d6da051756957a1}{set\+\_\+is\+\_\+preserving\+\_\+ancestors}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} value)
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6e8ecb2d4a5cb43b3d6da051756957a1}{set\+\_\+is\+\_\+preserving\+\_\+ancestors}} (const bool value)
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ab484f0dd4284c27a1279adcda9b7896a}\label{classBinaryTreeMaterializedImpl_ab484f0dd4284c27a1279adcda9b7896a} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+HWM nodes. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_addb5aa85e495c5553f4c14bf80c1de14}\label{classBinaryTreeMaterializedImpl_addb5aa85e495c5553f4c14bf80c1de14} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
+void {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
 \begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ae00eeefd4ada83586a23d4f6c56a0216}\label{classBinaryTreeMaterializedImpl_ae00eeefd4ada83586a23d4f6c56a0216} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
+void {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
 \begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ad3a002443b7b09f817c56774ea6f33e9}\label{classBinaryTreeMaterializedImpl_ad3a002443b7b09f817c56774ea6f33e9} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6a50c3a15c9d6eb009d2cce27152a3a1}{set\+\_\+is\+\_\+initialized}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}} value)
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6a50c3a15c9d6eb009d2cce27152a3a1}{set\+\_\+is\+\_\+initialized}} (const bool value)
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48}\label{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () \mbox{\hyperlink{classNode}{const}}
+const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () const
 \begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a4f221baa450144c4ccb84acc4c799945}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c}\label{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries clear\+\_\+uncovered\+\_\+values} ()
+void {\bfseries clear\+\_\+uncovered\+\_\+values} ()
 \begin{DoxyCompactList}\small\item\em Clears the value map. Usually for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Materialized-\/\+Only Accessors}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a9be81844a8872159277d9ff2dac05f8c}\label{classBinaryTreeMaterializedImpl_a9be81844a8872159277d9ff2dac05f8c} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+materialized} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+materialized} () const
 \begin{DoxyCompactList}\small\item\em Responds true to {\ttfamily \doxylink{classBinaryTreeMaterializedImpl_a9be81844a8872159277d9ff2dac05f8c}{is\+\_\+materialized()}}, mostly for the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{const}} std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_adde8aa871f0c8b733935a47e725acd35}{get\+\_\+level\+\_\+map}} () \mbox{\hyperlink{classNode}{const}}
+const std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_adde8aa871f0c8b733935a47e725acd35}{get\+\_\+level\+\_\+map}} () const
 \begin{DoxyCompactList}\small\item\em Get a reference to the level map, which contains all of the {\ttfamily \doxylink{classNode}{Node}} objects. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ae7e90237d4579290c94581a474d8f0be}\label{classBinaryTreeMaterializedImpl_ae7e90237d4579290c94581a474d8f0be} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+pruning\+\_\+hwm\+\_\+nodes} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+pruning\+\_\+hwm\+\_\+nodes} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning High-\/\+Water Mark nodes. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_af04c2f128cea6d1884a43d933ddf00d8}\label{classBinaryTreeMaterializedImpl_af04c2f128cea6d1884a43d933ddf00d8} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+pruning\+\_\+parent\+\_\+levels} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+pruning\+\_\+parent\+\_\+levels} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes). \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ae69d739f99aeaf1c526a50779304501f}\label{classBinaryTreeMaterializedImpl_ae69d739f99aeaf1c526a50779304501f} 
-T {\bfseries real\+\_\+node\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+T {\bfseries real\+\_\+node\+\_\+count} () const
 \begin{DoxyCompactList}\small\item\em Returns the REAL node count in the \+\_\+level\+\_\+map. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a4995b44bd43deb21c6776122f953a578}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+static bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a4995b44bd43deb21c6776122f953a578}{st\+\_\+equal}} (const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&first, const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Compare two materialized trees\textquotesingle{} specific internals and return true if identical. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a993b02b95481388c87b5135099b9feb9}\label{classBinaryTreeMaterializedImpl_a993b02b95481388c87b5135099b9feb9} 
-\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+root\+\_\+node} = \mbox{\hyperlink{classNode}{nullptr}}
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+root\+\_\+node} = nullptr
 \begin{DoxyCompactList}\small\item\em The root of a tree. Navigable in this tree type. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a11a07b54a884519188cd92138022c067}\label{classBinaryTreeMaterializedImpl_a11a07b54a884519188cd92138022c067} 
 level\+\_\+t {\bfseries \+\_\+level\+\_\+count} = 0
@@ -149,22 +149,22 @@ std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCover
 std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+ancestors}
 \begin{DoxyCompactList}\small\item\em Collection of ancestors, which are High-\/\+Water Mark nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a6a57a9411ff1d314a3f50517328afe13}\label{classBinaryTreeMaterializedImpl_a6a57a9411ff1d314a3f50517328afe13} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+initialized} = \mbox{\hyperlink{classNode}{false}}
+bool {\bfseries \+\_\+is\+\_\+initialized} = false
 \begin{DoxyCompactList}\small\item\em Flag to determine if this tree is initialized, meaning it\textquotesingle{}s had at least one level added. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a01e489a91c4a593d905aedc1d2fc3228}\label{classBinaryTreeMaterializedImpl_a01e489a91c4a593d905aedc1d2fc3228} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+pruning\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+hwm\+\_\+nodes
+bool {\bfseries \+\_\+is\+\_\+pruning\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+hwm\+\_\+nodes
 \begin{DoxyCompactList}\small\item\em Flag to determine if the tree should prune HWM nodes, carving out subtress, turning this into a DAG. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a1ed797dee4e9eed15efc8702483bc650}\label{classBinaryTreeMaterializedImpl_a1ed797dee4e9eed15efc8702483bc650} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+pruning\+\_\+parent\+\_\+levels} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+parent\+\_\+levels
+bool {\bfseries \+\_\+is\+\_\+pruning\+\_\+parent\+\_\+levels} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+parent\+\_\+levels
 \begin{DoxyCompactList}\small\item\em Flag to determine if the tree should prune parent levels. AKA, only keep the last level (leaf nodes). \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ad4887a4f457f633a03f1f0ab4eee9a75}\label{classBinaryTreeMaterializedImpl_ad4887a4f457f633a03f1f0ab4eee9a75} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+preserving\+\_\+ancestors} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.preserve\+\_\+ancestors
+bool {\bfseries \+\_\+is\+\_\+preserving\+\_\+ancestors} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.preserve\+\_\+ancestors
 \begin{DoxyCompactList}\small\item\em Flag to determine if HWM ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a3b47fb7da377f83c19e503a32ad47ac5}\label{classBinaryTreeMaterializedImpl_a3b47fb7da377f83c19e503a32ad47ac5} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+hwm\+\_\+nodes
+bool {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+hwm\+\_\+nodes
 \begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+HWM nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a50c4bfac68b930b7a332383913f4c139}\label{classBinaryTreeMaterializedImpl_a50c4bfac68b930b7a332383913f4c139} 
-\mbox{\hyperlink{classNode}{const}} Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+MATERIALIZED
+const Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+MATERIALIZED
 \begin{DoxyCompactList}\small\item\em Track the type of this tree for external comparison later. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -180,7 +180,7 @@ This was a first-\/principles implementation when starting out. It\textquotesing
 \end{DoxyNote}
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -191,7 +191,7 @@ This was a first-\/principles implementation when starting out. It\textquotesing
 \index{add\_level@{add\_level}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{add\_level()}{add\_level()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::add\+\_\+level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::add\+\_\+level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -206,7 +206,7 @@ When parent level pruning is enabled, all parents are trimmed, which keeps only 
 \index{deserialize@{deserialize}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -234,7 +234,7 @@ A boolean indicating success or failure. Do not discard.
 \index{equal@{equal}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{equal()}{equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -285,7 +285,7 @@ This is intended for serialization/deserilization only.
 \index{get\_level\_map@{get\_level\_map}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{get\_level\_map()}{get\_level\_map()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{const}} std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::get\+\_\+level\+\_\+map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+const std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::get\+\_\+level\+\_\+map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -330,7 +330,7 @@ This is intended for serialization/deserilization only.
 \index{init@{init}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{init()}{init()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{levels,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}}]{opts = {\ttfamily \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{levels,  }\item[{const \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}}]{opts = {\ttfamily \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -348,7 +348,7 @@ Initializes the object, calling {\ttfamily \doxylink{classBinaryTreeMaterialized
 \index{serialize@{serialize}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -384,7 +384,7 @@ A boolean indicating success or failure. Do not discard.
 \index{set\_is\_initialized@{set\_is\_initialized}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{set\_is\_initialized()}{set\_is\_initialized()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+initialized (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+initialized (\begin{DoxyParamCaption}\item[{const bool}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -403,7 +403,7 @@ This is intended for serialization/deserilization only.
 \index{set\_is\_preserving\_ancestors@{set\_is\_preserving\_ancestors}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{set\_is\_preserving\_ancestors()}{set\_is\_preserving\_ancestors()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+preserving\+\_\+ancestors (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{bool}}}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+is\+\_\+preserving\+\_\+ancestors (\begin{DoxyParamCaption}\item[{const bool}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -422,7 +422,7 @@ This is intended for serialization/deserilization only.
 \index{set\_level\_count@{set\_level\_count}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{set\_level\_count()}{set\_level\_count()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+level\+\_\+count (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level\+\_\+count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::set\+\_\+level\+\_\+count (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level\+\_\+count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -441,13 +441,13 @@ This is intended for serialization/deserilization only.
 \index{st\_equal@{st\_equal}!BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static bool \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{first,  }\item[{const \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
 Compare two materialized trees\textquotesingle{} specific internals and return true if identical. 
 
-This method only tests materialized tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (\doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{e.\+g}.\+: level count).
+This method only tests materialized tree specifics. Most equality happens via the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade since they share common members between implementations (e.\+g.\+: level count).
 
 This function checks\+:
 \begin{DoxyEnumerate}

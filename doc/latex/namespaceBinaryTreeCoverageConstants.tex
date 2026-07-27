@@ -8,21 +8,21 @@ Storage for known (precomputed) coverage of tree levels, and a few helpers for s
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a07b60eb7c7a649f566827a7adf485955}{get\+\_\+known\+\_\+coverage}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a07b60eb7c7a649f566827a7adf485955}{get\+\_\+known\+\_\+coverage}} (level\+\_\+t level)
 \begin{DoxyCompactList}\small\item\em Get known coverage for any given level. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a289f5c2c769944793e05392b9a366d20}{get\+\_\+known\+\_\+coverage\+\_\+sum\+\_\+to\+\_\+level}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+level}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a289f5c2c769944793e05392b9a366d20}{get\+\_\+known\+\_\+coverage\+\_\+sum\+\_\+to\+\_\+level}} (level\+\_\+t max\+\_\+level)
 \begin{DoxyCompactList}\small\item\em Get known coverage of a whole tree, not just a single level. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_ab48c55474857d3346fe513bb5288294a}{get\+\_\+total}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{level}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_ab48c55474857d3346fe513bb5288294a}{get\+\_\+total}} (level\+\_\+t level)
 \begin{DoxyCompactList}\small\item\em Get node total for a level. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a147cfd35d4a0fa73c334dab843eaa1b2}{get\+\_\+total\+\_\+sum\+\_\+of\+\_\+levels}} (\mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{min\+\_\+level}}, \mbox{\hyperlink{classNode}{level\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+level}})
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\T \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a147cfd35d4a0fa73c334dab843eaa1b2}{get\+\_\+total\+\_\+sum\+\_\+of\+\_\+levels}} (level\+\_\+t min\+\_\+level, level\+\_\+t max\+\_\+level)
 \begin{DoxyCompactList}\small\item\em Get node total for multiple levels. Fully closed. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}\label{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c} 
-\mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{level\+\_\+t}} {\bfseries MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL} = 45
+constexpr level\+\_\+t {\bfseries MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL} = 45
 \begin{DoxyCompactList}\small\item\em Maximum known (computed) level of coverage. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$ \mbox{\hyperlink{classNode}{uint128\+\_\+t}}, \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL}}+1 $>$ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\+\_\+\+COVERAGE\+\_\+\+MAP}}
+constexpr std\+::array$<$ uint128\+\_\+t, \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL}}+1 $>$ \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_afd3f521ef144031e890cd37efc9d0a7f}{KNOWN\+\_\+\+COVERAGE\+\_\+\+MAP}}
 \begin{DoxyCompactList}\small\item\em Map of precomputed coverage up to {\ttfamily MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -35,7 +35,7 @@ Storage for known (precomputed) coverage of tree levels, and a few helpers for s
 \index{get\_known\_coverage@{get\_known\_coverage}!BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}}
 \doxysubsubsection{\texorpdfstring{get\_known\_coverage()}{get\_known\_coverage()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+known\+\_\+coverage (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+known\+\_\+coverage (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -45,7 +45,7 @@ Looks up the precomputed coverage from {\ttfamily KNOWN\+\_\+\+COVERAGE\+\_\+\+M
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -61,7 +61,7 @@ The number of nodes covered on {\ttfamily level}, typed to your {\ttfamily T}.
 \index{get\_known\_coverage\_sum\_to\_level@{get\_known\_coverage\_sum\_to\_level}!BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}}
 \doxysubsubsection{\texorpdfstring{get\_known\_coverage\_sum\_to\_level()}{get\_known\_coverage\_sum\_to\_level()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+known\+\_\+coverage\+\_\+sum\+\_\+to\+\_\+level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+known\+\_\+coverage\+\_\+sum\+\_\+to\+\_\+level (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -71,7 +71,7 @@ Tallies the sum of all coverages from level 1 to max\+\_\+level specified, inclu
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -87,7 +87,7 @@ The number of nodes covered on all levels up to {\ttfamily max\+\_\+level}, type
 \index{get\_total@{get\_total}!BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}}
 \doxysubsubsection{\texorpdfstring{get\_total()}{get\_total()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+total (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+total (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -97,7 +97,7 @@ Simple helper when dealing with coverage which uses {\ttfamily \doxylink{classBi
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -113,7 +113,7 @@ Number of nodes on {\ttfamily level}.
 \index{get\_total\_sum\_of\_levels@{get\_total\_sum\_of\_levels}!BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}}
 \doxysubsubsection{\texorpdfstring{get\_total\_sum\_of\_levels()}{get\_total\_sum\_of\_levels()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+total\+\_\+sum\+\_\+of\+\_\+levels (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{min\+\_\+level,  }\item[{\mbox{\hyperlink{classNode}{level\+\_\+t}}}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+T Binary\+Tree\+Coverage\+Constants\+::get\+\_\+total\+\_\+sum\+\_\+of\+\_\+levels (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{min\+\_\+level,  }\item[{level\+\_\+t}]{max\+\_\+level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -123,7 +123,7 @@ Simple helper when dealing with coverage which uses {\ttfamily \doxylink{classBi
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -143,7 +143,7 @@ Number of nodes on fully-\/closed {\ttfamily \mbox{[}min\+\_\+level, max\+\_\+le
 \index{BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}!KNOWN\_COVERAGE\_MAP@{KNOWN\_COVERAGE\_MAP}}
 \index{KNOWN\_COVERAGE\_MAP@{KNOWN\_COVERAGE\_MAP}!BinaryTreeCoverageConstants@{BinaryTreeCoverageConstants}}
 \doxysubsubsection{\texorpdfstring{KNOWN\_COVERAGE\_MAP}{KNOWN\_COVERAGE\_MAP}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{constexpr}} std\+::array$<$\mbox{\hyperlink{classNode}{uint128\+\_\+t}}, \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL}}+1$>$ Binary\+Tree\+Coverage\+Constants\+::\+KNOWN\+\_\+\+COVERAGE\+\_\+\+MAP\hspace{0.3cm}{\ttfamily [constexpr]}}
+{\footnotesize\ttfamily constexpr std\+::array$<$uint128\+\_\+t, \mbox{\hyperlink{namespaceBinaryTreeCoverageConstants_a44a1561648ce635a3bef2e5b840aa73c}{MAX\+\_\+\+KNOWN\+\_\+\+COVERAGE\+\_\+\+LEVEL}}+1$>$ Binary\+Tree\+Coverage\+Constants\+::\+KNOWN\+\_\+\+COVERAGE\+\_\+\+MAP\hspace{0.3cm}{\ttfamily [constexpr]}}
 
 
 

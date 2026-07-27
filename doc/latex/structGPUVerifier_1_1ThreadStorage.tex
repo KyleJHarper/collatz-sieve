@@ -1,0 +1,49 @@
+\doxysection{GPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Thread\+Storage Struct Reference}
+\hypertarget{structGPUVerifier_1_1ThreadStorage}{}\label{structGPUVerifier_1_1ThreadStorage}\index{GPUVerifier$<$ T $>$::ThreadStorage@{GPUVerifier$<$ T $>$::ThreadStorage}}
+
+
+Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics.  
+
+
+
+
+Collaboration diagram for GPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::Thread\+Storage\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{structGPUVerifier_1_1ThreadStorage__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structGPUVerifier_1_1ThreadStorage_a752da5cef788dfc880329fb937cd0446}\label{structGPUVerifier_1_1ThreadStorage_a752da5cef788dfc880329fb937cd0446} 
+size\+\_\+t {\bfseries synchronization\+\_\+countdown} = 1
+\begin{DoxyCompactList}\small\item\em How many more numbers can be checked (verified) before checking for a new state. \end{DoxyCompactList}\item 
+\Hypertarget{structGPUVerifier_1_1ThreadStorage_a55d6c3ad72a78e1c3cd5de26bd1aa44d}\label{structGPUVerifier_1_1ThreadStorage_a55d6c3ad72a78e1c3cd5de26bd1aa44d} 
+size\+\_\+t {\bfseries synchronizations\+\_\+performed} = 0
+\begin{DoxyCompactList}\small\item\em Number of state checks performed. \end{DoxyCompactList}\item 
+\Hypertarget{structGPUVerifier_1_1ThreadStorage_aaeaf8ef295284fe1c00d955550829467}\label{structGPUVerifier_1_1ThreadStorage_aaeaf8ef295284fe1c00d955550829467} 
+\mbox{\hyperlink{structVerifierTLSMetric}{Verifier\+TLSMetric}} {\bfseries metrics}
+\begin{DoxyCompactList}\small\item\em Metrics gathered during a thread\textquotesingle{}s execution. \end{DoxyCompactList}\item 
+\Hypertarget{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}\label{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}}$<$ T, \mbox{\hyperlink{structGPUVerifierResultData}{GPUVerifier\+Result\+Data}} $>$ $>$ {\bfseries buffer\+\_\+ptr}
+\begin{DoxyCompactList}\small\item\em A pointer for a full \doxylink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer} object. Avoids ABA / AB-\/\+BA problems. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T$>$\newline
+struct GPUVerifier$<$ T $>$\+::\+Thread\+Storage}
+Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics. 
+
+For GPUs, this also includes a {\ttfamily \doxylink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}} object. Since OMP has implicit barriers which were intentionally leveraged at the prefix level in the parallel iterator, AB-\/\+BA deadlocks can occur if ANY blocking synchronization technique attempts to coordinate threads within a for\+\_\+each iterator. For this reason, each thread gets its own buffer to fill, submit, and wait on without barriers from others.
+
+\begin{DoxyWarning}{Warning}
+Data tends to spill cache lines and cause false sharing. Do NOT remove alignas(64). 
+\end{DoxyWarning}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+gpu.\+hpp\end{DoxyCompactItemize}

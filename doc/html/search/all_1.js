@@ -1,7 +1,7 @@
 var searchData=
 [
   ['abi_0',['ABI',['../namespaceABI.html',1,'']]],
-  ['add_1',['add',['../structAffineStride_1_1Stride.html#a86ae2b814b6d1f62186a545b85b7fae3',1,'AffineStride::Stride::add'],['../structAffineStride_1_1LongStride.html#add61f22e2b40a39e3ed5d09024d60e00',1,'AffineStride::LongStride::add'],['../classNodeBitmap.html#a7b1aa301f1af14f2594a40825c215f26',1,'NodeBitmap::add()'],['../classFlatHashBitmapImpl.html#a675c7dbc81e008f378536f9809fd9ae3',1,'FlatHashBitmapImpl::add()'],['../classStepResults.html#a21130a36f418b18feecc8dfab3dcaf88',1,'StepResults::add(size_t level, tally_t step_count)']]],
+  ['add_1',['add',['../structAffineStride_1_1Stride.html#a86ae2b814b6d1f62186a545b85b7fae3',1,'AffineStride::Stride::add'],['../classNodeBitmap.html#a7b1aa301f1af14f2594a40825c215f26',1,'NodeBitmap::add()'],['../classFlatHashBitmapImpl.html#a675c7dbc81e008f378536f9809fd9ae3',1,'FlatHashBitmapImpl::add()'],['../classStepResults.html#a21130a36f418b18feecc8dfab3dcaf88',1,'StepResults::add(size_t level, tally_t step_count)']]],
   ['add_5faggregate_2',['add_aggregate',['../classStepResults.html#a932822122aa94a3e95bbeb5bd95aa147',1,'StepResults']]],
   ['add_5fchild_3',['add_child',['../classNode.html#ab6aa77b6b6203cdb6ebb2f8d211d2856',1,'Node']]],
   ['add_5fcovered_4',['add_covered',['../classBinaryTreeCoverage.html#ac9c921ce843dff7be0df31cf14fa094d',1,'BinaryTreeCoverage']]],
@@ -15,15 +15,12 @@ var searchData=
   ['addleveltls_12',['AddLevelTLS',['../structBinaryTreeImplicitImpl_1_1AddLevelTLS.html',1,'BinaryTreeImplicitImpl']]],
   ['affinestride_13',['AffineStride',['../namespaceAffineStride.html',1,'']]],
   ['anysupportedintegral_14',['AnySupportedIntegral',['../conceptAnySupportedIntegral.html',1,'']]],
-  ['apply_5ff_15',['apply_f',['../classCollatzAffineMap.html#a0438b2fe0f64a9ff7023e163a7de8a3f',1,'CollatzAffineMap::apply_F()'],['../classCollatzAffineMapShortcut.html#ac9257a3b5535d7cf9129f74dfc247282',1,'CollatzAffineMapShortcut::apply_F()']]],
+  ['apply_5ff_15',['apply_f',['../classCollatzAffineMapShortcut.html#ac9257a3b5535d7cf9129f74dfc247282',1,'CollatzAffineMapShortcut::apply_F()'],['../classCollatzAffineMap.html#a0438b2fe0f64a9ff7023e163a7de8a3f',1,'CollatzAffineMap::apply_F()']]],
   ['apply_5fg_16',['apply_g',['../classCollatzAffineMap.html#a7b0a82c8ab244dce97b612cde154fc56',1,'CollatzAffineMap::apply_G()'],['../classCollatzAffineMapShortcut.html#a271acb3e0999a24608ec10dfd9eb9aca',1,'CollatzAffineMapShortcut::apply_G()']]],
-  ['apply_5fstride_17',['apply_stride',['../namespaceAffineStride.html#acca45ffaea831b52d436d571b36086e5',1,'AffineStride']]],
-  ['apply_5fstride_5f2x_18',['apply_stride_2x',['../namespaceAffineStride.html#a5b69c888485800e509d4b5251bc8db51',1,'AffineStride']]],
-  ['apply_5fstride_5f4x_19',['apply_stride_4x',['../namespaceAffineStride.html#a515c44e2e1c1e6807719160fc16839fb',1,'AffineStride']]],
-  ['apply_5fstride_5f8x_20',['apply_stride_8x',['../namespaceAffineStride.html#ae3fee91d30d86b467b7e9a4cdd01bd7e',1,'AffineStride']]],
-  ['assert_5flevel_5fverification_21',['assert_level_verification',['../classBinaryTree.html#a20cc074d3eee2f0081dcca4543162702',1,'BinaryTree']]],
-  ['assert_5flevel_5fwill_5ffit_22',['assert_level_will_fit',['../classBinaryTree.html#ac6ec6687fe24e4deba4c4e62b04afe69',1,'BinaryTree']]],
-  ['assign_5fchild_23',['assign_child',['../classNode.html#a5fbfcf7a86d8ebf2118e45999dee3790',1,'Node']]],
-  ['assign_5fhwm_5fancestor_24',['assign_hwm_ancestor',['../classNode.html#a0a921a007d49f266256900adc55aab60',1,'Node']]],
-  ['assign_5fparent_25',['assign_parent',['../classNode.html#ad2e48781de0681e7147bf71ed20263b0',1,'Node']]]
+  ['apply_5fstride_17',['apply_stride',['../structAffineStride_1_1Table.html#a0401baf577b8469f99946b4500d7abc3',1,'AffineStride::Table::apply_stride(T &amp;value)'],['../structAffineStride_1_1Table.html#a8446da7336bc8d5c9d9a2dbfe6520694',1,'AffineStride::Table::apply_stride(T &amp;value, const Stride &amp;stride)']]],
+  ['assert_5flevel_5fverification_18',['assert_level_verification',['../classBinaryTree.html#a20cc074d3eee2f0081dcca4543162702',1,'BinaryTree']]],
+  ['assert_5flevel_5fwill_5ffit_19',['assert_level_will_fit',['../classBinaryTree.html#ac6ec6687fe24e4deba4c4e62b04afe69',1,'BinaryTree']]],
+  ['assign_5fchild_20',['assign_child',['../classNode.html#a5fbfcf7a86d8ebf2118e45999dee3790',1,'Node']]],
+  ['assign_5fhwm_5fancestor_21',['assign_hwm_ancestor',['../classNode.html#a0a921a007d49f266256900adc55aab60',1,'Node']]],
+  ['assign_5fparent_22',['assign_parent',['../classNode.html#ad2e48781de0681e7147bf71ed20263b0',1,'Node']]]
 ];

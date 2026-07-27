@@ -1,0 +1,77 @@
+\doxysection{progress\+\_\+report.\+hpp}
+\hypertarget{progress__report_8hpp_source}{}\label{progress__report_8hpp_source}\index{src/collatz/progress\_report.hpp@{src/collatz/progress\_report.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classProgressReport}{ProgressReport}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00015\ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}{\_line\_count}}\ =\ 0;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classProgressReport_a0caa2c8e8b4e10abcca0d701683de6d8}{count\_lines}}(\textcolor{keyword}{const}\ std::string\&\ text)\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it's\ empty,\ return\ 0.}}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (text.empty())\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There's\ at\ least\ one\ characters,\ which\ means\ at\ leats\ one\ line.\ \ Add\ more\ if\ newline\ is\ seen.}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ count\ =\ 1;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{char}\ c\ :\ text)\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'\(\backslash\)n'})\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ count++;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ count;}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classProgressReport_a62b1a1c63e2d3c368334445ff04af83d}{ProgressReport}}(std::ostream\&\ out\ =\ std::cout)\ :\ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}(out)\ \{\}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classProgressReport_a19141b909cfb7024f2720592bf7f9eff}{\string~ProgressReport}}()\ \{\}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classProgressReport_afd22f85873b1ef03dd3561659b54c305}{clear}}()\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}{\_line\_count}};\ i++)\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Clear\ the\ current\ line.}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)033[2K"{}};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Move\ the\ cursor\ up\ a\ line\ if\ needed.}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ +\ 1\ <\ \mbox{\hyperlink{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}{\_line\_count}})\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)033[1A"{}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ to\ column\ 0.\ \ Flush\ that\ change\ (and\ others\ from\ the\ loop\ above).\ \ Then\ set\ line\ count\ to\ zero.}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)r"{}};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}.flush();}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}{\_line\_count}}\ =\ 0;}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classProgressReport_ae1d7505fe296834515b589071096088a}{report}}(\textcolor{keyword}{const}\ std::string\&\ text)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_afd22f85873b1ef03dd3561659b54c305}{clear}}();}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}\ <<\ text;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a571ddc12d49d51fd742dcd1fa326d129}{\_out}}.flush();}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classProgressReport_a1c3b89a82fbf925cd39ef5ba84d37f0e}{\_line\_count}}\ =\ \mbox{\hyperlink{classProgressReport_a0caa2c8e8b4e10abcca0d701683de6d8}{count\_lines}}(text);}
+\DoxyCodeLine{00081\ \ \ \ \ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \};}
+
+\end{DoxyCode}

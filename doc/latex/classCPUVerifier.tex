@@ -1,0 +1,265 @@
+\doxysection{CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classCPUVerifier}{}\label{classCPUVerifier}\index{CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}}
+
+
+An implementation of the {\ttfamily \doxylink{classVerifier}{Verifier}} class which uses local CPUs to process values.  
+
+
+
+
+{\ttfamily \#include $<$verifier\+\_\+cpu.\+hpp$>$}
+
+
+
+Inheritance diagram for CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=180pt]{classCPUVerifier__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classCPUVerifier__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}}
+\begin{DoxyCompactList}\small\item\em Thread-\/\+Local storage, mostly for wake-\/up call tracking and metrics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCPUVerifier_af0b6187a4bc363e6afec62f2c9b52e89}\label{classCPUVerifier_af0b6187a4bc363e6afec62f2c9b52e89} 
+void {\bfseries enable\+\_\+detailed\+\_\+metrics} ()
+\begin{DoxyCompactList}\small\item\em Enables detailed metrics. Slows down verification but offers a little extra context about HWM/\+Affine Striding/\+Etc. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a368e702135a862597b8aa7182787441f}\label{classCPUVerifier_a368e702135a862597b8aa7182787441f} 
+void {\bfseries disable\+\_\+detailed\+\_\+metrics} ()
+\begin{DoxyCompactList}\small\item\em Disables detailed metrics. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_aa569321329626668895203a19e7c55a4}\label{classCPUVerifier_aa569321329626668895203a19e7c55a4} 
+bool {\bfseries is\+\_\+detailed\+\_\+metrics\+\_\+enabled} () const
+\begin{DoxyCompactList}\small\item\em Return the status of detailed metrics. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\bool \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\+\_\+with\+\_\+detailed\+\_\+metrics}} (U \&value, \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}} \&thread\+\_\+storage)
+\begin{DoxyCompactList}\small\item\em Verifies a single value, promoting type if necessary. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCPUVerifier_a4abce90529496c571ea63a26b8cce946}{run\+\_\+executor}} () override
+\begin{DoxyCompactList}\small\item\em Entry point for the {\ttfamily \doxylink{classVerifier}{Verifier}} base class to begin actual execution of number verification. \end{DoxyCompactList}\item 
+{\footnotesize template$<$bool Use\+IVTable, bool Detailed\+Metrics$>$ }\\void \mbox{\hyperlink{classCPUVerifier_a3c932d95f7c56491a092f67343481634}{run\+\_\+executor\+\_\+impl}} ()
+\begin{DoxyCompactList}\small\item\em The actual implementation of verification steps, with necessary template params/constexpr values sent. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCPUVerifier_a96ef3b5f878ea1c97f406ef25db944c5}\label{classCPUVerifier_a96ef3b5f878ea1c97f406ef25db944c5} 
+{\bfseries CPUVerifier} ()=delete
+\begin{DoxyCompactList}\small\item\em Default constructor, not allowed. Must give a tree reference. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a62b41668311e2e3664ca2587142cfc7e}\label{classCPUVerifier_a62b41668311e2e3664ca2587142cfc7e} 
+{\bfseries CPUVerifier} (\mbox{\hyperlink{classVerifier}{Verifier}}$<$ T $>$\+::\+Tree\+Type \&tree)
+\begin{DoxyCompactList}\small\item\em Constructor taking a tree. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a2992f1e894fa95ebdafbff86e3da3702}\label{classCPUVerifier_a2992f1e894fa95ebdafbff86e3da3702} 
+{\bfseries CPUVerifier} (const \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_aa697f0bb0a28b1ca0797e9bca3db76c9}\label{classCPUVerifier_aa697f0bb0a28b1ca0797e9bca3db76c9} 
+\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \& {\bfseries operator=} (const \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a4f9275078380efdd959ab82b6d8bfaeb}\label{classCPUVerifier_a4f9275078380efdd959ab82b6d8bfaeb} 
+{\bfseries CPUVerifier} (\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a0c1132f0812ba6ddd54c510d85fec04c}\label{classCPUVerifier_a0c1132f0812ba6ddd54c510d85fec04c} 
+\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \& {\bfseries operator=} (\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\Hypertarget{classCPUVerifier_a41c28a00f4bdb38a2b59a1237268e65c}\label{classCPUVerifier_a41c28a00f4bdb38a2b59a1237268e65c} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+CPUVerifier} ()
+\begin{DoxyCompactList}\small\item\em Destruction is default for now. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Verifier} ()=delete
+\begin{DoxyCompactList}\small\item\em Default constructor, not allowed. Must send a tree. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (\mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \&tree)
+\begin{DoxyCompactList}\small\item\em Constructor taking a tree (and actually assigning it). This class owns the tree. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (const \mbox{\hyperlink{classVerifier}{Verifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVerifier}{Verifier}} \& {\bfseries operator=} (const \mbox{\hyperlink{classVerifier}{Verifier}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+{\bfseries Verifier} (\mbox{\hyperlink{classVerifier}{Verifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVerifier}{Verifier}} \& {\bfseries operator=} (\mbox{\hyperlink{classVerifier}{Verifier}} \&\&) noexcept=default
+\begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
+virtual {\bfseries \texorpdfstring{$\sim$}{\string~}\+Verifier} ()
+\begin{DoxyCompactList}\small\item\em When destroyed, call stop to flag STOPPING, and then join the executor thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \& {\bfseries get\+\_\+tree} () const
+\begin{DoxyCompactList}\small\item\em Get the assigned tree. Read only. \end{DoxyCompactList}\item 
+const T \& {\bfseries get\+\_\+start\+\_\+value} () const
+\begin{DoxyCompactList}\small\item\em Get the start value. \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+start\+\_\+value} (const T \&x)
+\begin{DoxyCompactList}\small\item\em Set the start value. When higher than the tree\textquotesingle{}s largest value, will skip forward within a range. See {\ttfamily Binary\+Tree.\+hpp}. \end{DoxyCompactList}\item 
+const T \& {\bfseries get\+\_\+end\+\_\+value} () const
+\begin{DoxyCompactList}\small\item\em Get the end value. When zero, it\textquotesingle{}s considered infinite (no end). \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+end\+\_\+value} (const T \&x)
+\begin{DoxyCompactList}\small\item\em Set the end value. Useful for testing in batches or ranges. \end{DoxyCompactList}\item 
+Verifier\+State {\bfseries get\+\_\+state} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Get the current state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVerifier_a015af34ae35da7f68945821866145de4}{enable\+\_\+max\+\_\+iv\+\_\+table}} ()
+\begin{DoxyCompactList}\small\item\em Enables the use of the Max IV table to help avoid overflows with a precomputed table. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVerifier_a5912b774eb7d9d9af691be8f67c847b2}{disable\+\_\+max\+\_\+iv\+\_\+table}} ()
+\begin{DoxyCompactList}\small\item\em Disables the use of the Max IV table, requiring "{}headroom bits"{} tracking internally for overflows. \end{DoxyCompactList}\item 
+bool {\bfseries is\+\_\+iv\+\_\+table\+\_\+enabled} () const
+\begin{DoxyCompactList}\small\item\em Return the status of whether the IV table is used. \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries get\+\_\+synchronization\+\_\+countdown} () const
+\begin{DoxyCompactList}\small\item\em Get the synchronization countdown. Usually not something you should care about. \end{DoxyCompactList}\item 
+void {\bfseries set\+\_\+synchronization\+\_\+countdown} (size\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Set the synchronization countdown. Usually not something you should tune. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} \& {\bfseries get\+\_\+metrics} ()
+\begin{DoxyCompactList}\small\item\em Get the latest metrics published by the threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classVerifier_ae185c2d35a707de8d1c12e6f5d3e57ae}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the verifier. Clears any previous state/data. Puts the work into a sub-\/thread and then returns. \end{DoxyCompactList}\item 
+void {\bfseries stop} ()
+\begin{DoxyCompactList}\small\item\em Stops verification, killing off threads. Verification cannot be resumed via {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}}. \end{DoxyCompactList}\item 
+void {\bfseries pause} ()
+\begin{DoxyCompactList}\small\item\em Pauses verification, putting threads to sleep. Verification may continue via {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}}. \end{DoxyCompactList}\item 
+void {\bfseries resume} ()
+\begin{DoxyCompactList}\small\item\em Wakes threads from sleep following a {\ttfamily \doxylink{classVerifier_a4f57bcbea79c49492e4ce82abe5efcbb}{pause()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCPUVerifier_a27da5ef745a81fd1dd5e021203d451c5}\label{classCPUVerifier_a27da5ef745a81fd1dd5e021203d451c5} 
+std\+::vector$<$ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}} $>$ {\bfseries \+\_\+tls}
+\begin{DoxyCompactList}\small\item\em Thread-\/local storage for the main workers. Should NOT be modified by anything other than the worker thread and sub-\/threads. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\+\_\+detailed\+\_\+metrics}} = false
+\begin{DoxyCompactList}\small\item\em Enables detailed metrics for step counts, striding, High-\/\+Water Mark stopping, etc. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Types inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+using {\bfseries Tree\+Type} = \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}$<$ T $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries start\+\_\+timer} ()
+\begin{DoxyCompactList}\small\item\em Starts the timer by setting it to now. \end{DoxyCompactList}\item 
+void {\bfseries sync\+\_\+timer} ()
+\begin{DoxyCompactList}\small\item\em Synchronizes the current duration stored in \+\_\+published\+\_\+metrics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classBinaryTree}{Tree\+Type}} \& {\bfseries \+\_\+tree}
+\begin{DoxyCompactList}\small\item\em The binary tree reference from the caller. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\+\_\+enable\+\_\+max\+\_\+iv\+\_\+table}} = true
+\begin{DoxyCompactList}\small\item\em Enables the lookup of max initial values inside {\ttfamily \doxylink{namespaceCollatzConstants}{Collatz\+Constants}} to prevent type overflows instead of tracking headroom bits. \end{DoxyCompactList}\item 
+T {\bfseries \+\_\+start\+\_\+value} = 0
+\begin{DoxyCompactList}\small\item\em Starting value when beginning iteration. If zero (or lower than the tree\textquotesingle{}s size), it bumps forward. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\+\_\+end\+\_\+value}} = 0
+\begin{DoxyCompactList}\small\item\em Optional stopping value. When zero, never stops. \end{DoxyCompactList}\item 
+std\+::atomic$<$ Verifier\+State $>$ {\bfseries \+\_\+state} = Verifier\+State\+::\+STOPPED
+\begin{DoxyCompactList}\small\item\em The state of the system. See {\ttfamily Verifier\+State} for options. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classVerifier_a3899943de03d220d4b479218c5555d32}{\+\_\+synchronization\+\_\+countdown}} = 100\textquotesingle{}000
+\begin{DoxyCompactList}\small\item\em How many verifications a thread should do before synchronizing\+: checking for state changes and updating metrics. \end{DoxyCompactList}\item 
+size\+\_\+t {\bfseries \+\_\+paused\+\_\+check\+\_\+ms} = 10
+\begin{DoxyCompactList}\small\item\em Controls how often paused loops check for updates. This is a guaranteed minimum, not maximum. \end{DoxyCompactList}\item 
+std\+::chrono\+::time\+\_\+point$<$ std\+::chrono\+::steady\+\_\+clock $>$ {\bfseries \+\_\+timer\+\_\+start} = std\+::chrono\+::steady\+\_\+clock\+::now()
+\begin{DoxyCompactList}\small\item\em The last time {\ttfamily \doxylink{classVerifier_ae185c2d35a707de8d1c12e6f5d3e57ae}{start()}} or {\ttfamily \doxylink{classVerifier_a83a7010aac816d8bf356a9b6f0ff3c31}{resume()}} was called. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVerifierMetric}{Verifier\+Metric}} {\bfseries \+\_\+published\+\_\+metrics}
+\begin{DoxyCompactList}\small\item\em A metric object, to be updated by executors when {\ttfamily \+\_\+synchronization\+\_\+countdown} is reached. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$\newline
+class CPUVerifier$<$ T $>$}
+An implementation of the {\ttfamily \doxylink{classVerifier}{Verifier}} class which uses local CPUs to process values. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCPUVerifier_a4abce90529496c571ea63a26b8cce946}\label{classCPUVerifier_a4abce90529496c571ea63a26b8cce946} 
+\index{CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}!run\_executor@{run\_executor}}
+\index{run\_executor@{run\_executor}!CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{run\_executor()}{run\_executor()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+void \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}$<$ T $>$\+::run\+\_\+executor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Entry point for the {\ttfamily \doxylink{classVerifier}{Verifier}} base class to begin actual execution of number verification. 
+
+In this CPU implementation, this is actually just a dispatcher. It takes the runtime policy choices and makes a single call to the {\ttfamily \doxylink{classCPUVerifier_a3c932d95f7c56491a092f67343481634}{run\+\_\+executor\+\_\+impl()}} with the neccessary compile-\/time constants. This avoids if/else blocks inside hot loops which adds anywhere from 1-\/2\% up to 10-\/20\% performance in testing. 
+
+Implements \mbox{\hyperlink{classVerifier_a76a2dc13fc257c2765b108c7b0b06a0f}{Verifier$<$ T $>$}}.
+
+\Hypertarget{classCPUVerifier_a3c932d95f7c56491a092f67343481634}\label{classCPUVerifier_a3c932d95f7c56491a092f67343481634} 
+\index{CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}!run\_executor\_impl@{run\_executor\_impl}}
+\index{run\_executor\_impl@{run\_executor\_impl}!CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{run\_executor\_impl()}{run\_executor\_impl()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$bool Use\+IVTable, bool Detailed\+Metrics$>$ \\
+void \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}$<$ T $>$\+::run\+\_\+executor\+\_\+impl (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The actual implementation of verification steps, with necessary template params/constexpr values sent. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Use\+IVTable} & Whether or not to use the max initial value table from {\ttfamily \doxylink{namespaceCollatzConstants}{Collatz\+Constants}} to protect from overflow instead of tracking headroom bits in realtime. Note\+: when the table is exhausted, the system falls back to headroom bits, making this always safe to send as {\ttfamily true}. \\
+\hline
+{\em Detailed\+Metrics} & Uses {\ttfamily \doxylink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\+\_\+with\+\_\+detailed\+\_\+metrics()}} in this implementation instead of {\ttfamily \doxylink{classCollatz}{Collatz}\texorpdfstring{$<$}{<}T\texorpdfstring{$>$}{>}::st\+\_\+verify()}. \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}\label{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d} 
+\index{CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}!verify\_with\_detailed\_metrics@{verify\_with\_detailed\_metrics}}
+\index{verify\_with\_detailed\_metrics@{verify\_with\_detailed\_metrics}!CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{verify\_with\_detailed\_metrics()}{verify\_with\_detailed\_metrics()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ \\
+bool \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}$<$ T $>$\+::verify\+\_\+with\+\_\+detailed\+\_\+metrics (\begin{DoxyParamCaption}\item[{U \&}]{value,  }\item[{\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}} \&}]{thread\+\_\+storage }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Verifies a single value, promoting type if necessary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to verify. \\
+\hline
+{\em thread\+\_\+storage} & The caller\textquotesingle{}s thread storage object for tracking and metric data. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). Allows this method to promote from the {\ttfamily T} provided by the class. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+True if verified, hangs otherwise. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}\label{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb} 
+\index{CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}!\_detailed\_metrics@{\_detailed\_metrics}}
+\index{\_detailed\_metrics@{\_detailed\_metrics}!CPUVerifier$<$ T $>$@{CPUVerifier$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{\_detailed\_metrics}{\_detailed\_metrics}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+bool \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}$<$ T $>$\+::\+\_\+detailed\+\_\+metrics = false\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Enables detailed metrics for step counts, striding, High-\/\+Water Mark stopping, etc. 
+
+\begin{DoxyNote}{Note}
+Only available on {\ttfamily \doxylink{classCPUVerifier}{CPUVerifier}} 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/verifier\+\_\+cpu.\+hpp\end{DoxyCompactItemize}

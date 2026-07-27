@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structfmt_1_1formatter_3_01mpz__class_01_4.html" title="Converts mpz_class types to string for logging." alt="" coords="5,5,164,45"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,31,120,56"/>
+<area shape="rect" id="Node000001" href="$structfmt_1_1formatter_3_01int128__t_01_4.html" title="Converts int128_t types to string for logging." alt="" coords="172,5,371,31"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="133,32,171,27,172,33,134,37"/>
+<area shape="rect" id="Node000002" href="$structfmt_1_1formatter_3_01uint128__t_01_4.html" title="Converts uint128_t types to string for logging." alt="" coords="168,55,375,80"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="134,49,168,53,168,58,134,54"/>
 </map>

@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['shift_0',['shift',['../structAffineStride_1_1Stride.html#a446ecb275e4e0f4d7f108b13d706c4e2',1,'AffineStride::Stride']]],
+  ['steps_5fskippable_5fby_5faffine_5fstride_1',['steps_skippable_by_affine_stride',['../structVerifierTLSMetric.html#a4e9277e074466cc75c41680a9ff17729',1,'VerifierTLSMetric']]],
+  ['steps_5fskippable_5fby_5faffine_5fstride_5fatomic_2',['steps_skippable_by_affine_stride_atomic',['../structVerifierMetric.html#ad713f9de15334a9375a1e576d012abe1',1,'VerifierMetric']]],
+  ['steps_5fskippable_5fby_5faffine_5fstride_5fbefore_5fhwm_3',['steps_skippable_by_affine_stride_before_hwm',['../structVerifierTLSMetric.html#a5939007871c1cf12a85d5673d4f29063',1,'VerifierTLSMetric']]],
+  ['steps_5fskippable_5fby_5faffine_5fstride_5fbefore_5fhwm_5fatomic_4',['steps_skippable_by_affine_stride_before_hwm_atomic',['../structVerifierMetric.html#a5b6164904c0bce2218eb7ba81fb046a6',1,'VerifierMetric']]],
+  ['steps_5fskippable_5fby_5fhwm_5',['steps_skippable_by_hwm',['../structVerifierTLSMetric.html#aa9874c75923a2a37d734ec8b3e59ec8a',1,'VerifierTLSMetric']]],
+  ['steps_5fskippable_5fby_5fhwm_5fatomic_6',['steps_skippable_by_hwm_atomic',['../structVerifierMetric.html#a79e5dec89dbe0515b1a53f249d7fa6f9',1,'VerifierMetric']]],
+  ['steps_5ftotal_7',['steps_total',['../structVerifierTLSMetric.html#aedcc59a6907aa03c501e8a83f74834d4',1,'VerifierTLSMetric']]],
+  ['steps_5ftotal_5fatomic_8',['steps_total_atomic',['../structVerifierMetric.html#a51c21cc46e8d65ad3e50cb00e423c2a3',1,'VerifierMetric']]],
+  ['stride_5fsize_9',['STRIDE_SIZE',['../structAffineStride_1_1Table.html#a87283706d6ac368d610f7aa8be4c6f44',1,'AffineStride::Table']]],
+  ['suffix_5fbits_10',['SUFFIX_BITS',['../structBitmapKeyTraits.html#a319eba2d881b3133e3621f3ce1a0218a',1,'BitmapKeyTraits']]],
+  ['suffix_5fbytes_11',['SUFFIX_BYTES',['../structBitmapKeyTraits.html#a6520ffa13b6aeb1fb7ca2f1c0c1ea142',1,'BitmapKeyTraits']]],
+  ['suffix_5fmask_12',['SUFFIX_MASK',['../structBitmapKeyTraits.html#af6280e805a4eb7fe52a680bb87074a7c',1,'BitmapKeyTraits']]],
+  ['suffix_5fmax_13',['SUFFIX_MAX',['../structBitmapKeyTraits.html#af8f3482cb20cfcd2444ac2772b9cfcb2',1,'BitmapKeyTraits']]],
+  ['synchronization_5fcountdown_14',['synchronization_countdown',['../structCPUVerifier_1_1ThreadStorage.html#a10c21a7f5bb17dda5cca03bd9fd212ce',1,'CPUVerifier::ThreadStorage::synchronization_countdown'],['../structGPUVerifier_1_1ThreadStorage.html#a752da5cef788dfc880329fb937cd0446',1,'GPUVerifier::ThreadStorage::synchronization_countdown']]],
+  ['synchronizations_5fperformed_15',['synchronizations_performed',['../structCPUVerifier_1_1ThreadStorage.html#a66da63d9a4ea1d0fa1c4c12c9a10fa70',1,'CPUVerifier::ThreadStorage::synchronizations_performed'],['../structGPUVerifier_1_1ThreadStorage.html#a55d6c3ad72a78e1c3cd5de26bd1aa44d',1,'GPUVerifier::ThreadStorage::synchronizations_performed']]]
+];

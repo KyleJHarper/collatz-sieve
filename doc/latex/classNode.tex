@@ -21,13 +21,13 @@ Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\+\_\+size}} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t \mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\+\_\+size}} () const
 \begin{DoxyCompactList}\small\item\em Calculate the size of this data structure as closely as possible. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode_a6fe2019d9fbed003fe9e04537c026bd3}{equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classNode_a6fe2019d9fbed003fe9e04537c026bd3}{equal}} (const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Compare another node to this one. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}} (std\+::ostream \&\mbox{\hyperlink{classNode}{out}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}}) \mbox{\hyperlink{classNode}{const}}
+bool \mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}} (std\+::ostream \&out, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Serialize the node specifics of this object for export. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}} (std\+::istream \&\mbox{\hyperlink{classNode}{in}}, T \&\mbox{\hyperlink{classNode}{parent\+\_\+v}}, T \&\mbox{\hyperlink{classNode}{hwm\+\_\+ancestor\+\_\+v}}, \mbox{\hyperlink{classNode}{uint8\+\_\+t}} \&\mbox{\hyperlink{classNode}{child\+\_\+count}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+bool \mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}} (std\+::istream \&in, T \&parent\+\_\+v, T \&hwm\+\_\+ancestor\+\_\+v, uint8\+\_\+t \&child\+\_\+count, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
@@ -36,30 +36,30 @@ Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\
 {\bfseries Node} ()
 \begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ad26a980b1363a1c2a05fb84e7c19a36a}\label{classNode_ad26a980b1363a1c2a05fb84e7c19a36a} 
-{\bfseries Node} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}}=\mbox{\hyperlink{classNode}{nullptr}})
+{\bfseries Node} (const T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}parent=nullptr)
 \begin{DoxyCompactList}\small\item\em Construct which allows value specified and parent optionally set when initialized. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ac949a08e80b9beb215d614b47a8c422c}\label{classNode_ac949a08e80b9beb215d614b47a8c422c} 
-{\bfseries Node} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}} \&)=\mbox{\hyperlink{classNode}{delete}}
+{\bfseries Node} (const \mbox{\hyperlink{classNode}{Node}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_aa9fe3e0f304f32b887cdad86eb657522}\label{classNode_aa9fe3e0f304f32b887cdad86eb657522} 
-\mbox{\hyperlink{classNode}{Node}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\mbox{\hyperlink{classNode}{Node}} \& {\bfseries operator=} (const \mbox{\hyperlink{classNode}{Node}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a0f90944f0966137b4537b6ccfac44638}\label{classNode_a0f90944f0966137b4537b6ccfac44638} 
-{\bfseries Node} (\mbox{\hyperlink{classNode}{Node}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+{\bfseries Node} (\mbox{\hyperlink{classNode}{Node}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a9b0fe6d4a3ea0c0692c92a20fe07b6a2}\label{classNode_a9b0fe6d4a3ea0c0692c92a20fe07b6a2} 
-\mbox{\hyperlink{classNode}{Node}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{Node}} \&\&) \mbox{\hyperlink{classNode}{noexcept}}=\mbox{\hyperlink{classNode}{default}}
+\mbox{\hyperlink{classNode}{Node}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{Node}} \&\&) noexcept=default
 \begin{DoxyCompactList}\small\item\em Moving is okay. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ae923d0417581dd19784d55b901f0f7f0}\label{classNode_ae923d0417581dd19784d55b901f0f7f0} 
 {\bfseries \texorpdfstring{$\sim$}{\string~}\+Node} ()
 \begin{DoxyCompactList}\small\item\em Destructor, which simply needs to call {\ttfamily \doxylink{classNode_a492a8099e26177947545b885999f8e2f}{release\+\_\+children()}} in case it owns any which need freed. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}} (\mbox{\hyperlink{classNode}{const}} T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}}=\mbox{\hyperlink{classNode}{nullptr}})
+void \mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}} (const T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}parent=nullptr)
 \begin{DoxyCompactList}\small\item\em Initializes a node object with {\ttfamily value} and an optional parent, treating it like it\textquotesingle{}s new. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNode_a4fde89f0ec750262d4f326276007a5f4}{init\+\_\+sequence\+\_\+helper}} ()
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\void \mbox{\hyperlink{classNode_a4fde89f0ec750262d4f326276007a5f4}{init\+\_\+sequence\+\_\+helper}} ()
 \begin{DoxyCompactList}\small\item\em Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init()}} for type comparison when processing sequence for FG chain/\+HWM analysis. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}\label{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries reset} ()
-\begin{DoxyCompactList}\small\item\em Reset to make this act like a \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{new()} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Reset to make this act like a new() object. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Child-\/\+Related Accessors}\par
 \begin{DoxyCompactItemize}
@@ -67,67 +67,67 @@ Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\
 \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classNode_ab6aa77b6b6203cdb6ebb2f8d211d2856}{add\+\_\+child}} (T value)
 \begin{DoxyCompactList}\small\item\em Create a node object with {\ttfamily value} and assign it to this member\textquotesingle{}s {\ttfamily \+\_\+children} list. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a5fbfcf7a86d8ebf2118e45999dee3790}\label{classNode_a5fbfcf7a86d8ebf2118e45999dee3790} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{child}})
+void {\bfseries assign\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}child)
 \begin{DoxyCompactList}\small\item\em Assign a child to this {\ttfamily \+\_\+children} list, with no safety checks. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a991abe2497838e42015d6c08092d1fa8}\label{classNode_a991abe2497838e42015d6c08092d1fa8} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries own\+\_\+children} (\mbox{\hyperlink{classNode}{bool}} value)
+void {\bfseries own\+\_\+children} (bool value)
 \begin{DoxyCompactList}\small\item\em Gain or relinquish ownership of children, mostly for destruction cascading purposes later. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a2784e42ef79815d508aeea0b2312f605}\label{classNode_a2784e42ef79815d508aeea0b2312f605} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries release\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{child}})
+void {\bfseries release\+\_\+child} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}child)
 \begin{DoxyCompactList}\small\item\em Release (delete) a single child if {\ttfamily \+\_\+owns\+\_\+children} is true. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a492a8099e26177947545b885999f8e2f}\label{classNode_a492a8099e26177947545b885999f8e2f} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries release\+\_\+children} ()
+void {\bfseries release\+\_\+children} ()
 \begin{DoxyCompactList}\small\item\em Releases (delete) all children if {\ttfamily \+\_\+owns\+\_\+children} is true. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ae856e60ec35925b79b122e029ecdfa36}\label{classNode_ae856e60ec35925b79b122e029ecdfa36} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries does\+\_\+own\+\_\+children} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries does\+\_\+own\+\_\+children} () const
 \begin{DoxyCompactList}\small\item\em Returns true if this object "{}owns"{} children (for destruction purposes), false otherwise. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_afb1da29ab629cdffd61c6c005e558c21}\label{classNode_afb1da29ab629cdffd61c6c005e558c21} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{index}}) \mbox{\hyperlink{classNode}{const}}
+const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child} (size\+\_\+t index) const
 \begin{DoxyCompactList}\small\item\em Return a readonly pointer to a child. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_adf7bf836a891fce518ab08ea88f8f85e}\label{classNode_adf7bf836a891fce518ab08ea88f8f85e} 
-\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child\+\_\+unsafe} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{index}})
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+child\+\_\+unsafe} (size\+\_\+t index)
 \begin{DoxyCompactList}\small\item\em Return a read-\/write pointer to a child. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a799dc03140055b044e22341ba3c494fc}\label{classNode_a799dc03140055b044e22341ba3c494fc} 
-\mbox{\hyperlink{classNode}{uint8\+\_\+t}} {\bfseries get\+\_\+child\+\_\+count} () \mbox{\hyperlink{classNode}{const}}
+uint8\+\_\+t {\bfseries get\+\_\+child\+\_\+count} () const
 \begin{DoxyCompactList}\small\item\em Return the number of children assigned to this node. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}\textbf{ Accessors}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNode_acd9ce8e35f9f5840779592383ea6b344}\label{classNode_acd9ce8e35f9f5840779592383ea6b344} 
-\mbox{\hyperlink{classNode}{const}} T \& {\bfseries get\+\_\+value} () \mbox{\hyperlink{classNode}{const}}
+const T \& {\bfseries get\+\_\+value} () const
 \begin{DoxyCompactList}\small\item\em Return this node\textquotesingle{}s value. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a384e4c5c02c237f1dad0aba304872cfc}\label{classNode_a384e4c5c02c237f1dad0aba304872cfc} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+below\+\_\+high\+\_\+water\+\_\+mark} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+below\+\_\+high\+\_\+water\+\_\+mark} () const
 \begin{DoxyCompactList}\small\item\em Flag to determine if this node is below the High-\/\+Water Mark. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ad177ff820a4b9416d8a3ee46cabfe774}\label{classNode_ad177ff820a4b9416d8a3ee46cabfe774} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries has\+\_\+high\+\_\+water\+\_\+mark\+\_\+ancestor} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries has\+\_\+high\+\_\+water\+\_\+mark\+\_\+ancestor} () const
 \begin{DoxyCompactList}\small\item\em Flag to determine if this node has a HWM ancestor. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a1e26152bd714bdbcb997fd946731a650}\label{classNode_a1e26152bd714bdbcb997fd946731a650} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries is\+\_\+initialized} () \mbox{\hyperlink{classNode}{const}}
+bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Flag to determine if this node has been initialized with a value. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_aa4c1e85c78e0c0f5f2b6f2cfe410dc14}\label{classNode_aa4c1e85c78e0c0f5f2b6f2cfe410dc14} 
-\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries get\+\_\+fg\+\_\+chain\+\_\+length} () \mbox{\hyperlink{classNode}{const}}
+seq\+\_\+size\+\_\+t {\bfseries get\+\_\+fg\+\_\+chain\+\_\+length} () const
 \begin{DoxyCompactList}\small\item\em Return the size of the FG chain for this node. Uses {\ttfamily \doxylink{classBinaryTreeMath_ac8139f556292fce4501e9010174bddef}{Binary\+Tree\+Math\+::st\+\_\+fg\+\_\+chain\+\_\+length()}} under the hood. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ac4a1e8bf6b3e480e2d79c742174a1f6e}\label{classNode_ac4a1e8bf6b3e480e2d79c742174a1f6e} 
-\mbox{\hyperlink{classNode}{level\+\_\+t}} {\bfseries get\+\_\+level} () \mbox{\hyperlink{classNode}{const}}
+level\+\_\+t {\bfseries get\+\_\+level} () const
 \begin{DoxyCompactList}\small\item\em Return this node\textquotesingle{}s level. It\textquotesingle{}s calculated from {\ttfamily \doxylink{classBinaryTreeMath_a77593656f36e970d58117fe24fb7f390}{Binary\+Tree\+Math\+::st\+\_\+get\+\_\+level\+\_\+by\+\_\+node\+\_\+value()}}. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a5d885c2048c44187abd83b6027337046}\label{classNode_a5d885c2048c44187abd83b6027337046} 
-T {\bfseries get\+\_\+position} () \mbox{\hyperlink{classNode}{const}}
+T {\bfseries get\+\_\+position} () const
 \begin{DoxyCompactList}\small\item\em Return the position of this node. Uses {\ttfamily \doxylink{classBinaryTreeMath_a9c933060b8bf36da748184ff45336606}{Binary\+Tree\+Math\+::st\+\_\+node\+\_\+position()}} under the hood. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a92652255576a27ebe2cd42d66b38e10d}\label{classNode_a92652255576a27ebe2cd42d66b38e10d} 
-std\+::string {\bfseries get\+\_\+fg\+\_\+chain\+\_\+string} () \mbox{\hyperlink{classNode}{const}}
-\begin{DoxyCompactList}\small\item\em Get the F-\/G chain for this node. Uses {\ttfamily \doxylink{classCollatz_a8ee1f8a061bedb3e82c4c80fe36d4f17}{Collatz\+::st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string()}}. \end{DoxyCompactList}\item 
+std\+::string {\bfseries get\+\_\+fg\+\_\+chain\+\_\+string} () const
+\begin{DoxyCompactList}\small\item\em Get the F-\/G chain for this node. Uses {\ttfamily Collatz\+::st\+\_\+get\+\_\+fg\+\_\+chain\+\_\+string()}. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ae8b9c415bbc9ca5615d93d5aa07bfd0f}\label{classNode_ae8b9c415bbc9ca5615d93d5aa07bfd0f} 
-std\+::string {\bfseries get\+\_\+odd\+\_\+even\+\_\+chain\+\_\+string} () \mbox{\hyperlink{classNode}{const}}
+std\+::string {\bfseries get\+\_\+odd\+\_\+even\+\_\+chain\+\_\+string} () const
 \begin{DoxyCompactList}\small\item\em Get the odd-\/even (OE) chain for this node. Uses {\ttfamily Collatz\+::fg\+\_\+to\+\_\+oe()}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+static bool \mbox{\hyperlink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{st\+\_\+equal}} (const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&first, const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Compare two Nodes\textquotesingle{} specific internals and return true if identical. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode_a3c91214103510f81a707a8257301a209}{st\+\_\+equal}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{first}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{second}}, std\+::string \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{err}}=\mbox{\hyperlink{classNode}{nullptr}})
+static bool \mbox{\hyperlink{classNode_a3c91214103510f81a707a8257301a209}{st\+\_\+equal}} (const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}first, const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}second, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Compare another node to this one. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -136,60 +136,60 @@ std\+::string {\bfseries get\+\_\+odd\+\_\+even\+\_\+chain\+\_\+string} () \mbox
 T {\bfseries \+\_\+value} = 0
 \item 
 \Hypertarget{classNode_aca6aed9c76de85f62c3f8f2020b341eb}\label{classNode_aca6aed9c76de85f62c3f8f2020b341eb} 
-\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+parent} = \mbox{\hyperlink{classNode}{nullptr}}
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+parent} = nullptr
 \item 
 \Hypertarget{classNode_abd13687c9b16b43a273ad93d7260cd2b}\label{classNode_abd13687c9b16b43a273ad93d7260cd2b} 
-\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+hwm\+\_\+ancestor} = \mbox{\hyperlink{classNode}{nullptr}}
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+hwm\+\_\+ancestor} = nullptr
 \item 
 \Hypertarget{classNode_aaa05167b39499499f550d7527faf0436}\label{classNode_aaa05167b39499499f550d7527faf0436} 
-\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+children} \mbox{[}\mbox{\hyperlink{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}{MAX\+\_\+\+CHILDREN}}\mbox{]} = \{\mbox{\hyperlink{classNode}{nullptr}}, \mbox{\hyperlink{classNode}{nullptr}}\}
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+children} \mbox{[}\mbox{\hyperlink{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}{MAX\+\_\+\+CHILDREN}}\mbox{]} = \{nullptr, nullptr\}
 \item 
 \Hypertarget{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2}\label{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+below\+\_\+hwm}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+bool {\bfseries \+\_\+is\+\_\+below\+\_\+hwm}\+: 1 = false
 \item 
 \Hypertarget{classNode_a8c5b5758227cb43b466cc653f3a2ffc9}\label{classNode_a8c5b5758227cb43b466cc653f3a2ffc9} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+has\+\_\+hwm\+\_\+ancestor}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+bool {\bfseries \+\_\+has\+\_\+hwm\+\_\+ancestor}\+: 1 = false
 \item 
 \Hypertarget{classNode_a358c408d443ce2e821f9843896d5823a}\label{classNode_a358c408d443ce2e821f9843896d5823a} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+is\+\_\+initialized}\+: 1 = \mbox{\hyperlink{classNode}{false}}
+bool {\bfseries \+\_\+is\+\_\+initialized}\+: 1 = false
 \item 
 \Hypertarget{classNode_a1e806af5e9fd75d20fa7cf78de0ac7db}\label{classNode_a1e806af5e9fd75d20fa7cf78de0ac7db} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+owns\+\_\+children}\+: 1 = \mbox{\hyperlink{classNode}{true}}
+bool {\bfseries \+\_\+owns\+\_\+children}\+: 1 = true
 \item 
 \Hypertarget{classNode_acc82ae9cf937b3885cee4caf26a05fb0}\label{classNode_acc82ae9cf937b3885cee4caf26a05fb0} 
-\mbox{\hyperlink{classNode}{uint8\+\_\+t}} {\bfseries \+\_\+child\+\_\+count} = 0
+uint8\+\_\+t {\bfseries \+\_\+child\+\_\+count} = 0
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Static Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}\label{classNode_ab204ebe45f832d60ecc0a69bc07dc39f} 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{constexpr}} \mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries MAX\+\_\+\+CHILDREN} = 2
+static constexpr size\+\_\+t {\bfseries MAX\+\_\+\+CHILDREN} = 2
 \begin{DoxyCompactList}\small\item\em Maximum amount of children a node is allowed to have. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNode_ae944c1a7004ae58f280a1a5dc429f8cb}\label{classNode_ae944c1a7004ae58f280a1a5dc429f8cb} 
-std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&\mbox{\hyperlink{classNode}{os}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{m}})
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&m)
 \begin{DoxyCompactList}\small\item\em Cout and string-\/ified methods. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Parent-\/ and Ancestor-\/\+Related Accessors}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classNode_ad2e48781de0681e7147bf71ed20263b0}\label{classNode_ad2e48781de0681e7147bf71ed20263b0} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+parent} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{parent}})
+void {\bfseries assign\+\_\+parent} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}parent)
 \begin{DoxyCompactList}\small\item\em Assign the {\ttfamily parent} to this {\ttfamily \+\_\+parent}, with no safety checks. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_ab43844ce28030e8b583d1de732ab43f7}\label{classNode_ab43844ce28030e8b583d1de732ab43f7} 
-\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+parent} () \mbox{\hyperlink{classNode}{const}}
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+parent} () const
 \begin{DoxyCompactList}\small\item\em Return a readonly pointer to the parent. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a0a921a007d49f266256900adc55aab60}\label{classNode_a0a921a007d49f266256900adc55aab60} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries assign\+\_\+hwm\+\_\+ancestor} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{hwm\+\_\+ancestor}})
+void {\bfseries assign\+\_\+hwm\+\_\+ancestor} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}hwm\+\_\+ancestor)
 \begin{DoxyCompactList}\small\item\em Assign the {\ttfamily hwm\+\_\+ancestor} to this {\ttfamily \+\_\+hwm\+\_\+ancestor}, with no safety checks. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_af2e96fdecdae4f193996072165f02ff5}\label{classNode_af2e96fdecdae4f193996072165f02ff5} 
-\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+hwm\+\_\+ancestor} () \mbox{\hyperlink{classNode}{const}}
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+hwm\+\_\+ancestor} () const
 \begin{DoxyCompactList}\small\item\em Return a readonly pointer to the HWM ancestor. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_acff24e5b0eb62dd16bc72744ed2af9bb}\label{classNode_acff24e5b0eb62dd16bc72744ed2af9bb} 
-\mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} {\bfseries get\+\_\+hwm\+\_\+index} () \mbox{\hyperlink{classNode}{const}}
+seq\+\_\+size\+\_\+t {\bfseries get\+\_\+hwm\+\_\+index} () const
 \begin{DoxyCompactList}\small\item\em Member helper to get this node\textquotesingle{}s High-\/\+Water Mark index. See {\ttfamily \doxylink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\+\_\+get\+\_\+hwm\+\_\+index()}}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\+\_\+get\+\_\+hwm\+\_\+index}} (T value)
+static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\+\_\+get\+\_\+hwm\+\_\+index}} (T value)
 \begin{DoxyCompactList}\small\item\em Return the sequence index for the HWM of a given value. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -202,7 +202,7 @@ Nodes are the objects within a {\ttfamily \doxylink{classBinaryTreeMaterializedI
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 
@@ -232,7 +232,7 @@ Pointer to the child.
 \index{deep\_size@{deep\_size}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deep\_size()}{deep\_size()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deep\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+size\+\_\+t \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deep\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -246,7 +246,7 @@ The size in bytes of the object.
 \index{deserialize@{deserialize}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{T \&}]{parent\+\_\+v,  }\item[{T \&}]{hwm\+\_\+ancestor\+\_\+v,  }\item[{\mbox{\hyperlink{classNode}{uint8\+\_\+t}} \&}]{child\+\_\+count,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{T \&}]{parent\+\_\+v,  }\item[{T \&}]{hwm\+\_\+ancestor\+\_\+v,  }\item[{uint8\+\_\+t \&}]{child\+\_\+count,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -278,7 +278,7 @@ A boolean indicating success or failure. Do not discard.
 \index{equal@{equal}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{equal()}{equal()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -301,7 +301,7 @@ True if equal, false otherwise.
 \index{init@{init}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{init()}{init()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{parent = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::init (\begin{DoxyParamCaption}\item[{const T \&}]{value,  }\item[{\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{parent = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -324,7 +324,7 @@ This method leans on {\ttfamily \doxylink{classNode_a4fde89f0ec750262d4f32627600
 \doxysubsubsection{\texorpdfstring{init\_sequence\_helper()}{init\_sequence\_helper()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
 template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ \\
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::init\+\_\+sequence\+\_\+helper (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::init\+\_\+sequence\+\_\+helper (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -332,7 +332,7 @@ Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em U} & Any supported integral (see \doxylink{classNode_a0ac1d44cfe588be564acf25485029bd8}{concepts.\+hpp}). \\
+{\em U} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
 \hline
 \end{DoxyTemplParams}
 \Hypertarget{classNode_a9517228032e6f0ce674e69bbbca02501}\label{classNode_a9517228032e6f0ce674e69bbbca02501} 
@@ -340,7 +340,7 @@ Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467
 \index{serialize@{serialize}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::serialize (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -375,7 +375,7 @@ A boolean indicating success or failure. Do not discard.
 \index{st\_equal@{st\_equal}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{first,  }\item[{const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \&}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -410,7 +410,7 @@ True if equal, false otherwise.
 \index{st\_equal@{st\_equal}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_equal()}{st\_equal()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{first,  }\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily \mbox{\hyperlink{classNode}{nullptr}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{first,  }\item[{const \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}}]{second,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -432,7 +432,7 @@ See the {\ttfamily st\+\_\+equal(\&)} version for details.
 \index{st\_get\_hwm\_index@{st\_get\_hwm\_index}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{st\_get\_hwm\_index()}{st\_get\_hwm\_index()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{seq\+\_\+size\+\_\+t}} \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+get\+\_\+hwm\+\_\+index (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+get\+\_\+hwm\+\_\+index (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 

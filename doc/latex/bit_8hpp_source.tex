@@ -4,233 +4,308 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
 \DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
-\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <gmp.h>}}
-\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <limits>}}
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
-\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <bit>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <gmp.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
 \DoxyCodeLine{00008\ }
 \DoxyCodeLine{00009\ }
 \DoxyCodeLine{00010\ }
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifndef\ \_\_has\_builtin}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\ \ \#define\ \_\_has\_builtin(x)\ 0}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#ifndef\ \_\_has\_builtin}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\ \ \#define\ \_\_has\_builtin(x)\ 0}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{00016\ }
 \DoxyCodeLine{00017\ }
-\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceBit}{Bit}}\ \{}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{namespaceBit_a12741c85ac515c7522899adf0b8a9737}{bitreverse8}}(\mbox{\hyperlink{classNode}{uint8\_t}}\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse8)}}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bitreverse8}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 1)\ \&\ 0x55)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x55)\ <<\ 1);}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 2)\ \&\ 0x33)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x33)\ <<\ 2);}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ (\mbox{\hyperlink{classNode}{x}}\ >>\ 4)\ |\ (\mbox{\hyperlink{classNode}{x}}\ <<\ 4);}
-\DoxyCodeLine{00036\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
-\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{x}};}
-\DoxyCodeLine{00038\ \ \ \ \ \}}
-\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespaceBit}{Bit}}\ \{}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint8\_t\ \mbox{\hyperlink{namespaceBit_a12741c85ac515c7522899adf0b8a9737}{bitreverse8}}(uint8\_t\ x)\ \{}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse8)}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ x\ =\ \_\_builtin\_bitreverse8(x);}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 1)\ \&\ 0x55)\ |\ ((x\ \&\ 0x55)\ <<\ 1);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 2)\ \&\ 0x33)\ |\ ((x\ \&\ 0x33)\ <<\ 2);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ x\ =\ (x\ >>\ 4)\ |\ (x\ <<\ 4);}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{00039\ \ \ \ \ \}}
 \DoxyCodeLine{00040\ }
 \DoxyCodeLine{00041\ }
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint16\_t}}\ \mbox{\hyperlink{namespaceBit_a294cb0b8604fedd1f0c442481965410f}{bitreverse16}}(\mbox{\hyperlink{classNode}{uint16\_t}}\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00044\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse16)}}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bitreverse16}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00046\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 1)\ \&\ 0x5555)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x5555)\ <<\ 1);}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 2)\ \&\ 0x3333)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x3333)\ <<\ 2);}
-\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 4)\ \&\ 0x0F0F)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x0F0F)\ <<\ 4);}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ (\mbox{\hyperlink{classNode}{x}}\ >>\ 8)\ |\ (\mbox{\hyperlink{classNode}{x}}\ <<\ 8);}
-\DoxyCodeLine{00051\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{x}};}
-\DoxyCodeLine{00053\ \ \ \ \ \}}
-\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint16\_t\ \mbox{\hyperlink{namespaceBit_a294cb0b8604fedd1f0c442481965410f}{bitreverse16}}(uint16\_t\ x)\ \{}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse16)}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ x\ =\ \_\_builtin\_bitreverse16(x);}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 1)\ \&\ 0x5555)\ |\ ((x\ \&\ 0x5555)\ <<\ 1);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 2)\ \&\ 0x3333)\ |\ ((x\ \&\ 0x3333)\ <<\ 2);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 4)\ \&\ 0x0F0F)\ |\ ((x\ \&\ 0x0F0F)\ <<\ 4);}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ x\ =\ (x\ >>\ 8)\ |\ (x\ <<\ 8);}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
 \DoxyCodeLine{00055\ }
 \DoxyCodeLine{00056\ }
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a}{bitreverse32}}(\mbox{\hyperlink{classNode}{uint32\_t}}\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse32)}}
-\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bitreverse32}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00061\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 1)\ \ \&\ 0x55555555)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x55555555)\ <<\ 1);}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 2)\ \ \&\ 0x33333333)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x33333333)\ <<\ 2);}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 4)\ \ \&\ 0x0F0F0F0F)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x0F0F0F0F)\ <<\ 4);}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 8)\ \ \&\ 0x00FF00FF)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x00FF00FF)\ <<\ 8);}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ (\mbox{\hyperlink{classNode}{x}}\ >>\ 16)\ |\ (\mbox{\hyperlink{classNode}{x}}\ <<\ 16);}
-\DoxyCodeLine{00067\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{x}};}
-\DoxyCodeLine{00069\ \ \ \ \ \}}
-\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint32\_t\ \mbox{\hyperlink{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a}{bitreverse32}}(uint32\_t\ x)\ \{}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse32)}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ x\ =\ \_\_builtin\_bitreverse32(x);}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 1)\ \ \&\ 0x55555555)\ |\ ((x\ \&\ 0x55555555)\ <<\ 1);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 2)\ \ \&\ 0x33333333)\ |\ ((x\ \&\ 0x33333333)\ <<\ 2);}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 4)\ \ \&\ 0x0F0F0F0F)\ |\ ((x\ \&\ 0x0F0F0F0F)\ <<\ 4);}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 8)\ \ \&\ 0x00FF00FF)\ |\ ((x\ \&\ 0x00FF00FF)\ <<\ 8);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ x\ =\ (x\ >>\ 16)\ |\ (x\ <<\ 16);}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
 \DoxyCodeLine{00071\ }
 \DoxyCodeLine{00072\ }
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(\mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00075\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse64)}}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bitreverse64}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00077\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 1)\ \ \&\ 0x5555555555555555ULL)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x5555555555555555ULL)\ <<\ 1);}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 2)\ \ \&\ 0x3333333333333333ULL)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x3333333333333333ULL)\ <<\ 2);}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 4)\ \ \&\ 0x0F0F0F0F0F0F0F0FULL)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x0F0F0F0F0F0F0F0FULL)\ <<\ 4);}
-\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 8)\ \ \&\ 0x00FF00FF00FF00FFULL)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x00FF00FF00FF00FFULL)\ <<\ 8);}
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ ((\mbox{\hyperlink{classNode}{x}}\ >>\ 16)\ \&\ 0x0000FFFF0000FFFFULL)\ |\ ((\mbox{\hyperlink{classNode}{x}}\ \&\ 0x0000FFFF0000FFFFULL)\ <<\ 16);}
-\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{x}}\ =\ (\mbox{\hyperlink{classNode}{x}}\ >>\ 32)\ |\ (\mbox{\hyperlink{classNode}{x}}\ <<\ 32);}
-\DoxyCodeLine{00084\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
-\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{x}};}
-\DoxyCodeLine{00086\ \ \ \ \ \}}
-\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ uint64\_t\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(uint64\_t\ x)\ \{}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#if\ \_\_has\_builtin(\_\_builtin\_bitreverse64)}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ x\ =\ \_\_builtin\_bitreverse64(x);}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 1)\ \ \&\ 0x5555555555555555ULL)\ |\ ((x\ \&\ 0x5555555555555555ULL)\ <<\ 1);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 2)\ \ \&\ 0x3333333333333333ULL)\ |\ ((x\ \&\ 0x3333333333333333ULL)\ <<\ 2);}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 4)\ \ \&\ 0x0F0F0F0F0F0F0F0FULL)\ |\ ((x\ \&\ 0x0F0F0F0F0F0F0F0FULL)\ <<\ 4);}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 8)\ \ \&\ 0x00FF00FF00FF00FFULL)\ |\ ((x\ \&\ 0x00FF00FF00FF00FFULL)\ <<\ 8);}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ x\ =\ ((x\ >>\ 16)\ \&\ 0x0000FFFF0000FFFFULL)\ |\ ((x\ \&\ 0x0000FFFF0000FFFFULL)\ <<\ 16);}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ x\ =\ (x\ >>\ 32)\ |\ (x\ <<\ 32);}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ x;}
+\DoxyCodeLine{00087\ \ \ \ \ \}}
 \DoxyCodeLine{00088\ }
 \DoxyCodeLine{00089\ }
-\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
-\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ type\ is\ signed,\ convert\ it\ to\ unsigned\ and\ try\ again.}}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::numeric\_limits<T>::is\_signed)\ \{}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classNode}{U}}\ =\ std::make\_unsigned\_t<T>;}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{U}}\ \mbox{\hyperlink{classNode}{ux}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{U}}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(\mbox{\hyperlink{classNode}{ux}});}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00114\ }
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ is\ already\ unsigned.\ \ Begin\ reversing.}}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a12741c85ac515c7522899adf0b8a9737}{bitreverse8}}(\mbox{\hyperlink{classNode}{x}}));}
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
-\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a294cb0b8604fedd1f0c442481965410f}{bitreverse16}}(\mbox{\hyperlink{classNode}{x}}));}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a}{bitreverse32}}(\mbox{\hyperlink{classNode}{x}}));}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(\mbox{\hyperlink{classNode}{x}}));}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low}}\ \ =\ (\mbox{\hyperlink{classNode}{uint64\_t}})\mbox{\hyperlink{classNode}{x}};}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high}}\ =\ (\mbox{\hyperlink{classNode}{uint64\_t}})(\mbox{\hyperlink{classNode}{x}}\ >>\ 64);}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{rev\_low}}\ \ =\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(\mbox{\hyperlink{classNode}{high}});}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{rev\_high}}\ =\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(\mbox{\hyperlink{classNode}{low}});}
-\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}((\ (T)\mbox{\hyperlink{classNode}{rev\_high}}\ <<\ 64\ )\ |\ \mbox{\hyperlink{classNode}{rev\_low}});}
-\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00131\ \ \ \ \ \}}
-\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(\textcolor{keyword}{const}\ T\&\ x)\ \{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ type\ is\ signed,\ convert\ it\ to\ unsigned\ and\ try\ again.}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(std::numeric\_limits<T>::is\_signed)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }U\ =\ std::make\_unsigned\_t<T>;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ U\ ux\ =\ \textcolor{keyword}{static\_cast<}U\textcolor{keyword}{>}(x);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(ux);}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ is\ already\ unsigned.\ \ Begin\ reversing.}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a12741c85ac515c7522899adf0b8a9737}{bitreverse8}}(x));}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a294cb0b8604fedd1f0c442481965410f}{bitreverse16}}(x));}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_afaf387fe5a15973f7a6aa007ed04442a}{bitreverse32}}(x));}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(x));}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\ \ =\ (uint64\_t)x;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\ =\ (uint64\_t)(x\ >>\ 64);}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ rev\_low\ \ =\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(high);}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ rev\_high\ =\ \mbox{\hyperlink{namespaceBit_ae5d745bd7263fa684d3d2d5566723bb4}{bitreverse64}}(low);}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}((\ (T)rev\_high\ <<\ 64\ )\ |\ rev\_low);}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
 \DoxyCodeLine{00133\ }
 \DoxyCodeLine{00134\ }
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}})\ \{}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
-\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{result}}\ =\ 0;}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bits}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};\ \}}
-\DoxyCodeLine{00148\ }
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ =\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(value);}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{WIDTH}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{result}}\ >>=\ (\mbox{\hyperlink{classNode}{WIDTH}}\ -\/\ \mbox{\hyperlink{classNode}{bits}});}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit}}\ =\ 0;\ \mbox{\hyperlink{classNode}{bit}}\ <\ \mbox{\hyperlink{classNode}{bits}};\ \mbox{\hyperlink{classNode}{bit}}++)\ \{}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mpz\_tstbit}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bit}}))\ \{}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_setbit}}(\mbox{\hyperlink{classNode}{result}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{bit}});}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00161\ }
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return.}}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{result}};}
-\DoxyCodeLine{00164\ \ \ \ \ \}}
-\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ T\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ bits)\ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ T\ result\ =\ 0;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (bits\ ==\ 0)\ \{\ \textcolor{keywordflow}{return}\ result;\ \}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ result\ =\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(value);}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ WIDTH\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ result\ >>=\ (WIDTH\ -\/\ bits);}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ bit\ =\ 0;\ bit\ <\ bits;\ bit++)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_tstbit(value.get\_mpz\_t(),\ bit))\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_setbit(result.get\_mpz\_t(),\ bits\ -\/\ 1\ -\/\ bit);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return.}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
 \DoxyCodeLine{00166\ }
 \DoxyCodeLine{00167\ }
-\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bits}},\ T\&\ \mbox{\hyperlink{classNode}{out}})\ \{}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ 0;}
-\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{bits}}\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00181\ }
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ =\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(value);}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{WIDTH}}\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{out}}\ >>=\ (\mbox{\hyperlink{classNode}{WIDTH}}\ -\/\ \mbox{\hyperlink{classNode}{bits}});}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{bit}}\ =\ 0;\ \mbox{\hyperlink{classNode}{bit}}\ <\ \mbox{\hyperlink{classNode}{bits}};\ \mbox{\hyperlink{classNode}{bit}}++)\ \{}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{mpz\_tstbit}}(value.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bit}}))\ \{}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_setbit}}(\mbox{\hyperlink{classNode}{out}}.get\_mpz\_t(),\ \mbox{\hyperlink{classNode}{bits}}\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{bit}});}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00194\ \ \ \ \ \}}
-\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespaceBit_aab6d50613533ca281a25ba1d692cf6fe}{st\_reverse\_low\_bits}}(\textcolor{keyword}{const}\ T\&\ value,\ \textcolor{keywordtype}{size\_t}\ bits,\ T\&\ out)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ zero.}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ out\ =\ 0;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (bits\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reverse\ and\ shift\ by\ the\ correct\ amount.}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ out\ =\ \mbox{\hyperlink{namespaceBit_ab010c837f197187f6c4f1eeb240efccb}{st\_bit\_reverse\_full}}(value);}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ WIDTH\ =\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ out\ >>=\ (WIDTH\ -\/\ bits);}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ bit\ =\ 0;\ bit\ <\ bits;\ bit++)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_tstbit(value.get\_mpz\_t(),\ bit))\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_setbit(out.get\_mpz\_t(),\ bits\ -\/\ 1\ -\/\ bit);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ \ \ \ \ \}}
 \DoxyCodeLine{00196\ }
 \DoxyCodeLine{00197\ }
-\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{x}})\ \{}
-\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ and\ undefined\ case\ for\ builtins.\ \ Return\ sizeof\ T\ in\ bits.}}
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{x}}\ ==\ 0)\ \{}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00211\ }
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ it's\ below\ 64-\/bits\ (long\ long),\ we\ can\ use\ the\ builtin.}}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <=\ 8)\ \{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_ctzll}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00217\ }
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Larger\ fixed-\/widths\ require\ one-\/off\ handling.}}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low\_bits}}\ =\ \mbox{\hyperlink{classNode}{uint64\_t}}(\mbox{\hyperlink{classNode}{x}});}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{low\_bits}}\ !=\ 0)\ \{}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ ones\ in\ the\ lower\ bits.\ \ Don't\ need\ high\ bits\ at\ all.}}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_ctzll}}(\mbox{\hyperlink{classNode}{low\_bits}});}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ no\ ones\ in\ the\ lower\ bits.\ \ Return\ all\ 64\ zeros\ plus\ whatever\ zeros\ are\ in\ high,\ if\ allowed.}}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high\_bits}}\ =\ \mbox{\hyperlink{classNode}{uint64\_t}}(\mbox{\hyperlink{classNode}{x}}\ >>\ 64);}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{high\_bits}}\ ==\ 0)\ \{}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64;}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64\ +\ \mbox{\hyperlink{classNode}{\_\_builtin\_ctzll}}(\mbox{\hyperlink{classNode}{high\_bits}});}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00234\ }
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ has\ a\ scan1\ function\ to\ find\ the\ first\ 1,\ so\ we\ can\ use\ it.}}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{mpz\_scan1}}(\mbox{\hyperlink{classNode}{x}}.get\_mpz\_t(),\ 0);}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00239\ \ \ \ \ \}}
-\DoxyCodeLine{00240\ }
-\DoxyCodeLine{00241\ }
-\DoxyCodeLine{00242\ }
-\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{count\_trailing\_ones}}(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{n}})\ \{}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Trailing\ ones\ is\ equivalent\ to\ the\ trailing\ zeros\ of\ inverted\ n:\ ctz(\string~n).}}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ will\ perform\ an\ alloc\ for\ this,\ so\ we'll\ use\ TLS\ on\ that\ path.}}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ T\ \mbox{\hyperlink{classNode}{inverted\_n}}\ =\ \mbox{\hyperlink{classNode}{\string~n}};}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(\mbox{\hyperlink{classNode}{inverted\_n}});}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ \mbox{\hyperlink{classNode}{mpz\_class}}\ \mbox{\hyperlink{classNode}{inverted\_n}}\ =\ 0;}
-\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{inverted\_n}}\ =\ \mbox{\hyperlink{classNode}{\string~n}};}
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(\mbox{\hyperlink{classNode}{inverted\_n}});}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00261\ \ \ \ \ \}}
-\DoxyCodeLine{00262\ }
-\DoxyCodeLine{00263\ }
-\DoxyCodeLine{00264\ }
-\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
-\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{static}\ T\ \mbox{\hyperlink{namespaceBit_ab5a8975fcf5cda4d39941d651ddf8ede}{byteswap}}(T\&\ value)\ \{}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap16}}(value);}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap32}}(value);}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(value);}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 128-\/bit\ needs\ broken\ into\ two\ chunks.}}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{high}}\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value\ >>\ 64);}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{uint64\_t}}\ \mbox{\hyperlink{classNode}{low}}\ \ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint64\_t}}\textcolor{keyword}{>}(value);}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{high}}\ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{high}});}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{low}}\ \ =\ \mbox{\hyperlink{classNode}{\_\_builtin\_bswap64}}(\mbox{\hyperlink{classNode}{low}});}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{low}})\ <<\ 64)\ |\ \mbox{\hyperlink{classNode}{high}};}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(T)\ <=\ 16,\ \textcolor{stringliteral}{"{}Unsupported\ size\ for\ byteswap"{}});}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00292\ \ \ \ \ \}}
-\DoxyCodeLine{00293\ }
-\DoxyCodeLine{00294\ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(\textcolor{keyword}{const}\ T\&\ x)\ \{}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ and\ undefined\ case\ for\ builtins.\ \ Return\ 0.}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ ==\ 0)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ it's\ below\ 64-\/bits\ (long\ long),\ we\ can\ use\ the\ builtin.}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <=\ 8)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countr\_zero(x);}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Larger\ fixed-\/widths\ require\ one-\/off\ handling.}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\_bits\ =\ uint64\_t(x);}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (low\_bits\ !=\ 0)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ ones\ in\ the\ lower\ bits.\ \ Don't\ need\ high\ bits\ at\ all.}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countr\_zero(low\_bits);}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ no\ ones\ in\ the\ lower\ bits.\ \ Return\ all\ 64\ zeros\ plus\ whatever\ zeros\ are\ in\ high.}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ High\ bits\ can't\ be\ all\ zeros\ because\ that\ would\ mean\ low+high\ ==\ 0,\ which\ is\ guarded\ against.}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\_bits\ =\ uint64\_t(x\ >>\ 64);}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64\ +\ std::countr\_zero(high\_bits);}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ has\ a\ scan1\ function\ to\ find\ the\ first\ 1,\ so\ we\ can\ use\ it.}}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mpz\_scan1(x.get\_mpz\_t(),\ 0);}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a60d8d63c2e97a9541fa55cb37576828f}{count\_trailing\_zeros\_positive}}(\textcolor{keyword}{const}\ T\&\ x)\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ it's\ below\ 64-\/bits\ (long\ long),\ we\ can\ use\ the\ builtin.}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <=\ 8)\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countr\_zero(x);}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Larger\ fixed-\/widths\ require\ one-\/off\ handling.}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\_bits\ =\ uint64\_t(x);}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (low\_bits\ !=\ 0)\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ ones\ in\ the\ lower\ bits.\ \ Don't\ need\ high\ bits\ at\ all.}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countr\_zero(low\_bits);}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ no\ ones\ in\ the\ lower\ bits.\ \ Return\ all\ 64\ zeros\ plus\ whatever\ zeros\ are\ in\ high.}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ High\ bits\ can't\ be\ all\ zeros\ because\ that\ would\ mean\ low+high\ ==\ 0,\ which\ is\ guarded\ against.}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\_bits\ =\ uint64\_t(x\ >>\ 64);}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64\ +\ std::countr\_zero(high\_bits);}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ has\ a\ scan1\ function\ to\ find\ the\ first\ 1,\ so\ we\ can\ use\ it.}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ mpz\_scan1(x.get\_mpz\_t(),\ 0);}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \}}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{count\_trailing\_ones}}(\textcolor{keyword}{const}\ T\&\ n)\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Trailing\ ones\ is\ equivalent\ to\ the\ trailing\ zeros\ of\ inverted\ n:\ ctz(\string~n).}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ will\ perform\ an\ alloc\ for\ this,\ so\ we'll\ use\ TLS\ on\ that\ path.}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ T\ inverted\_n\ =\ \string~n;}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(inverted\_n);}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ inverted\_n\ =\ 0;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ inverted\_n\ =\ \string~n;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{count\_trailing\_zeros}}(inverted\_n);}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ \ \ \ \ \}}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_abcb171eb4ad57fa6a8514a45e667389c}{count\_leading\_zeros}}(\textcolor{keyword}{const}\ T\&\ x)\ \{}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case.\ \ Return\ sizeof(T).}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ ==\ 0)\ \{}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{sizeof}(T)\ *\ 8;}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <=\ 8)\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countl\_zero(x);}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\_bits\ =\ uint64\_t(x\ >>\ 64);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (high\_bits\ !=\ 0)\ \{}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ ones\ in\ the\ high\ bits.\ \ Don't\ need\ low\ bits\ at\ all.}}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countl\_zero(high\_bits);}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ no\ ones\ in\ the\ higher\ bits.\ \ Return\ all\ 64\ plus\ whatever\ leading\ zeros\ exist\ in\ lower\ bits.}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Low\ bits\ can't\ be\ all\ zeros\ because\ that\ would\ mean\ low+high\ ==\ 0,\ which\ is\ guarded\ against.}}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\_bits\ =\ uint64\_t(x);}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64\ +\ std::countl\_zero(low\_bits);}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00327\ \ \ \ \ \}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ }
+\DoxyCodeLine{00338\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespaceBit_a409149ce95637fadcfd5159d27f9f2ee}{count\_leading\_zeros\_positive}}(\textcolor{keyword}{const}\ T\&\ x)\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(T)\ <=\ 8)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countl\_zero(x);}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\_bits\ =\ uint64\_t(x\ >>\ 64);}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (high\_bits\ !=\ 0)\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ ones\ in\ the\ high\ bits.\ \ Don't\ need\ low\ bits\ at\ all.}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::countl\_zero(high\_bits);}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ There\ are\ no\ ones\ in\ the\ higher\ bits.\ \ Return\ all\ 64\ plus\ whatever\ leading\ zeros\ exist\ in\ lower\ bits.}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Low\ bits\ can't\ be\ all\ zeros\ because\ that\ would\ mean\ low+high\ ==\ 0,\ which\ is\ guarded\ against.}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\_bits\ =\ uint64\_t(x);}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 64\ +\ std::countl\_zero(low\_bits);}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keyword}{static}\ T\ \mbox{\hyperlink{namespaceBit_ab5a8975fcf5cda4d39941d651ddf8ede}{byteswap}}(T\&\ value)\ \{}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 1)\ \{}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 2)\ \{}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_\_builtin\_bswap16(value);}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 4)\ \{}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_\_builtin\_bswap32(value);}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 8)\ \{}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_\_builtin\_bswap64(value);}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ ==\ 16)\ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 128-\/bit\ needs\ broken\ into\ two\ chunks.}}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ high\ =\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(value\ >>\ 64);}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ low\ \ =\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(value);}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ high\ =\ \_\_builtin\_bswap64(high);}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ low\ \ =\ \_\_builtin\_bswap64(low);}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(low)\ <<\ 64)\ |\ high;}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}(T)\ <=\ 16,\ \textcolor{stringliteral}{"{}Unsupported\ size\ for\ byteswap"{}});}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ value;}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00387\ \ \ \ \ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \}}
 
 \end{DoxyCode}

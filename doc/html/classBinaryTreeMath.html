@@ -98,107 +98,107 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ac8139f556292fce4501e9010174bddef" id="r_ac8139f556292fce4501e9010174bddef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac8139f556292fce4501e9010174bddef">st_fg_chain_length</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:ac8139f556292fce4501e9010174bddef" id="r_ac8139f556292fce4501e9010174bddef"><td class="memItemLeft" align="right" valign="top">static seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac8139f556292fce4501e9010174bddef">st_fg_chain_length</a> (level_t level)</td></tr>
 <tr class="memdesc:ac8139f556292fce4501e9010174bddef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the FG chain length of a node on any level.  <br /></td></tr>
 <tr class="separator:ac8139f556292fce4501e9010174bddef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7527ad5e677d9566236223921f17196" id="r_af7527ad5e677d9566236223921f17196"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af7527ad5e677d9566236223921f17196">st_floor_log2</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">val</a>)</td></tr>
+<tr class="memitem:af7527ad5e677d9566236223921f17196" id="r_af7527ad5e677d9566236223921f17196"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af7527ad5e677d9566236223921f17196">st_floor_log2</a> (const T &amp;val)</td></tr>
 <tr class="memdesc:af7527ad5e677d9566236223921f17196"><td class="mdescLeft">&#160;</td><td class="mdescRight">A log base-2 for integers (most significant bit based).  <br /></td></tr>
 <tr class="separator:af7527ad5e677d9566236223921f17196"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a910ad0174fe5fa88139e71cba7629bb1" id="r_a910ad0174fe5fa88139e71cba7629bb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a910ad0174fe5fa88139e71cba7629bb1">st_scaling_factor</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:a910ad0174fe5fa88139e71cba7629bb1" id="r_a910ad0174fe5fa88139e71cba7629bb1"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a910ad0174fe5fa88139e71cba7629bb1">st_scaling_factor</a> (level_t level)</td></tr>
 <tr class="memdesc:a910ad0174fe5fa88139e71cba7629bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The magnitude (scaling factor <code>s_L</code>) between a parent's value and child values.  <br /></td></tr>
 <tr class="separator:a910ad0174fe5fa88139e71cba7629bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84591dc8a1a863e9ee595593f0cd221" id="r_ac84591dc8a1a863e9ee595593f0cd221"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac84591dc8a1a863e9ee595593f0cd221">st_scaling_factor_cumulative</a> (level_t <a class="el" href="classNode.html">base_level</a>, level_t <a class="el" href="classNode.html">target_level</a>)</td></tr>
+<tr class="memitem:ac84591dc8a1a863e9ee595593f0cd221" id="r_ac84591dc8a1a863e9ee595593f0cd221"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ac84591dc8a1a863e9ee595593f0cd221">st_scaling_factor_cumulative</a> (level_t base_level, level_t target_level)</td></tr>
 <tr class="memdesc:ac84591dc8a1a863e9ee595593f0cd221"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cumulative magnitude required to scale a parent node <code>N</code> to its descendants on the target level.  <br /></td></tr>
 <tr class="separator:ac84591dc8a1a863e9ee595593f0cd221"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60235bbddf5e0a322f0e34d0922714c7" id="r_a60235bbddf5e0a322f0e34d0922714c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a60235bbddf5e0a322f0e34d0922714c7">st_child_count_at_target_level</a> (level_t <a class="el" href="classNode.html">parent_level</a>, level_t <a class="el" href="classNode.html">target_level</a>)</td></tr>
+<tr class="memitem:a60235bbddf5e0a322f0e34d0922714c7" id="r_a60235bbddf5e0a322f0e34d0922714c7"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a60235bbddf5e0a322f0e34d0922714c7">st_child_count_at_target_level</a> (level_t parent_level, level_t target_level)</td></tr>
 <tr class="memdesc:a60235bbddf5e0a322f0e34d0922714c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the number of nodes a parent node will have on a target level.  <br /></td></tr>
 <tr class="separator:a60235bbddf5e0a322f0e34d0922714c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Accessors</div></td></tr>
 <tr class="memitem:ac912afb53b0ee46bcb82255a5409a02e" id="r_ac912afb53b0ee46bcb82255a5409a02e"><td class="memItemLeft" align="right" valign="top"><a id="ac912afb53b0ee46bcb82255a5409a02e" name="ac912afb53b0ee46bcb82255a5409a02e"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_default_root_value</b> ()</td></tr>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_default_root_value</b> ()</td></tr>
 <tr class="memdesc:ac912afb53b0ee46bcb82255a5409a02e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default root value, which is 1 as of version 2.0.0. <br /></td></tr>
 <tr class="separator:ac912afb53b0ee46bcb82255a5409a02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a045f0809a76188a1b0325e4affff119a" id="r_a045f0809a76188a1b0325e4affff119a"><td class="memItemLeft" align="right" valign="top"><a id="a045f0809a76188a1b0325e4affff119a" name="a045f0809a76188a1b0325e4affff119a"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_root_value</b> ()</td></tr>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_root_value</b> ()</td></tr>
 <tr class="memdesc:a045f0809a76188a1b0325e4affff119a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current root value. This is a static/program-wide setting. <br /></td></tr>
 <tr class="separator:a045f0809a76188a1b0325e4affff119a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe704f31f48b23eb3108ea0b7b6da01f" id="r_abe704f31f48b23eb3108ea0b7b6da01f"><td class="memItemLeft" align="right" valign="top"><a id="abe704f31f48b23eb3108ea0b7b6da01f" name="abe704f31f48b23eb3108ea0b7b6da01f"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_offset</b> ()</td></tr>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_offset</b> ()</td></tr>
 <tr class="memdesc:abe704f31f48b23eb3108ea0b7b6da01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the offset from _root_value, which is always <code>1 - _root_value</code>, and is updated with calls to <code><a class="el" href="classBinaryTreeMath.html#a97dbcafb0ea464e9b0f546c37ab7de0d" title="Sets the root value and enforces it be 0 or 1. Anything else throws an error.">set_root_value()</a></code>. <br /></td></tr>
 <tr class="separator:abe704f31f48b23eb3108ea0b7b6da01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a371bd4f79a5e10a5a9284ab8e1a43963" id="r_a371bd4f79a5e10a5a9284ab8e1a43963"><td class="memItemLeft" align="right" valign="top"><a id="a371bd4f79a5e10a5a9284ab8e1a43963" name="a371bd4f79a5e10a5a9284ab8e1a43963"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reset_root_value</b> ()</td></tr>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>reset_root_value</b> ()</td></tr>
 <tr class="memdesc:a371bd4f79a5e10a5a9284ab8e1a43963"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>_root_value</code> to the default of 1 (after 2.0.0). <br /></td></tr>
 <tr class="separator:a371bd4f79a5e10a5a9284ab8e1a43963"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97dbcafb0ea464e9b0f546c37ab7de0d" id="r_a97dbcafb0ea464e9b0f546c37ab7de0d"><td class="memItemLeft" align="right" valign="top"><a id="a97dbcafb0ea464e9b0f546c37ab7de0d" name="a97dbcafb0ea464e9b0f546c37ab7de0d"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>set_root_value</b> (<a class="el" href="classNode.html">size_t</a> value)</td></tr>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>set_root_value</b> (size_t value)</td></tr>
 <tr class="memdesc:a97dbcafb0ea464e9b0f546c37ab7de0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the root value and enforces it be 0 or 1. Anything else throws an error. <br /></td></tr>
 <tr class="separator:a97dbcafb0ea464e9b0f546c37ab7de0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Node Counts</div></td></tr>
-<tr class="memitem:ab6597ebd8bdce898ee2005a392ef6024" id="r_ab6597ebd8bdce898ee2005a392ef6024"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ab6597ebd8bdce898ee2005a392ef6024">st_node_count_of_level</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:ab6597ebd8bdce898ee2005a392ef6024" id="r_ab6597ebd8bdce898ee2005a392ef6024"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ab6597ebd8bdce898ee2005a392ef6024">st_node_count_of_level</a> (level_t level)</td></tr>
 <tr class="memdesc:ab6597ebd8bdce898ee2005a392ef6024"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of nodesof a specific level on the tree.  <br /></td></tr>
 <tr class="separator:ab6597ebd8bdce898ee2005a392ef6024"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21222c83db75eae2c7d93d9d338a6ecb" id="r_a21222c83db75eae2c7d93d9d338a6ecb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a21222c83db75eae2c7d93d9d338a6ecb">st_node_count_of_levels</a> (level_t <a class="el" href="classNode.html">min_level</a>, level_t <a class="el" href="classNode.html">max_level</a>)</td></tr>
+<tr class="memitem:a21222c83db75eae2c7d93d9d338a6ecb" id="r_a21222c83db75eae2c7d93d9d338a6ecb"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a21222c83db75eae2c7d93d9d338a6ecb">st_node_count_of_levels</a> (level_t min_level, level_t max_level)</td></tr>
 <tr class="memdesc:a21222c83db75eae2c7d93d9d338a6ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of nodes between two levels, inclusive.  <br /></td></tr>
 <tr class="separator:a21222c83db75eae2c7d93d9d338a6ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb34d91a594ac1f8667d3d531b62ad4e" id="r_abb34d91a594ac1f8667d3d531b62ad4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#abb34d91a594ac1f8667d3d531b62ad4e">st_node_count_of_tree</a> (level_t <a class="el" href="classNode.html">levels</a>)</td></tr>
+<tr class="memitem:abb34d91a594ac1f8667d3d531b62ad4e" id="r_abb34d91a594ac1f8667d3d531b62ad4e"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#abb34d91a594ac1f8667d3d531b62ad4e">st_node_count_of_tree</a> (level_t levels)</td></tr>
 <tr class="memdesc:abb34d91a594ac1f8667d3d531b62ad4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of nodes in a tree of level L depth, summing all levels. Inclusive.  <br /></td></tr>
 <tr class="separator:abb34d91a594ac1f8667d3d531b62ad4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Level Operations</div></td></tr>
-<tr class="memitem:a77593656f36e970d58117fe24fb7f390" id="r_a77593656f36e970d58117fe24fb7f390"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a77593656f36e970d58117fe24fb7f390">st_get_level_by_node_value</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memitem:a77593656f36e970d58117fe24fb7f390" id="r_a77593656f36e970d58117fe24fb7f390"><td class="memItemLeft" align="right" valign="top">static level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a77593656f36e970d58117fe24fb7f390">st_get_level_by_node_value</a> (const T &amp;value)</td></tr>
 <tr class="memdesc:a77593656f36e970d58117fe24fb7f390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the level for a node from any value.  <br /></td></tr>
 <tr class="separator:a77593656f36e970d58117fe24fb7f390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af705321c961a71c6f5780c7c2ef004ed" id="r_af705321c961a71c6f5780c7c2ef004ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af705321c961a71c6f5780c7c2ef004ed">st_max_full_level_at_node_value</a> (T value)</td></tr>
+<tr class="memitem:af705321c961a71c6f5780c7c2ef004ed" id="r_af705321c961a71c6f5780c7c2ef004ed"><td class="memItemLeft" align="right" valign="top">static level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af705321c961a71c6f5780c7c2ef004ed">st_max_full_level_at_node_value</a> (T value)</td></tr>
 <tr class="memdesc:af705321c961a71c6f5780c7c2ef004ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum full level available given any node value.  <br /></td></tr>
 <tr class="separator:af705321c961a71c6f5780c7c2ef004ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a6123a3cc28228ef182e574521433ad" id="r_a5a6123a3cc28228ef182e574521433ad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a5a6123a3cc28228ef182e574521433ad">st_max_level_of_type</a> ()</td></tr>
+<tr class="memitem:a5a6123a3cc28228ef182e574521433ad" id="r_a5a6123a3cc28228ef182e574521433ad"><td class="memItemLeft" align="right" valign="top">static level_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a5a6123a3cc28228ef182e574521433ad">st_max_level_of_type</a> ()</td></tr>
 <tr class="memdesc:a5a6123a3cc28228ef182e574521433ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads type <code>T</code> to determine the maximum level supported without overflowing.  <br /></td></tr>
 <tr class="separator:a5a6123a3cc28228ef182e574521433ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e275b4ae6e1cac86737b7a45579392b" id="r_a8e275b4ae6e1cac86737b7a45579392b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a8e275b4ae6e1cac86737b7a45579392b">st_level_will_fit</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:a8e275b4ae6e1cac86737b7a45579392b" id="r_a8e275b4ae6e1cac86737b7a45579392b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a8e275b4ae6e1cac86737b7a45579392b">st_level_will_fit</a> (level_t level)</td></tr>
 <tr class="memdesc:a8e275b4ae6e1cac86737b7a45579392b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if the level sent will fit within the type <code>T</code> specified.  <br /></td></tr>
 <tr class="separator:a8e275b4ae6e1cac86737b7a45579392b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Position and Value Operations</div></td></tr>
-<tr class="memitem:a308d907cab5282063998393f8bb1394f" id="r_a308d907cab5282063998393f8bb1394f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a308d907cab5282063998393f8bb1394f">st_max_node_value_at_level</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:a308d907cab5282063998393f8bb1394f" id="r_a308d907cab5282063998393f8bb1394f"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a308d907cab5282063998393f8bb1394f">st_max_node_value_at_level</a> (level_t level)</td></tr>
 <tr class="memdesc:a308d907cab5282063998393f8bb1394f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the highest value a node can have and remain on a given level.  <br /></td></tr>
 <tr class="separator:a308d907cab5282063998393f8bb1394f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af33a48589b2b7c9d2180b9ae083f5553" id="r_af33a48589b2b7c9d2180b9ae083f5553"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af33a48589b2b7c9d2180b9ae083f5553">st_first_node_value_of_level</a> (level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:af33a48589b2b7c9d2180b9ae083f5553" id="r_af33a48589b2b7c9d2180b9ae083f5553"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af33a48589b2b7c9d2180b9ae083f5553">st_first_node_value_of_level</a> (level_t level)</td></tr>
 <tr class="memdesc:af33a48589b2b7c9d2180b9ae083f5553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the first node's value on any level.  <br /></td></tr>
 <tr class="separator:af33a48589b2b7c9d2180b9ae083f5553"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a11595e85505535bb32a40749370083" id="r_a5a11595e85505535bb32a40749370083"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a5a11595e85505535bb32a40749370083">st_node_value_by_position_and_level</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">position</a>, level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:a5a11595e85505535bb32a40749370083" id="r_a5a11595e85505535bb32a40749370083"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a5a11595e85505535bb32a40749370083">st_node_value_by_position_and_level</a> (const T &amp;position, level_t level)</td></tr>
 <tr class="memdesc:a5a11595e85505535bb32a40749370083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate a node's value by its position and level.  <br /></td></tr>
 <tr class="separator:a5a11595e85505535bb32a40749370083"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97e6bfad91ed9f81a6da9e422f251083" id="r_a97e6bfad91ed9f81a6da9e422f251083"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a97e6bfad91ed9f81a6da9e422f251083">st_node_value_by_position_and_level</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">position</a>, level_t <a class="el" href="classNode.html">level</a>, T &amp;<a class="el" href="classNode.html">out</a>)</td></tr>
+<tr class="memitem:a97e6bfad91ed9f81a6da9e422f251083" id="r_a97e6bfad91ed9f81a6da9e422f251083"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a97e6bfad91ed9f81a6da9e422f251083">st_node_value_by_position_and_level</a> (const T &amp;position, level_t level, T &amp;out)</td></tr>
 <tr class="memdesc:a97e6bfad91ed9f81a6da9e422f251083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate a node's value by its position and level (out-param version).  <br /></td></tr>
 <tr class="separator:a97e6bfad91ed9f81a6da9e422f251083"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c933060b8bf36da748184ff45336606" id="r_a9c933060b8bf36da748184ff45336606"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a9c933060b8bf36da748184ff45336606">st_node_position</a> (<a class="el" href="classNode.html">const</a> T &amp;value)</td></tr>
+<tr class="memitem:a9c933060b8bf36da748184ff45336606" id="r_a9c933060b8bf36da748184ff45336606"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a9c933060b8bf36da748184ff45336606">st_node_position</a> (const T &amp;value)</td></tr>
 <tr class="memdesc:a9c933060b8bf36da748184ff45336606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate node position from a node's value alone.  <br /></td></tr>
 <tr class="separator:a9c933060b8bf36da748184ff45336606"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6565799a11e571f5054969d53c38bc7e" id="r_a6565799a11e571f5054969d53c38bc7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a6565799a11e571f5054969d53c38bc7e">st_s1_summation</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">position</a>, level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:a6565799a11e571f5054969d53c38bc7e" id="r_a6565799a11e571f5054969d53c38bc7e"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#a6565799a11e571f5054969d53c38bc7e">st_s1_summation</a> (const T &amp;position, level_t level)</td></tr>
 <tr class="memdesc:a6565799a11e571f5054969d53c38bc7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sums the increases from the <code>S1</code> sequence described in Harper's research.  <br /></td></tr>
 <tr class="separator:a6565799a11e571f5054969d53c38bc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9216463e9936ef2d060c5a5267649a9" id="r_ab9216463e9936ef2d060c5a5267649a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ab9216463e9936ef2d060c5a5267649a9">st_s2_summation</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">position</a>, level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:ab9216463e9936ef2d060c5a5267649a9" id="r_ab9216463e9936ef2d060c5a5267649a9"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#ab9216463e9936ef2d060c5a5267649a9">st_s2_summation</a> (const T &amp;position, level_t level)</td></tr>
 <tr class="memdesc:ab9216463e9936ef2d060c5a5267649a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sums the decreases from the <code>S2</code> sequence described in Harper's research.  <br /></td></tr>
 <tr class="separator:ab9216463e9936ef2d060c5a5267649a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6c0b21e284c9773e5396e91f9e29b51" id="r_af6c0b21e284c9773e5396e91f9e29b51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">static</a> T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af6c0b21e284c9773e5396e91f9e29b51">st_node_value_by_position_and_level__deprecated</a> (<a class="el" href="classNode.html">const</a> T &amp;<a class="el" href="classNode.html">position</a>, level_t <a class="el" href="classNode.html">level</a>)</td></tr>
+<tr class="memitem:af6c0b21e284c9773e5396e91f9e29b51" id="r_af6c0b21e284c9773e5396e91f9e29b51"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTreeMath.html#af6c0b21e284c9773e5396e91f9e29b51">st_node_value_by_position_and_level__deprecated</a> (const T &amp;position, level_t level)</td></tr>
 <tr class="memdesc:af6c0b21e284c9773e5396e91f9e29b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate a node's value by its position and level.  <br /></td></tr>
 <tr class="separator:af6c0b21e284c9773e5396e91f9e29b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a6166e08850f860b2d2a13970fc597f66" id="r_a6166e08850f860b2d2a13970fc597f66"><td class="memItemLeft" align="right" valign="top"><a id="a6166e08850f860b2d2a13970fc597f66" name="a6166e08850f860b2d2a13970fc597f66"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">mpz_class</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_MPZ_TWO</b> = 2</td></tr>
+static const mpz_class&#160;</td><td class="memItemRight" valign="bottom"><b>_MPZ_TWO</b> = 2</td></tr>
 <tr class="memdesc:a6166e08850f860b2d2a13970fc597f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static 2 for <a class="el" href="namespaceGMP.html" title="Collection of methods for managing GMP data types, such as mpz_class and mpf_class.">GMP</a> operations to prevent allocs. <br /></td></tr>
 <tr class="separator:a6166e08850f860b2d2a13970fc597f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bffc775222f5fa29522c4a100b515b0" id="r_a5bffc775222f5fa29522c4a100b515b0"><td class="memItemLeft" align="right" valign="top"><a id="a5bffc775222f5fa29522c4a100b515b0" name="a5bffc775222f5fa29522c4a100b515b0"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">const</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_ROOT_VALUE_DEFAULT</b> = 1</td></tr>
+static const size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_ROOT_VALUE_DEFAULT</b> = 1</td></tr>
 <tr class="memdesc:a5bffc775222f5fa29522c4a100b515b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default root value, which is 1 as of version 2.0.0. <br /></td></tr>
 <tr class="separator:a5bffc775222f5fa29522c4a100b515b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76e8b8131d4ac2c676a6838f98010432" id="r_a76e8b8131d4ac2c676a6838f98010432"><td class="memItemLeft" align="right" valign="top"><a id="a76e8b8131d4ac2c676a6838f98010432" name="a76e8b8131d4ac2c676a6838f98010432"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_root_value</b> = <a class="el" href="classBinaryTreeMath.html#a5bffc775222f5fa29522c4a100b515b0">_ROOT_VALUE_DEFAULT</a></td></tr>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_root_value</b> = <a class="el" href="classBinaryTreeMath.html#a5bffc775222f5fa29522c4a100b515b0">_ROOT_VALUE_DEFAULT</a></td></tr>
 <tr class="memdesc:a76e8b8131d4ac2c676a6838f98010432"><td class="mdescLeft">&#160;</td><td class="mdescRight">The currently selected root value. This is a program-wide static, so be careful. <br /></td></tr>
 <tr class="separator:a76e8b8131d4ac2c676a6838f98010432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac86b5b08a2aba7c55777e7b16d502f56" id="r_ac86b5b08a2aba7c55777e7b16d502f56"><td class="memItemLeft" align="right" valign="top"><a id="ac86b5b08a2aba7c55777e7b16d502f56" name="ac86b5b08a2aba7c55777e7b16d502f56"></a>
-<a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_offset</b> = 1 - <a class="el" href="classBinaryTreeMath.html#a76e8b8131d4ac2c676a6838f98010432">_root_value</a></td></tr>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_offset</b> = 1 - <a class="el" href="classBinaryTreeMath.html#a76e8b8131d4ac2c676a6838f98010432">_root_value</a></td></tr>
 <tr class="memdesc:ac86b5b08a2aba7c55777e7b16d502f56"><td class="mdescLeft">&#160;</td><td class="mdescRight">An offset which helps the functions shift their logic for 0- and 1-based roots without a bunch of if/else garbage. <br /></td></tr>
 <tr class="separator:ac86b5b08a2aba7c55777e7b16d502f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -214,7 +214,7 @@ class BinaryTreeMath&lt; T &gt;</div><p>The core algorithms supporting tree buil
 <p>The math for building a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> supports both 0- and 1-based trees. In the original research, trees rooted at zero were fine because manual research was still underway into patterns. Patterns aligned more cleanly with a tree rooted at one, and it also meant the tree contained the space of <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> Conjecture correctly (no zero). Therefore, 1-based trees became the defaul as of version 2.0.0. That said, 0-based trees are still possible by changing <code>BinaryTreeMath::set_root_value(0)</code>, however their performance and behavior is provided on a best-effort basis and might be removed later.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="classNode.html#a0ac1d44cfe588be564acf25485029bd8" title="Default constructor.">concepts.hpp</a>). </td></tr>
+    <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -262,7 +262,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_child_count_at_target_level </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_child_count_at_target_level </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>parent_level</em>, </td>
@@ -312,7 +312,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">seq_size_t</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_fg_chain_length </td>
+          <td class="memname">static seq_size_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_fg_chain_length </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -351,7 +351,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_first_node_value_of_level </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_first_node_value_of_level </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -389,9 +389,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">size_t</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_floor_log2 </td>
+          <td class="memname">static size_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_floor_log2 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>val</em></td><td>)</td>
           <td></td>
         </tr>
@@ -427,9 +427,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_get_level_by_node_value </td>
+          <td class="memname">static level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_get_level_by_node_value </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -466,7 +466,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">bool</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_level_will_fit </td>
+          <td class="memname">static bool <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_level_will_fit </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -499,7 +499,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_full_level_at_node_value </td>
+          <td class="memname">static level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_full_level_at_node_value </td>
           <td>(</td>
           <td class="paramtype">T&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
@@ -536,7 +536,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_level_of_type </td>
+          <td class="memname">static level_t <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_level_of_type </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -568,7 +568,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_node_value_at_level </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_max_node_value_at_level </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -606,7 +606,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_level </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_level </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -644,7 +644,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_levels </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_levels </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>min_level</em>, </td>
@@ -693,7 +693,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_tree </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_count_of_tree </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>levels</em></td><td>)</td>
@@ -731,9 +731,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_position </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_position </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -778,9 +778,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>position</em>, </td>
         </tr>
         <tr>
@@ -838,9 +838,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> <a class="el" href="classNode.html">void</a> <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level </td>
+          <td class="memname">static void <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>position</em>, </td>
         </tr>
         <tr>
@@ -904,9 +904,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level__deprecated </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_node_value_by_position_and_level__deprecated </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>position</em>, </td>
         </tr>
         <tr>
@@ -954,9 +954,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_s1_summation </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_s1_summation </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>position</em>, </td>
         </tr>
         <tr>
@@ -1011,9 +1011,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_s2_summation </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_s2_summation </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classNode.html">const</a> T &amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>position</em>, </td>
         </tr>
         <tr>
@@ -1070,7 +1070,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>level</em></td><td>)</td>
@@ -1109,7 +1109,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classNode.html">static</a> T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor_cumulative </td>
+          <td class="memname">static T <a class="el" href="classBinaryTreeMath.html">BinaryTreeMath</a>&lt; T &gt;::st_scaling_factor_cumulative </td>
           <td>(</td>
           <td class="paramtype">level_t&#160;</td>
           <td class="paramname"><em>base_level</em>, </td>

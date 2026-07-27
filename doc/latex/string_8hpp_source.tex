@@ -7,16 +7,24 @@
 \DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
 \DoxyCodeLine{00004\ }
 \DoxyCodeLine{00005\ }
-\DoxyCodeLine{00012\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00013\ \textcolor{keyword}{inline}\ std::string\ to\_string\_any(\textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classNode}{val}})\ \{}
-\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptPrintableIntegral}{PrintableIntegral<T>}})\ \{}
-\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::to\_string(\mbox{\hyperlink{classNode}{val}});}
-\DoxyCodeLine{00016\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
-\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{Int128::uint128\_to\_string}}(\mbox{\hyperlink{classNode}{val}});}
-\DoxyCodeLine{00018\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{val}}.get\_str();}
-\DoxyCodeLine{00020\ \ \ \ \ \}}
-\DoxyCodeLine{00021\ \}}
-\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00014\ \textcolor{keyword}{inline}\ std::string\ to\_string\_any(\textcolor{keyword}{const}\ T\&\ val,\ \textcolor{keywordtype}{bool}\ separators\ =\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ std::string\ result;}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptPrintableIntegral}{PrintableIntegral<T>}})\ \{}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ result\ =\ std::to\_string(val);}
+\DoxyCodeLine{00018\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptInt128Integral}{Int128Integral<T>}})\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ result\ =\ \mbox{\hyperlink{namespaceInt128_af5a5a2e4039d50255dff767144086b69}{Int128::uint128\_to\_string}}(val);}
+\DoxyCodeLine{00020\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ result\ =\ val.get\_str();}
+\DoxyCodeLine{00022\ \ \ \ \ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordflow}{if}\ (separators)\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(result.size())\ -\/\ 3;\ i\ >\ 0;\ i\ -\/=\ 3)\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ result.insert(i,\ \textcolor{stringliteral}{"{},"{}});}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00031\ \}}
 
 \end{DoxyCode}

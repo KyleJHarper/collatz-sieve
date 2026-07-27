@@ -17,62 +17,62 @@
 \DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classzstd__ostreambuf}{zstd\_ostreambuf}}\ :\ \textcolor{keyword}{public}\ std::streambuf\ \{}
 \DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{private}:}
 \DoxyCodeLine{00020\ \ \ \ \ std::streambuf*\ \mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}};}
-\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_CStream}}*\ \mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}};}
+\DoxyCodeLine{00022\ \ \ \ \ ZSTD\_CStream*\ \mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}};}
 \DoxyCodeLine{00024\ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}};}
 \DoxyCodeLine{00026\ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}};}
 \DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}{\_finalized}}\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_EndDirective}}\ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}\ =\ \mbox{\hyperlink{classNode}{ZSTD\_e\_continue}};}
+\DoxyCodeLine{00030\ \ \ \ \ ZSTD\_EndDirective\ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}\ =\ ZSTD\_e\_continue;}
 \DoxyCodeLine{00031\ }
 \DoxyCodeLine{00032\ }
 \DoxyCodeLine{00033\ }
 \DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\_input}}()\ \{}
 \DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Calculate\ how\ many\ bytes\ we\ need\ to\ read\ and\ build\ an\ in-\/buffer\ locally\ for\ it.}}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{size}}\ =\ \mbox{\hyperlink{classNode}{pptr}}()\ -\/\ \mbox{\hyperlink{classNode}{pbase}}();}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_inBuffer}}\ \mbox{\hyperlink{classNode}{in}}\{\mbox{\hyperlink{classNode}{pbase}}(),\ \mbox{\hyperlink{classNode}{size}},\ 0\};}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size\ =\ pptr()\ -\/\ pbase();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ ZSTD\_inBuffer\ in\{pbase(),\ size,\ 0\};}
 \DoxyCodeLine{00042\ }
 \DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ the\ in-\/buffer\ until\ it's\ exhausted.}}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{in}}.pos\ <\ \mbox{\hyperlink{classNode}{in}}.size)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (in.pos\ <\ in.size)\ \{}
 \DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ an\ out-\/buffer\ to\ write\ to\ our\ private\ member.}}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_outBuffer}}\ \mbox{\hyperlink{classNode}{out}}\{\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.size(),\ 0\};}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ ZSTD\_outBuffer\ out\{\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.size(),\ 0\};}
 \DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ data\ through\ stream\ and\ store\ the\ compressed\ bits.}}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\mbox{\hyperlink{classNode}{ZSTD\_compressStream2}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \&\mbox{\hyperlink{classNode}{out}},\ \&\mbox{\hyperlink{classNode}{in}},\ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}));}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(ZSTD\_compressStream2(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \&out,\ \&in,\ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}));}
 \DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Put\ the\ buffered\ (compressed)\ data\ into\ the\ destination\ streambuf.}}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}-\/>sputn(\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classNode}{out}}.pos)\ !=\ std::streamsize(\mbox{\hyperlink{classNode}{out}}.pos))\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}-\/>sputn(\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ out.pos)\ !=\ std::streamsize(out.pos))\ \{}
 \DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00054\ }
 \DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ put\ area.}}
-\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{setp}}(\mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data()\ +\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.size());}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ setp(\mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data()\ +\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.size());}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00058\ \ \ \ \ \}}
 \DoxyCodeLine{00059\ }
 \DoxyCodeLine{00060\ }
 \DoxyCodeLine{00061\ }
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{code}})\ \{}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{ZSTD\_isError}}(\mbox{\hyperlink{classNode}{code}}))\ \{}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\mbox{\hyperlink{classNode}{ZSTD\_getErrorName}}(\mbox{\hyperlink{classNode}{code}}));}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\textcolor{keywordtype}{size\_t}\ code)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ZSTD\_isError(code))\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(ZSTD\_getErrorName(code));}
 \DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00070\ \ \ \ \ \}}
 \DoxyCodeLine{00071\ }
 \DoxyCodeLine{00072\ }
 \DoxyCodeLine{00073\ }
 \DoxyCodeLine{00074\ \ \ \ \ \textcolor{keyword}{protected}:}
-\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6}{overflow}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{ch}})\textcolor{keyword}{\ override\ }\{}
-\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}{\_finalized}})\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{EOF}};\ \}}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6}{overflow}}(\textcolor{keywordtype}{int}\ ch)\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}{\_finalized}})\ \{\ \textcolor{keywordflow}{return}\ EOF;\ \}}
 \DoxyCodeLine{00081\ }
-\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{pptr}}()\ ==\ \mbox{\hyperlink{classNode}{epptr}}())\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pptr()\ ==\ epptr())\ \{}
 \DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\_input}}()\ ==\ -\/1)\ \{}
-\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{EOF}};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ EOF;}
 \DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00087\ }
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{ch}}\ !=\ \mbox{\hyperlink{classNode}{EOF}})\ \{}
-\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ *\mbox{\hyperlink{classNode}{pptr}}()\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{classNode}{ch}});}
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{pbump}}(1);}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ch\ !=\ EOF)\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ *pptr()\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(ch);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ pbump(1);}
 \DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{traits\_type::not\_eof}}(\mbox{\hyperlink{classNode}{ch}});}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ traits\_type::not\_eof(ch);}
 \DoxyCodeLine{00094\ \ \ \ \ \}}
 \DoxyCodeLine{00095\ }
 \DoxyCodeLine{00096\ }
@@ -94,40 +94,40 @@
 \DoxyCodeLine{00120\ }
 \DoxyCodeLine{00121\ }
 \DoxyCodeLine{00122\ }
-\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96}{zstd\_ostreambuf}}(std::streambuf*\ \mbox{\hyperlink{classNode}{dest}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{level}}\ =\ \mbox{\hyperlink{classNode}{ZSTD\_CLEVEL\_DEFAULT}})\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96}{zstd\_ostreambuf}}(std::streambuf*\ dest,\ \textcolor{keywordtype}{int}\ level\ =\ ZSTD\_CLEVEL\_DEFAULT)\ \{}
 \DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Setup\ the\ stream\ buffers\ and\ destination.\ \ Give\ the\ input\ buffer\ a\ big\ size\ to\ aid\ with\ threaded\ compression.}}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}\ =\ \mbox{\hyperlink{classNode}{dest}};}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}\ =\ dest;}
 \DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.resize(1\ <<\ 24);\ \ \textcolor{comment}{//\ 16MB}}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.resize(\mbox{\hyperlink{classNode}{ZSTD\_CStreamOutSize}}());}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}}\ =\ \mbox{\hyperlink{classNode}{ZSTD\_createCCtx}}();}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.resize(ZSTD\_CStreamOutSize());}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}}\ =\ ZSTD\_createCCtx();}
 \DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}})\ \{}
 \DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}ZSTD\_createCCtx\ failed"{}});}
 \DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00159\ }
 \DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initialize\ the\ compression\ stream.\ \ Check\ for\ error\ codes.}}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{thread\_count}}\ =\ std::thread::hardware\_concurrency();}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{thread\_count}}\ <\ 1)\ \{}
-\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{thread\_count}}\ =\ 1;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ thread\_count\ =\ std::thread::hardware\_concurrency();}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\_count\ <\ 1)\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ thread\_count\ =\ 1;}
 \DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{thread\_count}}\ =\ std::min(16,\ \mbox{\hyperlink{classNode}{thread\_count}});}
-\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\mbox{\hyperlink{classNode}{ZSTD\_CCtx\_setParameter}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \mbox{\hyperlink{classNode}{ZSTD\_c\_compressionLevel}},\ \mbox{\hyperlink{classNode}{level}}));}
-\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\mbox{\hyperlink{classNode}{ZSTD\_CCtx\_setParameter}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \mbox{\hyperlink{classNode}{ZSTD\_c\_nbWorkers}},\ \mbox{\hyperlink{classNode}{thread\_count}}));}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ thread\_count\ =\ std::min(16,\ thread\_count);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(ZSTD\_CCtx\_setParameter(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ ZSTD\_c\_compressionLevel,\ level));}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(ZSTD\_CCtx\_setParameter(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ ZSTD\_c\_nbWorkers,\ thread\_count));}
 \DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ compression\ is\ >\ 19,\ long\ range\ scanning\ is\ required.\ \ Also\ change\ the\ end\ diretive\ to\ flush\ immediately\ so\ it\ can}}
 \DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ engage\ more\ CPU\ threads.\ \ The\ trade-\/off\ is\ around\ 10\%\ worse\ compression\ at\ the\ top\ end\ (level\ =\ 22).}}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{level}}\ >\ 19)\ \{}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\mbox{\hyperlink{classNode}{ZSTD\_CCtx\_setParameter}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \mbox{\hyperlink{classNode}{ZSTD\_c\_enableLongDistanceMatching}},\ 1));}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}\ =\ \mbox{\hyperlink{classNode}{ZSTD\_e\_flush}};}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (level\ >\ 19)\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(ZSTD\_CCtx\_setParameter(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ ZSTD\_c\_enableLongDistanceMatching,\ 1));}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}{\_zstd\_end\_directive}}\ =\ ZSTD\_e\_flush;}
 \DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(\mbox{\hyperlink{classNode}{ZSTD\_CCtx\_reset}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \mbox{\hyperlink{classNode}{ZSTD\_reset\_session\_only}}));}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}}(ZSTD\_CCtx\_reset(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ ZSTD\_reset\_session\_only));}
 \DoxyCodeLine{00175\ }
 \DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ the\ write\ points.}}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{setp}}(\mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data()\ +\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.size());}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ setp(\mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.data()\ +\ \mbox{\hyperlink{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}{\_input\_buffer}}.size());}
 \DoxyCodeLine{00178\ \ \ \ \ \}}
 \DoxyCodeLine{00179\ }
 \DoxyCodeLine{00180\ }
 \DoxyCodeLine{00181\ }
 \DoxyCodeLine{00183\ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_ae5947bd4969df6fb4f186adcad1c9a6d}{\string~zstd\_ostreambuf}}()\textcolor{keyword}{\ override\ }\{}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_freeCStream}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}});}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ ZSTD\_freeCStream(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}});}
 \DoxyCodeLine{00185\ \ \ \ \ \}}
 \DoxyCodeLine{00186\ }
 \DoxyCodeLine{00188\ }
@@ -137,27 +137,27 @@
 \DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}{\_finalized}})\ \{\ \textcolor{keywordflow}{return};\ \}}
 \DoxyCodeLine{00202\ }
 \DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ensure\ any\ remaining\ data\ in\ the\ put\ area\ is\ sent\ to\ Zstd.}}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{pptr}}()\ >\ \mbox{\hyperlink{classNode}{pbase}}())\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pptr()\ >\ pbase())\ \{}
 \DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\_input}}()\ ==\ -\/1)\ \{}
 \DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Final\ flush\_input\ (from\ inside\ finalize())\ failed"{}});}
 \DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00209\ }
 \DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ ZSTD\_e\_end\ until\ the\ frame\ is\ fully\ flushed\ (returns\ 0).}}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_inBuffer}}\ \mbox{\hyperlink{classNode}{input}}\ =\ \{\ \textcolor{keyword}{nullptr},\ 0,\ 0\ \};}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{finished}};}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ ZSTD\_inBuffer\ input\ =\ \{\ \textcolor{keyword}{nullptr},\ 0,\ 0\ \};}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ finished;}
 \DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{ZSTD\_outBuffer}}\ \mbox{\hyperlink{classNode}{output}}\ =\ \{\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.size(),\ 0\ \};}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{finished}}\ =\ \mbox{\hyperlink{classNode}{ZSTD\_compressStream2}}(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \&\mbox{\hyperlink{classNode}{output}},\ \&\mbox{\hyperlink{classNode}{input}},\ \mbox{\hyperlink{classNode}{ZSTD\_e\_end}});}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{ZSTD\_isError}}(\mbox{\hyperlink{classNode}{finished}}))\ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\mbox{\hyperlink{classNode}{ZSTD\_getErrorName}}(\mbox{\hyperlink{classNode}{finished}}));}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ ZSTD\_outBuffer\ output\ =\ \{\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.size(),\ 0\ \};}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ finished\ =\ ZSTD\_compressStream2(\mbox{\hyperlink{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}{\_zstd\_cstream}},\ \&output,\ \&input,\ ZSTD\_e\_end);}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ZSTD\_isError(finished))\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(ZSTD\_getErrorName(finished));}
 \DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{output}}.pos\ >\ 0)\ \{}
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}-\/>sputn(\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ \mbox{\hyperlink{classNode}{output}}.pos)\ !=\ std::streamsize(\mbox{\hyperlink{classNode}{output}}.pos))\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (output.pos\ >\ 0)\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classzstd__ostreambuf_a04b160292b01b5c01b4bfe2df19703cf}{\_dest}}-\/>sputn(\mbox{\hyperlink{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}{\_output\_buffer}}.data(),\ output.pos)\ !=\ std::streamsize(output.pos))\ \{}
 \DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Write\ failure\ during\ finalize()"{}});}
 \DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classNode}{finished}}\ >\ 0);}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ (finished\ >\ 0);}
 \DoxyCodeLine{00225\ }
 \DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ this\ or\ any\ other\ stream-\/touching\ methods\ to\ operate\ again.}}
 \DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}{\_finalized}}\ =\ \textcolor{keyword}{true};}
@@ -183,8 +183,8 @@
 \DoxyCodeLine{00258\ }
 \DoxyCodeLine{00259\ }
 \DoxyCodeLine{00260\ }
-\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392}{zstd\_ostream}}(std::ostream\&\ \mbox{\hyperlink{classNode}{underlying}},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classNode}{level}})\ :\ std::ostream(\mbox{\hyperlink{classNode}{nullptr}}),\ \mbox{\hyperlink{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c}{\_buffer}}(\mbox{\hyperlink{classNode}{underlying}}.\mbox{\hyperlink{classNode}{rdbuf}}(),\ \mbox{\hyperlink{classNode}{level}})\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{rdbuf}}(\&\mbox{\hyperlink{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c}{\_buffer}});}
+\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classzstd__ostream_adf50c5b10a0a43b3e74e0401207de392}{zstd\_ostream}}(std::ostream\&\ underlying,\ \textcolor{keywordtype}{int}\ level)\ :\ std::ostream(nullptr),\ \mbox{\hyperlink{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c}{\_buffer}}(underlying.rdbuf(),\ level)\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ rdbuf(\&\mbox{\hyperlink{classzstd__ostream_a7bf0e2abf36b8f9ac89f2e9c3edc463c}{\_buffer}});}
 \DoxyCodeLine{00269\ \ \ \ \ \}}
 \DoxyCodeLine{00270\ }
 \DoxyCodeLine{00272\ }

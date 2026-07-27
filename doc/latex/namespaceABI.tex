@@ -8,10 +8,22 @@ Utilities to help interact with the Application Binary Interface (\doxylink{name
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-std\+::string \mbox{\hyperlink{namespaceABI_a8d2298ff3f7f8e5953ac7aee8de99cd9}{demangle}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{char}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{name}})
+std\+::string \mbox{\hyperlink{namespaceABI_a8d2298ff3f7f8e5953ac7aee8de99cd9}{demangle}} (\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{const}} \mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{char}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{name}})
 \begin{DoxyCompactList}\small\item\em Demangle\textquotesingle{}s a mangled C++ type name. \end{DoxyCompactList}\item 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ }\\std\+::string \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}} ()
-\begin{DoxyCompactList}\small\item\em Demange a mangled c++ type name based on the type sent. \end{DoxyCompactList}\end{DoxyCompactItemize}
+{\footnotesize template$<$\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{typename}} T $>$ }\\std\+::string \mbox{\hyperlink{namespaceABI_a3fe9a7ecf485673d9d7616d8cebb1634}{demangle}} ()
+\begin{DoxyCompactList}\small\item\em Demange a mangled c++ type name based on the type sent. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceABI_ac70df8896897121448f4d5c2b7212585}\label{namespaceABI_ac70df8896897121448f4d5c2b7212585} 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\static constexpr uint16\+\_\+t {\bfseries get\+\_\+bit\+\_\+width\+\_\+id} ()
+\begin{DoxyCompactList}\small\item\em Assign consistent values to differnt data types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespaceABI_a3f380a3ac230e171fe1245b278d69a7c}\label{namespaceABI_a3f380a3ac230e171fe1245b278d69a7c} 
+\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{constexpr}} \mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{size\+\_\+t}} {\bfseries CACHE\+\_\+\+LINE\+\_\+\+SIZE} = 64
+\begin{DoxyCompactList}\small\item\em Use 64 bytes as the cache line size to avoid false sharing in TLS structs and similar. \end{DoxyCompactList}\item 
+\Hypertarget{namespaceABI_aa5b042ab2e22f69dae0b93c7943dc04b}\label{namespaceABI_aa5b042ab2e22f69dae0b93c7943dc04b} 
+\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{constexpr}} \mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{uint16\+\_\+t}} {\bfseries MPZ\+\_\+\+CLASS\+\_\+\+BIT\+\_\+\+WIDTH\+\_\+\+ID} = 0
+\begin{DoxyCompactList}\small\item\em Constant value for the mpz\+\_\+class type ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -22,18 +34,18 @@ Utilities to help interact with the Application Binary Interface (\doxylink{name
 \index{ABI@{ABI}!demangle@{demangle}}
 \index{demangle@{demangle}!ABI@{ABI}}
 \doxysubsubsection{\texorpdfstring{demangle()}{demangle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classNode}{typename}} T $>$ \\
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{typename}} T $>$ \\
 std\+::string ABI\+::demangle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 Demange a mangled c++ type name based on the type sent. 
 
-Converts a compiler-\/specific (and rather ugly) name returned by typeid() into a human-\/readable format.
+Converts a compiler-\/specific (and rather ugly) name returned by \doxylink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{typeid()} into a human-\/readable format.
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em T} & Any type which responds to {\ttfamily typeid(\+T).name()}. \\
+{\em T} & Any type which responds to {\ttfamily typeid(\+T).\doxylink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{name()}}. \\
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyReturn}{Returns}
@@ -43,13 +55,13 @@ A string with the friendly name, or the original name if it can\textquotesingle{
 \index{ABI@{ABI}!demangle@{demangle}}
 \index{demangle@{demangle}!ABI@{ABI}}
 \doxysubsubsection{\texorpdfstring{demangle()}{demangle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily std\+::string ABI\+::demangle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{char}} \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::string ABI\+::demangle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{const}} \mbox{\hyperlink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{char}} \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 Demangle\textquotesingle{}s a mangled C++ type name. 
 
-Converts a compiler-\/specific (and rather ugly) name returned by typeid() into a human-\/readable format.
+Converts a compiler-\/specific (and rather ugly) name returned by \doxylink{namespaceABI_ac70df8896897121448f4d5c2b7212585}{typeid()} into a human-\/readable format.
 
 
 \begin{DoxyParams}{Parameters}

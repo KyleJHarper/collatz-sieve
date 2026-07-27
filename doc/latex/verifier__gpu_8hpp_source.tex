@@ -1,0 +1,277 @@
+\doxysection{verifier\+\_\+gpu.\+hpp}
+\hypertarget{verifier__gpu_8hpp_source}{}\label{verifier__gpu_8hpp_source}\index{src/collatz/verifier\_gpu.hpp@{src/collatz/verifier\_gpu.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}for\_each.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}verifier\_state.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}verifier.hpp"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}verifier\_tls\_metric.hpp"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}verifier\_gpu\_result\_data.hpp"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}verifier\_gpu\_interface.hpp"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}cuda\_stream\_buffer.hpp"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <omp.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}gpu.hpp"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T>}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classVerifier}{Verifier}}<T>\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{const}\ T\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}}\ =\ 0;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}}\ =\ 0;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}{\_gpu\_buffer\_limit}}\ =\ 0;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}}\ =\ 0;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}}\ =\ 100;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{struct\ }\textcolor{keyword}{alignas}(ABI::CACHE\_LINE\_SIZE)\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{ThreadStorage}}\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_a752da5cef788dfc880329fb937cd0446}{synchronization\_countdown}}\ =\ 1;}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_a55d6c3ad72a78e1c3cd5de26bd1aa44d}{synchronizations\_performed}}\ =\ 0;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric}{VerifierTLSMetric}}\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_aaeaf8ef295284fe1c00d955550829467}{metrics}};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::unique\_ptr<CudaStreamBuffer<T,\ GPUVerifierResultData>>\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}};}
+\DoxyCodeLine{00069\ \ \ \ \ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00072\ \ \ \ \ std::vector<ThreadStorage>\ \mbox{\hyperlink{classGPUVerifier_aace87bfdccf59285f382888aef356018}{\_tls}};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_aca9f478eb6abe324f7f57c717a0b747f}{GPUVerifier}}()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classGPUVerifier_aa86746b4ebcd83b581f29167aa707a61}{GPUVerifier}}(\mbox{\hyperlink{classBinaryTree}{Verifier<T>::TreeType}}\&\ tree)\ :\ \mbox{\hyperlink{classVerifier}{Verifier}}<T>(tree),\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}}(tree.get\_scaling\_factor())\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespaceGPU_a68f1ae194ae20297066d511e43fdb9ec}{GPU::can\_use\_gpu}}())\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}No\ GPU\ detected.\ \ Cannot\ build\ a\ GPUVerifier."{}});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceGPU_affa307b654eb5885f7313e245b673c7c}{GPU::initialize\_stride\_table}}();}
+\DoxyCodeLine{00091\ \ \ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_aa0aa3f7d60206428652f5fc227ed6b2f}{GPUVerifier}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&\ \mbox{\hyperlink{classGPUVerifier_a079596faea87789e64d61c578d195acc}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00103\ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a315cfbe79e6554bc56ed6fe715079ec4}{GPUVerifier}}(\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&\ operator=(\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00110\ \ \ \ \ \string~\mbox{\hyperlink{classGPUVerifier}{GPUVerifier}}()\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_a691fa4824f5fd5364225686da3cba7ca}{get\_gpu\_buffer\_limit}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}{\_gpu\_buffer\_limit}};\ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGPUVerifier_a28373406a95055b6f87506c4eea9a6d4}{set\_gpu\_buffer\_limit}}(\textcolor{keywordtype}{size\_t}\ value)\ \{\ \mbox{\hyperlink{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}{\_gpu\_buffer\_limit}}\ =\ value;\ \}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_ab1c727b66c61fb5497152c11abd4417f}{get\_gpu\_buffer\_used}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}};\ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classGPUVerifier_addb218b7907fe789167fe8a502190aee}{get\_scales\_per\_run}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}};\ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGPUVerifier_ab14c082aa99a029ec6951f940227809e}{set\_scales\_per\_run}}(\textcolor{keywordtype}{size\_t}\ value)\ \{\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}}\ =\ value;\ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGPUVerifier_a39e86ef414ccaadcfbc05704aa9697db}{run\_executor}}()\ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sanity\ check\ the\ scaling\ runs\ is\ 1+.}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}}\ <\ 1)\ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Cannot\ send\ a\ scales-\/per-\/run\ of\ zero.\ \ Must\ be\ 1+."{}});}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ out\ how\ much\ memory\ is\ available\ for\ the\ GPU.\ \ Start\ by\ assuming\ the\ caller\ sent\ a\ fixed\ byte\ amount.}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}}\ =\ \mbox{\hyperlink{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}{\_gpu\_buffer\_limit}};}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ unsent,\ aim\ for\ 90\%\ of\ the\ free\ bytes\ or\ total\ needed\ (if\ lesser).}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classGPUVerifier_ab9d9601140258631b9cfe98a1aeaba27}{\_gpu\_buffer\_limit}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ free\_bytes\ =\ 0;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ total\_bytes\ =\ 0;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ cudaError\_t\ status\ =\ cudaMemGetInfo(\&free\_bytes,\ \&total\_bytes);}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (status\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(std::string(\textcolor{stringliteral}{"{}CUDA\ Error:\ "{}})\ +\ cudaGetErrorString(status));}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}}\ =\ free\_bytes\ *\ 9\ /\ 10;\ \ \textcolor{comment}{//\ 90\%}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ survivor\ set\ is\ smaller\ than\ the\ available\ buffer\ space\ on\ the\ GPU,\ reduce\ the\ allocation\ size\ needed.}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ uncovered\_values\_size\ =\ this-\/>\mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}}.\mbox{\hyperlink{classBinaryTree_a164d01c405d33264027aaf059b22104a}{get\_uncovered\_values}}().cardinality()\ *\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (uncovered\_values\_size\ <\ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}})\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}}\ =\ uncovered\_values\_size;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ the\ total\ buffer\ limit\ to\ decide\ how\ large\ each\ thread's\ buffer\ can\ be.}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ 1-\/2\ elements\ worth\ of\ buffer\ in\ case\ the\ full\ survivor\ set\ fits\ in\ VRAM.\ \ Otherwise,\ integer\ truncation\ might\ cause}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ edge-\/cases\ where\ a\ handful\ are\ excluded\ and\ require\ a\ whole\ round-\/trip.\ \ It's\ unlikely,\ but\ why\ risk\ it?}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ thread\_count\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(omp\_get\_max\_threads());}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ buffer\_limit\_per\_thread\ =\ (\mbox{\hyperlink{classGPUVerifier_a0726dd814b65cffb95e1b8ea0bdf2ec3}{\_gpu\_buffer\_used}}\ /\ thread\_count)\ +\ (\textcolor{keyword}{sizeof}(T)\ *\ 2);}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ size\_of\ to\ determine\ how\ many\ elements\ that\ works\ out\ to\ be.\ \ It'll\ be\ used\ by\ the\ buffer's\ constructor.}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint64\_t\ elements\_per\_thread\ =\ buffer\_limit\_per\_thread\ /\ \textcolor{keyword}{sizeof}(T);}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ TLS\ objects\ so\ element\ count\ can\ be\ sent.\ \ Otherwise\ NodeBitmap\ will\ default-\/initialiaze\ and\ fail.}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_aace87bfdccf59285f382888aef356018}{\_tls}}.resize(thread\_count);}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ tls\ :\ \mbox{\hyperlink{classGPUVerifier_aace87bfdccf59285f382888aef356018}{\_tls}})\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ tls.buffer\_ptr\ =\ std::make\_unique<CudaStreamBuffer<T,\ GPUVerifierResultData>>(elements\_per\_thread);}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Link\ to\ to\ the\ uncovered\ values\ (root\ survivors).}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNodeBitmap}{NodeBitmap<T>}}\&\ uncovered\_values\ =\ this-\/>\mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}}.\mbox{\hyperlink{classBinaryTree_a164d01c405d33264027aaf059b22104a}{get\_uncovered\_values}}();}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ multiplier\ to\ use\ with\ the\ scaling\ factor,\ which\ grows\ by\ scales\_per\_run\ with\ each\ loop.}}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \_base\_multiplier\ =\ 1;}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Bump\ the\ multiplier\ if\ a\ start\ value\ requires\ it.\ \ Take\ the\ maximum\ value\ of\ the\ tree\ and\ subtract\ it\ from\ the\ start}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ value\ requested,\ then\ divide\ it\ by\ the\ scaling\ factor\ to\ get\ the\ mutliplier.}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}}\ >\ uncovered\_values.\mbox{\hyperlink{classNodeBitmap_acae800834f3e98f2fe7902c2f312cf28}{maximum}}())\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}}\ +=\ ((this-\/>\mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}}\ -\/\ uncovered\_values.\mbox{\hyperlink{classNodeBitmap_acae800834f3e98f2fe7902c2f312cf28}{maximum}}())\ /\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}});}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Create\ a\ max\ multiplier\ which\ is\ the\ highest\ (inclusive)\ multiplier\ based\ on\ the\ scales\_per\_run.}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}}\ =\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}}\ +\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}}\ -\/\ 1;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Hoist\ a\ total\ scaling\ factor\ based\ on\ the\ maximum\ multiplier\ the\ GPU\ will\ receive.}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ T\ max\_scaling\_factor\ =\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}}\ *\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}};}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Loop\ through\ all\ survivors\ forever,\ or\ until\ end\_value\ is\ reached.}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ It's\ okay\ if\ this\ last\_loop\ is\ non-\/atomic.\ \ It's\ only\ ever\ checked\ outside\ OMP.}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ last\_loop\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(!\ last\_loop)\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ uncovered\_values.\mbox{\hyperlink{classNodeBitmap_a2243969818ba6ad34fef9e4e739eee04}{for\_each\_value\_with\_tls}}(ForEachPolicy::PARALLEL,\ \mbox{\hyperlink{classGPUVerifier_aace87bfdccf59285f382888aef356018}{\_tls}},\ [\&](T\&\ root\_survivor\_value,\ \mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ thread\_storage)\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ if\ done.\ \ Since\ a\ multiplier\ range\ is\ in\ effect,\ it\ breaks\ the\ contract\ of\ always\ working\ within\ one\ prefix}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ of\ a\ NodeBitmap\ (2\string^32\ range).\ \ Therefore,\ don't\ return\ BREAK,\ just\ flag\ the\ atomic\ for\ last\ loop.}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}}\ >\ 0\ \&\&\ (max\_scaling\_factor\ +\ root\_survivor\_value)\ >\ this-\/>\mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}})\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ last\_loop\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ buffer\ is\ full,\ send\ it\ to\ the\ GPU\ for\ processing.}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>is\_full())\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ helper\ to\ process\ on\ the\ GPU.}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a56f197875a251781fb7b59193adb36f0}{process\_buffer}}(thread\_storage);}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ is\ a\ natual\ point\ to\ check\ for\ pausing,\ stopping,\ etc.}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (this-\/>\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::PAUSED)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::this\_thread::sleep\_for(std::chrono::milliseconds(this-\/>\mbox{\hyperlink{classVerifier_af75be4c7c25be7f3b4d46ee7a60ba51b}{\_paused\_check\_ms}}));}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPING)\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ last\_loop\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_a55d6c3ad72a78e1c3cd5de26bd1aa44d}{synchronizations\_performed}}++;}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Buffer\ has\ space.\ \ Add\ the\ current\ value\ to\ the\ next\ index,\ incrementing\ it\ too.}}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_host\_data\_ptr()[thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>use\_next\_index()]\ =\ root\_survivor\_value;}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Continue}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flush\ any\ pending\ buffers.}}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ thread\_storage\ :\ \mbox{\hyperlink{classGPUVerifier_aace87bfdccf59285f382888aef356018}{\_tls}})\ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_next\_index()\ >\ 0)\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a56f197875a251781fb7b59193adb36f0}{process\_buffer}}(thread\_storage);}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Bump\ the\ multipliers.}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}}\ +=\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}};}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}}\ +=\ \mbox{\hyperlink{classGPUVerifier_a32f9a72780689ba3d11cde49d3da88ad}{\_scales\_per\_run}};}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Recompute\ the\ max\ scaling\ factor.}}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ max\_scaling\_factor\ =\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}}\ *\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}};}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ state\ to\ STOPPED.\ \ Only\ this\ thread\ may\ do\ that.}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::STOPPED);}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Synchronize\ the\ timer\ since\ it's\ done\ doing\ any\ work.}}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a249becc585c1f3c80b6122b73e88d7e2}{sync\_timer}}();}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ GPU\ used\ value.}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \_gpu\_buffer\_used\ =\ 0;}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGPUVerifier_a56f197875a251781fb7b59193adb36f0}{process\_buffer}}(\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ thread\_storage)\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mark\ the\ buffer\ READY.}}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>set\_state(CudaStreamBufferState::READY);}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Launch\ the\ kernel\ for\ the\ GPU\ to\ execute\ when\ it's\ able\ to.}}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}})\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>launch\_kernel(launch\_gpu\_verify\_kernel<T,\ true>,\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}},\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}},\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}});}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>launch\_kernel(launch\_gpu\_verify\_kernel<T,\ false>,\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}},\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}},\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}});}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ for\ the\ GPU\ to\ mark\ the\ buffer\ PROCESSED.}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>wait\_until\_state(CudaStreamBufferState::PROCESSED);}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ the\ results.\ \ Check\ for\ overflows\ and\ handle\ them.}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structGPUVerifierResultData}{GPUVerifierResultData}}*\ host\_results\_ptr\ =\ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_host\_results\_ptr();}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ T*\ host\_data\_ptr\ =\ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_host\_data\_ptr();}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ scales\_ran\ =\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}}\ -\/\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}}\ +\ 1;}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}{overflow\_count}}\ >\ 0)\ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Had\ at\ least\ one\ overflow.\ \ Check\ if\ we\ contained\ them.}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a4bc7cffaf8622c2b9c5479263abc5569}{overflow\_exceeded}})\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Ran\ out\ of\ overflow\ slots.\ \ Must\ reprocess\ the\ whole\ batch\ on\ CPU.}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint64\_t\ i\ =\ 0;\ i\ <\ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_next\_index();\ i++)\ \{}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ base\_value\ =\ *(host\_data\_ptr\ +\ i);}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ multiplier\ =\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}};\ multiplier\ <=\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}};\ multiplier++)\ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ initial\_value\ =\ base\_value\ +\ (multiplier\ *\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}});}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(initial\_value,\ initial\_value))\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Failed\ to\ verify\ value:\ "{}}\ +\ to\_string\_any(initial\_value));}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ metrics\ for\ this,\ including\ the\ overflow-\/exceeded\ counter.}}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}.fetch\_add(1);}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.fetch\_add(((thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_next\_index()\ +\ 1)\ *\ scales\_ran));}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Contained\ the\ overflow.\ \ Process\ only\ the\ offenders\ on\ CPU.}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint64\_t\ i\ =\ 0;\ i\ <\ host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}{overflow\_count}};\ i++)\ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ base\_value\ =\ *(host\_data\_ptr\ +\ host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a5fe2daa1198f0b0a671071b87f9a5eab}{overflow\_indexes}}[i]);}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ multiplier\ =\ \mbox{\hyperlink{classGPUVerifier_ac2ce94d9413689044ebd2f0c7c232810}{\_base\_multiplier}};\ multiplier\ <=\ \mbox{\hyperlink{classGPUVerifier_a000c77514d1703eb18670fa56533f7fa}{\_max\_multiplier}};\ multiplier++)\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ initial\_value\ =\ base\_value\ +\ (multiplier\ *\ \mbox{\hyperlink{classGPUVerifier_ad8fe0d6d369c39246db2f2f58559be8b}{\_scaling\_factor}});}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(initial\_value,\ initial\_value))\ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Failed\ to\ verify\ value:\ "{}}\ +\ to\_string\_any(initial\_value));}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ the\ metrics\ for\ this.}}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.fetch\_add(host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a342007d6b20800e111b3d86fd9a561da}{overflow\_count}}\ *\ scales\_ran);}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ results.\ \ They'll\ be\ sync'd\ as-\/such\ to\ the\ device.}}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ host\_results\_ptr-\/>\mbox{\hyperlink{structGPUVerifierResultData_a5121379f77a29fc889997c2b54bcf907}{reset}}();}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Update\ metrics.}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.fetch\_add(thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>get\_next\_index()\ *\ scales\_ran);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}}.\mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.fetch\_add(1);}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Recycle\ the\ buffer.\ \ This\ resets\ counters\ and\ sets\ state\ to\ FILLING.}}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structGPUVerifier_1_1ThreadStorage_acd5c6391337dab94bc50a270be1d632c}{buffer\_ptr}}-\/>recycle();}
+\DoxyCodeLine{00341\ \ \ \ \ \}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \};}
+
+\end{DoxyCode}

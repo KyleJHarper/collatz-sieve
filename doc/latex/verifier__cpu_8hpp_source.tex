@@ -1,0 +1,246 @@
+\doxysection{verifier\+\_\+cpu.\+hpp}
+\hypertarget{verifier__cpu_8hpp_source}{}\label{verifier__cpu_8hpp_source}\index{src/collatz/verifier\_cpu.hpp@{src/collatz/verifier\_cpu.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}abi.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}verifier\_tls\_metric.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}verifier\_state.hpp"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}verifier.hpp"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classVerifier}{Verifier}}<T>\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{struct\ }\textcolor{keyword}{alignas}(ABI::CACHE\_LINE\_SIZE)\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{ThreadStorage}}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a10c21a7f5bb17dda5cca03bd9fd212ce}{synchronization\_countdown}}\ =\ 1;}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a66da63d9a4ea1d0fa1c4c12c9a10fa70}{synchronizations\_performed}}\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric}{VerifierTLSMetric}}\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}};}
+\DoxyCodeLine{00031\ \ \ \ \ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ \ \ \ \ std::vector<ThreadStorage>\ \mbox{\hyperlink{classCPUVerifier_a27da5ef745a81fd1dd5e021203d451c5}{\_tls}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\_detailed\_metrics}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classCPUVerifier_a96ef3b5f878ea1c97f406ef25db944c5}{CPUVerifier}}()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classCPUVerifier_a62b41668311e2e3664ca2587142cfc7e}{CPUVerifier}}(\mbox{\hyperlink{classBinaryTree}{Verifier<T>::TreeType}}\&\ tree)\ :\ \mbox{\hyperlink{classVerifier}{Verifier}}<T>(tree)\ \{\}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classCPUVerifier_a2992f1e894fa95ebdafbff86e3da3702}{CPUVerifier}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&\ \mbox{\hyperlink{classCPUVerifier_aa697f0bb0a28b1ca0797e9bca3db76c9}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{classCPUVerifier_a4f9275078380efdd959ab82b6d8bfaeb}{CPUVerifier}}(\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&\ operator=(\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}\&\&)\ noexcept\ =\ default;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00073\ \ \ \ \ \string~\mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}()\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCPUVerifier_af0b6187a4bc363e6afec62f2c9b52e89}{enable\_detailed\_metrics}}()\ \{\ \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\_detailed\_metrics}}\ =\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCPUVerifier_a368e702135a862597b8aa7182787441f}{disable\_detailed\_metrics}}()\ \{\ \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\_detailed\_metrics}}\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCPUVerifier_aa569321329626668895203a19e7c55a4}{is\_detailed\_metrics\_enabled}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\_detailed\_metrics}};\ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ U>}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\_with\_detailed\_metrics}}(U\&\ value,\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ thread\_storage)\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Test\ for\ overflow.}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ method\ does\ NOT\ use\ striding\ for\ obvious\ reasons.\ \ Lean\ on\ the\ precomputed\ max\ initial\ values\ tables.}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ <\ 64)\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ is\ less\ than\ 64\ bits,\ just\ send\ it\ as\ a\ 64-\/bit.\ \ Even\ uint32\_t\ can't\ reach\ an\ overflow\ of\ 64-\/bit.}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ initial\ value\ of\ 64\ bit\ is\ 12,327,829,502\ which\ is\ greater\ than\ 2\string^32\ which\ is\ 4,294,967,296.}}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ safe\_value\ =\ value;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\_with\_detailed\_metrics}}(safe\_value,\ thread\_storage);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 64)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ T\ of\ exactly\ 64\ bits.\ \ If\ it'll\ overflow,\ use\ 128-\/bit.\ \ Otherwise,\ pass\ through.}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ >\ CollatzConstants::get\_max\_initial\_value\_by\_type<U>())\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ safe\_value\ =\ value;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\_with\_detailed\_metrics}}(safe\_value,\ thread\_storage);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 128)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ 128\ bits.\ \ If\ it'll\ overflow,\ use\ mpz\_class.}}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ >\ CollatzConstants::get\_max\_initial\_value\_by\_type<U>())\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ safe\_value;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(value,\ safe\_value);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\_with\_detailed\_metrics}}(safe\_value,\ thread\_storage);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ May\ now\ process\ value,\ guaranteed\ to\ not\ overflow.}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ below\_hwm\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ steps\ =\ 0;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ std::conditional\_t<}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyFWTable}}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyGMPTable}}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ >;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ U\ initial\_value\ =\ value;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (value\ !=\ 1)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((value\ \&\ 1)\ ==\ 0)\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ >>=\ 1;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ value\ =\ (value\ <<\ 1)\ +\ value\ +\ 1;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tally\ the\ local\ step\ count.}}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps++;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ High-\/Water\ Mark\ Metrics}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (below\_hwm)\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\_skippable\_by\_hwm}}++;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ <\ initial\_value)\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ below\_hwm\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Affine\ stride\ is\ no\ longer\ effective.\ \ Tally\ it\ by\ counting\ how\ many\ strides\ it\ would've\ taken.}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}\ +=\ (steps\ -\/\ (1\ +\ (steps\ /\ StrideTable::STRIDE\_SIZE)));}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<U>}})\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ initial\_value;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ initial\_value\ =\ value;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (mpz\_cmp\_ui(value.get\_mpz\_t(),\ 1)\ !=\ 0)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_even\_p(value.get\_mpz\_t()))\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul\_ui(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ 3);}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(value.get\_mpz\_t(),\ value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tally\ the\ local\ step\ count.}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps++;}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ High-\/Water\ Mark\ Metrics}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (below\_hwm)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\_skippable\_by\_hwm}}++;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (value\ <\ initial\_value)\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ below\_hwm\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Affine\ stride\ is\ no\ longer\ effective.\ \ Tally\ it\ by\ counting\ how\ many\ strides\ it\ would've\ taken.}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}\ +=\ (steps\ -\/\ (1\ +\ (steps\ /\ StrideTable::STRIDE\_SIZE)));}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ local\ steps\ to\ the\ thread\ local\ total.}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}{steps\_total}}\ +=\ steps;}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Affine\ Stride\ Metric}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ is\ simply\ the\ number\ of\ whole\ strides\ that\ could've\ been\ taken\ times\ the\ number\ of\ steps\ saved.}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}{steps\_skippable\_by\_affine\_stride}}\ +=\ ((steps\ /\ StrideTable::STRIDE\_SIZE)\ *\ (StrideTable::STRIDE\_SIZE\ -\/\ 1));}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ done.\ \ Return\ true.}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00193\ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCPUVerifier_a4abce90529496c571ea63a26b8cce946}{run\_executor}}()\textcolor{keyword}{\ override\ }\{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dispatch\ runtime\ selection\ to\ Impl}}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_a4f83f16c42da7193ad5dee5530c5ea7e}{\_enable\_max\_iv\_table}})\ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_detailed\_metrics)\ \{}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ run\_executor\_impl<true,\ true>();}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ run\_executor\_impl<true,\ false>();}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\_detailed\_metrics}})\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ run\_executor\_impl<false,\ true>();}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ run\_executor\_impl<false,\ false>();}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keywordtype}{bool}\ UseIVTable,\ \textcolor{keywordtype}{bool}\ DetailedMetrics>}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCPUVerifier_a3c932d95f7c56491a092f67343481634}{run\_executor\_impl}}()\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ variables.}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCPUVerifier_a27da5ef745a81fd1dd5e021203d451c5}{\_tls}}.clear();}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ all\ the\ uncovered\ values.}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a8d722f683a17e483191d2d2c49006c72}{\_tree}}.for\_each\_uncovered\_value\_with\_tls(ForEachPolicy::PARALLEL,\ \mbox{\hyperlink{classCPUVerifier_a27da5ef745a81fd1dd5e021203d451c5}{\_tls}},\ [\&](T\&\ value,\ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{ThreadStorage}}\&\ thread\_storage)\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stop\ if\ done.}}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this-\/>\mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}}\ >\ 0\ \&\&\ value\ >\ this-\/>\mbox{\hyperlink{classVerifier_ae95bc559ac7b7921160a0994e47d600a}{\_end\_value}})\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_a8dcb0b8897c0a7af8868734cdd5362f2}{flush}}(this-\/>\mbox{\hyperlink{classVerifier_a7053ccc7969f7d414b6f4261dab112f3}{\_published\_metrics}},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::BREAK;}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Synchronize\ state\ and\ metrics\ if\ necessary.}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (-\/-\/thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a10c21a7f5bb17dda5cca03bd9fd212ce}{synchronization\_countdown}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ countdown\ for\ next\ time.\ \ Bump\ the\ counter\ for\ metrics.}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.synchronization\_countdown\ =\ this-\/>\_synchronization\_countdown;}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.synchronizations\_performed++;}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flush\ metrics.}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.metrics.flush(this-\/>\_published\_metrics,\ true);}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Wait\ when\ paused.}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ while\ (this-\/>\_state.load(std::memory\_order\_relaxed)\ ==\ VerifierState::PAUSED)\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::this\_thread::sleep\_for(std::chrono::milliseconds(this-\/>\_paused\_check\_ms));}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Quit\ if\ necessary.}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (this-\/>\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.load(std::memory\_order\_relaxed)\ ==\ VerifierState::STOPPING)\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ ForEachSignal::BREAK;}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Verify\ using\ whichever\ method\ is\ requested:\ with\ or\ without\ metrics.}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(DetailedMetrics)\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classCPUVerifier_a6bc10dac6e08ee6a86e8975027eeef1d}{verify\_with\_detailed\_metrics}}(value,\ thread\_storage))\ \{}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Failed\ to\ validate\ value:\ "{}}\ +\ to\_string\_any(value));}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handles\ overflow\ detection\ and\ promotes\ automatically.}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \mbox{\hyperlink{classCollatz}{Collatz<T>::template}}\ st\_verify<T,\ UseIVTable>(value,\ value))\ \{}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Failed\ to\ validate\ value:\ "{}}\ +\ to\_string\_any(value));}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ bump\ the\ number\ of\ nodes\ verified,\ even\ without\ DetailedMetrics\ enabled.}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ thread\_storage.\mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage_a23f8f317594ff9a07fce66ed749985c9}{metrics}}.\mbox{\hyperlink{structVerifierTLSMetric_abc094adbaacacf8a31e5439532746e07}{nodes\_verified}}++;}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Continue}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \},\ this-\/>\mbox{\hyperlink{classVerifier_a69407ce888cdd7c2a4e6448aa5021811}{\_start\_value}});}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ state\ to\ STOPPED.\ \ Only\ this\ thread\ may\ do\ that.}}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a0acb53d62541f8d991d0d9954062689f}{\_state}}.store(VerifierState::STOPPED);}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Synchronize\ the\ timer\ since\ it's\ done\ doing\ any\ work.}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ this-\/>\mbox{\hyperlink{classVerifier_a249becc585c1f3c80b6122b73e88d7e2}{sync\_timer}}();}
+\DoxyCodeLine{00287\ \ \ \ \ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \};}
+
+\end{DoxyCode}

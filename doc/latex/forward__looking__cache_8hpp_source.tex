@@ -37,13 +37,13 @@
 \DoxyCodeLine{00039\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classLRUTracker}{LRUTracker}}\ \{}
 \DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{private}:}
 \DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structLRUTracker_1_1Node}{Node}}\ \{}
-\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ prev\ =\ \mbox{\hyperlink{structLRUTracker_1_1Node}{SIZE\_MAX}};}
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ next\ =\ \mbox{\hyperlink{structLRUTracker_1_1Node}{SIZE\_MAX}};}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ prev\ =\ SIZE\_MAX;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ next\ =\ SIZE\_MAX;}
 \DoxyCodeLine{00047\ \ \ \ \ \};}
 \DoxyCodeLine{00048\ \ \ \ \ std::vector<Node>\ \_nodes;}
 \DoxyCodeLine{00049\ \ \ \ \ std::vector<bool>\ \_in\_use;}
-\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_head\ =\ \mbox{\hyperlink{structLRUTracker_1_1Node}{SIZE\_MAX}};}
-\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_tail\ =\ \mbox{\hyperlink{structLRUTracker_1_1Node}{SIZE\_MAX}};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_head\ =\ SIZE\_MAX;}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_tail\ =\ SIZE\_MAX;}
 \DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_capacity;}
 \DoxyCodeLine{00053\ }
 \DoxyCodeLine{00054\ }
@@ -52,8 +52,8 @@
 \DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Constructors}}
 \DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{classLRUTracker}{LRUTracker}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structLRUTracker_1_1Node}{capacity}})\ \{}
-\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ init(\mbox{\hyperlink{structLRUTracker_1_1Node}{capacity}});}
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{classLRUTracker}{LRUTracker}}(\textcolor{keywordtype}{size\_t}\ capacity)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ init(capacity);}
 \DoxyCodeLine{00062\ \ \ \ \ \}}
 \DoxyCodeLine{00063\ }
 \DoxyCodeLine{00064\ }
@@ -62,16 +62,16 @@
 \DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ Initialize}}
 \DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ Builds\ the\ object,\ reusing\ it\ if\ necessary.}}
 \DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{capacity}})\ \{}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \_capacity\ =\ \mbox{\hyperlink{classNode}{capacity}};}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \_head\ =\ \mbox{\hyperlink{classNode}{SIZE\_MAX}};}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \_tail\ =\ \mbox{\hyperlink{classNode}{SIZE\_MAX}};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{size\_t}\ capacity)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \_capacity\ =\ capacity;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \_head\ =\ SIZE\_MAX;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \_tail\ =\ SIZE\_MAX;}
 \DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \_nodes.clear();}
 \DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \_nodes.shrink\_to\_fit();}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \_nodes.resize(\mbox{\hyperlink{classNode}{capacity}});}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \_nodes.resize(capacity);}
 \DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \_in\_use.clear();}
 \DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \_in\_use.shrink\_to\_fit();}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \_in\_use.resize(\mbox{\hyperlink{classNode}{capacity}},\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \_in\_use.resize(capacity,\ \textcolor{keyword}{false});}
 \DoxyCodeLine{00080\ \ \ \ \ \}}
 \DoxyCodeLine{00081\ }
 \DoxyCodeLine{00082\ }
@@ -89,13 +89,13 @@
 \DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//\ Insert}}
 \DoxyCodeLine{00095\ \ \ \ \ \textcolor{comment}{//\ Add\ index\ to\ the\ front.\ \ It\ if\ already\ exists,\ just\ touch\ it.}}
 \DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ insert(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}})\ \{}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_in\_use[\mbox{\hyperlink{classNode}{idx}}])\ \{}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ touch(\mbox{\hyperlink{classNode}{idx}});}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ insert(\textcolor{keywordtype}{size\_t}\ idx)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_in\_use[idx])\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ touch(idx);}
 \DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \_in\_use[\mbox{\hyperlink{classNode}{idx}}]\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ push(\mbox{\hyperlink{classNode}{idx}});}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \_in\_use[idx]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ push(idx);}
 \DoxyCodeLine{00104\ \ \ \ \ \}}
 \DoxyCodeLine{00105\ }
 \DoxyCodeLine{00106\ }
@@ -104,10 +104,10 @@
 \DoxyCodeLine{00109\ \ \ \ \ \textcolor{comment}{//\ Erase}}
 \DoxyCodeLine{00110\ \ \ \ \ \textcolor{comment}{//\ Remove\ a\ node.}}
 \DoxyCodeLine{00111\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}})\ \{}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_in\_use[\mbox{\hyperlink{classNode}{idx}}])\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ pop(\mbox{\hyperlink{classNode}{idx}});}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \_in\_use[\mbox{\hyperlink{classNode}{idx}}]\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ erase(\textcolor{keywordtype}{size\_t}\ idx)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_in\_use[idx])\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ pop(idx);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \_in\_use[idx]\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00116\ \ \ \ \ \}}
 \DoxyCodeLine{00117\ }
 \DoxyCodeLine{00118\ }
@@ -116,10 +116,10 @@
 \DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//\ Touch}}
 \DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ Move\ an\ index\ to\ the\ front.}}
 \DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{void}\ touch(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}})\ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_in\_use[\mbox{\hyperlink{classNode}{idx}}]\ ||\ \mbox{\hyperlink{classNode}{idx}}\ ==\ \_head)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ pop(\mbox{\hyperlink{classNode}{idx}});}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ push(\mbox{\hyperlink{classNode}{idx}});}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{void}\ touch(\textcolor{keywordtype}{size\_t}\ idx)\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_in\_use[idx]\ ||\ idx\ ==\ \_head)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ pop(idx);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ push(idx);}
 \DoxyCodeLine{00128\ \ \ \ \ \}}
 \DoxyCodeLine{00129\ }
 \DoxyCodeLine{00130\ }
@@ -129,9 +129,9 @@
 \DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ least-\/recently\ used\ node\ (the\ tail).}}
 \DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ evict()\ \{}
-\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}}\ =\ \_tail;}
-\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ erase(\mbox{\hyperlink{classNode}{idx}});}
-\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{idx}};}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ idx\ =\ \_tail;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ erase(idx);}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ idx;}
 \DoxyCodeLine{00140\ \ \ \ \ \}}
 \DoxyCodeLine{00141\ }
 \DoxyCodeLine{00142\ }
@@ -140,19 +140,19 @@
 \DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//\ Pop}}
 \DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{//\ Remove\ a\ node\ from\ the\ list.}}
 \DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{void}\ pop(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}})\ \{}
-\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ prev\ =\ \_nodes[\mbox{\hyperlink{classNode}{idx}}].prev;}
-\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ next\ =\ \_nodes[\mbox{\hyperlink{classNode}{idx}}].next;}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (prev\ !=\ \mbox{\hyperlink{classNode}{SIZE\_MAX}})\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{keywordtype}{void}\ pop(\textcolor{keywordtype}{size\_t}\ idx)\ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ prev\ =\ \_nodes[idx].prev;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ next\ =\ \_nodes[idx].next;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (prev\ !=\ SIZE\_MAX)\ \{}
 \DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \_nodes[prev].next\ =\ next;}
 \DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (next\ !=\ \mbox{\hyperlink{classNode}{SIZE\_MAX}})\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (next\ !=\ SIZE\_MAX)\ \{}
 \DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \_nodes[next].prev\ =\ prev;}
 \DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_head\ ==\ \mbox{\hyperlink{classNode}{idx}})\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_head\ ==\ idx)\ \{}
 \DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \_head\ =\ next;}
 \DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_tail\ ==\ \mbox{\hyperlink{classNode}{idx}})\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_tail\ ==\ idx)\ \{}
 \DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \_tail\ =\ prev;}
 \DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00163\ \ \ \ \ \}}
@@ -163,12 +163,12 @@
 \DoxyCodeLine{00168\ \ \ \ \ \textcolor{comment}{//\ Push}}
 \DoxyCodeLine{00169\ \ \ \ \ \textcolor{comment}{//\ Add\ a\ node\ to\ the\ front\ of\ the\ list.}}
 \DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ push(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{idx}})\ \{}
-\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \_nodes[\mbox{\hyperlink{classNode}{idx}}].prev\ =\ \mbox{\hyperlink{classNode}{SIZE\_MAX}};}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \_nodes[\mbox{\hyperlink{classNode}{idx}}].next\ =\ \_head;}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_head\ !=\ \mbox{\hyperlink{classNode}{SIZE\_MAX}})\ \_nodes[\_head].prev\ =\ \mbox{\hyperlink{classNode}{idx}};}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \_head\ =\ \mbox{\hyperlink{classNode}{idx}};}
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_tail\ ==\ \mbox{\hyperlink{classNode}{SIZE\_MAX}})\ \_tail\ =\ \mbox{\hyperlink{classNode}{idx}};}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ push(\textcolor{keywordtype}{size\_t}\ idx)\ \{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \_nodes[idx].prev\ =\ SIZE\_MAX;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \_nodes[idx].next\ =\ \_head;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_head\ !=\ SIZE\_MAX)\ \_nodes[\_head].prev\ =\ idx;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \_head\ =\ idx;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_tail\ ==\ SIZE\_MAX)\ \_tail\ =\ idx;}
 \DoxyCodeLine{00177\ \ \ \ \ \}}
 \DoxyCodeLine{00178\ }
 \DoxyCodeLine{00179\ }
@@ -178,11 +178,11 @@
 \DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{//\ Deeply\ scan\ the\ object,\ including\ pool\ and\ buffers.}}
 \DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ deep\_size()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ 0;}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \textcolor{keyword}{sizeof}(*this);}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_nodes.size()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{Node}});}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ (\_in\_use.size()\ +\ 7)\ /\ 8;}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ total\ =\ 0;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ total\ +=\ \textcolor{keyword}{sizeof}(*this);}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ total\ +=\ \_nodes.size()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{Node}});}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ total\ +=\ (\_in\_use.size()\ +\ 7)\ /\ 8;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
 \DoxyCodeLine{00191\ \ \ \ \ \}}
 \DoxyCodeLine{00192\ \};}
 \DoxyCodeLine{00193\ }
@@ -215,8 +215,8 @@
 \DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00221\ \ \ \ \ \textcolor{comment}{//\ Equality\ Operator}}
 \DoxyCodeLine{00222\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFLCKey}{FLCKey}}\&\ \mbox{\hyperlink{classNode}{other}})\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_bytes\ ==\ \mbox{\hyperlink{classNode}{other}}.\_bytes;}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFLCKey}{FLCKey}}\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_bytes\ ==\ other.\_bytes;}
 \DoxyCodeLine{00225\ \ \ \ \ \}}
 \DoxyCodeLine{00226\ }
 \DoxyCodeLine{00227\ }
@@ -226,8 +226,8 @@
 \DoxyCodeLine{00231\ \ \ \ \ \textcolor{comment}{//\ Absl\ can\ now\ see\ the\ equality\ operator\ and\ hash\ function.}}
 \DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00233\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ H>}
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classNode}{H}}\ AbslHashValue(\mbox{\hyperlink{classNode}{H}}\ \mbox{\hyperlink{classNode}{hash}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FLCKey<T>}}\&\ \mbox{\hyperlink{classNode}{k}})\ \{}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{H::combine\_contiguous}}(std::move(\mbox{\hyperlink{classNode}{hash}}),\ \mbox{\hyperlink{classNode}{k}}.\_bytes.data(),\ \mbox{\hyperlink{classNode}{k}}.\_bytes.size());}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keyword}{friend}\ H\ AbslHashValue(H\ hash,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classFLCKey}{FLCKey<T>}}\&\ k)\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ H::combine\_contiguous(std::move(hash),\ k.\_bytes.data(),\ k.\_bytes.size());}
 \DoxyCodeLine{00236\ \ \ \ \ \}}
 \DoxyCodeLine{00237\ }
 \DoxyCodeLine{00238\ }
@@ -238,17 +238,17 @@
 \DoxyCodeLine{00243\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{void}\ serialize(\textcolor{keyword}{const}\ T\&\ value)\ \{}
 \DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{i}}\ =\ 0;\ \mbox{\hyperlink{classNode}{i}}\ <\ \textcolor{keyword}{sizeof}(T);\ ++\mbox{\hyperlink{classNode}{i}})\ \{}
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_bytes[FLCKeySize\ -\/\ 1\ -\/\ \mbox{\hyperlink{classNode}{i}}]\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classNode}{uint8\_t}}\textcolor{keyword}{>}((value\ >>\ (\mbox{\hyperlink{classNode}{i}}\ *\ 8))\ \&\ 0xFF);}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \textcolor{keyword}{sizeof}(T);\ ++i)\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_bytes[FLCKeySize\ -\/\ 1\ -\/\ i]\ =\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}((value\ >>\ (i\ *\ 8))\ \&\ 0xFF);}
 \DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{count}}\ =\ 0;}
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{mpz\_export}}(\_bytes.data(),\ \&\mbox{\hyperlink{classNode}{count}},\ 1,\ 1,\ 1,\ 0,\ value.get\_mpz\_t());}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{count}}\ >\ FLCKeySize)\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ count\ =\ 0;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_export(\_bytes.data(),\ \&count,\ 1,\ 1,\ 1,\ 0,\ value.get\_mpz\_t());}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (count\ >\ FLCKeySize)\ \{}
 \DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::overflow\_error(\textcolor{stringliteral}{"{}FLCKey\ serialize\ overflow\ from\ mpz\_export."{}});}
 \DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero-\/fill\ rest\ if\ count\ <\ FLCKeySize}}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ std::fill(\_bytes.begin()\ +\ \mbox{\hyperlink{classNode}{count}},\ \_bytes.end(),\ 0);}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ std::fill(\_bytes.begin()\ +\ count,\ \_bytes.end(),\ 0);}
 \DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00258\ \ \ \ \ \}}
 \DoxyCodeLine{00259\ \};}
@@ -263,9 +263,9 @@
 \DoxyCodeLine{00268\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
 \DoxyCodeLine{00269\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classForwardLookingCache}{ForwardLookingCache}}\ \{}
 \DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl::flat\_hash\_map<FLCKey<T>}},\ \textcolor{keywordtype}{size\_t}>\ \_map;}
+\DoxyCodeLine{00271\ \ \ \ \ absl::flat\_hash\_map<FLCKey<T>,\ \textcolor{keywordtype}{size\_t}>\ \_map;}
 \DoxyCodeLine{00272\ \ \ \ \ std::vector<FLCKey<T>>\ \_entries;}
-\DoxyCodeLine{00273\ \ \ \ \ \mbox{\hyperlink{classNode}{LRUTracker<FLCKey<T>}}>\ \_lru;}
+\DoxyCodeLine{00273\ \ \ \ \ \mbox{\hyperlink{classLRUTracker}{LRUTracker<FLCKey<T>}}>\ \_lru;}
 \DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_evictions;}
 \DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_hits;}
 \DoxyCodeLine{00276\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \_size;}
@@ -280,8 +280,8 @@
 \DoxyCodeLine{00285\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{//\ Constructors}}
 \DoxyCodeLine{00287\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00288\ \ \ \ \ \mbox{\hyperlink{classForwardLookingCache}{ForwardLookingCache}}(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_entries}})\ :\ \_lru(\mbox{\hyperlink{classNode}{max\_entries}})\ \{}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ init(\mbox{\hyperlink{classNode}{max\_entries}});}
+\DoxyCodeLine{00288\ \ \ \ \ \mbox{\hyperlink{classForwardLookingCache}{ForwardLookingCache}}(\textcolor{keywordtype}{size\_t}\ max\_entries)\ :\ \_lru(max\_entries)\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ init(max\_entries);}
 \DoxyCodeLine{00290\ \ \ \ \ \}}
 \DoxyCodeLine{00291\ }
 \DoxyCodeLine{00292\ }
@@ -290,21 +290,21 @@
 \DoxyCodeLine{00295\ \ \ \ \ \textcolor{comment}{//\ Initialize}}
 \DoxyCodeLine{00296\ \ \ \ \ \textcolor{comment}{//\ Builds\ the\ object,\ reusing\ it\ if\ necessary.}}
 \DoxyCodeLine{00297\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{max\_entries}})\ \{}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{max\_entries}}\ ==\ 0)\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{size\_t}\ max\_entries)\ \{}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (max\_entries\ ==\ 0)\ \{}
 \DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}You\ can't\ have\ a\ forward-\/looking\ cache\ size\ of\ zero."{}});}
 \DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \_evictions\ =\ 0;}
 \DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \_hits\ =\ 0;}
 \DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \_size\ =\ 0;}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \_max\_entries\ =\ \mbox{\hyperlink{classNode}{max\_entries}};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \_max\_entries\ =\ max\_entries;}
 \DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \_misses\ =\ 0;}
 \DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \_new\_insertions\ =\ 0;}
 \DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \_overlap\_insertions\ =\ 0;}
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \_lru.\mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}}(\mbox{\hyperlink{classNode}{max\_entries}});}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \_lru.init(max\_entries);}
 \DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \_entries.clear();}
 \DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \_entries.shrink\_to\_fit();}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \_entries.resize(\mbox{\hyperlink{classNode}{max\_entries}});}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \_entries.resize(max\_entries);}
 \DoxyCodeLine{00313\ \ \ \ \ \}}
 \DoxyCodeLine{00314\ }
 \DoxyCodeLine{00315\ }
@@ -319,7 +319,7 @@
 \DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ get\_new\_insertions()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_new\_insertions;\ \}}
 \DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ get\_overlap\_insertions()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_overlap\_insertions;\ \}}
 \DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ get\_size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_size;\ \}}
-\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{LRUTracker<FLCKey<T>}}>\ get\_lru()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_lru;\ \}}
+\DoxyCodeLine{00327\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classLRUTracker}{LRUTracker<FLCKey<T>}}>\ get\_lru()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_lru;\ \}}
 \DoxyCodeLine{00328\ }
 \DoxyCodeLine{00329\ }
 \DoxyCodeLine{00330\ }
@@ -327,17 +327,17 @@
 \DoxyCodeLine{00332\ \ \ \ \ \textcolor{comment}{//\ Contains\ Key}}
 \DoxyCodeLine{00333\ \ \ \ \ \textcolor{comment}{//\ Scans\ for\ a\ key\ and\ returns\ true\ if\ it\ exists,\ false\ if\ not.\ \ Will\ update\ LRU\ if\ found,\ unless\ "{}track"{}\ is\ false.}}
 \DoxyCodeLine{00334\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FLCKey<T>}}\&\ \mbox{\hyperlink{classNode}{k}},\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode}{track}}\ =\ \textcolor{keyword}{true})\ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFLCKey}{FLCKey<T>}}\&\ k,\ \textcolor{keywordtype}{bool}\ track\ =\ \textcolor{keyword}{true})\ \{}
 \DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Not\ found\ means\ nothing\ to\ do.}}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \_map.find(\mbox{\hyperlink{classNode}{k}});}
-\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ ==\ \_map.end())\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ \_map.find(k);}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ ==\ \_map.end())\ \{}
 \DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \_misses++;}
 \DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00342\ }
 \DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Found\ requires\ sending\ it\ to\ the\ front\ of\ LRU\ cache,\ if\ allowed.}}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{track}})\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \_lru.touch(\mbox{\hyperlink{classNode}{it}}-\/>second);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (track)\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \_lru.touch(it-\/>second);}
 \DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \_hits++;}
 \DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00348\ }
@@ -350,31 +350,31 @@
 \DoxyCodeLine{00355\ \ \ \ \ \textcolor{comment}{//\ Insert\ Key}}
 \DoxyCodeLine{00356\ \ \ \ \ \textcolor{comment}{//\ Inserts\ a\ key.\ \ Returns\ true\ if\ successful,\ false\ if\ key\ already\ existed.}}
 \DoxyCodeLine{00357\ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordtype}{bool}\ insert(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{FLCKey<T>}}\&\ \mbox{\hyperlink{classNode}{key}})\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordtype}{bool}\ insert(\textcolor{keyword}{const}\ \mbox{\hyperlink{classFLCKey}{FLCKey<T>}}\&\ key)\ \{}
 \DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it\ already\ exists,\ just\ update\ LRU\ cache.}}
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classNode}{it}}\ =\ \_map.find(\mbox{\hyperlink{classNode}{key}});}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classNode}{it}}\ !=\ \_map.end())\ \{}
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \_lru.touch(\mbox{\hyperlink{classNode}{it}}-\/>second);}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ \_map.find(key);}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ !=\ \_map.end())\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \_lru.touch(it-\/>second);}
 \DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \_overlap\_insertions++;}
 \DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00366\ }
 \DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Didn't\ exist.\ \ Get\ an\ index,\ respecting\ eviction\ if\ necessary.}}
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{index}};}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ index;}
 \DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_size\ <\ \_max\_entries)\ \{}
 \DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Have\ room,\ so\ just\ add.}}
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \_size++;}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ index\ =\ \_size++;}
 \DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
 \DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Evict\ to\ make\ room.\ \ Clear\ the\ map\ of\ whoever\ was\ evicted.}}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{index}}\ =\ \_lru.evict();}
-\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \_map.erase(\_entries[\mbox{\hyperlink{classNode}{index}}]);}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ index\ =\ \_lru.evict();}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \_map.erase(\_entries[index]);}
 \DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \_evictions++;}
 \DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00378\ }
 \DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ set\ the\ key\ into\ the\ map\ and\ track\ it.}}
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \_entries[\mbox{\hyperlink{classNode}{index}}]\ =\ \mbox{\hyperlink{classNode}{key}};}
-\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \_map[\mbox{\hyperlink{classNode}{key}}]\ =\ \mbox{\hyperlink{classNode}{index}};}
-\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \_lru.insert(\mbox{\hyperlink{classNode}{index}});}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \_entries[index]\ =\ key;}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \_map[key]\ =\ index;}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \_lru.insert(index);}
 \DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \_new\_insertions++;}
 \DoxyCodeLine{00384\ }
 \DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Return\ successful\ insert.}}
@@ -388,12 +388,12 @@
 \DoxyCodeLine{00393\ \ \ \ \ \textcolor{comment}{//\ Deeply\ scan\ the\ object,\ including\ pool\ and\ buffers.}}
 \DoxyCodeLine{00394\ \ \ \ \ \textcolor{comment}{//}}
 \DoxyCodeLine{00395\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ deep\_size()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classNode}{total}}\ =\ \textcolor{keyword}{sizeof}(*this);}
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_lru.\mbox{\hyperlink{classNode_ac3b0a7152287753c0707502e263c5e9d}{deep\_size}}();}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_map.size()\ *\ (\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{FLCKey<T>}})\ +\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{size\_t}));}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode}{total}}\ +=\ \_entries.size()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classNode}{FLCKey<T>}});}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ total\ =\ \textcolor{keyword}{sizeof}(*this);}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ total\ +=\ \_lru.deep\_size();}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ total\ +=\ \_map.size()\ *\ (\textcolor{keyword}{sizeof}(\mbox{\hyperlink{classFLCKey}{FLCKey<T>}})\ +\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{size\_t}));}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ total\ +=\ \_entries.size()\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classFLCKey}{FLCKey<T>}});}
 \DoxyCodeLine{00400\ }
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode}{total}};}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
 \DoxyCodeLine{00402\ \ \ \ \ \}}
 \DoxyCodeLine{00403\ }
 \DoxyCodeLine{00404\ \};}

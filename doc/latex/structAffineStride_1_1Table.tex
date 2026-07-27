@@ -1,0 +1,120 @@
+\doxysection{Affine\+Stride\+::Table\texorpdfstring{$<$}{<} bits \texorpdfstring{$>$}{>} Struct Template Reference}
+\hypertarget{structAffineStride_1_1Table}{}\label{structAffineStride_1_1Table}\index{AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}}
+
+
+A struct of constexpr stride data including a table, mask, and size based on {\ttfamily bits}. Empirical testing shows that bit sizes between 8-\/12 are most optimal, but the real threshold is L1 cache. When it spills over into L2, performance drops.  
+
+
+
+
+{\ttfamily \#include $<$collatz\+\_\+affine\+\_\+stride.\+hpp$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\static const \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}} \& \mbox{\hyperlink{structAffineStride_1_1Table_a5799ae36f9cc92df80f9dbda5fd4077a}{get\+\_\+stride}} (const T \&value)
+\begin{DoxyCompactList}\small\item\em Gets the correct stride from {\ttfamily TABLE} for the given {\ttfamily value}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\static void \mbox{\hyperlink{structAffineStride_1_1Table_a0401baf577b8469f99946b4500d7abc3}{apply\+\_\+stride}} (T \&value)
+\begin{DoxyCompactList}\small\item\em Applies a stride to {\ttfamily value}. This version looks up the stride for you. Next version requires you send it. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ }\\static void \mbox{\hyperlink{structAffineStride_1_1Table_a8446da7336bc8d5c9d9a2dbfe6520694}{apply\+\_\+stride}} (T \&value, const \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}} \&stride)
+\begin{DoxyCompactList}\small\item\em Applies a stride to {\ttfamily value}. This version requires you send the stride. Previous version does it for you. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structAffineStride_1_1Table_a87283706d6ac368d610f7aa8be4c6f44}\label{structAffineStride_1_1Table_a87283706d6ac368d610f7aa8be4c6f44} 
+static constexpr size\+\_\+t {\bfseries STRIDE\+\_\+\+SIZE} = bits
+\begin{DoxyCompactList}\small\item\em The size of the stride, meaning how many accelerated F and G steps are taken. \end{DoxyCompactList}\item 
+\Hypertarget{structAffineStride_1_1Table_a079b53e075f40ea14c39934d155074c8}\label{structAffineStride_1_1Table_a079b53e075f40ea14c39934d155074c8} 
+static constexpr uint64\+\_\+t {\bfseries MASK} = (1ULL $<$$<$ \mbox{\hyperlink{structAffineStride_1_1Table_a87283706d6ac368d610f7aa8be4c6f44}{STRIDE\+\_\+\+SIZE}}) -\/ 1
+\begin{DoxyCompactList}\small\item\em The mask used to filter against any value in {\ttfamily \doxylink{structAffineStride_1_1Table_a0401baf577b8469f99946b4500d7abc3}{apply\+\_\+stride()}}. \end{DoxyCompactList}\item 
+\Hypertarget{structAffineStride_1_1Table_abdc12f841f0bf70a6b26a7df34d81ea7}\label{structAffineStride_1_1Table_abdc12f841f0bf70a6b26a7df34d81ea7} 
+static const auto {\bfseries TABLE} = \mbox{\hyperlink{namespaceAffineStride_a189318a0d9fb8d0ae3d9f93e6120dc00}{build\+\_\+stride\+\_\+table}}$<$\mbox{\hyperlink{structAffineStride_1_1Table_a87283706d6ac368d610f7aa8be4c6f44}{STRIDE\+\_\+\+SIZE}}$>$()
+\begin{DoxyCompactList}\small\item\em The table of {\ttfamily \doxylink{structAffineStride_1_1Stride}{Stride}} objects, all computed at compile time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$size\+\_\+t bits$>$\newline
+struct Affine\+Stride\+::\+Table$<$ bits $>$}
+A struct of constexpr stride data including a table, mask, and size based on {\ttfamily bits}. Empirical testing shows that bit sizes between 8-\/12 are most optimal, but the real threshold is L1 cache. When it spills over into L2, performance drops. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em bits} & The number of bits to build the table. Final table size is 2\texorpdfstring{$^\wedge$}{\string^}bits. Blows up compilers \texorpdfstring{$\sim$}{\string~}16+. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structAffineStride_1_1Table_a0401baf577b8469f99946b4500d7abc3}\label{structAffineStride_1_1Table_a0401baf577b8469f99946b4500d7abc3} 
+\index{AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}!apply\_stride@{apply\_stride}}
+\index{apply\_stride@{apply\_stride}!AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}}
+\doxysubsubsection{\texorpdfstring{apply\_stride()}{apply\_stride()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$size\+\_\+t bits$>$ \\
+template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+static void \mbox{\hyperlink{structAffineStride_1_1Table}{Affine\+Stride\+::\+Table}}$<$ bits $>$\+::apply\+\_\+stride (\begin{DoxyParamCaption}\item[{T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Applies a stride to {\ttfamily value}. This version looks up the stride for you. Next version requires you send it. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to apply the stride to. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structAffineStride_1_1Table_a8446da7336bc8d5c9d9a2dbfe6520694}\label{structAffineStride_1_1Table_a8446da7336bc8d5c9d9a2dbfe6520694} 
+\index{AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}!apply\_stride@{apply\_stride}}
+\index{apply\_stride@{apply\_stride}!AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}}
+\doxysubsubsection{\texorpdfstring{apply\_stride()}{apply\_stride()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$size\+\_\+t bits$>$ \\
+template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+static void \mbox{\hyperlink{structAffineStride_1_1Table}{Affine\+Stride\+::\+Table}}$<$ bits $>$\+::apply\+\_\+stride (\begin{DoxyParamCaption}\item[{T \&}]{value,  }\item[{const \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}} \&}]{stride }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Applies a stride to {\ttfamily value}. This version requires you send the stride. Previous version does it for you. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to apply the stride to. \\
+\hline
+{\em stride} & The preselected stride to apply. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structAffineStride_1_1Table_a5799ae36f9cc92df80f9dbda5fd4077a}\label{structAffineStride_1_1Table_a5799ae36f9cc92df80f9dbda5fd4077a} 
+\index{AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}!get\_stride@{get\_stride}}
+\index{get\_stride@{get\_stride}!AffineStride::Table$<$ bits $>$@{AffineStride::Table$<$ bits $>$}}
+\doxysubsubsection{\texorpdfstring{get\_stride()}{get\_stride()}}
+{\footnotesize\ttfamily template$<$size\+\_\+t bits$>$ \\
+template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
+static const \mbox{\hyperlink{structAffineStride_1_1Stride}{Stride}} \& \mbox{\hyperlink{structAffineStride_1_1Table}{Affine\+Stride\+::\+Table}}$<$ bits $>$\+::get\+\_\+stride (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Gets the correct stride from {\ttfamily TABLE} for the given {\ttfamily value}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Any supported integral (see \doxylink{concepts_8hpp_source}{concepts.\+hpp}). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to fetch the stride for. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/collatz\+\_\+affine\+\_\+stride.\+hpp\end{DoxyCompactItemize}

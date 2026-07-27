@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['verify_5fnon_5fhwm_5fnodes_0',['verify_non_hwm_nodes',['../structBinaryTreeOptions.html#a5ea57db72aee4d2e55f9fe1672a584bf',1,'BinaryTreeOptions']]],
-  ['version_1',['version',['../structBinaryTreeFileHeader.html#a5f0663567a0dbfbc6c9eae5391ae5a27',1,'BinaryTreeFileHeader']]]
+  ['overflow_5fcount_0',['overflow_count',['../structGPUVerifierResultData.html#a342007d6b20800e111b3d86fd9a561da',1,'GPUVerifierResultData']]],
+  ['overflow_5fexceeded_1',['overflow_exceeded',['../structGPUVerifierResultData.html#a4bc7cffaf8622c2b9c5479263abc5569',1,'GPUVerifierResultData']]],
+  ['overflow_5findexes_2',['overflow_indexes',['../structGPUVerifierResultData.html#a5fe2daa1198f0b0a671071b87f9a5eab',1,'GPUVerifierResultData']]]
 ];

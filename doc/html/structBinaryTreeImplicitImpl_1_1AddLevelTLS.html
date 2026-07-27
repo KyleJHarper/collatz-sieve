@@ -141,7 +141,9 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>right_position</b></td><
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
 struct BinaryTreeImplicitImpl&lt; T &gt;::AddLevelTLS</div><p>A thread-local cache structure for <code><a class="el" href="classBinaryTreeImplicitImpl.html#af93247b2efa3579ee7a92a0529aae36c" title="Add a level to the tree.">add_level()</a></code>. </p>
 <p>The <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> has a multithreading (OMP) for-each iterator which we leverage to engage multiple CPUs when adding nodes to a level. This struct creates safety and scratch space for that.</p>
-<dl class="section warning"><dt>Warning</dt><dd>This is not meant to be used anywhere else. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>This is not meant to be used anywhere else. </dd>
+<dd>
+Struct should be given alignas(...) to avoid false sharing. </dd></dl>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/collatz/<a class="el" href="binary__tree__implicit_8hpp_source.html">binary_tree_implicit.hpp</a></li>
 </ul>

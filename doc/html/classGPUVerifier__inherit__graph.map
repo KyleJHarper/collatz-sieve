@@ -1,0 +1,5 @@
+<map id="GPUVerifier&lt; T &gt;" name="GPUVerifier&lt; T &gt;">
+<area shape="rect" id="Node000001" title="An implementation of the Verifier class which uses local GPUs to verfy survivors." alt="" coords="5,79,140,104"/>
+<area shape="rect" id="Node000002" href="$classVerifier.html" title="A base class behind the verification implementation classes. Provides the start, stop,..." alt="" coords="19,5,126,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,44,75,79,70,79,70,44"/>
+</map>

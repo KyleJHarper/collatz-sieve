@@ -13,13 +13,13 @@ struct \mbox{\hyperlink{structGMP_1_1MpzEq}{Mpz\+Eq}}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMP_ad1680680fd46fd7eb08169eef4c1304b}{deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+size\+\_\+t \mbox{\hyperlink{namespaceGMP_ad1680680fd46fd7eb08169eef4c1304b}{deep\+\_\+sizeof}} (const mpz\+\_\+class \&obj)
 \begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpz\+\_\+class} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{namespaceGMP_a707b7d213952d319e12d8152d8607916}{deep\+\_\+sizeof}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&\mbox{\hyperlink{classNode}{obj}})
+size\+\_\+t \mbox{\hyperlink{namespaceGMP_a707b7d213952d319e12d8152d8607916}{deep\+\_\+sizeof}} (const mpf\+\_\+class \&obj)
 \begin{DoxyCompactList}\small\item\em Try to calculate the true (heap) size of an {\ttfamily mpf\+\_\+class} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{uint64\+\_\+t}} \mbox{\hyperlink{namespaceGMP_a73213abec6ff18bd1e8d59843ed050df}{mpz\+\_\+get\+\_\+ui64}} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}} \mbox{\hyperlink{classNode}{obj}})
+uint64\+\_\+t \mbox{\hyperlink{namespaceGMP_a73213abec6ff18bd1e8d59843ed050df}{mpz\+\_\+get\+\_\+ui64}} (const mpz\+\_\+t obj)
 \begin{DoxyCompactList}\small\item\em Retrieve exactly 64 bits from an {\ttfamily mpz\+\_\+t}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{mpz\+\_\+class}} \mbox{\hyperlink{namespaceGMP_a07297412a60efc96a3e175fb548bf2ab}{parse\+\_\+mpz}} (std\+::string\+\_\+view \mbox{\hyperlink{classNode}{view}})
+mpz\+\_\+class \mbox{\hyperlink{namespaceGMP_a07297412a60efc96a3e175fb548bf2ab}{parse\+\_\+mpz}} (std\+::string\+\_\+view view)
 \begin{DoxyCompactList}\small\item\em Convert a string view to an {\ttfamily mpz\+\_\+class}. Uses \doxylink{namespaceGMP}{GMP}\textquotesingle{}s {\ttfamily mpz\+\_\+set\+\_\+string()} internally. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -31,7 +31,7 @@ Collection of methods for managing \doxylink{namespaceGMP}{GMP} data types, such
 \index{GMP@{GMP}!deep\_sizeof@{deep\_sizeof}}
 \index{deep\_sizeof@{deep\_sizeof}!GMP@{GMP}}
 \doxysubsubsection{\texorpdfstring{deep\_sizeof()}{deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMP\+::deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpf\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily size\+\_\+t GMP\+::deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{const mpf\+\_\+class \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -49,7 +49,7 @@ Best attempt at the total bytes used by the object.
 \index{GMP@{GMP}!deep\_sizeof@{deep\_sizeof}}
 \index{deep\_sizeof@{deep\_sizeof}!GMP@{GMP}}
 \doxysubsubsection{\texorpdfstring{deep\_sizeof()}{deep\_sizeof()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{size\+\_\+t}} GMP\+::deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+class}} \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily size\+\_\+t GMP\+::deep\+\_\+sizeof (\begin{DoxyParamCaption}\item[{const mpz\+\_\+class \&}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -67,7 +67,7 @@ Best attempt at the total bytes used by the object.
 \index{GMP@{GMP}!mpz\_get\_ui64@{mpz\_get\_ui64}}
 \index{mpz\_get\_ui64@{mpz\_get\_ui64}!GMP@{GMP}}
 \doxysubsubsection{\texorpdfstring{mpz\_get\_ui64()}{mpz\_get\_ui64()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{uint64\+\_\+t}} GMP\+::mpz\+\_\+get\+\_\+ui64 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{mpz\+\_\+t}}}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily uint64\+\_\+t GMP\+::mpz\+\_\+get\+\_\+ui64 (\begin{DoxyParamCaption}\item[{const mpz\+\_\+t}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -85,7 +85,7 @@ A {\ttfamily uint64\+\_\+t} with the bits.
 \index{GMP@{GMP}!parse\_mpz@{parse\_mpz}}
 \index{parse\_mpz@{parse\_mpz}!GMP@{GMP}}
 \doxysubsubsection{\texorpdfstring{parse\_mpz()}{parse\_mpz()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{mpz\+\_\+class}} GMP\+::parse\+\_\+mpz (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily mpz\+\_\+class GMP\+::parse\+\_\+mpz (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{view }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 

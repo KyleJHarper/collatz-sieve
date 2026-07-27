@@ -1,0 +1,209 @@
+\doxysection{cuda\+\_\+stream\+\_\+buffer.\+hpp}
+\hypertarget{cuda__stream__buffer_8hpp_source}{}\label{cuda__stream__buffer_8hpp_source}\index{src/collatz/cuda\_stream\_buffer.hpp@{src/collatz/cuda\_stream\_buffer.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cuda\_runtime.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <features.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{enum\ class}\ CudaStreamBufferState\ :\ uint32\_t\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ FILLING\ =\ 1,\ \ \ \ \ }
+\DoxyCodeLine{00014\ \ \ \ \ READY\ =\ 2,\ \ \ \ \ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ PROCESSED\ =\ 3,\ \ \ }
+\DoxyCodeLine{00016\ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}<FixedW\textcolor{keywordtype}{id}thIntegral\ T,\ \textcolor{keyword}{typename}\ ResultData>}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCudaStreamBuffer}{CudaStreamBuffer}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{const}\ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1}{\_element\_limit}};}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}};}
+\DoxyCodeLine{00029\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}}\ =\ 0;}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00032\ \ \ \ \ T*\ \mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00034\ \ \ \ \ T*\ \mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00037\ \ \ \ \ ResultData*\ \mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00039\ \ \ \ \ ResultData*\ \mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00042\ \ \ \ \ std::atomic<CudaStreamBufferState>\ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}\ =\ CudaStreamBufferState::FILLING;}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00045\ \ \ \ \ cudaStream\_t\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_ad909584cb8e8abdc986e7475c23de069}{CudaStreamBuffer}}()\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classCudaStreamBuffer_ad463de3b5ccbdfa9947398cb9ffe0498}{CudaStreamBuffer}}(uint64\_t\ element\_count)}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ :\ \mbox{\hyperlink{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1}{\_element\_limit}}(element\_count)}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ ,\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}}(element\_count\ *\ sizeof(T))}
+\DoxyCodeLine{00062\ \ \ \ \ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ pinned\ host\ memory\ buffer.}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaMallocHost((\textcolor{keywordtype}{void}**)\&\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}})\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Failed\ to\ allocate\ host\ pinned\ data"{}});}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ pinned\ host\ results\ data.}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaMallocHost((\textcolor{keywordtype}{void}**)\&\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}},\ \textcolor{keyword}{sizeof}(ResultData))\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}});}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Failed\ to\ allocate\ host\ pinned\ result\ data"{}});}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ GPU\ buffer.}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaMalloc((\textcolor{keywordtype}{void}**)\&\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}})\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}});}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}});}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Failed\ to\ allocate\ device\ data"{}});}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Allocate\ the\ GPU\ results\ data.}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaMalloc((\textcolor{keywordtype}{void}**)\&\mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}},\ \textcolor{keyword}{sizeof}(ResultData))\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}});}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}});}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFree(\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}});}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Failed\ to\ allocate\ device\ data"{}});}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Build\ the\ non-\/blocking\ stream.}}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cudaStreamCreateWithFlags(\&\mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}},\ cudaStreamNonBlocking)\ !=\ cudaSuccess)\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}});}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}});}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFree(\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}});}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ cudaFree(\mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}});}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Failed\ to\ create\ CUDA\ stream"{}});}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a46ac281165ed3e41fd1aa36de1a3db92}{\string~CudaStreamBuffer}}()\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}})\ \{\ cudaStreamDestroy(\mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}});\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}})\ \{\ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}});\ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}})\ \{\ cudaFreeHost(\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}});\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}})\ \{\ cudaFree(\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}});\ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}})\ \{\ cudaFree(\mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}});\ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a1a8aa3acd4388b477cacc9b3ac97b837}{CudaStreamBuffer}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCudaStreamBuffer}{CudaStreamBuffer}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00115\ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer}{CudaStreamBuffer}}\&\ \mbox{\hyperlink{classCudaStreamBuffer_a413be980721e04687ad5bad658f0483b}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCudaStreamBuffer}{CudaStreamBuffer}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00125\ \ \ \ \ T*\ \mbox{\hyperlink{classCudaStreamBuffer_a2c4f78ac3441aecabf8cf830b41d7835}{get\_host\_data\_ptr}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}};\ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00130\ \ \ \ \ ResultData*\ \mbox{\hyperlink{classCudaStreamBuffer_aefe7ceaca8eaad7d1c01527fb2fb211d}{get\_host\_results\_ptr}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}};\ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00135\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_ad5ed62c12b46981f727cdd11aefe3eca}{get\_element\_count}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1}{\_element\_limit}};\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCudaStreamBuffer_aad54e3aaa868f4c881c52cef0f831a3e}{is\_full}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}}\ >=\ \mbox{\hyperlink{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1}{\_element\_limit}};\ \}}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00145\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_ac480b818eea00df6acb931dd8a54d226}{get\_next\_index}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}};\ \}}
+\DoxyCodeLine{00147\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{classCudaStreamBuffer_a2f552724807a93a32f67a0fd63223f41}{use\_next\_index}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}}++;\ \}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00152\ \ \ \ \ CudaStreamBufferState\ \mbox{\hyperlink{classCudaStreamBuffer_a601d49a1687fe6536f22dc87a0115c41}{get\_state}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}.load(m);\ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a2b89aae6a5fb8ff73e06550af92741cd}{set\_state}}(CudaStreamBufferState\ state)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}.store(state,\ std::memory\_order\_release);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}.notify\_all();}
+\DoxyCodeLine{00160\ \ \ \ \ \}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a4afc652fa4ae392e2705b7db68312d48}{recycle}}()\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}}\ =\ 0;}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a2b89aae6a5fb8ff73e06550af92741cd}{set\_state}}(CudaStreamBufferState::FILLING);}
+\DoxyCodeLine{00170\ \ \ \ \ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a57784cd369ee91914d22061efd8a1b4f}{wait\_until\_state}}(CudaStreamBufferState\ desired\_state)\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\textcolor{keyword}{true})\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ CudaStreamBufferState\ current\_state\ =\ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}.load(std::memory\_order\_acquire);}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_state\ ==\ desired\_state)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}{\_state}}.wait(current\_state,\ std::memory\_order\_acquire);}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a4d45023d60c169524fd82ef5927c140e}{sync\_host\_data\_to\_device}}()\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ cudaMemcpyAsync(\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}},\ cudaMemcpyHostToDevice,\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}});}
+\DoxyCodeLine{00190\ \ \ \ \ \}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a53347ae5db18f1a24fa38e5881354ba2}{sync\_host\_results\_to\_device}}()\ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ cudaMemcpyAsync(\mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}},\ \mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}},\ \textcolor{keyword}{sizeof}(ResultData),\ cudaMemcpyHostToDevice,\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}});}
+\DoxyCodeLine{00197\ \ \ \ \ \}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00202\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a513fbc09ea1347c455a7f60acb1cc4af}{sync\_device\_data\_to\_host}}()\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ cudaMemcpyAsync(\mbox{\hyperlink{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}{\_host\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}{\_bytes}},\ cudaMemcpyDeviceToHost,\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}});}
+\DoxyCodeLine{00204\ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_ac118fcd76ec857e6caadf893af3b6aba}{sync\_device\_results\_to\_host}}()\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ cudaMemcpyAsync(\mbox{\hyperlink{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}{\_host\_results}},\ \mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}},\ \textcolor{keyword}{sizeof}(ResultData),\ cudaMemcpyDeviceToHost,\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}});}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Kernel>}
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCudaStreamBuffer_a27c0f5f6fdf5b3e0b545d4dff71e5a2b}{launch\_kernel}}(Kernel\&\&\ kernel\_func,\ \textcolor{keywordtype}{size\_t}\ base\_multiplier\ =\ 1,\ \textcolor{keywordtype}{size\_t}\ max\_multiplier\ =\ 1,\ T\ scaling\_factor\ =\ 0)\ \{}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Make\ sure\ this\ buffer\ is\ READY.\ \ Otherwise,\ error.}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCudaStreamBuffer_a601d49a1687fe6536f22dc87a0115c41}{get\_state}}()\ !=\ CudaStreamBufferState::READY)\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}A\ buffer\ must\ be\ in\ the\ READY\ state\ before\ launching\ a\ kernel."{}});}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Synchronize\ data\ from\ host\ to\ device.}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a4d45023d60c169524fd82ef5927c140e}{sync\_host\_data\_to\_device}}();}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_a53347ae5db18f1a24fa38e5881354ba2}{sync\_host\_results\_to\_device}}();}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Launch\ the\ user-\/provided\ kernel\ wrapper.}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ kernel\_func(\mbox{\hyperlink{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}{\_device\_data}},\ \mbox{\hyperlink{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}{\_device\_results}},\ \mbox{\hyperlink{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}{\_next\_index}},\ \mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}},\ base\_multiplier,\ max\_multiplier,\ scaling\_factor);}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sync\ the\ results\ back.\ \ Don't\ need\ the\ device\ buffer\ (data).}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCudaStreamBuffer_ac118fcd76ec857e6caadf893af3b6aba}{sync\_device\_results\_to\_host}}();}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Inject\ a\ state\ =\ PROCESSED\ flag\ operation\ directly\ into\ the\ stream.\ \ Guarantees\ ordering\ after\ GPU\ threads\ are\ done.}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ cudaLaunchHostFunc(\mbox{\hyperlink{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}{\_stream}},\ [](\textcolor{keywordtype}{void}*\ p)\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classCudaStreamBuffer}{CudaStreamBuffer}}*\textcolor{keyword}{>}(p)-\/>\mbox{\hyperlink{classCudaStreamBuffer_a2b89aae6a5fb8ff73e06550af92741cd}{set\_state}}(CudaStreamBufferState::PROCESSED);}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{00249\ \ \ \ \ \}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \};}
+
+\end{DoxyCode}

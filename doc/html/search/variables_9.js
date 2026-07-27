@@ -1,11 +1,25 @@
 var searchData=
 [
-  ['shift_0',['shift',['../structAffineStride_1_1Stride.html#a446ecb275e4e0f4d7f108b13d706c4e2',1,'AffineStride::Stride::shift'],['../structAffineStride_1_1LongStride.html#a7fdbb9657bc46aaa1fea89c6ce1a663f',1,'AffineStride::LongStride::shift']]],
-  ['stride_5fmask_1',['STRIDE_MASK',['../namespaceAffineStride.html#aa27709e87630361007e5ffbe06726b0f',1,'AffineStride']]],
-  ['stride_5fsize_2',['STRIDE_SIZE',['../namespaceAffineStride.html#ae93385a83983d90af392024b43d3b14c',1,'AffineStride']]],
-  ['stride_5ftable_3',['STRIDE_TABLE',['../namespaceAffineStride.html#a050135d83bccbe061f23275de4c0c509',1,'AffineStride']]],
-  ['suffix_5fbits_4',['SUFFIX_BITS',['../structBitmapKeyTraits.html#a319eba2d881b3133e3621f3ce1a0218a',1,'BitmapKeyTraits']]],
-  ['suffix_5fbytes_5',['SUFFIX_BYTES',['../structBitmapKeyTraits.html#a6520ffa13b6aeb1fb7ca2f1c0c1ea142',1,'BitmapKeyTraits']]],
-  ['suffix_5fmask_6',['SUFFIX_MASK',['../structBitmapKeyTraits.html#af6280e805a4eb7fe52a680bb87074a7c',1,'BitmapKeyTraits']]],
-  ['suffix_5fmax_7',['SUFFIX_MAX',['../structBitmapKeyTraits.html#af8f3482cb20cfcd2444ac2772b9cfcb2',1,'BitmapKeyTraits']]]
+  ['magic_0',['magic',['../structBinaryTreeFileHeader.html#a8da08ec82eeac0fe54f3a49056ee036f',1,'BinaryTreeFileHeader']]],
+  ['magic_5fsize_1',['MAGIC_SIZE',['../structBinaryTreeFileHeader.html#a24e80366368a7ceeef1cbad2c0f360ca',1,'BinaryTreeFileHeader']]],
+  ['mask_2',['MASK',['../structAffineStride_1_1Table.html#a079b53e075f40ea14c39934d155074c8',1,'AffineStride::Table']]],
+  ['max_5f3xp1_3',['MAX_3XP1',['../namespaceCollatzConstants.html#afa7c008a6d843de3c9b5363785151192',1,'CollatzConstants']]],
+  ['max_5fchildren_4',['MAX_CHILDREN',['../classNode.html#ab204ebe45f832d60ecc0a69bc07dc39f',1,'Node']]],
+  ['max_5finitial_5fvalue_5fby_5fbit_5',['MAX_INITIAL_VALUE_BY_BIT',['../namespaceCollatzConstants.html#ae4bb1d3844419388a44932d7b60e5ebe',1,'CollatzConstants']]],
+  ['max_5fknown_5fcoverage_5flevel_6',['MAX_KNOWN_COVERAGE_LEVEL',['../namespaceBinaryTreeCoverageConstants.html#a44a1561648ce635a3bef2e5b840aa73c',1,'BinaryTreeCoverageConstants']]],
+  ['max_5foverflow_7',['MAX_OVERFLOW',['../structGPUVerifierResultData.html#a1eeb5a993cbeb15b3dd830174b85cb59',1,'GPUVerifierResultData']]],
+  ['max_5fpow2_5funder_5fpow3_8',['MAX_POW2_UNDER_POW3',['../namespaceExponents.html#afea47f1ca156afda94cc2283405fd0ba',1,'Exponents']]],
+  ['max_5fpow2_5funder_5fpow3_5fcount_9',['MAX_POW2_UNDER_POW3_COUNT',['../namespaceExponents.html#accbaded6f43ce579264a5c9a760e9083',1,'Exponents']]],
+  ['max_5fserial_5ff_5ftested_10',['MAX_SERIAL_F_TESTED',['../classCollatzAffineMapShortcut.html#a51afd30227ff944dde8dfd9b4ebe02b8',1,'CollatzAffineMapShortcut']]],
+  ['max_5fstride_11',['MAX_STRIDE',['../namespaceAffineStride.html#a204bfdf108dca7309f209f5dea043f5f',1,'AffineStride']]],
+  ['metrics_12',['metrics',['../structGPUVerifier_1_1ThreadStorage.html#aaeaf8ef295284fe1c00d955550829467',1,'GPUVerifier::ThreadStorage::metrics'],['../structCPUVerifier_1_1ThreadStorage.html#a23f8f317594ff9a07fce66ed749985c9',1,'CPUVerifier::ThreadStorage::metrics']]],
+  ['mpf_5fhalf_13',['MPF_HALF',['../namespaceCollatzConstants.html#a566fb8aeba1b31baf99adf97df84d63c',1,'CollatzConstants']]],
+  ['mpf_5fone_14',['MPF_ONE',['../namespaceCollatzConstants.html#ac14e461da19846c6933b1d128278645b',1,'CollatzConstants']]],
+  ['mpf_5fthree_15',['MPF_THREE',['../namespaceCollatzConstants.html#ac09ff047f60ce086a8154f88ada4fd9b',1,'CollatzConstants']]],
+  ['mpf_5ftwo_16',['MPF_TWO',['../namespaceCollatzConstants.html#a9c1bbce94fca6865e6ed920d2725eccb',1,'CollatzConstants']]],
+  ['mpz_5fclass_5fbit_5fwidth_5fid_17',['MPZ_CLASS_BIT_WIDTH_ID',['../namespaceABI.html#aa5b042ab2e22f69dae0b93c7943dc04b',1,'ABI']]],
+  ['mpz_5fone_18',['MPZ_ONE',['../namespaceCollatzConstants.html#a5cbdd281ee8db74e5565c417f537a72f',1,'CollatzConstants']]],
+  ['mpz_5fthree_19',['MPZ_THREE',['../namespaceCollatzConstants.html#a5077c6a9e79cbd44ba9645648d4d705f',1,'CollatzConstants']]],
+  ['mpz_5ftwo_20',['MPZ_TWO',['../namespaceCollatzConstants.html#a5da6da058cbae6ae099b0bd0227c3160',1,'CollatzConstants']]],
+  ['multiply_21',['multiply',['../structAffineStride_1_1Stride.html#ab08d60def9e2ca8cc792d3f68ad81386',1,'AffineStride::Stride']]]
 ];

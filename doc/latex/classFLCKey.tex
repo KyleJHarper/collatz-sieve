@@ -4,25 +4,25 @@
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFLCKey_a8c8e5154ff57bbf55c332d14ce3819ce}\label{classFLCKey_a8c8e5154ff57bbf55c332d14ce3819ce} 
-{\bfseries FLCKey} (\mbox{\hyperlink{classNode}{const}} T \&value)
+{\bfseries FLCKey} (const T \&value)
 \item 
 \Hypertarget{classFLCKey_af4770ce77bea3f2245dd8fdb77084715}\label{classFLCKey_af4770ce77bea3f2245dd8fdb77084715} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries operator==} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFLCKey}{FLCKey}} \&\mbox{\hyperlink{classNode}{other}}) \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classNode}{noexcept}}
+bool {\bfseries operator==} (const \mbox{\hyperlink{classFLCKey}{FLCKey}} \&other) const noexcept
 \item 
 \Hypertarget{classFLCKey_add96c0b581021bb991f5887f970c909f}\label{classFLCKey_add96c0b581021bb991f5887f970c909f} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries serialize} (\mbox{\hyperlink{classNode}{const}} T \&value)
+void {\bfseries serialize} (const T \&value)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFLCKey_a32d3761985596e245612a547f39cec82}\label{classFLCKey_a32d3761985596e245612a547f39cec82} 
-std\+::array$<$ \mbox{\hyperlink{classNode}{uint8\+\_\+t}}, FLCKey\+Size $>$ {\bfseries \+\_\+bytes} \{\}
+std\+::array$<$ uint8\+\_\+t, FLCKey\+Size $>$ {\bfseries \+\_\+bytes} \{\}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classFLCKey_a6873831491deee3560e065ac48e84453}\label{classFLCKey_a6873831491deee3560e065ac48e84453} 
-{\footnotesize template$<$\mbox{\hyperlink{classNode}{typename}} \mbox{\hyperlink{classNode}{H}} $>$ }\\\mbox{\hyperlink{classNode}{H}} {\bfseries Absl\+Hash\+Value} (\mbox{\hyperlink{classNode}{H}} \mbox{\hyperlink{classNode}{hash}}, \mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{k}})
+{\footnotesize template$<$typename H $>$ }\\H {\bfseries Absl\+Hash\+Value} (H hash, const \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&k)
 \end{DoxyCompactItemize}
 
 

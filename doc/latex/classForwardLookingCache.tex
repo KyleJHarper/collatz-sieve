@@ -13,49 +13,49 @@ Collaboration diagram for Forward\+Looking\+Cache\texorpdfstring{$<$}{<} T \texo
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classForwardLookingCache_a6336d3b2646696cd74e2b692f0a84e66}\label{classForwardLookingCache_a6336d3b2646696cd74e2b692f0a84e66} 
-{\bfseries Forward\+Looking\+Cache} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+entries}})
+{\bfseries Forward\+Looking\+Cache} (size\+\_\+t max\+\_\+entries)
 \item 
 \Hypertarget{classForwardLookingCache_a06870669379785e3e5351ed09c9d3911}\label{classForwardLookingCache_a06870669379785e3e5351ed09c9d3911} 
-\mbox{\hyperlink{classNode}{void}} {\bfseries init} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{max\+\_\+entries}})
+void {\bfseries init} (size\+\_\+t max\+\_\+entries)
 \item 
 \Hypertarget{classForwardLookingCache_a17961b62be096cafb22ed5d332f72f5e}\label{classForwardLookingCache_a17961b62be096cafb22ed5d332f72f5e} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+evictions} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+evictions} () const
 \item 
 \Hypertarget{classForwardLookingCache_abb1f151e045c4f0f4738ccfbab36b36b}\label{classForwardLookingCache_abb1f151e045c4f0f4738ccfbab36b36b} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+hits} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+hits} () const
 \item 
 \Hypertarget{classForwardLookingCache_a2c3b3e8c2f897c67d0fb301df24e93f2}\label{classForwardLookingCache_a2c3b3e8c2f897c67d0fb301df24e93f2} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+max\+\_\+entries} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+max\+\_\+entries} () const
 \item 
 \Hypertarget{classForwardLookingCache_ae948f6cb552df0c3c23f7266222abf07}\label{classForwardLookingCache_ae948f6cb552df0c3c23f7266222abf07} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+misses} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+misses} () const
 \item 
 \Hypertarget{classForwardLookingCache_af8662cc8047ea38fe86bffebc04fdaa3}\label{classForwardLookingCache_af8662cc8047ea38fe86bffebc04fdaa3} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+new\+\_\+insertions} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+new\+\_\+insertions} () const
 \item 
 \Hypertarget{classForwardLookingCache_a4c2753e9480d4ba2165c53a5d628a318}\label{classForwardLookingCache_a4c2753e9480d4ba2165c53a5d628a318} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+overlap\+\_\+insertions} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+overlap\+\_\+insertions} () const
 \item 
 \Hypertarget{classForwardLookingCache_a1b82d2c5f0728a6f456170e450826a42}\label{classForwardLookingCache_a1b82d2c5f0728a6f456170e450826a42} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries get\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries get\+\_\+size} () const
 \item 
 \Hypertarget{classForwardLookingCache_afb8c26bb601f72a330ff5138d5ef1a2e}\label{classForwardLookingCache_afb8c26bb601f72a330ff5138d5ef1a2e} 
-\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classLRUTracker}{LRUTracker}}$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ $>$ {\bfseries get\+\_\+lru} () \mbox{\hyperlink{classNode}{const}}
+const \mbox{\hyperlink{classLRUTracker}{LRUTracker}}$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ $>$ {\bfseries get\+\_\+lru} () const
 \item 
 \Hypertarget{classForwardLookingCache_ad4d3c53e9835e6f1243a98119ccc6771}\label{classForwardLookingCache_ad4d3c53e9835e6f1243a98119ccc6771} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries contains} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{k}}, \mbox{\hyperlink{classNode}{bool}} \mbox{\hyperlink{classNode}{track}}=\mbox{\hyperlink{classNode}{true}})
+bool {\bfseries contains} (const \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&k, bool track=true)
 \item 
 \Hypertarget{classForwardLookingCache_a27691903204885d6277a738f5a31dc3c}\label{classForwardLookingCache_a27691903204885d6277a738f5a31dc3c} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries insert} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&\mbox{\hyperlink{classNode}{key}})
+bool {\bfseries insert} (const \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ \&key)
 \item 
 \Hypertarget{classForwardLookingCache_a48d7669f9776bb5749e1fcec3614df00}\label{classForwardLookingCache_a48d7669f9776bb5749e1fcec3614df00} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries deep\+\_\+size} () \mbox{\hyperlink{classNode}{const}}
+size\+\_\+t {\bfseries deep\+\_\+size} () const
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classForwardLookingCache_af717bfc724b7c44ae72ef26ba22338db}\label{classForwardLookingCache_af717bfc724b7c44ae72ef26ba22338db} 
-\mbox{\hyperlink{classNode_a0ac1d44cfe588be564acf25485029bd8}{absl\+::flat\+\_\+hash\+\_\+map}}$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$, \mbox{\hyperlink{classNode}{size\+\_\+t}} $>$ {\bfseries \+\_\+map}
+absl\+::flat\+\_\+hash\+\_\+map$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$, size\+\_\+t $>$ {\bfseries \+\_\+map}
 \item 
 \Hypertarget{classForwardLookingCache_adca4129898fdb6be97570d32028b164b}\label{classForwardLookingCache_adca4129898fdb6be97570d32028b164b} 
 std\+::vector$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ $>$ {\bfseries \+\_\+entries}
@@ -64,25 +64,25 @@ std\+::vector$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ $>$ {\bfseries 
 \mbox{\hyperlink{classLRUTracker}{LRUTracker}}$<$ \mbox{\hyperlink{classFLCKey}{FLCKey}}$<$ T $>$ $>$ {\bfseries \+\_\+lru}
 \item 
 \Hypertarget{classForwardLookingCache_a2f285c640ce9ab24b13086a529261cab}\label{classForwardLookingCache_a2f285c640ce9ab24b13086a529261cab} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+evictions}
+size\+\_\+t {\bfseries \+\_\+evictions}
 \item 
 \Hypertarget{classForwardLookingCache_a83093737545f5052e7c43bc2b2176311}\label{classForwardLookingCache_a83093737545f5052e7c43bc2b2176311} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+hits}
+size\+\_\+t {\bfseries \+\_\+hits}
 \item 
 \Hypertarget{classForwardLookingCache_a4daef6155f47447cecbf8e7be74f698a}\label{classForwardLookingCache_a4daef6155f47447cecbf8e7be74f698a} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+size}
+size\+\_\+t {\bfseries \+\_\+size}
 \item 
 \Hypertarget{classForwardLookingCache_acd7d297a62f2940b17d5ea1c24969307}\label{classForwardLookingCache_acd7d297a62f2940b17d5ea1c24969307} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+max\+\_\+entries}
+size\+\_\+t {\bfseries \+\_\+max\+\_\+entries}
 \item 
 \Hypertarget{classForwardLookingCache_a6333cbae43d2e37c60b309881aa70bdd}\label{classForwardLookingCache_a6333cbae43d2e37c60b309881aa70bdd} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+misses}
+size\+\_\+t {\bfseries \+\_\+misses}
 \item 
 \Hypertarget{classForwardLookingCache_a730f6797900eda2d1cb12f6649053ade}\label{classForwardLookingCache_a730f6797900eda2d1cb12f6649053ade} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+new\+\_\+insertions}
+size\+\_\+t {\bfseries \+\_\+new\+\_\+insertions}
 \item 
 \Hypertarget{classForwardLookingCache_a82f29761e32973b3f4fb2c6dc33dfa8a}\label{classForwardLookingCache_a82f29761e32973b3f4fb2c6dc33dfa8a} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+overlap\+\_\+insertions}
+size\+\_\+t {\bfseries \+\_\+overlap\+\_\+insertions}
 \end{DoxyCompactItemize}
 
 

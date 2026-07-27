@@ -30,39 +30,39 @@ Collaboration diagram for zstd\+\_\+ostreambuf\+:\nopagebreak
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classzstd__ostreambuf_a759d55e82ba4c2e019333687da921740}{finalize}} ()
+void \mbox{\hyperlink{classzstd__ostreambuf_a759d55e82ba4c2e019333687da921740}{finalize}} ()
 \begin{DoxyCompactList}\small\item\em Flush all remaining buffers and wait for ZSTD to say its finished. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classzstd__ostreambuf_a0b6ffb53b6e82c233e7670d56cd4f88f}\label{classzstd__ostreambuf_a0b6ffb53b6e82c233e7670d56cd4f88f} 
-{\bfseries zstd\+\_\+ostreambuf} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+{\bfseries zstd\+\_\+ostreambuf} (const \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_a5513d7474ca84e20260a43ca88eab640}\label{classzstd__ostreambuf_a5513d7474ca84e20260a43ca88eab640} 
-\mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \& {\bfseries operator=} (const \mbox{\hyperlink{classzstd__ostreambuf}{zstd\+\_\+ostreambuf}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96}{zstd\+\_\+ostreambuf}} (std\+::streambuf \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{dest}}, \mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{level}}=\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+CLEVEL\+\_\+\+DEFAULT}})
+\mbox{\hyperlink{classzstd__ostreambuf_a7a1ba303dc0998247b8dfce9aaba7b96}{zstd\+\_\+ostreambuf}} (std\+::streambuf \texorpdfstring{$\ast$}{*}dest, int level=ZSTD\+\_\+\+CLEVEL\+\_\+\+DEFAULT)
 \begin{DoxyCompactList}\small\item\em Constructor which requires a destination stream. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_ae5947bd4969df6fb4f186adcad1c9a6d}\label{classzstd__ostreambuf_ae5947bd4969df6fb4f186adcad1c9a6d} 
-{\bfseries \texorpdfstring{$\sim$}{\string~}zstd\+\_\+ostreambuf} () \mbox{\hyperlink{classNode}{override}}
+{\bfseries \texorpdfstring{$\sim$}{\string~}zstd\+\_\+ostreambuf} () override
 \begin{DoxyCompactList}\small\item\em Destructor just needs to free() the Zstd memory bits. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6}{overflow}} (\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classNode}{ch}}) \mbox{\hyperlink{classNode}{override}}
+int \mbox{\hyperlink{classzstd__ostreambuf_ac3f7ec05795402ea7e8521a567fbc3b6}{overflow}} (int ch) override
 \begin{DoxyCompactList}\small\item\em Flushes the buffer when full and inserts the incoming character if provided. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classzstd__ostreambuf_a82e5c5f4afbf485787f85e2e5e0cd011}{sync}} () \mbox{\hyperlink{classNode}{override}}
+int \mbox{\hyperlink{classzstd__ostreambuf_a82e5c5f4afbf485787f85e2e5e0cd011}{sync}} () override
 \begin{DoxyCompactList}\small\item\em Overrides the sync method, which in this case is just \doxylink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\+\_\+input()}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\+\_\+input}} ()
+int \mbox{\hyperlink{classzstd__ostreambuf_a569abaf134f3f5e95e38c4c555991222}{flush\+\_\+input}} ()
 \begin{DoxyCompactList}\small\item\em Reads all pending input and asks Zstd to compress it to the CStream. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{code}})
+static void \mbox{\hyperlink{classzstd__ostreambuf_a90dfa115cacce1a0ad12adee5c6cab03}{check}} (size\+\_\+t code)
 \begin{DoxyCompactList}\small\item\em Wrapper for ZSTD\+\_\+is\+Error(), which checks an error code and throws the error name if found. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -71,19 +71,19 @@ Collaboration diagram for zstd\+\_\+ostreambuf\+:\nopagebreak
 std\+::streambuf \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+dest}
 \begin{DoxyCompactList}\small\item\em The destination streambuf for compressed data from the {\ttfamily ZSTD\+\_\+\+CStream}. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae}\label{classzstd__ostreambuf_aeba09e776fddbe59b92a06a887ba49ae} 
-\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+CStream}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+zstd\+\_\+cstream}
+ZSTD\+\_\+\+CStream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+zstd\+\_\+cstream}
 \begin{DoxyCompactList}\small\item\em The ZSTD compressor stream to send input to. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6}\label{classzstd__ostreambuf_a1295deee9b67192ffa8d4779cd9dfdc6} 
-std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+input\+\_\+buffer}
+std\+::vector$<$ char $>$ {\bfseries \+\_\+input\+\_\+buffer}
 \begin{DoxyCompactList}\small\item\em Basic input buffer to feed to ZSTD. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3}\label{classzstd__ostreambuf_aa1554163eba3763849a18c2ab7d31bd3} 
-std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+output\+\_\+buffer}
+std\+::vector$<$ char $>$ {\bfseries \+\_\+output\+\_\+buffer}
 \begin{DoxyCompactList}\small\item\em Basic output buffer for ZSTD. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45}\label{classzstd__ostreambuf_ac7fa2f6b493fa8c5402111774a29bd45} 
-\mbox{\hyperlink{classNode}{bool}} {\bfseries \+\_\+finalized} = \mbox{\hyperlink{classNode}{false}}
+bool {\bfseries \+\_\+finalized} = false
 \begin{DoxyCompactList}\small\item\em Internal flag for proper shutdown/destruction. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef}\label{classzstd__ostreambuf_a5d72f72891c6a36da62e8c1aaf3f52ef} 
-\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+End\+Directive}} {\bfseries \+\_\+zstd\+\_\+end\+\_\+directive} = \mbox{\hyperlink{classNode}{ZSTD\+\_\+e\+\_\+continue}}
+ZSTD\+\_\+\+End\+Directive {\bfseries \+\_\+zstd\+\_\+end\+\_\+directive} = ZSTD\+\_\+e\+\_\+continue
 \begin{DoxyCompactList}\small\item\em Customizable end-\/directive to use for {\ttfamily ZSTD\+\_\+compress\+Stream2} calls. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -95,7 +95,7 @@ A {\ttfamily streambuf} subclass which wraps the C-\/style ZSTD bits to create a
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{zstd\_ostreambuf()}{zstd\_ostreambuf()}}
-{\footnotesize\ttfamily zstd\+\_\+ostreambuf\+::zstd\+\_\+ostreambuf (\begin{DoxyParamCaption}\item[{std\+::streambuf \texorpdfstring{$\ast$}{*}}]{dest,  }\item[{\mbox{\hyperlink{classNode}{int}}}]{level = {\ttfamily \mbox{\hyperlink{classNode}{ZSTD\+\_\+\+CLEVEL\+\_\+\+DEFAULT}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily zstd\+\_\+ostreambuf\+::zstd\+\_\+ostreambuf (\begin{DoxyParamCaption}\item[{std\+::streambuf \texorpdfstring{$\ast$}{*}}]{dest,  }\item[{int}]{level = {\ttfamily ZSTD\+\_\+CLEVEL\+\_\+DEFAULT} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -131,7 +131,7 @@ Caller must issue {\ttfamily \doxylink{classzstd__ostreambuf_a759d55e82ba4c2e019
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!check@{check}}
 \index{check@{check}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{check()}{check()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} zstd\+\_\+ostreambuf\+::check (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+{\footnotesize\ttfamily static void zstd\+\_\+ostreambuf\+::check (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
 
 
 
@@ -146,7 +146,7 @@ Wrapper for ZSTD\+\_\+is\+Error(), which checks an error code and throws the err
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!finalize@{finalize}}
 \index{finalize@{finalize}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{finalize()}{finalize()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{void}} zstd\+\_\+ostreambuf\+::finalize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void zstd\+\_\+ostreambuf\+::finalize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -161,7 +161,7 @@ Caller must issue {\ttfamily \doxylink{classzstd__ostreambuf_a759d55e82ba4c2e019
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!flush\_input@{flush\_input}}
 \index{flush\_input@{flush\_input}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{flush\_input()}{flush\_input()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{int}} zstd\+\_\+ostreambuf\+::flush\+\_\+input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+{\footnotesize\ttfamily int zstd\+\_\+ostreambuf\+::flush\+\_\+input (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
 
 
 
@@ -174,7 +174,7 @@ Reads all pending input and asks Zstd to compress it to the CStream.
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!overflow@{overflow}}
 \index{overflow@{overflow}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{overflow()}{overflow()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{int}} zstd\+\_\+ostreambuf\+::overflow (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{int}}}]{ch }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily int zstd\+\_\+ostreambuf\+::overflow (\begin{DoxyParamCaption}\item[{int}]{ch }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
 
 
 
@@ -187,7 +187,7 @@ Integer indicating overflow/\+EOF status.
 \index{zstd\_ostreambuf@{zstd\_ostreambuf}!sync@{sync}}
 \index{sync@{sync}!zstd\_ostreambuf@{zstd\_ostreambuf}}
 \doxysubsubsection{\texorpdfstring{sync()}{sync()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{int}} zstd\+\_\+ostreambuf\+::sync (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily int zstd\+\_\+ostreambuf\+::sync (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
 
 
 

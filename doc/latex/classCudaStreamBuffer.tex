@@ -1,0 +1,145 @@
+\doxysection{Cuda\+Stream\+Buffer\texorpdfstring{$<$}{<} T, Result\+Data \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classCudaStreamBuffer}{}\label{classCudaStreamBuffer}\index{CudaStreamBuffer$<$ T, ResultData $>$@{CudaStreamBuffer$<$ T, ResultData $>$}}
+
+
+Collaboration diagram for Cuda\+Stream\+Buffer\texorpdfstring{$<$}{<} T, Result\+Data \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classCudaStreamBuffer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCudaStreamBuffer_a4afc652fa4ae392e2705b7db68312d48}\label{classCudaStreamBuffer_a4afc652fa4ae392e2705b7db68312d48} 
+void {\bfseries recycle} ()
+\begin{DoxyCompactList}\small\item\em Resets the counters and sets the buffer to FILLING state. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a57784cd369ee91914d22061efd8a1b4f}\label{classCudaStreamBuffer_a57784cd369ee91914d22061efd8a1b4f} 
+void {\bfseries wait\+\_\+until\+\_\+state} (Cuda\+Stream\+Buffer\+State desired\+\_\+state)
+\begin{DoxyCompactList}\small\item\em Waits until the buffer enters a given state. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a4d45023d60c169524fd82ef5927c140e}\label{classCudaStreamBuffer_a4d45023d60c169524fd82ef5927c140e} 
+void {\bfseries sync\+\_\+host\+\_\+data\+\_\+to\+\_\+device} ()
+\begin{DoxyCompactList}\small\item\em Synchronize the host data to the device. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a53347ae5db18f1a24fa38e5881354ba2}\label{classCudaStreamBuffer_a53347ae5db18f1a24fa38e5881354ba2} 
+void {\bfseries sync\+\_\+host\+\_\+results\+\_\+to\+\_\+device} ()
+\begin{DoxyCompactList}\small\item\em Synchronize the host results to the device. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a513fbc09ea1347c455a7f60acb1cc4af}\label{classCudaStreamBuffer_a513fbc09ea1347c455a7f60acb1cc4af} 
+void {\bfseries sync\+\_\+device\+\_\+data\+\_\+to\+\_\+host} ()
+\begin{DoxyCompactList}\small\item\em Synchronize the device data to the host. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_ac118fcd76ec857e6caadf893af3b6aba}\label{classCudaStreamBuffer_ac118fcd76ec857e6caadf893af3b6aba} 
+void {\bfseries sync\+\_\+device\+\_\+results\+\_\+to\+\_\+host} ()
+\begin{DoxyCompactList}\small\item\em Synchronize the device results to the host. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Kernel $>$ }\\void \mbox{\hyperlink{classCudaStreamBuffer_a27c0f5f6fdf5b3e0b545d4dff71e5a2b}{launch\+\_\+kernel}} (Kernel \&\&kernel\+\_\+func, size\+\_\+t base\+\_\+multiplier=1, size\+\_\+t max\+\_\+multiplier=1, T scaling\+\_\+factor=0)
+\begin{DoxyCompactList}\small\item\em Takes a kernel call reference, synchronizes buffers from host-\/to-\/device, and then executes the kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Lifecycle Management}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCudaStreamBuffer_ad909584cb8e8abdc986e7475c23de069}\label{classCudaStreamBuffer_ad909584cb8e8abdc986e7475c23de069} 
+{\bfseries Cuda\+Stream\+Buffer} ()=delete
+\begin{DoxyCompactList}\small\item\em No default constructor allowed. Must pass element count. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_ad463de3b5ccbdfa9947398cb9ffe0498}\label{classCudaStreamBuffer_ad463de3b5ccbdfa9947398cb9ffe0498} 
+{\bfseries Cuda\+Stream\+Buffer} (uint64\+\_\+t element\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Constructor takes element count and deduces bytes required. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a46ac281165ed3e41fd1aa36de1a3db92}\label{classCudaStreamBuffer_a46ac281165ed3e41fd1aa36de1a3db92} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Cuda\+Stream\+Buffer} ()
+\begin{DoxyCompactList}\small\item\em Destructor will unwind and free all memory. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a1a8aa3acd4388b477cacc9b3ac97b837}\label{classCudaStreamBuffer_a1a8aa3acd4388b477cacc9b3ac97b837} 
+{\bfseries Cuda\+Stream\+Buffer} (const \mbox{\hyperlink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a413be980721e04687ad5bad658f0483b}\label{classCudaStreamBuffer_a413be980721e04687ad5bad658f0483b} 
+\mbox{\hyperlink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}} \& {\bfseries operator=} (const \mbox{\hyperlink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Disallow copying. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Accessors}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCudaStreamBuffer_a2c4f78ac3441aecabf8cf830b41d7835}\label{classCudaStreamBuffer_a2c4f78ac3441aecabf8cf830b41d7835} 
+T \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+host\+\_\+data\+\_\+ptr} () const
+\begin{DoxyCompactList}\small\item\em Get the host pointer to the buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_aefe7ceaca8eaad7d1c01527fb2fb211d}\label{classCudaStreamBuffer_aefe7ceaca8eaad7d1c01527fb2fb211d} 
+Result\+Data \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+host\+\_\+results\+\_\+ptr} () const
+\begin{DoxyCompactList}\small\item\em Get the host pointer to the results. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_ad5ed62c12b46981f727cdd11aefe3eca}\label{classCudaStreamBuffer_ad5ed62c12b46981f727cdd11aefe3eca} 
+uint64\+\_\+t {\bfseries get\+\_\+element\+\_\+count} () const
+\begin{DoxyCompactList}\small\item\em Get the number of elements in the buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_aad54e3aaa868f4c881c52cef0f831a3e}\label{classCudaStreamBuffer_aad54e3aaa868f4c881c52cef0f831a3e} 
+bool {\bfseries is\+\_\+full} () const
+\begin{DoxyCompactList}\small\item\em Syntatic sugar to return if the buffer is "{}full"{}, meaning the elements buffered count matches the element limit. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_ac480b818eea00df6acb931dd8a54d226}\label{classCudaStreamBuffer_ac480b818eea00df6acb931dd8a54d226} 
+uint64\+\_\+t {\bfseries get\+\_\+next\+\_\+index} () const
+\begin{DoxyCompactList}\small\item\em Returns the next available index in the buffer without changing or incrementing it. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a2f552724807a93a32f67a0fd63223f41}\label{classCudaStreamBuffer_a2f552724807a93a32f67a0fd63223f41} 
+uint64\+\_\+t {\bfseries use\+\_\+next\+\_\+index} ()
+\begin{DoxyCompactList}\small\item\em Returns the next available index in the buffer, and increments internal counters. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a601d49a1687fe6536f22dc87a0115c41}\label{classCudaStreamBuffer_a601d49a1687fe6536f22dc87a0115c41} 
+Cuda\+Stream\+Buffer\+State {\bfseries get\+\_\+state} (std\+::memory\+\_\+order m=std\+::memory\+\_\+order\+\_\+relaxed) const
+\begin{DoxyCompactList}\small\item\em Returns the current state. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a2b89aae6a5fb8ff73e06550af92741cd}\label{classCudaStreamBuffer_a2b89aae6a5fb8ff73e06550af92741cd} 
+void {\bfseries set\+\_\+state} (Cuda\+Stream\+Buffer\+State state)
+\begin{DoxyCompactList}\small\item\em Sets the current state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1}\label{classCudaStreamBuffer_a53e3de5e27ea06c89d444e05e9fc74d1} 
+const uint64\+\_\+t {\bfseries \+\_\+element\+\_\+limit}
+\begin{DoxyCompactList}\small\item\em Number of elements in each buffer, max. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e}\label{classCudaStreamBuffer_a258c48e9c93f500ebfcc489aeb40320e} 
+const uint64\+\_\+t {\bfseries \+\_\+bytes}
+\begin{DoxyCompactList}\small\item\em Bytes occupied by each buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5}\label{classCudaStreamBuffer_af3bbcde29365648693886b4ee729edb5} 
+uint64\+\_\+t {\bfseries \+\_\+next\+\_\+index} = 0
+\begin{DoxyCompactList}\small\item\em The next element index. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c}\label{classCudaStreamBuffer_a2c0c4e181cfcad97554b34022c36ac9c} 
+T \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+host\+\_\+data} = nullptr
+\begin{DoxyCompactList}\small\item\em The host buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726}\label{classCudaStreamBuffer_ab82d7dfe626293e178a4266942632726} 
+T \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+device\+\_\+data} = nullptr
+\begin{DoxyCompactList}\small\item\em The device (\doxylink{namespaceGPU}{GPU}) buffer. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d}\label{classCudaStreamBuffer_af51fd80f313c654e405d67d2af3a2f1d} 
+Result\+Data \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+host\+\_\+results} = nullptr
+\begin{DoxyCompactList}\small\item\em The host result data object. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8}\label{classCudaStreamBuffer_a52e4d6fc91701458d7400af041c600e8} 
+Result\+Data \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+device\+\_\+results} = nullptr
+\begin{DoxyCompactList}\small\item\em The device result data object. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a}\label{classCudaStreamBuffer_a4f1831b8130715bf0fd2b123b88a4f9a} 
+std\+::atomic$<$ Cuda\+Stream\+Buffer\+State $>$ {\bfseries \+\_\+state} = Cuda\+Stream\+Buffer\+State\+::\+FILLING
+\begin{DoxyCompactList}\small\item\em The current state of the buffer. Only the host code modifies this, by help of {\ttfamily cuda\+Launch\+Host\+Func}. \end{DoxyCompactList}\item 
+\Hypertarget{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5}\label{classCudaStreamBuffer_a33044d7b1168b1cc1141c348825f0ea5} 
+cuda\+Stream\+\_\+t {\bfseries \+\_\+stream} = nullptr
+\begin{DoxyCompactList}\small\item\em Dedicated CUDA stream for synchronizing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classCudaStreamBuffer_a27c0f5f6fdf5b3e0b545d4dff71e5a2b}\label{classCudaStreamBuffer_a27c0f5f6fdf5b3e0b545d4dff71e5a2b} 
+\index{CudaStreamBuffer$<$ T, ResultData $>$@{CudaStreamBuffer$<$ T, ResultData $>$}!launch\_kernel@{launch\_kernel}}
+\index{launch\_kernel@{launch\_kernel}!CudaStreamBuffer$<$ T, ResultData $>$@{CudaStreamBuffer$<$ T, ResultData $>$}}
+\doxysubsubsection{\texorpdfstring{launch\_kernel()}{launch\_kernel()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptFixedWidthIntegral}{Fixed\+Width\+Integral}} T, typename Result\+Data $>$ \\
+template$<$typename Kernel $>$ \\
+void \mbox{\hyperlink{classCudaStreamBuffer}{Cuda\+Stream\+Buffer}}$<$ T, Result\+Data $>$\+::launch\+\_\+kernel (\begin{DoxyParamCaption}\item[{Kernel \&\&}]{kernel\+\_\+func,  }\item[{size\+\_\+t}]{base\+\_\+multiplier = {\ttfamily 1},  }\item[{size\+\_\+t}]{max\+\_\+multiplier = {\ttfamily 1},  }\item[{T}]{scaling\+\_\+factor = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Takes a kernel call reference, synchronizes buffers from host-\/to-\/device, and then executes the kernel. 
+
+The kernel passed in MUST have this signature\+: {\ttfamily (T\texorpdfstring{$\ast$}{*}, Result\+Data\texorpdfstring{$\ast$}{*}, size\+\_\+t, cuda\+Stream\+\_\+t)}
+
+Where\+:
+\begin{DoxyItemize}
+\item {\ttfamily T\texorpdfstring{$\ast$}{*}} will be the device buffer from this class.
+\item {\ttfamily Result\+Data\texorpdfstring{$\ast$}{*}} will be the device result memory for your kernel to shared results.
+\item {\ttfamily size\+\_\+t} will be the element count for your kernel to use with loops/boundaries.
+\item {\ttfamily cuda\+Stream\+\_\+t} will be the pre-\/established stream for host\texorpdfstring{$<$}{<}-\/\texorpdfstring{$>$}{>}device synchronization.
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+This method injects a state change after the kernel. Caller should NOT set state directly. 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/collatz/cuda\+\_\+stream\+\_\+buffer.\+hpp\end{DoxyCompactItemize}

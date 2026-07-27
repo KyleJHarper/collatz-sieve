@@ -13,7 +13,7 @@ A truthful concept when the {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Bi
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ TreeType>}
-\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptIsImplicitTree}{IsImplicitTree}}\ =\ \ \textcolor{keyword}{requires}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classNode}{TreeType}}\&\ \mbox{\hyperlink{classNode}{tree\_type}})\ \{\ \mbox{\hyperlink{classNode}{tree\_type}}.is\_implicit();\ \}}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptIsImplicitTree}{IsImplicitTree}}\ =\ \ \textcolor{keyword}{requires}(\textcolor{keyword}{const}\ TreeType\&\ tree\_type)\ \{\ tree\_type.is\_implicit();\ \}}
 
 \end{DoxyCode}
 

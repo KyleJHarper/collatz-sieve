@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['stepresults_0',['StepResults',['../classStepResults.html',1,'']]],
-  ['streamhelper_1',['StreamHelper',['../classStreamHelper.html',1,'']]],
-  ['stride_2',['Stride',['../structAffineStride_1_1Stride.html',1,'AffineStride']]]
+  ['progress_0',['Progress',['../classProgress.html',1,'']]],
+  ['progressreport_1',['ProgressReport',['../classProgressReport.html',1,'']]]
 ];

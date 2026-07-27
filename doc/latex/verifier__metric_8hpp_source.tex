@@ -1,0 +1,268 @@
+\doxysection{verifier\+\_\+metric.\+hpp}
+\hypertarget{verifier__metric_8hpp_source}{}\label{verifier__metric_8hpp_source}\index{src/collatz/verifier\_metric.hpp@{src/collatz/verifier\_metric.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}string.hpp"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structVerifierMetric}{VerifierMetric}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00019\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00024\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a1112fc67938542be0242d88103345303}{effective\_nodes\_verified}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.load(std::memory\_order\_relaxed)\ \ /\ \mbox{\hyperlink{structVerifierMetric_a9a20e4af03b76e41f9585c13a4bfc306}{residue\_ratio}}();}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00032\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00038\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00044\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00050\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00057\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a3b9f08655f353a3a065260c101b4da66}{steps\_before\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m)\ -\/\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m);}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00064\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00069\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00074\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}{coverage\_ratio}}\ =\ 0;}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a9a20e4af03b76e41f9585c13a4bfc306}{residue\_ratio}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1\ -\/\ \mbox{\hyperlink{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}{coverage\_ratio}};}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \ \ \ \ std::chrono::milliseconds\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}\ =\ std::chrono::milliseconds(0);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00103\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a1ff321b568d8492ce5dd8b84a25559c3}{nodes\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00108\ \ \ \ \ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00115\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a2de5c2461e2e02628891e43ccf990a54}{nodes\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00120\ \ \ \ \ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00127\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_ace491de3ca482cc338b9c2886215acfd}{effective\_nodes\_per\_ms}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a1112fc67938542be0242d88103345303}{effective\_nodes\_verified}}()\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count();}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00139\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a1b1872c1ee35d0753dfa1fb98c8d6b95}{effective\_nodes\_per\_s}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a1112fc67938542be0242d88103345303}{effective\_nodes\_verified}}()\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000);}
+\DoxyCodeLine{00144\ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00151\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_ae2379f9e885da4dd29a4c2548f8ec54c}{steps\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00156\ \ \ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00163\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_ac71b972ee4d4ee511a34528afb50cfe7}{steps\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00168\ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00175\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a80cd3e9cdcfb4511d38d4e38ae20f1e3}{steps\_skippable\_by\_affine\_stride\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00180\ \ \ \ \ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00187\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a4744906bea5bfccdc2df848abdda6d6c}{steps\_skippable\_by\_affine\_stride\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00192\ \ \ \ \ \}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00199\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_aeaa24bce0d644b10bd014793e82b2e2a}{steps\_skippable\_by\_hwm\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00204\ \ \ \ \ \}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00211\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a3d6c22a615bed91e0192f8d563567ccd}{steps\_skippable\_by\_hwm\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00216\ \ \ \ \ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00223\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a58e152cd61fe7b00952407ce00f080d5}{gpu\_kernel\_launches\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00228\ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00235\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_aec231dfbf72fb486b24b40b2a9bb0856}{gpu\_kernel\_launches\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00247\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a76ea946ca1563e7ca070c353b64667c7}{gpu\_overflows\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00252\ \ \ \ \ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00259\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_ae121fe10aa821b163effd08c555017e8}{gpu\_overflows\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00264\ \ \ \ \ \}}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_ad97def12d8a8b54a701191ef4c16b464}{skip\_rate\_of\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load()\ ==\ 0)\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
+\DoxyCodeLine{00282\ \ \ \ \ \}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a53a0edb674600b19c9b53c195a596fce}{skip\_rate\_of\_affine\_stride}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load()\ ==\ 0)\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
+\DoxyCodeLine{00295\ \ \ \ \ \}}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a6a59926b59e4533fb84cb3de65372390}{skip\_rate\_of\_affine\_stride\_before\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load()\ ==\ 0)\ \{}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
+\DoxyCodeLine{00308\ \ \ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structVerifierMetric_a503d32bca1c12f637aa771fc4a882391}{reset}}()\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.store(0);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ should\ not\ change.\ \ It's\ tied\ to\ a\ tree\ at\ instantiation.\ \ coverage\_ratio\ =\ 0;}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.store(0);}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.store(0);}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.store(0);}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.store(0);}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.store(0);}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.store(0);}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}.store(0);}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}\ =\ std::chrono::milliseconds(0);}
+\DoxyCodeLine{00326\ \ \ \ \ \}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \mbox{\hyperlink{structVerifierMetric_ae00dac165a014b0d8b0f60640c3c4c78}{emit\_ilp}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ std::string\ ilp;}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ ilp.clear();}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{}verifier\ "{}};}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{}nodes\_verified="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.load(m));}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},coverage\_ratio="{}}\ +\ std::to\_string(\mbox{\hyperlink{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}{coverage\_ratio}});}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},effective\_nodes\_verified="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a1112fc67938542be0242d88103345303}{effective\_nodes\_verified}}());}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_total="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m));}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_hwm="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m));}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_affine\_stride="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.load(m));}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_affine\_stride\_before\_hwm="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.load(m));}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_kernel\_launches="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.load(m));}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_overflows\_processed="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.load(m));}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_overflow\_buffer\_exceeded="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}.load(m));}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},duration\_ms="{}}\ +\ std::to\_string(\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{}\ "{}}\ +\ std::to\_string(std::chrono::duration\_cast<std::chrono::milliseconds>(std::chrono::system\_clock::now().time\_since\_epoch()).count());}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ilp;}
+\DoxyCodeLine{00351\ \ \ \ \ \}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \};}
+
+\end{DoxyCode}

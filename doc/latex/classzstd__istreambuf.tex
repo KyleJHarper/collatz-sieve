@@ -32,27 +32,27 @@ Collaboration diagram for zstd\+\_\+istreambuf\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{classzstd__istreambuf_a777a1f725474596c6f5850ecba0d79b2}\label{classzstd__istreambuf_a777a1f725474596c6f5850ecba0d79b2} 
-{\bfseries zstd\+\_\+istreambuf} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+{\bfseries zstd\+\_\+istreambuf} (const \mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_ac4f1773f021c453576ec08f9c9799479}\label{classzstd__istreambuf_ac4f1773f021c453576ec08f9c9799479} 
-\mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \& {\bfseries operator=} (\mbox{\hyperlink{classNode}{const}} \mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \&)=\mbox{\hyperlink{classNode}{delete}}
+\mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \& {\bfseries operator=} (const \mbox{\hyperlink{classzstd__istreambuf}{zstd\+\_\+istreambuf}} \&)=delete
 \begin{DoxyCompactList}\small\item\em Disallow copying and moving. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_a8095f2e6091178288dede8c36185ec13}\label{classzstd__istreambuf_a8095f2e6091178288dede8c36185ec13} 
-{\bfseries zstd\+\_\+istreambuf} (std\+::streambuf \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classNode}{src}})
+{\bfseries zstd\+\_\+istreambuf} (std\+::streambuf \texorpdfstring{$\ast$}{*}src)
 \begin{DoxyCompactList}\small\item\em Constructor connects caller\textquotesingle{}s {\ttfamily src} to read into the ZSTD decompressor. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_ae130e172d48ccd46282b6436229f6f69}\label{classzstd__istreambuf_ae130e172d48ccd46282b6436229f6f69} 
-{\bfseries \texorpdfstring{$\sim$}{\string~}zstd\+\_\+istreambuf} () \mbox{\hyperlink{classNode}{override}}
+{\bfseries \texorpdfstring{$\sim$}{\string~}zstd\+\_\+istreambuf} () override
 \begin{DoxyCompactList}\small\item\em Destructor simply needs to free() up the ZSTD stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{int}} \mbox{\hyperlink{classzstd__istreambuf_a6fd98e416292c990b94a7c70a037ef16}{underflow}} () \mbox{\hyperlink{classNode}{override}}
+int \mbox{\hyperlink{classzstd__istreambuf_a6fd98e416292c990b94a7c70a037ef16}{underflow}} () override
 \begin{DoxyCompactList}\small\item\em Underflow check which will read in as much data as possible and decompress it. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} \mbox{\hyperlink{classzstd__istreambuf_aead03fbc3fb158fa52c9811a1e441e47}{check}} (\mbox{\hyperlink{classNode}{size\+\_\+t}} \mbox{\hyperlink{classNode}{code}})
+static void \mbox{\hyperlink{classzstd__istreambuf_aead03fbc3fb158fa52c9811a1e441e47}{check}} (size\+\_\+t code)
 \begin{DoxyCompactList}\small\item\em Wrapper for ZSTD\+\_\+is\+Error(), which checks an error code and throws the error name if found. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -61,19 +61,19 @@ Collaboration diagram for zstd\+\_\+istreambuf\+:\nopagebreak
 std\+::streambuf \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+src}
 \begin{DoxyCompactList}\small\item\em The source stream to read compressed data from. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_adfcd7ce090be935068f92c592a2fac1a}\label{classzstd__istreambuf_adfcd7ce090be935068f92c592a2fac1a} 
-\mbox{\hyperlink{classNode}{ZSTD\+\_\+\+DStream}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+zstd\+\_\+dstream}
+ZSTD\+\_\+\+DStream \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+zstd\+\_\+dstream}
 \begin{DoxyCompactList}\small\item\em The ZSTD decompression object. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_aeb526c077e3fa00dd9d782cd76c17520}\label{classzstd__istreambuf_aeb526c077e3fa00dd9d782cd76c17520} 
-std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+input\+\_\+buffer}
+std\+::vector$<$ char $>$ {\bfseries \+\_\+input\+\_\+buffer}
 \begin{DoxyCompactList}\small\item\em Basic input buffer to feed to ZSTD. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_af5df7ba590d849c20a337f7681e702fc}\label{classzstd__istreambuf_af5df7ba590d849c20a337f7681e702fc} 
-std\+::vector$<$ \mbox{\hyperlink{classNode}{char}} $>$ {\bfseries \+\_\+output\+\_\+buffer}
+std\+::vector$<$ char $>$ {\bfseries \+\_\+output\+\_\+buffer}
 \begin{DoxyCompactList}\small\item\em Basic output buffer to write decompressed data to. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_a057489095247828ebb81583ce7377966}\label{classzstd__istreambuf_a057489095247828ebb81583ce7377966} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+input\+\_\+position} = 0
+size\+\_\+t {\bfseries \+\_\+input\+\_\+position} = 0
 \begin{DoxyCompactList}\small\item\em Tracker for input position while reading. \end{DoxyCompactList}\item 
 \Hypertarget{classzstd__istreambuf_aabb2ff9ff1fbcb0d98182e34a943df41}\label{classzstd__istreambuf_aabb2ff9ff1fbcb0d98182e34a943df41} 
-\mbox{\hyperlink{classNode}{size\+\_\+t}} {\bfseries \+\_\+input\+\_\+size} = 0
+size\+\_\+t {\bfseries \+\_\+input\+\_\+size} = 0
 \begin{DoxyCompactList}\small\item\em Sentinel value for input while reading. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -85,7 +85,7 @@ A {\ttfamily streambuf} subclass which wraps the C-\/style ZSTD bits to decompre
 \index{zstd\_istreambuf@{zstd\_istreambuf}!check@{check}}
 \index{check@{check}!zstd\_istreambuf@{zstd\_istreambuf}}
 \doxysubsubsection{\texorpdfstring{check()}{check()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{static}} \mbox{\hyperlink{classNode}{void}} zstd\+\_\+istreambuf\+::check (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classNode}{size\+\_\+t}}}]{code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+{\footnotesize\ttfamily static void zstd\+\_\+istreambuf\+::check (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
 
 
 
@@ -100,7 +100,7 @@ Wrapper for ZSTD\+\_\+is\+Error(), which checks an error code and throws the err
 \index{zstd\_istreambuf@{zstd\_istreambuf}!underflow@{underflow}}
 \index{underflow@{underflow}!zstd\_istreambuf@{zstd\_istreambuf}}
 \doxysubsubsection{\texorpdfstring{underflow()}{underflow()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classNode}{int}} zstd\+\_\+istreambuf\+::underflow (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
+{\footnotesize\ttfamily int zstd\+\_\+istreambuf\+::underflow (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [protected]}}
 
 
 
