@@ -6,16 +6,24 @@
 
 
 
-
-
 /**
 * @struct VerifierMetrics
 * @brief Basic metrics that can be gathered during verification.
 */
 struct VerifierMetric {
     public:
+    /// @name Counters
+    /// @{
+
     /// @brief Number of nodes verified.
     std::atomic<uint64_t> nodes_verified_atomic = 0;
+
+
+
+    /// @brief Returns the effective nodes processed processed, which is true nodes divided by (1 - coverage ratio).
+    uint64_t effective_nodes_verified() const {
+        return nodes_verified_atomic.load(std::memory_order_relaxed)  / residue_ratio();
+    }
 
 
 
@@ -40,6 +48,15 @@ struct VerifierMetric {
     /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting the HWM.
     /// @note Only available when `DetailedMetrics` are enabled.
     std::atomic<uint64_t> steps_skippable_by_affine_stride_before_hwm_atomic = 0;
+
+
+
+    /// @brief Number of steps required to reach High-Water Mark.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @note Only available when `DetailedMetrics` are enabled.
+    uint64_t steps_before_hwm(std::memory_order m = std::memory_order_relaxed) const {
+        return steps_total_atomic.load(m) - steps_skippable_by_hwm_atomic.load(m);
+    }
 
 
 
@@ -73,7 +90,12 @@ struct VerifierMetric {
     /// @brief The cumulative duration in milliseconds this verifier has ran.
     std::chrono::milliseconds duration_ms = std::chrono::milliseconds(0);
 
+    /// @}
 
+
+
+    /// @name Per-Time Methods
+    /// @{
 
     /// @brief Number of nodes verified per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
@@ -87,14 +109,19 @@ struct VerifierMetric {
 
 
 
-    /// @brief Returns the effective nodes processed processed, which is true nodes divided by (1 - coverage ratio).
-    uint64_t effective_nodes_verified() const {
-        return nodes_verified_atomic.load(std::memory_order_relaxed)  / residue_ratio();
+    /// @brief Number of nodes verified per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t nodes_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(nodes_verified_atomic.load(m) / (duration_ms.count() / 1000));
     }
 
 
 
-    /// @brief Number of nodes verified per millisecond.
+    /// @brief Number of effective nodes verified per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
     uint64_t effective_nodes_per_ms() const {
@@ -102,6 +129,18 @@ struct VerifierMetric {
             return 0;
         }
         return effective_nodes_verified() / duration_ms.count();
+    }
+
+
+
+    /// @brief Number of effective nodes verified per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t effective_nodes_per_s() const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return effective_nodes_verified() / (duration_ms.count() / 1000);
     }
 
 
@@ -118,6 +157,18 @@ struct VerifierMetric {
 
 
 
+    /// @brief Number of steps taken per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t steps_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(steps_total_atomic.load(m) / (duration_ms.count() / 1000));
+    }
+
+
+
     /// @brief Number of steps skipped by affine striding per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
@@ -126,6 +177,18 @@ struct VerifierMetric {
             return 0;
         }
         return static_cast<uint64_t>(steps_skippable_by_affine_stride_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of steps skipped by affine striding per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t steps_skippable_by_affine_stride_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(steps_skippable_by_affine_stride_atomic.load(m) / (duration_ms.count() / 1000));
     }
 
 
@@ -142,6 +205,18 @@ struct VerifierMetric {
 
 
 
+    /// @brief Number of steps skipped by High-Water Mark per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t steps_skippable_by_hwm_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(steps_skippable_by_hwm_atomic.load(m) / (duration_ms.count() / 1000));
+    }
+
+
+
     /// @brief Number of GPU kernel launches per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
@@ -150,6 +225,18 @@ struct VerifierMetric {
             return 0;
         }
         return static_cast<uint64_t>(gpu_kernel_launches_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of GPU kernel launches per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t gpu_kernel_launches_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(gpu_kernel_launches_atomic.load(m) / (duration_ms.count() / 1000));
     }
 
 
@@ -165,6 +252,23 @@ struct VerifierMetric {
     }
 
 
+
+    /// @brief Number of GPU node overflows per second.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t gpu_overflows_per_s(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() < 1000) {
+            return 0;
+        }
+        return static_cast<uint64_t>(gpu_overflows_processed_atomic.load(m) / (duration_ms.count() / 1000));
+    }
+
+    /// @}
+
+
+
+    /// @name Skip Rates
+    /// @{
 
     /// @brief Rate of steps skipped by using High-Water Mark stopping.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
@@ -203,14 +307,7 @@ struct VerifierMetric {
         return (1.0 * steps_skippable_by_affine_stride_before_hwm_atomic.load(m)) / steps_total_atomic.load(m);
     }
 
-
-
-    /// @brief Number of steps required to reach High-Water Mark.
-    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
-    /// @note Only available when `DetailedMetrics` are enabled.
-    uint64_t steps_before_hwm(std::memory_order m = std::memory_order_relaxed) const {
-        return steps_total_atomic.load(m) - steps_skippable_by_hwm_atomic.load(m);
-    }
+    /// @}
 
 
 
@@ -249,7 +346,7 @@ struct VerifierMetric {
         ilp += ",gpu_overflows_processed=" + to_string_any(gpu_overflows_processed_atomic.load(m));
         ilp += ",gpu_overflow_buffer_exceeded=" + to_string_any(gpu_overflow_buffer_exceeded_atomic.load(m));
         ilp += ",duration_ms=" + std::to_string(duration_ms.count());
-        ilp += " " + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+        ilp += " " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
         return ilp;
     }
 

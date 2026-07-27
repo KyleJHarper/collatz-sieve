@@ -12,7 +12,7 @@ struct LaunchContext {
     level_t end_level = 0;
     std::string existing_tree_path = "";
     std::string data_dir = "data";
-    bool build_value_map = false;
+    bool exclude_value_map = false;
     int compression_level = 22;
     bool overwrite = false;
     bool skip_verify = false;
@@ -32,7 +32,7 @@ void do_it(LaunchContext& ctx) {
     }
 
     // Calculate the value-map segment.
-    std::string value_map_segment = ctx.build_value_map ? "ivm" : "evm";
+    std::string value_map_segment = ctx.exclude_value_map ? "evm" : "ivm";
 
     // Make a bare binary tree object.
     BinaryTree<T> tree;
@@ -80,7 +80,7 @@ void do_it(LaunchContext& ctx) {
         tree.add_level();
 
         // Generate the value map, if requested.
-        if (ctx.build_value_map) {
+        if (ctx.exclude_value_map == false) {
             logger->info("  Building value map.");
             tree.generate_value_map();
         }
@@ -138,7 +138,6 @@ int main(int argc, char **argv) {
     bool use_i128 = false;
 
     CLI::App options("Build one or more trees and save them to disk for others to import later.  Always Implicit-style tree.");
-    options.add_flag("-b,--build-value-map", ctx.build_value_map, "Generate the value map too.  Larger file, saves time later.");
     options.add_option("-c,--compression-level", ctx.compression_level, "Compression level to use.  Default is: 22.");
     options.add_option("-d,--data-dir", ctx.data_dir, "The relative directory to write files to.  Default is: data");
     options.add_option("-e,--end-level", ctx.end_level, "The last level to build.  If 0, ignored, and a single level is built and exported.");
@@ -153,9 +152,9 @@ int main(int argc, char **argv) {
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
         , "Enable verbosity."
     );
+    options.add_flag("-x,--exclude-value-map", ctx.exclude_value_map, "Don't generate the value map.  Saves space, but cannot be used by verifier.");
     CLI11_PARSE(options, argc, argv);
     logger->debug("Selected options were:");
-    logger->debug("  Build Value Map    (-b): {}", ctx.build_value_map);
     logger->debug("  Compression Level  (-c): {}", ctx.compression_level);
     logger->debug("  Clobber Files      (-C): {}", ctx.overwrite);
     logger->debug("  Data Dir           (-d): {}", ctx.data_dir);
@@ -166,6 +165,7 @@ int main(int argc, char **argv) {
     logger->debug("  Skip Verify        (-s): {}", ctx.skip_verify);
     logger->debug("  Existing Tree Path (-t): {}", ctx.existing_tree_path);
     logger->debug("  Verbose            (-v): {}", verbose);
+    logger->debug("  Exclude Value Map  (-x): {}", ctx.exclude_value_map);
 
 
 

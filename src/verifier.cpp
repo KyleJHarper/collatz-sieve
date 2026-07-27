@@ -23,6 +23,11 @@ void shutdown_signal_handler(int signum) {
     if (signum < 0) {
         std::cerr << "How did signum go negative...?" << std::endl;
     }
+    if (global_shutdown_atomic.load() == true) {
+        logger->critical("Second interrupt received.  Aborting uncleanly.");
+        logger->flush();
+        std::abort();
+    }
     global_shutdown_atomic.store(true, std::memory_order_relaxed);
 }
 
@@ -95,7 +100,13 @@ std::string inline generate_report(Verifier<T>& verifier, const LaunchContext& c
         // Wrap in a FixedWidth constexpr to avoid errors since GMP isn't allowed on GPU.
         if constexpr(FixedWidthIntegral<T>) {
             auto* gpu = dynamic_cast<GPUVerifier<T>*>(&verifier);
-            result += std::format("\n{:<{}}: {} bytes VRAM", "GPU", fp_width, to_string_any(gpu->get_gpu_buffer_used()));
+            result += std::format(
+                "\n{:<{}}: {} bytes VRAM | {} Scales Per Run"
+                , "GPU"
+                , fp_width
+                , to_string_any(gpu->get_gpu_buffer_used(), true)
+                , gpu->get_scales_per_run()
+            );
         }
     }
 
@@ -132,37 +143,37 @@ std::string inline generate_report(Verifier<T>& verifier, const LaunchContext& c
     // Surviving Values
     result += std::format("\n{:<{}}", "Surviving Values", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.nodes_verified_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.nodes_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.nodes_per_s(), true), per_s_width);
 
     // Effective Values
     result += std::format("\n{:<{}}", "Effective Values", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.effective_nodes_verified(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.effective_nodes_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.effective_nodes_per_s(), true), per_s_width);
 
     // Steps
     result += std::format("\n{:<{}}", "Steps", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.steps_total_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.steps_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.steps_per_s(), true), per_s_width);
 
     // Steps Skippable By Affine
     result += std::format("\n{:<{}}", "Steps Skipped By Affine", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_affine_stride_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_affine_stride_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_affine_stride_per_s(), true), per_s_width);
 
     // Steps Skippable By HWM
     result += std::format("\n{:<{}}", "Steps Skipped By HWM", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_hwm_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_hwm_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_hwm_per_s(), true), per_s_width);
 
     // GPU Kernel Launches
     result += std::format("\n{:<{}}", "GPU Kernel Launches", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.gpu_kernel_launches_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.gpu_kernel_launches_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.gpu_kernel_launches_per_s(), true), per_s_width);
 
     // GPU Kernel Launches
     result += std::format("\n{:<{}}", "GPU Overflows", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.gpu_overflows_processed_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.gpu_overflows_per_ms() * 1000, true), per_s_width);
+    result += std::format("{:>{}}", to_string_any(metrics.gpu_overflows_per_s(), true), per_s_width);
 
     // Timer and Last Value Approximation.
     size_t duration_seconds = metrics.duration_ms.count() / 1000;
@@ -377,7 +388,7 @@ int main(int argc, char** argv) {
     options.add_flag("-n,--no-iv-table", ctx.no_iv_table, "Disables the Initial Value table.");
     options.add_option("-s,--start", ctx.start_s, "Start value to begin with.  If lower than tree, will be bumped up.");
     options.add_option("-S,--scales-per-run", ctx.gpu_scales_per_run, "Set the scales-per-run value to X for GPU verifiers.  Reduces CPU and PCIe overhead.  See verifier_gpu.hpp for details.");
-    options.add_option("-t,--tree", ctx.tree_path, "Path to an existing tree export to start with instead of building from nothing.");
+    options.add_option("-t,--tree", ctx.tree_path, "Path to an existing tree export to use.  Can be built with bin/tree_builder.");
     options.add_option("-u,--update-ms", ctx.update_ms, "Update the UI every X milliseconds.  Controls ILP (-i) frequency too.");
     options.add_flag(
         "-v,--verbose"
