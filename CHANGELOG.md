@@ -36,17 +36,12 @@ performance jumped considerably.  Implicit tree building of a level 40 tree went
 ### CPU and GPU Verifiers
 
 A `Verifier` superclass was built to take a `BinaryTree<T>` and begin verifying surviving values via the `CPUVerifier` or the
-`GPUVerifier` implementations.
+`GPUVerifier` implementations.  A full write-up is available in the README file.
 
-The `CPUVerifier` uses OMP under the hood (by virtue of `NodeBitmap`) and is therefore controllable as such.  Using a 64-bit tree,
-32 levels deep with 98.8991% sieving, the verifier was able to verify ~750,000 surviving values per millisecond (750M/sec) while
-safely tracking overflows and upgrading types as needed.  By leveraging the initial-value table from `CollatzConstants` (to avoid
-overflow checking), the rate jumps to ~4,000,000 surviving values per millisecond (4B/sec).
+### Tree Builder (Program)
 
-The `GPUVerifier` uses Cuda and therefore only works with NVidia currently.  It uses a tree and therefore `NodeBitmap` under the
-hood as well.  Using a 64-bit tree, 32 levels deep with 98.8991% sieving, the verifier was able to verify ~11,000,000 surviving
-values per millisecond (11B/sec).  Overflow checking and handling is included.  The initial-value table actually made performance
-worse on the GPU.
+A new program was written to help make building trees easier: `tree_builder`.  It does what it sounds like.  Options available by
+calling `tree_builder -h`.
 
 ## 4.1.0
 

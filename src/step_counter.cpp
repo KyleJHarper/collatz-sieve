@@ -119,7 +119,10 @@ StepResults run_it(size_t start_bit, size_t max_bit) {
 
 
 int main(int argc, char **argv) {
-    init_logger();
+    // Initialize logger.
+    init_logger("log/step_counter.log");
+
+
     // Process options.
     size_t start_bit;
     size_t max_bit;

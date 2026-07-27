@@ -5,8 +5,10 @@
 #include "binary_tree_types.hpp"
 #include "concepts.hpp"
 #include "for_each.hpp"
+#include "int128.hpp"
 #include "string.hpp"
 #include <atomic>
+#include <limits>
 #include <stdexcept>
 #include "stream_helper.hpp"
 #include <fstream>
@@ -47,7 +49,7 @@ struct BinaryTreeFileHeader {
     /// @brief Magic bytes.
     const char magic[MAGIC_SIZE] = {'H', 'a', 'r', 'p', 'e', 'r', 'T', 'r', 'e', 'e'}; // "HarperTree"
     /// @brief Version number.  Must change whenever serialization/deserialization changes happen.
-    const uint32_t version = 3;
+    const uint32_t version = 4;
 };
 
 
@@ -470,12 +472,17 @@ class BinaryTree {
         }
 
         // Common Metadata
+        // Currently, only mpz_class is arbitrary, so "0" (zero) will mean "mpz_class".
         uint8_t tree_type = IsImplicitTree<TreeType> ? TreeTypeEnum::IMPLICIT : TreeTypeEnum::MATERIALIZED;
+        uint16_t tree_type_bit_width_id = ABI::get_bit_width_id<T>();
         level_t level_count = get_level_count();
         bool b_is_preserving_ancestors = is_preserving_ancestors();
         bool b_is_verifying_non_hwm_nodes = is_verifying_non_hwm_nodes();
         if (! sh.serialize_integral(tree_type)) {
             return sh.fail("tree_type==" + to_string_any(tree_type));
+        }
+        if (! sh.serialize_integral(tree_type_bit_width_id)) {
+            return sh.fail("tree_type_bit_width_id=" + to_string_any(tree_type_bit_width_id));
         }
         if (! sh.serialize_integral(level_count)) {
             return sh.fail("level_count==" + to_string_any(level_count));
@@ -596,6 +603,7 @@ class BinaryTree {
 
         // Common Metadata
         uint8_t tree_type;
+        uint16_t tree_type_bit_width_id;
         level_t level_count;
         bool b_is_preserving_ancestors;
         bool b_is_verifying_non_hwm_nodes;
@@ -605,6 +613,13 @@ class BinaryTree {
         }
         if (! eq.equal(tree_type, static_cast<uint8_t>(_impl.get_tree_type()))) {
             return sh.fail("Tree types don't match");
+        }
+        // Tree type bit width ID.  Has to match.
+        if (! sh.deserialize_integral(tree_type_bit_width_id)) {
+            return sh.fail("couldn't read tree_type_bit_width_id (for type T inference)");
+        }
+        if (!eq.equal(tree_type_bit_width_id, static_cast<uint16_t>(ABI::get_bit_width_id<T>()))) {
+            return sh.fail("Tree types do not have matching bit width type IDs");
         }
         // Level count.  Type T needs to support this many levels.
         if (! sh.deserialize_integral(level_count)) {
@@ -800,16 +815,22 @@ class BinaryTree {
 
 
     /**
-    * @brief Read `deserialize()` data from the path specified.  Data may be raw or compressed with Zstd.
+    * @brief Reads data from `path` and sets up the correct file/ztsd/final input streams accordingly.
+    *
+    * Caller MUST provide them.  This method does not own them.
+    *
     * @param path The path to the file to read.  When path is "-", will read from stdin.
-    * @return True if successful, false otherwise.
+    * @param file_in An `ifstream` object to use for file reading.  If file is RAW, it's mapped to `final_in`.
+    * @param zstd_in A `zstd_istream` object to use for decompression if the file is compressed.
+    * @param final_in An `istream` object the caller can read from and be guaranteed only RAW (uncompressed) data will flow.
     */
-    bool load(const std::string& path) {
-        // Setup pointers to the file input and a potential zstd in.
-        std::ifstream file_in;
-        std::istream* final_in = nullptr;
-        std::unique_ptr<zstd_istream> zstd_in;
-
+    static void get_load_ptrs(
+        const std::string& path
+        , std::ifstream& file_in
+        , std::unique_ptr<zstd_istream>& zstd_in
+        , std::istream*& final_in
+        , bool& is_zstd
+    ) {
         // Open the file stream.
         if (path == "-") {
             // Read from stdin.
@@ -837,16 +858,89 @@ class BinaryTree {
         }
 
         // If we have Zstd compression, we need to link the file to our decompressor and pass on a different istream.
-        const bool is_zstd = four_byte_magic == ZSTD_MAGICNUMBER;
+        is_zstd = four_byte_magic == ZSTD_MAGICNUMBER;
         if (is_zstd) {
             zstd_in = std::make_unique<zstd_istream>(*final_in);
             final_in = zstd_in.get();
         }
+    }
+
+
+
+    /**
+    * @brief Read `deserialize()` data from the path specified.  Data may be raw or compressed with Zstd.
+    * @param path The path to the file to read.  When path is "-", will read from stdin.
+    * @return True if successful, false otherwise.
+    */
+    bool load(const std::string& path) {
+        // Setup pointers to the file input and a potential zstd in.
+        std::ifstream file_in;
+        std::istream* final_in = nullptr;
+        std::unique_ptr<zstd_istream> zstd_in;
+        bool is_zstd = false;
+        get_load_ptrs(path, file_in, zstd_in, final_in, is_zstd);
 
         // Now we can deserialize and it'll only receive the raw data.
-        err.clear();
+        std::string err;
         if (! deserialize(*final_in, &err)) {
             throw std::runtime_error("Failed to deserialize data (zstd compressed=" + to_string_any(is_zstd) + ").  Error chain is:  " + err);
+        }
+
+        return true;
+    }
+
+
+
+    /**
+    * @brief Reads the file specified and returns the core attributes.  This helps callers build trees with precomputed files.
+    * @param path The path to the file to read.  When path is "-", will read from stdin.  Automatically detects and handles Zstd.
+    * @return True if successful, false otherwise.
+    */
+    [[nodiscard]] static inline bool peek_at_core_attributes(
+        const std::string& path
+        , uint32_t& version
+        , uint8_t& tree_type
+        , uint16_t& tree_type_bit_width_id
+        , level_t& level_count
+        , std::string* err = nullptr
+    ) {
+        // Setup pointers to the file input and a potential zstd in.
+        std::ifstream file_in;
+        std::istream* final_in = nullptr;
+        std::unique_ptr<zstd_istream> zstd_in;
+        bool is_zstd = false;
+        get_load_ptrs(path, file_in, zstd_in, final_in, is_zstd);
+
+        // Now we can deserialize attributes and it'll only receive the raw data.
+        StreamHelper sh(final_in, nullptr, err);
+        EqualityHelper eq(err);
+
+        // Header
+        const BinaryTreeFileHeader header;
+        char magic[header.MAGIC_SIZE];
+        if (! sh.read_bytes(&magic, header.MAGIC_SIZE)) {
+            return sh.fail("couldn't read header magic string");
+        }
+        if (! eq.equal(std::string(magic, header.MAGIC_SIZE), std::string(header.magic, header.MAGIC_SIZE))) {
+            return sh.fail("Magic in header doesn't match the known value.  Wrong file?");
+        }
+        if (! sh.deserialize_integral(version)) {
+            return sh.fail("couldn't read header version");
+        }
+        if (! eq.equal(version, header.version)) {
+            return sh.fail("Version mismatch");
+        }
+
+        // Common Metadata
+        if (! sh.deserialize_integral(tree_type)) {
+            return sh.fail("couldn't read tree_type");
+        }
+        if (! sh.deserialize_integral(tree_type_bit_width_id)) {
+            return sh.fail("couldn't read tree_type_bit_width_id (for type T inference)");
+        }
+        // Level count.  Type T needs to support this many levels.
+        if (! sh.deserialize_integral(level_count)) {
+            return sh.fail("couldn't read level_count");
         }
 
         return true;
@@ -923,6 +1017,7 @@ class BinaryTree {
     *
     * @tparam Func A function signature defined to match `callback`.
     * @tparam TLS_Type User-selected data type for the vector of thread-local storage to utilize.
+    * @tparam U Optional type to handle values with, which may differ from the `T` type of this tree.  Defaults to `T`.
     * @param policy The desired policy (currently either Serial or Parallel) for processing.  See for_each_policy.hpp.
     * @param tls A vector to store thread-local data in during callbacks.  This method (or an impl method) WILL call `tls.resize()`
     * if the number of available threads reported by `omp_get_max_threads()` exceeds `tls.capacity()`.  From there, each thread is
@@ -932,12 +1027,24 @@ class BinaryTree {
     * guarantee to start at or below this value.  This is done by bumping the internal `multiplier` herein so it can avoid an `if`
     * block inside the hot path, which sometimes affects both compiler and CPU optimizations.
     */
-    template<typename Func, typename TLS_Type>
-    void for_each_uncovered_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback, const T start = 0) const {
+    template<typename Func, typename TLS_Type, AnySupportedIntegral U = T>
+    void for_each_uncovered_value_with_tls(ForEachPolicy policy, std::vector<TLS_Type>& tls, Func&& callback, const U start = 0) const {
         // Do not allow non-ref callbacks.  Otherwise we make GMP over and over.
-        static_assert(std::is_invocable_v<Func, T&, TLS_Type&>, "Callback must be callable with (T&, TLS_Type&)");
+        static_assert(std::is_invocable_v<Func, U&, TLS_Type&>, "Callback must be callable with (U&, TLS_Type&)");
         // Require ForEachSignal return type.
-        static_assert(std::is_same_v<std::invoke_result_t<Func, T&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
+        static_assert(std::is_same_v<std::invoke_result_t<Func, U&, TLS_Type&>, ForEachSignal>, "Callback must return ForEachSignal");
+        // Tree type and value type must align on certain criteria.
+        if constexpr(FixedWidthIntegral<T>) {
+            // Tree is fixed-width.
+            // Value type U must be >= T if it is also fixed width.
+            if constexpr(FixedWidthIntegral<U>) {
+                static_assert(sizeof(U) >= sizeof(T), "Value type (U) must have a width >= tree type (T).");
+            }
+        } else if constexpr(GMPIntegral<T>) {
+            // Tree is GMPIntegral.
+            // Value type U must be GMPIntegral as well.
+            static_assert(GMPIntegral<U>, "Value type (U) must be GMPIntegral (mpz_class) when tree type (T) is GMPIntegral.");
+        }
 
         // NodeBitmap handles the tls resizing, so leave it alone here.
 
@@ -952,30 +1059,74 @@ class BinaryTree {
         // Create the multiplier to use with the scaling factor, which grows by one with each loop.
         T multiplier = 1;
 
+        // Define the maximum multiplier before scaling factor and/or total would overflow.
+        U max_multiplier = 0;
+        if constexpr(FixedWidthIntegral<U>) {
+            max_multiplier = (std::numeric_limits<U>::max() - uncovered_values.maximum()) / _scaling_factor;
+        }
+
         // Bump the multiplier if a start value requires it.  Take the maximum value of the tree and subtract it from the start
         // value requested, then divide it by the scaling factor to get the mutliplier.
         if (start > uncovered_values.maximum()) {
             multiplier += ((start - uncovered_values.maximum()) / _scaling_factor);
         }
 
-        // Hoist the total scaling value.
-        T total_scaling_factor = _scaling_factor * multiplier;
-
         // Loop until the caller is done.
         std::atomic<ForEachSignal> a_signal = ForEachSignal::CONTINUE;
         while(a_signal.load(std::memory_order_relaxed) == ForEachSignal::CONTINUE) {
+            // Calculate the total scaling factor.
+            U total_scaling_factor = _scaling_factor * multiplier;
+
+            // Ensure overflow won't be hit.  If it will, throw.  No promotion possible because caller is locked to type U.
+            if constexpr(FixedWidthIntegral<U>) {
+                if (multiplier > max_multiplier) {
+                    throw std::overflow_error(
+                        std::format(
+                            "Cannot iterate uncovered values further.  Value type (U) is {} bits wide.  Must upgrade to wider type.  May resume from start={}."
+                            , sizeof(U) * 8
+                            , uncovered_values.minimum() + total_scaling_factor
+                        )
+                    );
+                }
+            }
+
             // Loop through each position, adjusting it with the total scaling factor before sending it back.
             uncovered_values.for_each_value_with_tls(policy, tls, [&](T& value, TLS_Type& my_tls) {
-                if constexpr(FixedWidthIntegral<T>) {
-                    T total = total_scaling_factor + value;
+                if constexpr(FixedWidthIntegral<U>) {
+                    // Value type is fixed-width.  T must be fixed-width too (due to static_asserts above).
+                    // A stack variable is fine/fast here.
+                    U total = total_scaling_factor + value;
+
+                    // Run the callback.
                     if (callback(total, my_tls) == ForEachSignal::BREAK) {
                         a_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                         return ForEachSignal::BREAK;
                     }
                     return ForEachSignal::CONTINUE;
-                } else if constexpr(GMPIntegral<T>) {
+                } else if constexpr(GMPIntegral<U>) {
+                    // Value type is MPZ.  T might be MPZ or fixed-width.
+                    // Use a thread-local for MPZ to avoid allocs on return value (total).
                     static thread_local mpz_class total;
-                    mpz_add(total.get_mpz_t(), value.get_mpz_t(), total_scaling_factor.get_mpz_t());
+
+                    // Call the correct mpz_add_*() based on tree type T.
+                    if constexpr(FixedWidthIntegral<T>) {
+                        // Tree is fixed width.  Juggle according to bit width since mpz_add_ui() has a 64-bit limit.
+                        if constexpr(sizeof(T) * 8 <= 64) {
+                            // Type is small enough to fix into mpz_add_ui().
+                            mpz_add_ui(total.get_mpz_t(), total_scaling_factor.get_mpz_t(), value);
+                        } else if constexpr(sizeof(T) * 8 == 128) {
+                            // Type is 128-bit.  Must convert to GMP.  Use another TLS to avoid alloc.
+                            static thread_local mpz_class value_tmp_mpz;
+                            Int128::uint128_to_mpz(value, value_tmp_mpz);
+                            mpz_add(total.get_mpz_t(), total_scaling_factor.get_mpz_t(), value_tmp_mpz.get_mpz_t());
+                        }
+                    } else if constexpr(GMPIntegral<T>) {
+                        // Tree is GMP type as well.
+                        // Simply use mpz_add directly.
+                        mpz_add(total.get_mpz_t(), total_scaling_factor.get_mpz_t(), value.get_mpz_t());
+                    }
+
+                    // Run the callback.
                     if (callback(total, my_tls) == ForEachSignal::BREAK) {
                         a_signal.store(ForEachSignal::BREAK, std::memory_order_relaxed);
                         return ForEachSignal::BREAK;
@@ -984,9 +1135,8 @@ class BinaryTree {
                 }
             });
 
-            // Bump the multiplier and scaling factor for the next range of future nodes.
+            // Bump the multiplier for the next loop.
             multiplier++;
-            total_scaling_factor = _scaling_factor * multiplier;
         }
     }
 

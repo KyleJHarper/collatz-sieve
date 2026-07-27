@@ -1,15 +1,14 @@
-#include <filesystem>
 #include "collatz/logging.hpp"
 #include <spdlog/spdlog.h>
 
 // Define the global logger instance
 std::shared_ptr<spdlog::logger> logger = nullptr;
 
-void init_logger() {
+
+void init_logger(const std::string file) {
     if (!logger) {
-        auto cwd = std::filesystem::current_path().string();
         auto logger_name = "combined";
-        auto logger_file = "everything.log";
+        auto logger_file = file.c_str();
 
         std::vector<spdlog::sink_ptr> sinks{
             std::make_shared<spdlog::sinks::stdout_color_sink_mt>(),
@@ -20,4 +19,11 @@ void init_logger() {
         spdlog::set_default_logger(logger);
         spdlog::flush_every(std::chrono::seconds(1));
     }
+}
+
+
+
+void init_logger(const char* file) {
+    std::string s_file = file;
+    init_logger(s_file);
 }

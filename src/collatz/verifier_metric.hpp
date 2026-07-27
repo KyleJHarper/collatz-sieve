@@ -106,7 +106,7 @@ struct VerifierMetric {
 
 
 
-    /// @brief Number of steps verified per millisecond.
+    /// @brief Number of steps taken per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
     uint64_t steps_per_ms(std::memory_order m = std::memory_order_relaxed) const {
@@ -114,6 +114,54 @@ struct VerifierMetric {
             return 0;
         }
         return static_cast<uint64_t>(steps_total_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of steps skipped by affine striding per millisecond.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t steps_skippable_by_affine_stride_per_ms(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() == 0) {
+            return 0;
+        }
+        return static_cast<uint64_t>(steps_skippable_by_affine_stride_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of steps skipped by High-Water Mark per millisecond.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t steps_skippable_by_hwm_per_ms(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() == 0) {
+            return 0;
+        }
+        return static_cast<uint64_t>(steps_skippable_by_hwm_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of GPU kernel launches per millisecond.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t gpu_kernel_launches_per_ms(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() == 0) {
+            return 0;
+        }
+        return static_cast<uint64_t>(gpu_kernel_launches_atomic.load(m) / duration_ms.count());
+    }
+
+
+
+    /// @brief Number of GPU node overflows per millisecond.
+    /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
+    /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
+    uint64_t gpu_overflows_per_ms(std::memory_order m = std::memory_order_relaxed) const {
+        if (duration_ms.count() == 0) {
+            return 0;
+        }
+        return static_cast<uint64_t>(gpu_overflows_processed_atomic.load(m) / duration_ms.count());
     }
 
 

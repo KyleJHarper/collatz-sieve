@@ -14,8 +14,9 @@
 /// @brief Basic wrapper to get spdlog and make formatting consistent.
 extern std::shared_ptr<spdlog::logger> logger;
 
-/// @brief Forward declare an initializer.
-void init_logger();
+/// @brief Forward declare an initializer.  Add an overload for string vs char*.
+void init_logger(const std::string);
+void init_logger(const char*);
 
 
 

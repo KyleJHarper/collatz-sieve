@@ -182,6 +182,7 @@ set(CPU_PROGRAMS
     junk
     performance_stats
     single_collatz
+    tree_builder
 )
 
 set(GPU_PROGRAMS

@@ -335,7 +335,11 @@ class PeakIVScanner {
 
 
 int main(int argc, char **argv) {
-    init_logger();
+    // Initialize logger.
+    init_logger("log/peak_by_bit.log");
+
+
+
     // Process options.
     size_t start_bit;
     size_t max_bit;

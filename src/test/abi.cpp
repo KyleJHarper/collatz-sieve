@@ -22,7 +22,7 @@ void test_abi_demangle() {
 
 
 template<AnySupportedIntegral T>
-void test_cache_line_size() {
+void test_abi_cache_line_size() {
     start_test(__func__);
 
     // It's hard coded to 64.
@@ -34,10 +34,31 @@ void test_cache_line_size() {
 
 
 template<AnySupportedIntegral T>
+void test_abi_get_bit_width_id() {
+    start_test(__func__);
+
+    // The mpz class should get assigned a fixed value.
+    assert(ABI::MPZ_CLASS_BIT_WIDTH_ID == 0);
+
+    // All other types should be equal to whatever their sizeof() returns.
+    if constexpr(FixedWidthIntegral<T>) {
+        assert(ABI::get_bit_width_id<T>() == sizeof(T) * 8);
+    } else if constexpr(GMPIntegral<T>) {
+        assert(ABI::get_bit_width_id<T>() == 0);
+        assert(ABI::get_bit_width_id<T>() == ABI::MPZ_CLASS_BIT_WIDTH_ID);
+    }
+
+    end_test();
+}
+
+
+
+template<AnySupportedIntegral T>
 void run_all() {
     announce_run_all<T>();
     test_abi_demangle<T>();
-    test_cache_line_size<T>();
+    test_abi_cache_line_size<T>();
+    test_abi_get_bit_width_id<T>();
 }
 
 

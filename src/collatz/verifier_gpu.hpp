@@ -37,8 +37,11 @@ class GPUVerifier : public Verifier<T> {
     /// @brief Controls the number of bytes to use on the GPU.  When 0, `GPUVerifier` targets 90%.
     size_t _gpu_buffer_limit = 0;
 
+    /// @brief Amount of GPU memory actually in use when running.
+    size_t _gpu_buffer_used = 0;
+
     /// @brief Determines how many scaling factors will apply on each GPU run.  See `run_executor()` for details.
-    size_t _scales_per_run = 10;
+    size_t _scales_per_run = 100;
 
 
 
@@ -117,6 +120,9 @@ class GPUVerifier : public Verifier<T> {
     /// @brief Set the GPU memory limit, in bytes.  If zero, 90% of free memory will be targeted.
     void set_gpu_buffer_limit(size_t value) { _gpu_buffer_limit = value; }
 
+    /// @brief Get the GPU memory actually used.
+    size_t get_gpu_buffer_used() const { return _gpu_buffer_used; }
+
     /// @brief Get the GPU scales-per-run value.  See `run_executor()` for details about this.
     size_t get_scales_per_run() const { return _scales_per_run; }
 
@@ -161,7 +167,7 @@ class GPUVerifier : public Verifier<T> {
         }
 
         // Find out how much memory is available for the GPU.  Start by assuming the caller sent a fixed byte amount.
-        size_t total_buffer_limit = _gpu_buffer_limit;
+        _gpu_buffer_used = _gpu_buffer_limit;
 
         // If unsent, aim for 90% of the free bytes or total needed (if lesser).
         if (_gpu_buffer_limit == 0) {
@@ -171,19 +177,19 @@ class GPUVerifier : public Verifier<T> {
             if (status != cudaSuccess) {
                 throw std::runtime_error(std::string("CUDA Error: ") + cudaGetErrorString(status));
             }
-            total_buffer_limit = free_bytes * 9 / 10;  // 90%
+            _gpu_buffer_used = free_bytes * 9 / 10;  // 90%
         }
         // If the survivor set is smaller than the available buffer space on the GPU, reduce the allocation size needed.
         const size_t uncovered_values_size = this->_tree.get_uncovered_values().cardinality() * sizeof(T);
-        if (uncovered_values_size < total_buffer_limit) {
-            total_buffer_limit = uncovered_values_size;
+        if (uncovered_values_size < _gpu_buffer_used) {
+            _gpu_buffer_used = uncovered_values_size;
         }
 
         // Use the total buffer limit to decide how large each thread's buffer can be.
         // Add 1-2 elements worth of buffer in case the full survivor set fits in VRAM.  Otherwise, integer truncation might cause
         // edge-cases where a handful are excluded and require a whole round-trip.  It's unlikely, but why risk it?
         const size_t thread_count = static_cast<size_t>(omp_get_max_threads());
-        const size_t buffer_limit_per_thread = (total_buffer_limit / thread_count) + (sizeof(T) * 2);
+        const size_t buffer_limit_per_thread = (_gpu_buffer_used / thread_count) + (sizeof(T) * 2);
 
         // Use size_of to determine how many elements that works out to be.  It'll be used by the buffer's constructor.
         const uint64_t elements_per_thread = buffer_limit_per_thread / sizeof(T);
@@ -265,6 +271,9 @@ class GPUVerifier : public Verifier<T> {
 
         // Synchronize the timer since it's done doing any work.
         this->sync_timer();
+
+        // Reset the GPU used value.
+        _gpu_buffer_used = 0;
     }
 
 

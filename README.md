@@ -358,6 +358,7 @@ Several programs are emitted (or are written in Python).
 | `single_collatz`      | Working    | Builds a single sequence and emits some stats about it.  Very simple. |
 | `step_counter`        | Unfinished | Tool to analyze steps and organize them. |
 | `stride_math.py`      | Working    | Emits bit requirements for affine stride coefficients. |
+| `tree_builder`        | Working    | Builds and exports trees for easy sharing. |
 | `verifier`            | Working    | Demonstration of how to use the verifier classes (CPU and GPU). |
 
 # Save and Load

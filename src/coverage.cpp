@@ -142,8 +142,11 @@ void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep
 
 
 int main(int argc, char **argv) {
-    // Get logger.
-    init_logger();
+    // Initialize logger.
+    init_logger("log/coverage.log");
+
+
+
     // Process options.
     size_t levels;
     bool verbose = false;

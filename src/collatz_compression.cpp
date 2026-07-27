@@ -689,7 +689,11 @@ void run_all(size_t bits, size_t progress_every_x_percent) {
 
 
 int main(int argc, char **argv) {
-    init_logger();
+    // Initialize logger.
+    init_logger("log/collatz_compression.log");
+
+
+
     // Process options.
     size_t bits;
     bool force_128bit = false;

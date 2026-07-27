@@ -34,7 +34,7 @@ concept AnySupportedIntegral = (FixedWidthIntegral<T> || GMPIntegral<T>);
 
 
 /// @brief Concept to detect which integrals will respond to operator<< for printing.
-template <typename T>
+template<typename T>
 concept PrintableIntegral = std::integral<T> && requires(std::ostream& os, T val) {
     { os << val } -> std::same_as<std::ostream&>;
 };

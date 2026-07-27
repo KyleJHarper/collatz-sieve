@@ -1,7 +1,9 @@
 #pragma once
 
+#include "concepts.hpp"
 #include <cxxabi.h>
 #include <string>
+#include <stdint.h>
 
 
 /**
@@ -45,4 +47,21 @@ namespace ABI {
 
     /// @brief Use 64 bytes as the cache line size to avoid false sharing in TLS structs and similar.
     constexpr size_t CACHE_LINE_SIZE = 64;
+
+
+
+    /// @brief Constant value for the mpz_class type ID.
+    constexpr uint16_t MPZ_CLASS_BIT_WIDTH_ID = 0;
+
+
+
+    /// @brief Assign consistent values to differnt data types.
+    template<AnySupportedIntegral T>
+    static constexpr uint16_t get_bit_width_id() {
+        if constexpr(FixedWidthIntegral<T>) {
+            return sizeof(T) * 8;
+        } else if constexpr(GMPIntegral<T>) {
+            return MPZ_CLASS_BIT_WIDTH_ID;
+        }
+    }
 }

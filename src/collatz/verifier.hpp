@@ -160,6 +160,11 @@ class Verifier {
     /// @name Accessors
     /// @{
 
+    /// @brief Get the assigned tree.  Read only.
+    const TreeType& get_tree() const { return _tree; }
+
+
+
     /// @brief Get the start value.
     const T& get_start_value() const { return _start_value; }
 
