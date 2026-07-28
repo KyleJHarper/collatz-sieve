@@ -224,7 +224,7 @@ void test_collatz_st_for_each_sequence_step() {
             } else {
                 manual_step = manual_step / 2;
             }
-            return false;
+            return ForEachSignal::CONTINUE;
         });
     }
 
@@ -240,7 +240,7 @@ void test_collatz_st_for_each_sequence_step() {
             } else {
                 manual_step = manual_step / 2;
             }
-            return false;
+            return ForEachSignal::CONTINUE;
         });
     }
 
@@ -321,7 +321,7 @@ void test_collatz_st_for_each_fg_chain_link() {
             } else {
                 manual_step = manual_step / 2;
             }
-            return false;
+            return ForEachSignal::CONTINUE;
         });
     }
 
@@ -345,7 +345,7 @@ void test_collatz_st_for_each_fg_step() {
             } else {
                 manual_step = manual_step / 2;
             }
-            return false;
+            return ForEachSignal::CONTINUE;
         });
     }
 
@@ -365,7 +365,7 @@ void test_collatz_st_get_fg_chain_string() {
         manual_fg_string.clear();
         Collatz<T>::st_for_each_fg_chain_link(i, [&](bool is_F) {
             manual_fg_string += (is_F ? 'F' : 'G');
-            return false;
+            return ForEachSignal::CONTINUE;
         });
         collatz.init(i);
         assert(Collatz<T>::st_get_fg_chain_string(i) == manual_fg_string);
@@ -388,7 +388,7 @@ void test_collatz_st_get_oe_pattern_string() {
         manual_oe_string.clear();
         Collatz<T>::st_for_each_sequence_step(i, [&](const T& step) {
             manual_oe_string += (step % 2 == 1 ? 'O' : 'E');
-            return false;
+            return ForEachSignal::CONTINUE;
         });
         collatz.init(i);
         assert(Collatz<T>::st_get_oe_pattern_string(i) == manual_oe_string);

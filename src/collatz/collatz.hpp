@@ -9,6 +9,7 @@
 #include "collatz_affine_stride.hpp"
 #include "concepts.hpp"
 #include "string.hpp"
+#include "for_each.hpp"
 #include "exponents.hpp"
 #include "collatz_constants.hpp"
 #include "bit.hpp"
@@ -104,7 +105,7 @@ class Collatz {
                 if (_hwm_index == 0 && step < _initial_value) {
                     _hwm_index = _step_count - 1;
                 }
-                return false;
+                return ForEachSignal::CONTINUE;
             });
             // Decrement 1 to account for start position
             if (_step_count > 0) {
@@ -156,7 +157,7 @@ class Collatz {
         sequence.reserve(_step_count + 1);
         for_each_sequence_step([&](const T& value) {
             sequence.push_back(value);
-            return false;
+            return ForEachSignal::CONTINUE;
         });
         return sequence;
     }
@@ -380,13 +381,15 @@ class Collatz {
     * @brief Run through the sequence with a callback each step, including the initial value.
     * @tparam Func A callback function type.
     * @param initial_value The first value of a sequence to process.  Will be returned as the first step.
-    * @param callback Caller's callback.  Must be callable as `const T&` to prevent alloc on GMP path.  Must return true to stop
-    * early, false otherwise.
+    * @param callback Caller's callback.  Must be callable as `const T&` to prevent alloc on GMP path.  Must return either
+    * ForEachSignal::CONTINUE to continue, otherwise ForEachSignal::BREAK.
     */
     template<typename Func>
     static void st_for_each_sequence_step(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise it can make GMP over and over.
         static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, const T&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
@@ -395,8 +398,7 @@ class Collatz {
             // Fixed integrals can use intrinsic arithmetic operators for "free", but can overflow.
             T current_value = initial_value;
             while (current_value != 1) {
-                bool stop = callback(current_value);
-                if (stop) { return; }
+                if (callback(current_value) == ForEachSignal::BREAK) { return; }
                 if ((current_value & 1) == 0) {
                     current_value >>= 1;
                 } else {
@@ -413,8 +415,7 @@ class Collatz {
             thread_local T current_value;
             current_value = initial_value;
             while (mpz_cmp_ui(current_value.get_mpz_t(), 1) != 0) {
-                bool stop = callback(current_value);
-                if (stop) { return; }
+                if (callback(current_value) == ForEachSignal::BREAK) { return; }
                 if (mpz_even_p(current_value.get_mpz_t())) {
                     mpz_tdiv_q_2exp(current_value.get_mpz_t(), current_value.get_mpz_t(), 1);  // current_step >> 1   ==>  current_step /= 2
                 } else {
@@ -574,13 +575,15 @@ class Collatz {
     * @brief Generate an FG chain on-the-fly and return the link (F or G) to a callback.
     * @tparam Func Caller's function type.  Must be: `bool(bool)`
     * @param initial_value The first value of the sequence.
-    * @param callback The method to invoke with each F or G step.  When F, true.  When G, false.  Caller may return false to stop
-    * execution at any time.
+    * @param callback The method to invoke with each F or G step.  When F, true.  When G, false.  Must return either
+    * ForEachSignal::CONTINUE to continue, otherwise ForEachSignal::BREAK.
     */
     template<typename Func>
     static void st_for_each_fg_chain_link(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise it makes GMP over and over.
-        static_assert(std::is_invocable_r_v<bool, Func, bool>, "Callback must be callable as bool(bool)");
+        static_assert(std::is_invocable_v<Func, bool>, "Callback must be callable as (bool)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, bool>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
@@ -592,15 +595,14 @@ class Collatz {
             if (is_F) {
                 // Reset it so it doesn't loop.
                 is_F = false;
-                return false;
+                return ForEachSignal::CONTINUE;
             } else {
                 if constexpr(FixedWidthIntegral<T>) {
                     is_F = (current_value & 1) == 1;
                 } else if constexpr(GMPIntegral<T>) {
                     is_F = mpz_odd_p(current_value.get_mpz_t());
                 }
-                bool stop = callback(is_F);
-                return stop;
+                return callback(is_F);
             }
         });
     }
@@ -611,12 +613,15 @@ class Collatz {
     * @brief Steps through a Collatz sequence using F and G steps instead of normal ones.
     * @tparam Func Caller's function type.  Must be: `const T&`
     * @param initial_value The first value of the sequence.
-    * @param callback The method to invoke with each F or G step's value.  Caller may return false to stop execution at any time.
+    * @param callback The method to invoke with each F or G step's value.  Must return either ForEachSignal::CONTINUE to continue,
+    * otherwise ForEachSignal::BREAK.
     */
     template<typename Func>
     static void st_for_each_fg_step(const T& initial_value, Func&& callback) {
         // Do not allow non-ref callbacks.  Otherwise it makes GMP over and over.
         static_assert(std::is_invocable_v<Func, const T&>, "Callback must be callable with (const T&)");
+        // Require ForEachSignal return type.
+        static_assert(std::is_same_v<std::invoke_result_t<Func, T&>, ForEachSignal>, "Callback must return ForEachSignal");
 
         // Zero is a special case, mostly for BinaryTree building a root.
         if (initial_value == 0) { return; }
@@ -628,15 +633,14 @@ class Collatz {
             if (was_F) {
                 // Reset it so it doesn't loop.
                 was_F = false;
-                return false;
+                return ForEachSignal::CONTINUE;
             } else {
                 if constexpr(FixedWidthIntegral<T>) {
                     was_F = (current_value & 1) == 1;
                 } else if constexpr(GMPIntegral<T>) {
                     was_F = mpz_odd_p(current_value.get_mpz_t());
                 }
-                bool stop = callback(current_value);
-                return stop;
+                return callback(current_value);
             }
         });
     }
@@ -658,7 +662,10 @@ class Collatz {
         Collatz<T>::st_for_each_fg_chain_link(initial_value, [&](bool is_F) {
             result += (is_F ? 'F' : 'G');
             count++;
-            return count >= max_chars;
+            if (count >= max_chars) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
         });
         return result;
     }

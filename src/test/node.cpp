@@ -513,7 +513,10 @@ void test_node_get_fg_chain_string() {
         std::string manual_chain = "";
         Collatz<T>::st_for_each_fg_chain_link(value, [&](bool is_F) {
             manual_chain += (is_F ? 'F' : 'G');
-            return manual_chain.size() >= max_chars;
+            if (manual_chain.size() >= max_chars) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
         });
         assert(manual_chain == node.get_fg_chain_string());
     }
@@ -567,7 +570,10 @@ void test_node_get_odd_even_chain_string() {
         std::string manual_oe_chain = "";
         Collatz<T>::st_for_each_fg_chain_link(value, [&](bool is_F) {
             manual_fg_chain += (is_F ? 'F' : 'G');
-            return manual_fg_chain.size() >= max_chars;
+            if (manual_fg_chain.size() >= max_chars) {
+                return ForEachSignal::BREAK;
+            }
+            return ForEachSignal::CONTINUE;
         });
         // Convert.  Don't strip the last E because these are partial sequences not ending in 1.
         manual_oe_chain = Collatz<T>::st_fg_to_oe(manual_fg_chain, std::numeric_limits<size_t>::max(), false);

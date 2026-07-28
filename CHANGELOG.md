@@ -43,6 +43,11 @@ A `Verifier` superclass was built to take a `BinaryTree<T>` and begin verifying 
 A new program was written to help make building trees easier: `tree_builder`.  It does what it sounds like.  Options available by
 calling `tree_builder -h`.
 
+### Verifier (Program)
+
+A new program was written which takes in a prebuilt tree (from `tree_builder`) and then begins verifying surviving values.  It
+provides realtime updates to any ANSI-compliant terminal.  The program is called `verifier`.  Options are available with `-h`.
+
 ## 4.1.0
 
 ### Value Iterator
