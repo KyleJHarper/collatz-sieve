@@ -19,15 +19,15 @@ class CoverageBuilder {
     private:
     BinaryTree<T, TreeType> _tree;
     bool _use_precomputed = false;
-    bool _is_verifying_non_hwm_nodes = false;
+    bool _is_verifying_non_ast_nodes = false;
 
     public:
-    CoverageBuilder(bool preserve_ancestors, bool verify_non_hwm_nodes) {
+    CoverageBuilder(bool preserve_ancestors, bool verify_non_ast_nodes) {
         BinaryTreeOptions opts;
-        opts.prune_hwm_nodes = true;
+        opts.prune_ast_nodes = true;
         opts.preserve_ancestors = preserve_ancestors;
         opts.prune_parent_levels = true;
-        opts.verify_non_hwm_nodes = verify_non_hwm_nodes;
+        opts.verify_non_ast_nodes = verify_non_ast_nodes;
         _tree.init(0, opts);
     }
 
@@ -72,9 +72,9 @@ class CoverageBuilder {
 
 
 template<AnySupportedIntegral T, typename TreeType>
-void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep_seconds, bool verify_non_hwm_nodes) {
+void run(level_t levels, bool use_precomputed, bool show_ancestors, size_t sleep_seconds, bool verify_non_ast_nodes) {
     std::unordered_map<level_t, BinaryTreeCoverage<T>> coverage_map;
-    CoverageBuilder<T, TreeType> builder(show_ancestors, verify_non_hwm_nodes);
+    CoverageBuilder<T, TreeType> builder(show_ancestors, verify_non_ast_nodes);
     builder.get_tree().assert_level_will_fit(levels);
     builder.use_precomputed(use_precomputed);
     builder.run(levels);
@@ -155,10 +155,10 @@ int main(int argc, char **argv) {
     bool use_precomputed = false;
     bool show_ancestors = false;
     bool use_materialized_tree = false;
-    bool verify_non_hwm_nodes = false;
+    bool verify_non_ast_nodes = false;
     size_t sleep_seconds = 0;
     CLI::App options("Builds a BinaryTree and calculates the per-level and global coverage along the way.");
-    options.add_flag("-a,--ancestors", show_ancestors, "Show a list of all the high-water mark ancestors when done.");
+    options.add_flag("-a,--ancestors", show_ancestors, "Show a list of all the AST ancestors when done.");
     options.add_flag("-i,--int128", force_128bit, "Use 128-bit integer instead of native 64-bit integral type.");
     options.add_option("-l,--levels", levels, "Number of levels to build the tree.")->default_val(16);
     options.add_flag("-m,--mpz", force_mpz, "Use GMP's mpz_class instead of native 64-bit integral type.");
@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
         , [&](size_t x){if(x>0) {verbose=true; logger->set_level(spdlog::level::debug);}}
         , "Enable verbosity."
     );
-    options.add_flag("-V,--verify-non-hwm-nodes", verify_non_hwm_nodes, "Verify the non-HWM nodes as the tree builds.");
+    options.add_flag("-V,--verify-non-ast-nodes", verify_non_ast_nodes, "Verify the non-AST nodes as the tree builds.");
     CLI11_PARSE(options, argc, argv);
     logger->debug("Selected options were:");
     logger->debug("  Force MPZ: {}", force_mpz);
@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
     logger->debug("  Levels: {}", levels);
     logger->debug("  Use Precomputed: {}", use_precomputed);
     logger->debug("  Verbose: {}", verbose);
-    logger->debug("  Verify Non-HWM Nodes: {}", verify_non_hwm_nodes);
+    logger->debug("  Verify Non-AST Nodes: {}", verify_non_ast_nodes);
     if (force_128bit && force_mpz) {
         throw(std::logic_error("You can't specify both 128-bit (-i) int and MPZ (-m)."));
     }
@@ -207,34 +207,34 @@ int main(int argc, char **argv) {
         }
     }
     // BinaryTreeType tree_type = use_materialized_tree ? BinaryTreeType::MATERIALIZED : BinaryTreeType::IMPLICIT;
-    logger->info("Building tree with {} levels, using {}, tree type is {}, verifying non-HWM nodes is: {}."
+    logger->info("Building tree with {} levels, using {}, tree type is {}, verifying non-AST nodes is: {}."
         , levels
         , data_type
         , use_materialized_tree ? "Materialized" : "Implicit"
-        , verify_non_hwm_nodes
+        , verify_non_ast_nodes
     );
     if (use_precomputed) {
         logger->warn("You requested a precomputed table.  These are statically looked up, not computed!");
     }
     if (data_type == "uint64_t") {
         if (use_materialized_tree) {
-            run<uint64_t, BinaryTreeMaterializedImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<uint64_t, BinaryTreeMaterializedImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         } else {
-            run<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<uint64_t, BinaryTreeImplicitImpl<uint64_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         }
     }
     if (data_type == "uint128_t") {
         if (use_materialized_tree) {
-            run<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<uint128_t, BinaryTreeMaterializedImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         } else {
-            run<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<uint128_t, BinaryTreeImplicitImpl<uint128_t>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         }
     }
     if (data_type == "mpz_class") {
         if (use_materialized_tree) {
-            run<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<mpz_class, BinaryTreeMaterializedImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         } else {
-            run<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_hwm_nodes);
+            run<mpz_class, BinaryTreeImplicitImpl<mpz_class>>(levels, use_precomputed, show_ancestors, sleep_seconds, verify_non_ast_nodes);
         }
     }
 

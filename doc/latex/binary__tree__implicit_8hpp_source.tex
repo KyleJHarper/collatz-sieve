@@ -33,7 +33,7 @@
 \DoxyCodeLine{00051\ \ \ \ \ std::vector<Node<T>*>\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}{\_ancestors}};}
 \DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}{\_is\_initialized}}\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_a53939add5e3c45a449a4123fc0ee3b7c}{preserve\_ancestors}};}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_a5ea57db72aee4d2e55f9fe1672a584bf}{verify\_non\_hwm\_nodes}};}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_ac9d6781562a6436ceba3c131058f4971}{verify\_non\_ast\_nodes}};}
 \DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{const}\ TreeTypeEnum\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a3954af07c4eceae610841b384f3368fd}{\_tree\_type}}\ =\ TreeTypeEnum::IMPLICIT;}
 \DoxyCodeLine{00060\ }
 \DoxyCodeLine{00061\ }
@@ -80,7 +80,7 @@
 \DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a018f9b9d25ae3946fd2a14778450ac33}{\_root\_node}};}
 \DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \};}
 \DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a018f9b9d25ae3946fd2a14778450ac33}{\_root\_node}}\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_a5ea57db72aee4d2e55f9fe1672a584bf}{verify\_non\_hwm\_nodes}};}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_ac9d6781562a6436ceba3c131058f4971}{verify\_non\_ast\_nodes}};}
 \DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}}\ =\ \mbox{\hyperlink{structBinaryTreeOptions}{BinaryTreeOptions}}\{\}.\mbox{\hyperlink{structBinaryTreeOptions_a53939add5e3c45a449a4123fc0ee3b7c}{preserve\_ancestors}};}
 \DoxyCodeLine{00122\ \ \ \ \ \}}
 \DoxyCodeLine{00123\ }
@@ -91,7 +91,7 @@
 \DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}{\_is\_initialized}})\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_af80c190065b8b07d9f6f00d8cb156a9b}{reset}}();\ \}}
 \DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}{\_is\_initialized}}\ =\ \textcolor{keyword}{true};}
 \DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Set\ options.}}
-\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}}\ =\ opts.verify\_non\_hwm\_nodes;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}}\ =\ opts.verify\_non\_ast\_nodes;}
 \DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}}\ =\ opts.preserve\_ancestors;}
 \DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ add\ the\ other\ levels,\ if\ needed.}}
 \DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf}{\_level\_count}}\ <\ levels)\ \{}
@@ -120,9 +120,9 @@
 \DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a731956e4e72bebbce1593c9cf3f95554}{is\_preserving\_ancestors}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}};\ \}}
 \DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a3d94ca995839420d8c875328f58fe3e7}{set\_is\_preserving\_ancestors}}(\textcolor{keywordtype}{bool}\ value)\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}}\ =\ value;\ \}}
 \DoxyCodeLine{00186\ }
-\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a71412ef41cf3e053549b3d234370dd45}{is\_verifying\_non\_hwm\_nodes}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}};\ \}}
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a2e00b915f66c9ec26ee4e9a82ecf791b}{disable\_non\_hwm\_node\_verification}}()\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}}\ =\ \textcolor{keyword}{false};\ \}}
-\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ad984431e1a470b0a098f7729632f57ef}{enable\_non\_hwm\_node\_verification}}()\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}}\ =\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a8eab21f6a4bf793a3717040b95772712}{is\_verifying\_non\_ast\_nodes}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}};\ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a126895df17a0349e3e7c1d541e1da02b}{disable\_non\_ast\_node\_verification}}()\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}}\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_aefdff6ea23ab27319b39c6f2275d313d}{enable\_non\_ast\_node\_verification}}()\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}}\ =\ \textcolor{keyword}{true};\ \}}
 \DoxyCodeLine{00193\ }
 \DoxyCodeLine{00195\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_aa43f0b6e858543a08816a2f81098f803}{is\_initialized}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}{\_is\_initialized}};\ \}}
 \DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0acc4}{set\_is\_initialized}}(\textcolor{keywordtype}{bool}\ value)\ \{\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}{\_is\_initialized}}\ =\ value;\ \}}
@@ -249,10 +249,10 @@
 \DoxyCodeLine{00412\ }
 \DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Establish\ TLS\ for\ our\ callback.}}
 \DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ std::vector<AddLevelTLS>\ callback\_storage;}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ our\ own\ local\ High-\/Water\ Mark.\ \ Since\ nodes\ are\ not\ sequentially\ ordered,\ we\ can\ only\ set\ this\ to\ first\ node\ -\/\ 1.}}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ T\ add\_level\_high\_water\_mark\ =\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{BinaryTreeMath<T>::st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf}{\_level\_count}})\ -\/\ 1;}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (add\_level\_high\_water\_mark\ <\ 1)\ \{}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ add\_level\_high\_water\_mark\ =\ 1;}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ our\ own\ local\ Above\ Stopping\ Time\ point.\ \ Since\ nodes\ are\ not\ sequentially\ ordered,\ we\ can\ only\ set\ this\ to\ first\ node\ -\/\ 1.}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ T\ add\_level\_ast\_value\ =\ \mbox{\hyperlink{classBinaryTreeMath_af33a48589b2b7c9d2180b9ae083f5553}{BinaryTreeMath<T>::st\_first\_node\_value\_of\_level}}(\mbox{\hyperlink{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf}{\_level\_count}})\ -\/\ 1;}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (add\_level\_ast\_value\ <\ 1)\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ add\_level\_ast\_value\ =\ 1;}
 \DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00420\ }
 \DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ loop.}}
@@ -279,37 +279,37 @@
 \DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classBinaryTreeMath_a5a11595e85505535bb32a40749370083}{BinaryTreeMath<T>::st\_node\_value\_by\_position\_and\_level}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a031c148523387fb150285959af8df772}{right\_position}},\ \mbox{\hyperlink{classBinaryTreeImplicitImpl_ac0ad88f2ae3a12baefc4df018f356caf}{\_level\_count}},\ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}});}
 \DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00444\ }
-\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initialize\ the\ node\ and\ test\ HWM\ for\ ancestry.}}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initialize\ the\ node\ and\ test\ AST\ for\ ancestry.}}
 \DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.init(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}{left\_value}});}
 \DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.init(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}});}
 \DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}{\_is\_preserving\_ancestors}})\ \{}
-\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_high\_water\_mark())\ \{}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_ast())\ \{}
 \DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a7f528f44681da439c411ad13b46db56e}{new\_ancestors}}.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classNode}{Node<T>}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}{left\_value}}));}
 \DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_high\_water\_mark())\ \{}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_ast())\ \{}
 \DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a7f528f44681da439c411ad13b46db56e}{new\_ancestors}}.push\_back(\textcolor{keyword}{new}\ \mbox{\hyperlink{classNode}{Node<T>}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}}));}
 \DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00456\ }
 \DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Perform\ verification,\ if\ requested.}}
-\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}{\_is\_verifying\_non\_hwm\_nodes}})\ \{}
-\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
-\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}{left\_value}},\ add\_level\_high\_water\_mark)\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}{\_is\_verifying\_non\_ast\_nodes}})\ \{}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_ast()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}{left\_value}},\ add\_level\_ast\_value)\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Node\ value\ "{}}\ +\ to\_string\_any(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aff73cde6d5d2d1aa95d366ff1d4c80de}{left\_value}})\ +\ \textcolor{stringliteral}{"{}\ didn't\ verify.\ \ How?"{}});}
 \DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
-\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}},\ add\_level\_high\_water\_mark)\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_ast()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classCollatz}{Collatz<T>::st\_verify}}(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}},\ add\_level\_ast\_value)\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::logic\_error(\textcolor{stringliteral}{"{}Node\ value\ "{}}\ +\ to\_string\_any(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_aa40f5152ef07d64d4dd7a12950717226}{right\_value}})\ +\ \textcolor{stringliteral}{"{}\ didn't\ verify.\ \ How?"{}});}
 \DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00470\ }
-\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ POSITION\ to\ the\ TLS\ bitmap\ if\ it\ didn't\ hit\ HWM.}}
-\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Write\ the\ POSITION\ to\ the\ TLS\ bitmap\ if\ it\ didn't\ hit\ AST.}}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a26ab20675ba6e70fdd1ec39a006e4468}{left\_node}}.is\_below\_ast()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a4fe358c673bb7eba372a297849e561da}{uncovered\_bitmap}}.add(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a489c30d3b72ab35e664ec8b48a751117}{left\_position}});}
 \DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_high\_water\_mark()\ ==\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a99a026f3e1b20b1977cbc5a8e21774c7}{right\_node}}.is\_below\_ast()\ ==\ \textcolor{keyword}{false})\ \{}
 \DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a4fe358c673bb7eba372a297849e561da}{uncovered\_bitmap}}.add(tls.\mbox{\hyperlink{structBinaryTreeImplicitImpl_1_1AddLevelTLS_a031c148523387fb150285959af8df772}{right\_position}});}
 \DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00478\ }

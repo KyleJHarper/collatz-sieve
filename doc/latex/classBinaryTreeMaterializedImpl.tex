@@ -81,15 +81,15 @@ bool {\bfseries is\+\_\+preserving\+\_\+ancestors} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6e8ecb2d4a5cb43b3d6da051756957a1}{set\+\_\+is\+\_\+preserving\+\_\+ancestors}} (const bool value)
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_ab484f0dd4284c27a1279adcda9b7896a}\label{classBinaryTreeMaterializedImpl_ab484f0dd4284c27a1279adcda9b7896a} 
-bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () const
-\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+HWM nodes. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_addb5aa85e495c5553f4c14bf80c1de14}\label{classBinaryTreeMaterializedImpl_addb5aa85e495c5553f4c14bf80c1de14} 
-void {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_ae00eeefd4ada83586a23d4f6c56a0216}\label{classBinaryTreeMaterializedImpl_ae00eeefd4ada83586a23d4f6c56a0216} 
-void {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_ae0b23caddbdf4adc6fe6f09632b1c4b6}\label{classBinaryTreeMaterializedImpl_ae0b23caddbdf4adc6fe6f09632b1c4b6} 
+bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} () const
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+AST nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a6fff434ca158f230a2b627840d98c1f7}\label{classBinaryTreeMaterializedImpl_a6fff434ca158f230a2b627840d98c1f7} 
+void {\bfseries disable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+AST node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_ae7d4d9a283c5be21f56d1efaf4994974}\label{classBinaryTreeMaterializedImpl_ae7d4d9a283c5be21f56d1efaf4994974} 
+void {\bfseries enable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+AST node verification. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ad3a002443b7b09f817c56774ea6f33e9}\label{classBinaryTreeMaterializedImpl_ad3a002443b7b09f817c56774ea6f33e9} 
 bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
@@ -97,7 +97,7 @@ void \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a6a50c3a15c9d6eb009d2cce27
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48}\label{classBinaryTreeMaterializedImpl_ab86e43472cb44b33e47f9e71c14a6f48} 
 const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () const
-\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by an AST ancestor. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_a4f221baa450144c4ccb84acc4c799945}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c}\label{classBinaryTreeMaterializedImpl_aa14871ccac1875447ed3a33b21ead55c} 
@@ -112,9 +112,9 @@ bool {\bfseries is\+\_\+materialized} () const
 \begin{DoxyCompactList}\small\item\em Responds true to {\ttfamily \doxylink{classBinaryTreeMaterializedImpl_a9be81844a8872159277d9ff2dac05f8c}{is\+\_\+materialized()}}, mostly for the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade. \end{DoxyCompactList}\item 
 const std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTreeMaterializedImpl_adde8aa871f0c8b733935a47e725acd35}{get\+\_\+level\+\_\+map}} () const
 \begin{DoxyCompactList}\small\item\em Get a reference to the level map, which contains all of the {\ttfamily \doxylink{classNode}{Node}} objects. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_ae7e90237d4579290c94581a474d8f0be}\label{classBinaryTreeMaterializedImpl_ae7e90237d4579290c94581a474d8f0be} 
-bool {\bfseries is\+\_\+pruning\+\_\+hwm\+\_\+nodes} () const
-\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning High-\/\+Water Mark nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a0d3a4ca99227e4a3694610091c392b20}\label{classBinaryTreeMaterializedImpl_a0d3a4ca99227e4a3694610091c392b20} 
+bool {\bfseries is\+\_\+pruning\+\_\+ast\+\_\+nodes} () const
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning AST nodes. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_af04c2f128cea6d1884a43d933ddf00d8}\label{classBinaryTreeMaterializedImpl_af04c2f128cea6d1884a43d933ddf00d8} 
 bool {\bfseries is\+\_\+pruning\+\_\+parent\+\_\+levels} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes). \end{DoxyCompactList}\item 
@@ -147,22 +147,22 @@ std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCover
 \begin{DoxyCompactList}\small\item\em Map of levels and their associated coverage. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a23bb1d9e457d94421b667b6fea65012f}\label{classBinaryTreeMaterializedImpl_a23bb1d9e457d94421b667b6fea65012f} 
 std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+ancestors}
-\begin{DoxyCompactList}\small\item\em Collection of ancestors, which are High-\/\+Water Mark nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Collection of ancestors, which are Abort at Stopping Time nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a6a57a9411ff1d314a3f50517328afe13}\label{classBinaryTreeMaterializedImpl_a6a57a9411ff1d314a3f50517328afe13} 
 bool {\bfseries \+\_\+is\+\_\+initialized} = false
 \begin{DoxyCompactList}\small\item\em Flag to determine if this tree is initialized, meaning it\textquotesingle{}s had at least one level added. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_a01e489a91c4a593d905aedc1d2fc3228}\label{classBinaryTreeMaterializedImpl_a01e489a91c4a593d905aedc1d2fc3228} 
-bool {\bfseries \+\_\+is\+\_\+pruning\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+hwm\+\_\+nodes
-\begin{DoxyCompactList}\small\item\em Flag to determine if the tree should prune HWM nodes, carving out subtress, turning this into a DAG. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a24d61bf24c7c269d1cede5f6a43e5385}\label{classBinaryTreeMaterializedImpl_a24d61bf24c7c269d1cede5f6a43e5385} 
+bool {\bfseries \+\_\+is\+\_\+pruning\+\_\+ast\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+ast\+\_\+nodes
+\begin{DoxyCompactList}\small\item\em Flag to determine if the tree should prune AST nodes, carving out subtress, turning this into a DAG. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a1ed797dee4e9eed15efc8702483bc650}\label{classBinaryTreeMaterializedImpl_a1ed797dee4e9eed15efc8702483bc650} 
 bool {\bfseries \+\_\+is\+\_\+pruning\+\_\+parent\+\_\+levels} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.prune\+\_\+parent\+\_\+levels
 \begin{DoxyCompactList}\small\item\em Flag to determine if the tree should prune parent levels. AKA, only keep the last level (leaf nodes). \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_ad4887a4f457f633a03f1f0ab4eee9a75}\label{classBinaryTreeMaterializedImpl_ad4887a4f457f633a03f1f0ab4eee9a75} 
 bool {\bfseries \+\_\+is\+\_\+preserving\+\_\+ancestors} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.preserve\+\_\+ancestors
-\begin{DoxyCompactList}\small\item\em Flag to determine if HWM ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeMaterializedImpl_a3b47fb7da377f83c19e503a32ad47ac5}\label{classBinaryTreeMaterializedImpl_a3b47fb7da377f83c19e503a32ad47ac5} 
-bool {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+hwm\+\_\+nodes
-\begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+HWM nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Flag to determine if AST ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeMaterializedImpl_a710e0725aae1b7c83f516851188b1ad0}\label{classBinaryTreeMaterializedImpl_a710e0725aae1b7c83f516851188b1ad0} 
+bool {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+ast\+\_\+nodes
+\begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+AST nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeMaterializedImpl_a50c4bfac68b930b7a332383913f4c139}\label{classBinaryTreeMaterializedImpl_a50c4bfac68b930b7a332383913f4c139} 
 const Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+MATERIALIZED
 \begin{DoxyCompactList}\small\item\em Track the type of this tree for external comparison later. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -173,7 +173,7 @@ const Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+
 class Binary\+Tree\+Materialized\+Impl$<$ T $>$}
 An implementation of the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} which creates and persists {\ttfamily \doxylink{classNode}{Node}} objects in memory. 
 
-This is the materialized version, which creates real \doxylink{classNode}{Node} objects and persists them. When pruning is enabled, nodes which hit the High-\/\+Water Mark (HWM) are removed, leaving only nodes which still need to be tested.
+This is the materialized version, which creates real \doxylink{classNode}{Node} objects and persists them. When pruning is enabled, nodes which hit the Abort at Stopping Time (AST) are removed, leaving only nodes which still need to be tested.
 
 \begin{DoxyNote}{Note}
 This was a first-\/principles implementation when starting out. It\textquotesingle{}s great for in-\/memory inspection of true {\ttfamily \doxylink{classNode}{Node}} objects, or when you want to walk an actual tree, but RAM explodes quickly. If you need to work with larger trees, consider using the {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}} instead.
@@ -197,9 +197,9 @@ void \mbox{\hyperlink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialize
 
 Add a level to the tree. 
 
-Materialized tree building happens by taking the nodes from the last level in {\ttfamily \+\_\+level\+\_\+map} and treating them as parents. The children created have known values according to Harper\textquotesingle{}s algorithm. The children are checked for High-\/\+Water Mark, and stored in the next level of the map.
+Materialized tree building happens by taking the nodes from the last level in {\ttfamily \+\_\+level\+\_\+map} and treating them as parents. The children created have known values according to Harper\textquotesingle{}s algorithm. The children are checked for Abort at Stopping Time, and stored in the next level of the map.
 
-When HWM pruning is anbled, all grandparents who meet HWM are trimmed, which prevents entire subtrees of nodes from taking up memory.
+When AST pruning is anbled, all grandparents who meet AST are trimmed, which prevents entire subtrees of nodes from taking up memory.
 
 When parent level pruning is enabled, all parents are trimmed, which keeps only the last level of nodes in memory. \Hypertarget{classBinaryTreeMaterializedImpl_a6d7c5d9d4a3626fb564bb8f16a4ab4b2}\label{classBinaryTreeMaterializedImpl_a6d7c5d9d4a3626fb564bb8f16a4ab4b2} 
 \index{BinaryTreeMaterializedImpl$<$ T $>$@{BinaryTreeMaterializedImpl$<$ T $>$}!deserialize@{deserialize}}
@@ -356,7 +356,7 @@ Serialize the materialized tree specifics of this object for export.
 
 Serialization happens in this order\+:
 \begin{DoxyEnumerate}
-\item The is\+\_\+pruning\+\_\+hwm\+\_\+nodes flag.
+\item The is\+\_\+pruning\+\_\+ast\+\_\+nodes flag.
 \item The is\+\_\+pruning\+\_\+parent\+\_\+levels flag.
 \item The level map, which emits level numbers and node counts, and then uses {\ttfamily \doxylink{classNode_a9517228032e6f0ce674e69bbbca02501}{Node\+::serialize()}} on each node.
 \end{DoxyEnumerate}
@@ -451,7 +451,7 @@ This method only tests materialized tree specifics. Most equality happens via th
 
 This function checks\+:
 \begin{DoxyEnumerate}
-\item The is\+\_\+pruning\+\_\+hwm\+\_\+nodes flag.
+\item The is\+\_\+pruning\+\_\+ast\+\_\+nodes flag.
 \item The is\+\_\+pruning\+\_\+parent\+\_\+levels flag.
 \item Level map ({\ttfamily \doxylink{classNode}{Node}} objects, which invoke their own {\ttfamily \doxylink{classNode_a17282dcd2faed3e704e04be5c08dbaf3}{Node\+::st\+\_\+equal()}}).
 \end{DoxyEnumerate}

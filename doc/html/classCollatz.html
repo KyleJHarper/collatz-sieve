@@ -139,10 +139,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> ()
 const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_peak_value</b> () const</td></tr>
 <tr class="memdesc:ada4600f08f862724804bb54d22291130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the peak value found for the initial value sent. <br /></td></tr>
 <tr class="separator:ada4600f08f862724804bb54d22291130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0478fad7960232858b0a5ea852ce638e" id="r_a0478fad7960232858b0a5ea852ce638e"><td class="memItemLeft" align="right" valign="top"><a id="a0478fad7960232858b0a5ea852ce638e" name="a0478fad7960232858b0a5ea852ce638e"></a>
-seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () const</td></tr>
-<tr class="memdesc:a0478fad7960232858b0a5ea852ce638e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the index of the sequence where the High-Water Mark was found for initial value sent. <br /></td></tr>
-<tr class="separator:a0478fad7960232858b0a5ea852ce638e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e650a152361c88ea24e80a01d4c6494" id="r_a2e650a152361c88ea24e80a01d4c6494"><td class="memItemLeft" align="right" valign="top"><a id="a2e650a152361c88ea24e80a01d4c6494" name="a2e650a152361c88ea24e80a01d4c6494"></a>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_ast_index</b> () const</td></tr>
+<tr class="memdesc:a2e650a152361c88ea24e80a01d4c6494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the index of the sequence where the Abort at Stopping Time was found for initial value sent. <br /></td></tr>
+<tr class="separator:a2e650a152361c88ea24e80a01d4c6494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cf1d94aee87d3d45bd5269d9c9d606a" id="r_a6cf1d94aee87d3d45bd5269d9c9d606a"><td class="memItemLeft" align="right" valign="top"><a id="a6cf1d94aee87d3d45bd5269d9c9d606a" name="a6cf1d94aee87d3d45bd5269d9c9d606a"></a>
 seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_step_count</b> () const</td></tr>
 <tr class="memdesc:a6cf1d94aee87d3d45bd5269d9c9d606a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the step count of the sequence (stopping time) for initial value sent. <br /></td></tr>
@@ -167,9 +167,9 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_initial_value</b> = 0</
 <tr class="memitem:adabddfd8f0d3729a41b6e118c95afcf2" id="r_adabddfd8f0d3729a41b6e118c95afcf2"><td class="memItemLeft" align="right" valign="top"><a id="adabddfd8f0d3729a41b6e118c95afcf2" name="adabddfd8f0d3729a41b6e118c95afcf2"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>_peak_value</b> = 0</td></tr>
 <tr class="separator:adabddfd8f0d3729a41b6e118c95afcf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a694850331dfcd7afb99f936c16c290c8" id="r_a694850331dfcd7afb99f936c16c290c8"><td class="memItemLeft" align="right" valign="top"><a id="a694850331dfcd7afb99f936c16c290c8" name="a694850331dfcd7afb99f936c16c290c8"></a>
-seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_hwm_index</b> = 0</td></tr>
-<tr class="separator:a694850331dfcd7afb99f936c16c290c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a837ccf4bcd8ce5975166f7dc428d5e73" id="r_a837ccf4bcd8ce5975166f7dc428d5e73"><td class="memItemLeft" align="right" valign="top"><a id="a837ccf4bcd8ce5975166f7dc428d5e73" name="a837ccf4bcd8ce5975166f7dc428d5e73"></a>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_ast_index</b> = 0</td></tr>
+<tr class="separator:a837ccf4bcd8ce5975166f7dc428d5e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c1fba7d69ae0406f1a1a3e91d1e7444" id="r_a0c1fba7d69ae0406f1a1a3e91d1e7444"><td class="memItemLeft" align="right" valign="top"><a id="a0c1fba7d69ae0406f1a1a3e91d1e7444" name="a0c1fba7d69ae0406f1a1a3e91d1e7444"></a>
 seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_step_count</b> = 0</td></tr>
 <tr class="separator:a0c1fba7d69ae0406f1a1a3e91d1e7444"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,7 +228,7 @@ In the event a number is divergent (cyclic), this method will hang. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">initial_value</td><td>The starting value for a sequence. </td></tr>
-    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or a High-Water Mark. </td></tr>
+    <tr><td class="paramname">sentinel_value</td><td>The value to stop at. Usually 1 or an AST value. </td></tr>
   </table>
   </dd>
 </dl>

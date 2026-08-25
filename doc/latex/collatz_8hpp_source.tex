@@ -13,602 +13,608 @@
 \DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}collatz\_affine\_stride.hpp"{}}}
 \DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}concepts.hpp"{}}}
 \DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}string.hpp"{}}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}exponents.hpp"{}}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}collatz\_constants.hpp"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}bit.hpp"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}typedefs.hpp"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <vector>}}
-\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}for\_each.hpp"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}exponents.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}collatz\_constants.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}bit.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}typedefs.hpp"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <vector>}}
 \DoxyCodeLine{00018\ }
 \DoxyCodeLine{00019\ }
-\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}\ :\ \textcolor{keyword}{public}\ std::runtime\_error\ \{}
-\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{keyword}{const}\ std::string\&\ msg)\ :\ std::runtime\_error(msg)\ \{\}}
-\DoxyCodeLine{00027\ \};}
-\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}\ :\ \textcolor{keyword}{public}\ std::runtime\_error\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{keyword}{const}\ std::string\&\ msg)\ :\ std::runtime\_error(msg)\ \{\}}
+\DoxyCodeLine{00028\ \};}
 \DoxyCodeLine{00029\ }
 \DoxyCodeLine{00030\ }
 \DoxyCodeLine{00031\ }
-\DoxyCodeLine{00045\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
-\DoxyCodeLine{00046\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatz}{Collatz}}\ \{}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ Memory\ packing\ and\ alignment\ matter!\ \ Keep\ this\ class\ LIGHT.\ \ All\ data\ must\ fit\ within\ one\ cache\ line.}}
-\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ |\ total\ |\ uint128\_t\ |\ total\ |\ mpz\_class\ |\ total}}
-\DoxyCodeLine{00050\ \ \ \ \ T\ \_initial\_value\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 8\ |\ \ \ \ \ 8\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16}}
-\DoxyCodeLine{00051\ \ \ \ \ T\ \_peak\_value\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 8\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 32}}
-\DoxyCodeLine{00052\ \ \ \ \ seq\_size\_t\ \_hwm\_index\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 4\ |\ \ \ \ 20\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 36\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 36}}
-\DoxyCodeLine{00053\ \ \ \ \ seq\_size\_t\ \_step\_count\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 4\ |\ \ \ \ 24\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 40\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 40}}
-\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_is\_initialized\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ 1:1\ |\ \ \ \ 25\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41}}
-\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_sequence\_overflows\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \textcolor{comment}{//\ \ \ \ \ \ 1:2\ |\ \ \ \ 25\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ \ (6\ bits\ padding)}}
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ Alignment\ Padding\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ \ 7\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ \ 7\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 7\ |\ \ \ \ 48}}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ Struct\ Padding\ (u128\ only)\ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48}}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Free\ Padding\ to\ Cacheline\ \ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ 16\ |\ \ \ \ 64\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 64\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 64}}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ -\/-\/\ Cache\ Line\ -\/-\/}}
-\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{template}<AnySupportedIntegral\ T>}
+\DoxyCodeLine{00047\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollatz}{Collatz}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//\ Memory\ packing\ and\ alignment\ matter!\ \ Keep\ this\ class\ LIGHT.\ \ All\ data\ must\ fit\ within\ one\ cache\ line.}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ |\ total\ |\ uint128\_t\ |\ total\ |\ mpz\_class\ |\ total}}
+\DoxyCodeLine{00051\ \ \ \ \ T\ \_initial\_value\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 8\ |\ \ \ \ \ 8\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16}}
+\DoxyCodeLine{00052\ \ \ \ \ T\ \_peak\_value\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 8\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 32}}
+\DoxyCodeLine{00053\ \ \ \ \ seq\_size\_t\ \_ast\_index\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 4\ |\ \ \ \ 20\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 36\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 36}}
+\DoxyCodeLine{00054\ \ \ \ \ seq\_size\_t\ \_step\_count\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 4\ |\ \ \ \ 24\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 40\ |\ \ \ \ \ \ \ \ \ 4\ |\ \ \ \ 40}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_is\_initialized\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ 1:1\ |\ \ \ \ 25\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_sequence\_overflows\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \textcolor{comment}{//\ \ \ \ \ \ 1:2\ |\ \ \ \ 25\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ \ (6\ bits\ padding)}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ Alignment\ Padding\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ \ 7\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ \ 7\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 7\ |\ \ \ \ 48}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ Struct\ Padding\ (u128\ only)\ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ \ 0\ |\ \ \ \ 48}}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ Free\ Padding\ to\ Cacheline\ \ \ \ \ \ \ \ \ \ \ //\ \ \ \ \ \ \ 16\ |\ \ \ \ 64\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 64\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 64}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{comment}{//\ -\/-\/\ Cache\ Line\ -\/-\/}}
 \DoxyCodeLine{00061\ }
 \DoxyCodeLine{00062\ }
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{classCollatz_a072e85b7c6db2e7dffd401fcf7e04521}{Collatz}}()\ \{\}}
-\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classCollatz_a072e85b7c6db2e7dffd401fcf7e04521}{Collatz}}()\ \{\}}
 \DoxyCodeLine{00070\ }
 \DoxyCodeLine{00071\ }
-\DoxyCodeLine{00075\ \ \ \ \ \mbox{\hyperlink{classCollatz_afa6f01d7f6e4ebccd3086250660406e1}{Collatz}}(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init}}(initial\_value);}
-\DoxyCodeLine{00077\ \ \ \ \ \};}
-\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{classCollatz_afa6f01d7f6e4ebccd3086250660406e1}{Collatz}}(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init}}(initial\_value);}
+\DoxyCodeLine{00078\ \ \ \ \ \};}
 \DoxyCodeLine{00079\ }
 \DoxyCodeLine{00080\ }
-\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init}}(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
-\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <\ 0)\ \{}
-\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}You\ cannot\ create\ a\ Collatz\ sequence\ with\ a\ value\ lower\ than\ 0."{}});}
-\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00089\ }
-\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ if\ necessary.}}
-\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_is\_initialized)\ \{\ \mbox{\hyperlink{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889}{reset}}();\ \}}
-\DoxyCodeLine{00092\ }
-\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Establish\ or\ clear\ metadata\ object.\ \ Reset()\ already\ cleared\ it,\ if\ it\ existed.}}
-\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \_is\_initialized\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \_initial\_value\ =\ initial\_value;}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ the\ sequence\ and\ store\ any\ related\ metadata,\ if\ needed.\ \ Otherwise,\ leave.}}
-\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
-\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ for\_each\_sequence\_step([\&](\textcolor{keyword}{const}\ T\&\ step)\ \{}
-\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_step\_count++;}
-\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (step\ >\ \_peak\_value)\ \{}
-\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_peak\_value\ =\ step;}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_hwm\_index\ ==\ 0\ \&\&\ step\ <\ \_initial\_value)\ \{}
-\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_hwm\_index\ =\ \_step\_count\ -\/\ 1;}
-\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Decrement\ 1\ to\ account\ for\ start\ position}}
-\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_step\_count\ >\ 0)\ \{}
-\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_step\_count-\/-\/;}
-\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}\&\ err)\ \{}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \_sequence\_overflows\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}(err);}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00117\ \ \ \ \ \}}
-\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatz_a33c0998331a6f9e2b655bed17e85e873}{init}}(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <\ 0)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}You\ cannot\ create\ a\ Collatz\ sequence\ with\ a\ value\ lower\ than\ 0."{}});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ if\ necessary.}}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_is\_initialized)\ \{\ \mbox{\hyperlink{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889}{reset}}();\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Establish\ or\ clear\ metadata\ object.\ \ Reset()\ already\ cleared\ it,\ if\ it\ existed.}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \_is\_initialized\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \_initial\_value\ =\ initial\_value;}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ the\ sequence\ and\ store\ any\ related\ metadata,\ if\ needed.\ \ Otherwise,\ leave.}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ for\_each\_sequence\_step([\&](\textcolor{keyword}{const}\ T\&\ step)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_step\_count++;}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (step\ >\ \_peak\_value)\ \{}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_peak\_value\ =\ step;}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_ast\_index\ ==\ 0\ \&\&\ step\ <\ \_initial\_value)\ \{}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_ast\_index\ =\ \_step\_count\ -\/\ 1;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Decrement\ 1\ to\ account\ for\ start\ position}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_step\_count\ >\ 0)\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_step\_count-\/-\/;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{catch}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}\&\ err)\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \_sequence\_overflows\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}(err);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \}}
 \DoxyCodeLine{00119\ }
 \DoxyCodeLine{00120\ }
-\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889}{reset}}()\ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \_initial\_value\ =\ 0;}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \_peak\_value\ =\ 0;}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \_hwm\_index\ =\ 0;}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \_step\_count\ =\ 0;}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \_is\_initialized\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \_sequence\_overflows\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00129\ \ \ \ \ \}}
-\DoxyCodeLine{00130\ }
-\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollatz_a5ab8266174ef0f4f6ea93f397e23a889}{reset}}()\ \{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \_initial\_value\ =\ 0;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \_peak\_value\ =\ 0;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \_ast\_index\ =\ 0;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \_step\_count\ =\ 0;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \_is\_initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \_sequence\_overflows\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00130\ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
 \DoxyCodeLine{00133\ }
 \DoxyCodeLine{00134\ }
-\DoxyCodeLine{00137\ }
-\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classCollatz_a7220372a1109186c701506d15129314a}{get\_initial\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_initial\_value;\ \}}
-\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatz_a336d8fa59234cdaf9b91866f03df2b0b}{has\_overflowed}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_sequence\_overflows;\ \}}
-\DoxyCodeLine{00143\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatz_a987bc9af0d6e9800a86819f8af0079e7}{is\_initialized}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_is\_initialized;\ \}}
-\DoxyCodeLine{00145\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classCollatz_ada4600f08f862724804bb54d22291130}{get\_peak\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_peak\_value;\ \}}
-\DoxyCodeLine{00147\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classCollatz_a0478fad7960232858b0a5ea852ce638e}{get\_hwm\_index}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_hwm\_index;\ \}}
-\DoxyCodeLine{00149\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a}{get\_step\_count}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_step\_count;\ \}}
-\DoxyCodeLine{00151\ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classCollatz_a3273d5a80a00f0f0b63e3ac1c4318fb5}{get\_sequence}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \_is\_initialized)\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}You\ cannot\ call\ get\_sequence()\ when\ your\ Collatz\ object\ isn't\ initialized."{}});}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ std::vector<T>\ sequence;}
-\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ sequence.reserve(\_step\_count\ +\ 1);}
-\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ for\_each\_sequence\_step([\&](\textcolor{keyword}{const}\ T\&\ value)\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ sequence.push\_back(value);}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sequence;}
-\DoxyCodeLine{00162\ \ \ \ \ \}}
-\DoxyCodeLine{00163\ }
-\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classCollatz_a7220372a1109186c701506d15129314a}{get\_initial\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_initial\_value;\ \}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatz_a336d8fa59234cdaf9b91866f03df2b0b}{has\_overflowed}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_sequence\_overflows;\ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classCollatz_a987bc9af0d6e9800a86819f8af0079e7}{is\_initialized}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_is\_initialized;\ \}}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{const}\ T\&\ \mbox{\hyperlink{classCollatz_ada4600f08f862724804bb54d22291130}{get\_peak\_value}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_peak\_value;\ \}}
+\DoxyCodeLine{00148\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classCollatz_a2e650a152361c88ea24e80a01d4c6494}{get\_ast\_index}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_ast\_index;\ \}}
+\DoxyCodeLine{00150\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a}{get\_step\_count}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_step\_count;\ \}}
+\DoxyCodeLine{00152\ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classCollatz_a3273d5a80a00f0f0b63e3ac1c4318fb5}{get\_sequence}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ \_is\_initialized)\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}You\ cannot\ call\ get\_sequence()\ when\ your\ Collatz\ object\ isn't\ initialized."{}});}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ std::vector<T>\ sequence;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ sequence.reserve(\_step\_count\ +\ 1);}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ for\_each\_sequence\_step([\&](\textcolor{keyword}{const}\ T\&\ value)\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ sequence.push\_back(value);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sequence;}
+\DoxyCodeLine{00163\ \ \ \ \ \}}
+\DoxyCodeLine{00164\ }
 \DoxyCodeLine{00166\ }
 \DoxyCodeLine{00167\ }
-\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classCollatz_a4fb36272dff7d0e4d543e42226615588}{deep\_size}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ total\ =\ \textcolor{keyword}{sizeof}(*this);}
-\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
-\DoxyCodeLine{00172\ \ \ \ \ \}}
-\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classCollatz_a4fb36272dff7d0e4d543e42226615588}{deep\_size}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ total\ =\ \textcolor{keyword}{sizeof}(*this);}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ total;}
+\DoxyCodeLine{00173\ \ \ \ \ \}}
 \DoxyCodeLine{00174\ }
 \DoxyCodeLine{00175\ }
-\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ U,\ \textcolor{keywordtype}{bool}\ UseIVTable\ =\ true>}
-\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classCollatz_a5a53b917a3a681c400ed37b68ac024bc}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keywordtype}{bool}\ st\_verify(\textcolor{keyword}{const}\ U\&\ initial\_value,\ \textcolor{keyword}{const}\ U\&\ sentinel\_value\ =\ 1)\ \{}
-\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ Collatz\ sequences\ converge\ to\ 2-\/>1-\/>2\ loops\ when\ using\ accerlated\ functions\ F\ and\ G,\ it's\ possible\ for\ an\ affine}}
-\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\ to\ terminate\ on\ 1\ or\ 2,\ not\ just\ 1.\ \ To\ solve\ for\ this\ without\ introducing\ an\ additional\ test\ inside\ the\ hot\ loop,}}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ sentinel\ value\ is\ required\ to\ be\ at\ least\ 3.}}
-\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ These\ are\ addressed\ differently\ for\ fixed-\/width\ vs\ GMP\ types\ below.}}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ value\ is\ even,\ it's\ automatically\ verified.}}
-\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((initial\_value\ \&\ 1)\ ==\ 0)\ \{}
-\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00202\ }
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ selection\ and\ main\ loops.}}
-\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
-\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sentinal\ value\ safety,\ solves\ low-\/value\ edge\ cases\ (see\ above).\ \ For\ fixed-\/width\ types,\ use\ a\ stack\ variable.}}
-\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ U\ effective\_sentinel\_value\ =\ sentinel\_value\ >\ U(2)\ ?\ sentinel\_value\ :\ U(3);}
-\DoxyCodeLine{00207\ }
-\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ initial\ value\ is\ below\ the\ known\ (precomputed)\ max\ initial\ values\ defined\ in\ CollatzConstants,\ there's\ no}}
-\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ need\ to\ track\ headroom\ or\ detect\ overflow\ in\ the\ hot\ loop.\ \ It\ can\ be\ calculated,\ promoted,\ and\ then\ use\ raw}}
-\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ arithmetic\ without\ checks,\ which\ enables\ all\ manner\ of\ compiler\ and\ CPU\ optimizations.}}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ table\ is\ viable,\ pick\ the\ known-\/safe\ type\ and\ pass\ the\ work\ to\ the\ "{}unsafe"{}\ verifier\ for\ speed.}}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(UseIVTable)\ \{}
-\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <=\ \mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{CollatzConstants::MAX\_INITIAL\_VALUE\_BY\_BIT}}.back())\ \{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Is\ promotion\ needed?\ \ If\ not,\ send\ it\ as\ type\ U\ (as-\/is).}}
-\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <=\ CollatzConstants::get\_max\_initial\_value\_by\_type<U>())\ \{}
-\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(initial\_value,\ effective\_sentinel\_value);}
-\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00219\ }
-\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Promotion\ needed.\ \ Current\ type\ U\ cannot\ handle\ it.}}
-\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ <\ 64)\ \{}
-\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ U\ is\ less\ than\ 64\ bits,\ just\ send\ it\ as\ a\ 64-\/bit.\ \ Even\ uint32\_t\ can't\ reach\ an\ overflow\ of\ 64-\/bit.}}
-\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ initial\ value\ of\ 64\ bit\ is\ empirically\ shown\ to\ be\ 12,327,829,502\ which\ is\ greater\ than\ 2\string^32\ which\ is\ 4,294,967,296.}}
-\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_initial\_value\ =\ initial\_value;}
-\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value,\ promoted\_effective\_sentinel\_value);}
-\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 64)\ \{}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ U\ of\ exactly\ 64\ bits.\ \ Uint128\_t\ can\ handle\ it.}}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_initial\_value\ =\ initial\_value;}
-\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
-\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value,\ promoted\_effective\_sentinel\_value);}
-\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 128)\ \{}
-\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ 128\ bits.\ \ Upgrade\ to\ mpz\_class.}}
-\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_initial\_value\_tls;}
-\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_effective\_sentinel\_value\_tls;}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(initial\_value,\ promoted\_initial\_value\_tls);}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(effective\_sentinel\_value,\ promoted\_effective\_sentinel\_value\_tls);}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value\_tls,\ promoted\_effective\_sentinel\_value\_tls);}
-\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Table\ above\ wasn't\ viable\ or\ used.\ \ Process\ while\ tracking\ headroom\ bits\ for\ realtime\ safety.}}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00244\ }
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ a\ steady\ stride\ table.}}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyFWTable}};}
-\DoxyCodeLine{00247\ }
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ stack\ variable\ for\ the\ temp.}}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ U\ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00250\ }
-\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ headroom\ and\ make\ adjustments\ from\ Stride\ to\ prevent\ overflow\ efficiently.}}
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ headroom\_bits\ =\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a409149ce95637fadcfd5159d27f9f2ee}{Bit::count\_leading\_zeros\_positive}}(current\_value));}
-\DoxyCodeLine{00253\ }
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ effective\_sentinel\_value)\ \{}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
-\DoxyCodeLine{00258\ }
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ headroom\ to\ see\ if\ we\ need\ promotion.}}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (headroom\_bits\ <\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}})\ \{}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ <\ 64)\ \{}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ is\ less\ than\ 64\ bits,\ just\ send\ it\ as\ a\ 64-\/bit.\ \ Even\ uint32\_t\ can't\ reach\ an\ overflow\ of\ 64-\/bit.}}
-\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ initial\ value\ of\ 64\ bit\ is\ empirically\ shown\ to\ be\ 12,327,829,502\ which\ is\ greater\ than\ 2\string^32\ which\ is\ 4,294,967,296.}}
-\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_current\_value\ =\ current\_value;}
-\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
-\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value,\ promoted\_effective\_sentinel\_value);}
-\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 64)\ \{}
-\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ U\ of\ exactly\ 64\ bits.\ \ Uint128\_t\ is\ the\ next\ best\ candidate.}}
-\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_current\_value\ =\ current\_value;}
-\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
-\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value,\ promoted\_effective\_sentinel\_value);}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 128)\ \{}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ 128\ bits.\ \ Upgrade\ to\ mpz\_class\ if\ needed.}}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Headroom\ is\ conservative\ because\ Stride.bits\_required\ is\ pessimistic.\ \ It's\ worth\ a\ quick\ clz()\ to\ re-\/chec\ headroom\ before\ giving\ up\ on\ the\ GPU\ entirely.}}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ =\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a409149ce95637fadcfd5159d27f9f2ee}{Bit::count\_leading\_zeros\_positive}}(current\_value));}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (headroom\_bits\ <\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}})\ \{}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ It's\ truly\ too\ low\ to\ handle\ this\ value.\ \ Upgrade\ to\ GMP.}}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_current\_value\_tls;}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_effective\_sentinel\_value\_tls;}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(current\_value,\ promoted\_current\_value\_tls);}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(effective\_sentinel\_value,\ promoted\_effective\_sentinel\_value\_tls);}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value\_tls,\ promoted\_effective\_sentinel\_value\_tls);}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ updated\ headroom\ from\ clz()\ says\ it's\ okay.\ \ Fall\ out\ of\ this\ block\ and\ keep\ going.}}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00287\ }
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ promotion\ needed.\ \ Apply\ the\ stride.}}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
-\DoxyCodeLine{00290\ }
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adjust\ headroom\ according\ to\ Stride.}}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ +=\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a446ecb275e4e0f4d7f108b13d706c4e2}{shift}};}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ -\/=\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}};}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<U>}})\ \{}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sentinal\ value\ safety,\ solves\ low-\/value\ edge\ cases\ (see\ above).\ \ For\ GMP\ types,\ use\ a\ thread-\/local.}}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ effective\_sentinel\_value;}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ effective\_sentinel\_value\ =\ sentinel\_value\ >\ 2\ ?\ sentinel\_value\ :\ 3;}
-\DoxyCodeLine{00299\ }
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ thread-\/local\ to\ avoid\ GMP\ allocs.}}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ current\_value;}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00303\ }
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ cannot\ overflow,\ so\ there's\ no\ need\ to\ track\ headroom\_bits.}}
-\DoxyCodeLine{00305\ }
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ a\ steady\ stride\ table.\ \ Twelve\ seems\ to\ be\ the\ sweet\ spot\ for\ this\ according\ to\ microbenchmarking.}}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyGMPTable}};}
-\DoxyCodeLine{00308\ }
-\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
-\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ effective\_sentinel\_value)\ \{}
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
-\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
-\DoxyCodeLine{00313\ }
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ the\ stride.}}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00318\ }
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Everything\ is\ okay.}}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00321\ \ \ \ \ \}}
-\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ U,\ \textcolor{keywordtype}{bool}\ UseIVTable\ =\ true>}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classCollatz_a5a53b917a3a681c400ed37b68ac024bc}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keywordtype}{bool}\ st\_verify(\textcolor{keyword}{const}\ U\&\ initial\_value,\ \textcolor{keyword}{const}\ U\&\ sentinel\_value\ =\ 1)\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ Collatz\ sequences\ converge\ to\ 2-\/>1-\/>2\ loops\ when\ using\ accerlated\ functions\ F\ and\ G,\ it's\ possible\ for\ an\ affine}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ map\ to\ terminate\ on\ 1\ or\ 2,\ not\ just\ 1.\ \ To\ solve\ for\ this\ without\ introducing\ an\ additional\ test\ inside\ the\ hot\ loop,}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ the\ sentinel\ value\ is\ required\ to\ be\ at\ least\ 3.}}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ These\ are\ addressed\ differently\ for\ fixed-\/width\ vs\ GMP\ types\ below.}}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ value\ is\ even,\ it's\ automatically\ verified.}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((initial\_value\ \&\ 1)\ ==\ 0)\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ selection\ and\ main\ loops.}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sentinal\ value\ safety,\ solves\ low-\/value\ edge\ cases\ (see\ above).\ \ For\ fixed-\/width\ types,\ use\ a\ stack\ variable.}}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ U\ effective\_sentinel\_value\ =\ sentinel\_value\ >\ U(2)\ ?\ sentinel\_value\ :\ U(3);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ initial\ value\ is\ below\ the\ known\ (precomputed)\ max\ initial\ values\ defined\ in\ CollatzConstants,\ there's\ no}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ need\ to\ track\ headroom\ or\ detect\ overflow\ in\ the\ hot\ loop.\ \ It\ can\ be\ calculated,\ promoted,\ and\ then\ use\ raw}}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ arithmetic\ without\ checks,\ which\ enables\ all\ manner\ of\ compiler\ and\ CPU\ optimizations.}}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ table\ is\ viable,\ pick\ the\ known-\/safe\ type\ and\ pass\ the\ work\ to\ the\ "{}unsafe"{}\ verifier\ for\ speed.}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(UseIVTable)\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <=\ \mbox{\hyperlink{namespaceCollatzConstants_ae4bb1d3844419388a44932d7b60e5ebe}{CollatzConstants::MAX\_INITIAL\_VALUE\_BY\_BIT}}.back())\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Is\ promotion\ needed?\ \ If\ not,\ send\ it\ as\ type\ U\ (as-\/is).}}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ <=\ CollatzConstants::get\_max\_initial\_value\_by\_type<U>())\ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(initial\_value,\ effective\_sentinel\_value);}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Promotion\ needed.\ \ Current\ type\ U\ cannot\ handle\ it.}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ <\ 64)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ U\ is\ less\ than\ 64\ bits,\ just\ send\ it\ as\ a\ 64-\/bit.\ \ Even\ uint32\_t\ can't\ reach\ an\ overflow\ of\ 64-\/bit.}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ initial\ value\ of\ 64\ bit\ is\ empirically\ shown\ to\ be\ 12,327,829,502\ which\ is\ greater\ than\ 2\string^32\ which\ is\ 4,294,967,296.}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_initial\_value\ =\ initial\_value;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value,\ promoted\_effective\_sentinel\_value);}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 64)\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ U\ of\ exactly\ 64\ bits.\ \ Uint128\_t\ can\ handle\ it.}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_initial\_value\ =\ initial\_value;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value,\ promoted\_effective\_sentinel\_value);}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 128)\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ 128\ bits.\ \ Upgrade\ to\ mpz\_class.}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_initial\_value\_tls;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_effective\_sentinel\_value\_tls;}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(initial\_value,\ promoted\_initial\_value\_tls);}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(effective\_sentinel\_value,\ promoted\_effective\_sentinel\_value\_tls);}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify\_unsafe(promoted\_initial\_value\_tls,\ promoted\_effective\_sentinel\_value\_tls);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Table\ above\ wasn't\ viable\ or\ used.\ \ Process\ while\ tracking\ headroom\ bits\ for\ realtime\ safety.}}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ a\ steady\ stride\ table.}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyFWTable}};}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ stack\ variable\ for\ the\ temp.}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ U\ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Track\ headroom\ and\ make\ adjustments\ from\ Stride\ to\ prevent\ overflow\ efficiently.}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ headroom\_bits\ =\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a409149ce95637fadcfd5159d27f9f2ee}{Bit::count\_leading\_zeros\_positive}}(current\_value));}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ effective\_sentinel\_value)\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ headroom\ to\ see\ if\ we\ need\ promotion.}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (headroom\_bits\ <\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}})\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\textcolor{keyword}{sizeof}(U)\ *\ 8\ <\ 64)\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Type\ is\ less\ than\ 64\ bits,\ just\ send\ it\ as\ a\ 64-\/bit.\ \ Even\ uint32\_t\ can't\ reach\ an\ overflow\ of\ 64-\/bit.}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Max\ initial\ value\ of\ 64\ bit\ is\ empirically\ shown\ to\ be\ 12,327,829,502\ which\ is\ greater\ than\ 2\string^32\ which\ is\ 4,294,967,296.}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_current\_value\ =\ current\_value;}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value,\ promoted\_effective\_sentinel\_value);}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 64)\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ U\ of\ exactly\ 64\ bits.\ \ Uint128\_t\ is\ the\ next\ best\ candidate.}}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_current\_value\ =\ current\_value;}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint128\_t\ promoted\_effective\_sentinel\_value\ =\ effective\_sentinel\_value;}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value,\ promoted\_effective\_sentinel\_value);}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(U)\ *\ 8\ ==\ 128)\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Dealing\ with\ 128\ bits.\ \ Upgrade\ to\ mpz\_class\ if\ needed.}}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Headroom\ is\ conservative\ because\ Stride.bits\_required\ is\ pessimistic.\ \ It's\ worth\ a\ quick\ clz()\ to\ re-\/chec\ headroom\ before\ giving\ up\ on\ the\ GPU\ entirely.}}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ =\ \textcolor{keyword}{static\_cast<}uint8\_t\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceBit_a409149ce95637fadcfd5159d27f9f2ee}{Bit::count\_leading\_zeros\_positive}}(current\_value));}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (headroom\_bits\ <\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}})\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ It's\ truly\ too\ low\ to\ handle\ this\ value.\ \ Upgrade\ to\ GMP.}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_current\_value\_tls;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ mpz\_class\ promoted\_effective\_sentinel\_value\_tls;}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(current\_value,\ promoted\_current\_value\_tls);}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceInt128_a6acb8efc67e186def4fa6ae40670aac9}{Int128::uint128\_to\_mpz}}(effective\_sentinel\_value,\ promoted\_effective\_sentinel\_value\_tls);}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_verify(promoted\_current\_value\_tls,\ promoted\_effective\_sentinel\_value\_tls);}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ The\ updated\ headroom\ from\ clz()\ says\ it's\ okay.\ \ Fall\ out\ of\ this\ block\ and\ keep\ going.}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ No\ promotion\ needed.\ \ Apply\ the\ stride.}}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Adjust\ headroom\ according\ to\ Stride.}}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ +=\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a446ecb275e4e0f4d7f108b13d706c4e2}{shift}};}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ headroom\_bits\ -\/=\ stride.\mbox{\hyperlink{structAffineStride_1_1Stride_a4875cd882331773d23cfde9107f58981}{bits\_required}};}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<U>}})\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Sentinal\ value\ safety,\ solves\ low-\/value\ edge\ cases\ (see\ above).\ \ For\ GMP\ types,\ use\ a\ thread-\/local.}}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ effective\_sentinel\_value;}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ effective\_sentinel\_value\ =\ sentinel\_value\ >\ 2\ ?\ sentinel\_value\ :\ 3;}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ thread-\/local\ to\ avoid\ GMP\ allocs.}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ current\_value;}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ cannot\ overflow,\ so\ there's\ no\ need\ to\ track\ headroom\_bits.}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ a\ steady\ stride\ table.\ \ Twelve\ seems\ to\ be\ the\ sweet\ spot\ for\ this\ according\ to\ microbenchmarking.}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyGMPTable}};}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ effective\_sentinel\_value)\ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ the\ stride.}}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Everything\ is\ okay.}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00322\ \ \ \ \ \}}
 \DoxyCodeLine{00323\ }
 \DoxyCodeLine{00324\ }
-\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ U>}
-\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ st\_verify\_unsafe(\textcolor{keyword}{const}\ U\&\ initial\_value,\ \textcolor{keyword}{const}\ U\&\ sentinel\_value)\ \{}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Caller\ has\ checked\ for\ (or\ disregarded)\ overflow\ potential\ already.\ \ Just\ blaze\ through\ the\ loop.\ \ Make\ CPU\ happy.}}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stack\ allocate\ and\ fly.}}
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ U\ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ sentinel\_value)\ \{}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Must\ be\ odd\ here.}}
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
-\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Must\ be\ even\ here.}}
-\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a60d8d63c2e97a9541fa55cb37576828f}{Bit::count\_trailing\_zeros\_positive}}(current\_value);}
-\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<U>}})\ \{}
-\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ thread-\/local\ to\ avoid\ GMP\ allocs.}}
-\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ current\_value;}
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00359\ }
-\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ striding\ with\ GMP.\ \ Always.}}
-\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyGMPTable}};}
-\DoxyCodeLine{00362\ }
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ sentinel\_value)\ \{}
-\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
-\DoxyCodeLine{00367\ }
-\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ the\ stride.}}
-\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
-\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00372\ }
-\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
-\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00375\ \ \ \ \ \}}
-\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keyword}{template}<AnySupportedIntegral\ U>}
+\DoxyCodeLine{00345\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ st\_verify\_unsafe(\textcolor{keyword}{const}\ U\&\ initial\_value,\ \textcolor{keyword}{const}\ U\&\ sentinel\_value)\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Caller\ has\ checked\ for\ (or\ disregarded)\ overflow\ potential\ already.\ \ Just\ blaze\ through\ the\ loop.\ \ Make\ CPU\ happy.}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<U>}})\ \{}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Stack\ allocate\ and\ fly.}}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ U\ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ sentinel\_value)\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Must\ be\ odd\ here.}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Must\ be\ even\ here.}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a60d8d63c2e97a9541fa55cb37576828f}{Bit::count\_trailing\_zeros\_positive}}(current\_value);}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<U>}})\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ a\ thread-\/local\ to\ avoid\ GMP\ allocs.}}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ U\ current\_value;}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ striding\ with\ GMP.\ \ Always.}}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }StrideTable\ =\ \mbox{\hyperlink{structAffineStride_1_1Table}{AffineStride::VerifyGMPTable}};}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Run\ the\ loop.}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >=\ sentinel\_value)\ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Pick\ the\ next\ stride.}}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structAffineStride_1_1Stride}{AffineStride::Stride}}\&\ stride\ =\ StrideTable::get\_stride(current\_value);}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Apply\ the\ stride.}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StrideTable::apply\_stride(current\_value,\ stride);}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ All\ good.}}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00376\ \ \ \ \ \}}
 \DoxyCodeLine{00377\ }
 \DoxyCodeLine{00378\ }
-\DoxyCodeLine{00386\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_sequence\_step(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
-\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ can\ make\ GMP\ over\ and\ over.}}
-\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
-\DoxyCodeLine{00390\ }
-\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
-\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00388\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_sequence\_step(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ can\ make\ GMP\ over\ and\ over.}}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Require\ ForEachSignal\ return\ type.}}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_same\_v<std::invoke\_result\_t<Func,\ const\ T\&>,\ ForEachSignal>,\ \textcolor{stringliteral}{"{}Callback\ must\ return\ ForEachSignal"{}});}
 \DoxyCodeLine{00393\ }
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fixed\ integrals\ can\ use\ intrinsic\ arithmetic\ operators\ for\ "{}free"{},\ but\ can\ overflow.}}
-\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ T\ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ !=\ 1)\ \{}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ stop\ =\ callback(current\_value);}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stop)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((current\_value\ \&\ 1)\ ==\ 0)\ \{}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ 1;}
-\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ CollatzConstants::get\_max\_3xp1<T>())\ \{}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{stringliteral}{"{}Overflow\ when\ building\ for\_each\_sequence\_step()."{}});}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ while-\/loop\ exits\ prematurely\ at\ 1,\ it\ needs\ one\ more\ callback\ before\ ending.}}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ callback(current\_value);}
-\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ integers\ will\ alloc()\ with\ certain\ arithmetic\ operators,\ but\ can't\ overflow.}}
-\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{thread\_local}\ T\ current\_value;}
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (mpz\_cmp\_ui(current\_value.get\_mpz\_t(),\ 1)\ !=\ 0)\ \{}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ stop\ =\ callback(current\_value);}
-\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stop)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_even\_p(current\_value.get\_mpz\_t()))\ \{}
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);\ \ \textcolor{comment}{//\ current\_step\ >>\ 1\ \ \ ==>\ \ current\_step\ /=\ 2}}
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 3);\ \ \textcolor{comment}{//\ current\_step\ *=\ 3}}
-\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);\ \ \ \ \textcolor{comment}{//\ current\_step\ +=\ 1}}
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ while-\/loop\ exits\ prematurely\ at\ 1,\ it\ needs\ one\ more\ callback\ before\ ending.}}
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ callback(current\_value);}
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00428\ \ \ \ \ \}}
-\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Fixed\ integrals\ can\ use\ intrinsic\ arithmetic\ operators\ for\ "{}free"{},\ but\ can\ overflow.}}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ T\ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ !=\ 1)\ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (callback(current\_value)\ ==\ ForEachSignal::BREAK)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((current\_value\ \&\ 1)\ ==\ 0)\ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ 1;}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ CollatzConstants::get\_max\_3xp1<T>())\ \{}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{stringliteral}{"{}Overflow\ when\ building\ for\_each\_sequence\_step()."{}});}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ while-\/loop\ exits\ prematurely\ at\ 1,\ it\ needs\ one\ more\ callback\ before\ ending.}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ callback(current\_value);}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ integers\ will\ alloc()\ with\ certain\ arithmetic\ operators,\ but\ can't\ overflow.}}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{thread\_local}\ T\ current\_value;}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (mpz\_cmp\_ui(current\_value.get\_mpz\_t(),\ 1)\ !=\ 0)\ \{}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (callback(current\_value)\ ==\ ForEachSignal::BREAK)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_even\_p(current\_value.get\_mpz\_t()))\ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);\ \ \textcolor{comment}{//\ current\_step\ >>\ 1\ \ \ ==>\ \ current\_step\ /=\ 2}}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 3);\ \ \textcolor{comment}{//\ current\_step\ *=\ 3}}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);\ \ \ \ \textcolor{comment}{//\ current\_step\ +=\ 1}}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Since\ the\ while-\/loop\ exits\ prematurely\ at\ 1,\ it\ needs\ one\ more\ callback\ before\ ending.}}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ callback(current\_value);}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00429\ \ \ \ \ \}}
 \DoxyCodeLine{00430\ }
 \DoxyCodeLine{00431\ }
-\DoxyCodeLine{00433\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00434\ \ \ \ \ \textcolor{keywordtype}{void}\ for\_each\_sequence\_step(Func\&\&\ callback)\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(\_initial\_value,\ std::forward<Func>(callback));}
-\DoxyCodeLine{00436\ \ \ \ \ \}}
-\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00434\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00435\ \ \ \ \ \textcolor{keywordtype}{void}\ for\_each\_sequence\_step(Func\&\&\ callback)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(\_initial\_value,\ std::forward<Func>(callback));}
+\DoxyCodeLine{00437\ \ \ \ \ \}}
 \DoxyCodeLine{00438\ }
 \DoxyCodeLine{00439\ }
-\DoxyCodeLine{00445\ \ \ \ \ \textcolor{keyword}{static}\ seq\_size\_t\ st\_get\_step\_count(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
-\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ right\_shifts\ =\ 0;}
-\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ seq\_size\_t\ steps\ =\ 0;}
-\DoxyCodeLine{00448\ }
-\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ types\ are\ fast\ as-\/is.\ \ Affine\ compression\ doesn't\ help,\ except\ bit-\/shifting\ CTZ.}}
-\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ T\ tmp\ =\ initial\_value;}
-\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ overflow\ here,\ once,\ instead\ of\ over\ and\ over.}}
-\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ >\ CollatzConstants::get\_max\_initial\_value\_by\_bit<T>(std::numeric\_limits<T>::digits))\ \{}
-\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{stringliteral}{"{}Overflow\ when\ building\ st\_get\_step\_count()."{}});}
-\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (tmp\ >\ 1)\ \{}
-\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
-\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((tmp\ \&\ 1)\ ==\ 1)\ \{}
-\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ (tmp\ <<\ 1)\ +\ tmp\ +\ 1;}
-\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps++;}
-\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
-\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(tmp);}
-\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ >>=\ right\_shifts;}
-\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ right\_shifts;}
-\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ types\ are\ significantly\ faster\ using\ an\ Affine\ map\ for\ CTZ\ and\ CTO,\ ergo\ it's\ worth\ the\ overhead.}}
-\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ tmp;}
-\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ initial\_value;}
-\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ trailing\_ones\ =\ 0;}
-\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ limit\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
-\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
-\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (tmp\ >\ 1)\ \{}
-\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
-\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((tmp\ \&\ 1)\ ==\ 1)\ \{}
-\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ =\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{Bit::count\_trailing\_ones}}(tmp);}
-\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ (2\ *\ trailing\_ones);}
-\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (trailing\_ones\ >\ limit)\ \{}
-\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[limit]\ *\ (tmp\ +\ 1))\ >>\ limit)\ -\/\ 1;}
-\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ -\/=\ limit;}
-\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trailing\_ones\ >\ 0)\ \{}
-\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[trailing\_ones]\ *\ (tmp\ +\ 1))\ >>\ trailing\_ones)\ -\/\ 1;}
-\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
-\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(tmp);}
-\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ >>=\ right\_shifts;}
-\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ right\_shifts;}
-\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ steps;}
-\DoxyCodeLine{00494\ \ \ \ \ \}}
-\DoxyCodeLine{00495\ }
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{keyword}{static}\ seq\_size\_t\ st\_get\_step\_count(\textcolor{keyword}{const}\ T\&\ initial\_value)\ \{}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ right\_shifts\ =\ 0;}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ seq\_size\_t\ steps\ =\ 0;}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ types\ are\ fast\ as-\/is.\ \ Affine\ compression\ doesn't\ help,\ except\ bit-\/shifting\ CTZ.}}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ T\ tmp\ =\ initial\_value;}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ for\ overflow\ here,\ once,\ instead\ of\ over\ and\ over.}}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ >\ CollatzConstants::get\_max\_initial\_value\_by\_bit<T>(std::numeric\_limits<T>::digits))\ \{}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classCollatzSequenceOverflow}{CollatzSequenceOverflow}}(\textcolor{stringliteral}{"{}Overflow\ when\ building\ st\_get\_step\_count()."{}});}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (tmp\ >\ 1)\ \{}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((tmp\ \&\ 1)\ ==\ 1)\ \{}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ (tmp\ <<\ 1)\ +\ tmp\ +\ 1;}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps++;}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(tmp);}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ >>=\ right\_shifts;}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ right\_shifts;}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ types\ are\ significantly\ faster\ using\ an\ Affine\ map\ for\ CTZ\ and\ CTO,\ ergo\ it's\ worth\ the\ overhead.}}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ tmp;}
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ initial\_value;}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ trailing\_ones\ =\ 0;}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ limit\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (tmp\ >\ 1)\ \{}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((tmp\ \&\ 1)\ ==\ 1)\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ =\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{Bit::count\_trailing\_ones}}(tmp);}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ (2\ *\ trailing\_ones);}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (trailing\_ones\ >\ limit)\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[limit]\ *\ (tmp\ +\ 1))\ >>\ limit)\ -\/\ 1;}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ -\/=\ limit;}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trailing\_ones\ >\ 0)\ \{}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ =\ ((\mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[trailing\_ones]\ *\ (tmp\ +\ 1))\ >>\ trailing\_ones)\ -\/\ 1;}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(tmp);}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tmp\ >>=\ right\_shifts;}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ steps\ +=\ right\_shifts;}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ steps;}
+\DoxyCodeLine{00495\ \ \ \ \ \}}
 \DoxyCodeLine{00496\ }
 \DoxyCodeLine{00497\ }
-\DoxyCodeLine{00504\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ st\_get\_peak(\textcolor{keyword}{const}\ T\&\ initial\_value,\ T\&\ out\_peak,\ \textcolor{keywordtype}{bool}\ stop\_at\_hwm\ =\ \textcolor{keyword}{false})\ \{}
-\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ right\_shifts\ =\ 0;}
-\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ out\_peak\ =\ initial\_value;}
-\DoxyCodeLine{00507\ }
-\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ types\ are\ fast\ as-\/is.\ \ Affine\ compression\ of\ consecutive\ ones\ doesn't\ help,\ except\ bit-\/shifting\ CTZ.}}
-\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ T\ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ T\ bailout\_value\ =\ (stop\_at\_hwm\ \&\&\ initial\_value\ >\ 1)\ ?\ (T)initial\_value\ -\/\ 1\ :\ T(1);}
-\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ CTZ\ to\ ensure\ odd\ start.}}
-\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
-\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >\ bailout\_value)\ \{}
-\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ odd\ here.\ \ Check\ for\ overflow.}}
-\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ CollatzConstants::get\_max\_3xp1<T>())\ \{}
-\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Cannot\ process\ initial\_value\ "{}}\ +\ to\_string\_any(initial\_value)\ +\ \textcolor{stringliteral}{"{}\ any\ further\ in\ st\_get\_peak."{}});}
-\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
-\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ out\_peak)\ \{}
-\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out\_peak\ =\ current\_value;}
-\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.\ \ Can't\ affect\ peak.}}
-\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
-\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ types\ are\ significantly\ faster\ using\ an\ Affine\ map\ for\ CTZ\ and\ CTO,\ ergo\ it's\ worth\ the\ overhead.}}
-\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ current\_value;}
-\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
-\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ tmp\_x\_2;}
-\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ bailout\_value;}
-\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ bailout\_value\ =\ 1;}
-\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stop\_at\_hwm\ \&\&\ initial\_value\ >\ 1)\ \{}
-\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bailout\_value\ =\ initial\_value;}
-\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(bailout\_value.get\_mpz\_t(),\ bailout\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ trailing\_ones\ =\ 0;}
-\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ limit\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
-\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
-\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >\ bailout\_value)\ \{}
-\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
-\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_odd\_p(current\_value.get\_mpz\_t()))\ \{}
-\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ =\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{Bit::count\_trailing\_ones}}(current\_value);}
-\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (trailing\_ones\ >\ limit)\ \{}
-\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[limit].get\_mpz\_t());}
-\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ limit);}
-\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ -\/=\ limit;}
-\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trailing\_ones\ >\ 0)\ \{}
-\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[trailing\_ones].get\_mpz\_t());}
-\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ trailing\_ones);}
-\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ check\ peak.\ \ However!\ \ It\ applied\ an\ accelerated\ F(x):\ \ (3x\ +\ 1)\ /\ 2}}
-\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Peak\ was\ actually\ tmp\ *\ 2.}}
-\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul\_2exp(tmp\_x\_2.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
-\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_cmp(tmp\_x\_2.get\_mpz\_t(),\ out\_peak.get\_mpz\_t())\ >\ 0)\ \{}
-\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out\_peak\ =\ tmp\_x\_2;}
-\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
-\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
-\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ right\_shifts;}
-\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00569\ \ \ \ \ \}}
-\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00505\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ st\_get\_peak(\textcolor{keyword}{const}\ T\&\ initial\_value,\ T\&\ out\_peak,\ \textcolor{keywordtype}{bool}\ stop\_at\_ast\ =\ \textcolor{keyword}{false})\ \{}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ right\_shifts\ =\ 0;}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ out\_peak\ =\ initial\_value;}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Native\ types\ are\ fast\ as-\/is.\ \ Affine\ compression\ of\ consecutive\ ones\ doesn't\ help,\ except\ bit-\/shifting\ CTZ.}}
+\DoxyCodeLine{00511\ \ \ \ \ \ \ \ \ \ \ \ \ T\ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \ \ \ \ T\ bailout\_value\ =\ (stop\_at\_ast\ \&\&\ initial\_value\ >\ 1)\ ?\ (T)initial\_value\ -\/\ 1\ :\ T(1);}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Shift\ CTZ\ to\ ensure\ odd\ start.}}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >\ bailout\_value)\ \{}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ odd\ here.\ \ Check\ for\ overflow.}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ CollatzConstants::get\_max\_3xp1<T>())\ \{}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Cannot\ process\ initial\_value\ "{}}\ +\ to\_string\_any(initial\_value)\ +\ \textcolor{stringliteral}{"{}\ any\ further\ in\ st\_get\_peak."{}});}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ (current\_value\ <<\ 1)\ +\ current\_value\ +\ 1;}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (current\_value\ >\ out\_peak)\ \{}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out\_peak\ =\ current\_value;}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.\ \ Can't\ affect\ peak.}}
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ GMP\ types\ are\ significantly\ faster\ using\ an\ Affine\ map\ for\ CTZ\ and\ CTO,\ ergo\ it's\ worth\ the\ overhead.}}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ current\_value;}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ =\ initial\_value;}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ tmp\_x\_2;}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{thread\_local}\ T\ bailout\_value;}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ bailout\_value\ =\ 1;}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stop\_at\_ast\ \&\&\ initial\_value\ >\ 1)\ \{}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bailout\_value\ =\ initial\_value;}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(bailout\_value.get\_mpz\_t(),\ bailout\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ trailing\_ones\ =\ 0;}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{size\_t}\ limit\ =\ \mbox{\hyperlink{namespaceExponents_a562a9874f650809872adb72ce9939eeb}{Exponents::POW3\_MPZ\_ELEMENT\_COUNT}}\ -\/\ 1;}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ See\ collatz\_compression.cpp\ tests\ for\ details\ on\ how\ this\ works\ and\ why.}}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_value\ >\ bailout\_value)\ \{}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Handle\ odd.}}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_odd\_p(current\_value.get\_mpz\_t()))\ \{}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ =\ \mbox{\hyperlink{namespaceBit_a714bf2865e70558aacfdb18709972f2d}{Bit::count\_trailing\_ones}}(current\_value);}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (trailing\_ones\ >\ limit)\ \{}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[limit].get\_mpz\_t());}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ limit);}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trailing\_ones\ -\/=\ limit;}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trailing\_ones\ >\ 0)\ \{}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_add\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ \mbox{\hyperlink{namespaceExponents_afaeae33f9e3845e93b62a7c9c76a05e4}{Exponents::POW3\_MPZ}}[trailing\_ones].get\_mpz\_t());}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_tdiv\_q\_2exp(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ trailing\_ones);}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_sub\_ui(current\_value.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ check\ peak.\ \ However!\ \ It\ applied\ an\ accelerated\ F(x):\ \ (3x\ +\ 1)\ /\ 2}}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Peak\ was\ actually\ tmp\ *\ 2.}}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mpz\_mul\_2exp(tmp\_x\_2.get\_mpz\_t(),\ current\_value.get\_mpz\_t(),\ 1);}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mpz\_cmp(tmp\_x\_2.get\_mpz\_t(),\ out\_peak.get\_mpz\_t())\ >\ 0)\ \{}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ out\_peak\ =\ tmp\_x\_2;}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Always\ even\ at\ this\ point.\ \ Shift\ zeros\ out.}}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ right\_shifts\ =\ \mbox{\hyperlink{namespaceBit_a2a02bc3e6af5232afe3b72fae6d8c90d}{Bit::count\_trailing\_zeros}}(current\_value);}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ current\_value\ >>=\ right\_shifts;}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00570\ \ \ \ \ \}}
 \DoxyCodeLine{00571\ }
 \DoxyCodeLine{00572\ }
-\DoxyCodeLine{00580\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_fg\_chain\_link(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
-\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ makes\ GMP\ over\ and\ over.}}
-\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_r\_v<bool,\ Func,\ bool>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ as\ bool(bool)"{}});}
-\DoxyCodeLine{00584\ }
-\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
-\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00582\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_fg\_chain\_link(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ makes\ GMP\ over\ and\ over.}}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ bool>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ as\ (bool)"{}});}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Require\ ForEachSignal\ return\ type.}}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_same\_v<std::invoke\_result\_t<Func,\ bool>,\ ForEachSignal>,\ \textcolor{stringliteral}{"{}Callback\ must\ return\ ForEachSignal"{}});}
 \DoxyCodeLine{00587\ }
-\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ our\ basic\ Collatz\ iterator.}}
-\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_F\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(initial\_value,\ [\&](\textcolor{keyword}{const}\ T\&\ current\_value)\ \{}
-\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ previous\ step\ was\ F,\ skip\ the\ next\ step\ which\ is\ always\ the\ latter\ part\ of\ accerlated\ F(x).}}
-\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_F)\ \{}
-\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ it\ so\ it\ doesn't\ loop.}}
-\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ (current\_value\ \&\ 1)\ ==\ 1;}
-\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ mpz\_odd\_p(current\_value.get\_mpz\_t());}
-\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ stop\ =\ callback(is\_F);}
-\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ stop;}
-\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00606\ \ \ \ \ \}}
-\DoxyCodeLine{00607\ }
-\DoxyCodeLine{00608\ }
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ our\ basic\ Collatz\ iterator.}}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_F\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(initial\_value,\ [\&](\textcolor{keyword}{const}\ T\&\ current\_value)\ \{}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ previous\ step\ was\ F,\ skip\ the\ next\ step\ which\ is\ always\ the\ latter\ part\ of\ accerlated\ F(x).}}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_F)\ \{}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ it\ so\ it\ doesn't\ loop.}}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ (current\_value\ \&\ 1)\ ==\ 1;}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_F\ =\ mpz\_odd\_p(current\_value.get\_mpz\_t());}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ callback(is\_F);}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00608\ \ \ \ \ \}}
 \DoxyCodeLine{00609\ }
-\DoxyCodeLine{00616\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
-\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_fg\_step(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
-\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ makes\ GMP\ over\ and\ over.}}
-\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
-\DoxyCodeLine{00620\ }
-\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
-\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
-\DoxyCodeLine{00623\ }
-\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ our\ basic\ Collatz\ iterator.}}
-\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ was\_F\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(initial\_value,\ [\&](\textcolor{keyword}{const}\ T\&\ current\_value)\ \{}
-\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ previous\ step\ was\ F,\ skip\ the\ next\ step\ which\ is\ always\ the\ latter\ part\ of\ accerlated\ F(x).}}
-\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (was\_F)\ \{}
-\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ it\ so\ it\ doesn't\ loop.}}
-\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
-\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ (current\_value\ \&\ 1)\ ==\ 1;}
-\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
-\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ mpz\_odd\_p(current\_value.get\_mpz\_t());}
-\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ stop\ =\ callback(current\_value);}
-\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ stop;}
-\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00642\ \ \ \ \ \}}
-\DoxyCodeLine{00643\ }
-\DoxyCodeLine{00644\ }
-\DoxyCodeLine{00645\ }
-\DoxyCodeLine{00652\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_get\_fg\_chain\_string(\textcolor{keyword}{const}\ T\&\ initial\_value,\ seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
-\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ std::string\ result;}
-\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ seq\_size\_t\ count\ =\ 0;}
-\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (max\_chars\ ==\ 0)\ \{}
-\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_fg\_chain\_link}}(initial\_value,\ [\&](\textcolor{keywordtype}{bool}\ is\_F)\ \{}
-\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (is\_F\ ?\ \textcolor{charliteral}{'F'}\ :\ \textcolor{charliteral}{'G'});}
-\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ count++;}
-\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ count\ >=\ max\_chars;}
-\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \});}
-\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00664\ \ \ \ \ \}}
-\DoxyCodeLine{00665\ }
-\DoxyCodeLine{00666\ }
-\DoxyCodeLine{00667\ }
-\DoxyCodeLine{00669\ \ \ \ \ std::string\ get\_fg\_chain\_string(seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_fg\_chain\_string}}(\_initial\_value,\ max\_chars);}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ }
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ Func>}
+\DoxyCodeLine{00620\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ st\_for\_each\_fg\_step(\textcolor{keyword}{const}\ T\&\ initial\_value,\ Func\&\&\ callback)\ \{}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Do\ not\ allow\ non-\/ref\ callbacks.\ \ Otherwise\ it\ makes\ GMP\ over\ and\ over.}}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_invocable\_v<Func,\ const\ T\&>,\ \textcolor{stringliteral}{"{}Callback\ must\ be\ callable\ with\ (const\ T\&)"{}});}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Require\ ForEachSignal\ return\ type.}}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_same\_v<std::invoke\_result\_t<Func,\ T\&>,\ ForEachSignal>,\ \textcolor{stringliteral}{"{}Callback\ must\ return\ ForEachSignal"{}});}
+\DoxyCodeLine{00625\ }
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zero\ is\ a\ special\ case,\ mostly\ for\ BinaryTree\ building\ a\ root.}}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (initial\_value\ ==\ 0)\ \{\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ our\ basic\ Collatz\ iterator.}}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ was\_F\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_sequence\_step}}(initial\_value,\ [\&](\textcolor{keyword}{const}\ T\&\ current\_value)\ \{}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ When\ the\ previous\ step\ was\ F,\ skip\ the\ next\ step\ which\ is\ always\ the\ latter\ part\ of\ accerlated\ F(x).}}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (was\_F)\ \{}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ it\ so\ it\ doesn't\ loop.}}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ (current\_value\ \&\ 1)\ ==\ 1;}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptGMPIntegral}{GMPIntegral<T>}})\ \{}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ was\_F\ =\ mpz\_odd\_p(current\_value.get\_mpz\_t());}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ callback(current\_value);}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00646\ \ \ \ \ \}}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00656\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_get\_fg\_chain\_string(\textcolor{keyword}{const}\ T\&\ initial\_value,\ seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ std::string\ result;}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ seq\_size\_t\ count\ =\ 0;}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (max\_chars\ ==\ 0)\ \{}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_for\_each\_fg\_chain\_link}}(initial\_value,\ [\&](\textcolor{keywordtype}{bool}\ is\_F)\ \{}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ result\ +=\ (is\_F\ ?\ \textcolor{charliteral}{'F'}\ :\ \textcolor{charliteral}{'G'});}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ count++;}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (count\ >=\ max\_chars)\ \{}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::BREAK;}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ForEachSignal::CONTINUE;}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \});}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
 \DoxyCodeLine{00671\ \ \ \ \ \}}
 \DoxyCodeLine{00672\ }
 \DoxyCodeLine{00673\ }
 \DoxyCodeLine{00674\ }
-\DoxyCodeLine{00681\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_get\_oe\_pattern\_string(\textcolor{keyword}{const}\ T\&\ initial\_value,\ seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
-\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ std::string\ fg\_pattern\ =\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_fg\_chain\_string}}(initial\_value,\ max\_chars);}
-\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_fg\_to\_oe(fg\_pattern,\ max\_chars);}
-\DoxyCodeLine{00684\ \ \ \ \ \}}
-\DoxyCodeLine{00685\ }
-\DoxyCodeLine{00686\ }
-\DoxyCodeLine{00687\ }
-\DoxyCodeLine{00689\ \ \ \ \ std::string\ get\_oe\_pattern\_string(seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
-\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_oe\_pattern\_string}}(\_initial\_value,\ max\_chars);}
+\DoxyCodeLine{00676\ \ \ \ \ std::string\ get\_fg\_chain\_string(seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_fg\_chain\_string}}(\_initial\_value,\ max\_chars);}
+\DoxyCodeLine{00678\ \ \ \ \ \}}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ }
+\DoxyCodeLine{00688\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_get\_oe\_pattern\_string(\textcolor{keyword}{const}\ T\&\ initial\_value,\ seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ std::string\ fg\_pattern\ =\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_fg\_chain\_string}}(initial\_value,\ max\_chars);}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ st\_fg\_to\_oe(fg\_pattern,\ max\_chars);}
 \DoxyCodeLine{00691\ \ \ \ \ \}}
 \DoxyCodeLine{00692\ }
 \DoxyCodeLine{00693\ }
 \DoxyCodeLine{00694\ }
-\DoxyCodeLine{00703\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_fg\_to\_oe(}
-\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ fg\_pattern}
-\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ ,\ \textcolor{keywordtype}{size\_t}\ max\_oe\_chars\ =\ std::numeric\_limits<size\_t>::max()}
-\DoxyCodeLine{00706\ \ \ \ \ \ \ \ \ ,\ \textcolor{keywordtype}{bool}\ strip\_last\_e\ =\ \textcolor{keyword}{true}}
-\DoxyCodeLine{00707\ \ \ \ \ )\ \{}
-\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ std::string\ oe\_string;}
-\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\&\ c\ :\ fg\_pattern)\ \{}
-\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'F'})\ \{}
-\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string\ +=\ \textcolor{stringliteral}{"{}OE"{}};}
-\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string\ +=\ \textcolor{stringliteral}{"{}E"{}};}
-\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (oe\_string.size()\ >\ max\_oe\_chars)\ \{}
-\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00719\ }
-\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ this\ didn't\ hit\ the\ max\_chars,\ remove\ the\ last\ E.\ \ Because\ all\ sequences\ end\ in\ 1\ (odd)\ and\ therefore\ get\ an\ "{}F"{},}}
-\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ which\ traslates\ to\ "{}OE"{},\ but\ that\ last\ "{}E"{}\ is\ 1\ going\ to\ 4\ (1\ *\ 3\ +\ 1).}}
-\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ caller\ forbids\ this,\ skip\ it.}}
-\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strip\_last\_e\ \&\&\ oe\_string.size()\ <\ max\_oe\_chars\ \&\&\ oe\_string.size()\ >\ 0)\ \{}
-\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string.pop\_back();}
+\DoxyCodeLine{00696\ \ \ \ \ std::string\ get\_oe\_pattern\_string(seq\_size\_t\ max\_chars\ =\ std::numeric\_limits<seq\_size\_t>::max())\ \{}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classCollatz}{Collatz<T>::st\_get\_oe\_pattern\_string}}(\_initial\_value,\ max\_chars);}
+\DoxyCodeLine{00698\ \ \ \ \ \}}
+\DoxyCodeLine{00699\ }
+\DoxyCodeLine{00700\ }
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00710\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ st\_fg\_to\_oe(}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ fg\_pattern}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ ,\ \textcolor{keywordtype}{size\_t}\ max\_oe\_chars\ =\ std::numeric\_limits<size\_t>::max()}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ ,\ \textcolor{keywordtype}{bool}\ strip\_last\_e\ =\ \textcolor{keyword}{true}}
+\DoxyCodeLine{00714\ \ \ \ \ )\ \{}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ std::string\ oe\_string;}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\&\ c\ :\ fg\_pattern)\ \{}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'F'})\ \{}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string\ +=\ \textcolor{stringliteral}{"{}OE"{}};}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string\ +=\ \textcolor{stringliteral}{"{}E"{}};}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (oe\_string.size()\ >\ max\_oe\_chars)\ \{}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00726\ }
-\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it's\ over\ the\ max\_chars\ requested,\ trim.}}
-\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (oe\_string.size()\ >\ max\_oe\_chars)\ \{}
-\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string.resize(max\_oe\_chars);}
-\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00731\ }
-\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oe\_string;}
-\DoxyCodeLine{00733\ \ \ \ \ \}}
-\DoxyCodeLine{00734\ \};}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ this\ didn't\ hit\ the\ max\_chars,\ remove\ the\ last\ E.\ \ Because\ all\ sequences\ end\ in\ 1\ (odd)\ and\ therefore\ get\ an\ "{}F"{},}}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ which\ traslates\ to\ "{}OE"{},\ but\ that\ last\ "{}E"{}\ is\ 1\ going\ to\ 4\ (1\ *\ 3\ +\ 1).}}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ caller\ forbids\ this,\ skip\ it.}}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strip\_last\_e\ \&\&\ oe\_string.size()\ <\ max\_oe\_chars\ \&\&\ oe\_string.size()\ >\ 0)\ \{}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string.pop\_back();}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ it's\ over\ the\ max\_chars\ requested,\ trim.}}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (oe\_string.size()\ >\ max\_oe\_chars)\ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \ \ \ \ oe\_string.resize(max\_oe\_chars);}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00738\ }
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oe\_string;}
+\DoxyCodeLine{00740\ \ \ \ \ \}}
+\DoxyCodeLine{00741\ \};}
 
 \end{DoxyCode}

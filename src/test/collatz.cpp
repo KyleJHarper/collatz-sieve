@@ -15,7 +15,7 @@ void test_collatz_basic_construction() {
     Collatz<T> collatz;
     assert(collatz.get_initial_value() == 0);
     assert(collatz.get_peak_value() == 0);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == false);
     assert(collatz.has_overflowed() == false);
@@ -24,7 +24,7 @@ void test_collatz_basic_construction() {
     Collatz<T> collatz_1(1);
     assert(collatz_1.get_initial_value() == 1);
     assert(collatz_1.get_peak_value() == 1);
-    assert(collatz_1.get_hwm_index() == 0);
+    assert(collatz_1.get_ast_index() == 0);
     assert(collatz_1.get_step_count() == 0);
     assert(collatz_1.is_initialized() == true);
     assert(collatz_1.has_overflowed() == false);
@@ -47,7 +47,7 @@ void test_collatz_init() {
     Collatz<T> collatz;
     assert(collatz.get_initial_value() == 0);
     assert(collatz.get_peak_value() == 0);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == false);
     assert(collatz.has_overflowed() == false);
@@ -55,7 +55,7 @@ void test_collatz_init() {
     collatz.init(1);
     assert(collatz.get_initial_value() == 1);
     assert(collatz.get_peak_value() == 1);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == true);
     assert(collatz.has_overflowed() == false);
@@ -95,7 +95,7 @@ void test_collatz_reset() {
     Collatz<T> collatz;
     assert(collatz.get_initial_value() == 0);
     assert(collatz.get_peak_value() == 0);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == false);
     assert(collatz.has_overflowed() == false);
@@ -104,7 +104,7 @@ void test_collatz_reset() {
     collatz.init(1);
     assert(collatz.get_initial_value() == 1);
     assert(collatz.get_peak_value() == 1);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == true);
     assert(collatz.has_overflowed() == false);
@@ -113,7 +113,7 @@ void test_collatz_reset() {
     collatz.reset();
     assert(collatz.get_initial_value() == 0);
     assert(collatz.get_peak_value() == 0);
-    assert(collatz.get_hwm_index() == 0);
+    assert(collatz.get_ast_index() == 0);
     assert(collatz.get_step_count() == 0);
     assert(collatz.is_initialized() == false);
     assert(collatz.has_overflowed() == false);
@@ -132,7 +132,7 @@ void test_collatz_reset() {
         collatz.reset();
         assert(collatz.get_initial_value() == 0);
         assert(collatz.get_peak_value() == 0);
-        assert(collatz.get_hwm_index() == 0);
+        assert(collatz.get_ast_index() == 0);
         assert(collatz.get_step_count() == 0);
         assert(collatz.is_initialized() == false);
         assert(collatz.has_overflowed() == false);

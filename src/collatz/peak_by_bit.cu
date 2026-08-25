@@ -52,7 +52,7 @@ __host__ __device__ inline constexpr uint128_t get_max_3xp1() {
 
 
 /**
-* @brief Find the peak value of an initial value, optinally stopping if we reach below HWM.
+* @brief Find the peak value of an initial value, optinally stopping if we reach below AST.
 * @param initial_value The starting value to begin a Collatz sequence.
 * @tparam T Any device-supported integral, which is 32-, 64-, and 128-bit for modern CUDA.
 * @return The peak value found.  If the next 3x+1 would overflow, we set peak to get_max_3xp1<T>().  Caller must check.
@@ -71,7 +71,7 @@ __device__ T collatz_get_peak(
             peak = current_step;
         }
 
-        // We always skip after HWM, leave when we're below it.
+        // We always skip after AST, leave when we're below it.
         if (current_step < initial_value) {
             break;
         }
@@ -85,7 +85,7 @@ __device__ T collatz_get_peak(
             }
             // 3x+1
             current_step = (current_step << 1) + current_step + 1;
-            // Check for peak again.  We can't hit HWM with a 3x+1 step.
+            // Check for peak again.  We can't hit AST with a 3x+1 step.
             if (current_step > peak) {
                 peak = current_step;
             }

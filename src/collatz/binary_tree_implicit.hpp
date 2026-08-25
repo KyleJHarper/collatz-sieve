@@ -26,7 +26,7 @@
 * on-the-fly instead of being stored in RAM.
 *
 * Specifically, instead of a level map of all surviving nodes and a vector of pointers to them for each level, this implementation
-* computes the values, detect coverage (HWM), and update a roaring bitmap.  Tracking and iteration become implicit, hence this
+* computes the values, detect coverage (AST), and update a roaring bitmap.  Tracking and iteration become implicit, hence this
 * implementation's namesake.
 *
 * This implementation is vastly superior in almost every metric, and is the default as of version 4.0.0.
@@ -47,14 +47,14 @@ class BinaryTreeImplicitImpl {
     NodeBitmap<T> _uncovered_values;
     /// @brief Map of levels and their associated coverage.
     std::unordered_map<level_t, BinaryTreeCoverage<T>> _coverage_map;
-    /// @brief Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree.
+    /// @brief Collection of ancestors, which are Above Stopping Time nodes that originally truncated a subtree.
     std::vector<Node<T>*> _ancestors;
     /// @brief Flag to determine if this tree is initialized, meaning it's had at least one level added.
     bool _is_initialized = false;
-    /// @brief Flag to determine if HWM ancestors should be added to our vector or simply discarded.
+    /// @brief Flag to determine if AST ancestors should be added to our vector or simply discarded.
     bool _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
-    /// @brief Flag to determine if verification of non-HWM nodes should happen.  See `BinaryTree` or CHANGELOG 3.4.0 for details.
-    bool _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
+    /// @brief Flag to determine if verification of non-AST nodes should happen.  See `BinaryTree` or CHANGELOG 3.4.0 for details.
+    bool _is_verifying_non_ast_nodes = BinaryTreeOptions{}.verify_non_ast_nodes;
     /// @brief Track the type of this tree for external comparison later.
     const TreeTypeEnum _tree_type = TreeTypeEnum::IMPLICIT;
 
@@ -117,7 +117,7 @@ class BinaryTreeImplicitImpl {
             delete _root_node;
         };
         _root_node = nullptr;
-        _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
+        _is_verifying_non_ast_nodes = BinaryTreeOptions{}.verify_non_ast_nodes;
         _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
 
@@ -133,7 +133,7 @@ class BinaryTreeImplicitImpl {
         if(_is_initialized) { reset(); }
         _is_initialized = true;
         // Set options.
-        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
+        _is_verifying_non_ast_nodes = opts.verify_non_ast_nodes;
         _is_preserving_ancestors = opts.preserve_ancestors;
         // Now add the other levels, if needed.
         while (_level_count < levels) {
@@ -184,12 +184,12 @@ class BinaryTreeImplicitImpl {
     /// @param value The true or false value to set.
     void set_is_preserving_ancestors(bool value) { _is_preserving_ancestors = value; }
 
-    /// @brief Get a flag whether this tree is verifying non-HWM nodes.
-    bool is_verifying_non_hwm_nodes() const { return _is_verifying_non_hwm_nodes; }
-    /// @brief Explicitly disable non-HWM node verification.
-    void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
-    /// @brief Explicitly enable non-HWM node verification.
-    void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
+    /// @brief Get a flag whether this tree is verifying non-AST nodes.
+    bool is_verifying_non_ast_nodes() const { return _is_verifying_non_ast_nodes; }
+    /// @brief Explicitly disable non-AST node verification.
+    void disable_non_ast_node_verification() { _is_verifying_non_ast_nodes = false; }
+    /// @brief Explicitly enable non-AST node verification.
+    void enable_non_ast_node_verification() { _is_verifying_non_ast_nodes = true; }
 
     /// @brief Get a flag whether this tree is initialized.
     bool is_initialized() const { return _is_initialized; }
@@ -198,7 +198,7 @@ class BinaryTreeImplicitImpl {
     /// @param value The true or false value to set.
     void set_is_initialized(bool value) { _is_initialized = value; }
 
-    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by an AST ancestor.
     const NodeBitmap<T>& get_uncovered_values() const { return _uncovered_values; }
     /// @brief Get a read-write reference to the uncovered values map.
     /// @warning This is intended for serialization/deserilization only.
@@ -213,7 +213,7 @@ class BinaryTreeImplicitImpl {
 
     /// @brief Responds true to `is_implicit()`, mostly for the `BinaryTree` facade.
     bool is_implicit() const { return true; }
-    /// @brief Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor.
+    /// @brief Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor.
     /// @note These are left-to-right positions, not node values.
     const NodeBitmap<T>& get_uncovered_positions() const { return _uncovered_positions; }
 
@@ -358,7 +358,7 @@ class BinaryTreeImplicitImpl {
     struct alignas(ABI::CACHE_LINE_SIZE) AddLevelTLS {
         /// @brief Dedicated `NodeBitmap` for the thread to use without guards.  Is merged later.
         NodeBitmap<T> uncovered_bitmap;
-        /// @brief Dedicated pool of newly-found ancestors (HWM nodes).
+        /// @brief Dedicated pool of newly-found ancestors (AST nodes).
         std::vector<Node<T>*> new_ancestors;
         /// @brief Left child's value (scratch space).
         T left_value;
@@ -380,7 +380,7 @@ class BinaryTreeImplicitImpl {
     * @brief Add a level to the tree.
     *
     * Implicit tree building happens by tracking the left-to-right positions (not values) of nodes which haven't been removed by a
-    * HWM node or ancestor.  This is representatively identical to a materialized tree's last level of nodes: anything remaining in
+    * AST node or ancestor.  This is representatively identical to a materialized tree's last level of nodes: anything remaining in
     * the `_uncovered_positions` are the parent nodes from the previous level whose children must be processed.
     *
     * To achieve any sort of threading performance, each thread will get thread-local storage (TLS) from an `AddLevelTLS` struct,
@@ -412,10 +412,10 @@ class BinaryTreeImplicitImpl {
 
         // Establish TLS for our callback.
         std::vector<AddLevelTLS> callback_storage;
-        // Track our own local High-Water Mark.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
-        T add_level_high_water_mark = BinaryTreeMath<T>::st_first_node_value_of_level(_level_count) - 1;
-        if (add_level_high_water_mark < 1) {
-            add_level_high_water_mark = 1;
+        // Track our own local Above Stopping Time point.  Since nodes are not sequentially ordered, we can only set this to first node - 1.
+        T add_level_ast_value = BinaryTreeMath<T>::st_first_node_value_of_level(_level_count) - 1;
+        if (add_level_ast_value < 1) {
+            add_level_ast_value = 1;
         }
 
         // Now loop.
@@ -442,37 +442,37 @@ class BinaryTreeImplicitImpl {
                 BinaryTreeMath<T>::st_node_value_by_position_and_level(tls.right_position, _level_count, tls.right_value);
             }
 
-            // Initialize the node and test HWM for ancestry.
+            // Initialize the node and test AST for ancestry.
             tls.left_node.init(tls.left_value);
             tls.right_node.init(tls.right_value);
             if (_is_preserving_ancestors) {
-                if (tls.left_node.is_below_high_water_mark()) {
+                if (tls.left_node.is_below_ast()) {
                     tls.new_ancestors.push_back(new Node<T>(tls.left_value));
                 }
-                if (tls.right_node.is_below_high_water_mark()) {
+                if (tls.right_node.is_below_ast()) {
                     tls.new_ancestors.push_back(new Node<T>(tls.right_value));
                 }
             }
 
             // Perform verification, if requested.
-            if (_is_verifying_non_hwm_nodes) {
-                if (tls.left_node.is_below_high_water_mark() == false) {
-                    if (Collatz<T>::st_verify(tls.left_value, add_level_high_water_mark) == false) {
+            if (_is_verifying_non_ast_nodes) {
+                if (tls.left_node.is_below_ast() == false) {
+                    if (Collatz<T>::st_verify(tls.left_value, add_level_ast_value) == false) {
                         throw std::logic_error("Node value " + to_string_any(tls.left_value) + " didn't verify.  How?");
                     }
                 }
-                if (tls.right_node.is_below_high_water_mark() == false) {
-                    if (Collatz<T>::st_verify(tls.right_value, add_level_high_water_mark) == false) {
+                if (tls.right_node.is_below_ast() == false) {
+                    if (Collatz<T>::st_verify(tls.right_value, add_level_ast_value) == false) {
                         throw std::logic_error("Node value " + to_string_any(tls.right_value) + " didn't verify.  How?");
                     }
                 }
             }
 
-            // Write the POSITION to the TLS bitmap if it didn't hit HWM.
-            if (tls.left_node.is_below_high_water_mark() == false) {
+            // Write the POSITION to the TLS bitmap if it didn't hit AST.
+            if (tls.left_node.is_below_ast() == false) {
                 tls.uncovered_bitmap.add(tls.left_position);
             }
-            if (tls.right_node.is_below_high_water_mark() == false) {
+            if (tls.right_node.is_below_ast() == false) {
                 tls.uncovered_bitmap.add(tls.right_position);
             }
 

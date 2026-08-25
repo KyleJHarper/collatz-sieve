@@ -327,8 +327,8 @@ int main(int argc, char **argv) {
     Node node_mpz_c = Node<mpz_class>(27);
 
     // Binrary Tree Option Sets
-    BinaryTreeOptions BTWithoutPrune = {.prune_hwm_nodes = false };
-    BinaryTreeOptions BTWithPrune = {.prune_hwm_nodes = true, .prune_parent_levels = true};
+    BinaryTreeOptions BTWithoutPrune = {.prune_ast_nodes = false };
+    BinaryTreeOptions BTWithPrune = {.prune_ast_nodes = true, .prune_parent_levels = true};
     BinaryTreeOptions DEFAULT_OPTS;
 
     // BT without pruning

@@ -27,7 +27,7 @@
 \DoxyCodeLine{00033\ }
 \DoxyCodeLine{00034\ }
 \DoxyCodeLine{00035\ }
-\DoxyCodeLine{00038\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00038\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}\ =\ 0;}
 \DoxyCodeLine{00039\ }
 \DoxyCodeLine{00040\ }
 \DoxyCodeLine{00041\ }
@@ -35,12 +35,12 @@
 \DoxyCodeLine{00045\ }
 \DoxyCodeLine{00046\ }
 \DoxyCodeLine{00047\ }
-\DoxyCodeLine{00050\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}\ =\ 0;}
+\DoxyCodeLine{00050\ \ \ \ \ std::atomic<uint64\_t>\ \mbox{\hyperlink{structVerifierMetric_a6da5496452c180fadac8393c0ebc3cc3}{steps\_skippable\_by\_affine\_stride\_before\_ast\_atomic}}\ =\ 0;}
 \DoxyCodeLine{00051\ }
 \DoxyCodeLine{00052\ }
 \DoxyCodeLine{00053\ }
-\DoxyCodeLine{00057\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a3b9f08655f353a3a065260c101b4da66}{steps\_before\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m)\ -\/\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m);}
+\DoxyCodeLine{00057\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a7e55aa0428307a7e5dc2e99bbbe5fa8f}{steps\_before\_ast}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m)\ -\/\ \mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.load(m);}
 \DoxyCodeLine{00059\ \ \ \ \ \}}
 \DoxyCodeLine{00060\ }
 \DoxyCodeLine{00061\ }
@@ -145,20 +145,20 @@
 \DoxyCodeLine{00193\ }
 \DoxyCodeLine{00194\ }
 \DoxyCodeLine{00195\ }
-\DoxyCodeLine{00199\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_aeaa24bce0d644b10bd014793e82b2e2a}{steps\_skippable\_by\_hwm\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00199\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a209999c7f8e717e15ee234e40da28c65}{steps\_skippable\_by\_ast\_per\_ms}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ ==\ 0)\ \{}
 \DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.load(m)\ /\ \mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count());}
 \DoxyCodeLine{00204\ \ \ \ \ \}}
 \DoxyCodeLine{00205\ }
 \DoxyCodeLine{00206\ }
 \DoxyCodeLine{00207\ }
-\DoxyCodeLine{00211\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_a3d6c22a615bed91e0192f8d563567ccd}{steps\_skippable\_by\_hwm\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00211\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierMetric_af75a4c404c3e8f729b3f05ace54ea936}{steps\_skippable\_by\_ast\_per\_s}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ <\ 1000)\ \{}
 \DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint64\_t\textcolor{keyword}{>}(\mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.load(m)\ /\ (\mbox{\hyperlink{structVerifierMetric_a6e74a5d2c64b050db71b47746eb234f2}{duration\_ms}}.count()\ /\ 1000));}
 \DoxyCodeLine{00216\ \ \ \ \ \}}
 \DoxyCodeLine{00217\ }
 \DoxyCodeLine{00218\ }
@@ -201,11 +201,11 @@
 \DoxyCodeLine{00268\ }
 \DoxyCodeLine{00269\ }
 \DoxyCodeLine{00272\ }
-\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_ad97def12d8a8b54a701191ef4c16b464}{skip\_rate\_of\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00277\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a675ca6a674e347b69e46d9cbddd8a354}{skip\_rate\_of\_ast}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load()\ ==\ 0)\ \{}
 \DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
 \DoxyCodeLine{00282\ \ \ \ \ \}}
 \DoxyCodeLine{00283\ }
 \DoxyCodeLine{00284\ }
@@ -219,11 +219,11 @@
 \DoxyCodeLine{00296\ }
 \DoxyCodeLine{00297\ }
 \DoxyCodeLine{00298\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_a6a59926b59e4533fb84cb3de65372390}{skip\_rate\_of\_affine\_stride\_before\_hwm}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structVerifierMetric_afb9505d69e98a99f1c98bf18de1da0e8}{skip\_rate\_of\_affine\_stride\_before\_ast}}(std::memory\_order\ m\ =\ std::memory\_order\_relaxed)\textcolor{keyword}{\ const\ }\{}
 \DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load()\ ==\ 0)\ \{}
 \DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (1.0\ *\ \mbox{\hyperlink{structVerifierMetric_a6da5496452c180fadac8393c0ebc3cc3}{steps\_skippable\_by\_affine\_stride\_before\_ast\_atomic}}.load(m))\ /\ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m);}
 \DoxyCodeLine{00308\ \ \ \ \ \}}
 \DoxyCodeLine{00309\ }
 \DoxyCodeLine{00311\ }
@@ -233,9 +233,9 @@
 \DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.store(0);}
 \DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ should\ not\ change.\ \ It's\ tied\ to\ a\ tree\ at\ instantiation.\ \ coverage\_ratio\ =\ 0;}}
 \DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.store(0);}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.store(0);}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.store(0);}
 \DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.store(0);}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.store(0);}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a6da5496452c180fadac8393c0ebc3cc3}{steps\_skippable\_by\_affine\_stride\_before\_ast\_atomic}}.store(0);}
 \DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.store(0);}
 \DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.store(0);}
 \DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}.store(0);}
@@ -252,9 +252,9 @@
 \DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},coverage\_ratio="{}}\ +\ std::to\_string(\mbox{\hyperlink{structVerifierMetric_a9706c2d9a6371f853272a451c2c38541}{coverage\_ratio}});}
 \DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},effective\_nodes\_verified="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a1112fc67938542be0242d88103345303}{effective\_nodes\_verified}}());}
 \DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_total="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.load(m));}
-\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_hwm="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.load(m));}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_ast="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.load(m));}
 \DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_affine\_stride="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.load(m));}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_affine\_stride\_before\_hwm="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.load(m));}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},steps\_skippable\_by\_affine\_stride\_before\_ast="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a6da5496452c180fadac8393c0ebc3cc3}{steps\_skippable\_by\_affine\_stride\_before\_ast\_atomic}}.load(m));}
 \DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_kernel\_launches="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a308d37dbf817e265e32ce5fd20d30523}{gpu\_kernel\_launches\_atomic}}.load(m));}
 \DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_overflows\_processed="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_a8382430c6a05649b6abe0b5aa821f050}{gpu\_overflows\_processed\_atomic}}.load(m));}
 \DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ ilp\ +=\ \textcolor{stringliteral}{"{},gpu\_overflow\_buffer\_exceeded="{}}\ +\ to\_string\_any(\mbox{\hyperlink{structVerifierMetric_aa34070ebddc7f9181a20e276832efc42}{gpu\_overflow\_buffer\_exceeded\_atomic}}.load(m));}

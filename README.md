@@ -8,9 +8,9 @@ An implementation of the data structure and sieve outlined in Kyle Harper's anal
 [Collatz Conjecture's](https://en.wikipedia.org/wiki/Collatz_conjecture) problem space.
 
 The code builds a binary tree in a unique, deterministic manner which allows the classification of parents and children into parity
-vectors, called __F-G Chains__.  These chains identify __High-Water Mark__ nodes whose parity vectors prove contractive for itself
-and all descendants, creating _coverage_ of a congruence class equivalent to a subtree.  The result leaves less than 1% of the
-search space ℕ after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU, requiring only ~40MB of memory.
+vectors, called __F-G Chains__.  These chains identify __Abort at Stopping Time__ nodes whose parity vectors prove contractive for
+itself and all descendants, creating _coverage_ of a congruence class equivalent to a subtree.  The result leaves less than 1% of
+the search space ℕ after 33 levels.  Such a tree can be built in a few seconds on a desktop CPU, requiring only ~40MB of memory.
 Larger trees are possible by its monotonic nature, using more resources, and growing closer to 100% coverage (though never 100%).
 The following table shows coverage and performance when building a tree using `uint64_t` on a desktop PC (i5-14600, DDR5).
 
@@ -176,7 +176,7 @@ and hits memory bandwidth limits (and possibly pointer chasing) long before the 
 outpace our `NodeBitmap`.  It also outperforms compressed memory.  The compressed memory was slightly smaller in size, and this
 might scale at higher tree levels, but the decompression time was so massive it killed the overall throughput.
 
-Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 1,117,834,900 (1.1B)
+Here is a table showing the memory required for each test, and the throughput.  This was a level 37 tree, with 527,682,754 (528M)
 surviving positions/values.  Note, the c/ms (count per millisecond) is not a typo.  The system can provide billions of values per
 second.
 
@@ -317,8 +317,8 @@ Metrics can be emitted as [Influx Line Protocol](https://docs.influxdata.com/inf
 calling `verifier.emit_ilp()`.
 
 For purely analytical reasons, detailed metrics are available on the `CPUVerifier` by calling `verifier.enable_detailed_metrics()`.
-This drastically slows down verification, but can give some insight to the effects of stopping at High-Water Mark, affine striding,
-and step counts.
+This drastically slows down verification, but can give some insight to the effects of stopping at AST, affine striding, and step
+counts.
 
 # Data Types and Cost Model
 
@@ -337,8 +337,8 @@ require more instructions (limbs, chunks, etc).
 # Classes & Facades
 
 `BinaryTree` A facade which builds a tree of type `BinaryTreeMaterializedImpl` or `BinaryTreeImplicitImpl`, removing nodes and
-subtrees meeting High-Water Mark.  Once built, the uncovered positions are provided in a vector of `Node` objects (Materialized) or
-a `NodeBitmap` bitmap (Implicit). As of version 4.0.0, the Implicit tree is the default, and you should use it.
+subtrees meeting AST.  Once built, the uncovered positions are provided in a vector of `Node` objects (Materialized) or a
+`NodeBitmap` bitmap (Implicit). As of version 4.0.0, the Implicit tree is the default, and you should use it.
 
 `Collatz` A class which can build a sequence and give you warm-fuzzy OOP feels, but its real value is in the static members for
 efficiently processing steps, finding metadata, and so forth.

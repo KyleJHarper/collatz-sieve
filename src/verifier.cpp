@@ -159,11 +159,13 @@ std::string inline generate_report(Verifier<T>& verifier, const LaunchContext& c
     result += std::format("\n{:<{}}", "Steps Skipped By Affine", metric_width);
     result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_affine_stride_atomic.load(), true), total_width);
     result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_affine_stride_per_s(), true), per_s_width);
+    result += std::format("  {:<.2f}%", 100 * metrics.skip_rate_of_affine_stride());
 
-    // Steps Skippable By HWM
-    result += std::format("\n{:<{}}", "Steps Skipped By HWM", metric_width);
-    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_hwm_atomic.load(), true), total_width);
-    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_hwm_per_s(), true), per_s_width);
+    // Steps Skippable By AST
+    result += std::format("\n{:<{}}", "Steps Skipped By AST", metric_width);
+    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_ast_atomic.load(), true), total_width);
+    result += std::format("{:>{}}", to_string_any(metrics.steps_skippable_by_ast_per_s(), true), per_s_width);
+    result += std::format("  {:<.2f}%", 100 * metrics.skip_rate_of_ast());
 
     // GPU Kernel Launches
     result += std::format("\n{:<{}}", "GPU Kernel Launches", metric_width);

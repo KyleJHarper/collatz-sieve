@@ -16,12 +16,12 @@ uint64\+\_\+t {\bfseries nodes\+\_\+verified} = 0
 \begin{DoxyCompactList}\small\item\em True nodes (values) verified. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}{steps\+\_\+total}} = 0
 \begin{DoxyCompactList}\small\item\em Total number of steps taken. \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\+\_\+skippable\+\_\+by\+\_\+hwm}} = 0
-\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c}{steps\+\_\+skippable\+\_\+by\+\_\+ast}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting Abort at Stopping Time. \end{DoxyCompactList}\item 
 uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride}} = 0
 \begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides alone. \end{DoxyCompactList}\item 
-uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm}} = 0
-\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. \end{DoxyCompactList}\end{DoxyCompactItemize}
+uint64\+\_\+t \mbox{\hyperlink{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587}{steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+ast}} = 0
+\begin{DoxyCompactList}\small\item\em Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting AST. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Member Function Documentation}
@@ -58,28 +58,28 @@ Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Aff
 \begin{DoxyNote}{Note}
 Only available when {\ttfamily Detailed\+Metrics} are enabled. 
 \end{DoxyNote}
-\Hypertarget{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}\label{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063} 
-\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_affine\_stride\_before\_hwm@{steps\_skippable\_by\_affine\_stride\_before\_hwm}}
-\index{steps\_skippable\_by\_affine\_stride\_before\_hwm@{steps\_skippable\_by\_affine\_stride\_before\_hwm}!VerifierTLSMetric@{VerifierTLSMetric}}
-\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_before\_hwm}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}
-{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+hwm = 0}
+\Hypertarget{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587}\label{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_affine\_stride\_before\_ast@{steps\_skippable\_by\_affine\_stride\_before\_ast}}
+\index{steps\_skippable\_by\_affine\_stride\_before\_ast@{steps\_skippable\_by\_affine\_stride\_before\_ast}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_affine\_stride\_before\_ast}{steps\_skippable\_by\_affine\_stride\_before\_ast}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+affine\+\_\+stride\+\_\+before\+\_\+ast = 0}
 
 
 
-Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting the HWM. 
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by using Affine Strides before hitting AST. 
 
 \begin{DoxyNote}{Note}
 Only available when {\ttfamily Detailed\+Metrics} are enabled. 
 \end{DoxyNote}
-\Hypertarget{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}\label{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a} 
-\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_hwm@{steps\_skippable\_by\_hwm}}
-\index{steps\_skippable\_by\_hwm@{steps\_skippable\_by\_hwm}!VerifierTLSMetric@{VerifierTLSMetric}}
-\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_hwm}{steps\_skippable\_by\_hwm}}
-{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+hwm = 0}
+\Hypertarget{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c}\label{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c} 
+\index{VerifierTLSMetric@{VerifierTLSMetric}!steps\_skippable\_by\_ast@{steps\_skippable\_by\_ast}}
+\index{steps\_skippable\_by\_ast@{steps\_skippable\_by\_ast}!VerifierTLSMetric@{VerifierTLSMetric}}
+\doxysubsubsection{\texorpdfstring{steps\_skippable\_by\_ast}{steps\_skippable\_by\_ast}}
+{\footnotesize\ttfamily uint64\+\_\+t Verifier\+TLSMetric\+::steps\+\_\+skippable\+\_\+by\+\_\+ast = 0}
 
 
 
-Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting the High-\/\+Water Mark. 
+Number of steps skipped (or would\textquotesingle{}ve been skipped) by hitting Abort at Stopping Time. 
 
 \begin{DoxyNote}{Note}
 Only available when {\ttfamily Detailed\+Metrics} are enabled. 

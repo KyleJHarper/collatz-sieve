@@ -20,9 +20,9 @@ struct VerifierTLSMetric {
 
 
 
-    /// @brief Number of steps skipped (or would've been skipped) by hitting the High-Water Mark.
+    /// @brief Number of steps skipped (or would've been skipped) by hitting Abort at Stopping Time.
     /// @note Only available when `DetailedMetrics` are enabled.
-    uint64_t steps_skippable_by_hwm = 0;
+    uint64_t steps_skippable_by_ast = 0;
 
 
 
@@ -32,9 +32,9 @@ struct VerifierTLSMetric {
 
 
 
-    /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting the HWM.
+    /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting AST.
     /// @note Only available when `DetailedMetrics` are enabled.
-    uint64_t steps_skippable_by_affine_stride_before_hwm = 0;
+    uint64_t steps_skippable_by_affine_stride_before_ast = 0;
 
 
 
@@ -47,9 +47,9 @@ struct VerifierTLSMetric {
         // Atomic updates.
         metrics.nodes_verified_atomic.fetch_add(nodes_verified);
         metrics.steps_total_atomic.fetch_add(steps_total);
-        metrics.steps_skippable_by_hwm_atomic.fetch_add(steps_skippable_by_hwm);
+        metrics.steps_skippable_by_ast_atomic.fetch_add(steps_skippable_by_ast);
         metrics.steps_skippable_by_affine_stride_atomic.fetch_add(steps_skippable_by_affine_stride);
-        metrics.steps_skippable_by_affine_stride_before_hwm_atomic.fetch_add(steps_skippable_by_affine_stride_before_hwm);
+        metrics.steps_skippable_by_affine_stride_before_ast_atomic.fetch_add(steps_skippable_by_affine_stride_before_ast);
 
         // Reset everything if desired.
         if (do_reset) {
@@ -63,8 +63,8 @@ struct VerifierTLSMetric {
     void reset() {
         nodes_verified = 0;
         steps_total = 0;
-        steps_skippable_by_hwm = 0;
+        steps_skippable_by_ast = 0;
         steps_skippable_by_affine_stride = 0;
-        steps_skippable_by_affine_stride_before_hwm = 0;
+        steps_skippable_by_affine_stride_before_ast = 0;
     }
 };

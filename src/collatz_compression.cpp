@@ -431,7 +431,7 @@ void test_9(T max_value, T report_every) {
 
 template<AnySupportedIntegral T>
 void test_10(T max_value, T report_every) {
-    logger->info("Test 10 -- Stop at the High-Water Mark (for comparison; doesn't go to 1)");
+    logger->info("Test 10 -- Stop at the AST (for comparison; doesn't go to 1)");
     std::chrono::time_point start = std::chrono::high_resolution_clock::now();
     T total_steps = 0;
     T next_report = report_every;

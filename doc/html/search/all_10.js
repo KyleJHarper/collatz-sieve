@@ -23,6 +23,6 @@ var searchData=
   ['process_5fbuffer_20',['process_buffer',['../classGPUVerifier.html#a56f197875a251781fb7b59193adb36f0',1,'GPUVerifier']]],
   ['progress_21',['progress',['../classProgress.html#a11fb7247afea0ef534ade36e1bc0a664',1,'Progress::Progress(const Progress &amp;)=delete'],['../classProgress.html#ab7afceceb1d8cee8bcd9dd8a62aa239a',1,'Progress::Progress(const std::string &amp;file_path)'],['../classProgress.html#a01d83f02dc49939dd5d14057932a8a8d',1,'Progress::Progress()'],['../classProgress.html',1,'Progress']]],
   ['progressreport_22',['progressreport',['../classProgressReport.html',1,'ProgressReport'],['../classProgressReport.html#a62b1a1c63e2d3c368334445ff04af83d',1,'ProgressReport::ProgressReport()']]],
-  ['prune_5fhwm_5fnodes_23',['prune_hwm_nodes',['../structBinaryTreeOptions.html#a789f1f3f23d7e1e6f485bb34af274e4a',1,'BinaryTreeOptions']]],
+  ['prune_5fast_5fnodes_23',['prune_ast_nodes',['../structBinaryTreeOptions.html#a250d4baaa8c36c0119ab783422722e71',1,'BinaryTreeOptions']]],
   ['prune_5fparent_5flevels_24',['prune_parent_levels',['../structBinaryTreeOptions.html#a1db90c92f907dbd30709fd7ed5a1af7d',1,'BinaryTreeOptions']]]
 ];

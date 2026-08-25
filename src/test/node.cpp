@@ -15,11 +15,11 @@ void test_node_basics() {
     Node<T> node;
     assert(node.get_value() == 0);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == false);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == false);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == false);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -28,11 +28,11 @@ void test_node_basics() {
     Node<T> node2(4);
     assert(node2.get_value() == 4);
     assert(node2.get_parent() == nullptr);
-    assert(node2.get_hwm_ancestor() == nullptr);
+    assert(node2.get_ast_ancestor() == nullptr);
     assert(node2.get_child(0) == nullptr);
     assert(node2.get_child(1) == nullptr);
-    assert(node2.is_below_high_water_mark() == true);
-    assert(node2.has_high_water_mark_ancestor() == false);
+    assert(node2.is_below_ast() == true);
+    assert(node2.has_ast_ancestor() == false);
     assert(node2.is_initialized() == true);
     assert(node2.does_own_children() == true);
     assert(node2.get_child_count() == 0);
@@ -41,11 +41,11 @@ void test_node_basics() {
     Node<T> node3(8, &node2);
     assert(node3.get_value() == 8);
     assert(node3.get_parent() == &node2);
-    assert(node3.get_hwm_ancestor() == &node2);
+    assert(node3.get_ast_ancestor() == &node2);
     assert(node3.get_child(0) == nullptr);
     assert(node3.get_child(1) == nullptr);
-    assert(node3.is_below_high_water_mark() == true);
-    assert(node3.has_high_water_mark_ancestor() == true);
+    assert(node3.is_below_ast() == true);
+    assert(node3.has_ast_ancestor() == true);
     assert(node3.is_initialized() == true);
     assert(node3.does_own_children() == true);
     assert(node3.get_child_count() == 0);
@@ -62,11 +62,11 @@ void test_node_init() {
     Node<T> node;
     assert(node.get_value() == 0);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == false);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == false);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == false);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -75,11 +75,11 @@ void test_node_init() {
     node.init(4);
     assert(node.get_value() == 4);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == true);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == true);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == true);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -88,11 +88,11 @@ void test_node_init() {
     node.init(8);
     assert(node.get_value() == 8);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == true);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == true);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == true);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -109,11 +109,11 @@ void test_node_reset() {
     Node<T> node(4);
     assert(node.get_value() == 4);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == true);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == true);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == true);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -122,11 +122,11 @@ void test_node_reset() {
     node.reset();
     assert(node.get_value() == 0);
     assert(node.get_parent() == nullptr);
-    assert(node.get_hwm_ancestor() == nullptr);
+    assert(node.get_ast_ancestor() == nullptr);
     assert(node.get_child(0) == nullptr);
     assert(node.get_child(1) == nullptr);
-    assert(node.is_below_high_water_mark() == false);
-    assert(node.has_high_water_mark_ancestor() == false);
+    assert(node.is_below_ast() == false);
+    assert(node.has_ast_ancestor() == false);
     assert(node.is_initialized() == false);
     assert(node.does_own_children() == true);
     assert(node.get_child_count() == 0);
@@ -357,14 +357,14 @@ void test_node_get_parent() {
 
 
 template<AnySupportedIntegral T>
-void test_node_assign_hwm_ancestor() {
+void test_node_assign_ast_ancestor() {
     start_test(__func__);
 
-    Node<T> hwm_ancestor(2);
+    Node<T> ast_ancestor(2);
     Node<T> node(4);
-    assert(node.get_hwm_ancestor() == nullptr);
-    node.assign_hwm_ancestor(&hwm_ancestor);
-    assert(node.get_hwm_ancestor() == &hwm_ancestor);
+    assert(node.get_ast_ancestor() == nullptr);
+    node.assign_ast_ancestor(&ast_ancestor);
+    assert(node.get_ast_ancestor() == &ast_ancestor);
 
     end_test();
 }
@@ -372,15 +372,15 @@ void test_node_assign_hwm_ancestor() {
 
 
 template<AnySupportedIntegral T>
-void test_node_get_hwm_ancestor() {
+void test_node_get_ast_ancestor() {
     start_test(__func__);
 
     // Manual assignment (only option).
-    Node<T> hwm_ancestor(2);
+    Node<T> ast_ancestor(2);
     Node<T> node(4);
-    assert(node.get_hwm_ancestor() == nullptr);
-    node.assign_hwm_ancestor(&hwm_ancestor);
-    assert(node.get_hwm_ancestor() == &hwm_ancestor);
+    assert(node.get_ast_ancestor() == nullptr);
+    node.assign_ast_ancestor(&ast_ancestor);
+    assert(node.get_ast_ancestor() == &ast_ancestor);
 
     end_test();
 }
@@ -388,14 +388,14 @@ void test_node_get_hwm_ancestor() {
 
 
 template<AnySupportedIntegral T>
-void test_node_st_get_hwm_index() {
+void test_node_st_get_ast_index() {
     start_test(__func__);
 
     Node<T> node;
     for(T i = 1; i < 100000; i++) {
         T current = i;
         seq_size_t step = 0;
-        T manual_hwm_index = 0;
+        T manual_ast_index = 0;
         while (current > 1) {
             if (current % 2 == 1) {
                 current = (3 * current) + 1;
@@ -404,13 +404,13 @@ void test_node_st_get_hwm_index() {
             }
             step++;
             if (current < i) {
-                manual_hwm_index = step;
+                manual_ast_index = step;
                 break;
             }
         }
         node.init(i);
-        assert(manual_hwm_index == Node<T>::st_get_hwm_index(i));
-        assert(manual_hwm_index == node.get_hwm_index());
+        assert(manual_ast_index == Node<T>::st_get_ast_index(i));
+        assert(manual_ast_index == node.get_ast_index());
     }
 
     end_test();
@@ -601,7 +601,7 @@ template<AnySupportedIntegral T>
 void test_node_cloneable() {
     start_test(__func__);
 
-    // Node uses a different signature because of parent/hwm values.  Can't use cloneable() helper.
+    // Node uses a different signature because of parent/ast values.  Can't use cloneable() helper.
     Node<T> node(3);
 
     // Make a stream and error string.
@@ -617,11 +617,11 @@ void test_node_cloneable() {
     // Make a blank object.
     Node<T> copy;
     T parent_v = 0;
-    T hwm_ancestor_v = 0;
+    T ast_ancestor_v = 0;
     uint8_t child_count = 0;
 
     // Deserialize into it.
-    if (! copy.deserialize(stream, parent_v, hwm_ancestor_v, child_count, &err)) {
+    if (! copy.deserialize(stream, parent_v, ast_ancestor_v, child_count, &err)) {
         std::cout << "Failed to deseralize for cloning.  Error is: " << err << std::endl;
         assert(false);
     }
@@ -678,9 +678,9 @@ void run_all() {
     test_node_get_child_count<T>();
     test_node_assign_parent<T>();
     test_node_get_parent<T>();
-    test_node_assign_hwm_ancestor<T>();
-    test_node_get_hwm_ancestor<T>();
-    test_node_st_get_hwm_index<T>();
+    test_node_assign_ast_ancestor<T>();
+    test_node_get_ast_ancestor<T>();
+    test_node_st_get_ast_index<T>();
     test_node_get_fg_chain_length<T>();
     test_node_get_level<T>();
     test_node_get_position<T>();

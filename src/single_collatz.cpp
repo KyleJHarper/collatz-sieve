@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
     std::cout << "Value is: " << to_string_any(c.get_initial_value()) << std::endl;
     std::cout << "OE pattern is: " << c.get_oe_pattern_string() << std::endl;
-    std::cout << "HWM index is: " << c.get_hwm_index() << std::endl;
+    std::cout << "AST index is: " << c.get_ast_index() << std::endl;
     std::cout << "Stop count: " << c.get_step_count() << std::endl;
     std::cout << "Peak value: " << c.get_peak_value() << std::endl;
     std::cout << "Deep size is: " << c.deep_size() << std::endl;

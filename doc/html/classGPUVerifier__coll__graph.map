@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="An implementation of the Verifier class which uses local GPUs to verfy survivors." alt="" coords="5,260,140,285"/>
 <area shape="rect" id="Node000002" href="$classVerifier.html" title="A base class behind the verification implementation classes. Provides the start, stop,..." alt="" coords="187,185,294,211"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,218,100,262,98,258,201,214"/>
-<area shape="rect" id="Node000003" href="$classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High&#45;Water Mark nodes." alt="" coords="285,95,479,121"/>
+<area shape="rect" id="Node000003" href="$classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes." alt="" coords="285,95,479,121"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="353,130,261,188,258,183,351,126"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="160,5,199,31"/>
 <area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="163,43,129,89,98,148,88,179,81,210,76,260,71,260,76,209,83,177,93,146,125,86,159,40"/>

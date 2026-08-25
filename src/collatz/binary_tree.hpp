@@ -57,10 +57,10 @@ struct BinaryTreeFileHeader {
 
 /**
 * @class BinaryTree
-* @brief The BinaryTree facade which will apply Harper's sieve of High-Water Mark nodes.
+* @brief The BinaryTree facade which will apply Harper's sieve of AST nodes.
 *
 * This static facade will build a binary tree using the child values (labels) defined in Harper's research, which will find and
-* remove any nodes whose FG-chain reaches the High-Water Mark, eliminating subtrees.
+* remove any nodes whose FG-chain reaches the Abort at Stopping Time condition, eliminating subtrees.
 *
 * Users may choose the `BinaryTreeMaterializedImpl` or the `BinaryTreeImplicitImpl`.
 *
@@ -70,7 +70,7 @@ struct BinaryTreeFileHeader {
 *
 * The `BinaryTreeImplicitImpl` is a mathematically equivalent tree, and is the default as of version 4.0.0.  It uses significantly
 * less memory by foregoing nodes in favor of a `NodeBitmap` which tracks the uncovered positions: the leaf node positions of the
-* tree which haven't been pruned by a High-Water Mark ancestor yet.
+* tree which haven't been pruned by an AST ancestor yet.
 *
 * @tparam T Any supported integral (see concepts.hpp).
 * @tparam TreeType The implementation type (with type T nested) to use for the `_impl` member.
@@ -142,7 +142,10 @@ class BinaryTree {
         // Sanity check.  T must support requested tree size.
         assert_level_will_fit(levels);
         _impl.init(levels, opts);
-        if (_impl.get_level_count() >= 2) {
+        // Facade owns scaling factor.  Handle it.
+        if (_impl.get_level_count() + 1 < 2) {
+            _scaling_factor = 0;
+        } else {
             _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
         }
     }
@@ -154,6 +157,8 @@ class BinaryTree {
     */
     void reset() {
         _impl.reset();
+        // Facade owns scaling factor.  Handle it.
+        _scaling_factor = 0;
     }
 
     /// @}
@@ -187,12 +192,12 @@ class BinaryTree {
     /// @brief Get a flag whether this tree is preserving ancestors.
     bool is_preserving_ancestors() const { return _impl.is_preserving_ancestors(); }
 
-    /// @brief Get a flag whether this tree is verifying non-HWM nodes.
-    bool is_verifying_non_hwm_nodes() const { return _impl.is_verifying_non_hwm_nodes(); }
-    /// @brief Explicitly disable non-HWM node verification.
-    void disable_non_hwm_node_verification() { _impl.disable_non_hwm_node_verification(); }
-    /// @brief Explicitly enable non-HWM node verification.
-    void enable_non_hwm_node_verification() { _impl.enable_non_hwm_node_verification(); }
+    /// @brief Get a flag whether this tree is verifying non-AST nodes.
+    bool is_verifying_non_ast_nodes() const { return _impl.is_verifying_non_ast_nodes(); }
+    /// @brief Explicitly disable non-AST node verification.
+    void disable_non_ast_node_verification() { _impl.disable_non_ast_node_verification(); }
+    /// @brief Explicitly enable non-AST node verification.
+    void enable_non_ast_node_verification() { _impl.enable_non_ast_node_verification(); }
 
     /// @brief Get a flag whether this tree is initialized.
     bool is_initialized() const { return _impl.is_initialized(); }
@@ -201,7 +206,7 @@ class BinaryTree {
     /// @note This uses `BinaryTreeMath::st_node_count_of_tree()`.  It does not walk the actual `_impl` or read it in any way.
     T node_count() const { return BinaryTreeMath<T>::st_node_count_of_tree(_impl.get_level_count()); }
 
-    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by an AST ancestor.
     const NodeBitmap<T>& get_uncovered_values() const { return _impl.get_uncovered_values(); }
     /// @brief Get a read-write reference to the uncovered values map.
     /// @warning This is intended for serialization/deserilization only.
@@ -223,9 +228,9 @@ class BinaryTree {
         return _impl.get_level_map();
     }
 
-    /// @brief Get a flag whether this tree is pruning High-Water Mark nodes.
-    bool is_pruning_hwm_nodes() const requires IsMaterializedTree<TreeType> {
-        return _impl.is_pruning_hwm_nodes();
+    /// @brief Get a flag whether this tree is pruning Abort at Stopping Time nodes.
+    bool is_pruning_ast_nodes() const requires IsMaterializedTree<TreeType> {
+        return _impl.is_pruning_ast_nodes();
     }
 
     /// @brief Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes).
@@ -248,7 +253,7 @@ class BinaryTree {
     /// @brief Attaches `is_implicit()` if using the `BinaryTreeImplicitImpl`.
     bool is_implicit() const requires IsImplicitTree<TreeType> { return true; }
 
-    /// @brief Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor.
+    /// @brief Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor.
     /// @note These are left-to-right positions, not node values.
     const NodeBitmap<T>& get_uncovered_positions() const requires IsImplicitTree<TreeType> {
         return _impl.get_uncovered_positions();
@@ -278,30 +283,30 @@ class BinaryTree {
 
 
     /**
-    * @brief Assert non High-Water Mark verification is enabled when necessary.
+    * @brief Assert non AST verification is enabled when necessary.
     *
     * If verification is disabled (default) and the tree level exceeds the max known, fail.  It might seen annoying, but the API
-    * refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes
+    * refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non AST nodes
     * themsleves.  The limit is defined by `CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL`.
     *
     * \par Deeper Explanation
     *
-    * When building a tree, the nodes which don't meet HWM (directly or by ancestor) need to be checked.  For example, the
-    * number `14` is below the HWM because of the `G` step on node `2`.  Its value becomes `7`.  That node isn't a HWM node,
+    * When building a tree, the nodes which don't meet AST (directly or by ancestor) need to be checked.  For example, the
+    * number `14` is below the AST because of the `G` step on node `2`.  Its value becomes `7`.  That node isn't an AST node,
     * descendant of one, nor has it been verified by the tree.  This leaves pockets of nodes that aren't verified, which means the
-    * overall High-Water Mark of the tree isn't valid.
+    * overall AST value of the tree isn't valid.
     *
     * To compensate, verification can be activated via the `BinaryTreeOptions` during `init()`, or by calling
-    * `enable_non_hwm_node_verification()` on an instantiated tree.  However, external work by
+    * `enable_non_ast_node_verification()` on an instantiated tree.  However, external work by
     * [David Barina](https://link.springer.com/article/10.1007/s11227-025-07337-0) has empirically verified up to `2^71`, which is
     * the first node on level `72` of a tree.  Ergo, nodes up through level `71` are verified and do not need re-verification.
     *
     * @warning This is an assertion, not a boolean.  It will throw if verification is disabled and level count grows beyond limits.
     * @param level The level being added.
-    * @param is_verifying_non_hwm_nodes Flag indicating if verification is enabled or not.
+    * @param is_verifying_non_ast_nodes Flag indicating if verification is enabled or not.
     */
-    void assert_level_verification(level_t level, bool is_verifying_non_hwm_nodes) {
-        if (is_verifying_non_hwm_nodes == false && level >= CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1) {
+    void assert_level_verification(level_t level, bool is_verifying_non_ast_nodes) {
+        if (is_verifying_non_ast_nodes == false && level >= CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL + 1) {
             std::string msg= "Tree has reached max level of previously verified space: "
             + to_string_any(level)
             + ".  You have disabled runtime verification, which means this and future levels are NOT fully verified!"
@@ -321,11 +326,9 @@ class BinaryTree {
     void add_level() {
         level_t next_level = _impl.get_level_count() + 1;
         assert_level_will_fit(next_level);
-        assert_level_verification(next_level, _impl.is_verifying_non_hwm_nodes());
+        assert_level_verification(next_level, _impl.is_verifying_non_ast_nodes());
         _impl.add_level();
-        if (_impl.get_level_count() >= 2) {
-            _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
-        }
+        _scaling_factor = BinaryTreeMath<T>::st_scaling_factor(_impl.get_level_count() + 1);
     }
 
 
@@ -346,7 +349,7 @@ class BinaryTree {
     *   1. Root nodes.
     *   2. Level count.
     *   3. The is_preserving_ancestors flag.
-    *   4. The is_verifying_non_hwm_nodes flag.
+    *   4. The is_verifying_non_ast_nodes flag.
     *   5. The is_initialized flag.
     *   6. Coverage map.
     *   7. Ancestors (if enabled).
@@ -381,8 +384,8 @@ class BinaryTree {
         if (! eq.equal(first.is_preserving_ancestors(), second.is_preserving_ancestors())) {
             return eq.fail("Is preserving ancestors mismatch");
         }
-        if (! eq.equal(first.is_verifying_non_hwm_nodes(), second.is_verifying_non_hwm_nodes())) {
-            return eq.fail("Is verifying hwm nodes mismatch");
+        if (! eq.equal(first.is_verifying_non_ast_nodes(), second.is_verifying_non_ast_nodes())) {
+            return eq.fail("Is verifying ast nodes mismatch");
         }
         if (! eq.equal(first.is_initialized(), second.is_initialized())) {
             return eq.fail("Is initialized mismatch");
@@ -477,7 +480,7 @@ class BinaryTree {
         uint16_t tree_type_bit_width_id = ABI::get_bit_width_id<T>();
         level_t level_count = get_level_count();
         bool b_is_preserving_ancestors = is_preserving_ancestors();
-        bool b_is_verifying_non_hwm_nodes = is_verifying_non_hwm_nodes();
+        bool b_is_verifying_non_ast_nodes = is_verifying_non_ast_nodes();
         if (! sh.serialize_integral(tree_type)) {
             return sh.fail("tree_type==" + to_string_any(tree_type));
         }
@@ -493,8 +496,8 @@ class BinaryTree {
         if (! sh.serialize_bool(b_is_preserving_ancestors)) {
             return sh.fail("b_is_preserving_ancestors==" + std::to_string(b_is_preserving_ancestors));
         }
-        if (! sh.serialize_bool(b_is_verifying_non_hwm_nodes)) {
-            return sh.fail("b_is_verifying_non_hwm_nodes==" + std::to_string(b_is_verifying_non_hwm_nodes));
+        if (! sh.serialize_bool(b_is_verifying_non_ast_nodes)) {
+            return sh.fail("b_is_verifying_non_ast_nodes==" + std::to_string(b_is_verifying_non_ast_nodes));
         }
         // The is_initialized must be true, so we ignore it.
 
@@ -606,7 +609,7 @@ class BinaryTree {
         uint16_t tree_type_bit_width_id;
         level_t level_count;
         bool b_is_preserving_ancestors;
-        bool b_is_verifying_non_hwm_nodes;
+        bool b_is_verifying_non_ast_nodes;
         // Tree type.  Has to match.
         if (! sh.deserialize_integral(tree_type)) {
             return sh.fail("couldn't read tree_type");
@@ -645,14 +648,14 @@ class BinaryTree {
             return sh.fail("couldn't read is_preserving_ancestors");
         }
         _impl.set_is_preserving_ancestors(b_is_preserving_ancestors);
-        // Is verifying non-hwm nodes
-        if (! sh.deserialize_bool(b_is_verifying_non_hwm_nodes)) {
-            return sh.fail("couldn't read is_verifying_non_hwm_nodes");
+        // Is verifying non-ast nodes
+        if (! sh.deserialize_bool(b_is_verifying_non_ast_nodes)) {
+            return sh.fail("couldn't read is_verifying_non_ast_nodes");
         }
-        if (b_is_verifying_non_hwm_nodes) {
-            enable_non_hwm_node_verification();
+        if (b_is_verifying_non_ast_nodes) {
+            enable_non_ast_node_verification();
         } else {
-            disable_non_hwm_node_verification();
+            disable_non_ast_node_verification();
         }
         // The is_initialized must be true, so we set it manually.
         _impl.set_is_initialized(true);
@@ -669,16 +672,16 @@ class BinaryTree {
                 root_node = new Node<T>(BinaryTreeMath<T>::get_root_value());
             }
             T root_parent_v;
-            T root_hwm_ancestor_v;
+            T root_ast_ancestor_v;
             uint8_t child_count;
-            if (! root_node->deserialize(in, root_parent_v, root_hwm_ancestor_v, child_count, err)) {
+            if (! root_node->deserialize(in, root_parent_v, root_ast_ancestor_v, child_count, err)) {
                 return sh.fail("root node");
             }
             if (root_parent_v != 0) {
                 return sh.fail("Root node's parent value must be 0 (absent), but it's: " + to_string_any(root_parent_v));
             }
-            if (root_hwm_ancestor_v != 0) {
-                return sh.fail("Root node's hwm ancestor value must be 0 (absent), but it's: " + to_string_any(root_hwm_ancestor_v));
+            if (root_ast_ancestor_v != 0) {
+                return sh.fail("Root node's ast ancestor value must be 0 (absent), but it's: " + to_string_any(root_ast_ancestor_v));
             }
         } else {
             // The backed up file didn't have a root node... which means it was a 0-level tree :/
@@ -718,11 +721,11 @@ class BinaryTree {
         }
         ancestors_rw.reserve(static_cast<size_t>(u64_size));
         T parent_v;
-        T hwm_ancestor_v;
+        T ast_ancestor_v;
         uint8_t child_count;
         for (uint64_t i = 0; i < u64_size; i++) {
             Node<T>* new_node = new Node<T>(T(1));
-            if (! new_node->deserialize(in, parent_v, hwm_ancestor_v, child_count, err)) {
+            if (! new_node->deserialize(in, parent_v, ast_ancestor_v, child_count, err)) {
                 return sh.fail("couldn't deserialize ancestor at index i==" + to_string_any(i));
             }
             ancestors_rw.push_back(new_node);
@@ -1062,7 +1065,12 @@ class BinaryTree {
         // Define the maximum multiplier before scaling factor and/or total would overflow.
         U max_multiplier = 0;
         if constexpr(FixedWidthIntegral<U>) {
-            max_multiplier = (std::numeric_limits<U>::max() - uncovered_values.maximum()) / _scaling_factor;
+            if (_scaling_factor == 0) {
+                // When tree is small (L=1) scaling factor will be zero.  Don't get a division-by-zero error.
+                max_multiplier = std::numeric_limits<U>::max() - uncovered_values.maximum();
+            } else {
+                max_multiplier = (std::numeric_limits<U>::max() - uncovered_values.maximum()) / _scaling_factor;
+            }
         }
 
         // Bump the multiplier if a start value requires it.  Take the maximum value of the tree and subtract it from the start

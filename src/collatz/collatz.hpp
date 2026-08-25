@@ -50,7 +50,7 @@ class Collatz {
     //                                   uint64_t | total | uint128_t | total | mpz_class | total
     T _initial_value = 0;                  //        8 |     8 |        16 |    16 |        16 |    16
     T _peak_value = 0;                     //        8 |    16 |        16 |    32 |        16 |    32
-    seq_size_t _hwm_index = 0;             //        4 |    20 |         4 |    36 |         4 |    36
+    seq_size_t _ast_index = 0;             //        4 |    20 |         4 |    36 |         4 |    36
     seq_size_t _step_count = 0;            //        4 |    24 |         4 |    40 |         4 |    40
     bool _is_initialized : 1 = false;      //      1:1 |    25 |       1:1 |    41 |       1:1 |    41
     bool _sequence_overflows : 1 = false;  //      1:2 |    25 |       1:2 |    41 |       1:2 |    41  (6 bits padding)
@@ -102,8 +102,8 @@ class Collatz {
                 if (step > _peak_value) {
                     _peak_value = step;
                 }
-                if (_hwm_index == 0 && step < _initial_value) {
-                    _hwm_index = _step_count - 1;
+                if (_ast_index == 0 && step < _initial_value) {
+                    _ast_index = _step_count - 1;
                 }
                 return ForEachSignal::CONTINUE;
             });
@@ -123,7 +123,7 @@ class Collatz {
     void reset() {
         _initial_value = 0;
         _peak_value = 0;
-        _hwm_index = 0;
+        _ast_index = 0;
         _step_count = 0;
         _is_initialized = false;
         _sequence_overflows = false;
@@ -144,8 +144,8 @@ class Collatz {
     bool is_initialized() const { return _is_initialized; }
     /// @brief Return the peak value found for the initial value sent.
     const T& get_peak_value() const { return _peak_value; }
-    /// @brief Return the index of the sequence where the High-Water Mark was found for initial value sent.
-    seq_size_t get_hwm_index() const { return _hwm_index; }
+    /// @brief Return the index of the sequence where the Abort at Stopping Time was found for initial value sent.
+    seq_size_t get_ast_index() const { return _ast_index; }
     /// @brief Return the step count of the sequence (stopping time) for initial value sent.
     seq_size_t get_step_count() const { return _step_count; }
     /// @brief Return the sequence as a vector of `T`.
@@ -184,7 +184,7 @@ class Collatz {
     * inline this method.
     * @note In the event a number is divergent (cyclic), this method will hang.
     * @param initial_value The starting value for a sequence.
-    * @param sentinel_value The value to stop at.  Usually 1 or a High-Water Mark.
+    * @param sentinel_value The value to stop at.  Usually 1 or an AST value.
     * @tparam U Required type to avoid overflow, which may exceed T.
     * @return True if the sequence reached the sentinel value, hangs otherwise.
     */
@@ -497,19 +497,19 @@ class Collatz {
 
 
     /**
-    * @brief Finds the peak value of a sequence, optionally stopping at High-Water Mark.
+    * @brief Finds the peak value of a sequence, optionally stopping at AST.
     * @param initial_value The first value of a sequence to calculate.
     * @param out_peak Caller's memory to store peak value.
-    * @param stop_at_hwm Flag to stop at High-Water Mark when testing peaks, mostly for the peak-by-bit program.
+    * @param stop_at_ast Flag to stop at AST when testing peaks, mostly for the peak-by-bit program.
     */
-    static inline void st_get_peak(const T& initial_value, T& out_peak, bool stop_at_hwm = false) {
+    static inline void st_get_peak(const T& initial_value, T& out_peak, bool stop_at_ast = false) {
         size_t right_shifts = 0;
         out_peak = initial_value;
 
         if constexpr(FixedWidthIntegral<T>) {
             // Native types are fast as-is.  Affine compression of consecutive ones doesn't help, except bit-shifting CTZ.
             T current_value = initial_value;
-            T bailout_value = (stop_at_hwm && initial_value > 1) ? (T)initial_value - 1 : T(1);
+            T bailout_value = (stop_at_ast && initial_value > 1) ? (T)initial_value - 1 : T(1);
             // Shift CTZ to ensure odd start.
             current_value >>= Bit::count_trailing_zeros(current_value);
             while (current_value > bailout_value) {
@@ -531,7 +531,7 @@ class Collatz {
             static thread_local T tmp_x_2;
             static thread_local T bailout_value;
             bailout_value = 1;
-            if (stop_at_hwm && initial_value > 1) {
+            if (stop_at_ast && initial_value > 1) {
                 bailout_value = initial_value;
                 mpz_sub_ui(bailout_value.get_mpz_t(), bailout_value.get_mpz_t(), 1);
             }

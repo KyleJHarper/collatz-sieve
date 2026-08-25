@@ -2,7 +2,7 @@
 \hypertarget{classBinaryTree}{}\label{classBinaryTree}\index{BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}}
 
 
-The \doxylink{classBinaryTree}{Binary\+Tree} facade which will apply Harper\textquotesingle{}s sieve of High-\/\+Water Mark nodes.  
+The \doxylink{classBinaryTree}{Binary\+Tree} facade which will apply Harper\textquotesingle{}s sieve of AST nodes.  
 
 
 
@@ -24,8 +24,8 @@ Collaboration diagram for Binary\+Tree\texorpdfstring{$<$}{<} T, Tree\+Type \tex
 \item 
 void \mbox{\hyperlink{classBinaryTree_ac6ec6687fe24e4deba4c4e62b04afe69}{assert\+\_\+level\+\_\+will\+\_\+fit}} (level\+\_\+t level) const
 \begin{DoxyCompactList}\small\item\em Assert the level requested will fit within the limits of {\ttfamily T} used. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classBinaryTree_a20cc074d3eee2f0081dcca4543162702}{assert\+\_\+level\+\_\+verification}} (level\+\_\+t level, bool \mbox{\hyperlink{classBinaryTree_a81330d96418ecd89407487de742810f1}{is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes}})
-\begin{DoxyCompactList}\small\item\em Assert non High-\/\+Water Mark verification is enabled when necessary. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBinaryTree_a478599040b6c4af20c8b825b47b2b126}{assert\+\_\+level\+\_\+verification}} (level\+\_\+t level, bool \mbox{\hyperlink{classBinaryTree_a39de2ea4f0f31109baa72435d4c7f863}{is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes}})
+\begin{DoxyCompactList}\small\item\em Assert non AST verification is enabled when necessary. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classBinaryTree_abe2f579857f50ff0728b6b12221ccb5d}{add\+\_\+level}} ()
 \begin{DoxyCompactList}\small\item\em Adds a level to the tree. Details are implementation-\/specific. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTree_adc594f95085f464ff696e6396dd832c4}\label{classBinaryTree_adc594f95085f464ff696e6396dd832c4} 
@@ -98,15 +98,15 @@ const std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstri
 \Hypertarget{classBinaryTree_ade92d714e72a07e5052dda23a87b102a}\label{classBinaryTree_ade92d714e72a07e5052dda23a87b102a} 
 bool {\bfseries is\+\_\+preserving\+\_\+ancestors} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTree_a81330d96418ecd89407487de742810f1}\label{classBinaryTree_a81330d96418ecd89407487de742810f1} 
-bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () const
-\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+HWM nodes. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTree_ae3294399465d28e6e3779f6619bed521}\label{classBinaryTree_ae3294399465d28e6e3779f6619bed521} 
-void {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTree_ac25d4b4510a44522433e9f7c195c7209}\label{classBinaryTree_ac25d4b4510a44522433e9f7c195c7209} 
-void {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a39de2ea4f0f31109baa72435d4c7f863}\label{classBinaryTree_a39de2ea4f0f31109baa72435d4c7f863} 
+bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} () const
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+AST nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_ad1f9eade2a2b866c50f2d940469d5931}\label{classBinaryTree_ad1f9eade2a2b866c50f2d940469d5931} 
+void {\bfseries disable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+AST node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a32c3e51017d9f421ffa6828575955973}\label{classBinaryTree_a32c3e51017d9f421ffa6828575955973} 
+void {\bfseries enable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+AST node verification. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTree_a5ab4c5f9a887dd776450281b8af8ef8e}\label{classBinaryTree_a5ab4c5f9a887dd776450281b8af8ef8e} 
 bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
@@ -114,7 +114,7 @@ T \mbox{\hyperlink{classBinaryTree_a501b4333691de390dbdf2c05011d194c}{node\+\_\+
 \begin{DoxyCompactList}\small\item\em Get the number of nodes for a tree of this size. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTree_a164d01c405d33264027aaf059b22104a}\label{classBinaryTree_a164d01c405d33264027aaf059b22104a} 
 const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () const
-\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by an AST ancestor. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTree_a65410c6ccddecdcd4dc90b6c981154f8}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
@@ -126,9 +126,9 @@ bool {\bfseries is\+\_\+materialized} () const
 \begin{DoxyCompactList}\small\item\em Attaches {\ttfamily \doxylink{classBinaryTree_a50dadcccf0fa007fc9d89fbee2ecd9d7}{is\+\_\+materialized()}} if using the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}}. \end{DoxyCompactList}\item 
 const std\+::unordered\+\_\+map$<$ level\+\_\+t, std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ $>$ \& \mbox{\hyperlink{classBinaryTree_a0db608de5a943ddb8724cdd625994684}{get\+\_\+level\+\_\+map}} () const
 \begin{DoxyCompactList}\small\item\em Get a reference to the level map, which contains all of the {\ttfamily \doxylink{classNode}{Node}} objects. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTree_a028f3dc27a7db896d94c5ced6f5b59f6}\label{classBinaryTree_a028f3dc27a7db896d94c5ced6f5b59f6} 
-bool {\bfseries is\+\_\+pruning\+\_\+hwm\+\_\+nodes} () const
-\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning High-\/\+Water Mark nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTree_a50de4a4668ae4180fdcda508bc18d3d0}\label{classBinaryTree_a50de4a4668ae4180fdcda508bc18d3d0} 
+bool {\bfseries is\+\_\+pruning\+\_\+ast\+\_\+nodes} () const
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning Abort at Stopping Time nodes. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTree_aa141a0f8fe4b89379eb8976bb983bdaf}\label{classBinaryTree_aa141a0f8fe4b89379eb8976bb983bdaf} 
 bool {\bfseries is\+\_\+pruning\+\_\+parent\+\_\+levels} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes). \end{DoxyCompactList}\item 
@@ -143,7 +143,7 @@ T {\bfseries real\+\_\+node\+\_\+count} () const
 bool {\bfseries is\+\_\+implicit} () const
 \begin{DoxyCompactList}\small\item\em Attaches {\ttfamily \doxylink{classBinaryTree_abfaf68f6800afca2a033c9b64b74cbec}{is\+\_\+implicit()}} if using the {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}. \end{DoxyCompactList}\item 
 const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTree_a8af75d9e71b73df8449db3c6b87bee44}{get\+\_\+uncovered\+\_\+positions}} () const
-\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -170,15 +170,15 @@ T {\bfseries \+\_\+scaling\+\_\+factor} = 0
 \doxysubsection{Detailed Description}
 \subsubsection*{template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, typename Tree\+Type = Binary\+Tree\+Implicit\+Impl$<$\+T$>$$>$\newline
 class Binary\+Tree$<$ T, Tree\+Type $>$}
-The \doxylink{classBinaryTree}{Binary\+Tree} facade which will apply Harper\textquotesingle{}s sieve of High-\/\+Water Mark nodes. 
+The \doxylink{classBinaryTree}{Binary\+Tree} facade which will apply Harper\textquotesingle{}s sieve of AST nodes. 
 
-This static facade will build a binary tree using the child values (labels) defined in Harper\textquotesingle{}s research, which will find and remove any nodes whose FG-\/chain reaches the High-\/\+Water Mark, eliminating subtrees.
+This static facade will build a binary tree using the child values (labels) defined in Harper\textquotesingle{}s research, which will find and remove any nodes whose FG-\/chain reaches the Abort at Stopping Time condition, eliminating subtrees.
 
 Users may choose the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} or the {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}}.
 
 The {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} is a true, memory-\/backed tree with nodes connected via edges (pointers). It is extremely heavy in RAM, but its saving grace is that it\textquotesingle{}s a true binary tree which users can walk and analyze. If pruning is enabled, nodes are removed according to the pruning policy, leaving what is technically a directed acyclic graph (DAG).
 
-The {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}} is a mathematically equivalent tree, and is the default as of version 4.\+0.\+0. It uses significantly less memory by foregoing nodes in favor of a {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} which tracks the uncovered positions\+: the leaf node positions of the tree which haven\textquotesingle{}t been pruned by a High-\/\+Water Mark ancestor yet.
+The {\ttfamily \doxylink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}} is a mathematically equivalent tree, and is the default as of version 4.\+0.\+0. It uses significantly less memory by foregoing nodes in favor of a {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} which tracks the uncovered positions\+: the leaf node positions of the tree which haven\textquotesingle{}t been pruned by an AST ancestor yet.
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -225,25 +225,25 @@ void \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, Tree\+Type $>$\+::ad
 
 Adds a level to the tree. Details are implementation-\/specific. 
 
-This facade will assert the level fits, assert verification is correctly handled/covered, and then call the implementation\textquotesingle{}s {\ttfamily \doxylink{classBinaryTree_abe2f579857f50ff0728b6b12221ccb5d}{add\+\_\+level()}} method. \Hypertarget{classBinaryTree_a20cc074d3eee2f0081dcca4543162702}\label{classBinaryTree_a20cc074d3eee2f0081dcca4543162702} 
+This facade will assert the level fits, assert verification is correctly handled/covered, and then call the implementation\textquotesingle{}s {\ttfamily \doxylink{classBinaryTree_abe2f579857f50ff0728b6b12221ccb5d}{add\+\_\+level()}} method. \Hypertarget{classBinaryTree_a478599040b6c4af20c8b825b47b2b126}\label{classBinaryTree_a478599040b6c4af20c8b825b47b2b126} 
 \index{BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}!assert\_level\_verification@{assert\_level\_verification}}
 \index{assert\_level\_verification@{assert\_level\_verification}!BinaryTree$<$ T, TreeType $>$@{BinaryTree$<$ T, TreeType $>$}}
 \doxysubsubsection{\texorpdfstring{assert\_level\_verification()}{assert\_level\_verification()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T, typename Tree\+Type  = Binary\+Tree\+Implicit\+Impl$<$\+T$>$$>$ \\
-void \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, Tree\+Type $>$\+::assert\+\_\+level\+\_\+verification (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level,  }\item[{bool}]{is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classBinaryTree}{Binary\+Tree}}$<$ T, Tree\+Type $>$\+::assert\+\_\+level\+\_\+verification (\begin{DoxyParamCaption}\item[{level\+\_\+t}]{level,  }\item[{bool}]{is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
-Assert non High-\/\+Water Mark verification is enabled when necessary. 
+Assert non AST verification is enabled when necessary. 
 
-If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by {\ttfamily \doxylink{namespaceCollatzConstants_a973af5204c6bff2e94087a73f2b4af0c}{Collatz\+Constants\+::\+LARGEST\+\_\+\+EMPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL}}.
+If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non AST nodes themsleves. The limit is defined by {\ttfamily \doxylink{namespaceCollatzConstants_a973af5204c6bff2e94087a73f2b4af0c}{Collatz\+Constants\+::\+LARGEST\+\_\+\+EMPIRICALLY\+\_\+\+TESTED\+\_\+\+LEVEL}}.
 
 \begin{DoxyParagraph}{Deeper Explanation}
 
 \end{DoxyParagraph}
-When building a tree, the nodes which don\textquotesingle{}t meet HWM (directly or by ancestor) need to be checked. For example, the number {\ttfamily 14} is below the HWM because of the {\ttfamily G} step on node {\ttfamily 2}. Its value becomes {\ttfamily 7}. That node isn\textquotesingle{}t a HWM node, descendant of one, nor has it been verified by the tree. This leaves pockets of nodes that aren\textquotesingle{}t verified, which means the overall High-\/\+Water Mark of the tree isn\textquotesingle{}t valid.
+When building a tree, the nodes which don\textquotesingle{}t meet AST (directly or by ancestor) need to be checked. For example, the number {\ttfamily 14} is below the AST because of the {\ttfamily G} step on node {\ttfamily 2}. Its value becomes {\ttfamily 7}. That node isn\textquotesingle{}t an AST node, descendant of one, nor has it been verified by the tree. This leaves pockets of nodes that aren\textquotesingle{}t verified, which means the overall AST value of the tree isn\textquotesingle{}t valid.
 
-To compensate, verification can be activated via the {\ttfamily \doxylink{structBinaryTreeOptions}{Binary\+Tree\+Options}} during {\ttfamily \doxylink{classBinaryTree_a2eeaf4a7727c29a727d01845add1475b}{init()}}, or by calling {\ttfamily \doxylink{classBinaryTree_ac25d4b4510a44522433e9f7c195c7209}{enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification()}} on an instantiated tree. However, external work by \href{https://link.springer.com/article/10.1007/s11227-025-07337-0}{\texttt{ David Barina}} has empirically verified up to {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}71}, which is the first node on level {\ttfamily 72} of a tree. Ergo, nodes up through level {\ttfamily 71} are verified and do not need re-\/verification.
+To compensate, verification can be activated via the {\ttfamily \doxylink{structBinaryTreeOptions}{Binary\+Tree\+Options}} during {\ttfamily \doxylink{classBinaryTree_a2eeaf4a7727c29a727d01845add1475b}{init()}}, or by calling {\ttfamily \doxylink{classBinaryTree_a32c3e51017d9f421ffa6828575955973}{enable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification()}} on an instantiated tree. However, external work by \href{https://link.springer.com/article/10.1007/s11227-025-07337-0}{\texttt{ David Barina}} has empirically verified up to {\ttfamily 2\texorpdfstring{$^\wedge$}{\string^}71}, which is the first node on level {\ttfamily 72} of a tree. Ergo, nodes up through level {\ttfamily 71} are verified and do not need re-\/verification.
 
 \begin{DoxyWarning}{Warning}
 This is an assertion, not a boolean. It will throw if verification is disabled and level count grows beyond limits. 
@@ -252,7 +252,7 @@ This is an assertion, not a boolean. It will throw if verification is disabled a
 \begin{DoxyParams}{Parameters}
 {\em level} & The level being added. \\
 \hline
-{\em is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} & Flag indicating if verification is enabled or not. \\
+{\em is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} & Flag indicating if verification is enabled or not. \\
 \hline
 \end{DoxyParams}
 \Hypertarget{classBinaryTree_ac6ec6687fe24e4deba4c4e62b04afe69}\label{classBinaryTree_ac6ec6687fe24e4deba4c4e62b04afe69} 
@@ -347,7 +347,7 @@ const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperl
 
 
 
-Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. 
+Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor. 
 
 \begin{DoxyNote}{Note}
 These are left-\/to-\/right positions, not node values. 
@@ -522,7 +522,7 @@ This function checks\+:
 \item Root nodes.
 \item Level count.
 \item The is\+\_\+preserving\+\_\+ancestors flag.
-\item The is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes flag.
+\item The is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes flag.
 \item The is\+\_\+initialized flag.
 \item Coverage map.
 \item Ancestors (if enabled).

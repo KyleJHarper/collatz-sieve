@@ -15,9 +15,9 @@ void test_verifier_tls_metric_basic_members() {
     VerifierTLSMetric tls_metric;
     assert(tls_metric.nodes_verified == 0);
     assert(tls_metric.steps_total == 0);
-    assert(tls_metric.steps_skippable_by_hwm == 0);
+    assert(tls_metric.steps_skippable_by_ast == 0);
     assert(tls_metric.steps_skippable_by_affine_stride == 0);
-    assert(tls_metric.steps_skippable_by_affine_stride_before_hwm == 0);
+    assert(tls_metric.steps_skippable_by_affine_stride_before_ast == 0);
 
     end_test();
 }
@@ -31,24 +31,24 @@ void test_verifier_tls_metric_flush() {
     VerifierTLSMetric tls_metric;
     tls_metric.nodes_verified = 42;
     tls_metric.steps_total = 42;
-    tls_metric.steps_skippable_by_hwm = 42;
+    tls_metric.steps_skippable_by_ast = 42;
     tls_metric.steps_skippable_by_affine_stride = 42;
-    tls_metric.steps_skippable_by_affine_stride_before_hwm = 42;
+    tls_metric.steps_skippable_by_affine_stride_before_ast = 42;
 
     VerifierMetric flushed_metric;
     tls_metric.flush(flushed_metric, false);
     // The existing one shouldn't have been reset.
     assert(tls_metric.nodes_verified == 42);
     assert(tls_metric.steps_total == 42);
-    assert(tls_metric.steps_skippable_by_hwm == 42);
+    assert(tls_metric.steps_skippable_by_ast == 42);
     assert(tls_metric.steps_skippable_by_affine_stride == 42);
-    assert(tls_metric.steps_skippable_by_affine_stride_before_hwm == 42);
+    assert(tls_metric.steps_skippable_by_affine_stride_before_ast == 42);
     // The flushed metric should have the same values.
     assert(flushed_metric.nodes_verified_atomic.load() == 42);
     assert(flushed_metric.steps_total_atomic.load() == 42);
-    assert(flushed_metric.steps_skippable_by_hwm_atomic.load() == 42);
+    assert(flushed_metric.steps_skippable_by_ast_atomic.load() == 42);
     assert(flushed_metric.steps_skippable_by_affine_stride_atomic.load() == 42);
-    assert(flushed_metric.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 42);
+    assert(flushed_metric.steps_skippable_by_affine_stride_before_ast_atomic.load() == 42);
 
     // Repeat the process but call reset.
     VerifierMetric flushed_metric_2;
@@ -56,15 +56,15 @@ void test_verifier_tls_metric_flush() {
     // The existing one shouldn have reset.
     assert(tls_metric.nodes_verified == 0);
     assert(tls_metric.steps_total == 0);
-    assert(tls_metric.steps_skippable_by_hwm == 0);
+    assert(tls_metric.steps_skippable_by_ast == 0);
     assert(tls_metric.steps_skippable_by_affine_stride == 0);
-    assert(tls_metric.steps_skippable_by_affine_stride_before_hwm == 0);
+    assert(tls_metric.steps_skippable_by_affine_stride_before_ast == 0);
     // The flushed metric should have the same values.
     assert(flushed_metric_2.nodes_verified_atomic.load() == 42);
     assert(flushed_metric_2.steps_total_atomic.load() == 42);
-    assert(flushed_metric_2.steps_skippable_by_hwm_atomic.load() == 42);
+    assert(flushed_metric_2.steps_skippable_by_ast_atomic.load() == 42);
     assert(flushed_metric_2.steps_skippable_by_affine_stride_atomic.load() == 42);
-    assert(flushed_metric_2.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 42);
+    assert(flushed_metric_2.steps_skippable_by_affine_stride_before_ast_atomic.load() == 42);
 
     end_test();
 }
@@ -78,22 +78,22 @@ void test_verifier_tls_metric_reset() {
     VerifierTLSMetric tls_metric;
     tls_metric.nodes_verified = 42;
     tls_metric.steps_total = 42;
-    tls_metric.steps_skippable_by_hwm = 42;
+    tls_metric.steps_skippable_by_ast = 42;
     tls_metric.steps_skippable_by_affine_stride = 42;
-    tls_metric.steps_skippable_by_affine_stride_before_hwm = 42;
+    tls_metric.steps_skippable_by_affine_stride_before_ast = 42;
     // Verify the values were set.
     assert(tls_metric.nodes_verified == 42);
     assert(tls_metric.steps_total == 42);
-    assert(tls_metric.steps_skippable_by_hwm == 42);
+    assert(tls_metric.steps_skippable_by_ast == 42);
     assert(tls_metric.steps_skippable_by_affine_stride == 42);
-    assert(tls_metric.steps_skippable_by_affine_stride_before_hwm == 42);
+    assert(tls_metric.steps_skippable_by_affine_stride_before_ast == 42);
     // Reset them and assert they're 0.
     tls_metric.reset();
     assert(tls_metric.nodes_verified == 0);
     assert(tls_metric.steps_total == 0);
-    assert(tls_metric.steps_skippable_by_hwm == 0);
+    assert(tls_metric.steps_skippable_by_ast == 0);
     assert(tls_metric.steps_skippable_by_affine_stride == 0);
-    assert(tls_metric.steps_skippable_by_affine_stride_before_hwm == 0);
+    assert(tls_metric.steps_skippable_by_affine_stride_before_ast == 0);
 
     end_test();
 }

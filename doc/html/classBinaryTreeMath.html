@@ -205,13 +205,13 @@ static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>_offset</b> 
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
 class BinaryTreeMath&lt; T &gt;</div><p>The core algorithms supporting tree building and navigation. </p>
-<dl class="section attention"><dt>Attention</dt><dd>This class contains many of the core formulas driving the entire algorithm behind the custom <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code>.</dd></dl>
-<p>The math behind any <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a> must support the two types of coordinates consistently. These are:</p><ul>
+<dl class="section attention"><dt>Attention</dt><dd>This class contains many of the core formulas driving the entire algorithm behind the custom <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code>.</dd></dl>
+<p>The math behind any <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a> must support the two types of coordinates consistently. These are:</p><ul>
 <li>Levels are the vertical coordinates and are labeled with countering numbers: 1, 2, 3 ...</li>
 <li>Positions are the left-to-right horizontal coordinates and are labeled with counting numbers: 1, 2, 3 ...</li>
 </ul>
 <p>As shown, 0-based indexes are not used for tree coordinates. They could be, but it just sounds weird to call the first level of a tree "level zero". More importantly, it also requires more +1/-1 adjustments in the functions. Levels were zero-based originally, but this was changed in version 3.0.0.</p>
-<p>The math for building a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> supports both 0- and 1-based trees. In the original research, trees rooted at zero were fine because manual research was still underway into patterns. Patterns aligned more cleanly with a tree rooted at one, and it also meant the tree contained the space of <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> Conjecture correctly (no zero). Therefore, 1-based trees became the defaul as of version 2.0.0. That said, 0-based trees are still possible by changing <code>BinaryTreeMath::set_root_value(0)</code>, however their performance and behavior is provided on a best-effort basis and might be removed later.</p>
+<p>The math for building a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code> supports both 0- and 1-based trees. In the original research, trees rooted at zero were fine because manual research was still underway into patterns. Patterns aligned more cleanly with a tree rooted at one, and it also meant the tree contained the space of <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> Conjecture correctly (no zero). Therefore, 1-based trees became the defaul as of version 2.0.0. That said, 0-based trees are still possible by changing <code>BinaryTreeMath::set_root_value(0)</code>, however their performance and behavior is provided on a best-effort basis and might be removed later.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
@@ -443,7 +443,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Calculate the level for a node from any value. </p>
 <p>Since trees grow dyadically, the level is essentially log2(N), but consideration has to be taken for 0- and 1-based trees.</p>
-<dl class="section user"><dt>Formula</dt><dd>\( \left\lfloor \log_{2}(N+Offset) + 1 \right\rfloor \)</dd></dl>
+<dl class="section user"><dt>Formula</dt><dd>\( \left\lfloor \log_{2}(N+Offset) \right\rfloor + 1 \)</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>The value to compute a level for. </td></tr>

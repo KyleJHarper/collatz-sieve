@@ -87,7 +87,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code>.  
+<p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code>.  
  <a href="classNode.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="node_8hpp_source.html">node.hpp</a>&gt;</code></p>
@@ -117,9 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9517228032e6f0ce674e69bbbca02501" id="r_a9517228032e6f0ce674e69bbbca02501"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501">serialize</a> (std::ostream &amp;out, std::string *err=nullptr) const</td></tr>
 <tr class="memdesc:a9517228032e6f0ce674e69bbbca02501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialize the node specifics of this object for export.  <br /></td></tr>
 <tr class="separator:a9517228032e6f0ce674e69bbbca02501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1abc023e5f1316182c73be4420e8eecc" id="r_a1abc023e5f1316182c73be4420e8eecc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a1abc023e5f1316182c73be4420e8eecc">deserialize</a> (std::istream &amp;in, T &amp;parent_v, T &amp;hwm_ancestor_v, uint8_t &amp;child_count, std::string *err=nullptr)</td></tr>
-<tr class="memdesc:a1abc023e5f1316182c73be4420e8eecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501" title="Serialize the node specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
-<tr class="separator:a1abc023e5f1316182c73be4420e8eecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac90d2d128a0c2006539d1947e63bd32e" id="r_ac90d2d128a0c2006539d1947e63bd32e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#ac90d2d128a0c2006539d1947e63bd32e">deserialize</a> (std::istream &amp;in, T &amp;parent_v, T &amp;ast_ancestor_v, uint8_t &amp;child_count, std::string *err=nullptr)</td></tr>
+<tr class="memdesc:ac90d2d128a0c2006539d1947e63bd32e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deserialize this object for import following a previous <code><a class="el" href="classNode.html#a9517228032e6f0ce674e69bbbca02501" title="Serialize the node specifics of this object for export.">serialize()</a></code>.  <br /></td></tr>
+<tr class="separator:ac90d2d128a0c2006539d1947e63bd32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Lifecycle Management</div></td></tr>
 <tr class="memitem:a0ac1d44cfe588be564acf25485029bd8" id="r_a0ac1d44cfe588be564acf25485029bd8"><td class="memItemLeft" align="right" valign="top"><a id="a0ac1d44cfe588be564acf25485029bd8" name="a0ac1d44cfe588be564acf25485029bd8"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> ()</td></tr>
@@ -154,7 +154,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9094a9dcdb0d8d02db467549cda22da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fde89f0ec750262d4f326276007a5f4" id="r_a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> U&gt; </td></tr>
 <tr class="memitem:a4fde89f0ec750262d4f326276007a5f4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classNode.html#a4fde89f0ec750262d4f326276007a5f4">init_sequence_helper</a> ()</td></tr>
-<tr class="memdesc:a4fde89f0ec750262d4f326276007a5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/HWM analysis.  <br /></td></tr>
+<tr class="memdesc:a4fde89f0ec750262d4f326276007a5f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/AST analysis.  <br /></td></tr>
 <tr class="separator:a4fde89f0ec750262d4f326276007a5f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dd2dadaf062f03fc80797a0cd0a03b5" id="r_a3dd2dadaf062f03fc80797a0cd0a03b5"><td class="memItemLeft" align="right" valign="top"><a id="a3dd2dadaf062f03fc80797a0cd0a03b5" name="a3dd2dadaf062f03fc80797a0cd0a03b5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
@@ -201,14 +201,14 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_child_count</b
 const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_value</b> () const</td></tr>
 <tr class="memdesc:acd9ce8e35f9f5840779592383ea6b344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return this node's value. <br /></td></tr>
 <tr class="separator:acd9ce8e35f9f5840779592383ea6b344"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a384e4c5c02c237f1dad0aba304872cfc" id="r_a384e4c5c02c237f1dad0aba304872cfc"><td class="memItemLeft" align="right" valign="top"><a id="a384e4c5c02c237f1dad0aba304872cfc" name="a384e4c5c02c237f1dad0aba304872cfc"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_below_high_water_mark</b> () const</td></tr>
-<tr class="memdesc:a384e4c5c02c237f1dad0aba304872cfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node is below the High-Water Mark. <br /></td></tr>
-<tr class="separator:a384e4c5c02c237f1dad0aba304872cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad177ff820a4b9416d8a3ee46cabfe774" id="r_ad177ff820a4b9416d8a3ee46cabfe774"><td class="memItemLeft" align="right" valign="top"><a id="ad177ff820a4b9416d8a3ee46cabfe774" name="ad177ff820a4b9416d8a3ee46cabfe774"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_high_water_mark_ancestor</b> () const</td></tr>
-<tr class="memdesc:ad177ff820a4b9416d8a3ee46cabfe774"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node has a HWM ancestor. <br /></td></tr>
-<tr class="separator:ad177ff820a4b9416d8a3ee46cabfe774"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f47b79178fa861a96bc8a8b533b956d" id="r_a5f47b79178fa861a96bc8a8b533b956d"><td class="memItemLeft" align="right" valign="top"><a id="a5f47b79178fa861a96bc8a8b533b956d" name="a5f47b79178fa861a96bc8a8b533b956d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_below_ast</b> () const</td></tr>
+<tr class="memdesc:a5f47b79178fa861a96bc8a8b533b956d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node is below the Abort at Stopping Time. <br /></td></tr>
+<tr class="separator:a5f47b79178fa861a96bc8a8b533b956d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad71aa43ac16165f013652b3b17cb033d" id="r_ad71aa43ac16165f013652b3b17cb033d"><td class="memItemLeft" align="right" valign="top"><a id="ad71aa43ac16165f013652b3b17cb033d" name="ad71aa43ac16165f013652b3b17cb033d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_ast_ancestor</b> () const</td></tr>
+<tr class="memdesc:ad71aa43ac16165f013652b3b17cb033d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node has an AST ancestor. <br /></td></tr>
+<tr class="separator:ad71aa43ac16165f013652b3b17cb033d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e26152bd714bdbcb997fd946731a650" id="r_a1e26152bd714bdbcb997fd946731a650"><td class="memItemLeft" align="right" valign="top"><a id="a1e26152bd714bdbcb997fd946731a650" name="a1e26152bd714bdbcb997fd946731a650"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () const</td></tr>
 <tr class="memdesc:a1e26152bd714bdbcb997fd946731a650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to determine if this node has been initialized with a value. <br /></td></tr>
@@ -251,18 +251,18 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_value</b> = 0</td></tr>
 <tr class="memitem:aca6aed9c76de85f62c3f8f2020b341eb" id="r_aca6aed9c76de85f62c3f8f2020b341eb"><td class="memItemLeft" align="right" valign="top"><a id="aca6aed9c76de85f62c3f8f2020b341eb" name="aca6aed9c76de85f62c3f8f2020b341eb"></a>
 <a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_parent</b> = nullptr</td></tr>
 <tr class="separator:aca6aed9c76de85f62c3f8f2020b341eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd13687c9b16b43a273ad93d7260cd2b" id="r_abd13687c9b16b43a273ad93d7260cd2b"><td class="memItemLeft" align="right" valign="top"><a id="abd13687c9b16b43a273ad93d7260cd2b" name="abd13687c9b16b43a273ad93d7260cd2b"></a>
-<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_hwm_ancestor</b> = nullptr</td></tr>
-<tr class="separator:abd13687c9b16b43a273ad93d7260cd2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a997533b30ae663011dfc3c9610675978" id="r_a997533b30ae663011dfc3c9610675978"><td class="memItemLeft" align="right" valign="top"><a id="a997533b30ae663011dfc3c9610675978" name="a997533b30ae663011dfc3c9610675978"></a>
+<a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_ast_ancestor</b> = nullptr</td></tr>
+<tr class="separator:a997533b30ae663011dfc3c9610675978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa05167b39499499f550d7527faf0436" id="r_aaa05167b39499499f550d7527faf0436"><td class="memItemLeft" align="right" valign="top"><a id="aaa05167b39499499f550d7527faf0436" name="aaa05167b39499499f550d7527faf0436"></a>
 <a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>_children</b> [<a class="el" href="classNode.html#ab204ebe45f832d60ecc0a69bc07dc39f">MAX_CHILDREN</a>] = {nullptr, nullptr}</td></tr>
 <tr class="separator:aaa05167b39499499f550d7527faf0436"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a805bd36a7aae0f7d50f3bab642ffc9e2" id="r_a805bd36a7aae0f7d50f3bab642ffc9e2"><td class="memItemLeft" align="right" valign="top"><a id="a805bd36a7aae0f7d50f3bab642ffc9e2" name="a805bd36a7aae0f7d50f3bab642ffc9e2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_below_hwm</b>: 1 = false</td></tr>
-<tr class="separator:a805bd36a7aae0f7d50f3bab642ffc9e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c5b5758227cb43b466cc653f3a2ffc9" id="r_a8c5b5758227cb43b466cc653f3a2ffc9"><td class="memItemLeft" align="right" valign="top"><a id="a8c5b5758227cb43b466cc653f3a2ffc9" name="a8c5b5758227cb43b466cc653f3a2ffc9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_has_hwm_ancestor</b>: 1 = false</td></tr>
-<tr class="separator:a8c5b5758227cb43b466cc653f3a2ffc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4be638c08e09e89b70eeca6978051c3" id="r_ab4be638c08e09e89b70eeca6978051c3"><td class="memItemLeft" align="right" valign="top"><a id="ab4be638c08e09e89b70eeca6978051c3" name="ab4be638c08e09e89b70eeca6978051c3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_below_ast</b>: 1 = false</td></tr>
+<tr class="separator:ab4be638c08e09e89b70eeca6978051c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30ab308c43b8603b963e75842902a296" id="r_a30ab308c43b8603b963e75842902a296"><td class="memItemLeft" align="right" valign="top"><a id="a30ab308c43b8603b963e75842902a296" name="a30ab308c43b8603b963e75842902a296"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>_has_ast_ancestor</b>: 1 = false</td></tr>
+<tr class="separator:a30ab308c43b8603b963e75842902a296"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a358c408d443ce2e821f9843896d5823a" id="r_a358c408d443ce2e821f9843896d5823a"><td class="memItemLeft" align="right" valign="top"><a id="a358c408d443ce2e821f9843896d5823a" name="a358c408d443ce2e821f9843896d5823a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>_is_initialized</b>: 1 = false</td></tr>
 <tr class="separator:a358c408d443ce2e821f9843896d5823a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -296,26 +296,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>assign_parent</b> (<a
 <a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_parent</b> () const</td></tr>
 <tr class="memdesc:ab43844ce28030e8b583d1de732ab43f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to the parent. <br /></td></tr>
 <tr class="separator:ab43844ce28030e8b583d1de732ab43f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a921a007d49f266256900adc55aab60" id="r_a0a921a007d49f266256900adc55aab60"><td class="memItemLeft" align="right" valign="top"><a id="a0a921a007d49f266256900adc55aab60" name="a0a921a007d49f266256900adc55aab60"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>assign_hwm_ancestor</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *hwm_ancestor)</td></tr>
-<tr class="memdesc:a0a921a007d49f266256900adc55aab60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the <code>hwm_ancestor</code> to this <code>_hwm_ancestor</code>, with no safety checks. <br /></td></tr>
-<tr class="separator:a0a921a007d49f266256900adc55aab60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2e96fdecdae4f193996072165f02ff5" id="r_af2e96fdecdae4f193996072165f02ff5"><td class="memItemLeft" align="right" valign="top"><a id="af2e96fdecdae4f193996072165f02ff5" name="af2e96fdecdae4f193996072165f02ff5"></a>
-<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_ancestor</b> () const</td></tr>
-<tr class="memdesc:af2e96fdecdae4f193996072165f02ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to the HWM ancestor. <br /></td></tr>
-<tr class="separator:af2e96fdecdae4f193996072165f02ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acff24e5b0eb62dd16bc72744ed2af9bb" id="r_acff24e5b0eb62dd16bc72744ed2af9bb"><td class="memItemLeft" align="right" valign="top"><a id="acff24e5b0eb62dd16bc72744ed2af9bb" name="acff24e5b0eb62dd16bc72744ed2af9bb"></a>
-seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_hwm_index</b> () const</td></tr>
-<tr class="memdesc:acff24e5b0eb62dd16bc72744ed2af9bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member helper to get this node's High-Water Mark index. See <code><a class="el" href="classNode.html#a63422be985eab555730bbde62c0ca2d3" title="Return the sequence index for the HWM of a given value.">st_get_hwm_index()</a></code>. <br /></td></tr>
-<tr class="separator:acff24e5b0eb62dd16bc72744ed2af9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63422be985eab555730bbde62c0ca2d3" id="r_a63422be985eab555730bbde62c0ca2d3"><td class="memItemLeft" align="right" valign="top">static seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a63422be985eab555730bbde62c0ca2d3">st_get_hwm_index</a> (T value)</td></tr>
-<tr class="memdesc:a63422be985eab555730bbde62c0ca2d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sequence index for the HWM of a given value.  <br /></td></tr>
-<tr class="separator:a63422be985eab555730bbde62c0ca2d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbdcd39aa647f5ef531c4e1c0ec8a0dd" id="r_adbdcd39aa647f5ef531c4e1c0ec8a0dd"><td class="memItemLeft" align="right" valign="top"><a id="adbdcd39aa647f5ef531c4e1c0ec8a0dd" name="adbdcd39aa647f5ef531c4e1c0ec8a0dd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>assign_ast_ancestor</b> (<a class="el" href="classNode.html">Node</a>&lt; T &gt; *ast_ancestor)</td></tr>
+<tr class="memdesc:adbdcd39aa647f5ef531c4e1c0ec8a0dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the <code>ast_ancestor</code> to this <code>_ast_ancestor</code>, with no safety checks. <br /></td></tr>
+<tr class="separator:adbdcd39aa647f5ef531c4e1c0ec8a0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae431761853b84998173f57b00d9a100f" id="r_ae431761853b84998173f57b00d9a100f"><td class="memItemLeft" align="right" valign="top"><a id="ae431761853b84998173f57b00d9a100f" name="ae431761853b84998173f57b00d9a100f"></a>
+<a class="el" href="classNode.html">Node</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>get_ast_ancestor</b> () const</td></tr>
+<tr class="memdesc:ae431761853b84998173f57b00d9a100f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a readonly pointer to the AST ancestor. <br /></td></tr>
+<tr class="separator:ae431761853b84998173f57b00d9a100f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62acf4aebefc7751eb761ca0f4910a60" id="r_a62acf4aebefc7751eb761ca0f4910a60"><td class="memItemLeft" align="right" valign="top"><a id="a62acf4aebefc7751eb761ca0f4910a60" name="a62acf4aebefc7751eb761ca0f4910a60"></a>
+seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_ast_index</b> () const</td></tr>
+<tr class="memdesc:a62acf4aebefc7751eb761ca0f4910a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Member helper to get this node's Abort at Stopping Time index. See <code><a class="el" href="classNode.html#a73e658333ea7a2f258a0c702579208b2" title="Return the sequence index for the AST of a given value.">st_get_ast_index()</a></code>. <br /></td></tr>
+<tr class="separator:a62acf4aebefc7751eb761ca0f4910a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73e658333ea7a2f258a0c702579208b2" id="r_a73e658333ea7a2f258a0c702579208b2"><td class="memItemLeft" align="right" valign="top">static seq_size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a73e658333ea7a2f258a0c702579208b2">st_get_ast_index</a> (T value)</td></tr>
+<tr class="memdesc:a73e658333ea7a2f258a0c702579208b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sequence index for the AST of a given value.  <br /></td></tr>
+<tr class="separator:a73e658333ea7a2f258a0c702579208b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T&gt;<br />
-class Node&lt; T &gt;</div><p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code>. </p>
-<p>Nodes are the objects within a <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> or the workhorses used when building a <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> facade.</p>
+class Node&lt; T &gt;</div><p>The value and metadata for a node inside of a <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code>. </p>
+<p>Nodes are the objects within a <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> or the workhorses used when building a <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> via the <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code> facade.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
@@ -390,8 +390,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a1abc023e5f1316182c73be4420e8eecc" name="a1abc023e5f1316182c73be4420e8eecc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1abc023e5f1316182c73be4420e8eecc">&#9670;&#160;</a></span>deserialize()</h2>
+<a id="ac90d2d128a0c2006539d1947e63bd32e" name="ac90d2d128a0c2006539d1947e63bd32e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac90d2d128a0c2006539d1947e63bd32e">&#9670;&#160;</a></span>deserialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -417,7 +417,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">T &amp;&#160;</td>
-          <td class="paramname"><em>hwm_ancestor_v</em>, </td>
+          <td class="paramname"><em>ast_ancestor_v</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -451,7 +451,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <table class="params">
     <tr><td class="paramname">in</td><td>The stream to read data from. </td></tr>
     <tr><td class="paramname">parent_v</td><td>A reference to return parent value to (for linking/validation). Zero == null when serialized. </td></tr>
-    <tr><td class="paramname">hwm_ancestor_v</td><td>A reference to return HWM ancestor value to (for linking/validation). Zero == null when serialized. </td></tr>
+    <tr><td class="paramname">ast_ancestor_v</td><td>A reference to return AST ancestor value to (for linking/validation). Zero == null when serialized. </td></tr>
     <tr><td class="paramname">child_count</td><td>A reference to return child count to (for linking/validation). </td></tr>
     <tr><td class="paramname">err</td><td>Pointer to a string where errors, if any, are written. </td></tr>
   </table>
@@ -548,7 +548,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 <p>Initializes a node object with <code>value</code> and an optional parent, treating it like it's new. </p>
 <p>This method is by far one of the hottest paths when building any tree type. It handles type-specific optimizations for you, and even handles overflow detection as well. It can be called reliably for any value.</p>
-<p>This method leans on <code><a class="el" href="classNode.html#a4fde89f0ec750262d4f326276007a5f4" title="Helper used exclusively by init() for type comparison when processing sequence for FG chain/HWM analy...">init_sequence_helper()</a></code> for the overflow detection and affine stride optimization.</p>
+<p>This method leans on <code><a class="el" href="classNode.html#a4fde89f0ec750262d4f326276007a5f4" title="Helper used exclusively by init() for type comparison when processing sequence for FG chain/AST analy...">init_sequence_helper()</a></code> for the overflow detection and affine stride optimization.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>Reference to the value for this node. </td></tr>
@@ -586,7 +586,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/HWM analysis. </p>
+<p>Helper used exclusively by <code><a class="el" href="classNode.html#a9094a9dcdb0d8d02db467549cda22da2" title="Initializes a node object with value and an optional parent, treating it like it&#39;s new.">init()</a></code> for type comparison when processing sequence for FG chain/AST analysis. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">U</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
@@ -636,7 +636,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <p>Serialization happens in this order:</p><ol type="1">
 <li>Value.</li>
 <li>Parent.</li>
-<li>HWM Ancestor.</li>
+<li>AST Ancestor.</li>
 <li>Flags.</li>
 <li>Child count.</li>
 </ol>
@@ -701,9 +701,9 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <li>Pointers null agree.</li>
 <li><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a> values match.</li>
 <li>Parent's null agree. If they exist, their values match.</li>
-<li>HWM Ancestor's flags and pointers null agree. If they exist, their values match.</li>
+<li>AST Ancestor's flags and pointers null agree. If they exist, their values match.</li>
 <li>Children have matching counts, null agreement, and equal values.</li>
-<li>Flags for _is_below_hwm match.</li>
+<li>Flags for _is_below_ast match.</li>
 <li>Flags for _is_initialized match.</li>
 <li>FG chain lengths and strings match.</li>
 </ol>
@@ -774,8 +774,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a63422be985eab555730bbde62c0ca2d3" name="a63422be985eab555730bbde62c0ca2d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63422be985eab555730bbde62c0ca2d3">&#9670;&#160;</a></span>st_get_hwm_index()</h2>
+<a id="a73e658333ea7a2f258a0c702579208b2" name="a73e658333ea7a2f258a0c702579208b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73e658333ea7a2f258a0c702579208b2">&#9670;&#160;</a></span>st_get_ast_index()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -786,7 +786,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static seq_size_t <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_get_hwm_index </td>
+          <td class="memname">static seq_size_t <a class="el" href="classNode.html">Node</a>&lt; T &gt;::st_get_ast_index </td>
           <td>(</td>
           <td class="paramtype">T&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
@@ -800,15 +800,15 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Return the sequence index for the HWM of a given value. </p>
-<dl class="section note"><dt>Note</dt><dd>HWM data is available in the <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> object. </dd></dl>
+<p>Return the sequence index for the AST of a given value. </p>
+<dl class="section note"><dt>Note</dt><dd>AST data is available in the <a class="el" href="classCollatz.html" title="A small object with metadata for a Collatz sequence. Mostly used for its static methods.">Collatz</a> object. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>The value to process a sequence for. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The index where High-Water Mark is reached. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The index where Abort at Stopping Time is reached. </dd></dl>
 
 </div>
 </div>

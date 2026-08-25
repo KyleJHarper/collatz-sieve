@@ -37,10 +37,10 @@ class Node {
     //                                                       uint64_t | total | uint128_t | total | mpz_class | total
     T _value = 0;                                        //         8 |     8 |        16 |    16 |        16 |    16
     Node *_parent = nullptr;                             //         8 |    16 |         8 |    24 |         8 |    24
-    Node *_hwm_ancestor = nullptr;                       //         8 |    24 |         8 |    32 |         8 |    32
+    Node *_ast_ancestor = nullptr;                       //         8 |    24 |         8 |    32 |         8 |    32
     Node *_children[MAX_CHILDREN] = {nullptr, nullptr};  //        16 |    40 |        16 |    48 |        16 |    48
-    bool _is_below_hwm : 1 = false;                      //       1:1 |    41 |       1:1 |    49 |       1:1 |    49
-    bool _has_hwm_ancestor : 1 = false;                  //       1:2 |    41 |       1:2 |    49 |       1:2 |    49
+    bool _is_below_ast : 1 = false;                      //       1:1 |    41 |       1:1 |    49 |       1:1 |    49
+    bool _has_ast_ancestor : 1 = false;                  //       1:2 |    41 |       1:2 |    49 |       1:2 |    49
     bool _is_initialized : 1 = false;                    //       1:3 |    41 |       1:3 |    49 |       1:3 |    49
     bool _owns_children : 1 = true;                      //       1:4 |    41 |       1:4 |    49 |       1:4 |    49  (4 bits padding)
     uint8_t _child_count = 0;                            //         1 |    42 |         1 |    50 |         1 |    50
@@ -115,7 +115,7 @@ class Node {
         }
         _parent = parent;
 
-        // Call a helper with a promoted type to process the sequence and build our FG/HWM info.  Doing this allows trees to build
+        // Call a helper with a promoted type to process the sequence and build our FG/AST info.  Doing this allows trees to build
         // up to 2^<bit-1>.
         if constexpr(FixedWidthIntegral<T>) {
             if constexpr (sizeof(T) * 8 <= 64) {
@@ -138,19 +138,19 @@ class Node {
             init_sequence_helper<mpz_class>();
         }
 
-        // Use our parent to decide who the high-water mark ancestor is, if any.  Since it's a lineage, there's no
-        // reason to scan everything manually.  The parent's data is all we need.
+        // Use our parent to decide who the AST ancestor is, if any.  Since it's a lineage, there's no reason to scan everything
+        // manually.  The parent's data is all we need.
         if (parent != nullptr) {
             // Assign whoever the ancestor is, even if it's nullptr.
-            _hwm_ancestor = parent->get_hwm_ancestor();
+            _ast_ancestor = parent->get_ast_ancestor();
             // If we have an ancestor, just flag our boolean.
-            if (_hwm_ancestor != nullptr) {
-                _has_hwm_ancestor = true;
+            if (_ast_ancestor != nullptr) {
+                _has_ast_ancestor = true;
             }
             // If we don't have an ancestor, see if the parent can be.
-            if (_hwm_ancestor == nullptr && parent->is_below_high_water_mark()) {
-                _hwm_ancestor = parent;
-                _has_hwm_ancestor = true;
+            if (_ast_ancestor == nullptr && parent->is_below_ast()) {
+                _ast_ancestor = parent;
+                _has_ast_ancestor = true;
             }
         }
     };
@@ -158,7 +158,7 @@ class Node {
 
 
     /**
-    * @brief Helper used exclusively by `init()` for type comparison when processing sequence for FG chain/HWM analysis.
+    * @brief Helper used exclusively by `init()` for type comparison when processing sequence for FG chain/AST analysis.
     * @tparam U Any supported integral (see concepts.hpp).
     */
     template<AnySupportedIntegral U>
@@ -223,7 +223,7 @@ class Node {
         }
 
         // Now compare the current value to our original value.
-        _is_below_hwm = u_current_value < u_value;
+        _is_below_ast = u_current_value < u_value;
     }
 
 
@@ -233,9 +233,9 @@ class Node {
         release_children();
         _value = 0;
         _parent = nullptr;
-        _hwm_ancestor = nullptr;
-        _is_below_hwm = false;
-        _has_hwm_ancestor = false;
+        _ast_ancestor = nullptr;
+        _is_below_ast = false;
+        _has_ast_ancestor = false;
         _is_initialized = false;
         _owns_children = true;
     }
@@ -357,34 +357,34 @@ class Node {
 
 
 
-    /// @brief Assign the `hwm_ancestor` to this `_hwm_ancestor`, with no safety checks.
-    void assign_hwm_ancestor(Node<T>* hwm_ancestor) {
-        _hwm_ancestor = hwm_ancestor;
+    /// @brief Assign the `ast_ancestor` to this `_ast_ancestor`, with no safety checks.
+    void assign_ast_ancestor(Node<T>* ast_ancestor) {
+        _ast_ancestor = ast_ancestor;
     }
 
 
 
-    /// @brief Return a readonly pointer to the HWM ancestor.
-    Node<T>* get_hwm_ancestor() const { return _hwm_ancestor; }
+    /// @brief Return a readonly pointer to the AST ancestor.
+    Node<T>* get_ast_ancestor() const { return _ast_ancestor; }
 
 
 
     /**
-    * @brief Return the sequence index for the HWM of a given value.
-    * @note HWM data is available in the Collatz object.
+    * @brief Return the sequence index for the AST of a given value.
+    * @note AST data is available in the Collatz object.
     * @param value The value to process a sequence for.
-    * @return The index where High-Water Mark is reached.
+    * @return The index where Abort at Stopping Time is reached.
     */
-    static seq_size_t st_get_hwm_index(T value) {
+    static seq_size_t st_get_ast_index(T value) {
         Collatz<T> collatz(value);
-        return collatz.get_hwm_index();
+        return collatz.get_ast_index();
     }
 
 
 
-    /// @brief Member helper to get this node's High-Water Mark index.  See `st_get_hwm_index()`.
-    seq_size_t get_hwm_index() const {
-        return st_get_hwm_index(_value);
+    /// @brief Member helper to get this node's Abort at Stopping Time index.  See `st_get_ast_index()`.
+    seq_size_t get_ast_index() const {
+        return st_get_ast_index(_value);
     }
 
     /// @}
@@ -399,13 +399,13 @@ class Node {
 
 
 
-    /// @brief Flag to determine if this node is below the High-Water Mark.
-    bool is_below_high_water_mark() const { return _is_below_hwm; }
+    /// @brief Flag to determine if this node is below the Abort at Stopping Time.
+    bool is_below_ast() const { return _is_below_ast; }
 
 
 
-    /// @brief Flag to determine if this node has a HWM ancestor.
-    bool has_high_water_mark_ancestor() const { return _has_hwm_ancestor; }
+    /// @brief Flag to determine if this node has an AST ancestor.
+    bool has_ast_ancestor() const { return _has_ast_ancestor; }
 
 
 
@@ -463,9 +463,9 @@ class Node {
     *   1. Pointers null agree.
     *   2. Node values match.
     *   3. Parent's null agree.  If they exist, their values match.
-    *   4. HWM Ancestor's flags and pointers null agree.  If they exist, their values match.
+    *   4. AST Ancestor's flags and pointers null agree.  If they exist, their values match.
     *   5. Children have matching counts, null agreement, and equal values.
-    *   6. Flags for _is_below_hwm match.
+    *   6. Flags for _is_below_ast match.
     *   7. Flags for _is_initialized match.
     *   8. FG chain lengths and strings match.
     *
@@ -493,16 +493,16 @@ class Node {
             }
         }
 
-        // HWM Ancestor
-        if (! eq.equal(first.has_high_water_mark_ancestor(), second.has_high_water_mark_ancestor())) {
-            return eq.fail("Has HWM ancestor mismatch");
+        // AST Ancestor
+        if (! eq.equal(first.has_ast_ancestor(), second.has_ast_ancestor())) {
+            return eq.fail("Has AST ancestor mismatch");
         }
-        if (! eq.pointers_null_agree(first.get_hwm_ancestor(), second.get_hwm_ancestor())) {
-            return eq.fail("HWM ancestors don't agree on null state");
+        if (! eq.pointers_null_agree(first.get_ast_ancestor(), second.get_ast_ancestor())) {
+            return eq.fail("AST ancestors don't agree on null state");
         }
-        if (first.get_hwm_ancestor() != nullptr) {
-            if (! eq.equal(first.get_hwm_ancestor()->get_value(), second.get_hwm_ancestor()->get_value())) {
-                return eq.fail("HWM ancestor's value mismatch");
+        if (first.get_ast_ancestor() != nullptr) {
+            if (! eq.equal(first.get_ast_ancestor()->get_value(), second.get_ast_ancestor()->get_value())) {
+                return eq.fail("AST ancestor's value mismatch");
             }
         }
 
@@ -532,8 +532,8 @@ class Node {
         }
 
         // Remaining flags.
-        if (! eq.equal(first.is_below_high_water_mark(), second.is_below_high_water_mark())) {
-            return eq.fail("Nodes' is_below_high_water_mark mismatch");
+        if (! eq.equal(first.is_below_ast(), second.is_below_ast())) {
+            return eq.fail("Nodes' is_below_ast mismatch");
         }
         if (! eq.equal(first.is_initialized(), second.is_initialized())) {
             return eq.fail("Nodes' is_initialize mismatch");
@@ -611,7 +611,7 @@ class Node {
     * Serialization happens in this order:
     *   1. Value.
     *   2. Parent.
-    *   3. HWM Ancestor.
+    *   3. AST Ancestor.
     *   4. Flags.
     *   5. Child count.
     *
@@ -641,14 +641,14 @@ class Node {
             }
         }
 
-        // HWM Ancestor
-        if (_hwm_ancestor == nullptr) {
+        // AST Ancestor
+        if (_ast_ancestor == nullptr) {
             if (! sh.serialize_integral(T(0))) {
-                return sh.fail("no hwm_ancestor (aka: T(0))");
+                return sh.fail("no ast_ancestor (aka: T(0))");
             }
         } else {
-            if (! sh.serialize_integral(_hwm_ancestor->get_value())) {
-                return sh.fail("_hwm_ancestor->get_value()==" + to_string_any(_hwm_ancestor->get_value()));
+            if (! sh.serialize_integral(_ast_ancestor->get_value())) {
+                return sh.fail("_ast_ancestor->get_value()==" + to_string_any(_ast_ancestor->get_value()));
             }
         }
 
@@ -657,15 +657,15 @@ class Node {
         // is merely adding a node, linking to the parent value (which we wrote above), and then telling that parent to own "this".
 
         // Flags
-        bool b_is_below_hwm = _is_below_hwm;
-        bool b_has_hwm_ancestor = _has_hwm_ancestor;
+        bool b_is_below_ast = _is_below_ast;
+        bool b_has_ast_ancestor = _has_ast_ancestor;
         bool b_is_initialized = _is_initialized;
         bool b_owns_children = _owns_children;
-        if (! sh.serialize_bool(b_is_below_hwm)) {
-            return sh.fail("_is_below_hwm==" + std::to_string(b_is_below_hwm));
+        if (! sh.serialize_bool(b_is_below_ast)) {
+            return sh.fail("_is_below_ast==" + std::to_string(b_is_below_ast));
         }
-        if (! sh.serialize_bool(b_has_hwm_ancestor)) {
-            return sh.fail("_has_hwm_ancestor==" + std::to_string(b_has_hwm_ancestor));
+        if (! sh.serialize_bool(b_has_ast_ancestor)) {
+            return sh.fail("_has_ast_ancestor==" + std::to_string(b_has_ast_ancestor));
         }
         if (! sh.serialize_bool(b_is_initialized)) {
             return sh.fail("_is_initialized==" + std::to_string(b_is_initialized));
@@ -693,12 +693,12 @@ class Node {
     * @note This method does not throw.
     * @param in The stream to read data from.
     * @param parent_v A reference to return parent value to (for linking/validation).  Zero == null when serialized.
-    * @param hwm_ancestor_v A reference to return HWM ancestor value to (for linking/validation).  Zero == null when serialized.
+    * @param ast_ancestor_v A reference to return AST ancestor value to (for linking/validation).  Zero == null when serialized.
     * @param child_count A reference to return child count to (for linking/validation).
     * @param err Pointer to a string where errors, if any, are written.
     * @return A boolean indicating success or failure.  Do not discard.
     */
-    [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& hwm_ancestor_v, uint8_t& child_count, std::string* err = nullptr) {
+    [[nodiscard]] bool deserialize(std::istream& in, T& parent_v, T& ast_ancestor_v, uint8_t& child_count, std::string* err = nullptr) {
         StreamHelper sh(&in, nullptr, err);
         sh.set_category("Node");
 
@@ -715,22 +715,22 @@ class Node {
             return sh.fail("couldn't read _parent's value");
         }
 
-        // HWM Ancestor
-        if (! sh.deserialize_integral(hwm_ancestor_v)) {
-            return sh.fail("couldn't read hwm ancestor's value");
+        // AST Ancestor
+        if (! sh.deserialize_integral(ast_ancestor_v)) {
+            return sh.fail("couldn't read ast ancestor's value");
         }
 
         // Flags
         // We use bit fields, which cannot bind to bool&.  So we need a tmp.
         bool b_tmp;
         if (! sh.deserialize_bool(b_tmp)) {
-            return sh.fail("couldn't read _is_below_hwm");
+            return sh.fail("couldn't read _is_below_ast");
         }
-        _is_below_hwm = b_tmp;
+        _is_below_ast = b_tmp;
         if (! sh.deserialize_bool(b_tmp)) {
-            return sh.fail("couldn't read _has_hwm_ancestor");
+            return sh.fail("couldn't read _has_ast_ancestor");
         }
-        _has_hwm_ancestor = b_tmp;
+        _has_ast_ancestor = b_tmp;
         if (! sh.deserialize_bool(b_tmp)) {
             return sh.fail("couldn't read _is_initialized");
         }

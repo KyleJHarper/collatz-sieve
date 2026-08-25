@@ -17,7 +17,7 @@
 \DoxyCodeLine{00020\ }
 \DoxyCodeLine{00021\ }
 \DoxyCodeLine{00022\ }
-\DoxyCodeLine{00025\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\_skippable\_by\_hwm}}\ =\ 0;}
+\DoxyCodeLine{00025\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c}{steps\_skippable\_by\_ast}}\ =\ 0;}
 \DoxyCodeLine{00026\ }
 \DoxyCodeLine{00027\ }
 \DoxyCodeLine{00028\ }
@@ -25,7 +25,7 @@
 \DoxyCodeLine{00032\ }
 \DoxyCodeLine{00033\ }
 \DoxyCodeLine{00034\ }
-\DoxyCodeLine{00037\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \ \ uint64\_t\ \mbox{\hyperlink{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587}{steps\_skippable\_by\_affine\_stride\_before\_ast}}\ =\ 0;}
 \DoxyCodeLine{00038\ }
 \DoxyCodeLine{00039\ }
 \DoxyCodeLine{00040\ }
@@ -33,9 +33,9 @@
 \DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Atomic\ updates.}}
 \DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_a8da09c14055235411ee13019daba1a93}{nodes\_verified\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_abc094adbaacacf8a31e5439532746e07}{nodes\_verified}});}
 \DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_a51c21cc46e8d65ad3e50cb00e423c2a3}{steps\_total\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}{steps\_total}});}
-\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_a79e5dec89dbe0515b1a53f249d7fa6f9}{steps\_skippable\_by\_hwm\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\_skippable\_by\_hwm}});}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_ad4fec24369380461af165abc50f1a1b3}{steps\_skippable\_by\_ast\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c}{steps\_skippable\_by\_ast}});}
 \DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_ad713f9de15334a9375a1e576d012abe1}{steps\_skippable\_by\_affine\_stride\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}{steps\_skippable\_by\_affine\_stride}});}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_a5b6164904c0bce2218eb7ba81fb046a6}{steps\_skippable\_by\_affine\_stride\_before\_hwm\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\_skippable\_by\_affine\_stride\_before\_hwm}});}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ metrics.\mbox{\hyperlink{structVerifierMetric_a6da5496452c180fadac8393c0ebc3cc3}{steps\_skippable\_by\_affine\_stride\_before\_ast\_atomic}}.fetch\_add(\mbox{\hyperlink{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587}{steps\_skippable\_by\_affine\_stride\_before\_ast}});}
 \DoxyCodeLine{00053\ }
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ everything\ if\ desired.}}
 \DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (do\_reset)\ \{}
@@ -48,9 +48,9 @@
 \DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structVerifierTLSMetric_a14529ac91f3ffa065083b6fbbba8458f}{reset}}()\ \{}
 \DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_abc094adbaacacf8a31e5439532746e07}{nodes\_verified}}\ =\ 0;}
 \DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_aedcc59a6907aa03c501e8a83f74834d4}{steps\_total}}\ =\ 0;}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_aa9874c75923a2a37d734ec8b3e59ec8a}{steps\_skippable\_by\_hwm}}\ =\ 0;}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_a2a353d922bcf34f578e3da10f06d353c}{steps\_skippable\_by\_ast}}\ =\ 0;}
 \DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_a4e9277e074466cc75c41680a9ff17729}{steps\_skippable\_by\_affine\_stride}}\ =\ 0;}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_a5939007871c1cf12a85d5673d4f29063}{steps\_skippable\_by\_affine\_stride\_before\_hwm}}\ =\ 0;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structVerifierTLSMetric_ab75891d68e5b3c95b2c69ab26ea88587}{steps\_skippable\_by\_affine\_stride\_before\_ast}}\ =\ 0;}
 \DoxyCodeLine{00069\ \ \ \ \ \}}
 \DoxyCodeLine{00070\ \};}
 

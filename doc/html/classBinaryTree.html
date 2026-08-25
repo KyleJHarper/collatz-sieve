@@ -85,7 +85,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a> facade which will apply Harper's sieve of High-Water Mark nodes.  
+<p>The <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a> facade which will apply Harper's sieve of AST nodes.  
  <a href="classBinaryTree.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="binary__tree_8hpp_source.html">binary_tree.hpp</a>&gt;</code></p>
@@ -94,7 +94,7 @@ Collaboration diagram for BinaryTree&lt; T, TreeType &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classBinaryTree__coll__graph.png" border="0" usemap="#aBinaryTree_3_01T_00_01TreeType_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="aBinaryTree_3_01T_00_01TreeType_01_4_coll__map" id="aBinaryTree_3_01T_00_01TreeType_01_4_coll__map">
-<area shape="rect" title="The BinaryTree facade which will apply Harper&#39;s sieve of High&#45;Water Mark nodes." alt="" coords="5,93,200,119"/>
+<area shape="rect" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes." alt="" coords="5,93,200,119"/>
 <area shape="rect" title=" " alt="" coords="83,5,122,31"/>
 <area shape="poly" title=" " alt="" coords="105,45,105,93,100,93,100,45"/>
 </map>
@@ -105,9 +105,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6ec6687fe24e4deba4c4e62b04afe69" id="r_ac6ec6687fe24e4deba4c4e62b04afe69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#ac6ec6687fe24e4deba4c4e62b04afe69">assert_level_will_fit</a> (level_t level) const</td></tr>
 <tr class="memdesc:ac6ec6687fe24e4deba4c4e62b04afe69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert the level requested will fit within the limits of <code>T</code> used.  <br /></td></tr>
 <tr class="separator:ac6ec6687fe24e4deba4c4e62b04afe69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20cc074d3eee2f0081dcca4543162702" id="r_a20cc074d3eee2f0081dcca4543162702"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a20cc074d3eee2f0081dcca4543162702">assert_level_verification</a> (level_t level, bool <a class="el" href="classBinaryTree.html#a81330d96418ecd89407487de742810f1">is_verifying_non_hwm_nodes</a>)</td></tr>
-<tr class="memdesc:a20cc074d3eee2f0081dcca4543162702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert non High-Water Mark verification is enabled when necessary.  <br /></td></tr>
-<tr class="separator:a20cc074d3eee2f0081dcca4543162702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a478599040b6c4af20c8b825b47b2b126" id="r_a478599040b6c4af20c8b825b47b2b126"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a478599040b6c4af20c8b825b47b2b126">assert_level_verification</a> (level_t level, bool <a class="el" href="classBinaryTree.html#a39de2ea4f0f31109baa72435d4c7f863">is_verifying_non_ast_nodes</a>)</td></tr>
+<tr class="memdesc:a478599040b6c4af20c8b825b47b2b126"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assert non AST verification is enabled when necessary.  <br /></td></tr>
+<tr class="separator:a478599040b6c4af20c8b825b47b2b126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe2f579857f50ff0728b6b12221ccb5d" id="r_abe2f579857f50ff0728b6b12221ccb5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#abe2f579857f50ff0728b6b12221ccb5d">add_level</a> ()</td></tr>
 <tr class="memdesc:abe2f579857f50ff0728b6b12221ccb5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a level to the tree. Details are implementation-specific.  <br /></td></tr>
 <tr class="separator:abe2f579857f50ff0728b6b12221ccb5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,18 +199,18 @@ const std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_preserving_ancestors</b> () const</td></tr>
 <tr class="memdesc:ade92d714e72a07e5052dda23a87b102a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is preserving ancestors. <br /></td></tr>
 <tr class="separator:ade92d714e72a07e5052dda23a87b102a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81330d96418ecd89407487de742810f1" id="r_a81330d96418ecd89407487de742810f1"><td class="memItemLeft" align="right" valign="top"><a id="a81330d96418ecd89407487de742810f1" name="a81330d96418ecd89407487de742810f1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_verifying_non_hwm_nodes</b> () const</td></tr>
-<tr class="memdesc:a81330d96418ecd89407487de742810f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is verifying non-HWM nodes. <br /></td></tr>
-<tr class="separator:a81330d96418ecd89407487de742810f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3294399465d28e6e3779f6619bed521" id="r_ae3294399465d28e6e3779f6619bed521"><td class="memItemLeft" align="right" valign="top"><a id="ae3294399465d28e6e3779f6619bed521" name="ae3294399465d28e6e3779f6619bed521"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>disable_non_hwm_node_verification</b> ()</td></tr>
-<tr class="memdesc:ae3294399465d28e6e3779f6619bed521"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly disable non-HWM node verification. <br /></td></tr>
-<tr class="separator:ae3294399465d28e6e3779f6619bed521"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac25d4b4510a44522433e9f7c195c7209" id="r_ac25d4b4510a44522433e9f7c195c7209"><td class="memItemLeft" align="right" valign="top"><a id="ac25d4b4510a44522433e9f7c195c7209" name="ac25d4b4510a44522433e9f7c195c7209"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enable_non_hwm_node_verification</b> ()</td></tr>
-<tr class="memdesc:ac25d4b4510a44522433e9f7c195c7209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly enable non-HWM node verification. <br /></td></tr>
-<tr class="separator:ac25d4b4510a44522433e9f7c195c7209"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39de2ea4f0f31109baa72435d4c7f863" id="r_a39de2ea4f0f31109baa72435d4c7f863"><td class="memItemLeft" align="right" valign="top"><a id="a39de2ea4f0f31109baa72435d4c7f863" name="a39de2ea4f0f31109baa72435d4c7f863"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_verifying_non_ast_nodes</b> () const</td></tr>
+<tr class="memdesc:a39de2ea4f0f31109baa72435d4c7f863"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is verifying non-AST nodes. <br /></td></tr>
+<tr class="separator:a39de2ea4f0f31109baa72435d4c7f863"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1f9eade2a2b866c50f2d940469d5931" id="r_ad1f9eade2a2b866c50f2d940469d5931"><td class="memItemLeft" align="right" valign="top"><a id="ad1f9eade2a2b866c50f2d940469d5931" name="ad1f9eade2a2b866c50f2d940469d5931"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>disable_non_ast_node_verification</b> ()</td></tr>
+<tr class="memdesc:ad1f9eade2a2b866c50f2d940469d5931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly disable non-AST node verification. <br /></td></tr>
+<tr class="separator:ad1f9eade2a2b866c50f2d940469d5931"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32c3e51017d9f421ffa6828575955973" id="r_a32c3e51017d9f421ffa6828575955973"><td class="memItemLeft" align="right" valign="top"><a id="a32c3e51017d9f421ffa6828575955973" name="a32c3e51017d9f421ffa6828575955973"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>enable_non_ast_node_verification</b> ()</td></tr>
+<tr class="memdesc:a32c3e51017d9f421ffa6828575955973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly enable non-AST node verification. <br /></td></tr>
+<tr class="separator:a32c3e51017d9f421ffa6828575955973"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ab4c5f9a887dd776450281b8af8ef8e" id="r_a5ab4c5f9a887dd776450281b8af8ef8e"><td class="memItemLeft" align="right" valign="top"><a id="a5ab4c5f9a887dd776450281b8af8ef8e" name="a5ab4c5f9a887dd776450281b8af8ef8e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> () const</td></tr>
 <tr class="memdesc:a5ab4c5f9a887dd776450281b8af8ef8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is initialized. <br /></td></tr>
@@ -220,7 +220,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_initialized</b> ()
 <tr class="separator:a501b4333691de390dbdf2c05011d194c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a164d01c405d33264027aaf059b22104a" id="r_a164d01c405d33264027aaf059b22104a"><td class="memItemLeft" align="right" valign="top"><a id="a164d01c405d33264027aaf059b22104a" name="a164d01c405d33264027aaf059b22104a"></a>
 const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get_uncovered_values</b> () const</td></tr>
-<tr class="memdesc:a164d01c405d33264027aaf059b22104a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor. <br /></td></tr>
+<tr class="memdesc:a164d01c405d33264027aaf059b22104a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered values, which are the node values not covered by an AST ancestor. <br /></td></tr>
 <tr class="separator:a164d01c405d33264027aaf059b22104a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65410c6ccddecdcd4dc90b6c981154f8" id="r_a65410c6ccddecdcd4dc90b6c981154f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a65410c6ccddecdcd4dc90b6c981154f8">get_uncovered_values_rw</a> ()</td></tr>
 <tr class="memdesc:a65410c6ccddecdcd4dc90b6c981154f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a read-write reference to the uncovered values map.  <br /></td></tr>
@@ -233,10 +233,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_materialized</b> (
 <tr class="memitem:a0db608de5a943ddb8724cdd625994684" id="r_a0db608de5a943ddb8724cdd625994684"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; level_t, std::vector&lt; <a class="el" href="classNode.html">Node</a>&lt; T &gt; * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a0db608de5a943ddb8724cdd625994684">get_level_map</a> () const</td></tr>
 <tr class="memdesc:a0db608de5a943ddb8724cdd625994684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the level map, which contains all of the <code><a class="el" href="classNode.html" title="The value and metadata for a node inside of a BinaryTree.">Node</a></code> objects.  <br /></td></tr>
 <tr class="separator:a0db608de5a943ddb8724cdd625994684"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a028f3dc27a7db896d94c5ced6f5b59f6" id="r_a028f3dc27a7db896d94c5ced6f5b59f6"><td class="memItemLeft" align="right" valign="top"><a id="a028f3dc27a7db896d94c5ced6f5b59f6" name="a028f3dc27a7db896d94c5ced6f5b59f6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_hwm_nodes</b> () const</td></tr>
-<tr class="memdesc:a028f3dc27a7db896d94c5ced6f5b59f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is pruning High-Water Mark nodes. <br /></td></tr>
-<tr class="separator:a028f3dc27a7db896d94c5ced6f5b59f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50de4a4668ae4180fdcda508bc18d3d0" id="r_a50de4a4668ae4180fdcda508bc18d3d0"><td class="memItemLeft" align="right" valign="top"><a id="a50de4a4668ae4180fdcda508bc18d3d0" name="a50de4a4668ae4180fdcda508bc18d3d0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_ast_nodes</b> () const</td></tr>
+<tr class="memdesc:a50de4a4668ae4180fdcda508bc18d3d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is pruning Abort at Stopping Time nodes. <br /></td></tr>
+<tr class="separator:a50de4a4668ae4180fdcda508bc18d3d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa141a0f8fe4b89379eb8976bb983bdaf" id="r_aa141a0f8fe4b89379eb8976bb983bdaf"><td class="memItemLeft" align="right" valign="top"><a id="aa141a0f8fe4b89379eb8976bb983bdaf" name="aa141a0f8fe4b89379eb8976bb983bdaf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_pruning_parent_levels</b> () const</td></tr>
 <tr class="memdesc:aa141a0f8fe4b89379eb8976bb983bdaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes). <br /></td></tr>
@@ -251,7 +251,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_implicit</b> () co
 <tr class="memdesc:abfaf68f6800afca2a033c9b64b74cbec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches <code><a class="el" href="classBinaryTree.html#abfaf68f6800afca2a033c9b64b74cbec" title="Attaches is_implicit() if using the BinaryTreeImplicitImpl.">is_implicit()</a></code> if using the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code>. <br /></td></tr>
 <tr class="separator:abfaf68f6800afca2a033c9b64b74cbec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8af75d9e71b73df8449db3c6b87bee44" id="r_a8af75d9e71b73df8449db3c6b87bee44"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classNodeBitmap.html">NodeBitmap</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBinaryTree.html#a8af75d9e71b73df8449db3c6b87bee44">get_uncovered_positions</a> () const</td></tr>
-<tr class="memdesc:a8af75d9e71b73df8449db3c6b87bee44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor.  <br /></td></tr>
+<tr class="memdesc:a8af75d9e71b73df8449db3c6b87bee44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor.  <br /></td></tr>
 <tr class="separator:a8af75d9e71b73df8449db3c6b87bee44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -282,11 +282,11 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>_scaling_factor</b> = 0<
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIntegral</a> T, typename TreeType = BinaryTreeImplicitImpl&lt;T&gt;&gt;<br />
-class BinaryTree&lt; T, TreeType &gt;</div><p>The <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a> facade which will apply Harper's sieve of High-Water Mark nodes. </p>
-<p>This static facade will build a binary tree using the child values (labels) defined in Harper's research, which will find and remove any nodes whose FG-chain reaches the High-Water Mark, eliminating subtrees.</p>
+class BinaryTree&lt; T, TreeType &gt;</div><p>The <a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a> facade which will apply Harper's sieve of AST nodes. </p>
+<p>This static facade will build a binary tree using the child values (labels) defined in Harper's research, which will find and remove any nodes whose FG-chain reaches the Abort at Stopping Time condition, eliminating subtrees.</p>
 <p>Users may choose the <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> or the <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code>.</p>
 <p>The <code><a class="el" href="classBinaryTreeMaterializedImpl.html" title="An implementation of the BinaryTree which creates and persists Node objects in memory.">BinaryTreeMaterializedImpl</a></code> is a true, memory-backed tree with nodes connected via edges (pointers). It is extremely heavy in RAM, but its saving grace is that it's a true binary tree which users can walk and analyze. If pruning is enabled, nodes are removed according to the pruning policy, leaving what is technically a directed acyclic graph (DAG).</p>
-<p>The <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> is a mathematically equivalent tree, and is the default as of version 4.0.0. It uses significantly less memory by foregoing nodes in favor of a <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> which tracks the uncovered positions: the leaf node positions of the tree which haven't been pruned by a High-Water Mark ancestor yet.</p>
+<p>The <code><a class="el" href="classBinaryTreeImplicitImpl.html" title="A mathematically equivalent implimentation of a materialized BinaryTree.">BinaryTreeImplicitImpl</a></code> is a mathematically equivalent tree, and is the default as of version 4.0.0. It uses significantly less memory by foregoing nodes in favor of a <code><a class="el" href="classNodeBitmap.html" title="The NodeBitmap facade. Currently, only one implementation exists and is the default.">NodeBitmap</a></code> which tracks the uncovered positions: the leaf node positions of the tree which haven't been pruned by an AST ancestor yet.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Any supported integral (see <a class="el" href="concepts_8hpp_source.html">concepts.hpp</a>). </td></tr>
@@ -374,8 +374,8 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 
 </div>
 </div>
-<a id="a20cc074d3eee2f0081dcca4543162702" name="a20cc074d3eee2f0081dcca4543162702"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20cc074d3eee2f0081dcca4543162702">&#9670;&#160;</a></span>assert_level_verification()</h2>
+<a id="a478599040b6c4af20c8b825b47b2b126" name="a478599040b6c4af20c8b825b47b2b126"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a478599040b6c4af20c8b825b47b2b126">&#9670;&#160;</a></span>assert_level_verification()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -395,7 +395,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_verifying_non_hwm_nodes</em>&#160;</td>
+          <td class="paramname"><em>is_verifying_non_ast_nodes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -410,16 +410,16 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Assert non High-Water Mark verification is enabled when necessary. </p>
-<p>If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non HWM nodes themsleves. The limit is defined by <code><a class="el" href="namespaceCollatzConstants.html#a973af5204c6bff2e94087a73f2b4af0c" title="Highest known empircally tested level. See Barina.">CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL</a></code>.</p>
+<p>Assert non AST verification is enabled when necessary. </p>
+<p>If verification is disabled (default) and the tree level exceeds the max known, fail. It might seen annoying, but the API refuses to allow people to build trees beyond empirically tested bounardaries unless they are willing to verify non AST nodes themsleves. The limit is defined by <code><a class="el" href="namespaceCollatzConstants.html#a973af5204c6bff2e94087a73f2b4af0c" title="Highest known empircally tested level. See Barina.">CollatzConstants::LARGEST_EMPIRICALLY_TESTED_LEVEL</a></code>.</p>
 <dl class="section user"><dt>Deeper Explanation</dt><dd></dd></dl>
-<p>When building a tree, the nodes which don't meet HWM (directly or by ancestor) need to be checked. For example, the number <code>14</code> is below the HWM because of the <code>G</code> step on node <code>2</code>. Its value becomes <code>7</code>. That node isn't a HWM node, descendant of one, nor has it been verified by the tree. This leaves pockets of nodes that aren't verified, which means the overall High-Water Mark of the tree isn't valid.</p>
-<p>To compensate, verification can be activated via the <code><a class="el" href="structBinaryTreeOptions.html" title="An options package for building BinaryTree objects.">BinaryTreeOptions</a></code> during <code><a class="el" href="classBinaryTree.html#a2eeaf4a7727c29a727d01845add1475b" title="Initializes the tree, rebuilding it if necessary.">init()</a></code>, or by calling <code><a class="el" href="classBinaryTree.html#ac25d4b4510a44522433e9f7c195c7209" title="Explicitly enable non-HWM node verification.">enable_non_hwm_node_verification()</a></code> on an instantiated tree. However, external work by <a href="https://link.springer.com/article/10.1007/s11227-025-07337-0">David Barina</a> has empirically verified up to <code>2^71</code>, which is the first node on level <code>72</code> of a tree. Ergo, nodes up through level <code>71</code> are verified and do not need re-verification.</p>
+<p>When building a tree, the nodes which don't meet AST (directly or by ancestor) need to be checked. For example, the number <code>14</code> is below the AST because of the <code>G</code> step on node <code>2</code>. Its value becomes <code>7</code>. That node isn't an AST node, descendant of one, nor has it been verified by the tree. This leaves pockets of nodes that aren't verified, which means the overall AST value of the tree isn't valid.</p>
+<p>To compensate, verification can be activated via the <code><a class="el" href="structBinaryTreeOptions.html" title="An options package for building BinaryTree objects.">BinaryTreeOptions</a></code> during <code><a class="el" href="classBinaryTree.html#a2eeaf4a7727c29a727d01845add1475b" title="Initializes the tree, rebuilding it if necessary.">init()</a></code>, or by calling <code><a class="el" href="classBinaryTree.html#a32c3e51017d9f421ffa6828575955973" title="Explicitly enable non-AST node verification.">enable_non_ast_node_verification()</a></code> on an instantiated tree. However, external work by <a href="https://link.springer.com/article/10.1007/s11227-025-07337-0">David Barina</a> has empirically verified up to <code>2^71</code>, which is the first node on level <code>72</code> of a tree. Ergo, nodes up through level <code>71</code> are verified and do not need re-verification.</p>
 <dl class="section warning"><dt>Warning</dt><dd>This is an assertion, not a boolean. It will throw if verification is disabled and level count grows beyond limits. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">level</td><td>The level being added. </td></tr>
-    <tr><td class="paramname">is_verifying_non_hwm_nodes</td><td>Flag indicating if verification is enabled or not. </td></tr>
+    <tr><td class="paramname">is_verifying_non_ast_nodes</td><td>Flag indicating if verification is enabled or not. </td></tr>
   </table>
   </dd>
 </dl>
@@ -636,7 +636,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Get a reference to the uncovered positions, which are the node positions not covered by a High-Water Mark ancestor. </p>
+<p>Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor. </p>
 <dl class="section note"><dt>Note</dt><dd>These are left-to-right positions, not node values. </dd></dl>
 
 </div>
@@ -1017,7 +1017,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 <li>Root nodes.</li>
 <li>Level count.</li>
 <li>The is_preserving_ancestors flag.</li>
-<li>The is_verifying_non_hwm_nodes flag.</li>
+<li>The is_verifying_non_ast_nodes flag.</li>
 <li>The is_initialized flag.</li>
 <li>Coverage map.</li>
 <li>Ancestors (if enabled).</li>

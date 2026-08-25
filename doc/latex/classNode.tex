@@ -11,11 +11,12 @@ The value and metadata for a node inside of a {\ttfamily \doxylink{classBinaryTr
 
 
 
-Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
+Collaboration diagram for Node\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=320pt]{classNode__coll__graph}
+\includegraphics[width=314pt]{classNode__coll__graph}
 \end{center}
 \end{figure}
 \doxysubsubsection*{Public Member Functions}
@@ -27,7 +28,7 @@ bool \mbox{\hyperlink{classNode_a6fe2019d9fbed003fe9e04537c026bd3}{equal}} (cons
 \begin{DoxyCompactList}\small\item\em Compare another node to this one. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize}} (std\+::ostream \&out, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr) const
 \begin{DoxyCompactList}\small\item\em Serialize the node specifics of this object for export. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}} (std\+::istream \&in, T \&parent\+\_\+v, T \&hwm\+\_\+ancestor\+\_\+v, uint8\+\_\+t \&child\+\_\+count, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
+bool \mbox{\hyperlink{classNode_ac90d2d128a0c2006539d1947e63bd32e}{deserialize}} (std\+::istream \&in, T \&parent\+\_\+v, T \&ast\+\_\+ancestor\+\_\+v, uint8\+\_\+t \&child\+\_\+count, std\+::string \texorpdfstring{$\ast$}{*}err=nullptr)
 \begin{DoxyCompactList}\small\item\em Deserialize this object for import following a previous {\ttfamily \doxylink{classNode_a9517228032e6f0ce674e69bbbca02501}{serialize()}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}\textbf{ Lifecycle Management}\par
 \begin{DoxyCompactItemize}
@@ -56,7 +57,7 @@ bool \mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}}
 void \mbox{\hyperlink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init}} (const T \&value, \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*}parent=nullptr)
 \begin{DoxyCompactList}\small\item\em Initializes a node object with {\ttfamily value} and an optional parent, treating it like it\textquotesingle{}s new. \end{DoxyCompactList}\item 
 {\footnotesize template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} U$>$ }\\void \mbox{\hyperlink{classNode_a4fde89f0ec750262d4f326276007a5f4}{init\+\_\+sequence\+\_\+helper}} ()
-\begin{DoxyCompactList}\small\item\em Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init()}} for type comparison when processing sequence for FG chain/\+HWM analysis. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init()}} for type comparison when processing sequence for FG chain/\+AST analysis. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5}\label{classNode_a3dd2dadaf062f03fc80797a0cd0a03b5} 
 void {\bfseries reset} ()
 \begin{DoxyCompactList}\small\item\em Reset to make this act like a new() object. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -97,12 +98,12 @@ uint8\+\_\+t {\bfseries get\+\_\+child\+\_\+count} () const
 \Hypertarget{classNode_acd9ce8e35f9f5840779592383ea6b344}\label{classNode_acd9ce8e35f9f5840779592383ea6b344} 
 const T \& {\bfseries get\+\_\+value} () const
 \begin{DoxyCompactList}\small\item\em Return this node\textquotesingle{}s value. \end{DoxyCompactList}\item 
-\Hypertarget{classNode_a384e4c5c02c237f1dad0aba304872cfc}\label{classNode_a384e4c5c02c237f1dad0aba304872cfc} 
-bool {\bfseries is\+\_\+below\+\_\+high\+\_\+water\+\_\+mark} () const
-\begin{DoxyCompactList}\small\item\em Flag to determine if this node is below the High-\/\+Water Mark. \end{DoxyCompactList}\item 
-\Hypertarget{classNode_ad177ff820a4b9416d8a3ee46cabfe774}\label{classNode_ad177ff820a4b9416d8a3ee46cabfe774} 
-bool {\bfseries has\+\_\+high\+\_\+water\+\_\+mark\+\_\+ancestor} () const
-\begin{DoxyCompactList}\small\item\em Flag to determine if this node has a HWM ancestor. \end{DoxyCompactList}\item 
+\Hypertarget{classNode_a5f47b79178fa861a96bc8a8b533b956d}\label{classNode_a5f47b79178fa861a96bc8a8b533b956d} 
+bool {\bfseries is\+\_\+below\+\_\+ast} () const
+\begin{DoxyCompactList}\small\item\em Flag to determine if this node is below the Abort at Stopping Time. \end{DoxyCompactList}\item 
+\Hypertarget{classNode_ad71aa43ac16165f013652b3b17cb033d}\label{classNode_ad71aa43ac16165f013652b3b17cb033d} 
+bool {\bfseries has\+\_\+ast\+\_\+ancestor} () const
+\begin{DoxyCompactList}\small\item\em Flag to determine if this node has an AST ancestor. \end{DoxyCompactList}\item 
 \Hypertarget{classNode_a1e26152bd714bdbcb997fd946731a650}\label{classNode_a1e26152bd714bdbcb997fd946731a650} 
 bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Flag to determine if this node has been initialized with a value. \end{DoxyCompactList}\item 
@@ -138,17 +139,17 @@ T {\bfseries \+\_\+value} = 0
 \Hypertarget{classNode_aca6aed9c76de85f62c3f8f2020b341eb}\label{classNode_aca6aed9c76de85f62c3f8f2020b341eb} 
 \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+parent} = nullptr
 \item 
-\Hypertarget{classNode_abd13687c9b16b43a273ad93d7260cd2b}\label{classNode_abd13687c9b16b43a273ad93d7260cd2b} 
-\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+hwm\+\_\+ancestor} = nullptr
+\Hypertarget{classNode_a997533b30ae663011dfc3c9610675978}\label{classNode_a997533b30ae663011dfc3c9610675978} 
+\mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+ast\+\_\+ancestor} = nullptr
 \item 
 \Hypertarget{classNode_aaa05167b39499499f550d7527faf0436}\label{classNode_aaa05167b39499499f550d7527faf0436} 
 \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+children} \mbox{[}\mbox{\hyperlink{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}{MAX\+\_\+\+CHILDREN}}\mbox{]} = \{nullptr, nullptr\}
 \item 
-\Hypertarget{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2}\label{classNode_a805bd36a7aae0f7d50f3bab642ffc9e2} 
-bool {\bfseries \+\_\+is\+\_\+below\+\_\+hwm}\+: 1 = false
+\Hypertarget{classNode_ab4be638c08e09e89b70eeca6978051c3}\label{classNode_ab4be638c08e09e89b70eeca6978051c3} 
+bool {\bfseries \+\_\+is\+\_\+below\+\_\+ast}\+: 1 = false
 \item 
-\Hypertarget{classNode_a8c5b5758227cb43b466cc653f3a2ffc9}\label{classNode_a8c5b5758227cb43b466cc653f3a2ffc9} 
-bool {\bfseries \+\_\+has\+\_\+hwm\+\_\+ancestor}\+: 1 = false
+\Hypertarget{classNode_a30ab308c43b8603b963e75842902a296}\label{classNode_a30ab308c43b8603b963e75842902a296} 
+bool {\bfseries \+\_\+has\+\_\+ast\+\_\+ancestor}\+: 1 = false
 \item 
 \Hypertarget{classNode_a358c408d443ce2e821f9843896d5823a}\label{classNode_a358c408d443ce2e821f9843896d5823a} 
 bool {\bfseries \+\_\+is\+\_\+initialized}\+: 1 = false
@@ -180,17 +181,17 @@ void {\bfseries assign\+\_\+parent} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$
 \Hypertarget{classNode_ab43844ce28030e8b583d1de732ab43f7}\label{classNode_ab43844ce28030e8b583d1de732ab43f7} 
 \mbox{\hyperlink{classNode}{Node}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+parent} () const
 \begin{DoxyCompactList}\small\item\em Return a readonly pointer to the parent. \end{DoxyCompactList}\item 
-\Hypertarget{classNode_a0a921a007d49f266256900adc55aab60}\label{classNode_a0a921a007d49f266256900adc55aab60} 
-void {\bfseries assign\+\_\+hwm\+\_\+ancestor} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}hwm\+\_\+ancestor)
-\begin{DoxyCompactList}\small\item\em Assign the {\ttfamily hwm\+\_\+ancestor} to this {\ttfamily \+\_\+hwm\+\_\+ancestor}, with no safety checks. \end{DoxyCompactList}\item 
-\Hypertarget{classNode_af2e96fdecdae4f193996072165f02ff5}\label{classNode_af2e96fdecdae4f193996072165f02ff5} 
-\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+hwm\+\_\+ancestor} () const
-\begin{DoxyCompactList}\small\item\em Return a readonly pointer to the HWM ancestor. \end{DoxyCompactList}\item 
-\Hypertarget{classNode_acff24e5b0eb62dd16bc72744ed2af9bb}\label{classNode_acff24e5b0eb62dd16bc72744ed2af9bb} 
-seq\+\_\+size\+\_\+t {\bfseries get\+\_\+hwm\+\_\+index} () const
-\begin{DoxyCompactList}\small\item\em Member helper to get this node\textquotesingle{}s High-\/\+Water Mark index. See {\ttfamily \doxylink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\+\_\+get\+\_\+hwm\+\_\+index()}}. \end{DoxyCompactList}\item 
-static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\+\_\+get\+\_\+hwm\+\_\+index}} (T value)
-\begin{DoxyCompactList}\small\item\em Return the sequence index for the HWM of a given value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\Hypertarget{classNode_adbdcd39aa647f5ef531c4e1c0ec8a0dd}\label{classNode_adbdcd39aa647f5ef531c4e1c0ec8a0dd} 
+void {\bfseries assign\+\_\+ast\+\_\+ancestor} (\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*}ast\+\_\+ancestor)
+\begin{DoxyCompactList}\small\item\em Assign the {\ttfamily ast\+\_\+ancestor} to this {\ttfamily \+\_\+ast\+\_\+ancestor}, with no safety checks. \end{DoxyCompactList}\item 
+\Hypertarget{classNode_ae431761853b84998173f57b00d9a100f}\label{classNode_ae431761853b84998173f57b00d9a100f} 
+\mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+ast\+\_\+ancestor} () const
+\begin{DoxyCompactList}\small\item\em Return a readonly pointer to the AST ancestor. \end{DoxyCompactList}\item 
+\Hypertarget{classNode_a62acf4aebefc7751eb761ca0f4910a60}\label{classNode_a62acf4aebefc7751eb761ca0f4910a60} 
+seq\+\_\+size\+\_\+t {\bfseries get\+\_\+ast\+\_\+index} () const
+\begin{DoxyCompactList}\small\item\em Member helper to get this node\textquotesingle{}s Abort at Stopping Time index. See {\ttfamily \doxylink{classNode_a73e658333ea7a2f258a0c702579208b2}{st\+\_\+get\+\_\+ast\+\_\+index()}}. \end{DoxyCompactList}\item 
+static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode_a73e658333ea7a2f258a0c702579208b2}{st\+\_\+get\+\_\+ast\+\_\+index}} (T value)
+\begin{DoxyCompactList}\small\item\em Return the sequence index for the AST of a given value. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -241,12 +242,12 @@ Calculate the size of this data structure as closely as possible.
 \begin{DoxyReturn}{Returns}
 The size in bytes of the object. 
 \end{DoxyReturn}
-\Hypertarget{classNode_a1abc023e5f1316182c73be4420e8eecc}\label{classNode_a1abc023e5f1316182c73be4420e8eecc} 
+\Hypertarget{classNode_ac90d2d128a0c2006539d1947e63bd32e}\label{classNode_ac90d2d128a0c2006539d1947e63bd32e} 
 \index{Node$<$ T $>$@{Node$<$ T $>$}!deserialize@{deserialize}}
 \index{deserialize@{deserialize}!Node$<$ T $>$@{Node$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{deserialize()}{deserialize()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{T \&}]{parent\+\_\+v,  }\item[{T \&}]{hwm\+\_\+ancestor\+\_\+v,  }\item[{uint8\+\_\+t \&}]{child\+\_\+count,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+bool \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::deserialize (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{in,  }\item[{T \&}]{parent\+\_\+v,  }\item[{T \&}]{ast\+\_\+ancestor\+\_\+v,  }\item[{uint8\+\_\+t \&}]{child\+\_\+count,  }\item[{std\+::string \texorpdfstring{$\ast$}{*}}]{err = {\ttfamily nullptr} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -263,7 +264,7 @@ This method does not throw.
 \hline
 {\em parent\+\_\+v} & A reference to return parent value to (for linking/validation). Zero == null when serialized. \\
 \hline
-{\em hwm\+\_\+ancestor\+\_\+v} & A reference to return HWM ancestor value to (for linking/validation). Zero == null when serialized. \\
+{\em ast\+\_\+ancestor\+\_\+v} & A reference to return AST ancestor value to (for linking/validation). Zero == null when serialized. \\
 \hline
 {\em child\+\_\+count} & A reference to return child count to (for linking/validation). \\
 \hline
@@ -328,7 +329,7 @@ void \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::init\+\_\+sequence\+\_\+help
 
 
 
-Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init()}} for type comparison when processing sequence for FG chain/\+HWM analysis. 
+Helper used exclusively by {\ttfamily \doxylink{classNode_a9094a9dcdb0d8d02db467549cda22da2}{init()}} for type comparison when processing sequence for FG chain/\+AST analysis. 
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -350,7 +351,7 @@ Serialization happens in this order\+:
 \begin{DoxyEnumerate}
 \item Value.
 \item Parent.
-\item HWM Ancestor.
+\item AST Ancestor.
 \item Flags.
 \item Child count.
 \end{DoxyEnumerate}
@@ -386,9 +387,9 @@ This function checks\+:
 \item Pointers null agree.
 \item \doxylink{classNode}{Node} values match.
 \item Parent\textquotesingle{}s null agree. If they exist, their values match.
-\item HWM Ancestor\textquotesingle{}s flags and pointers null agree. If they exist, their values match.
+\item AST Ancestor\textquotesingle{}s flags and pointers null agree. If they exist, their values match.
 \item Children have matching counts, null agreement, and equal values.
-\item Flags for \+\_\+is\+\_\+below\+\_\+hwm match.
+\item Flags for \+\_\+is\+\_\+below\+\_\+ast match.
 \item Flags for \+\_\+is\+\_\+initialized match.
 \item FG chain lengths and strings match.
 \end{DoxyEnumerate}
@@ -427,19 +428,19 @@ See the {\ttfamily st\+\_\+equal(\&)} version for details.
 {\em second} & The second \doxylink{classNode}{Node} (pointer) to compare. \\
 \hline
 \end{DoxyParams}
-\Hypertarget{classNode_a63422be985eab555730bbde62c0ca2d3}\label{classNode_a63422be985eab555730bbde62c0ca2d3} 
-\index{Node$<$ T $>$@{Node$<$ T $>$}!st\_get\_hwm\_index@{st\_get\_hwm\_index}}
-\index{st\_get\_hwm\_index@{st\_get\_hwm\_index}!Node$<$ T $>$@{Node$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{st\_get\_hwm\_index()}{st\_get\_hwm\_index()}}
+\Hypertarget{classNode_a73e658333ea7a2f258a0c702579208b2}\label{classNode_a73e658333ea7a2f258a0c702579208b2} 
+\index{Node$<$ T $>$@{Node$<$ T $>$}!st\_get\_ast\_index@{st\_get\_ast\_index}}
+\index{st\_get\_ast\_index@{st\_get\_ast\_index}!Node$<$ T $>$@{Node$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{st\_get\_ast\_index()}{st\_get\_ast\_index()}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{conceptAnySupportedIntegral}{Any\+Supported\+Integral}} T$>$ \\
-static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+get\+\_\+hwm\+\_\+index (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+static seq\+\_\+size\+\_\+t \mbox{\hyperlink{classNode}{Node}}$<$ T $>$\+::st\+\_\+get\+\_\+ast\+\_\+index (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
-Return the sequence index for the HWM of a given value. 
+Return the sequence index for the AST of a given value. 
 
 \begin{DoxyNote}{Note}
-HWM data is available in the \doxylink{classCollatz}{Collatz} object. 
+AST data is available in the \doxylink{classCollatz}{Collatz} object. 
 \end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
@@ -447,7 +448,7 @@ HWM data is available in the \doxylink{classCollatz}{Collatz} object.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-The index where High-\/\+Water Mark is reached. 
+The index where Abort at Stopping Time is reached. 
 \end{DoxyReturn}
 
 

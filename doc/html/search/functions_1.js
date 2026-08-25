@@ -14,9 +14,9 @@ var searchData=
   ['apply_5ff_11',['apply_f',['../classCollatzAffineMap.html#a0438b2fe0f64a9ff7023e163a7de8a3f',1,'CollatzAffineMap::apply_F()'],['../classCollatzAffineMapShortcut.html#ac9257a3b5535d7cf9129f74dfc247282',1,'CollatzAffineMapShortcut::apply_F()']]],
   ['apply_5fg_12',['apply_g',['../classCollatzAffineMap.html#a7b0a82c8ab244dce97b612cde154fc56',1,'CollatzAffineMap::apply_G()'],['../classCollatzAffineMapShortcut.html#a271acb3e0999a24608ec10dfd9eb9aca',1,'CollatzAffineMapShortcut::apply_G()']]],
   ['apply_5fstride_13',['apply_stride',['../structAffineStride_1_1Table.html#a0401baf577b8469f99946b4500d7abc3',1,'AffineStride::Table::apply_stride(T &amp;value)'],['../structAffineStride_1_1Table.html#a8446da7336bc8d5c9d9a2dbfe6520694',1,'AffineStride::Table::apply_stride(T &amp;value, const Stride &amp;stride)']]],
-  ['assert_5flevel_5fverification_14',['assert_level_verification',['../classBinaryTree.html#a20cc074d3eee2f0081dcca4543162702',1,'BinaryTree']]],
+  ['assert_5flevel_5fverification_14',['assert_level_verification',['../classBinaryTree.html#a478599040b6c4af20c8b825b47b2b126',1,'BinaryTree']]],
   ['assert_5flevel_5fwill_5ffit_15',['assert_level_will_fit',['../classBinaryTree.html#ac6ec6687fe24e4deba4c4e62b04afe69',1,'BinaryTree']]],
-  ['assign_5fchild_16',['assign_child',['../classNode.html#a5fbfcf7a86d8ebf2118e45999dee3790',1,'Node']]],
-  ['assign_5fhwm_5fancestor_17',['assign_hwm_ancestor',['../classNode.html#a0a921a007d49f266256900adc55aab60',1,'Node']]],
+  ['assign_5fast_5fancestor_16',['assign_ast_ancestor',['../classNode.html#adbdcd39aa647f5ef531c4e1c0ec8a0dd',1,'Node']]],
+  ['assign_5fchild_17',['assign_child',['../classNode.html#a5fbfcf7a86d8ebf2118e45999dee3790',1,'Node']]],
   ['assign_5fparent_18',['assign_parent',['../classNode.html#ad2e48781de0681e7147bf71ed20263b0',1,'Node']]]
 ];

@@ -25,7 +25,7 @@
 * @brief An implementation of the `BinaryTree` which creates and persists `Node` objects in memory.
 *
 * This is the materialized version, which creates real Node objects and persists them.  When pruning is enabled, nodes which hit
-* the High-Water Mark (HWM) are removed, leaving only nodes which still need to be tested.
+* the Abort at Stopping Time (AST) are removed, leaving only nodes which still need to be tested.
 *
 * @note This was a first-principles implementation when starting out.  It's great for in-memory inspection of true `Node` objects,
 * or when you want to walk an actual tree, but RAM explodes quickly.  If you need to work with larger trees, consider using the
@@ -46,18 +46,18 @@ class BinaryTreeMaterializedImpl {
     NodeBitmap<T> _uncovered_values;
     /// @brief Map of levels and their associated coverage.
     std::unordered_map<level_t, BinaryTreeCoverage<T>> _coverage_map;
-    /// @brief Collection of ancestors, which are High-Water Mark nodes that originally truncated a subtree.
+    /// @brief Collection of ancestors, which are Abort at Stopping Time nodes that originally truncated a subtree.
     std::vector<Node<T>*> _ancestors;
     /// @brief Flag to determine if this tree is initialized, meaning it's had at least one level added.
     bool _is_initialized = false;
-    /// @brief Flag to determine if the tree should prune HWM nodes, carving out subtress, turning this into a DAG.
-    bool _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
+    /// @brief Flag to determine if the tree should prune AST nodes, carving out subtress, turning this into a DAG.
+    bool _is_pruning_ast_nodes = BinaryTreeOptions{}.prune_ast_nodes;
     /// @brief Flag to determine if the tree should prune parent levels.  AKA, only keep the last level (leaf nodes).
     bool _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
-    /// @brief Flag to determine if HWM ancestors should be added to our vector or simply discarded.
+    /// @brief Flag to determine if AST ancestors should be added to our vector or simply discarded.
     bool _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
-    /// @brief Flag to determine if verification of non-HWM nodes should happen.  See `BinaryTree` or CHANGELOG 3.4.0 for details.
-    bool _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
+    /// @brief Flag to determine if verification of non-AST nodes should happen.  See `BinaryTree` or CHANGELOG 3.4.0 for details.
+    bool _is_verifying_non_ast_nodes = BinaryTreeOptions{}.verify_non_ast_nodes;
     /// @brief Track the type of this tree for external comparison later.
     const TreeTypeEnum _tree_type = TreeTypeEnum::MATERIALIZED;
 
@@ -98,7 +98,7 @@ class BinaryTreeMaterializedImpl {
         _ancestors.clear();
 
         // Now clear out the level_map.  If pruning, handle it carefully.
-        if (_is_pruning_hwm_nodes) {
+        if (_is_pruning_ast_nodes) {
             // Scan all levels manually and call delete explicitly.
             for (level_t level = 0; level <= _level_count; level++) {
                 for (Node<T>* node : _level_map[level]) {
@@ -132,8 +132,8 @@ class BinaryTreeMaterializedImpl {
         if (_root_node != nullptr) {
             _root_node = nullptr;
         }
-        _is_verifying_non_hwm_nodes = BinaryTreeOptions{}.verify_non_hwm_nodes;
-        _is_pruning_hwm_nodes = BinaryTreeOptions{}.prune_hwm_nodes;
+        _is_verifying_non_ast_nodes = BinaryTreeOptions{}.verify_non_ast_nodes;
+        _is_pruning_ast_nodes = BinaryTreeOptions{}.prune_ast_nodes;
         _is_pruning_parent_levels = BinaryTreeOptions{}.prune_parent_levels;
         _is_preserving_ancestors = BinaryTreeOptions{}.preserve_ancestors;
     }
@@ -150,8 +150,8 @@ class BinaryTreeMaterializedImpl {
         if(_is_initialized) { reset(); }
         _is_initialized = true;
         // Set options.
-        _is_verifying_non_hwm_nodes = opts.verify_non_hwm_nodes;
-        _is_pruning_hwm_nodes = opts.prune_hwm_nodes;
+        _is_verifying_non_ast_nodes = opts.verify_non_ast_nodes;
+        _is_pruning_ast_nodes = opts.prune_ast_nodes;
         _is_pruning_parent_levels = opts.prune_parent_levels;
         _is_preserving_ancestors = opts.preserve_ancestors;
         while (_level_count < levels) {
@@ -203,12 +203,12 @@ class BinaryTreeMaterializedImpl {
     /// @param value The true or false value to set.
     void set_is_preserving_ancestors(const bool value) { _is_preserving_ancestors = value; }
 
-    /// @brief Get a flag whether this tree is verifying non-HWM nodes.
-    bool is_verifying_non_hwm_nodes() const { return _is_verifying_non_hwm_nodes; }
-    /// @brief Explicitly disable non-HWM node verification.
-    void disable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = false; }
-    /// @brief Explicitly enable non-HWM node verification.
-    void enable_non_hwm_node_verification() { _is_verifying_non_hwm_nodes = true; }
+    /// @brief Get a flag whether this tree is verifying non-AST nodes.
+    bool is_verifying_non_ast_nodes() const { return _is_verifying_non_ast_nodes; }
+    /// @brief Explicitly disable non-AST node verification.
+    void disable_non_ast_node_verification() { _is_verifying_non_ast_nodes = false; }
+    /// @brief Explicitly enable non-AST node verification.
+    void enable_non_ast_node_verification() { _is_verifying_non_ast_nodes = true; }
 
     /// @brief Get a flag whether this tree is initialized.
     bool is_initialized() const { return _is_initialized; }
@@ -217,7 +217,7 @@ class BinaryTreeMaterializedImpl {
     /// @param value The true or false value to set.
     void set_is_initialized(const bool value) { _is_initialized = value; }
 
-    /// @brief Get a reference to the uncovered values, which are the node values not covered by a High-Water Mark ancestor.
+    /// @brief Get a reference to the uncovered values, which are the node values not covered by an AST ancestor.
     const NodeBitmap<T>& get_uncovered_values() const { return _uncovered_values; }
     /// @brief Get a read-write reference to the uncovered values map.
     /// @warning This is intended for serialization/deserilization only.
@@ -239,8 +239,8 @@ class BinaryTreeMaterializedImpl {
     /// @note Nodes are left-to-right by position, not node value.
     const std::unordered_map<level_t, std::vector<Node<T>*>>& get_level_map() const { return _level_map; }
 
-    /// @brief Get a flag whether this tree is pruning High-Water Mark nodes.
-    bool is_pruning_hwm_nodes() const { return _is_pruning_hwm_nodes; }
+    /// @brief Get a flag whether this tree is pruning AST nodes.
+    bool is_pruning_ast_nodes() const { return _is_pruning_ast_nodes; }
 
     /// @brief Get a flag whether this tree is pruning parent levels, leaving only the last one (leaf nodes).
     bool is_pruning_parent_levels() const { return _is_pruning_parent_levels; }
@@ -301,7 +301,7 @@ class BinaryTreeMaterializedImpl {
     * common members between implementations (e.g.: level count).
     *
     * This function checks:
-    *   1. The is_pruning_hwm_nodes flag.
+    *   1. The is_pruning_ast_nodes flag.
     *   2. The is_pruning_parent_levels flag.
     *   3. Level map (`Node` objects, which invoke their own `Node::st_equal()`).
     *
@@ -315,8 +315,8 @@ class BinaryTreeMaterializedImpl {
         eq.set_category("BinaryTreeMaterializedImpl");
 
         // Flags
-        if (! eq.equal(first.is_pruning_hwm_nodes(), second.is_pruning_hwm_nodes())) {
-            return eq.fail("Is pruning hwm nodes mismatch");
+        if (! eq.equal(first.is_pruning_ast_nodes(), second.is_pruning_ast_nodes())) {
+            return eq.fail("Is pruning ast nodes mismatch");
         }
         if (! eq.equal(first.is_pruning_parent_levels(), second.is_pruning_parent_levels())) {
             return eq.fail("Is pruning parent levels mismatch");
@@ -366,7 +366,7 @@ class BinaryTreeMaterializedImpl {
     * @brief Serialize the materialized tree specifics of this object for export.
     *
     * Serialization happens in this order:
-    *   1. The is_pruning_hwm_nodes flag.
+    *   1. The is_pruning_ast_nodes flag.
     *   2. The is_pruning_parent_levels flag.
     *   3. The level map, which emits level numbers and node counts, and then uses `Node::serialize()` on each node.
     *
@@ -379,7 +379,7 @@ class BinaryTreeMaterializedImpl {
     */
     [[nodiscard]] bool serialize(std::ostream& out, std::string* err = nullptr) const {
         // !!! BIG FAT ANNOYING ERROR !!!
-        if (_is_pruning_hwm_nodes || _is_pruning_parent_levels) {
+        if (_is_pruning_ast_nodes || _is_pruning_parent_levels) {
             std::string msg = "You've activated my trap card!";
                 msg+= "  Serializing and deserializing a materialized tree is already a bad idea.";
                 msg+= "  Doing it with any form of node pruning enabled is NOT supported NOR a good idea.";
@@ -392,8 +392,8 @@ class BinaryTreeMaterializedImpl {
         sh.set_category("BinaryTreeMaterializedImpl");
 
         // Unique properties.
-        if (! sh.serialize_bool(_is_pruning_hwm_nodes)) {
-            return sh.fail("_is_pruning_hwm_nodes==" + std::to_string(_is_pruning_hwm_nodes));
+        if (! sh.serialize_bool(_is_pruning_ast_nodes)) {
+            return sh.fail("_is_pruning_ast_nodes==" + std::to_string(_is_pruning_ast_nodes));
         }
         if (! sh.serialize_bool(_is_pruning_parent_levels)) {
             return sh.fail("_is_pruning_parent_levels==" + std::to_string(_is_pruning_parent_levels));
@@ -458,9 +458,9 @@ class BinaryTreeMaterializedImpl {
         // Unique properties
         bool b_tmp;
         if (! sh.deserialize_bool(b_tmp)) {
-            return sh.fail("couldn't read _is_pruning_hwm_nodes");
+            return sh.fail("couldn't read _is_pruning_ast_nodes");
         }
-        _is_pruning_hwm_nodes = b_tmp;
+        _is_pruning_ast_nodes = b_tmp;
         if (! sh.deserialize_bool(b_tmp)) {
             return sh.fail("couldn't read _is_pruning_parent_levels");
         }
@@ -473,7 +473,7 @@ class BinaryTreeMaterializedImpl {
         // Now get the remaining levels, if any.
         uint64_t u64_level_map_count = 0;
         T parent_v;
-        T hwm_ancestor_v;
+        T ast_ancestor_v;
         uint8_t child_count;
         if (! sh.deserialize_integral(u64_level_map_count)) {
             return sh.fail("couldn't read level_map_count");
@@ -493,7 +493,7 @@ class BinaryTreeMaterializedImpl {
             for (uint64_t j = 0; j < u64_node_size; j++) {
                 // Make a new heap-allocated node to deserialize into.
                 Node<T>* new_node = new Node<T>();
-                if (! new_node->deserialize(in, parent_v, hwm_ancestor_v, child_count, err)) {
+                if (! new_node->deserialize(in, parent_v, ast_ancestor_v, child_count, err)) {
                     return sh.fail("couldn't get node on level==" + to_string_any(level) + " and position j==" + to_string_any(j));
                 }
                 // Add it to the map.
@@ -516,9 +516,9 @@ class BinaryTreeMaterializedImpl {
                 new_node->assign_parent(parent);
                 parent->assign_child(new_node);
                 // Follow the same ancestor tracking logic from Node: inherit parent's, and if still null, see if parent is one.
-                new_node->assign_hwm_ancestor(parent->get_hwm_ancestor());
-                if (new_node->get_hwm_ancestor() == nullptr && parent->is_below_high_water_mark()) {
-                    new_node->assign_hwm_ancestor(parent);
+                new_node->assign_ast_ancestor(parent->get_ast_ancestor());
+                if (new_node->get_ast_ancestor() == nullptr && parent->is_below_ast()) {
+                    new_node->assign_ast_ancestor(parent);
                 }
             }
         }
@@ -533,10 +533,10 @@ class BinaryTreeMaterializedImpl {
     * @brief Add a level to the tree.
     *
     * Materialized tree building happens by taking the nodes from the last level in `_level_map` and treating them as parents.  The
-    * children created have known values according to Harper's algorithm.  The children are checked for High-Water Mark, and stored
-    * in the next level of the map.
+    * children created have known values according to Harper's algorithm.  The children are checked for Abort at Stopping Time, and
+    * stored in the next level of the map.
     *
-    * When HWM pruning is anbled, all grandparents who meet HWM are trimmed, which prevents entire subtrees of nodes from taking up
+    * When AST pruning is anbled, all grandparents who meet AST are trimmed, which prevents entire subtrees of nodes from taking up
     * memory.
     *
     * When parent level pruning is enabled, all parents are trimmed, which keeps only the last level of nodes in memory.
@@ -584,7 +584,7 @@ class BinaryTreeMaterializedImpl {
 
         // Begin the critical section, but don't loop yet.
         std::exception_ptr eptr = nullptr;
-        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, scaling_factor, child_level, parent_count, _is_pruning_hwm_nodes, _is_preserving_ancestors, omp_local_ancestors_group, _is_verifying_non_hwm_nodes, eptr)
+        #pragma omp parallel reduction(+:covered_or_pruned) default(none) shared(parents, _level_map, scaling_factor, child_level, parent_count, _is_pruning_ast_nodes, _is_preserving_ancestors, omp_local_ancestors_group, _is_verifying_non_ast_nodes, eptr)
         {
             try {
                 // Use local child values.
@@ -594,10 +594,10 @@ class BinaryTreeMaterializedImpl {
                 // Grab this thread's personal ancestors vector to avoid locking.
                 auto& my_ancestors = omp_local_ancestors_group[omp_get_thread_num()];
 
-                // Track this thread's local High-Water Mark.  Since nodes are not sequentially ordered, it can only set this to first node - 1.
-                T my_high_water_mark = BinaryTreeMath<T>::st_first_node_value_of_level(_level_count) - 1;
-                if (my_high_water_mark < 1) {
-                    my_high_water_mark = 1;
+                // Track this thread's local AST.  Since nodes are not sequentially ordered, it can only set this to first node - 1.
+                T my_ast_value = BinaryTreeMath<T>::st_first_node_value_of_level(_level_count) - 1;
+                if (my_ast_value < 1) {
+                    my_ast_value = 1;
                 }
 
                 // Now Loop
@@ -622,19 +622,19 @@ class BinaryTreeMaterializedImpl {
                     // Tally them.  Prune them if necessesary.  Otherwise add them to the map.
                     // -- Child 1
                     bool assign_to_map = true;
-                    if (_is_preserving_ancestors && child_1->is_below_high_water_mark() && ! child_1->has_high_water_mark_ancestor()) {
+                    if (_is_preserving_ancestors && child_1->is_below_ast() && ! child_1->has_ast_ancestor()) {
                         my_ancestors.push_back(new Node<T>(child_1->get_value()));
                     }
-                    if (_is_verifying_non_hwm_nodes) {
-                        if (child_1->is_below_high_water_mark() == false && child_1->has_high_water_mark_ancestor() == false) {
-                            if (Collatz<T>::st_verify(child_value_1, my_high_water_mark) == false) {
+                    if (_is_verifying_non_ast_nodes) {
+                        if (child_1->is_below_ast() == false && child_1->has_ast_ancestor() == false) {
+                            if (Collatz<T>::st_verify(child_value_1, my_ast_value) == false) {
                                 throw std::logic_error("Node value " + to_string_any(child_value_1) + " didn't verify.  How?");
                             }
                         }
                     }
-                    if (child_1->is_below_high_water_mark() || child_1->has_high_water_mark_ancestor()) {
+                    if (child_1->is_below_ast() || child_1->has_ast_ancestor()) {
                         covered_or_pruned += 1;
-                        if (_is_pruning_hwm_nodes) {
+                        if (_is_pruning_ast_nodes) {
                             delete child_1;
                             child_1 = nullptr;
                             assign_to_map = false;
@@ -642,25 +642,25 @@ class BinaryTreeMaterializedImpl {
                     }
                     if (assign_to_map) {
                         _level_map[child_level][2 * parent_idx] = child_1;
-                        if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                        if (! _is_pruning_ast_nodes && ! _is_pruning_parent_levels) {
                             parent->assign_child(child_1);
                         }
                     }
                     // -- Child 2
                     assign_to_map = true;
-                    if (_is_preserving_ancestors && child_2->is_below_high_water_mark() && ! child_2->has_high_water_mark_ancestor()) {
+                    if (_is_preserving_ancestors && child_2->is_below_ast() && ! child_2->has_ast_ancestor()) {
                         my_ancestors.push_back(new Node<T>(child_2->get_value()));
                     }
-                    if (_is_verifying_non_hwm_nodes) {
-                        if (child_2->is_below_high_water_mark() == false && child_2->has_high_water_mark_ancestor() == false) {
-                            if (Collatz<T>::st_verify(child_value_2, my_high_water_mark) == false) {
+                    if (_is_verifying_non_ast_nodes) {
+                        if (child_2->is_below_ast() == false && child_2->has_ast_ancestor() == false) {
+                            if (Collatz<T>::st_verify(child_value_2, my_ast_value) == false) {
                                 throw std::logic_error("Node value " + to_string_any(child_value_2) + " didn't verify.  How?");
                             }
                         }
                     }
-                    if (child_2->is_below_high_water_mark() || child_2->has_high_water_mark_ancestor()) {
+                    if (child_2->is_below_ast() || child_2->has_ast_ancestor()) {
                         covered_or_pruned += 1;
-                        if (_is_pruning_hwm_nodes) {
+                        if (_is_pruning_ast_nodes) {
                             delete child_2;
                             child_2 = nullptr;
                             assign_to_map = false;
@@ -668,7 +668,7 @@ class BinaryTreeMaterializedImpl {
                     }
                     if (assign_to_map) {
                         _level_map[child_level][2 * parent_idx + 1] = child_2;
-                        if (! _is_pruning_hwm_nodes && ! _is_pruning_parent_levels) {
+                        if (! _is_pruning_ast_nodes && ! _is_pruning_parent_levels) {
                             parent->assign_child(child_2);
                         }
                     }
@@ -704,7 +704,7 @@ class BinaryTreeMaterializedImpl {
         }
 
         // When pruning nodes,remove any nullptr (pruned) children from the vector to keep counts accurate on next loop.
-        if (_is_pruning_hwm_nodes) {
+        if (_is_pruning_ast_nodes) {
             std::vector<Node<T>*>& children = _level_map[child_level];
             children.erase(
                 std::remove(children.begin(), children.end(), nullptr),
@@ -735,7 +735,7 @@ class BinaryTreeMaterializedImpl {
         // on .size() to report how many are *not* covered, which means covered = total - .size().
         T total = scaling_factor * 2;
         T covered = covered_or_pruned;
-        if (_is_pruning_hwm_nodes) {
+        if (_is_pruning_ast_nodes) {
             covered = total - _level_map[child_level].size();
         }
         _coverage_map[child_level] = BinaryTreeCoverage<T>(covered, total);
@@ -760,7 +760,7 @@ class BinaryTreeMaterializedImpl {
             buffer.reserve(BUFFER_SIZE);
             for (const Node<T>* node : _level_map[_level_count]) {
                 // Non-pruned trees have covered nodes in memory.  Check for them.
-                if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+                if (node->is_below_ast() || node->has_ast_ancestor()) {
                     continue;
                 }
                 buffer.push_back(node->get_value());

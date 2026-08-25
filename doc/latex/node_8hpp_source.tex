@@ -31,10 +31,10 @@
 \DoxyCodeLine{00037\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ |\ total\ |\ uint128\_t\ |\ total\ |\ mpz\_class\ |\ total}}
 \DoxyCodeLine{00038\ \ \ \ \ T\ \_value\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ \ 8\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 16}}
 \DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{classNode}{Node}}\ *\_parent\ =\ \textcolor{keyword}{nullptr};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 16\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 24\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 24}}
-\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classNode}{Node}}\ *\_hwm\_ancestor\ =\ \textcolor{keyword}{nullptr};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 24\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 32}}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{classNode}{Node}}\ *\_ast\_ancestor\ =\ \textcolor{keyword}{nullptr};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 24\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 32\ |\ \ \ \ \ \ \ \ \ 8\ |\ \ \ \ 32}}
 \DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classNode}{Node}}\ *\_children[\mbox{\hyperlink{classNode_ab204ebe45f832d60ecc0a69bc07dc39f}{MAX\_CHILDREN}}]\ =\ \{\textcolor{keyword}{nullptr},\ \textcolor{keyword}{nullptr}\};\ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 40\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 48\ |\ \ \ \ \ \ \ \ 16\ |\ \ \ \ 48}}
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_is\_below\_hwm\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 49}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_has\_hwm\_ancestor\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 49}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_is\_below\_ast\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:1\ |\ \ \ \ 49}}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_has\_ast\_ancestor\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:2\ |\ \ \ \ 49}}
 \DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_is\_initialized\ :\ 1\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:3\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:3\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:3\ |\ \ \ \ 49}}
 \DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_owns\_children\ :\ 1\ =\ \textcolor{keyword}{true};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ 1:4\ |\ \ \ \ 41\ |\ \ \ \ \ \ \ 1:4\ |\ \ \ \ 49\ |\ \ \ \ \ \ \ 1:4\ |\ \ \ \ 49\ \ (4\ bits\ padding)}}
 \DoxyCodeLine{00046\ \ \ \ \ uint8\_t\ \_child\_count\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ 1\ |\ \ \ \ 42\ |\ \ \ \ \ \ \ \ \ 1\ |\ \ \ \ 50\ |\ \ \ \ \ \ \ \ \ 1\ |\ \ \ \ 50}}
@@ -88,7 +88,7 @@
 \DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \_parent\ =\ parent;}
 \DoxyCodeLine{00117\ }
-\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ a\ helper\ with\ a\ promoted\ type\ to\ process\ the\ sequence\ and\ build\ our\ FG/HWM\ info.\ \ Doing\ this\ allows\ trees\ to\ build}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Call\ a\ helper\ with\ a\ promoted\ type\ to\ process\ the\ sequence\ and\ build\ our\ FG/AST\ info.\ \ Doing\ this\ allows\ trees\ to\ build}}
 \DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ up\ to\ 2\string^<bit-\/1>.}}
 \DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}(\mbox{\hyperlink{conceptFixedWidthIntegral}{FixedWidthIntegral<T>}})\ \{}
 \DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}(T)\ *\ 8\ <=\ 64)\ \{}
@@ -111,19 +111,19 @@
 \DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ init\_sequence\_helper<mpz\_class>();}
 \DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00140\ }
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ our\ parent\ to\ decide\ who\ the\ high-\/water\ mark\ ancestor\ is,\ if\ any.\ \ Since\ it's\ a\ lineage,\ there's\ no}}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ reason\ to\ scan\ everything\ manually.\ \ The\ parent's\ data\ is\ all\ we\ need.}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Use\ our\ parent\ to\ decide\ who\ the\ AST\ ancestor\ is,\ if\ any.\ \ Since\ it's\ a\ lineage,\ there's\ no\ reason\ to\ scan\ everything}}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ manually.\ \ The\ parent's\ data\ is\ all\ we\ need.}}
 \DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (parent\ !=\ \textcolor{keyword}{nullptr})\ \{}
 \DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Assign\ whoever\ the\ ancestor\ is,\ even\ if\ it's\ nullptr.}}
-\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \_hwm\_ancestor\ =\ parent-\/>\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}();}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \_ast\_ancestor\ =\ parent-\/>\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}();}
 \DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ we\ have\ an\ ancestor,\ just\ flag\ our\ boolean.}}
-\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_hwm\_ancestor\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_has\_hwm\_ancestor\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_ast\_ancestor\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_has\_ast\_ancestor\ =\ \textcolor{keyword}{true};}
 \DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ we\ don't\ have\ an\ ancestor,\ see\ if\ the\ parent\ can\ be.}}
-\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_hwm\_ancestor\ ==\ \textcolor{keyword}{nullptr}\ \&\&\ parent-\/>\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}())\ \{}
-\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_hwm\_ancestor\ =\ parent;}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_has\_hwm\_ancestor\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_ast\_ancestor\ ==\ \textcolor{keyword}{nullptr}\ \&\&\ parent-\/>\mbox{\hyperlink{classNode_a5f47b79178fa861a96bc8a8b533b956d}{is\_below\_ast}}())\ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_ast\_ancestor\ =\ parent;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_has\_ast\_ancestor\ =\ \textcolor{keyword}{true};}
 \DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00156\ \ \ \ \ \};}
@@ -192,7 +192,7 @@
 \DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00224\ }
 \DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Now\ compare\ the\ current\ value\ to\ our\ original\ value.}}
-\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \_is\_below\_hwm\ =\ u\_current\_value\ <\ u\_value;}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \_is\_below\_ast\ =\ u\_current\_value\ <\ u\_value;}
 \DoxyCodeLine{00227\ \ \ \ \ \}}
 \DoxyCodeLine{00228\ }
 \DoxyCodeLine{00229\ }
@@ -201,9 +201,9 @@
 \DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classNode_a492a8099e26177947545b885999f8e2f}{release\_children}}();}
 \DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \_value\ =\ 0;}
 \DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \_parent\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \_hwm\_ancestor\ =\ \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \_is\_below\_hwm\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \_has\_hwm\_ancestor\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \_ast\_ancestor\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \_is\_below\_ast\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \_has\_ast\_ancestor\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \_is\_initialized\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \_owns\_children\ =\ \textcolor{keyword}{true};}
 \DoxyCodeLine{00241\ \ \ \ \ \}}
@@ -303,25 +303,25 @@
 \DoxyCodeLine{00357\ }
 \DoxyCodeLine{00358\ }
 \DoxyCodeLine{00359\ }
-\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNode_a0a921a007d49f266256900adc55aab60}{assign\_hwm\_ancestor}}(\mbox{\hyperlink{classNode}{Node<T>}}*\ hwm\_ancestor)\ \{}
-\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \_hwm\_ancestor\ =\ hwm\_ancestor;}
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNode_adbdcd39aa647f5ef531c4e1c0ec8a0dd}{assign\_ast\_ancestor}}(\mbox{\hyperlink{classNode}{Node<T>}}*\ ast\_ancestor)\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \_ast\_ancestor\ =\ ast\_ancestor;}
 \DoxyCodeLine{00363\ \ \ \ \ \}}
 \DoxyCodeLine{00364\ }
 \DoxyCodeLine{00365\ }
 \DoxyCodeLine{00366\ }
-\DoxyCodeLine{00368\ \ \ \ \ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_hwm\_ancestor;\ \}}
+\DoxyCodeLine{00368\ \ \ \ \ \mbox{\hyperlink{classNode}{Node<T>}}*\ \mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_ast\_ancestor;\ \}}
 \DoxyCodeLine{00369\ }
 \DoxyCodeLine{00370\ }
 \DoxyCodeLine{00371\ }
-\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keyword}{static}\ seq\_size\_t\ \mbox{\hyperlink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\_get\_hwm\_index}}(T\ value)\ \{}
+\DoxyCodeLine{00378\ \ \ \ \ \textcolor{keyword}{static}\ seq\_size\_t\ \mbox{\hyperlink{classNode_a73e658333ea7a2f258a0c702579208b2}{st\_get\_ast\_index}}(T\ value)\ \{}
 \DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollatz}{Collatz<T>}}\ collatz(value);}
-\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ collatz.\mbox{\hyperlink{classCollatz_a0478fad7960232858b0a5ea852ce638e}{get\_hwm\_index}}();}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ collatz.\mbox{\hyperlink{classCollatz_a2e650a152361c88ea24e80a01d4c6494}{get\_ast\_index}}();}
 \DoxyCodeLine{00381\ \ \ \ \ \}}
 \DoxyCodeLine{00382\ }
 \DoxyCodeLine{00383\ }
 \DoxyCodeLine{00384\ }
-\DoxyCodeLine{00386\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classNode_acff24e5b0eb62dd16bc72744ed2af9bb}{get\_hwm\_index}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a63422be985eab555730bbde62c0ca2d3}{st\_get\_hwm\_index}}(\_value);}
+\DoxyCodeLine{00386\ \ \ \ \ seq\_size\_t\ \mbox{\hyperlink{classNode_a62acf4aebefc7751eb761ca0f4910a60}{get\_ast\_index}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classNode_a73e658333ea7a2f258a0c702579208b2}{st\_get\_ast\_index}}(\_value);}
 \DoxyCodeLine{00388\ \ \ \ \ \}}
 \DoxyCodeLine{00389\ }
 \DoxyCodeLine{00391\ }
@@ -332,11 +332,11 @@
 \DoxyCodeLine{00399\ }
 \DoxyCodeLine{00400\ }
 \DoxyCodeLine{00401\ }
-\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_is\_below\_hwm;\ \}}
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_a5f47b79178fa861a96bc8a8b533b956d}{is\_below\_ast}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_is\_below\_ast;\ \}}
 \DoxyCodeLine{00404\ }
 \DoxyCodeLine{00405\ }
 \DoxyCodeLine{00406\ }
-\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_ad177ff820a4b9416d8a3ee46cabfe774}{has\_high\_water\_mark\_ancestor}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_has\_hwm\_ancestor;\ \}}
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_ad71aa43ac16165f013652b3b17cb033d}{has\_ast\_ancestor}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_has\_ast\_ancestor;\ \}}
 \DoxyCodeLine{00409\ }
 \DoxyCodeLine{00410\ }
 \DoxyCodeLine{00411\ }
@@ -395,16 +395,16 @@
 \DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00495\ }
-\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ HWM\ Ancestor}}
-\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_ad177ff820a4b9416d8a3ee46cabfe774}{has\_high\_water\_mark\_ancestor}}(),\ second.\mbox{\hyperlink{classNode_ad177ff820a4b9416d8a3ee46cabfe774}{has\_high\_water\_mark\_ancestor}}()))\ \{}
-\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Has\ HWM\ ancestor\ mismatch"{}});}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AST\ Ancestor}}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_ad71aa43ac16165f013652b3b17cb033d}{has\_ast\_ancestor}}(),\ second.\mbox{\hyperlink{classNode_ad71aa43ac16165f013652b3b17cb033d}{has\_ast\_ancestor}}()))\ \{}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Has\ AST\ ancestor\ mismatch"{}});}
 \DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\_null\_agree}}(first.\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}(),\ second.\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}()))\ \{}
-\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}HWM\ ancestors\ don't\ agree\ on\ null\ state"{}});}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_a10e1226ff5ed678e9570c72f30b839db}{pointers\_null\_agree}}(first.\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}(),\ second.\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}()))\ \{}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}AST\ ancestors\ don't\ agree\ on\ null\ state"{}});}
 \DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (first.\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}()\ !=\ \textcolor{keyword}{nullptr})\ \{}
-\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}()-\/>get\_value(),\ second.\mbox{\hyperlink{classNode_af2e96fdecdae4f193996072165f02ff5}{get\_hwm\_ancestor}}()-\/>get\_value()))\ \{}
-\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}HWM\ ancestor's\ value\ mismatch"{}});}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (first.\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}()\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}()-\/>get\_value(),\ second.\mbox{\hyperlink{classNode_ae431761853b84998173f57b00d9a100f}{get\_ast\_ancestor}}()-\/>get\_value()))\ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}AST\ ancestor's\ value\ mismatch"{}});}
 \DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00508\ }
@@ -434,8 +434,8 @@
 \DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00533\ }
 \DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remaining\ flags.}}
-\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}(),\ second.\mbox{\hyperlink{classNode_a384e4c5c02c237f1dad0aba304872cfc}{is\_below\_high\_water\_mark}}()))\ \{}
-\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Nodes'\ is\_below\_high\_water\_mark\ mismatch"{}});}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_a5f47b79178fa861a96bc8a8b533b956d}{is\_below\_ast}}(),\ second.\mbox{\hyperlink{classNode_a5f47b79178fa861a96bc8a8b533b956d}{is\_below\_ast}}()))\ \{}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Nodes'\ is\_below\_ast\ mismatch"{}});}
 \DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ eq.\mbox{\hyperlink{classEqualityHelper_aecd64fcc8ea0cf44b6afad4b3e6e0204}{equal}}(first.\mbox{\hyperlink{classNode_a1e26152bd714bdbcb997fd946731a650}{is\_initialized}}(),\ second.\mbox{\hyperlink{classNode_a1e26152bd714bdbcb997fd946731a650}{is\_initialized}}()))\ \{}
 \DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ eq.\mbox{\hyperlink{classEqualityHelper_a34258a2eb2fac97a6712bb9b1e6daa72}{fail}}(\textcolor{stringliteral}{"{}Nodes'\ is\_initialize\ mismatch"{}});}
@@ -508,14 +508,14 @@
 \DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00643\ }
-\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ HWM\ Ancestor}}
-\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_hwm\_ancestor\ ==\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AST\ Ancestor}}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_ast\_ancestor\ ==\ \textcolor{keyword}{nullptr})\ \{}
 \DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(T(0)))\ \{}
-\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}no\ hwm\_ancestor\ (aka:\ T(0))"{}});}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}no\ ast\_ancestor\ (aka:\ T(0))"{}});}
 \DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\_hwm\_ancestor-\/>\mbox{\hyperlink{classNode_acd9ce8e35f9f5840779592383ea6b344}{get\_value}}()))\ \{}
-\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_hwm\_ancestor-\/>get\_value()=="{}}\ +\ to\_string\_any(\_hwm\_ancestor-\/>\mbox{\hyperlink{classNode_acd9ce8e35f9f5840779592383ea6b344}{get\_value}}()));}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_abfc9679f40161822a20dd8734af8ba20}{serialize\_integral}}(\_ast\_ancestor-\/>\mbox{\hyperlink{classNode_acd9ce8e35f9f5840779592383ea6b344}{get\_value}}()))\ \{}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_ast\_ancestor-\/>get\_value()=="{}}\ +\ to\_string\_any(\_ast\_ancestor-\/>\mbox{\hyperlink{classNode_acd9ce8e35f9f5840779592383ea6b344}{get\_value}}()));}
 \DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00654\ }
@@ -524,15 +524,15 @@
 \DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ is\ merely\ adding\ a\ node,\ linking\ to\ the\ parent\ value\ (which\ we\ wrote\ above),\ and\ then\ telling\ that\ parent\ to\ own\ "{}this"{}.}}
 \DoxyCodeLine{00658\ }
 \DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flags}}
-\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_is\_below\_hwm\ =\ \_is\_below\_hwm;}
-\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_has\_hwm\_ancestor\ =\ \_has\_hwm\_ancestor;}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_is\_below\_ast\ =\ \_is\_below\_ast;}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_has\_ast\_ancestor\ =\ \_has\_ast\_ancestor;}
 \DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_is\_initialized\ =\ \_is\_initialized;}
 \DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_owns\_children\ =\ \_owns\_children;}
-\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(b\_is\_below\_hwm))\ \{}
-\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_is\_below\_hwm=="{}}\ +\ std::to\_string(b\_is\_below\_hwm));}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(b\_is\_below\_ast))\ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_is\_below\_ast=="{}}\ +\ std::to\_string(b\_is\_below\_ast));}
 \DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(b\_has\_hwm\_ancestor))\ \{}
-\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_has\_hwm\_ancestor=="{}}\ +\ std::to\_string(b\_has\_hwm\_ancestor));}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(b\_has\_ast\_ancestor))\ \{}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_has\_ast\_ancestor=="{}}\ +\ std::to\_string(b\_has\_ast\_ancestor));}
 \DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a3ecb10b3639c7ad20d1d4f92425fffd1}{serialize\_bool}}(b\_is\_initialized))\ \{}
 \DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}\_is\_initialized=="{}}\ +\ std::to\_string(b\_is\_initialized));}
@@ -552,7 +552,7 @@
 \DoxyCodeLine{00685\ }
 \DoxyCodeLine{00686\ }
 \DoxyCodeLine{00687\ }
-\DoxyCodeLine{00701\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_a1abc023e5f1316182c73be4420e8eecc}{deserialize}}(std::istream\&\ in,\ T\&\ parent\_v,\ T\&\ hwm\_ancestor\_v,\ uint8\_t\&\ child\_count,\ std::string*\ err\ =\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00701\ \ \ \ \ [[nodiscard]]\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classNode_ac90d2d128a0c2006539d1947e63bd32e}{deserialize}}(std::istream\&\ in,\ T\&\ parent\_v,\ T\&\ ast\_ancestor\_v,\ uint8\_t\&\ child\_count,\ std::string*\ err\ =\ \textcolor{keyword}{nullptr})\ \{}
 \DoxyCodeLine{00702\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classStreamHelper}{StreamHelper}}\ sh(\&in,\ \textcolor{keyword}{nullptr},\ err);}
 \DoxyCodeLine{00703\ \ \ \ \ \ \ \ \ sh.\mbox{\hyperlink{classStreamHelper_a0d592bc6aac52699b61768979fc8a44a}{set\_category}}(\textcolor{stringliteral}{"{}Node"{}});}
 \DoxyCodeLine{00704\ }
@@ -569,22 +569,22 @@
 \DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_parent's\ value"{}});}
 \DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00717\ }
-\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ HWM\ Ancestor}}
-\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(hwm\_ancestor\_v))\ \{}
-\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ hwm\ ancestor's\ value"{}});}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AST\ Ancestor}}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a1bef7f72a2603c25a4424a167015a2cc}{deserialize\_integral}}(ast\_ancestor\_v))\ \{}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ ast\ ancestor's\ value"{}});}
 \DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00722\ }
 \DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flags}}
 \DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ use\ bit\ fields,\ which\ cannot\ bind\ to\ bool\&.\ \ So\ we\ need\ a\ tmp.}}
 \DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ b\_tmp;}
 \DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\_bool}}(b\_tmp))\ \{}
-\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_is\_below\_hwm"{}});}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_is\_below\_ast"{}});}
 \DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \_is\_below\_hwm\ =\ b\_tmp;}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \_is\_below\_ast\ =\ b\_tmp;}
 \DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\_bool}}(b\_tmp))\ \{}
-\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_has\_hwm\_ancestor"{}});}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_has\_ast\_ancestor"{}});}
 \DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \_has\_hwm\_ancestor\ =\ b\_tmp;}
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \_has\_ast\_ancestor\ =\ b\_tmp;}
 \DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\ sh.\mbox{\hyperlink{classStreamHelper_a85200b98bc03c8c403a2f606c82d064a}{deserialize\_bool}}(b\_tmp))\ \{}
 \DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ sh.\mbox{\hyperlink{classStreamHelper_a5c88f91f30a684e8718cf3ecfca66613}{fail}}(\textcolor{stringliteral}{"{}couldn't\ read\ \_is\_initialized"{}});}
 \DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \}}

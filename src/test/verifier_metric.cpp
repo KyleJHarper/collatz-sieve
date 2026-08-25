@@ -15,9 +15,9 @@ void test_verifier_metric_basic_members() {
     VerifierMetric metric;
     assert(metric.nodes_verified_atomic.load() == 0);
     assert(metric.steps_total_atomic.load() == 0);
-    assert(metric.steps_skippable_by_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_ast_atomic.load() == 0);
     assert(metric.steps_skippable_by_affine_stride_atomic.load() == 0);
-    assert(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_affine_stride_before_ast_atomic.load() == 0);
     assert(metric.gpu_kernel_launches_atomic.load() == 0);
     assert(metric.gpu_overflows_processed_atomic.load() == 0);
     assert(metric.gpu_overflow_buffer_exceeded_atomic.load() == 0);
@@ -102,18 +102,18 @@ void test_verifier_metric_steps_per_ms() {
 
 
 template<AnySupportedIntegral T>
-void test_verifier_metric_skip_rate_of_hwm() {
+void test_verifier_metric_skip_rate_of_ast() {
     start_test(__func__);
 
     VerifierMetric metric;
-    metric.steps_skippable_by_hwm_atomic.store(1001);
+    metric.steps_skippable_by_ast_atomic.store(1001);
     metric.steps_total_atomic.store(2000);
     metric.duration_ms = std::chrono::milliseconds(20);
-    assert(metric.skip_rate_of_hwm() > double(0.5));
+    assert(metric.skip_rate_of_ast() > double(0.5));
 
     // When step total is zero, it should return 0.
     metric.steps_total_atomic.store(0);
-    assert(metric.skip_rate_of_hwm() == 0);
+    assert(metric.skip_rate_of_ast() == 0);
 
     end_test();
 }
@@ -140,18 +140,18 @@ void test_verifier_metric_skip_rate_of_affine_stride() {
 
 
 template<AnySupportedIntegral T>
-void test_verifier_metric_skip_rate_of_affine_stride_before_hwm() {
+void test_verifier_metric_skip_rate_of_affine_stride_before_ast() {
     start_test(__func__);
 
     VerifierMetric metric;
-    metric.steps_skippable_by_affine_stride_before_hwm_atomic.store(1001);
+    metric.steps_skippable_by_affine_stride_before_ast_atomic.store(1001);
     metric.steps_total_atomic.store(2000);
     metric.duration_ms = std::chrono::milliseconds(20);
-    assert(metric.skip_rate_of_affine_stride_before_hwm() > double(0.5));
+    assert(metric.skip_rate_of_affine_stride_before_ast() > double(0.5));
 
     // When step total is zero, it should return 0.
     metric.steps_total_atomic.store(0);
-    assert(metric.skip_rate_of_affine_stride_before_hwm() == 0);
+    assert(metric.skip_rate_of_affine_stride_before_ast() == 0);
 
     end_test();
 }
@@ -159,13 +159,13 @@ void test_verifier_metric_skip_rate_of_affine_stride_before_hwm() {
 
 
 template<AnySupportedIntegral T>
-void test_verifier_metric_steps_before_hwm() {
+void test_verifier_metric_steps_before_ast() {
     start_test(__func__);
 
     VerifierMetric metric;
     metric.steps_total_atomic.store(1000);
-    metric.steps_skippable_by_hwm_atomic.store(400);
-    assert(metric.steps_before_hwm() == 600);
+    metric.steps_skippable_by_ast_atomic.store(400);
+    assert(metric.steps_before_ast() == 600);
 
     end_test();
 }
@@ -181,9 +181,9 @@ void test_verifier_metric_reset() {
     // Start with initial values.
     assert(metric.nodes_verified_atomic.load() == 0);
     assert(metric.steps_total_atomic.load() == 0);
-    assert(metric.steps_skippable_by_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_ast_atomic.load() == 0);
     assert(metric.steps_skippable_by_affine_stride_atomic.load() == 0);
-    assert(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_affine_stride_before_ast_atomic.load() == 0);
     assert(metric.gpu_kernel_launches_atomic.load() == 0);
     assert(metric.gpu_overflows_processed_atomic.load() == 0);
     assert(metric.gpu_overflow_buffer_exceeded_atomic.load() == 0);
@@ -194,9 +194,9 @@ void test_verifier_metric_reset() {
     // Change them all.
     metric.nodes_verified_atomic.store(42);
     metric.steps_total_atomic.store(42);
-    metric.steps_skippable_by_hwm_atomic.store(42);
+    metric.steps_skippable_by_ast_atomic.store(42);
     metric.steps_skippable_by_affine_stride_atomic.store(42);
-    metric.steps_skippable_by_affine_stride_before_hwm_atomic.store(42);
+    metric.steps_skippable_by_affine_stride_before_ast_atomic.store(42);
     metric.gpu_kernel_launches_atomic.store(42);
     metric.gpu_overflows_processed_atomic.store(42);
     metric.gpu_overflow_buffer_exceeded_atomic.store(42);
@@ -205,9 +205,9 @@ void test_verifier_metric_reset() {
     // Ensure they stay changed.
     assert(metric.nodes_verified_atomic.load() == 42);
     assert(metric.steps_total_atomic.load() == 42);
-    assert(metric.steps_skippable_by_hwm_atomic.load() == 42);
+    assert(metric.steps_skippable_by_ast_atomic.load() == 42);
     assert(metric.steps_skippable_by_affine_stride_atomic.load() == 42);
-    assert(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 42);
+    assert(metric.steps_skippable_by_affine_stride_before_ast_atomic.load() == 42);
     assert(metric.gpu_kernel_launches_atomic.load() == 42);
     assert(metric.gpu_overflows_processed_atomic.load() == 42);
     assert(metric.gpu_overflow_buffer_exceeded_atomic.load() == 42);
@@ -221,9 +221,9 @@ void test_verifier_metric_reset() {
     // Check they are back to initial values.
     assert(metric.nodes_verified_atomic.load() == 0);
     assert(metric.steps_total_atomic.load() == 0);
-    assert(metric.steps_skippable_by_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_ast_atomic.load() == 0);
     assert(metric.steps_skippable_by_affine_stride_atomic.load() == 0);
-    assert(metric.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 0);
+    assert(metric.steps_skippable_by_affine_stride_before_ast_atomic.load() == 0);
     assert(metric.gpu_kernel_launches_atomic.load() == 0);
     assert(metric.gpu_overflows_processed_atomic.load() == 0);
     assert(metric.gpu_overflow_buffer_exceeded_atomic.load() == 0);
@@ -244,9 +244,9 @@ void test_verifier_metric_emit_ilp() {
     VerifierMetric metric;
     metric.nodes_verified_atomic.store(42);
     metric.steps_total_atomic.store(42);
-    metric.steps_skippable_by_hwm_atomic.store(42);
+    metric.steps_skippable_by_ast_atomic.store(42);
     metric.steps_skippable_by_affine_stride_atomic.store(42);
-    metric.steps_skippable_by_affine_stride_before_hwm_atomic.store(42);
+    metric.steps_skippable_by_affine_stride_before_ast_atomic.store(42);
     metric.gpu_kernel_launches_atomic.store(42);
     metric.gpu_overflows_processed_atomic.store(42);
     metric.gpu_overflow_buffer_exceeded_atomic.store(42);
@@ -260,9 +260,9 @@ void test_verifier_metric_emit_ilp() {
     assert(ilp.find(",coverage_ratio=0.91") != std::string::npos);
     assert(ilp.find(",effective_nodes_verified=466") != std::string::npos);
     assert(ilp.find(",steps_total=42") != std::string::npos);
-    assert(ilp.find(",steps_skippable_by_hwm=42") != std::string::npos);
+    assert(ilp.find(",steps_skippable_by_ast=42") != std::string::npos);
     assert(ilp.find(",steps_skippable_by_affine_stride=42") != std::string::npos);
-    assert(ilp.find(",steps_skippable_by_affine_stride_before_hwm=42") != std::string::npos);
+    assert(ilp.find(",steps_skippable_by_affine_stride_before_ast=42") != std::string::npos);
     assert(ilp.find(",gpu_kernel_launches=42") != std::string::npos);
     assert(ilp.find(",gpu_overflows_processed=42") != std::string::npos);
     assert(ilp.find(",gpu_overflow_buffer_exceeded=42") != std::string::npos);
@@ -282,10 +282,10 @@ void run_all() {
     test_verifier_metric_effective_nodes_verified<T>();
     test_verifier_metric_effective_nodes_per_ms<T>();
     test_verifier_metric_steps_per_ms<T>();
-    test_verifier_metric_skip_rate_of_hwm<T>();
+    test_verifier_metric_skip_rate_of_ast<T>();
     test_verifier_metric_skip_rate_of_affine_stride<T>();
-    test_verifier_metric_skip_rate_of_affine_stride_before_hwm<T>();
-    test_verifier_metric_steps_before_hwm<T>();
+    test_verifier_metric_skip_rate_of_affine_stride_before_ast<T>();
+    test_verifier_metric_steps_before_ast<T>();
     test_verifier_metric_reset<T>();
     test_verifier_metric_emit_ilp<T>();
 }

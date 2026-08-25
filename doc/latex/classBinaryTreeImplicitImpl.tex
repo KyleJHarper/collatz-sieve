@@ -86,15 +86,15 @@ bool {\bfseries is\+\_\+preserving\+\_\+ancestors} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classBinaryTreeImplicitImpl_a3d94ca995839420d8c875328f58fe3e7}{set\+\_\+is\+\_\+preserving\+\_\+ancestors}} (bool value)
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is preserving ancestors. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeImplicitImpl_a71412ef41cf3e053549b3d234370dd45}\label{classBinaryTreeImplicitImpl_a71412ef41cf3e053549b3d234370dd45} 
-bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} () const
-\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+HWM nodes. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeImplicitImpl_a2e00b915f66c9ec26ee4e9a82ecf791b}\label{classBinaryTreeImplicitImpl_a2e00b915f66c9ec26ee4e9a82ecf791b} 
-void {\bfseries disable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeImplicitImpl_ad984431e1a470b0a098f7729632f57ef}\label{classBinaryTreeImplicitImpl_ad984431e1a470b0a098f7729632f57ef} 
-void {\bfseries enable\+\_\+non\+\_\+hwm\+\_\+node\+\_\+verification} ()
-\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+HWM node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a8eab21f6a4bf793a3717040b95772712}\label{classBinaryTreeImplicitImpl_a8eab21f6a4bf793a3717040b95772712} 
+bool {\bfseries is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} () const
+\begin{DoxyCompactList}\small\item\em Get a flag whether this tree is verifying non-\/\+AST nodes. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_a126895df17a0349e3e7c1d541e1da02b}\label{classBinaryTreeImplicitImpl_a126895df17a0349e3e7c1d541e1da02b} 
+void {\bfseries disable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly disable non-\/\+AST node verification. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_aefdff6ea23ab27319b39c6f2275d313d}\label{classBinaryTreeImplicitImpl_aefdff6ea23ab27319b39c6f2275d313d} 
+void {\bfseries enable\+\_\+non\+\_\+ast\+\_\+node\+\_\+verification} ()
+\begin{DoxyCompactList}\small\item\em Explicitly enable non-\/\+AST node verification. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_aa43f0b6e858543a08816a2f81098f803}\label{classBinaryTreeImplicitImpl_aa43f0b6e858543a08816a2f81098f803} 
 bool {\bfseries is\+\_\+initialized} () const
 \begin{DoxyCompactList}\small\item\em Get a flag whether this tree is initialized. \end{DoxyCompactList}\item 
@@ -102,7 +102,7 @@ void \mbox{\hyperlink{classBinaryTreeImplicitImpl_a8e25fb5467791c52501ebc8063b0a
 \begin{DoxyCompactList}\small\item\em Change the flag for whether this tree is initialized. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_ac154dca1c4d7a374b401b4311fcd3f7e}\label{classBinaryTreeImplicitImpl_ac154dca1c4d7a374b401b4311fcd3f7e} 
 const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& {\bfseries get\+\_\+uncovered\+\_\+values} () const
-\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered values, which are the node values not covered by an AST ancestor. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_ae26aef2e4d20452fc50b1fc78de43fe2}{get\+\_\+uncovered\+\_\+values\+\_\+rw}} ()
 \begin{DoxyCompactList}\small\item\em Get a read-\/write reference to the uncovered values map. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a5d37fd55f1a855d50f45d6f5edba0e48}\label{classBinaryTreeImplicitImpl_a5d37fd55f1a855d50f45d6f5edba0e48} 
@@ -116,7 +116,7 @@ void {\bfseries clear\+\_\+uncovered\+\_\+values} ()
 bool {\bfseries is\+\_\+implicit} () const
 \begin{DoxyCompactList}\small\item\em Responds true to {\ttfamily \doxylink{classBinaryTreeImplicitImpl_aad468411bcfef28b6df20d7bc1a16ed6}{is\+\_\+implicit()}}, mostly for the {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} facade. \end{DoxyCompactList}\item 
 const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperlink{classBinaryTreeImplicitImpl_a2b72c8f71ff0c72a64bae86c09a2dc28}{get\+\_\+uncovered\+\_\+positions}} () const
-\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -142,16 +142,16 @@ std\+::unordered\+\_\+map$<$ level\+\_\+t, \mbox{\hyperlink{classBinaryTreeCover
 \begin{DoxyCompactList}\small\item\em Map of levels and their associated coverage. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619}\label{classBinaryTreeImplicitImpl_a7a6deb8a3dc91317b3955629c571b619} 
 std\+::vector$<$ \mbox{\hyperlink{classNode}{Node}}$<$ T $>$ \texorpdfstring{$\ast$}{*} $>$ {\bfseries \+\_\+ancestors}
-\begin{DoxyCompactList}\small\item\em Collection of ancestors, which are High-\/\+Water Mark nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Collection of ancestors, which are Above Stopping Time nodes that originally truncated a subtree. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968}\label{classBinaryTreeImplicitImpl_a226ce1d64987d0e5aff60be859c36968} 
 bool {\bfseries \+\_\+is\+\_\+initialized} = false
 \begin{DoxyCompactList}\small\item\em Flag to determine if this tree is initialized, meaning it\textquotesingle{}s had at least one level added. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba}\label{classBinaryTreeImplicitImpl_a47f6ff0f412c2c5d6d7b97649a7fa0ba} 
 bool {\bfseries \+\_\+is\+\_\+preserving\+\_\+ancestors} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.preserve\+\_\+ancestors
-\begin{DoxyCompactList}\small\item\em Flag to determine if HWM ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
-\Hypertarget{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5}\label{classBinaryTreeImplicitImpl_afe5f167744806dc96dcbe113871ed6d5} 
-bool {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+hwm\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+hwm\+\_\+nodes
-\begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+HWM nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Flag to determine if AST ancestors should be added to our vector or simply discarded. \end{DoxyCompactList}\item 
+\Hypertarget{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8}\label{classBinaryTreeImplicitImpl_ae534bcbc400c147c361fea3be74dbea8} 
+bool {\bfseries \+\_\+is\+\_\+verifying\+\_\+non\+\_\+ast\+\_\+nodes} = \mbox{\hyperlink{structBinaryTreeOptions}{Binary\+Tree\+Options}}\{\}.verify\+\_\+non\+\_\+ast\+\_\+nodes
+\begin{DoxyCompactList}\small\item\em Flag to determine if verification of non-\/\+AST nodes should happen. See {\ttfamily \doxylink{classBinaryTree}{Binary\+Tree}} or CHANGELOG 3.\+4.\+0 for details. \end{DoxyCompactList}\item 
 \Hypertarget{classBinaryTreeImplicitImpl_a3954af07c4eceae610841b384f3368fd}\label{classBinaryTreeImplicitImpl_a3954af07c4eceae610841b384f3368fd} 
 const Tree\+Type\+Enum {\bfseries \+\_\+tree\+\_\+type} = Tree\+Type\+Enum\+::\+IMPLICIT
 \begin{DoxyCompactList}\small\item\em Track the type of this tree for external comparison later. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -164,7 +164,7 @@ A mathematically equivalent implimentation of a materialized {\ttfamily \doxylin
 
 A mathematically equivalent analog to the {\ttfamily \doxylink{classBinaryTreeMaterializedImpl}{Binary\+Tree\+Materialized\+Impl}} approach. Nodes objects and other values are calculated on-\/the-\/fly instead of being stored in RAM.
 
-Specifically, instead of a level map of all surviving nodes and a vector of pointers to them for each level, this implementation computes the values, detect coverage (HWM), and update a roaring bitmap. Tracking and iteration become implicit, hence this implementation\textquotesingle{}s namesake.
+Specifically, instead of a level map of all surviving nodes and a vector of pointers to them for each level, this implementation computes the values, detect coverage (AST), and update a roaring bitmap. Tracking and iteration become implicit, hence this implementation\textquotesingle{}s namesake.
 
 This implementation is vastly superior in almost every metric, and is the default as of version 4.\+0.\+0.
 
@@ -187,7 +187,7 @@ void \mbox{\hyperlink{classBinaryTreeImplicitImpl}{Binary\+Tree\+Implicit\+Impl}
 
 Add a level to the tree. 
 
-Implicit tree building happens by tracking the left-\/to-\/right positions (not values) of nodes which haven\textquotesingle{}t been removed by a HWM node or ancestor. This is representatively identical to a materialized tree\textquotesingle{}s last level of nodes\+: anything remaining in the {\ttfamily \+\_\+uncovered\+\_\+positions} are the parent nodes from the previous level whose children must be processed.
+Implicit tree building happens by tracking the left-\/to-\/right positions (not values) of nodes which haven\textquotesingle{}t been removed by a AST node or ancestor. This is representatively identical to a materialized tree\textquotesingle{}s last level of nodes\+: anything remaining in the {\ttfamily \+\_\+uncovered\+\_\+positions} are the parent nodes from the previous level whose children must be processed.
 
 To achieve any sort of threading performance, each thread will get thread-\/local storage (TLS) from an {\ttfamily \doxylink{structBinaryTreeImplicitImpl_1_1AddLevelTLS}{Add\+Level\+TLS}} struct, which includes its own {\ttfamily \doxylink{classNodeBitmap}{Node\+Bitmap}} and vector of ancestors (if tracking them). When all threading is finished, the results are merged into {\ttfamily \+\_\+uncovered\+\_\+positions}, coverage is calculated via simple arithmetic, and this function ends.
 
@@ -296,7 +296,7 @@ const \mbox{\hyperlink{classNodeBitmap}{Node\+Bitmap}}$<$ T $>$ \& \mbox{\hyperl
 
 
 
-Get a reference to the uncovered positions, which are the node positions not covered by a High-\/\+Water Mark ancestor. 
+Get a reference to the uncovered positions, which are the node positions not covered by an AST ancestor. 
 
 \begin{DoxyNote}{Note}
 These are left-\/to-\/right positions, not node values. 

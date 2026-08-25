@@ -1,5 +1,5 @@
 <map id="BinaryTree&lt; T, TreeType &gt;" name="BinaryTree&lt; T, TreeType &gt;">
-<area shape="rect" id="Node000001" title="The BinaryTree facade which will apply Harper&#39;s sieve of High&#45;Water Mark nodes." alt="" coords="5,93,200,119"/>
+<area shape="rect" id="Node000001" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes." alt="" coords="5,93,200,119"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="83,5,122,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,45,105,93,100,93,100,45"/>
 </map>

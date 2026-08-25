@@ -113,9 +113,9 @@ $(function() {
 <li>_input_size&#160;:&#160;<a class="el" href="classzstd__istreambuf.html#aabb2ff9ff1fbcb0d98182e34a943df41">zstd_istreambuf</a></li>
 <li>_is_initialized&#160;:&#160;<a class="el" href="classBinaryTreeImplicitImpl.html#a226ce1d64987d0e5aff60be859c36968">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#a6a57a9411ff1d314a3f50517328afe13">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
 <li>_is_preserving_ancestors&#160;:&#160;<a class="el" href="classBinaryTreeImplicitImpl.html#a47f6ff0f412c2c5d6d7b97649a7fa0ba">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#ad4887a4f457f633a03f1f0ab4eee9a75">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
-<li>_is_pruning_hwm_nodes&#160;:&#160;<a class="el" href="classBinaryTreeMaterializedImpl.html#a01e489a91c4a593d905aedc1d2fc3228">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
+<li>_is_pruning_ast_nodes&#160;:&#160;<a class="el" href="classBinaryTreeMaterializedImpl.html#a24d61bf24c7c269d1cede5f6a43e5385">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
 <li>_is_pruning_parent_levels&#160;:&#160;<a class="el" href="classBinaryTreeMaterializedImpl.html#a1ed797dee4e9eed15efc8702483bc650">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
-<li>_is_verifying_non_hwm_nodes&#160;:&#160;<a class="el" href="classBinaryTreeImplicitImpl.html#afe5f167744806dc96dcbe113871ed6d5">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#a3b47fb7da377f83c19e503a32ad47ac5">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
+<li>_is_verifying_non_ast_nodes&#160;:&#160;<a class="el" href="classBinaryTreeImplicitImpl.html#ae534bcbc400c147c361fea3be74dbea8">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#a710e0725aae1b7c83f516851188b1ad0">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
 <li>_level_count&#160;:&#160;<a class="el" href="classBinaryTreeImplicitImpl.html#ac0ad88f2ae3a12baefc4df018f356caf">BinaryTreeImplicitImpl&lt; T &gt;</a>, <a class="el" href="classBinaryTreeMaterializedImpl.html#a11a07b54a884519188cd92138022c067">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
 <li>_level_map&#160;:&#160;<a class="el" href="classBinaryTreeMaterializedImpl.html#aca7323d693d332da9c10c26dee2da58e">BinaryTreeMaterializedImpl&lt; T &gt;</a></li>
 <li>_line_count&#160;:&#160;<a class="el" href="classProgressReport.html#a1c3b89a82fbf925cd39ef5ba84d37f0e">ProgressReport</a></li>
@@ -220,7 +220,7 @@ $(function() {
 
 <h3><a id="index_p" name="index_p"></a>- p -</h3><ul>
 <li>preserve_ancestors&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#a53939add5e3c45a449a4123fc0ee3b7c">BinaryTreeOptions</a></li>
-<li>prune_hwm_nodes&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#a789f1f3f23d7e1e6f485bb34af274e4a">BinaryTreeOptions</a></li>
+<li>prune_ast_nodes&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#a250d4baaa8c36c0119ab783422722e71">BinaryTreeOptions</a></li>
 <li>prune_parent_levels&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#a1db90c92f907dbd30709fd7ed5a1af7d">BinaryTreeOptions</a></li>
 </ul>
 
@@ -240,10 +240,10 @@ $(function() {
 <li>shift&#160;:&#160;<a class="el" href="structAffineStride_1_1Stride.html#a446ecb275e4e0f4d7f108b13d706c4e2">AffineStride::Stride</a></li>
 <li>steps_skippable_by_affine_stride&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#a4e9277e074466cc75c41680a9ff17729">VerifierTLSMetric</a></li>
 <li>steps_skippable_by_affine_stride_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#ad713f9de15334a9375a1e576d012abe1">VerifierMetric</a></li>
-<li>steps_skippable_by_affine_stride_before_hwm&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#a5939007871c1cf12a85d5673d4f29063">VerifierTLSMetric</a></li>
-<li>steps_skippable_by_affine_stride_before_hwm_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#a5b6164904c0bce2218eb7ba81fb046a6">VerifierMetric</a></li>
-<li>steps_skippable_by_hwm&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#aa9874c75923a2a37d734ec8b3e59ec8a">VerifierTLSMetric</a></li>
-<li>steps_skippable_by_hwm_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#a79e5dec89dbe0515b1a53f249d7fa6f9">VerifierMetric</a></li>
+<li>steps_skippable_by_affine_stride_before_ast&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#ab75891d68e5b3c95b2c69ab26ea88587">VerifierTLSMetric</a></li>
+<li>steps_skippable_by_affine_stride_before_ast_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#a6da5496452c180fadac8393c0ebc3cc3">VerifierMetric</a></li>
+<li>steps_skippable_by_ast&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#a2a353d922bcf34f578e3da10f06d353c">VerifierTLSMetric</a></li>
+<li>steps_skippable_by_ast_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#ad4fec24369380461af165abc50f1a1b3">VerifierMetric</a></li>
 <li>steps_total&#160;:&#160;<a class="el" href="structVerifierTLSMetric.html#aedcc59a6907aa03c501e8a83f74834d4">VerifierTLSMetric</a></li>
 <li>steps_total_atomic&#160;:&#160;<a class="el" href="structVerifierMetric.html#a51c21cc46e8d65ad3e50cb00e423c2a3">VerifierMetric</a></li>
 <li>STRIDE_SIZE&#160;:&#160;<a class="el" href="structAffineStride_1_1Table.html#a87283706d6ac368d610f7aa8be4c6f44">AffineStride::Table&lt; bits &gt;</a></li>
@@ -267,7 +267,7 @@ $(function() {
 
 
 <h3><a id="index_v" name="index_v"></a>- v -</h3><ul>
-<li>verify_non_hwm_nodes&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#a5ea57db72aee4d2e55f9fe1672a584bf">BinaryTreeOptions</a></li>
+<li>verify_non_ast_nodes&#160;:&#160;<a class="el" href="structBinaryTreeOptions.html#ac9d6781562a6436ceba3c131058f4971">BinaryTreeOptions</a></li>
 <li>version&#160;:&#160;<a class="el" href="structBinaryTreeFileHeader.html#a5f0663567a0dbfbc6c9eae5391ae5a27">BinaryTreeFileHeader</a></li>
 </ul>
 </div><!-- contents -->

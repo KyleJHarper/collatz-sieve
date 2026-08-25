@@ -171,7 +171,7 @@ class BinaryTreeMath {
     * Since trees grow dyadically, the level is essentially log2(N), but consideration has to be taken for 0- and 1-based trees.
     *
     * \par Formula
-    * \f$ \left\lfloor \log_{2}(N+Offset) + 1 \right\rfloor \f$
+    * \f$ \left\lfloor \log_{2}(N+Offset) \right\rfloor + 1 \f$
     *
     * @param value The value to compute a level for.
     * @return The level for `value`.

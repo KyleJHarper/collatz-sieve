@@ -54,9 +54,9 @@ bool {\bfseries is\+\_\+initialized} () const
 \Hypertarget{classCollatz_ada4600f08f862724804bb54d22291130}\label{classCollatz_ada4600f08f862724804bb54d22291130} 
 const T \& {\bfseries get\+\_\+peak\+\_\+value} () const
 \begin{DoxyCompactList}\small\item\em Return the peak value found for the initial value sent. \end{DoxyCompactList}\item 
-\Hypertarget{classCollatz_a0478fad7960232858b0a5ea852ce638e}\label{classCollatz_a0478fad7960232858b0a5ea852ce638e} 
-seq\+\_\+size\+\_\+t {\bfseries get\+\_\+hwm\+\_\+index} () const
-\begin{DoxyCompactList}\small\item\em Return the index of the sequence where the High-\/\+Water Mark was found for initial value sent. \end{DoxyCompactList}\item 
+\Hypertarget{classCollatz_a2e650a152361c88ea24e80a01d4c6494}\label{classCollatz_a2e650a152361c88ea24e80a01d4c6494} 
+seq\+\_\+size\+\_\+t {\bfseries get\+\_\+ast\+\_\+index} () const
+\begin{DoxyCompactList}\small\item\em Return the index of the sequence where the Abort at Stopping Time was found for initial value sent. \end{DoxyCompactList}\item 
 \Hypertarget{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a}\label{classCollatz_a6cf1d94aee87d3d45bd5269d9c9d606a} 
 seq\+\_\+size\+\_\+t {\bfseries get\+\_\+step\+\_\+count} () const
 \begin{DoxyCompactList}\small\item\em Return the step count of the sequence (stopping time) for initial value sent. \end{DoxyCompactList}\item 
@@ -78,8 +78,8 @@ T {\bfseries \+\_\+initial\+\_\+value} = 0
 \Hypertarget{classCollatz_adabddfd8f0d3729a41b6e118c95afcf2}\label{classCollatz_adabddfd8f0d3729a41b6e118c95afcf2} 
 T {\bfseries \+\_\+peak\+\_\+value} = 0
 \item 
-\Hypertarget{classCollatz_a694850331dfcd7afb99f936c16c290c8}\label{classCollatz_a694850331dfcd7afb99f936c16c290c8} 
-seq\+\_\+size\+\_\+t {\bfseries \+\_\+hwm\+\_\+index} = 0
+\Hypertarget{classCollatz_a837ccf4bcd8ce5975166f7dc428d5e73}\label{classCollatz_a837ccf4bcd8ce5975166f7dc428d5e73} 
+seq\+\_\+size\+\_\+t {\bfseries \+\_\+ast\+\_\+index} = 0
 \item 
 \Hypertarget{classCollatz_a0c1fba7d69ae0406f1a1a3e91d1e7444}\label{classCollatz_a0c1fba7d69ae0406f1a1a3e91d1e7444} 
 seq\+\_\+size\+\_\+t {\bfseries \+\_\+step\+\_\+count} = 0
@@ -132,7 +132,7 @@ In the event a number is divergent (cyclic), this method will hang.
 \begin{DoxyParams}{Parameters}
 {\em initial\+\_\+value} & The starting value for a sequence. \\
 \hline
-{\em sentinel\+\_\+value} & The value to stop at. Usually 1 or a High-\/\+Water Mark. \\
+{\em sentinel\+\_\+value} & The value to stop at. Usually 1 or an AST value. \\
 \hline
 \end{DoxyParams}
 

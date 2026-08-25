@@ -294,24 +294,24 @@ void test_binary_tree_get_ancestors() {
 
 
 template<AnySupportedIntegral T>
-void test_binary_tree_is_verifying_non_hwm_nodes() {
+void test_binary_tree_is_verifying_non_ast_nodes() {
     start_test(__func__);
 
     // Implicit
     ImplicitBinaryTree<T> implicit_tree;
-    assert(implicit_tree.is_verifying_non_hwm_nodes() == false);
-    implicit_tree.enable_non_hwm_node_verification();
-    assert(implicit_tree.is_verifying_non_hwm_nodes() == true);
-    implicit_tree.disable_non_hwm_node_verification();
-    assert(implicit_tree.is_verifying_non_hwm_nodes() == false);
+    assert(implicit_tree.is_verifying_non_ast_nodes() == false);
+    implicit_tree.enable_non_ast_node_verification();
+    assert(implicit_tree.is_verifying_non_ast_nodes() == true);
+    implicit_tree.disable_non_ast_node_verification();
+    assert(implicit_tree.is_verifying_non_ast_nodes() == false);
 
     // Materialized
     MaterializedBinaryTree<T> materialized_tree;
-    assert(materialized_tree.is_verifying_non_hwm_nodes() == false);
-    materialized_tree.enable_non_hwm_node_verification();
-    assert(materialized_tree.is_verifying_non_hwm_nodes() == true);
-    materialized_tree.disable_non_hwm_node_verification();
-    assert(materialized_tree.is_verifying_non_hwm_nodes() == false);
+    assert(materialized_tree.is_verifying_non_ast_nodes() == false);
+    materialized_tree.enable_non_ast_node_verification();
+    assert(materialized_tree.is_verifying_non_ast_nodes() == true);
+    materialized_tree.disable_non_ast_node_verification();
+    assert(materialized_tree.is_verifying_non_ast_nodes() == false);
 
     end_test();
 }
@@ -404,31 +404,31 @@ void test_binary_tree_materialized_pruning_options() {
     start_test(__func__);
 
     BinaryTreeOptions opts_with_no_pruning;
-    opts_with_no_pruning.prune_hwm_nodes = false;
+    opts_with_no_pruning.prune_ast_nodes = false;
     opts_with_no_pruning.prune_parent_levels = false;
-    BinaryTreeOptions opts_with_hwm_pruning;
-    opts_with_hwm_pruning.prune_hwm_nodes = true;
-    opts_with_hwm_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_ast_pruning;
+    opts_with_ast_pruning.prune_ast_nodes = true;
+    opts_with_ast_pruning.prune_parent_levels = false;
     BinaryTreeOptions opts_with_parent_pruning;
-    opts_with_parent_pruning.prune_hwm_nodes = false;
+    opts_with_parent_pruning.prune_ast_nodes = false;
     opts_with_parent_pruning.prune_parent_levels = true;
     BinaryTreeOptions opts_with_all_pruning;
-    opts_with_all_pruning.prune_hwm_nodes = true;
+    opts_with_all_pruning.prune_ast_nodes = true;
     opts_with_all_pruning.prune_parent_levels = true;
 
     // Materialized
     level_t levels = 8;
     MaterializedBinaryTree<T> tree_with_no_pruning(levels, opts_with_no_pruning);
-    assert(tree_with_no_pruning.is_pruning_hwm_nodes() == false);
+    assert(tree_with_no_pruning.is_pruning_ast_nodes() == false);
     assert(tree_with_no_pruning.is_pruning_parent_levels() == false);
-    MaterializedBinaryTree<T> tree_with_hwm_pruning(levels, opts_with_hwm_pruning);
-    assert(tree_with_hwm_pruning.is_pruning_hwm_nodes() == true);
-    assert(tree_with_hwm_pruning.is_pruning_parent_levels() == false);
+    MaterializedBinaryTree<T> tree_with_ast_pruning(levels, opts_with_ast_pruning);
+    assert(tree_with_ast_pruning.is_pruning_ast_nodes() == true);
+    assert(tree_with_ast_pruning.is_pruning_parent_levels() == false);
     MaterializedBinaryTree<T> tree_with_parent_pruning(levels, opts_with_parent_pruning);
-    assert(tree_with_parent_pruning.is_pruning_hwm_nodes() == false);
+    assert(tree_with_parent_pruning.is_pruning_ast_nodes() == false);
     assert(tree_with_parent_pruning.is_pruning_parent_levels() == true);
     MaterializedBinaryTree<T> tree_with_all_pruning(levels, opts_with_all_pruning);
-    assert(tree_with_all_pruning.is_pruning_hwm_nodes() == true);
+    assert(tree_with_all_pruning.is_pruning_ast_nodes() == true);
     assert(tree_with_all_pruning.is_pruning_parent_levels() == true);
 
     end_test();
@@ -441,24 +441,24 @@ void test_binary_tree_materialized_real_node_count() {
     start_test(__func__);
 
     BinaryTreeOptions opts_with_no_pruning;
-    opts_with_no_pruning.prune_hwm_nodes = false;
+    opts_with_no_pruning.prune_ast_nodes = false;
     opts_with_no_pruning.prune_parent_levels = false;
-    BinaryTreeOptions opts_with_hwm_pruning;
-    opts_with_hwm_pruning.prune_hwm_nodes = true;
-    opts_with_hwm_pruning.prune_parent_levels = false;
+    BinaryTreeOptions opts_with_ast_pruning;
+    opts_with_ast_pruning.prune_ast_nodes = true;
+    opts_with_ast_pruning.prune_parent_levels = false;
     BinaryTreeOptions opts_with_parent_pruning;
-    opts_with_parent_pruning.prune_hwm_nodes = false;
+    opts_with_parent_pruning.prune_ast_nodes = false;
     opts_with_parent_pruning.prune_parent_levels = true;
     BinaryTreeOptions opts_with_all_pruning;
-    opts_with_all_pruning.prune_hwm_nodes = true;
+    opts_with_all_pruning.prune_ast_nodes = true;
     opts_with_all_pruning.prune_parent_levels = true;
 
     // Materialized
     level_t levels = 8;
     MaterializedBinaryTree<T> tree_with_no_pruning(levels, opts_with_no_pruning);
     assert(tree_with_no_pruning.real_node_count() == 255);
-    MaterializedBinaryTree<T> tree_with_hwm_pruning(levels, opts_with_hwm_pruning);
-    assert(tree_with_hwm_pruning.real_node_count() == 33);
+    MaterializedBinaryTree<T> tree_with_ast_pruning(levels, opts_with_ast_pruning);
+    assert(tree_with_ast_pruning.real_node_count() == 33);
     MaterializedBinaryTree<T> tree_with_parent_pruning(levels, opts_with_parent_pruning);
     assert(tree_with_parent_pruning.real_node_count() == 128);
     MaterializedBinaryTree<T> tree_with_all_pruning(levels, opts_with_all_pruning);
@@ -720,17 +720,17 @@ void test_binary_tree_add_level() {
 
     // Multi-threading should produce identical results.
     // Pruning shouldn't affect coverage totals.
-    BinaryTreeOptions opts_hwm_pruning_only;
-    opts_hwm_pruning_only.prune_hwm_nodes = true;
-    opts_hwm_pruning_only.prune_parent_levels = false;
+    BinaryTreeOptions opts_ast_pruning_only;
+    opts_ast_pruning_only.prune_ast_nodes = true;
+    opts_ast_pruning_only.prune_parent_levels = false;
     BinaryTreeOptions opts_all_pruning;
-    opts_all_pruning.prune_hwm_nodes = true;
+    opts_all_pruning.prune_ast_nodes = true;
     opts_all_pruning.prune_parent_levels = true;
     BinaryTreeOptions opts_level_pruning_only;
-    opts_level_pruning_only.prune_hwm_nodes = false;
+    opts_level_pruning_only.prune_ast_nodes = false;
     opts_level_pruning_only.prune_parent_levels = true;
     BinaryTreeOptions opts_no_pruning;
-    opts_no_pruning.prune_hwm_nodes = false;
+    opts_no_pruning.prune_ast_nodes = false;
     opts_no_pruning.prune_parent_levels = false;
     int original_thread_count = omp_get_max_threads();
     level_t max_level = 16;
@@ -739,7 +739,7 @@ void test_binary_tree_add_level() {
             omp_set_num_threads(threads);
             // Implicit (Pruning doesn't exist, but shouldn't cause problems when set)
             ImplicitBinaryTree<T> implicit_tree_1(level, opts_no_pruning);
-            ImplicitBinaryTree<T> implicit_tree_2(level, opts_hwm_pruning_only);
+            ImplicitBinaryTree<T> implicit_tree_2(level, opts_ast_pruning_only);
             ImplicitBinaryTree<T> implicit_tree_3(level, opts_level_pruning_only);
             ImplicitBinaryTree<T> implicit_tree_4(level, opts_all_pruning);
             confirm_coverage(implicit_tree_1);
@@ -748,7 +748,7 @@ void test_binary_tree_add_level() {
             confirm_coverage(implicit_tree_4);
             // Materialized
             MaterializedBinaryTree<T> materialized_tree_1(level, opts_no_pruning);
-            MaterializedBinaryTree<T> materialized_tree_2(level, opts_hwm_pruning_only);
+            MaterializedBinaryTree<T> materialized_tree_2(level, opts_ast_pruning_only);
             MaterializedBinaryTree<T> materialized_tree_3(level, opts_level_pruning_only);
             MaterializedBinaryTree<T> materialized_tree_4(level, opts_all_pruning);
             confirm_coverage(materialized_tree_1);
@@ -994,18 +994,18 @@ void test_binary_tree_save_load_equal() {
     sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
     sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
 
-    // Verifying HWM nodes differs.
+    // Verifying AST nodes differs.
     different_levels = levels;
     opts.reset();
     different_opts.reset();
-    different_opts.verify_non_hwm_nodes = true;
-    known_err = "Is verifying hwm nodes mismatch";
+    different_opts.verify_non_ast_nodes = true;
+    known_err = "Is verifying ast nodes mismatch";
     sle_helper<T, BinaryTreeImplicitImpl<T>>(levels, different_levels, opts, different_opts, known_err);
     sle_helper<T, BinaryTreeMaterializedImpl<T>>(levels, different_levels, opts, different_opts, known_err);
 
     // Pruning node should always throw a logic error, because deserializing it is a nightmare I'm not interested in.
     opts.reset();
-    opts.prune_hwm_nodes = true;
+    opts.prune_ast_nodes = true;
     const std::string tree_path = "__tree.btree.zst";
     if (fs::exists(tree_path)) { fs::remove(tree_path); }
     try {
@@ -1115,7 +1115,7 @@ void test_binary_tree_generate_value_map() {
     assert(materialized_tree.get_uncovered_values().empty() == false);
     T uncovered_nodes_in_map = 0;
     for (const Node<T>* node : materialized_tree.get_level_map().at(levels)) {
-        if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+        if (node->is_below_ast() || node->has_ast_ancestor()) {
             continue;
         }
         uncovered_nodes_in_map++;
@@ -1129,7 +1129,7 @@ void test_binary_tree_generate_value_map() {
     assert(materialized_tree.get_uncovered_values().empty() == false);
     uncovered_nodes_in_map = 0;
     for (const Node<T>* node : materialized_tree.get_level_map().at(levels+1)) {
-        if (node->is_below_high_water_mark() || node->has_high_water_mark_ancestor()) {
+        if (node->is_below_ast() || node->has_ast_ancestor()) {
             continue;
         }
         uncovered_nodes_in_map++;
@@ -1514,7 +1514,7 @@ void run_all(size_t root_value) {
     test_binary_tree_get_root_node<T>();
     test_binary_tree_get_coverage_map<T>();
     test_binary_tree_get_ancestors<T>();
-    test_binary_tree_is_verifying_non_hwm_nodes<T>();
+    test_binary_tree_is_verifying_non_ast_nodes<T>();
     test_binary_tree_node_count<T>();
     test_binary_tree_materialized_level_map<T>();
     test_binary_tree_materialized_pruning_options<T>();

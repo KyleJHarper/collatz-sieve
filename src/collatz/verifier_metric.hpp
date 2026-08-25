@@ -33,9 +33,9 @@ struct VerifierMetric {
 
 
 
-    /// @brief Number of steps skipped (or would've been skipped) by hitting the High-Water Mark.
+    /// @brief Number of steps skipped (or would've been skipped) by hitting AST.
     /// @note Only available when `DetailedMetrics` are enabled.
-    std::atomic<uint64_t> steps_skippable_by_hwm_atomic = 0;
+    std::atomic<uint64_t> steps_skippable_by_ast_atomic = 0;
 
 
 
@@ -45,17 +45,17 @@ struct VerifierMetric {
 
 
 
-    /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting the HWM.
+    /// @brief Number of steps skipped (or would've been skipped) by using Affine Strides before hitting AST.
     /// @note Only available when `DetailedMetrics` are enabled.
-    std::atomic<uint64_t> steps_skippable_by_affine_stride_before_hwm_atomic = 0;
+    std::atomic<uint64_t> steps_skippable_by_affine_stride_before_ast_atomic = 0;
 
 
 
-    /// @brief Number of steps required to reach High-Water Mark.
+    /// @brief Number of steps required to reach AST.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @note Only available when `DetailedMetrics` are enabled.
-    uint64_t steps_before_hwm(std::memory_order m = std::memory_order_relaxed) const {
-        return steps_total_atomic.load(m) - steps_skippable_by_hwm_atomic.load(m);
+    uint64_t steps_before_ast(std::memory_order m = std::memory_order_relaxed) const {
+        return steps_total_atomic.load(m) - steps_skippable_by_ast_atomic.load(m);
     }
 
 
@@ -193,26 +193,26 @@ struct VerifierMetric {
 
 
 
-    /// @brief Number of steps skipped by High-Water Mark per millisecond.
+    /// @brief Number of steps skipped by AST per millisecond.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
-    uint64_t steps_skippable_by_hwm_per_ms(std::memory_order m = std::memory_order_relaxed) const {
+    uint64_t steps_skippable_by_ast_per_ms(std::memory_order m = std::memory_order_relaxed) const {
         if (duration_ms.count() == 0) {
             return 0;
         }
-        return static_cast<uint64_t>(steps_skippable_by_hwm_atomic.load(m) / duration_ms.count());
+        return static_cast<uint64_t>(steps_skippable_by_ast_atomic.load(m) / duration_ms.count());
     }
 
 
 
-    /// @brief Number of steps skipped by High-Water Mark per second.
+    /// @brief Number of steps skipped by AST per second.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @warning Returns 0 when duration is zero, instead of throwing an overflow error.
-    uint64_t steps_skippable_by_hwm_per_s(std::memory_order m = std::memory_order_relaxed) const {
+    uint64_t steps_skippable_by_ast_per_s(std::memory_order m = std::memory_order_relaxed) const {
         if (duration_ms.count() < 1000) {
             return 0;
         }
-        return static_cast<uint64_t>(steps_skippable_by_hwm_atomic.load(m) / (duration_ms.count() / 1000));
+        return static_cast<uint64_t>(steps_skippable_by_ast_atomic.load(m) / (duration_ms.count() / 1000));
     }
 
 
@@ -270,20 +270,20 @@ struct VerifierMetric {
     /// @name Skip Rates
     /// @{
 
-    /// @brief Rate of steps skipped by using High-Water Mark stopping.
+    /// @brief Rate of steps skipped by using AST.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @note Only available when `DetailedMetrics` are enabled.
     /// @warning Returns 0 when steps_total_atomic is zero, instead of throwing an overflow error.
-    double skip_rate_of_hwm(std::memory_order m = std::memory_order_relaxed) const {
+    double skip_rate_of_ast(std::memory_order m = std::memory_order_relaxed) const {
         if (steps_total_atomic.load() == 0) {
             return 0;
         }
-        return (1.0 * steps_skippable_by_hwm_atomic.load(m)) / steps_total_atomic.load(m);
+        return (1.0 * steps_skippable_by_ast_atomic.load(m)) / steps_total_atomic.load(m);
     }
 
 
 
-    /// @brief Rate of steps skipped by using `AffineStride` tables without using High-Water Mark stopping.
+    /// @brief Rate of steps skipped by using `AffineStride` tables without using AST.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @note Only available when `DetailedMetrics` are enabled.
     /// @warning Returns 0 when steps_total_atomic is zero, instead of throwing an overflow error.
@@ -296,15 +296,15 @@ struct VerifierMetric {
 
 
 
-    /// @brief Rate of steps skipped by using `AffineStride` tables while using High-Water Mark stopping.
+    /// @brief Rate of steps skipped by using `AffineStride` tables while using AST.
     /// @note Data is only updated every `Verifier::_synchronization_countdown` iterations.
     /// @note Only available when `DetailedMetrics` are enabled.
     /// @warning Returns 0 when steps_total_atomic is zero, instead of throwing an overflow error.
-    double skip_rate_of_affine_stride_before_hwm(std::memory_order m = std::memory_order_relaxed) const {
+    double skip_rate_of_affine_stride_before_ast(std::memory_order m = std::memory_order_relaxed) const {
         if (steps_total_atomic.load() == 0) {
             return 0;
         }
-        return (1.0 * steps_skippable_by_affine_stride_before_hwm_atomic.load(m)) / steps_total_atomic.load(m);
+        return (1.0 * steps_skippable_by_affine_stride_before_ast_atomic.load(m)) / steps_total_atomic.load(m);
     }
 
     /// @}
@@ -316,9 +316,9 @@ struct VerifierMetric {
         nodes_verified_atomic.store(0);
         // This should not change.  It's tied to a tree at instantiation.  coverage_ratio = 0;
         steps_total_atomic.store(0);
-        steps_skippable_by_hwm_atomic.store(0);
+        steps_skippable_by_ast_atomic.store(0);
         steps_skippable_by_affine_stride_atomic.store(0);
-        steps_skippable_by_affine_stride_before_hwm_atomic.store(0);
+        steps_skippable_by_affine_stride_before_ast_atomic.store(0);
         gpu_kernel_launches_atomic.store(0);
         gpu_overflows_processed_atomic.store(0);
         gpu_overflow_buffer_exceeded_atomic.store(0);
@@ -339,9 +339,9 @@ struct VerifierMetric {
         ilp += ",coverage_ratio=" + std::to_string(coverage_ratio);
         ilp += ",effective_nodes_verified=" + to_string_any(effective_nodes_verified());
         ilp += ",steps_total=" + to_string_any(steps_total_atomic.load(m));
-        ilp += ",steps_skippable_by_hwm=" + to_string_any(steps_skippable_by_hwm_atomic.load(m));
+        ilp += ",steps_skippable_by_ast=" + to_string_any(steps_skippable_by_ast_atomic.load(m));
         ilp += ",steps_skippable_by_affine_stride=" + to_string_any(steps_skippable_by_affine_stride_atomic.load(m));
-        ilp += ",steps_skippable_by_affine_stride_before_hwm=" + to_string_any(steps_skippable_by_affine_stride_before_hwm_atomic.load(m));
+        ilp += ",steps_skippable_by_affine_stride_before_ast=" + to_string_any(steps_skippable_by_affine_stride_before_ast_atomic.load(m));
         ilp += ",gpu_kernel_launches=" + to_string_any(gpu_kernel_launches_atomic.load(m));
         ilp += ",gpu_overflows_processed=" + to_string_any(gpu_overflows_processed_atomic.load(m));
         ilp += ",gpu_overflow_buffer_exceeded=" + to_string_any(gpu_overflow_buffer_exceeded_atomic.load(m));

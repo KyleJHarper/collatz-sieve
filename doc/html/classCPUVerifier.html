@@ -107,7 +107,7 @@ Collaboration diagram for CPUVerifier&lt; T &gt;:</div>
 <area shape="rect" title="An implementation of the Verifier class which uses local CPUs to process values." alt="" coords="139,260,273,285"/>
 <area shape="rect" href="classVerifier.html" title="A base class behind the verification implementation classes. Provides the start, stop,..." alt="" coords="153,185,259,211"/>
 <area shape="poly" title=" " alt="" coords="209,225,209,260,203,260,203,225"/>
-<area shape="rect" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High&#45;Water Mark nodes." alt="" coords="109,95,303,121"/>
+<area shape="rect" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes." alt="" coords="109,95,303,121"/>
 <area shape="poly" title=" " alt="" coords="209,134,209,185,203,185,203,134"/>
 <area shape="rect" title=" " alt="" coords="5,5,44,31"/>
 <area shape="poly" title=" " alt="" coords="17,44,9,83,10,103,18,121,45,149,79,169,117,182,153,189,152,195,115,187,77,174,42,153,13,124,5,104,3,83,12,43"/>
@@ -127,7 +127,7 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af0b6187a4bc363e6afec62f2c9b52e89" id="r_af0b6187a4bc363e6afec62f2c9b52e89"><td class="memItemLeft" align="right" valign="top"><a id="af0b6187a4bc363e6afec62f2c9b52e89" name="af0b6187a4bc363e6afec62f2c9b52e89"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>enable_detailed_metrics</b> ()</td></tr>
-<tr class="memdesc:af0b6187a4bc363e6afec62f2c9b52e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables detailed metrics. Slows down verification but offers a little extra context about HWM/Affine Striding/Etc. <br /></td></tr>
+<tr class="memdesc:af0b6187a4bc363e6afec62f2c9b52e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables detailed metrics. Slows down verification but offers a little extra context about AST/Affine Striding/Etc. <br /></td></tr>
 <tr class="separator:af0b6187a4bc363e6afec62f2c9b52e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a368e702135a862597b8aa7182787441f" id="r_a368e702135a862597b8aa7182787441f"><td class="memItemLeft" align="right" valign="top"><a id="a368e702135a862597b8aa7182787441f" name="a368e702135a862597b8aa7182787441f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>disable_detailed_metrics</b> ()</td></tr>
@@ -275,7 +275,7 @@ std::vector&lt; <a class="el" href="structCPUVerifier_1_1ThreadStorage.html">Thr
 <tr class="memdesc:a27da5ef745a81fd1dd5e021203d451c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread-local storage for the main workers. Should NOT be modified by anything other than the worker thread and sub-threads. <br /></td></tr>
 <tr class="separator:a27da5ef745a81fd1dd5e021203d451c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52598ca6c7707438b9d8d7639a4a2ddb" id="r_a52598ca6c7707438b9d8d7639a4a2ddb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPUVerifier.html#a52598ca6c7707438b9d8d7639a4a2ddb">_detailed_metrics</a> = false</td></tr>
-<tr class="memdesc:a52598ca6c7707438b9d8d7639a4a2ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables detailed metrics for step counts, striding, High-Water Mark stopping, etc.  <br /></td></tr>
+<tr class="memdesc:a52598ca6c7707438b9d8d7639a4a2ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables detailed metrics for step counts, striding, AST, etc.  <br /></td></tr>
 <tr class="separator:a52598ca6c7707438b9d8d7639a4a2ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
@@ -481,7 +481,7 @@ template&lt;<a class="el" href="conceptAnySupportedIntegral.html">AnySupportedIn
 </table>
 </div><div class="memdoc">
 
-<p>Enables detailed metrics for step counts, striding, High-Water Mark stopping, etc. </p>
+<p>Enables detailed metrics for step counts, striding, AST, etc. </p>
 <dl class="section note"><dt>Note</dt><dd>Only available on <code><a class="el" href="classCPUVerifier.html" title="An implementation of the Verifier class which uses local CPUs to process values.">CPUVerifier</a></code> </dd></dl>
 
 </div>

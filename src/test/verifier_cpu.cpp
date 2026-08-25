@@ -90,12 +90,12 @@ void test_verifier_gpu_run_a_range() {
     assert(metrics.effective_nodes_verified() > metrics.nodes_verified_atomic.load());
     // steps_total (detailed metric only)
     assert(metrics.steps_total_atomic.load() == 0);
-    // steps_skippable_by_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_hwm_atomic.load() == 0);
+    // steps_skippable_by_ast (detailed metric only)
+    assert(metrics.steps_skippable_by_ast_atomic.load() == 0);
     // steps_skippable_by_affine_stride (detailed metric only)
     assert(metrics.steps_skippable_by_affine_stride_atomic.load() == 0);
-    // steps_skippable_by_affine_stride_before_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_affine_stride_before_hwm_atomic.load() == 0);
+    // steps_skippable_by_affine_stride_before_ast (detailed metric only)
+    assert(metrics.steps_skippable_by_affine_stride_before_ast_atomic.load() == 0);
     // gpu_kernel_launches (n/a on cpu verifier)
     assert(metrics.gpu_kernel_launches_atomic.load() == 0);
     // gpu_overflows_processed (n/a on cpu verifier)
@@ -229,12 +229,12 @@ void test_verifier_gpu_detailed_metrics() {
     assert(metrics.effective_nodes_verified() > metrics.nodes_verified_atomic.load());
     // steps_total (detailed metric only)
     assert(metrics.steps_total_atomic.load() > 0);
-    // steps_skippable_by_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_hwm_atomic.load() > 0);
+    // steps_skippable_by_ast (detailed metric only)
+    assert(metrics.steps_skippable_by_ast_atomic.load() > 0);
     // steps_skippable_by_affine_stride (detailed metric only)
     assert(metrics.steps_skippable_by_affine_stride_atomic.load() > 0);
-    // steps_skippable_by_affine_stride_before_hwm (detailed metric only)
-    assert(metrics.steps_skippable_by_affine_stride_before_hwm_atomic.load() > 0);
+    // steps_skippable_by_affine_stride_before_ast (detailed metric only)
+    assert(metrics.steps_skippable_by_affine_stride_before_ast_atomic.load() > 0);
     // gpu_kernel_launches (n/a on cpu verifier)
     assert(metrics.gpu_kernel_launches_atomic.load() == 0);
     // gpu_overflows_processed (n/a on cpu verifier)

@@ -84,7 +84,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>An options package for building <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> objects.  
+<p>An options package for building <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code> objects.  
  <a href="structBinaryTreeOptions.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="binary__tree__options_8hpp_source.html">binary_tree_options.hpp</a>&gt;</code></p>
@@ -98,37 +98,37 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a789f1f3f23d7e1e6f485bb34af274e4a" id="r_a789f1f3f23d7e1e6f485bb34af274e4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBinaryTreeOptions.html#a789f1f3f23d7e1e6f485bb34af274e4a">prune_hwm_nodes</a> = false</td></tr>
-<tr class="memdesc:a789f1f3f23d7e1e6f485bb34af274e4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls pruning of High-Water Mark nodes.  <br /></td></tr>
-<tr class="separator:a789f1f3f23d7e1e6f485bb34af274e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a250d4baaa8c36c0119ab783422722e71" id="r_a250d4baaa8c36c0119ab783422722e71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBinaryTreeOptions.html#a250d4baaa8c36c0119ab783422722e71">prune_ast_nodes</a> = false</td></tr>
+<tr class="memdesc:a250d4baaa8c36c0119ab783422722e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls pruning of Abort at Stopping Time nodes.  <br /></td></tr>
+<tr class="separator:a250d4baaa8c36c0119ab783422722e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1db90c92f907dbd30709fd7ed5a1af7d" id="r_a1db90c92f907dbd30709fd7ed5a1af7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBinaryTreeOptions.html#a1db90c92f907dbd30709fd7ed5a1af7d">prune_parent_levels</a> = false</td></tr>
 <tr class="memdesc:a1db90c92f907dbd30709fd7ed5a1af7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls pruning of parent levels, leaving only leaf nodes.  <br /></td></tr>
 <tr class="separator:a1db90c92f907dbd30709fd7ed5a1af7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53939add5e3c45a449a4123fc0ee3b7c" id="r_a53939add5e3c45a449a4123fc0ee3b7c"><td class="memItemLeft" align="right" valign="top"><a id="a53939add5e3c45a449a4123fc0ee3b7c" name="a53939add5e3c45a449a4123fc0ee3b7c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>preserve_ancestors</b> = false</td></tr>
-<tr class="memdesc:a53939add5e3c45a449a4123fc0ee3b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the collection of High-Water Mark node roots (ancestors). These are stored in a dedicated vector. <br /></td></tr>
+<tr class="memdesc:a53939add5e3c45a449a4123fc0ee3b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the collection of AST node roots (ancestors). These are stored in a dedicated vector. <br /></td></tr>
 <tr class="separator:a53939add5e3c45a449a4123fc0ee3b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ea57db72aee4d2e55f9fe1672a584bf" id="r_a5ea57db72aee4d2e55f9fe1672a584bf"><td class="memItemLeft" align="right" valign="top"><a id="a5ea57db72aee4d2e55f9fe1672a584bf" name="a5ea57db72aee4d2e55f9fe1672a584bf"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>verify_non_hwm_nodes</b> = false</td></tr>
-<tr class="memdesc:a5ea57db72aee4d2e55f9fe1672a584bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls whether verification of non-HWM nodes occurs during tree building. Required above <code>CollatzConstants::LARGEST_EPIRICALLY_TESTED_LEVEL</code>. <br /></td></tr>
-<tr class="separator:a5ea57db72aee4d2e55f9fe1672a584bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d6781562a6436ceba3c131058f4971" id="r_ac9d6781562a6436ceba3c131058f4971"><td class="memItemLeft" align="right" valign="top"><a id="ac9d6781562a6436ceba3c131058f4971" name="ac9d6781562a6436ceba3c131058f4971"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>verify_non_ast_nodes</b> = false</td></tr>
+<tr class="memdesc:ac9d6781562a6436ceba3c131058f4971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls whether verification of non-AST nodes occurs during tree building. Required above <code>CollatzConstants::LARGEST_EPIRICALLY_TESTED_LEVEL</code>. <br /></td></tr>
+<tr class="separator:ac9d6781562a6436ceba3c131058f4971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>An options package for building <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of High-Water Mark nodes.">BinaryTree</a></code> objects. </p>
+<div class="textblock"><p>An options package for building <code><a class="el" href="classBinaryTree.html" title="The BinaryTree facade which will apply Harper&#39;s sieve of AST nodes.">BinaryTree</a></code> objects. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a789f1f3f23d7e1e6f485bb34af274e4a" name="a789f1f3f23d7e1e6f485bb34af274e4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a789f1f3f23d7e1e6f485bb34af274e4a">&#9670;&#160;</a></span>prune_hwm_nodes</h2>
+<a id="a250d4baaa8c36c0119ab783422722e71" name="a250d4baaa8c36c0119ab783422722e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a250d4baaa8c36c0119ab783422722e71">&#9670;&#160;</a></span>prune_ast_nodes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool BinaryTreeOptions::prune_hwm_nodes = false</td>
+          <td class="memname">bool BinaryTreeOptions::prune_ast_nodes = false</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Controls pruning of High-Water Mark nodes. </p>
+<p>Controls pruning of Abort at Stopping Time nodes. </p>
 <dl class="section note"><dt>Note</dt><dd>Only applies to Materialized trees. </dd></dl>
 
 </div>

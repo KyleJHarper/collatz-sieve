@@ -11,8 +11,7 @@ An implementation of the {\ttfamily \doxylink{classVerifier}{Verifier}} class wh
 
 
 
-Inheritance diagram for CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
+Inheritance diagram for CPUVerifier\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -39,7 +38,7 @@ struct \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}}
 \item 
 \Hypertarget{classCPUVerifier_af0b6187a4bc363e6afec62f2c9b52e89}\label{classCPUVerifier_af0b6187a4bc363e6afec62f2c9b52e89} 
 void {\bfseries enable\+\_\+detailed\+\_\+metrics} ()
-\begin{DoxyCompactList}\small\item\em Enables detailed metrics. Slows down verification but offers a little extra context about HWM/\+Affine Striding/\+Etc. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Enables detailed metrics. Slows down verification but offers a little extra context about AST/\+Affine Striding/\+Etc. \end{DoxyCompactList}\item 
 \Hypertarget{classCPUVerifier_a368e702135a862597b8aa7182787441f}\label{classCPUVerifier_a368e702135a862597b8aa7182787441f} 
 void {\bfseries disable\+\_\+detailed\+\_\+metrics} ()
 \begin{DoxyCompactList}\small\item\em Disables detailed metrics. \end{DoxyCompactList}\item 
@@ -137,7 +136,7 @@ void {\bfseries resume} ()
 std\+::vector$<$ \mbox{\hyperlink{structCPUVerifier_1_1ThreadStorage}{Thread\+Storage}} $>$ {\bfseries \+\_\+tls}
 \begin{DoxyCompactList}\small\item\em Thread-\/local storage for the main workers. Should NOT be modified by anything other than the worker thread and sub-\/threads. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classCPUVerifier_a52598ca6c7707438b9d8d7639a4a2ddb}{\+\_\+detailed\+\_\+metrics}} = false
-\begin{DoxyCompactList}\small\item\em Enables detailed metrics for step counts, striding, High-\/\+Water Mark stopping, etc. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Enables detailed metrics for step counts, striding, AST, etc. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Additional Inherited Members}
 \doxysubsection*{Protected Types inherited from \mbox{\hyperlink{classVerifier}{Verifier$<$ T $>$}}}
 \begin{DoxyCompactItemize}
@@ -253,7 +252,7 @@ bool \mbox{\hyperlink{classCPUVerifier}{CPUVerifier}}$<$ T $>$\+::\+\_\+detailed
 
 
 
-Enables detailed metrics for step counts, striding, High-\/\+Water Mark stopping, etc. 
+Enables detailed metrics for step counts, striding, AST, etc. 
 
 \begin{DoxyNote}{Note}
 Only available on {\ttfamily \doxylink{classCPUVerifier}{CPUVerifier}} 

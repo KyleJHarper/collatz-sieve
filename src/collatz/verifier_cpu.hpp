@@ -35,7 +35,7 @@ class CPUVerifier : public Verifier<T> {
 
 
 
-    /// @brief Enables detailed metrics for step counts, striding, High-Water Mark stopping, etc.
+    /// @brief Enables detailed metrics for step counts, striding, AST, etc.
     /// @note Only available on `CPUVerifier`
     bool _detailed_metrics = false;
 
@@ -77,7 +77,7 @@ class CPUVerifier : public Verifier<T> {
 
 
 
-    /// @brief Enables detailed metrics.  Slows down verification but offers a little extra context about HWM/Affine Striding/Etc.
+    /// @brief Enables detailed metrics.  Slows down verification but offers a little extra context about AST/Affine Striding/Etc.
     void enable_detailed_metrics() { _detailed_metrics = true; }
 
 
@@ -126,7 +126,7 @@ class CPUVerifier : public Verifier<T> {
         }
 
         // May now process value, guaranteed to not overflow.
-        bool below_hwm = false;
+        bool below_ast = false;
         size_t steps = 0;
         using StrideTable = std::conditional_t<
             FixedWidthIntegral<T>
@@ -144,14 +144,14 @@ class CPUVerifier : public Verifier<T> {
                 // Tally the local step count.
                 steps++;
 
-                // High-Water Mark Metrics
-                if (below_hwm) {
-                    thread_storage.metrics.steps_skippable_by_hwm++;
+                // AST Metrics
+                if (below_ast) {
+                    thread_storage.metrics.steps_skippable_by_ast++;
                 } else {
                     if (value < initial_value) {
-                        below_hwm = true;
+                        below_ast = true;
                         // Affine stride is no longer effective.  Tally it by counting how many strides it would've taken.
-                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / StrideTable::STRIDE_SIZE)));
+                        thread_storage.metrics.steps_skippable_by_affine_stride_before_ast += (steps - (1 + (steps / StrideTable::STRIDE_SIZE)));
                     }
                 }
             }
@@ -169,14 +169,14 @@ class CPUVerifier : public Verifier<T> {
                 // Tally the local step count.
                 steps++;
 
-                // High-Water Mark Metrics
-                if (below_hwm) {
-                    thread_storage.metrics.steps_skippable_by_hwm++;
+                // AST Metrics
+                if (below_ast) {
+                    thread_storage.metrics.steps_skippable_by_ast++;
                 } else {
                     if (value < initial_value) {
-                        below_hwm = true;
+                        below_ast = true;
                         // Affine stride is no longer effective.  Tally it by counting how many strides it would've taken.
-                        thread_storage.metrics.steps_skippable_by_affine_stride_before_hwm += (steps - (1 + (steps / StrideTable::STRIDE_SIZE)));
+                        thread_storage.metrics.steps_skippable_by_affine_stride_before_ast += (steps - (1 + (steps / StrideTable::STRIDE_SIZE)));
                     }
                 }
             }
@@ -278,6 +278,11 @@ class CPUVerifier : public Verifier<T> {
             // Continue
             return ForEachSignal::CONTINUE;
         }, this->_start_value);
+
+        // Flush metrics in case any lost updates happened.
+        for (ThreadStorage& thread_storage : _tls) {
+            thread_storage.metrics.flush(this->_published_metrics, true);
+        }
 
         // Set state to STOPPED.  Only this thread may do that.
         this->_state.store(VerifierState::STOPPED);
