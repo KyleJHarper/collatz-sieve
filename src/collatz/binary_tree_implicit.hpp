@@ -480,47 +480,11 @@ class BinaryTreeImplicitImpl {
             return ForEachSignal::CONTINUE;
         });
 
-        // Merge TLS data into the tree's trackers.  First clear the bitmap to release some memory.
+        // Merge TLS data into the tree's trackers.
         _uncovered_positions.clear();
-
-        // Now, use a parallel merge of the TLS storage to avoid a heavy single-threaded bottleneck.
-        size_t remaining_size = callback_storage.size();
-        while (remaining_size > 1) {
-            // Find the midpint and then merge in parallel.
-            const size_t midpoint = remaining_size / 2;
-            #pragma omp parallel for
-            for (size_t i = 0; i < midpoint; ++i) {
-                // Merge it.
-                callback_storage[i].uncovered_bitmap |= callback_storage[i + midpoint].uncovered_bitmap;
-                // Clear the bitmap to reclaim memory.
-                callback_storage[i + midpoint].uncovered_bitmap.clear();
-                // Merge ancestors, if any.
-                callback_storage[i].new_ancestors.insert(
-                    callback_storage[i].new_ancestors.end()
-                    , callback_storage[i + midpoint].new_ancestors.begin()
-                    , callback_storage[i + midpoint].new_ancestors.end()
-                );
-            }
-
-            // If size was odd, we need the last element.
-            if (remaining_size & 1) {
-                callback_storage[midpoint] = std::move(callback_storage[remaining_size - 1]);
-                remaining_size = midpoint + 1;
-            } else {
-                remaining_size = midpoint;
-            }
-        }
-
-        // Merge the final few into the main bitmap.
-        // There's only one "remaining_size" now, so we can simply move it.
-        _uncovered_positions = std::move(callback_storage[0].uncovered_bitmap);
-        // _uncovered_positions.clone(callback_storage[0].uncovered_bitmap);
-        for (size_t i = 0; i < remaining_size; ++i) {
-            _ancestors.insert(
-                _ancestors.end()
-                , callback_storage[i].new_ancestors.begin()
-                , callback_storage[i].new_ancestors.end()
-            );
+        for (const AddLevelTLS& storage : callback_storage) {
+            _uncovered_positions |= storage.uncovered_bitmap;
+            _ancestors.insert(_ancestors.end(), storage.new_ancestors.begin(), storage.new_ancestors.end());
         }
 
         // Always sort ancestors.

@@ -14,7 +14,7 @@
 namespace BinaryTreeCoverageConstants {
 
     /// @brief Maximum known (computed) level of coverage.
-    constexpr level_t MAX_KNOWN_COVERAGE_LEVEL = 45;
+    constexpr level_t MAX_KNOWN_COVERAGE_LEVEL = 50;
 
 
 
@@ -66,7 +66,12 @@ namespace BinaryTreeCoverageConstants {
         , 2186217585552  // 42
         , 4374334645782  // 43
         , 8754392322150  // 44
-        , 17508784644300 // 45
+        , 17508784644300  // 45
+        , 35030378766136  // 46
+        , 70098794380682  // 47
+        , 140197588761364  // 48
+        , 280479319327805  // 49
+        , 560958638655610  // 50
     };
 
 
