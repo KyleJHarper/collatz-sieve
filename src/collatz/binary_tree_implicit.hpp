@@ -480,15 +480,28 @@ class BinaryTreeImplicitImpl {
             return ForEachSignal::CONTINUE;
         });
 
-        // Merge TLS data into the tree's trackers.
-        // First, use a parallel merge of the TLS storage to avoid a heavy single-threaded bottleneck.
+        // Merge TLS data into the tree's trackers.  First clear the bitmap to release some memory.
+        std::cout << "\n";
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Clearing the uncovered positions\n";
+        _uncovered_positions.clear();
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
+
+        // Now, use a parallel merge of the TLS storage to avoid a heavy single-threaded bottleneck.
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Merging callbacks\n";
         size_t remaining_size = callback_storage.size();
-        while (remaining_size >= 64) {
+        while (remaining_size >= 4) {
             // Find the midpint and then merge in parallel.
             const size_t midpoint = remaining_size / 2;
             #pragma omp parallel for
             for (size_t i = 0; i < midpoint; ++i) {
+                // Merge it.
                 callback_storage[i].uncovered_bitmap |= callback_storage[i + midpoint].uncovered_bitmap;
+                // Clear the bitmap to reclaim memory.
+                callback_storage[i + midpoint].uncovered_bitmap.clear();
+                // Merge ancestors, if any.
                 callback_storage[i].new_ancestors.insert(
                     callback_storage[i].new_ancestors.end()
                     , callback_storage[i + midpoint].new_ancestors.begin()
@@ -504,19 +517,27 @@ class BinaryTreeImplicitImpl {
                 remaining_size = midpoint;
             }
         }
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
 
         // Merge the final few into the main bitmap.
-        _uncovered_positions.clear();
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Merging remaining callbacks into main bitmap\n";
         for (size_t i = 0; i < remaining_size; ++i) {
             _uncovered_positions |= callback_storage[i].uncovered_bitmap;
+            callback_storage[i].uncovered_bitmap.clear();
             _ancestors.insert(
                 _ancestors.end()
                 , callback_storage[i].new_ancestors.begin()
                 , callback_storage[i].new_ancestors.end()
             );
         }
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
 
         // Always sort ancestors.
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Sorting ancestors\n";
         if (_is_preserving_ancestors) {
             tbb::parallel_sort(_ancestors.begin(), _ancestors.end(), [](const Node<T>* a, const Node<T>* b) {
                 if constexpr(FixedWidthIntegral<T>) {
@@ -526,16 +547,26 @@ class BinaryTreeImplicitImpl {
                 }
             });
         }
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
 
         // Persist the coverage to the new level.  It's just a sum of the uncovered size() values subtracted from the node total.
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Getting cardinality\n";
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T uncovered = _uncovered_positions.cardinality();
         _coverage_map[_level_count] = BinaryTreeCoverage<T>(total - uncovered, total);
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
 
         // Invoke optimize above level 32.
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Calling optimize\n";
         if (_level_count > 32) {
             _uncovered_positions.optimize();
         }
+        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        std::cout << ms << "  Done\n";
     }
 
 
