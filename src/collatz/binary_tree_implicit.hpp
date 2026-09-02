@@ -481,18 +481,11 @@ class BinaryTreeImplicitImpl {
         });
 
         // Merge TLS data into the tree's trackers.  First clear the bitmap to release some memory.
-        std::cout << "\n";
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Clearing the uncovered positions\n";
         _uncovered_positions.clear();
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
 
         // Now, use a parallel merge of the TLS storage to avoid a heavy single-threaded bottleneck.
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Merging callbacks\n";
         size_t remaining_size = callback_storage.size();
-        while (remaining_size >= 4) {
+        while (remaining_size > 1) {
             // Find the midpint and then merge in parallel.
             const size_t midpoint = remaining_size / 2;
             #pragma omp parallel for
@@ -517,27 +510,20 @@ class BinaryTreeImplicitImpl {
                 remaining_size = midpoint;
             }
         }
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
 
         // Merge the final few into the main bitmap.
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Merging remaining callbacks into main bitmap\n";
+        // There's only one "remaining_size" now, so we can simply move it.
+        _uncovered_positions = std::move(callback_storage[0].uncovered_bitmap);
+        // _uncovered_positions.clone(callback_storage[0].uncovered_bitmap);
         for (size_t i = 0; i < remaining_size; ++i) {
-            _uncovered_positions |= callback_storage[i].uncovered_bitmap;
-            callback_storage[i].uncovered_bitmap.clear();
             _ancestors.insert(
                 _ancestors.end()
                 , callback_storage[i].new_ancestors.begin()
                 , callback_storage[i].new_ancestors.end()
             );
         }
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
 
         // Always sort ancestors.
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Sorting ancestors\n";
         if (_is_preserving_ancestors) {
             tbb::parallel_sort(_ancestors.begin(), _ancestors.end(), [](const Node<T>* a, const Node<T>* b) {
                 if constexpr(FixedWidthIntegral<T>) {
@@ -547,26 +533,16 @@ class BinaryTreeImplicitImpl {
                 }
             });
         }
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
 
         // Persist the coverage to the new level.  It's just a sum of the uncovered size() values subtracted from the node total.
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Getting cardinality\n";
         T total = BinaryTreeMath<T>::st_node_count_of_level(_level_count);
         T uncovered = _uncovered_positions.cardinality();
         _coverage_map[_level_count] = BinaryTreeCoverage<T>(total - uncovered, total);
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
 
         // Invoke optimize above level 32.
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Calling optimize\n";
         if (_level_count > 32) {
             _uncovered_positions.optimize();
         }
-        ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        std::cout << ms << "  Done\n";
     }
 
 
