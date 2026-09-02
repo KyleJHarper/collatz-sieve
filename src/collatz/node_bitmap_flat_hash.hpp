@@ -498,8 +498,9 @@ class FlatHashBitmapImpl {
     * @note Empty sets are already checked for in `remove()`, so no dead prefixes exist in `_sorted_prefixes`.
     */
     void optimize() {
-        for (auto& [prefix, bitmap] : _flat_map) {
-            bitmap.runOptimize();
+        #pragma omp parallel for
+        for (size_t i = 0; i < _sorted_prefixes.size(); i++) {
+            _flat_map.at(_sorted_prefixes[i]).runOptimize();
         }
     }
 

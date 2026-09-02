@@ -481,10 +481,39 @@ class BinaryTreeImplicitImpl {
         });
 
         // Merge TLS data into the tree's trackers.
+        // First, use a parallel merge of the TLS storage to avoid a heavy single-threaded bottleneck.
+        size_t remaining_size = callback_storage.size();
+        while (remaining_size >= 64) {
+            // Find the midpint and then merge in parallel.
+            const size_t midpoint = remaining_size / 2;
+            #pragma omp parallel for
+            for (size_t i = 0; i < midpoint; ++i) {
+                callback_storage[i].uncovered_bitmap |= callback_storage[i + midpoint].uncovered_bitmap;
+                callback_storage[i].new_ancestors.insert(
+                    callback_storage[i].new_ancestors.end()
+                    , callback_storage[i + midpoint].new_ancestors.begin()
+                    , callback_storage[i + midpoint].new_ancestors.end()
+                );
+            }
+
+            // If size was odd, we need the last element.
+            if (remaining_size & 1) {
+                callback_storage[midpoint] = std::move(callback_storage[remaining_size - 1]);
+                remaining_size = midpoint + 1;
+            } else {
+                remaining_size = midpoint;
+            }
+        }
+
+        // Merge the final few into the main bitmap.
         _uncovered_positions.clear();
-        for (const AddLevelTLS& storage : callback_storage) {
-            _uncovered_positions |= storage.uncovered_bitmap;
-            _ancestors.insert(_ancestors.end(), storage.new_ancestors.begin(), storage.new_ancestors.end());
+        for (size_t i = 0; i < remaining_size; ++i) {
+            _uncovered_positions |= callback_storage[i].uncovered_bitmap;
+            _ancestors.insert(
+                _ancestors.end()
+                , callback_storage[i].new_ancestors.begin()
+                , callback_storage[i].new_ancestors.end()
+            );
         }
 
         // Always sort ancestors.
