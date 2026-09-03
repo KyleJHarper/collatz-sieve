@@ -7,7 +7,7 @@ authors:
   - family-names: "Harper"
     given-names: "Kyle"
 license: Apache-2.0
-repository-code: "[REPO URL, e.g. https://github.com/yourname/yourrepo]"
+repository-code: "https://github.com/KyleJHarper/collatz-sieve"
 
 references:
   - type: article
