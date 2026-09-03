@@ -40,7 +40,7 @@ This was an R&D project, focused on education and delving into insights I garner
 choice of language and building a stable API happened as a natural consequence during development.  Take it for what it is and
 don't overthink it. If you hate C++, port it.  If you hate _my_ C++, fork it.  If you need a feature, make a pull request.
 
-I __highly__ recommend you read [the paper (PENDING)]() on this before you start playing with the code.
+I __highly__ recommend you read [the paper](https://zenodo.org/records/22262596) on this before you start playing with the code.
 
 
 # Present State

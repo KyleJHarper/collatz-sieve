@@ -1,23 +1,19 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite both the software and the associated paper as below."
 title: "Harper's Sieve of Collatz"
-version: "[VERSION, e.g. 1.0.0]"
-date-released: "[YYYY-MM-DD]"
+version: "1.0.0"
+date-released: "2026-09-02"
 authors:
-  - family-names: "[YOUR LAST NAME]"
-    given-names: "[YOUR FIRST NAME]"
-    orcid: "[OPTIONAL: https://orcid.org/xxxx-xxxx-xxxx-xxxx]"
+  - family-names: "Harper"
+    given-names: "Kyle"
 license: Apache-2.0
 repository-code: "[REPO URL, e.g. https://github.com/yourname/yourrepo]"
-preferred-citation:
-  type: article
-  title: "[PAPER TITLE]"
-  authors:
-    - family-names: "[YOUR LAST NAME]"
-      given-names: "[YOUR FIRST NAME]"
-      orcid: "[OPTIONAL]"
-  year: [YYYY]
-  identifiers:
-    - type: other
-      value: "arXiv:[ARXIV ID]"
-      description: "arXiv preprint"
+
+references:
+  - type: article
+    title: "Harper's Sieve of Collatz"
+    authors:
+      - family-names: "Harper"
+        given-names: "Kyle"
+    date-published: 2026-09-02
+    doi: "10.5281/zenodo.22262595"

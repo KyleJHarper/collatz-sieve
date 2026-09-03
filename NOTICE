@@ -16,9 +16,9 @@ and is also available at:
 Attribution notice:
 
 This software implements an original algorithm and data structure
-first described by [YOUR FULL NAME] in:
+first described by Kyle Harper in:
 
-    [PAPER TITLE], [YEAR], arXiv:[ARXIV ID WHEN AVAILABLE]
+    Harper's Sieve of Collatz, 2006, DOI: 10.5281/zenodo.22262595
 
 If you use, adapt, or build upon this software or the algorithm it
 implements — in research, in another codebase, or in a product —

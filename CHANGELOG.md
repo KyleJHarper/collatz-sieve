@@ -14,6 +14,10 @@ Note: when larger memory and/or high core count was required, the donor system w
 
 ## 4.2.0
 
+### Public Release
+
+This repo is now available to the public.
+
 ### Mutable Iterator Functors
 
 The `NodeBitmap::for_each_value()` and `BinaryTree::for_each_uncovered_value()` and their with-TLS-variants no longer require the
